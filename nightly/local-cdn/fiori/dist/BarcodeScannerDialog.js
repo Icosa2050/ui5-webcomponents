@@ -124,11 +124,13 @@ let BarcodeScannerDialog = BarcodeScannerDialog_1 = class BarcodeScannerDialog e
         this.dialog = this._getDialog();
         this.dialog.show();
         this.open = true;
+        this.fireEvent("open");
     }
     _closeDialog() {
         if (this.dialog && this.dialog.open) {
             this.dialog.close();
             this.open = false;
+            this.fireEvent("close");
         }
     }
     _startReader() {
@@ -180,6 +182,18 @@ BarcodeScannerDialog = BarcodeScannerDialog_1 = __decorate([
             Button,
         ],
     })
+    /**
+     * Fired after the component is opened.
+     * @public
+     */
+    ,
+    event("open")
+    /**
+     * Fired after the component is closed.
+     * @public
+     */
+    ,
+    event("close")
     /**
      * Fires when the scan is completed successfuuly.
      * @param {string} text the scan result as string

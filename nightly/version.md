@@ -1,7 +1,11 @@
-commit a5574d6ddd6a218f4fe4a686836d33797b790a76
-Author: TeodorTaushanov <teodor.taushanov@sap.com>
-Date:   Mon Apr 15 11:34:27 2024 +0300
+commit 1ae2142aa6ba2c587126e49422724658686d2344
+Author: Konstantin Gogov <68374332+kgogov@users.noreply.github.com>
+Date:   Mon Apr 15 14:31:46 2024 +0300
 
-    refactor(ui5-popup): simplify block layer logic (#8748)
+    feat(ui5-barcode-scanner-dialog): add support for close and open events (#8753)
     
-    * refactor(ui5-popup): simplify block layer logic
+    This change adds support for `close` and `open` events to
+    the barcode scanner dialog. Along with this change, the documentation
+    and the sample have been updated.
+    
+    Fixes #8695
