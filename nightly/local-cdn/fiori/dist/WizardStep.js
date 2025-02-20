@@ -33,6 +33,38 @@ import property from "@ui5/webcomponents-base/dist/decorators/property.js";
  * @slot {Node[]} default - Defines the step content.
  */
 let WizardStep = class WizardStep extends UI5Element {
+    constructor() {
+        super(...arguments);
+        /**
+         * Defines if the step is `disabled`. When disabled the step is displayed,
+         * but the user can't select the step by clicking or navigate to it with scrolling.
+         *
+         * **Note:** Step can't be `selected` and `disabled` at the same time.
+         * In this case the `selected` property would take precedence.
+         * @default false
+         * @public
+         */
+        this.disabled = false;
+        /**
+         * Defines the step's `selected` state - the step that is currently active.
+         *
+         * **Note:** Step can't be `selected` and `disabled` at the same time.
+         * In this case the `selected` property would take precedence.
+         * @default false
+         * @public
+         */
+        this.selected = false;
+        /**
+         * When `branching` is enabled a dashed line would be displayed after the step,
+         * meant to indicate that the next step is not yet known and depends on user choice in the current step.
+         *
+         * **Note:** It is recommended to use `branching` on the last known step
+         * and later add new steps when it becomes clear how the wizard flow should continue.
+         * @default false
+         * @public
+         */
+        this.branching = false;
+    }
 };
 __decorate([
     property()

@@ -7,20 +7,18 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var TreeItemBase_1;
 import property from "@ui5/webcomponents-base/dist/decorators/property.js";
 import customElement from "@ui5/webcomponents-base/dist/decorators/customElement.js";
+import jsxRenderer from "@ui5/webcomponents-base/dist/renderer/JsxRenderer.js";
 import slot from "@ui5/webcomponents-base/dist/decorators/slot.js";
-import event from "@ui5/webcomponents-base/dist/decorators/event.js";
-import Integer from "@ui5/webcomponents-base/dist/types/Integer.js";
+import event from "@ui5/webcomponents-base/dist/decorators/event-strict.js";
 import { isLeft, isRight } from "@ui5/webcomponents-base/dist/Keys.js";
-import { getI18nBundle } from "@ui5/webcomponents-base/dist/i18nBundle.js";
-import ValueState from "@ui5/webcomponents-base/dist/types/ValueState.js";
+import i18n from "@ui5/webcomponents-base/dist/decorators/i18n.js";
 import { getScopedVarName } from "@ui5/webcomponents-base/dist/CustomElementsScope.js";
 import ListItem from "./ListItem.js";
-import Icon from "./Icon.js";
 import "@ui5/webcomponents-icons/dist/navigation-right-arrow.js";
 import "@ui5/webcomponents-icons/dist/navigation-down-arrow.js";
 import { TREE_ITEM_ARIA_LABEL, TREE_ITEM_EXPAND_NODE, TREE_ITEM_COLLAPSE_NODE, } from "./generated/i18n/i18n-defaults.js";
 // Template
-import TreeItemBaseTemplate from "./generated/templates/TreeItemBaseTemplate.lit.js";
+import TreeItemBaseTemplate from "./TreeItemBaseTemplate.js";
 // Styles
 import treeItemCss from "./generated/themes/TreeItem.css.js";
 /**
@@ -32,8 +30,71 @@ import treeItemCss from "./generated/themes/TreeItem.css.js";
  * @public
  */
 let TreeItemBase = TreeItemBase_1 = class TreeItemBase extends ListItem {
+    constructor() {
+        super(...arguments);
+        /**
+         * Defines the indentation of the tree list item. Use level 1 for tree list items, representing top-level tree nodes.
+         * @protected
+         * @default 1
+         */
+        this.level = 1;
+        /**
+         * Defines whether the tree list item should display an expand/collapse button.
+         * @default false
+         * @protected
+         */
+        this.showToggleButton = false;
+        /**
+         * Defines whether the tree list item will show a collapse or expand icon inside its toggle button.
+         * @default false
+         * @public
+         */
+        this.expanded = false;
+        /**
+         * Defines whether the item is movable.
+         * @default false
+         * @public
+         * @since 2.0.0
+         */
+        this.movable = false;
+        /**
+         * Defines whether the tree node has children, even if currently no other tree nodes are slotted inside.
+         *
+         * **Note:** This property is useful for showing big tree structures where not all nodes are initially loaded due to performance reasons.
+         * Set this to `true` for nodes you intend to load lazily, when the user clicks the expand button.
+         * It is not necessary to set this property otherwise. If a tree item has children, the expand button will be displayed anyway.
+         * @default false
+         * @public
+         */
+        this.hasChildren = false;
+        /**
+         * Defines the state of the `additionalText`.
+         *
+         * Available options are: `"None"` (by default), `"Positive"`, `"Critical"`, `"Information"` and `"Negative"`.
+         * @default "None"
+         * @public
+         * @since 1.0.0-rc.15
+         */
+        this.additionalTextState = "None";
+        /**
+         * @private
+         * @since 1.0.0-rc.11
+         */
+        this.forcedSetsize = 1;
+        /**
+         * @private
+         * @since 1.0.0-rc.11
+         */
+        this.forcedPosinset = 1;
+        /**
+         * Defines if the item should be collapsible or not.
+         * @private
+         * @default false
+         * @since 1.10.0
+         */
+        this._fixed = false;
+    }
     onBeforeRendering() {
-        this.actionable = false;
         this.showToggleButton = this.requiresToggleButton;
     }
     get classes() {
@@ -61,7 +122,7 @@ let TreeItemBase = TreeItemBase_1 = class TreeItemBase extends ListItem {
         return this.expanded ? "navigation-down-arrow" : "navigation-right-arrow";
     }
     get _ariaLabel() {
-        return this.accessibleRoleDescription ? undefined : TreeItemBase_1.i18nBundle.getText(TREE_ITEM_ARIA_LABEL);
+        return TreeItemBase_1.i18nBundle.getText(TREE_ITEM_ARIA_LABEL);
     }
     get _accInfo() {
         const accInfoSettings = {
@@ -73,7 +134,7 @@ let TreeItemBase = TreeItemBase_1 = class TreeItemBase extends ListItem {
             ariaSelectedText: this.ariaSelectedText,
             listItemAriaLabel: !this.accessibleName ? this._ariaLabel : undefined,
             ariaOwns: this.expanded ? `${this._id}-subtree` : undefined,
-            ariaHaspopup: this.ariaHaspopup?.toLowerCase() || undefined,
+            ariaHaspopup: this.accessibilityAttributes.hasPopup,
         };
         return { ...super._accInfo, ...accInfoSettings };
     }
@@ -94,39 +155,33 @@ let TreeItemBase = TreeItemBase_1 = class TreeItemBase extends ListItem {
     }
     _toggleClick(e) {
         e.stopPropagation();
-        this.fireEvent("toggle", { item: this });
+        this.fireDecoratorEvent("toggle", { item: this });
     }
-    _onkeydown(e) {
-        super._onkeydown(e);
+    async _onkeydown(e) {
+        await super._onkeydown(e);
         if (!this._fixed && this.showToggleButton && isRight(e)) {
             if (!this.expanded) {
-                this.fireEvent("toggle", { item: this });
+                this.fireDecoratorEvent("toggle", { item: this });
             }
             else {
-                this.fireEvent("step-in", { item: this });
+                this.fireDecoratorEvent("step-in", { item: this });
             }
         }
         if (!this._fixed && isLeft(e)) {
             if (this.expanded) {
-                this.fireEvent("toggle", { item: this });
+                this.fireDecoratorEvent("toggle", { item: this });
             }
             else if (this.hasParent) {
-                this.fireEvent("step-out", { item: this });
+                this.fireDecoratorEvent("step-out", { item: this });
             }
         }
     }
     get iconAccessibleName() {
         return this.expanded ? TreeItemBase_1.i18nBundle.getText(TREE_ITEM_COLLAPSE_NODE) : TreeItemBase_1.i18nBundle.getText(TREE_ITEM_EXPAND_NODE);
     }
-    static async onDefine() {
-        [TreeItemBase_1.i18nBundle] = await Promise.all([
-            getI18nBundle("@ui5/webcomponents"),
-            super.onDefine(),
-        ]);
-    }
 };
 __decorate([
-    property({ validator: Integer, defaultValue: 1 })
+    property({ type: Number })
 ], TreeItemBase.prototype, "level", void 0);
 __decorate([
     property()
@@ -139,21 +194,24 @@ __decorate([
 ], TreeItemBase.prototype, "expanded", void 0);
 __decorate([
     property({ type: Boolean })
+], TreeItemBase.prototype, "movable", void 0);
+__decorate([
+    property({ type: Boolean })
 ], TreeItemBase.prototype, "indeterminate", void 0);
 __decorate([
     property({ type: Boolean })
 ], TreeItemBase.prototype, "hasChildren", void 0);
 __decorate([
-    property({ type: ValueState, defaultValue: ValueState.None })
+    property()
 ], TreeItemBase.prototype, "additionalTextState", void 0);
 __decorate([
     property()
 ], TreeItemBase.prototype, "accessibleName", void 0);
 __decorate([
-    property({ validator: Integer, defaultValue: 1, noAttribute: true })
+    property({ type: Number, noAttribute: true })
 ], TreeItemBase.prototype, "forcedSetsize", void 0);
 __decorate([
-    property({ validator: Integer, defaultValue: 1, noAttribute: true })
+    property({ type: Number, noAttribute: true })
 ], TreeItemBase.prototype, "forcedPosinset", void 0);
 __decorate([
     property({ type: Boolean })
@@ -168,17 +226,17 @@ __decorate([
         "default": true,
     })
 ], TreeItemBase.prototype, "items", void 0);
+__decorate([
+    i18n("@ui5/webcomponents")
+], TreeItemBase, "i18nBundle", void 0);
 TreeItemBase = TreeItemBase_1 = __decorate([
     customElement({
         languageAware: true,
+        renderer: jsxRenderer,
         template: TreeItemBaseTemplate,
         styles: [
             ListItem.styles,
             treeItemCss,
-        ],
-        dependencies: [
-            ...ListItem.dependencies,
-            Icon,
         ],
     })
     /**
@@ -188,9 +246,7 @@ TreeItemBase = TreeItemBase_1 = __decorate([
      */
     ,
     event("toggle", {
-        detail: {
-            item: { type: HTMLElement },
-        },
+        bubbles: true,
     })
     /**
      * Fired when the user drills down into the tree hierarchy by pressing the right arrow on the tree node.
@@ -199,9 +255,7 @@ TreeItemBase = TreeItemBase_1 = __decorate([
      */
     ,
     event("step-in", {
-        detail: {
-            item: { type: HTMLElement },
-        },
+        bubbles: true,
     })
     /**
      * Fired when the user goes up the tree hierarchy by pressing the left arrow on the tree node.
@@ -210,9 +264,7 @@ TreeItemBase = TreeItemBase_1 = __decorate([
      */
     ,
     event("step-out", {
-        detail: {
-            item: { type: HTMLElement },
-        },
+        bubbles: true,
     })
 ], TreeItemBase);
 export default TreeItemBase;

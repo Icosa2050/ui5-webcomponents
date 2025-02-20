@@ -1,7 +1,7 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "grip";
-const pathData = "M365 60h-64V-4h64v64zm-192 0V-4h64v64h-64zm0 113v-64h64v64h-64zm192 0h-64v-64h64v64zm-64 48h64v64h-64v-64zm-64 64h-64v-64h64v64zm64 47h64v64h-64v-64zm-128 0h64v64h-64v-64zm192 176h-64v-64h64v64zm-128 0h-64v-64h64v64z";
+const pathData = "M173 285v-64h64v64h-64zm128-176h64v64h-64v-64zm0 223h64v64h-64v-64zm0-336h64v64h-64V-4zM173 444h64v64h-64v-64zm0-448h64v64h-64V-4zm128 225h64v64h-64v-64zm-128-48v-64h64v64h-64zm128 271h64v64h-64v-64zm-64-48h-64v-64h64v64z";
 const ltr = false;
 const accData = null;
 const collection = "business-suite-v1";

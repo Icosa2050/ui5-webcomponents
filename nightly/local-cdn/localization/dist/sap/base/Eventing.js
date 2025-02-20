@@ -10,7 +10,7 @@ import Event from "./Event.js";
  * Eventing
  *
  * @author SAP SE
- * @version 1.120.5
+ * @version 1.120.17
  *
  * @since 1.120.0
  * @private

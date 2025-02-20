@@ -12,13 +12,16 @@ import type SideNavigation from "./SideNavigation.js";
  * @since 1.19.0
  */
 declare class SideNavigationItemBase extends UI5Element implements ITabbable {
+    eventDetails: {
+        click: void;
+    };
     /**
      * Defines the text of the item.
      *
      * @public
-     * @default ""
+     * @default undefined
      */
-    text: string;
+    text?: string;
     /**
      * Defines whether the component is disabled.
      * A disabled component can't be pressed or
@@ -33,11 +36,11 @@ declare class SideNavigationItemBase extends UI5Element implements ITabbable {
      * Defines the tooltip of the component.
      *
      * A tooltip attribute should be provided, in order to represent meaning/function, when the component is collapsed(icon only is visualized).
-     * @default ""
+     * @default undefined
      * @public
-     * @since 2.0
+     * @since 2.0.0
      */
-    tooltip: string;
+    tooltip?: string;
     forcedTabIndex: string;
     sideNavCollapsed: boolean;
     inPopover: boolean;
@@ -50,5 +53,8 @@ declare class SideNavigationItemBase extends UI5Element implements ITabbable {
     get sideNavigation(): SideNavigation;
     set sideNavigation(sideNavigation: SideNavigation);
     get isFixedItem(): boolean;
+    get isSideNavigationItemBase(): boolean;
 }
+declare const isInstanceOfSideNavigationItemBase: (object: any) => object is SideNavigationItemBase;
 export default SideNavigationItemBase;
+export { isInstanceOfSideNavigationItemBase };

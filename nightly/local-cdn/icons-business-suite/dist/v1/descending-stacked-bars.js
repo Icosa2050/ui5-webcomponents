@@ -1,7 +1,7 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "descending-stacked-bars";
-const pathData = "M76.5 0h109v146h-109V0zm255 245h-109V99h109v146zm146-99v146h-109V146h109zm-401 37h109v146h-109V183zm255 255h-109V292h109v146zm146 0h-109V329h109v109zm-401-72h109v72h-109v-72zm-74 146v-32h508v32H2.5z";
+const pathData = "M2.5 480h508v32H2.5v-32zm366-188V146h109v146h-109zM76.5 0h109v146h-109V0zm255 438h-109V292h109v146zm-109-339h109v146h-109V99zm-37 230h-109V183h109v146zm292 109h-109V329h109v109zm-292 0h-109v-72h109v72z";
 const ltr = false;
 const accData = null;
 const collection = "business-suite-v1";

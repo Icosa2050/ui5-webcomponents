@@ -8,11 +8,11 @@ import type { ResizeObserverCallback } from "@ui5/webcomponents-base/dist/delega
  * @public
  */
 interface IProductSwitchItem extends HTMLElement, ITabbable {
-    titleText: string;
-    subtitleText: string;
-    icon: string;
-    target: string;
-    targetSrc: string;
+    titleText?: string;
+    subtitleText?: string;
+    icon?: string;
+    target?: string;
+    targetSrc?: string;
     selected: boolean;
 }
 /**
@@ -41,7 +41,6 @@ interface IProductSwitchItem extends HTMLElement, ITabbable {
  * @since 1.0.0-rc.5
  */
 declare class ProductSwitch extends UI5Element {
-    constructor();
     /**
      * Indicates how many columns are displayed.
      * @private
@@ -56,12 +55,12 @@ declare class ProductSwitch extends UI5Element {
     _currentIndex: number;
     _rowSize: number;
     _handleResizeBound: ResizeObserverCallback;
+    constructor();
     static i18nBundle: I18nBundle;
     static get ROW_MIN_WIDTH(): {
         ONE_COLUMN: number;
         THREE_COLUMN: number;
     };
-    static onDefine(): Promise<void>;
     get _ariaLabelText(): string;
     onEnterDOM(): void;
     onExitDOM(): void;

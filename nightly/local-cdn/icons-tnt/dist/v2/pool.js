@@ -1,7 +1,7 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "pool";
-const pathData = "M230 102H115v326q0 15 4.5 23.5t7.5 8.5h103V102zm167 0H281v358h105q2 0 6.5-8.5T397 428V102zm-11 409H127q-27 0-45-24t-18-59V83q0-35 18-59t45-24h259q26 0 44 24t18 59v345q0 35-18 59t-44 24z";
+const pathData = "M112 0h288q13 0 22.5 9.5T432 32v448q0 14-9.5 23t-22.5 9H112q-14 0-23-9t-9-23V32q0-13 9-22.5T112 0zm160 480h128V64H272v416zm-160 0h128V64H112v416z";
 const ltr = false;
 const accData = null;
 const collection = "tnt-v2";

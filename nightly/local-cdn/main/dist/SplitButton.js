@@ -7,19 +7,15 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var SplitButton_1;
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
 import customElement from "@ui5/webcomponents-base/dist/decorators/customElement.js";
-import event from "@ui5/webcomponents-base/dist/decorators/event.js";
+import event from "@ui5/webcomponents-base/dist/decorators/event-strict.js";
 import property from "@ui5/webcomponents-base/dist/decorators/property.js";
 import slot from "@ui5/webcomponents-base/dist/decorators/slot.js";
 import { isEscape, isSpace, isEnter, isDown, isUp, isDownAlt, isUpAlt, isF4, isShift, isTabNext, isTabPrevious, } from "@ui5/webcomponents-base/dist/Keys.js";
-import { getI18nBundle } from "@ui5/webcomponents-base/dist/i18nBundle.js";
-import { getEventMark } from "@ui5/webcomponents-base/dist/MarkedEvents.js";
-import litRender from "@ui5/webcomponents-base/dist/renderer/LitRenderer.js";
-import "@ui5/webcomponents-icons/dist/slim-arrow-down.js";
-import ButtonDesign from "./types/ButtonDesign.js";
-import Button from "./Button.js";
-import { SPLIT_BUTTON_DESCRIPTION, SPLIT_BUTTON_KEYBOARD_HINT, } from "./generated/i18n/i18n-defaults.js";
+import i18n from "@ui5/webcomponents-base/dist/decorators/i18n.js";
+import jsxRenderer from "@ui5/webcomponents-base/dist/renderer/JsxRenderer.js";
+import { SPLIT_BUTTON_DESCRIPTION, SPLIT_BUTTON_KEYBOARD_HINT, SPLIT_BUTTON_ARROW_BUTTON_TOOLTIP, } from "./generated/i18n/i18n-defaults.js";
 // Template
-import SplitButtonTemplate from "./generated/templates/SplitButtonTemplate.lit.js";
+import SplitButtonTemplate from "./SplitButtonTemplate.js";
 // Styles
 import SplitButtonCss from "./generated/themes/SplitButton.css.js";
 /**
@@ -37,7 +33,6 @@ import SplitButtonCss from "./generated/themes/SplitButton.css.js";
  * `ui5-split-button` consists two separate buttons:
  *
  * - for the first one (default action) you can define some `text` or an `icon`, or both.
- * Also, it is possible to define different icon for active state of this button - `activeIcon`.
  * - the second one (arrow action) contains only `slim-arrow-down` icon.
  *
  * You can choose a `design` from a set of predefined types (the same as for ui5-button) that offer
@@ -62,50 +57,103 @@ import SplitButtonCss from "./generated/themes/SplitButton.css.js";
  * ### ES6 Module Import
  *
  * `import "@ui5/webcomponents/dist/SplitButton.js";`
+ * @csspart button - Used to style the native button element
+ * @csspart icon - Used to style the icon in the native button element
+ * @csspart endIcon - Used to style the end icon in the native button element
  * @constructor
  * @extends UI5Element
  * @public
  * @since 1.1.0
  */
 let SplitButton = SplitButton_1 = class SplitButton extends UI5Element {
-    static async onDefine() {
-        SplitButton_1.i18nBundle = await getI18nBundle("@ui5/webcomponents");
-    }
     constructor() {
-        super();
+        super(...arguments);
+        /**
+         * Defines whether the arrow button should have the active state styles or not.
+         * @default false
+         * @public
+         * @since 1.21.0
+         */
+        this.activeArrowButton = false;
+        /**
+         * Defines the component design.
+         * @default "Default"
+         * @public
+         */
+        this.design = "Default";
+        /**
+         * Defines whether the component is disabled.
+         * A disabled component can't be pressed or
+         * focused, and it is not in the tab chain.
+         * @default false
+         * @public
+         */
+        this.disabled = false;
+        /**
+         * Defines the tabIndex of the component.
+         * @default "0"
+         * @private
+         */
+        this._tabIndex = 0;
+        /**
+         * Indicates if there is Space key pressed
+         * @default false
+         * @private
+         */
+        this._spacePressed = false;
+        /**
+         * Indicates if there is SHIFT or ESCAPE key pressed
+         * @default false
+         * @private
+         */
+        this._shiftOrEscapePressed = false;
+        /**
+         * Defines the active state of the text button
+         * @default false
+         * @private
+         */
+        this._textButtonActive = false;
+        /**
+         * Defines the state of the internal Button used for the Arrow button of the SplitButton.
+         * @default false
+         * @private
+         */
+        this._activeArrowButton = false;
+        /**
+         * Defines the visibility of the arrow button of the component.
+         *
+         * @default false
+         * @private
+         */
+        this._hideArrowButton = false;
         this._isDefaultActionPressed = false;
         this._isKeyDownOperation = false;
-        const handleTouchStartEvent = (e) => {
-            e.stopPropagation();
-            this._textButtonActive = true;
-            this._tabIndex = "-1";
-        };
-        this._textButtonPress = {
-            handleEvent: handleTouchStartEvent,
-            passive: true,
-        };
     }
     onBeforeRendering() {
-        this._textButtonIcon = this.textButton && this.activeIcon !== "" && (this._textButtonActive) && !this._shiftOrEscapePressed ? this.activeIcon : this.icon;
         if (this.disabled) {
-            this._tabIndex = "-1";
+            this._tabIndex = -1;
         }
     }
     _handleMouseClick(e) {
         this._fireClick(e);
     }
-    _onFocusOut(e) {
-        if (this.disabled || getEventMark(e)) {
+    _onFocusOut() {
+        if (this.disabled || this.getFocusDomRef().matches(":has(:focus-within)")) {
             return;
         }
         this._shiftOrEscapePressed = false;
         this._setTabIndexValue();
     }
-    _onFocusIn(e) {
-        if (this.disabled || getEventMark(e)) {
+    _onFocusIn() {
+        if (this.disabled || this.getFocusDomRef().matches(":has(:focus-within)")) {
             return;
         }
         this._shiftOrEscapePressed = false;
+    }
+    handleTouchStart(e) {
+        e.stopPropagation();
+        this._textButtonActive = true;
+        this._tabIndex = -1;
     }
     _onInnerButtonFocusIn(e) {
         e.stopPropagation();
@@ -131,7 +179,7 @@ let SplitButton = SplitButton_1 = class SplitButton extends UI5Element {
             this._activeArrowButton = false;
             this._textButtonActive = false;
         }
-        this._tabIndex = "-1";
+        this._tabIndex = -1;
     }
     _onKeyUp(e) {
         this._isKeyDownOperation = false;
@@ -154,36 +202,35 @@ let SplitButton = SplitButton_1 = class SplitButton extends UI5Element {
         if (this._isShiftOrEscape(e)) {
             this._handleShiftOrEscapePressed();
         }
-        this._tabIndex = "-1";
+        this._tabIndex = -1;
     }
     _fireClick(e) {
         e?.stopPropagation();
         if (!this._shiftOrEscapePressed) {
-            this.fireEvent("click");
+            this.fireDecoratorEvent("click");
         }
         this._shiftOrEscapePressed = false;
     }
     _fireArrowClick(e) {
         e?.stopPropagation();
-        this.fireEvent("arrow-click");
+        this.fireDecoratorEvent("arrow-click");
     }
     _textButtonRelease() {
         this._textButtonActive = false;
-        this._textButtonIcon = this.textButton && this.activeIcon !== "" && (this._textButtonActive) && !this._shiftOrEscapePressed ? this.activeIcon : this.icon;
-        this._tabIndex = "-1";
+        this._tabIndex = -1;
     }
     _arrowButtonPress(e) {
         e.stopPropagation();
-        this._tabIndex = "-1";
+        this._tabIndex = -1;
     }
     _arrowButtonRelease(e) {
         e.preventDefault();
-        this._tabIndex = "-1";
+        this._tabIndex = -1;
     }
     _setTabIndexValue(innerButtonPressed) {
-        this._tabIndex = this.disabled ? "-1" : "0";
-        if (this._tabIndex === "-1" && innerButtonPressed) {
-            this._tabIndex = "0";
+        this._tabIndex = this.disabled ? -1 : 0;
+        if (this._tabIndex === -1 && innerButtonPressed) {
+            this._tabIndex = 0;
         }
     }
     _onArrowButtonActiveStateChange(e) {
@@ -246,10 +293,11 @@ let SplitButton = SplitButton_1 = class SplitButton extends UI5Element {
         }
         else {
             this._textButtonActive = true;
-            this._fireClick();
             if (wasSpacePressed) {
                 this._spacePressed = true;
+                return;
             }
+            this._fireClick();
         }
     }
     _handleShiftOrEscapePressed() {
@@ -272,15 +320,23 @@ let SplitButton = SplitButton_1 = class SplitButton extends UI5Element {
     get arrowButton() {
         return this.getDomRef()?.querySelector(".ui5-split-arrow-button");
     }
-    get accessibilityInfo() {
+    get accInfo() {
         return {
-            // affects arrow button
-            ariaExpanded: this._splitButtonAccInfo && this._splitButtonAccInfo.ariaExpanded,
-            ariaHaspopup: this._splitButtonAccInfo && this._splitButtonAccInfo.ariaHaspopup,
-            // affects root element
-            description: SplitButton_1.i18nBundle.getText(SPLIT_BUTTON_DESCRIPTION),
-            keyboardHint: SplitButton_1.i18nBundle.getText(SPLIT_BUTTON_KEYBOARD_HINT),
+            root: {
+                "description": SplitButton_1.i18nBundle.getText(SPLIT_BUTTON_DESCRIPTION),
+                "keyboardHint": SplitButton_1.i18nBundle.getText(SPLIT_BUTTON_KEYBOARD_HINT),
+            },
+            arrowButton: {
+                "title": this.arrowButtonTooltip,
+                "accessibilityAttributes": {
+                    "hasPopup": "menu",
+                    "expanded": this.effectiveActiveArrowButton,
+                },
+            },
         };
+    }
+    get arrowButtonTooltip() {
+        return SplitButton_1.i18nBundle.getText(SPLIT_BUTTON_ARROW_BUTTON_TOOLTIP);
     }
     get ariaLabelText() {
         return [SplitButton_1.i18nBundle.getText(SPLIT_BUTTON_DESCRIPTION), SplitButton_1.i18nBundle.getText(SPLIT_BUTTON_KEYBOARD_HINT)].join(" ");
@@ -290,25 +346,19 @@ __decorate([
     property()
 ], SplitButton.prototype, "icon", void 0);
 __decorate([
-    property()
-], SplitButton.prototype, "activeIcon", void 0);
-__decorate([
     property({ type: Boolean })
 ], SplitButton.prototype, "activeArrowButton", void 0);
 __decorate([
-    property({ type: ButtonDesign, defaultValue: ButtonDesign.Default })
+    property()
 ], SplitButton.prototype, "design", void 0);
 __decorate([
     property({ type: Boolean })
 ], SplitButton.prototype, "disabled", void 0);
 __decorate([
-    property({ defaultValue: undefined })
+    property()
 ], SplitButton.prototype, "accessibleName", void 0);
 __decorate([
-    property({ type: Object })
-], SplitButton.prototype, "_splitButtonAccInfo", void 0);
-__decorate([
-    property({ defaultValue: "0", noAttribute: true })
+    property({ type: Number, noAttribute: true })
 ], SplitButton.prototype, "_tabIndex", void 0);
 __decorate([
     property({ type: Boolean, noAttribute: true })
@@ -320,34 +370,43 @@ __decorate([
     property({ type: Boolean, noAttribute: true })
 ], SplitButton.prototype, "_textButtonActive", void 0);
 __decorate([
-    property({ noAttribute: true })
-], SplitButton.prototype, "_textButtonIcon", void 0);
-__decorate([
     property({ type: Boolean, noAttribute: true })
 ], SplitButton.prototype, "_activeArrowButton", void 0);
 __decorate([
+    property({ type: String })
+], SplitButton.prototype, "_endIcon", void 0);
+__decorate([
+    property({ type: Boolean })
+], SplitButton.prototype, "_hideArrowButton", void 0);
+__decorate([
     slot({ type: Node, "default": true })
 ], SplitButton.prototype, "text", void 0);
+__decorate([
+    i18n("@ui5/webcomponents")
+], SplitButton, "i18nBundle", void 0);
 SplitButton = SplitButton_1 = __decorate([
     customElement({
         tag: "ui5-split-button",
-        renderer: litRender,
+        renderer: jsxRenderer,
         styles: SplitButtonCss,
         template: SplitButtonTemplate,
-        dependencies: [Button],
     })
     /**
      * Fired when the user clicks on the default action.
      * @public
      */
     ,
-    event("click")
+    event("click", {
+        bubbles: true,
+    })
     /**
      * Fired when the user clicks on the arrow action.
      * @public
      */
     ,
-    event("arrow-click")
+    event("arrow-click", {
+        bubbles: true,
+    })
 ], SplitButton);
 SplitButton.define();
 export default SplitButton;

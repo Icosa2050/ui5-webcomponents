@@ -1,4 +1,3 @@
-/// <reference types="openui5" />
 import CalendarDate from "@ui5/webcomponents-localization/dist/dates/CalendarDate.js";
 import DateComponentBase from "./DateComponentBase.js";
 /**

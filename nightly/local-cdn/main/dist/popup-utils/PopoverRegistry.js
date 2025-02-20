@@ -1,4 +1,5 @@
 import { isClickInRect } from "@ui5/webcomponents-base/dist/util/PopupUtils.js";
+import getActiveElement from "@ui5/webcomponents-base/dist/util/getActiveElement.js";
 import { instanceOfPopover } from "../Popover.js";
 import { getOpenedPopups, addOpenedPopup, removeOpenedPopup } from "./OpenedPopupsRegistry.js";
 let updateInterval;
@@ -10,8 +11,8 @@ const repositionPopovers = () => {
     });
 };
 const closePopoversIfLostFocus = () => {
-    if (document.activeElement.tagName === "IFRAME") {
-        getRegistry().reverse().forEach(popup => popup.instance.close(false, false, true));
+    if (getActiveElement().tagName === "IFRAME") {
+        getRegistry().reverse().forEach(popup => popup.instance.closePopup(false, false, true));
     }
 };
 const runUpdateInterval = () => {
@@ -60,7 +61,7 @@ const clickHandler = (event) => {
         if (isClickInRect(event, popup.getBoundingClientRect())) {
             break;
         }
-        popup.close();
+        popup.closePopup();
     }
 };
 const addOpenedPopover = (instance) => {
@@ -95,7 +96,7 @@ const removeOpenedPopover = (instance) => {
                 removeOpenedPopup(openedRegistry[indexOfItemToRemove].instance);
                 detachScrollHandler(openedRegistry[indexOfItemToRemove].instance);
                 const itemToClose = openedRegistry.splice(indexOfItemToRemove, 1);
-                itemToClose[0].instance.close(false, true);
+                itemToClose[0].instance.closePopup(false, true);
             }
         }
     }

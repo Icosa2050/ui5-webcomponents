@@ -29,16 +29,8 @@ const getTabbables = (nodes, tabbables) => {
         if (currentNode.nodeType === Node.TEXT_NODE || currentNode.nodeType === Node.COMMENT_NODE) {
             return;
         }
-        let currentElement = currentNode;
+        const currentElement = currentNode;
         if (currentElement.hasAttribute("data-sap-no-tab-ref")) {
-            return;
-        }
-        if (currentElement.shadowRoot) {
-            // get the root node of the ShadowDom (1st none style tag)
-            const children = currentElement.shadowRoot.children;
-            currentElement = Array.from(children).find(node => node.tagName !== "STYLE");
-        }
-        if (!currentElement) {
             return;
         }
         if (isElementTabbable(currentElement)) {
@@ -48,7 +40,8 @@ const getTabbables = (nodes, tabbables) => {
             getTabbables(currentElement.assignedNodes(), tabbableElements);
         }
         else {
-            getTabbables([...currentElement.children], tabbableElements);
+            const children = currentElement.shadowRoot ? currentElement.shadowRoot.children : currentElement.children;
+            getTabbables([...children], tabbableElements);
         }
     });
     return tabbableElements;

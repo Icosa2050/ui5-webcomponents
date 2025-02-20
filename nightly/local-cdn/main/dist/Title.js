@@ -5,13 +5,12 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
-import litRender from "@ui5/webcomponents-base/dist/renderer/LitRenderer.js";
+import jsxRenderer from "@ui5/webcomponents-base/dist/renderer/JsxRenderer.js";
 import customElement from "@ui5/webcomponents-base/dist/decorators/customElement.js";
 import property from "@ui5/webcomponents-base/dist/decorators/property.js";
 import TitleLevel from "./types/TitleLevel.js";
-import WrappingType from "./types/WrappingType.js";
 // Template
-import TitleTemplate from "./generated/templates/TitleTemplate.lit.js";
+import TitleTemplate from "./TitleTemplate.js";
 // Styles
 import titleCss from "./generated/themes/Title.css.js";
 /**
@@ -34,38 +33,65 @@ import titleCss from "./generated/themes/Title.css.js";
  * @public
  */
 let Title = class Title extends UI5Element {
-    get normalizedLevel() {
-        return this.level.toLowerCase();
+    constructor() {
+        super(...arguments);
+        /**
+         * Defines how the text of a component will be displayed when there is not enough space.
+         *
+         * **Note:** for option "Normal" the text will wrap and the words will not be broken based on hyphenation.
+         * @default "Normal"
+         * @public
+         */
+        this.wrappingType = "Normal";
+        /**
+         * Defines the component level.
+         * Available options are: `"H6"` to `"H1"`.
+         * This property does not influence the style of the component.
+         * Use the property `size` for this purpose instead.
+         * @default "H2"
+         * @public
+         */
+        this.level = "H2";
+        /**
+         * Defines the visual appearance of the title.
+         * Available options are: `"H6"` to `"H1"`.
+         * @default "H5"
+         * @public
+         */
+        this.size = "H5";
     }
     get h1() {
-        return this.normalizedLevel === "h1";
+        return this.level === TitleLevel.H1;
     }
     get h2() {
-        return this.normalizedLevel === "h2";
+        return this.level === TitleLevel.H2;
     }
     get h3() {
-        return this.normalizedLevel === "h3";
+        return this.level === TitleLevel.H3;
     }
     get h4() {
-        return this.normalizedLevel === "h4";
+        return this.level === TitleLevel.H4;
     }
     get h5() {
-        return this.normalizedLevel === "h5";
+        return this.level === TitleLevel.H5;
     }
     get h6() {
-        return this.normalizedLevel === "h6";
+        return this.level === TitleLevel.H6;
     }
 };
 __decorate([
-    property({ type: WrappingType, defaultValue: WrappingType.None })
+    property()
 ], Title.prototype, "wrappingType", void 0);
 __decorate([
-    property({ type: TitleLevel, defaultValue: TitleLevel.H2 })
+    property()
 ], Title.prototype, "level", void 0);
+__decorate([
+    property()
+], Title.prototype, "size", void 0);
 Title = __decorate([
     customElement({
         tag: "ui5-title",
-        renderer: litRender,
+        renderer: jsxRenderer,
         template: TitleTemplate,
         styles: titleCss,
     })

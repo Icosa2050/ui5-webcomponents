@@ -5,12 +5,21 @@ import type { ScrollEnablementEventListenerParam } from "@ui5/webcomponents-base
 import type { ResizeObserverCallback } from "@ui5/webcomponents-base/dist/delegate/ResizeHandler.js";
 import CarouselArrowsPlacement from "./types/CarouselArrowsPlacement.js";
 import CarouselPageIndicatorType from "./types/CarouselPageIndicatorType.js";
-import BackgroundDesign from "./types/BackgroundDesign.js";
-import BorderDesign from "./types/BorderDesign.js";
-import "@ui5/webcomponents-icons/dist/slim-arrow-left.js";
-import "@ui5/webcomponents-icons/dist/slim-arrow-right.js";
+import type BackgroundDesign from "./types/BackgroundDesign.js";
+import type BorderDesign from "./types/BorderDesign.js";
 type CarouselNavigateEventDetail = {
     selectedIndex: number;
+};
+type ItemsInfo = {
+    id: string;
+    item: HTMLElement & {
+        _individualSlot?: string;
+    };
+    tabIndex: number;
+    posinset: number;
+    setsize: number;
+    selected: boolean;
+    _individualSlot?: string;
 };
 /**
  * @class
@@ -21,8 +30,8 @@ type CarouselNavigateEventDetail = {
  *
  * There are several ways to perform navigation:
  *
- * - on desktop - the user can navigate using the navigation arrows or with keyboard shorcuts.
- * - on mobile - the user can use swipe gestures.
+ * - on desktop - the user can navigate using the navigation arrows or with keyboard shortcuts.
+ * - on touch devices - the user can navigate using the navigation arrows (always visible) or can use swipe gestures.
  *
  * ### Usage
  *
@@ -61,20 +70,23 @@ type CarouselNavigateEventDetail = {
  * @csspart content - Used to style the content of the component
  */
 declare class Carousel extends UI5Element {
+    eventDetails: {
+        navigate: CarouselNavigateEventDetail;
+    };
     /**
      * Defines the accessible name of the component.
-     * @default ""
+     * @default undefined
      * @public
      * @since 1.24
      */
-    accessibleName: string;
+    accessibleName?: string;
     /**
      * Defines the IDs of the elements that label the input.
-     * @default ""
+     * @default undefined
      * @public
      * @since 1.24
      */
-    accessibleNameRef: string;
+    accessibleNameRef?: string;
     /**
      * Defines whether the carousel should loop, i.e show the first page after the last page is reached and vice versa.
      * @default false
@@ -82,29 +94,22 @@ declare class Carousel extends UI5Element {
      */
     cyclic: boolean;
     /**
-     * Defines the number of items per page on small size (up to 640px). One item per page shown by default.
-     * @default 1
+     * Defines the number of items per page depending on the carousel width.
+     *
+     * - 'S' for screens smaller than 600 pixels.
+     * - 'M' for screens greater than or equal to 600 pixels and smaller than 1024 pixels.
+     * - 'L' for screens greater than or equal to 1024 pixels and smaller than 1440 pixels.
+     * - 'XL' for screens greater than or equal to 1440 pixels.
+     *
+     * One item per page is shown by default.
+     * @default "S1 M1 L1 XL1"
      * @public
      */
-    itemsPerPageS: number;
-    /**
-     * Defines the number of items per page on medium size (from 640px to 1024px). One item per page shown by default.
-     * @default 1
-     * @public
-     */
-    itemsPerPageM: number;
-    /**
-     * Defines the number of items per page on large size (more than 1024px). One item per page shown by default.
-     * @default 1
-     * @public
-     */
-    itemsPerPageL: number;
+    itemsPerPage: string;
     /**
      * Defines the visibility of the navigation arrows.
      * If set to true the navigation arrows will be hidden.
      *
-     * **Note:** The navigation arrows are never displayed on touch devices.
-     * In this case, the user can swipe to navigate through the items.
      * @since 1.0.0-rc.15
      * @default false
      * @public
@@ -135,21 +140,21 @@ declare class Carousel extends UI5Element {
      * @default "Translucent"
      * @public
      */
-    backgroundDesign: BackgroundDesign;
+    backgroundDesign: `${BackgroundDesign}`;
     /**
      * Defines the page indicator background design.
      * @since 1.14
      * @default "Solid"
      * @public
      */
-    pageIndicatorBackgroundDesign: BackgroundDesign;
+    pageIndicatorBackgroundDesign: `${BackgroundDesign}`;
     /**
      * Defines the page indicator border design.
      * @since 1.14
      * @default "Solid"
      * @public
      */
-    pageIndicatorBorderDesign: BorderDesign;
+    pageIndicatorBorderDesign: `${BorderDesign}`;
     /**
      * Defines the index of the initially selected item.
      * @default 0
@@ -224,17 +229,7 @@ declare class Carousel extends UI5Element {
      * Assuming that all items have the same width
      * @private
      */
-    get items(): {
-        id: string;
-        item: HTMLElement;
-        tabIndex: string;
-        posinset: string;
-        setsize: string;
-        styles: {
-            width: string;
-        };
-        classes: string;
-    }[];
+    get items(): Array<ItemsInfo>;
     get effectiveItemsPerPage(): number;
     isItemInViewport(index: number): boolean;
     isIndexInRange(index: number): boolean;
@@ -243,11 +238,6 @@ declare class Carousel extends UI5Element {
      */
     get renderNavigation(): boolean;
     get hasManyPages(): boolean;
-    get styles(): {
-        content: {
-            transform: string;
-        };
-    };
     get classes(): {
         viewport: {
             "ui5-carousel-viewport": boolean;
@@ -263,12 +253,6 @@ declare class Carousel extends UI5Element {
             [x: string]: boolean;
             "ui5-carousel-navigation-wrapper": boolean;
             "ui5-carousel-navigation-with-buttons": boolean;
-        };
-        navPrevButton: {
-            "ui5-carousel-navigation-button--hidden": boolean;
-        };
-        navNextButton: {
-            "ui5-carousel-navigation-button--hidden": boolean;
         };
     };
     get pagesCount(): number;
@@ -298,7 +282,6 @@ declare class Carousel extends UI5Element {
      * @default []
      */
     get visibleItemsIndices(): Array<number>;
-    static onDefine(): Promise<void>;
 }
 export default Carousel;
 export type { CarouselNavigateEventDetail, };

@@ -4,6 +4,15 @@ import { instanceOfUI5Element } from "../UI5Element.js";
 import { getFirstFocusableElement } from "../util/FocusableElements.js";
 import getFastNavigationGroups from "../util/getFastNavigationGroups.js";
 import isElementClickable from "../util/isElementClickable.js";
+import { getCurrentRuntimeIndex, compareRuntimes } from "../Runtimes.js";
+import getSharedResource from "../getSharedResource.js";
+const currentRuntimeINdex = getCurrentRuntimeIndex();
+const shouldUpdate = (runtimeIndex) => {
+    if (runtimeIndex === undefined) {
+        return true;
+    }
+    return compareRuntimes(currentRuntimeINdex, runtimeIndex) === 1; // 1 means the current is newer, 0 means the same, -1 means the resource's runtime is newer
+};
 class F6Navigation {
     constructor() {
         this.selectedGroup = null;
@@ -14,8 +23,14 @@ class F6Navigation {
     attachEventListeners() {
         document.addEventListener("keydown", this.keydownHandler);
     }
+    removeEventListeners() {
+        document.removeEventListener("keydown", this.keydownHandler);
+    }
     async groupElementToFocus(nextElement) {
-        const nextElementDomRef = instanceOfUI5Element(nextElement) ? nextElement.getDomRef() : nextElement;
+        let nextElementDomRef = nextElement;
+        if (instanceOfUI5Element(nextElement)) {
+            nextElementDomRef = nextElement.getDomRef() || nextElement.firstElementChild;
+        }
         if (nextElementDomRef) {
             if (isElementClickable(nextElementDomRef)) {
                 return nextElementDomRef;
@@ -115,12 +130,22 @@ class F6Navigation {
         }
         elementToFocus?.focus();
     }
-    removeEventListeners() {
-        document.removeEventListener("keydown", this.keydownHandler);
-    }
     updateGroups() {
+        const container = this.findContainer();
         this.setSelectedGroup();
-        this.groups = getFastNavigationGroups(document.body);
+        this.groups = getFastNavigationGroups(container);
+    }
+    findContainer() {
+        const htmlElement = window.document.querySelector("html");
+        let element = this.deepActive(window.document);
+        while (element && element !== htmlElement) {
+            const closestScopeEl = element.closest("[data-sap-ui-fastnavgroup-container='true']");
+            if (closestScopeEl) {
+                return closestScopeEl;
+            }
+            element = element.parentElement ? element.parentElement : element.parentNode.host;
+        }
+        return document.body;
     }
     setSelectedGroup(root = window.document) {
         const htmlElement = window.document.querySelector("html");
@@ -131,7 +156,7 @@ class F6Navigation {
         this.selectedGroup = element;
     }
     deepActive(root) {
-        if (root.activeElement && root.activeElement.shadowRoot) {
+        if (root?.activeElement?.shadowRoot?.activeElement) {
             return this.deepActive(root.activeElement.shadowRoot);
         }
         return root.activeElement;
@@ -139,11 +164,18 @@ class F6Navigation {
     destroy() {
         this.removeEventListeners();
     }
+    get _ui5RuntimeIndex() {
+        return currentRuntimeINdex;
+    }
     static init() {
-        if (!this._instance) {
-            this._instance = new F6Navigation();
+        const f6Registry = getSharedResource("F6Registry", {});
+        if (!f6Registry.instance) {
+            f6Registry.instance = new F6Navigation();
         }
-        return this._instance;
+        else if (shouldUpdate(f6Registry.instance?._ui5RuntimeIndex)) {
+            f6Registry.instance?.destroy();
+            f6Registry.instance = new F6Navigation();
+        }
     }
 }
 registerFeature("F6Navigation", F6Navigation);

@@ -5,20 +5,20 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
-import litRender from "@ui5/webcomponents-base/dist/renderer/LitRenderer.js";
+import jsxRender from "@ui5/webcomponents-base/dist/renderer/JsxRenderer.js";
 import customElement from "@ui5/webcomponents-base/dist/decorators/customElement.js";
-import event from "@ui5/webcomponents-base/dist/decorators/event.js";
+import event from "@ui5/webcomponents-base/dist/decorators/event-strict.js";
 import property from "@ui5/webcomponents-base/dist/decorators/property.js";
 import { getIconData, getIconDataSync } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 import { getI18nBundle } from "@ui5/webcomponents-base/dist/i18nBundle.js";
+import { isDesktop } from "@ui5/webcomponents-base/dist/Device.js";
 import { isSpace, isEnter } from "@ui5/webcomponents-base/dist/Keys.js";
 import executeTemplate from "@ui5/webcomponents-base/dist/renderer/executeTemplate.js";
-import IconTemplate from "./generated/templates/IconTemplate.lit.js";
-import IconDesign from "./types/IconDesign.js";
+import IconTemplate from "./IconTemplate.js";
+import IconMode from "./types/IconMode.js";
 // Styles
 import iconCss from "./generated/themes/Icon.css.js";
 const ICON_NOT_FOUND = "ICON_NOT_FOUND";
-const PRESENTATION_ROLE = "presentation";
 /**
  * @class
  * ### Overview
@@ -40,7 +40,7 @@ const PRESENTATION_ROLE = "presentation";
  * [icons](https://sdk.openui5.org/test-resources/sap/m/demokit/iconExplorer/webapp/index.html#/overview/SAP-icons).
  * - [@ui5/webcomponents-icons-tnt](https://www.npmjs.com/package/@ui5/webcomponents-icons-tnt) represents the "tnt" collection and includes the following
  * [icons](https://sdk.openui5.org/test-resources/sap/m/demokit/iconExplorer/webapp/index.html#/overview/SAP-icons-TNT).
- * - [@ui5/webcomponents-icons-icons-business-suite](https://www.npmjs.com/package/@ui5/webcomponents-icons-business-suite) represents the "business-suite" collection and includes the following
+ * - [@ui5/webcomponents-icons-business-suite](https://www.npmjs.com/package/@ui5/webcomponents-icons-business-suite) represents the "business-suite" collection and includes the following
  * [icons](https://ui5.sap.com/test-resources/sap/m/demokit/iconExplorer/webapp/index.html#/overview/BusinessSuiteInAppSymbols).
  *
  * 2. **After exploring the icons collections, add one or more of the packages as dependencies to your project.**
@@ -77,7 +77,7 @@ const PRESENTATION_ROLE = "presentation";
  *
  * ### Keyboard Handling
  *
- * - [Space] / [Enter] or [Return] - Fires the `click` event if the `interactive` property is set to true.
+ * - [Space] / [Enter] or [Return] - Fires the `click` event if the `mode` property is set to `Interactive`.
  * - [Shift] - If [Space] / [Enter] or [Return] is pressed, pressing [Shift] releases the ui5-icon without triggering the click event.
  *
  * ### ES6 Module Import
@@ -90,28 +90,53 @@ const PRESENTATION_ROLE = "presentation";
  * @public
  */
 let Icon = class Icon extends UI5Element {
-    _onFocusInHandler() {
-        if (this.interactive) {
-            this.focused = true;
-        }
-    }
-    _onFocusOutHandler() {
-        this.focused = false;
+    constructor() {
+        super(...arguments);
+        /**
+         * Defines the component semantic design.
+         * @default "Default"
+         * @public
+         * @since 1.9.2
+         */
+        this.design = "Default";
+        /**
+         * Defines whether the component should have a tooltip.
+         *
+         * **Note:** The tooltip text should be provided via the `accessible-name` property.
+         * @default false
+         * @public
+         */
+        this.showTooltip = false;
+        /**
+         * Defines the mode of the component.
+         * @default "Image"
+         * @public
+         * @since 2.0.0
+         */
+        this.mode = "Image";
+        /**
+         * @private
+         */
+        this.pathData = [];
+        /**
+        * @private
+        */
+        this.invalid = false;
     }
     _onkeydown(e) {
-        if (!this.interactive) {
+        if (this.mode !== IconMode.Interactive) {
             return;
         }
         if (isEnter(e)) {
-            this.fireEvent("click");
+            this.fireDecoratorEvent("click");
         }
         if (isSpace(e)) {
             e.preventDefault(); // prevent scrolling
         }
     }
     _onkeyup(e) {
-        if (this.interactive && isSpace(e)) {
-            this.fireEvent("click");
+        if (this.mode === IconMode.Interactive && isSpace(e)) {
+            this.fireDecoratorEvent("click");
         }
     }
     /**
@@ -121,28 +146,25 @@ let Icon = class Icon extends UI5Element {
         return this.ltr ? "ltr" : undefined;
     }
     get effectiveAriaHidden() {
-        if (this.ariaHidden === "") {
-            if (this.isDecorative) {
-                return true;
-            }
-            return;
-        }
-        return this.ariaHidden;
+        return this.mode === IconMode.Decorative ? "true" : undefined;
     }
     get _tabIndex() {
-        return this.interactive ? "0" : undefined;
-    }
-    get isDecorative() {
-        return this.effectiveAccessibleRole === PRESENTATION_ROLE;
+        return this.mode === IconMode.Interactive ? 0 : undefined;
     }
     get effectiveAccessibleRole() {
-        if (this.accessibleRole) {
-            return this.accessibleRole;
+        switch (this.mode) {
+            case IconMode.Interactive:
+                return "button";
+            case IconMode.Decorative:
+                return "presentation";
+            default:
+                return "img";
         }
-        if (this.interactive) {
-            return "button";
+    }
+    onEnterDOM() {
+        if (isDesktop()) {
+            this.setAttribute("desktop", "");
         }
-        return this.effectiveAccessibleName ? "img" : PRESENTATION_ROLE;
     }
     async onBeforeRendering() {
         const name = this.name;
@@ -175,8 +197,6 @@ let Icon = class Icon extends UI5Element {
         this.accData = iconData.accData;
         this.ltr = iconData.ltr;
         this.packageName = iconData.packageName;
-        this._onfocusout = this.interactive ? this._onFocusOutHandler.bind(this) : undefined;
-        this._onfocusin = this.interactive ? this._onFocusInHandler.bind(this) : undefined;
         if (this.accessibleName) {
             this.effectiveAccessibleName = this.accessibleName;
         }
@@ -193,11 +213,8 @@ let Icon = class Icon extends UI5Element {
     }
 };
 __decorate([
-    property({ type: IconDesign, defaultValue: IconDesign.Default })
+    property()
 ], Icon.prototype, "design", void 0);
-__decorate([
-    property({ type: Boolean })
-], Icon.prototype, "interactive", void 0);
 __decorate([
     property()
 ], Icon.prototype, "name", void 0);
@@ -209,31 +226,25 @@ __decorate([
 ], Icon.prototype, "showTooltip", void 0);
 __decorate([
     property()
-], Icon.prototype, "accessibleRole", void 0);
+], Icon.prototype, "mode", void 0);
 __decorate([
-    property()
-], Icon.prototype, "ariaHidden", void 0);
-__decorate([
-    property({ multiple: true })
+    property({ type: Array })
 ], Icon.prototype, "pathData", void 0);
 __decorate([
-    property({ type: Object, defaultValue: undefined, noAttribute: true })
+    property({ type: Object, noAttribute: true })
 ], Icon.prototype, "accData", void 0);
-__decorate([
-    property({ type: Boolean })
-], Icon.prototype, "focused", void 0);
 __decorate([
     property({ type: Boolean })
 ], Icon.prototype, "invalid", void 0);
 __decorate([
-    property({ noAttribute: true, defaultValue: undefined })
+    property({ noAttribute: true })
 ], Icon.prototype, "effectiveAccessibleName", void 0);
 Icon = __decorate([
     customElement({
         tag: "ui5-icon",
         languageAware: true,
         themeAware: true,
-        renderer: litRender,
+        renderer: jsxRender,
         template: IconTemplate,
         styles: iconCss,
     })
@@ -245,7 +256,9 @@ Icon = __decorate([
      * @since 1.0.0-rc.8
      */
     ,
-    event("click")
+    event("click", {
+        bubbles: true,
+    })
 ], Icon);
 Icon.define();
 export default Icon;

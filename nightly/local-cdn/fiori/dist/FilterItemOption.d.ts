@@ -19,10 +19,10 @@ import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
 declare class FilterItemOption extends UI5Element {
     /**
      * Defines the text of the component.
-     * @default ""
+     * @default undefined
      * @public
      */
-    text: string;
+    text?: string;
     /**
      * Defines if the component is selected.
      * @default false

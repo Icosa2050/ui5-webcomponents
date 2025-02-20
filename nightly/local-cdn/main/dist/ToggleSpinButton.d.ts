@@ -1,3 +1,4 @@
+import type { AriaRole } from "@ui5/webcomponents-base";
 import ToggleButton from "./ToggleButton.js";
 /**
  * @class
@@ -30,12 +31,16 @@ declare class ToggleSpinButton extends ToggleButton {
     valueNow: number;
     /**
      * Defines the ARIA valuetext of the component.
-     * @default ""
+     * @default undefined
      */
     valueText?: string;
     /**
      * Override of the handler in order to prevent button toggle functionality
      */
     _onclick(): void;
+    /**
+     * Override
+     */
+    get effectiveAccRole(): AriaRole;
 }
 export default ToggleSpinButton;

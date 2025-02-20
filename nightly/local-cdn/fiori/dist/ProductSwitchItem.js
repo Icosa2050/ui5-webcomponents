@@ -5,13 +5,13 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
-import litRender from "@ui5/webcomponents-base/dist/renderer/LitRenderer.js";
+import jsxRenderer from "@ui5/webcomponents-base/dist/renderer/JsxRenderer.js";
 import { isSpace, isEnter, isSpaceShift } from "@ui5/webcomponents-base/dist/Keys.js";
-import Icon from "@ui5/webcomponents/dist/Icon.js";
+import { isDesktop } from "@ui5/webcomponents-base/dist/Device.js";
 import property from "@ui5/webcomponents-base/dist/decorators/property.js";
-import event from "@ui5/webcomponents-base/dist/decorators/event.js";
+import event from "@ui5/webcomponents-base/dist/decorators/event-strict.js";
 import customElement from "@ui5/webcomponents-base/dist/decorators/customElement.js";
-import ProductSwitchItemTemplate from "./generated/templates/ProductSwitchItemTemplate.lit.js";
+import ProductSwitchItemTemplate from "./ProductSwitchItemTemplate.js";
 // Styles
 import ProductSwitchItemCss from "./generated/themes/ProductSwitchItem.css.js";
 /**
@@ -40,6 +40,16 @@ import ProductSwitchItemCss from "./generated/themes/ProductSwitchItem.css.js";
 let ProductSwitchItem = class ProductSwitchItem extends UI5Element {
     constructor() {
         super();
+        /**
+         * Used to switch the active state (pressed or not) of the component.
+         * @private
+         */
+        this.active = false;
+        /**
+         * Used to set the selected state of the component. Only one selected in a sequence.
+         * **Note:** Set by the `ProductSwitch`
+         */
+        this.selected = false;
         this._deactivate = () => {
             if (this.active) {
                 this.active = false;
@@ -48,12 +58,18 @@ let ProductSwitchItem = class ProductSwitchItem extends UI5Element {
     }
     onEnterDOM() {
         document.addEventListener("mouseup", this._deactivate);
+        if (isDesktop()) {
+            this.setAttribute("desktop", "");
+        }
     }
     onExitDOM() {
         document.removeEventListener("mouseup", this._deactivate);
     }
     _onmousedown() {
         this.active = true;
+    }
+    get _effectiveTarget() {
+        return this.target || "_self";
     }
     _onkeydown(e) {
         if (isSpace(e) || isEnter(e)) {
@@ -79,14 +95,12 @@ let ProductSwitchItem = class ProductSwitchItem extends UI5Element {
     }
     _onfocusout() {
         this.active = false;
-        this.focused = false;
     }
-    _onfocusin(e) {
-        this.focused = true;
-        this.fireEvent("_focused", e);
+    _onfocusin() {
+        this.fireDecoratorEvent("_focused");
     }
     _fireItemClick() {
-        this.fireEvent("click", { item: this });
+        this.fireDecoratorEvent("click", { item: this });
     }
 };
 __decorate([
@@ -99,7 +113,7 @@ __decorate([
     property()
 ], ProductSwitchItem.prototype, "icon", void 0);
 __decorate([
-    property({ defaultValue: "_self" })
+    property()
 ], ProductSwitchItem.prototype, "target", void 0);
 __decorate([
     property()
@@ -109,20 +123,16 @@ __decorate([
 ], ProductSwitchItem.prototype, "active", void 0);
 __decorate([
     property({ type: Boolean })
-], ProductSwitchItem.prototype, "focused", void 0);
-__decorate([
-    property({ type: Boolean })
 ], ProductSwitchItem.prototype, "selected", void 0);
 __decorate([
-    property({ defaultValue: "-1", noAttribute: true })
+    property({ noAttribute: true })
 ], ProductSwitchItem.prototype, "forcedTabIndex", void 0);
 ProductSwitchItem = __decorate([
     customElement({
         tag: "ui5-product-switch-item",
-        renderer: litRender,
+        renderer: jsxRenderer,
         styles: ProductSwitchItemCss,
         template: ProductSwitchItemTemplate,
-        dependencies: [Icon],
     })
     /**
      * Fired when the `ui5-product-switch-item` is activated either with a
@@ -130,8 +140,12 @@ ProductSwitchItem = __decorate([
      * @public
      */
     ,
-    event("click"),
-    event("_focused")
+    event("click", {
+        bubbles: true,
+    }),
+    event("_focused", {
+        bubbles: true,
+    })
 ], ProductSwitchItem);
 ProductSwitchItem.define();
 export default ProductSwitchItem;

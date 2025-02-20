@@ -5,25 +5,24 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 var Popover_1;
+import { instanceOfUI5Element } from "@ui5/webcomponents-base/dist/UI5Element.js";
 import customElement from "@ui5/webcomponents-base/dist/decorators/customElement.js";
 import property from "@ui5/webcomponents-base/dist/decorators/property.js";
 import slot from "@ui5/webcomponents-base/dist/decorators/slot.js";
-import Integer from "@ui5/webcomponents-base/dist/types/Integer.js";
 import { isIOS } from "@ui5/webcomponents-base/dist/Device.js";
-import DOMReference from "@ui5/webcomponents-base/dist/types/DOMReference.js";
 import { getClosedPopupParent } from "@ui5/webcomponents-base/dist/util/PopupUtils.js";
 import clamp from "@ui5/webcomponents-base/dist/util/clamp.js";
-import isElementContainingBlock from "@ui5/webcomponents-base/dist/util/isElementContainingBlock.js";
-import getParentElement from "@ui5/webcomponents-base/dist/util/getParentElement.js";
+import getEffectiveScrollbarStyle from "@ui5/webcomponents-base/dist/util/getEffectiveScrollbarStyle.js";
+import DOMReferenceConverter from "@ui5/webcomponents-base/dist/converters/DOMReference.js";
+import { renderFinished } from "@ui5/webcomponents-base/dist/Render.js";
 import Popup from "./Popup.js";
 import PopoverPlacement from "./types/PopoverPlacement.js";
 import PopoverVerticalAlign from "./types/PopoverVerticalAlign.js";
 import PopoverHorizontalAlign from "./types/PopoverHorizontalAlign.js";
 import { addOpenedPopover, removeOpenedPopover } from "./popup-utils/PopoverRegistry.js";
 // Template
-import PopoverTemplate from "./generated/templates/PopoverTemplate.lit.js";
+import PopoverTemplate from "./PopoverTemplate.js";
 // Styles
-import browserScrollbarCSS from "./generated/themes/BrowserScrollbar.css.js";
 import PopupsCommonCss from "./generated/themes/PopupsCommon.css.js";
 import PopoverCss from "./generated/themes/Popover.css.js";
 const ARROW_SIZE = 8;
@@ -54,12 +53,6 @@ const ARROW_SIZE = 8;
  *
  * `import "@ui5/webcomponents/dist/Popover.js";`
  *
- * **Note: ** We recommend placing popup-like components (`ui5-dialog` and `ui5-popover`)
- * outside any other components. Preferably, the popup-like components should be placed
- * in an upper level HTML element. Otherwise, in some cases the parent HTML elements can break
- * the position and/or z-index management of the popup-like components.
- *
- * **Note:** We don't recommend nesting popup-like components (`ui5-dialog`, `ui5-popover`).
  * @constructor
  * @extends Popup
  * @since 1.0.0-rc.6
@@ -74,9 +67,72 @@ let Popover = Popover_1 = class Popover extends Popup {
     }
     constructor() {
         super();
+        /**
+         * Determines on which side the component is placed at.
+         * @default "End"
+         * @public
+         */
+        this.placement = "End";
+        /**
+         * Determines the horizontal alignment of the component.
+         * @default "Center"
+         * @public
+         */
+        this.horizontalAlign = "Center";
+        /**
+         * Determines the vertical alignment of the component.
+         * @default "Center"
+         * @public
+         */
+        this.verticalAlign = "Center";
+        /**
+         * Defines whether the component should close when
+         * clicking/tapping outside of the popover.
+         * If enabled, it blocks any interaction with the background.
+         * @default false
+         * @public
+         */
+        this.modal = false;
+        /**
+         * Determines whether the component arrow is hidden.
+         * @default false
+         * @public
+         * @since 1.0.0-rc.15
+         */
+        this.hideArrow = false;
+        /**
+         * Determines if there is no enough space, the component can be placed
+         * over the target.
+         * @default false
+         * @public
+         */
+        this.allowTargetOverlap = false;
+        /**
+         * Defines whether the content is scrollable.
+         * @default false
+         * @private
+         */
+        this.disableScrolling = false;
+        /**
+         * Sets the X translation of the arrow
+         * @private
+         */
+        this.arrowTranslateX = 0;
+        /**
+         * Sets the Y translation of the arrow
+         * @private
+         */
+        this.arrowTranslateY = 0;
+        /**
+         * Returns the calculated placement depending on the free space
+         * @private
+         */
+        this.actualPlacement = "End";
     }
     /**
-     * Defines the ID or DOM Reference of the element that the popover is shown at
+     * Defines the ID or DOM Reference of the element at which the popover is shown.
+     * When using this attribute in a declarative way, you must only use the `id` (as a string) of the element at which you want to show the popover.
+     * You can only set the `opener` attribute to a DOM Reference when using JavaScript.
      * @public
      * @default undefined
      * @since 1.2.0
@@ -94,50 +150,35 @@ let Popover = Popover_1 = class Popover extends Popup {
         return this._opener;
     }
     async openPopup() {
-        let opener;
-        if (this.opener instanceof HTMLElement) {
-            opener = this.opener;
-        }
-        else if (typeof this.opener === "string") {
-            const rootNode = this.getRootNode();
-            if (rootNode instanceof Document) {
-                opener = rootNode.getElementById(this.opener);
-            }
-            if (!opener) {
-                opener = document.getElementById(this.opener);
-            }
-        }
-        if (!opener) {
-            console.warn("Valid opener id is required. It must be defined before opening the popover."); // eslint-disable-line
+        if (this._opened) {
             return;
         }
-        await this.showAt(opener);
+        const opener = this.getOpenerHTMLElement(this.opener);
+        if (!opener) {
+            return;
+        }
+        if (this.isOpenerOutsideViewport(opener.getBoundingClientRect())) {
+            await renderFinished();
+            this.open = false;
+            this.fireDecoratorEvent("close");
+            return;
+        }
+        this._openerRect = opener.getBoundingClientRect();
+        await super.openPopup();
     }
     isOpenerClicked(e) {
         const target = e.target;
-        if (target === this._opener) {
+        const opener = this.getOpenerHTMLElement(this.opener);
+        if (!opener) {
+            return false;
+        }
+        if (target === opener) {
             return true;
         }
-        const ui5ElementTarget = target;
-        if (ui5ElementTarget.getFocusDomRef && ui5ElementTarget.getFocusDomRef() === this._opener) {
+        if (this._isUI5AbstractElement(target) && target.getFocusDomRef() === opener) {
             return true;
         }
-        return e.composedPath().indexOf(this._opener) > -1;
-    }
-    /**
-     * Shows the popover.
-     * @param opener the element that the popover is shown at
-     * @param [preventInitialFocus=false] prevents applying the focus inside the popover
-     * @public
-     * @returns Resolved when the popover is open
-     */
-    async showAt(opener, preventInitialFocus = false) {
-        if (!opener || this._isOpened) {
-            return;
-        }
-        this._opener = opener;
-        this._openerRect = opener.getBoundingClientRect();
-        await super._open(preventInitialFocus);
+        return e.composedPath().indexOf(opener) > -1;
     }
     /**
      * Override for the _addOpenedPopup hook, which would otherwise just call addOpenedPopup(this)
@@ -153,6 +194,26 @@ let Popover = Popover_1 = class Popover extends Popup {
     _removeOpenedPopup() {
         removeOpenedPopover(this);
     }
+    getOpenerHTMLElement(opener) {
+        if (opener === undefined) {
+            return opener;
+        }
+        if (opener instanceof HTMLElement) {
+            return this._isUI5AbstractElement(opener) ? opener.getFocusDomRef() : opener;
+        }
+        let rootNode = this.getRootNode();
+        if (rootNode === this) {
+            rootNode = document;
+        }
+        let openerHTMLElement = rootNode.getElementById(opener);
+        if (rootNode instanceof ShadowRoot && !openerHTMLElement) {
+            openerHTMLElement = document.getElementById(opener);
+        }
+        if (openerHTMLElement) {
+            return this._isUI5AbstractElement(openerHTMLElement) ? openerHTMLElement.getFocusDomRef() : openerHTMLElement;
+        }
+        return openerHTMLElement;
+    }
     shouldCloseDueToOverflow(placement, openerRect) {
         const threshold = 32;
         const limits = {
@@ -161,11 +222,12 @@ let Popover = Popover_1 = class Popover extends Popup {
             "Top": openerRect.top,
             "Bottom": openerRect.bottom,
         };
-        const closedPopupParent = getClosedPopupParent(this._opener);
+        const opener = this.getOpenerHTMLElement(this.opener);
+        const closedPopupParent = getClosedPopupParent(opener);
         let overflowsBottom = false;
         let overflowsTop = false;
-        if (closedPopupParent.showAt) {
-            const contentRect = closedPopupParent.contentDOM.getBoundingClientRect();
+        if (closedPopupParent instanceof Popover_1) {
+            const contentRect = closedPopupParent.getBoundingClientRect();
             overflowsBottom = openerRect.top > (contentRect.top + contentRect.height);
             overflowsTop = (openerRect.top + openerRect.height) < contentRect.top;
         }
@@ -195,9 +257,13 @@ let Popover = Popover_1 = class Popover extends Popup {
     reposition() {
         this._show();
     }
-    _show() {
+    async _show() {
         super._show();
-        if (!this._isOpened) {
+        const opener = this.getOpenerHTMLElement(this.opener);
+        if (opener && instanceOfUI5Element(opener) && !opener.getDomRef()) {
+            return;
+        }
+        if (!this._opened) {
             this._showOutsideViewport();
         }
         const popoverSize = this.getPopoverSize();
@@ -206,11 +272,11 @@ let Popover = Popover_1 = class Popover extends Popup {
             // size can not be determined properly at this point, popover will be shown with the next reposition
             return;
         }
-        if (this.isOpen()) {
+        if (this.open) {
             // update opener rect if it was changed during the popover being opened
-            this._openerRect = this._opener.getBoundingClientRect();
+            this._openerRect = opener.getBoundingClientRect();
         }
-        if (this.shouldCloseDueToNoOpener(this._openerRect) && this.isFocusWithin() && this._oldPlacement) {
+        if (this._oldPlacement && this.shouldCloseDueToNoOpener(this._openerRect) && this.isFocusWithin()) {
             // reuse the old placement as the opener is not available,
             // but keep the popover open as the focus is within
             placement = this._oldPlacement;
@@ -219,7 +285,8 @@ let Popover = Popover_1 = class Popover extends Popup {
             placement = this.calcPlacement(this._openerRect, popoverSize);
         }
         if (this._preventRepositionAndClose || this.isOpenerOutsideViewport(this._openerRect)) {
-            return this.close();
+            await this._waitForDomRef();
+            return this.closePopup();
         }
         this._oldPlacement = placement;
         this.actualPlacement = placement.placement;
@@ -241,6 +308,9 @@ let Popover = Popover_1 = class Popover extends Popup {
         if (this.horizontalAlign === PopoverHorizontalAlign.Stretch && this._width) {
             this.style.width = this._width;
         }
+        if (this.verticalAlign === PopoverVerticalAlign.Stretch && this._height) {
+            this.style.height = this._height;
+        }
     }
     /**
      * Adjust the desired top position to compensate for shift of the screen
@@ -256,16 +326,6 @@ let Popover = Popover_1 = class Popover extends Popup {
         const actualTop = Math.ceil(this.getBoundingClientRect().top);
         return top + (Number.parseInt(this.style.top || "0") - actualTop);
     }
-    _getContainingBlockClientLocation() {
-        let parentElement = getParentElement(this);
-        while (parentElement) {
-            if (isElementContainingBlock(parentElement)) {
-                return parentElement.getBoundingClientRect();
-            }
-            parentElement = getParentElement(parentElement);
-        }
-        return { left: 0, top: 0 };
-    }
     getPopoverSize() {
         const rect = this.getBoundingClientRect(), width = rect.width, height = rect.height;
         return { width, height };
@@ -276,8 +336,17 @@ let Popover = Popover_1 = class Popover extends Popup {
             left: "-10000px",
         });
     }
+    _isUI5AbstractElement(el) {
+        return instanceOfUI5Element(el) && el.isUI5AbstractElement;
+    }
     get arrowDOM() {
         return this.shadowRoot.querySelector(".ui5-popover-arrow");
+    }
+    /**
+     * @protected
+     */
+    focusOpener() {
+        this.getOpenerHTMLElement(this.opener)?.focus();
     }
     /**
      * @private
@@ -300,6 +369,7 @@ let Popover = Popover_1 = class Popover extends Popup {
         }
         else if (this.verticalAlign === PopoverVerticalAlign.Stretch && !isVertical) {
             popoverSize.height = targetRect.height;
+            this._height = `${targetRect.height}px`;
         }
         const arrowOffset = this.hideArrow ? 0 : ARROW_SIZE;
         // calc popover positions
@@ -349,11 +419,11 @@ let Popover = Popover_1 = class Popover extends Popup {
             }
         }
         else {
-            if (popoverSize.height > clientHeight || top < 0) { // eslint-disable-line
-                top = 0;
+            if (popoverSize.height > clientHeight || top < Popover_1.VIEWPORT_MARGIN) { // eslint-disable-line
+                top = Popover_1.VIEWPORT_MARGIN;
             }
-            else if (top + popoverSize.height > clientHeight) {
-                top -= top + popoverSize.height - clientHeight;
+            else if (top + popoverSize.height > clientHeight - Popover_1.VIEWPORT_MARGIN) {
+                top = clientHeight - Popover_1.VIEWPORT_MARGIN - popoverSize.height;
             }
         }
         this._maxHeight = Math.round(maxHeight - Popover_1.VIEWPORT_MARGIN);
@@ -366,12 +436,16 @@ let Popover = Popover_1 = class Popover extends Popup {
         }
         const borderRadius = Number.parseInt(window.getComputedStyle(this).getPropertyValue("border-radius"));
         const arrowPos = this.getArrowPosition(targetRect, popoverSize, left, top, isVertical, borderRadius);
+        this._left += this.getRTLCorrectionLeft();
         return {
             arrow: arrowPos,
             top: this._top,
             left: this._left,
             placement,
         };
+    }
+    getRTLCorrectionLeft() {
+        return parseFloat(window.getComputedStyle(this).left) - this.getBoundingClientRect().left;
     }
     /**
      * Calculates the position for the arrow.
@@ -497,9 +571,6 @@ let Popover = Popover_1 = class Popover extends Popup {
     get isModal() {
         return this.modal;
     }
-    get shouldHideBackdrop() {
-        return this.hideBackdrop;
-    }
     get _ariaLabelledBy() {
         if (!this._ariaLabel && this._displayHeader) {
             return "ui5-popup-header";
@@ -551,20 +622,17 @@ __decorate([
     property()
 ], Popover.prototype, "headerText", void 0);
 __decorate([
-    property({ type: PopoverPlacement, defaultValue: PopoverPlacement.End })
+    property()
 ], Popover.prototype, "placement", void 0);
 __decorate([
-    property({ type: PopoverHorizontalAlign, defaultValue: PopoverHorizontalAlign.Center })
+    property()
 ], Popover.prototype, "horizontalAlign", void 0);
 __decorate([
-    property({ type: PopoverVerticalAlign, defaultValue: PopoverVerticalAlign.Center })
+    property()
 ], Popover.prototype, "verticalAlign", void 0);
 __decorate([
     property({ type: Boolean })
 ], Popover.prototype, "modal", void 0);
-__decorate([
-    property({ type: Boolean })
-], Popover.prototype, "hideBackdrop", void 0);
 __decorate([
     property({ type: Boolean })
 ], Popover.prototype, "hideArrow", void 0);
@@ -575,19 +643,19 @@ __decorate([
     property({ type: Boolean })
 ], Popover.prototype, "disableScrolling", void 0);
 __decorate([
-    property({ validator: Integer, defaultValue: 0, noAttribute: true })
+    property({ type: Number, noAttribute: true })
 ], Popover.prototype, "arrowTranslateX", void 0);
 __decorate([
-    property({ validator: Integer, defaultValue: 0, noAttribute: true })
+    property({ type: Number, noAttribute: true })
 ], Popover.prototype, "arrowTranslateY", void 0);
 __decorate([
-    property({ type: PopoverPlacement, defaultValue: PopoverPlacement.End })
+    property()
 ], Popover.prototype, "actualPlacement", void 0);
 __decorate([
-    property({ validator: Integer, noAttribute: true })
+    property({ type: Number, noAttribute: true })
 ], Popover.prototype, "_maxHeight", void 0);
 __decorate([
-    property({ validator: Integer, noAttribute: true })
+    property({ type: Number, noAttribute: true })
 ], Popover.prototype, "_maxWidth", void 0);
 __decorate([
     slot({ type: HTMLElement })
@@ -596,22 +664,22 @@ __decorate([
     slot({ type: HTMLElement })
 ], Popover.prototype, "footer", void 0);
 __decorate([
-    property({ validator: DOMReference })
+    property({ converter: DOMReferenceConverter })
 ], Popover.prototype, "opener", null);
 Popover = Popover_1 = __decorate([
     customElement({
         tag: "ui5-popover",
         styles: [
             Popup.styles,
-            browserScrollbarCSS,
             PopupsCommonCss,
             PopoverCss,
+            getEffectiveScrollbarStyle(),
         ],
         template: PopoverTemplate,
     })
 ], Popover);
 const instanceOfPopover = (object) => {
-    return "showAt" in object;
+    return "opener" in object;
 };
 Popover.define();
 export default Popover;

@@ -1,4 +1,4 @@
-import { I18nText } from "@ui5/webcomponents-base/dist/i18nBundle.js";
+import type { I18nText } from "@ui5/webcomponents-base/dist/i18nBundle.js";
 declare const ICON_ACTION_SETTINGS: I18nText;
 declare const ICON_ACTIVATE: I18nText;
 declare const ICON_ADD: I18nText;

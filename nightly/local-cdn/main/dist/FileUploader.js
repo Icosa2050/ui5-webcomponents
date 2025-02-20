@@ -8,24 +8,20 @@ var FileUploader_1;
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
 import customElement from "@ui5/webcomponents-base/dist/decorators/customElement.js";
 import property from "@ui5/webcomponents-base/dist/decorators/property.js";
-import event from "@ui5/webcomponents-base/dist/decorators/event.js";
+import event from "@ui5/webcomponents-base/dist/decorators/event-strict.js";
 import slot from "@ui5/webcomponents-base/dist/decorators/slot.js";
 import ValueState from "@ui5/webcomponents-base/dist/types/ValueState.js";
-import { getFeature } from "@ui5/webcomponents-base/dist/FeaturesRegistry.js";
-import litRender from "@ui5/webcomponents-base/dist/renderer/LitRenderer.js";
-import { getI18nBundle } from "@ui5/webcomponents-base/dist/i18nBundle.js";
-import { getEventMark } from "@ui5/webcomponents-base/dist/MarkedEvents.js";
+import jsxRenderer from "@ui5/webcomponents-base/dist/renderer/JsxRenderer.js";
+import i18n from "@ui5/webcomponents-base/dist/decorators/i18n.js";
 import { isEnter, isSpace } from "@ui5/webcomponents-base/dist/Keys.js";
 import { FILEUPLOAD_BROWSE, FILEUPLOADER_TITLE, VALUE_STATE_SUCCESS, VALUE_STATE_INFORMATION, VALUE_STATE_ERROR, VALUE_STATE_WARNING, } from "./generated/i18n/i18n-defaults.js";
-import Input from "./Input.js";
-import Popover from "./Popover.js";
-import Icon from "./Icon.js";
 // Template
-import FileUploaderTemplate from "./generated/templates/FileUploaderTemplate.lit.js";
+import FileUploaderTemplate from "./FileUploaderTemplate.js";
 // Styles
 import FileUploaderCss from "./generated/themes/FileUploader.css.js";
 import ResponsivePopoverCommonCss from "./generated/themes/ResponsivePopoverCommon.css.js";
 import ValueStateMessageCss from "./generated/themes/ValueStateMessage.css.js";
+const convertBytesToMegabytes = (bytes) => (bytes / 1024) / 1024;
 /**
  * @class
  *
@@ -51,12 +47,65 @@ import ValueStateMessageCss from "./generated/themes/ValueStateMessage.css.js";
  * @public
  */
 let FileUploader = FileUploader_1 = class FileUploader extends UI5Element {
-    static get formAssociated() {
-        return true;
-    }
     constructor() {
-        super();
-        this._internals = this.attachInternals && this.attachInternals();
+        super(...arguments);
+        /**
+         * If set to "true", the input field of component will not be rendered. Only the default slot that is passed will be rendered.
+         * @default false
+         * @public
+         */
+        this.hideInput = false;
+        /**
+         * Defines whether the component is in disabled state.
+         *
+         * **Note:** A disabled component is completely noninteractive.
+         * @default false
+         * @public
+         */
+        this.disabled = false;
+        /**
+         * Allows multiple files to be chosen.
+         * @default false
+         * @public
+         */
+        this.multiple = false;
+        /**
+         * Defines the name/names of the file/files to upload.
+         * @default ""
+         * @formEvents change
+         * @formProperty
+         * @public
+         */
+        this.value = "";
+        /**
+         * Defines the value state of the component.
+         * @default "None"
+         * @public
+         */
+        this.valueState = "None";
+        /**
+         * @private
+         */
+        this.focused = false;
+    }
+    async formElementAnchor() {
+        return this.getFocusDomRefAsync();
+    }
+    /**
+     * @override
+     */
+    getFocusDomRef() {
+        return this.content[0];
+    }
+    get formFormattedValue() {
+        if (this.files && this.name) {
+            const formData = new FormData();
+            for (let i = 0; i < this.files.length; i++) {
+                formData.append(this.name, this.files[i]);
+            }
+            return formData;
+        }
+        return null;
     }
     _onmouseover() {
         this.content.forEach(item => {
@@ -68,8 +117,8 @@ let FileUploader = FileUploader_1 = class FileUploader extends UI5Element {
             item.classList.remove("ui5_hovered");
         });
     }
-    _onclick(e) {
-        if (getEventMark(e) === "button") {
+    _onclick() {
+        if (this.getFocusDomRef()?.matches(":focus-within")) {
             this._input.click();
         }
     }
@@ -84,6 +133,27 @@ let FileUploader = FileUploader_1 = class FileUploader extends UI5Element {
             this._input.click();
             e.preventDefault();
         }
+    }
+    _ondrag(e) {
+        e.preventDefault();
+        e.stopPropagation();
+    }
+    _ondrop(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        const files = e.dataTransfer?.files;
+        if (!files) {
+            return;
+        }
+        const validatedFiles = this._validateFiles(files);
+        if (!this.value && !validatedFiles.length) {
+            return;
+        }
+        this._input.files = validatedFiles;
+        this._updateValue(validatedFiles);
+        this.fireDecoratorEvent("change", {
+            files: validatedFiles,
+        });
     }
     _onfocusin() {
         this.focused = true;
@@ -102,35 +172,22 @@ let FileUploader = FileUploader_1 = class FileUploader extends UI5Element {
         }
         return FileUploader_1._emptyFilesList;
     }
-    onBeforeRendering() {
-        this._enableFormSupport();
-    }
     onAfterRendering() {
         if (!this.value) {
             this._input.value = "";
         }
         this.toggleValueStatePopover(this.shouldOpenValueStateMessagePopover);
     }
-    _enableFormSupport() {
-        const formSupport = getFeature("FormSupport");
-        if (formSupport) {
-            if (this._canUseNativeFormSupport) {
-                this._setFormValue();
-            }
-            else {
-                formSupport.syncNativeFileInput(this, (element, nativeInput) => {
-                    nativeInput.disabled = !!element.disabled;
-                }, this._onChange.bind(this));
-            }
-        }
-        else if (this.name) {
-            console.warn(`In order for the "name" property to have effect, you should also: import "@ui5/webcomponents/dist/features/InputElementsFormSupport.js";`); // eslint-disable-line
-        }
-    }
     _onChange(e) {
-        const changedFiles = e.target.files;
+        let changedFiles = e.target.files;
+        if (changedFiles) {
+            changedFiles = this._validateFiles(changedFiles);
+        }
+        if (!this.value && !changedFiles?.length) {
+            return;
+        }
         this._updateValue(changedFiles);
-        this.fireEvent("change", {
+        this.fireDecoratorEvent("change", {
             files: changedFiles,
         });
     }
@@ -139,14 +196,34 @@ let FileUploader = FileUploader_1 = class FileUploader extends UI5Element {
             return `${acc}"${currFile.name}" `;
         }, "");
     }
-    _setFormValue() {
-        const formData = new FormData();
-        if (this.files) {
-            for (let i = 0; i < this.files.length; i++) {
-                formData.append(this.name, this.files[i]);
+    /**
+     * Checks whether all files are below `maxFileSize` (if set),
+     * and fires a `file-size-exceed` event if any file exceeds it.
+     * @private
+     */
+    _validateFiles(changedFiles) {
+        const exceededFilesData = this.maxFileSize ? this._getExceededFiles(changedFiles) : [];
+        if (exceededFilesData.length) {
+            this.fireDecoratorEvent("file-size-exceed", {
+                filesData: exceededFilesData,
+            });
+            changedFiles = new DataTransfer().files;
+        }
+        return changedFiles;
+    }
+    _getExceededFiles(files) {
+        const filesArray = Array.from(files);
+        const exceededFiles = [];
+        for (let i = 0; i < filesArray.length; i++) {
+            const fileSize = convertBytesToMegabytes(filesArray[i].size);
+            if (fileSize > this.maxFileSize) {
+                exceededFiles.push({
+                    fileName: filesArray[i].name,
+                    fileSize,
+                });
             }
         }
-        this._internals.setFormValue(formData);
+        return exceededFiles;
     }
     toggleValueStatePopover(open) {
         if (open) {
@@ -159,13 +236,14 @@ let FileUploader = FileUploader_1 = class FileUploader extends UI5Element {
     openValueStatePopover() {
         const popover = this._getPopover();
         if (popover) {
-            popover.showAt(this);
+            popover.opener = this;
+            popover.open = true;
         }
     }
     closeValueStatePopover() {
         const popover = this._getPopover();
         if (popover) {
-            popover.close();
+            popover.open = false;
         }
     }
     _getPopover() {
@@ -188,22 +266,15 @@ let FileUploader = FileUploader_1 = class FileUploader extends UI5Element {
     get titleText() {
         return FileUploader_1.i18nBundle.getText(FILEUPLOADER_TITLE);
     }
-    get _canUseNativeFormSupport() {
-        return !!(this._internals && this._internals.setFormValue);
-    }
-    get _keepInputInShadowDOM() {
-        // only put input in the light dom when ui5-file-uploader is placed inside form and there is no support for form elements
-        return this._canUseNativeFormSupport || !this.name;
-    }
     get _input() {
         return (this.shadowRoot.querySelector("input[type=file]") || this.querySelector("input[type=file][data-ui5-form-support]"));
     }
     get valueStateTextMappings() {
         return {
-            "Success": FileUploader_1.i18nBundle.getText(VALUE_STATE_SUCCESS),
+            "Positive": FileUploader_1.i18nBundle.getText(VALUE_STATE_SUCCESS),
             "Information": FileUploader_1.i18nBundle.getText(VALUE_STATE_INFORMATION),
-            "Error": FileUploader_1.i18nBundle.getText(VALUE_STATE_ERROR),
-            "Warning": FileUploader_1.i18nBundle.getText(VALUE_STATE_WARNING),
+            "Negative": FileUploader_1.i18nBundle.getText(VALUE_STATE_ERROR),
+            "Critical": FileUploader_1.i18nBundle.getText(VALUE_STATE_WARNING),
         };
     }
     get valueStateText() {
@@ -213,10 +284,7 @@ let FileUploader = FileUploader_1 = class FileUploader extends UI5Element {
         return this.valueState !== ValueState.None;
     }
     get hasValueStateText() {
-        return this.hasValueState && this.valueState !== ValueState.Success;
-    }
-    get valueStateMessageText() {
-        return this.getSlottedNodes("valueStateMessage").map(el => el.cloneNode(true));
+        return this.hasValueState && this.valueState !== ValueState.Positive;
     }
     get shouldDisplayDefaultValueStateMessage() {
         return !this.valueStateMessage.length && this.hasValueStateText;
@@ -229,36 +297,15 @@ let FileUploader = FileUploader_1 = class FileUploader extends UI5Element {
      */
     get _valueStateMessageInputIcon() {
         const iconPerValueState = {
-            Error: "error",
-            Warning: "alert",
-            Success: "sys-enter-2",
+            Negative: "error",
+            Critical: "alert",
+            Positive: "sys-enter-2",
             Information: "information",
         };
         return this.valueState !== ValueState.None ? iconPerValueState[this.valueState] : "";
     }
-    get classes() {
-        return {
-            popoverValueState: {
-                "ui5-valuestatemessage-root": true,
-                "ui5-valuestatemessage--success": this.valueState === ValueState.Success,
-                "ui5-valuestatemessage--error": this.valueState === ValueState.Error,
-                "ui5-valuestatemessage--warning": this.valueState === ValueState.Warning,
-                "ui5-valuestatemessage--information": this.valueState === ValueState.Information,
-            },
-        };
-    }
-    get styles() {
-        return {
-            popoverHeader: {
-                "width": `${this.ui5Input ? this.ui5Input.offsetWidth : 0}px`,
-            },
-        };
-    }
     get ui5Input() {
         return this.shadowRoot.querySelector(".ui5-file-uploader-input");
-    }
-    static async onDefine() {
-        FileUploader_1.i18nBundle = await getI18nBundle("@ui5/webcomponents");
     }
 };
 __decorate([
@@ -283,7 +330,10 @@ __decorate([
     property()
 ], FileUploader.prototype, "value", void 0);
 __decorate([
-    property({ type: ValueState, defaultValue: ValueState.None })
+    property({ type: Number })
+], FileUploader.prototype, "maxFileSize", void 0);
+__decorate([
+    property()
 ], FileUploader.prototype, "valueState", void 0);
 __decorate([
     property({ type: Boolean })
@@ -295,24 +345,20 @@ __decorate([
     slot()
 ], FileUploader.prototype, "valueStateMessage", void 0);
 __decorate([
-    slot()
-], FileUploader.prototype, "formSupport", void 0);
+    i18n("@ui5/webcomponents")
+], FileUploader, "i18nBundle", void 0);
 FileUploader = FileUploader_1 = __decorate([
     customElement({
         tag: "ui5-file-uploader",
         languageAware: true,
-        renderer: litRender,
+        formAssociated: true,
+        renderer: jsxRenderer,
         styles: [
             FileUploaderCss,
             ResponsivePopoverCommonCss,
             ValueStateMessageCss,
         ],
         template: FileUploaderTemplate,
-        dependencies: [
-            Input,
-            Popover,
-            Icon,
-        ],
     })
     /**
      * Event is fired when the value of the file path has been changed.
@@ -323,12 +369,17 @@ FileUploader = FileUploader_1 = __decorate([
      */
     ,
     event("change", {
-        detail: {
-            /**
-             * @public
-             */
-            files: { type: FileList },
-        },
+        bubbles: true,
+    })
+    /**
+     * Event is fired when the size of a file is above the `maxFileSize` property value.
+     * @param {Array<FileData>} filesData An array of `FileData` objects containing the`fileName` and `fileSize` in MB of each file that exceeds the upload limit.
+     * @since 2.2.0
+     * @public
+     */
+    ,
+    event("file-size-exceed", {
+        bubbles: true,
     })
 ], FileUploader);
 FileUploader.define();

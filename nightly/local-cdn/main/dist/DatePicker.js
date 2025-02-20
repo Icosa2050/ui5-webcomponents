@@ -8,31 +8,24 @@ var DatePicker_1;
 import customElement from "@ui5/webcomponents-base/dist/decorators/customElement.js";
 import property from "@ui5/webcomponents-base/dist/decorators/property.js";
 import slot from "@ui5/webcomponents-base/dist/decorators/slot.js";
-import event from "@ui5/webcomponents-base/dist/decorators/event.js";
-import { getFeature } from "@ui5/webcomponents-base/dist/FeaturesRegistry.js";
-import "@ui5/webcomponents-localization/dist/DateFormat.js";
+import event from "@ui5/webcomponents-base/dist/decorators/event-strict.js";
+import i18n from "@ui5/webcomponents-base/dist/decorators/i18n.js";
 import CalendarDate from "@ui5/webcomponents-localization/dist/dates/CalendarDate.js";
 import modifyDateBy from "@ui5/webcomponents-localization/dist/dates/modifyDateBy.js";
 import getRoundedTimestamp from "@ui5/webcomponents-localization/dist/dates/getRoundedTimestamp.js";
 import getTodayUTCTimestamp from "@ui5/webcomponents-localization/dist/dates/getTodayUTCTimestamp.js";
 import ValueState from "@ui5/webcomponents-base/dist/types/ValueState.js";
-import { getEffectiveAriaLabelText } from "@ui5/webcomponents-base/dist/util/AriaLabelHelper.js";
+import { getEffectiveAriaLabelText } from "@ui5/webcomponents-base/dist/util/AccessibilityTextsHelper.js";
+import { submitForm } from "@ui5/webcomponents-base/dist/features/InputElementsFormSupport.js";
 import { isPageUp, isPageDown, isPageUpShift, isPageDownShift, isPageUpShiftCtrl, isPageDownShiftCtrl, isShow, isF4, isEnter, isTabNext, isTabPrevious, isF6Next, isF6Previous, } from "@ui5/webcomponents-base/dist/Keys.js";
 import { isPhone, isDesktop } from "@ui5/webcomponents-base/dist/Device.js";
 import CalendarPickersMode from "./types/CalendarPickersMode.js";
 import "@ui5/webcomponents-icons/dist/appointment-2.js";
-import "@ui5/webcomponents-icons/dist/decline.js";
-import HasPopup from "./types/HasPopup.js";
-import { DATEPICKER_OPEN_ICON_TITLE, DATEPICKER_DATE_DESCRIPTION, INPUT_SUGGESTIONS_TITLE } from "./generated/i18n/i18n-defaults.js";
+import { DATEPICKER_OPEN_ICON_TITLE, DATEPICKER_DATE_DESCRIPTION, INPUT_SUGGESTIONS_TITLE, FORM_TEXTFIELD_REQUIRED, DATEPICKER_POPOVER_ACCESSIBLE_NAME, } from "./generated/i18n/i18n-defaults.js";
 import DateComponentBase from "./DateComponentBase.js";
-import Icon from "./Icon.js";
-import Button from "./Button.js";
-import ResponsivePopover from "./ResponsivePopover.js";
-import Calendar from "./Calendar.js";
-import CalendarDateComponent from "./CalendarDate.js";
-import Input from "./Input.js";
 import InputType from "./types/InputType.js";
-import DatePickerTemplate from "./generated/templates/DatePickerTemplate.lit.js";
+import IconMode from "./types/IconMode.js";
+import DatePickerTemplate from "./DatePickerTemplate.js";
 // default calendar for bundling
 import "@ui5/webcomponents-localization/dist/features/calendar/Gregorian.js";
 // Styles
@@ -120,34 +113,105 @@ import ResponsivePopoverCommonCss from "./generated/themes/ResponsivePopoverComm
  * @public
  */
 let DatePicker = DatePicker_1 = class DatePicker extends DateComponentBase {
+    constructor() {
+        super(...arguments);
+        /**
+         * Defines a formatted date value.
+         * @default ""
+         * @formEvents change input
+         * @formProperty
+         * @public
+         */
+        this.value = "";
+        /**
+         * Defines the value state of the component.
+         * @default "None"
+         * @public
+         */
+        this.valueState = "None";
+        /**
+         * Defines whether the component is required.
+         * @since 1.0.0-rc.9
+         * @default false
+         * @public
+         */
+        this.required = false;
+        /**
+         * Determines whether the component is displayed as disabled.
+         * @default false
+         * @public
+         */
+        this.disabled = false;
+        /**
+         * Determines whether the component is displayed as read-only.
+         * @default false
+         * @public
+         */
+        this.readonly = false;
+        /**
+         * Defines the visibility of the week numbers column.
+         *
+         * **Note:** For calendars other than Gregorian,
+         * the week numbers are not displayed regardless of what is set.
+         * @default false
+         * @public
+         * @since 1.0.0-rc.8
+         */
+        this.hideWeekNumbers = false;
+        /**
+         * Defines the open or closed state of the popover.
+         * @public
+         * @default false
+         * @since 2.0.0
+         */
+        this.open = false;
+        this._calendarCurrentPicker = "day";
+    }
+    get formValidityMessage() {
+        return DatePicker_1.i18nBundle.getText(FORM_TEXTFIELD_REQUIRED);
+    }
+    get formValidity() {
+        return { valueMissing: this.required && !this.value };
+    }
+    async formElementAnchor() {
+        return (await this.getFocusDomRefAsync())?.getFocusDomRefAsync();
+    }
+    get formFormattedValue() {
+        return this.value;
+    }
     /**
      * @protected
      */
     onResponsivePopoverAfterClose() {
-        this._isPickerOpen = false;
+        this.open = false;
         if (isPhone()) {
             this.blur(); // close device's keyboard and prevent further typing
         }
         else {
             this._getInput()?.focus();
         }
+        this.fireDecoratorEvent("close");
+    }
+    onResponsivePopoverAfterOpen() {
+        this.fireDecoratorEvent("open");
+    }
+    onResponsivePopoverBeforeOpen() {
+        this._calendar.timestamp = this._calendarTimestamp;
+        this._calendarCurrentPicker = this.firstPicker;
     }
     onBeforeRendering() {
-        this.FormSupport = getFeature("FormSupport");
         ["minDate", "maxDate"].forEach((prop) => {
             const propValue = this[prop];
             if (!this.isValid(propValue)) {
                 console.warn(`Invalid value for property "${prop}": ${propValue} is not compatible with the configured format pattern: "${this._displayFormat}"`); // eslint-disable-line
             }
         });
-        if (this.FormSupport) {
-            this.FormSupport.syncNativeHiddenInput(this);
-        }
-        else if (this.name) {
-            console.warn(`In order for the "name" property to have effect, you should also: import "@ui5/webcomponents/dist/features/InputElementsFormSupport.js";`); // eslint-disable-line
-        }
         this.value = this.normalizeValue(this.value) || this.value;
         this.liveValue = this.value;
+    }
+    get _calendar() {
+        return this.shadowRoot.querySelector("[ui5-responsive-popover]")
+            .querySelector("[ui5-calendar]");
     }
     /**
      * Override in derivatives to change calendar selection mode
@@ -183,7 +247,7 @@ let DatePicker = DatePicker_1 = class DatePicker extends DateComponentBase {
     _onkeydown(e) {
         if (isShow(e)) {
             e.preventDefault(); // Prevent scroll on Alt/Option + Arrow Up/Down
-            if (this.isOpen()) {
+            if (this.open) {
                 if (!isF4(e)) {
                     this._toggleAndFocusInput();
                 }
@@ -192,15 +256,16 @@ let DatePicker = DatePicker_1 = class DatePicker extends DateComponentBase {
                 this._toggleAndFocusInput();
             }
         }
-        if ((this._getInput().isEqualNode(e.target) && this.isOpen()) && (isTabNext(e) || isTabPrevious(e) || isF6Next(e) || isF6Previous(e))) {
-            this.closePicker();
+        const target = e.target;
+        if (target && this.open && this._getInput().id === target.id && (isTabNext(e) || isTabPrevious(e) || isF6Next(e) || isF6Previous(e))) {
+            this._togglePicker();
         }
-        if (this.isOpen()) {
+        if (this.open) {
             return;
         }
         if (isEnter(e)) {
-            if (this.FormSupport) {
-                this.FormSupport.triggerFormSubmit(this);
+            if (this._internals.form) {
+                submitForm(this);
             }
         }
         else if (isPageUpShiftCtrl(e)) {
@@ -255,8 +320,8 @@ let DatePicker = DatePicker_1 = class DatePicker extends DateComponentBase {
             this.value = value;
             this._updateValueState(); // Change the value state to Error/None, but only if needed
         }
-        events.forEach((e) => {
-            if (!this.fireEvent(e, { value, valid }, true)) {
+        events.forEach(e => {
+            if (!this.fireDecoratorEvent(e, { value, valid })) {
                 executeEvent = false;
             }
         });
@@ -271,15 +336,11 @@ let DatePicker = DatePicker_1 = class DatePicker extends DateComponentBase {
     _updateValueState() {
         const valid = this._checkValueValidity(this.value);
         const previousValueState = this.valueState;
-        this.valueState = valid ? ValueState.None : ValueState.Error;
-        const eventPrevented = !this.fireEvent("value-state-change", { valueState: this.valueState, valid }, true);
+        this.valueState = valid ? ValueState.None : ValueState.Negative;
+        const eventPrevented = !this.fireDecoratorEvent("value-state-change", { valueState: this.valueState, valid });
         if (eventPrevented) {
             this.valueState = previousValueState;
         }
-    }
-    _toggleAndFocusInput() {
-        this.togglePicker();
-        this._getInput().focus();
     }
     _getInput() {
         return this.shadowRoot.querySelector("[ui5-input]");
@@ -316,7 +377,8 @@ let DatePicker = DatePicker_1 = class DatePicker extends DateComponentBase {
     }
     _click(e) {
         if (isPhone()) {
-            this.responsivePopover.showAt(this);
+            this.responsivePopover.opener = this;
+            this.responsivePopover.open = true;
             e.preventDefault(); // prevent immediate selection of any item
         }
     }
@@ -381,7 +443,7 @@ let DatePicker = DatePicker_1 = class DatePicker extends DateComponentBase {
     get accInfo() {
         return {
             "ariaRoledescription": this.dateAriaDescription,
-            "ariaHasPopup": HasPopup.Grid.toLowerCase(),
+            "ariaHasPopup": "grid",
             "ariaRequired": this.required,
             "ariaLabel": getEffectiveAriaLabelText(this),
         };
@@ -394,6 +456,9 @@ let DatePicker = DatePicker_1 = class DatePicker extends DateComponentBase {
     }
     get dateAriaDescription() {
         return DatePicker_1.i18nBundle.getText(DATEPICKER_DATE_DESCRIPTION);
+    }
+    get pickerAccessibleName() {
+        return DatePicker_1.i18nBundle.getText(DATEPICKER_POPOVER_ACCESSIBLE_NAME);
     }
     /**
      * Defines whether the dialog on mobile should have header
@@ -420,8 +485,8 @@ let DatePicker = DatePicker_1 = class DatePicker extends DateComponentBase {
      * Defines whether the value help icon is hidden
      * @private
      */
-    get _ariaHidden() {
-        return isDesktop();
+    get _iconMode() {
+        return isDesktop() ? IconMode.Decorative : IconMode.Interactive;
     }
     _respPopover() {
         return this.shadowRoot.querySelector("[ui5-responsive-popover]");
@@ -451,7 +516,7 @@ let DatePicker = DatePicker_1 = class DatePicker extends DateComponentBase {
         e.preventDefault();
         const newValue = e.detail.selectedValues && e.detail.selectedValues[0];
         this._updateValueAndFireEvents(newValue, true, ["change", "value-changed"]);
-        this.closePicker();
+        this._togglePicker();
     }
     /**
      * The user clicked the "month" button in the header
@@ -475,39 +540,12 @@ let DatePicker = DatePicker_1 = class DatePicker extends DateComponentBase {
     formatValue(date) {
         return this.getFormat().format(date);
     }
-    /**
-     * Closes the picker.
-     * @public
-     */
-    closePicker() {
-        this.responsivePopover.close();
+    _togglePicker() {
+        this.open = !this.open;
     }
-    /**
-     * Opens the picker.
-     * @public
-     * @returns Resolves when the picker is open
-     */
-    async openPicker() {
-        this._isPickerOpen = true;
-        this._calendarCurrentPicker = this.firstPicker;
-        this.responsivePopover = this._respPopover();
-        await this.responsivePopover.showAt(this);
-    }
-    togglePicker() {
-        if (this.isOpen()) {
-            this.closePicker();
-        }
-        else if (this._canOpenPicker()) {
-            this.openPicker();
-        }
-    }
-    /**
-     * Checks if the picker is open.
-     * @public
-     * @returns true if the picker is open, false otherwise
-     */
-    isOpen() {
-        return !!this._isPickerOpen;
+    _toggleAndFocusInput() {
+        this._togglePicker();
+        this._getInput().focus();
     }
     /**
      * Currently selected date represented as a Local JavaScript Date instance.
@@ -535,7 +573,7 @@ __decorate([
     property()
 ], DatePicker.prototype, "value", void 0);
 __decorate([
-    property({ type: ValueState, defaultValue: ValueState.None })
+    property()
 ], DatePicker.prototype, "valueState", void 0);
 __decorate([
     property({ type: Boolean })
@@ -547,7 +585,7 @@ __decorate([
     property({ type: Boolean })
 ], DatePicker.prototype, "readonly", void 0);
 __decorate([
-    property({ defaultValue: undefined })
+    property()
 ], DatePicker.prototype, "placeholder", void 0);
 __decorate([
     property()
@@ -556,119 +594,87 @@ __decorate([
     property({ type: Boolean })
 ], DatePicker.prototype, "hideWeekNumbers", void 0);
 __decorate([
+    property({ type: Boolean })
+], DatePicker.prototype, "open", void 0);
+__decorate([
     property()
 ], DatePicker.prototype, "accessibleName", void 0);
 __decorate([
-    property({ defaultValue: "" })
+    property()
 ], DatePicker.prototype, "accessibleNameRef", void 0);
-__decorate([
-    property({ type: Boolean, noAttribute: true })
-], DatePicker.prototype, "_isPickerOpen", void 0);
 __decorate([
     property({ type: Object })
 ], DatePicker.prototype, "_respPopoverConfig", void 0);
 __decorate([
-    property({ defaultValue: "day" })
+    property()
 ], DatePicker.prototype, "_calendarCurrentPicker", void 0);
 __decorate([
     slot({ type: HTMLElement })
 ], DatePicker.prototype, "valueStateMessage", void 0);
 __decorate([
-    slot({ type: HTMLElement })
-], DatePicker.prototype, "formSupport", void 0);
+    i18n("@ui5/webcomponents")
+], DatePicker, "i18nBundle", void 0);
 DatePicker = DatePicker_1 = __decorate([
     customElement({
         tag: "ui5-date-picker",
         languageAware: true,
+        formAssociated: true,
         template: DatePickerTemplate,
         styles: [
             datePickerCss,
             ResponsivePopoverCommonCss,
             datePickerPopoverCss,
         ],
-        dependencies: [
-            Icon,
-            ResponsivePopover,
-            Calendar,
-            CalendarDateComponent,
-            Input,
-            Button,
-        ],
     })
     /**
      * Fired when the input operation has finished by pressing Enter or on focusout.
-     * @allowPreventDefault
      * @public
      * @param {string} value The submitted value.
      * @param {boolean} valid Indicator if the value is in correct format pattern and in valid range.
      */
     ,
     event("change", {
-        detail: {
-            /**
-             * @public
-             */
-            value: {
-                type: String,
-            },
-            /**
-             * @public
-             */
-            valid: {
-                type: Boolean,
-            },
-        },
+        bubbles: true,
+        cancelable: true,
     })
     /**
      * Fired when the value of the component is changed at each key stroke.
-     * @allowPreventDefault
      * @public
      * @param {string} value The submitted value.
      * @param {boolean} valid Indicator if the value is in correct format pattern and in valid range.
      */
     ,
     event("input", {
-        detail: {
-            /**
-             * @public
-             */
-            value: {
-                type: String,
-            },
-            /**
-             * @public
-             */
-            valid: {
-                type: Boolean,
-            },
-        },
+        bubbles: true,
+        cancelable: true,
     })
     /**
      * Fired before the value state of the component is updated internally.
      * The event is preventable, meaning that if it's default action is
      * prevented, the component will not update the value state.
-     * @allowPreventDefault
      * @public
      * @param {string} valueState The new `valueState` that will be set.
      * @param {boolean} valid Indicator if the value is in correct format pattern and in valid range.
      */
     ,
     event("value-state-change", {
-        detail: {
-            /**
-             * @public
-             */
-            valueState: {
-                type: String,
-            },
-            /**
-             * @public
-             */
-            valid: {
-                type: Boolean,
-            },
-        },
+        bubbles: true,
+        cancelable: true,
     })
+    /**
+     * Fired after the component's picker is opened.
+     * @since 2.4.0
+     * @public
+     */
+    ,
+    event("open")
+    /**
+     * Fired after the component's picker is closed.
+     * @since 2.4.0
+     * @public
+     */
+    ,
+    event("close")
 ], DatePicker);
 DatePicker.define();
 export default DatePicker;

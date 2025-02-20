@@ -1,6 +1,6 @@
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
 import TitleLevel from "./types/TitleLevel.js";
-import WrappingType from "./types/WrappingType.js";
+import type WrappingType from "./types/WrappingType.js";
 /**
  * @class
  *
@@ -25,18 +25,26 @@ declare class Title extends UI5Element {
      * Defines how the text of a component will be displayed when there is not enough space.
      *
      * **Note:** for option "Normal" the text will wrap and the words will not be broken based on hyphenation.
-     * @default "None"
+     * @default "Normal"
      * @public
      */
     wrappingType: `${WrappingType}`;
     /**
      * Defines the component level.
      * Available options are: `"H6"` to `"H1"`.
+     * This property does not influence the style of the component.
+     * Use the property `size` for this purpose instead.
      * @default "H2"
      * @public
      */
     level: `${TitleLevel}`;
-    get normalizedLevel(): string;
+    /**
+     * Defines the visual appearance of the title.
+     * Available options are: `"H6"` to `"H1"`.
+     * @default "H5"
+     * @public
+     */
+    size: `${TitleLevel}`;
     get h1(): boolean;
     get h2(): boolean;
     get h3(): boolean;

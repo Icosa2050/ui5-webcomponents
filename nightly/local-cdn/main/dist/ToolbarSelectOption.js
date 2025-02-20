@@ -21,6 +21,15 @@ import property from "@ui5/webcomponents-base/dist/decorators/property.js";
  * @since 1.17.0
  */
 let ToolbarSelectOption = class ToolbarSelectOption extends UI5Element {
+    constructor() {
+        super(...arguments);
+        /**
+         * Defines the selected state of the component.
+         * @default false
+         * @public
+         */
+        this.selected = false;
+    }
 };
 __decorate([
     property({ type: Boolean })

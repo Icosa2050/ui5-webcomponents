@@ -18,6 +18,22 @@ import { isDesktop, } from "@ui5/webcomponents-base/dist/Device.js";
  * @since 1.19.0
  */
 class SideNavigationItemBase extends UI5Element {
+    constructor() {
+        super(...arguments);
+        /**
+         * Defines whether the component is disabled.
+         * A disabled component can't be pressed or
+         * focused, and it is not in the tab chain.
+         *
+         * @default false
+         * @public
+         * @since 1.19.0
+         */
+        this.disabled = false;
+        this.forcedTabIndex = "-1";
+        this.sideNavCollapsed = false;
+        this.inPopover = false;
+    }
     onEnterDOM() {
         if (isDesktop()) {
             this.setAttribute("desktop", "");
@@ -60,6 +76,9 @@ class SideNavigationItemBase extends UI5Element {
         }
         return element?.slot === "fixedItems";
     }
+    get isSideNavigationItemBase() {
+        return true;
+    }
 }
 __decorate([
     property()
@@ -71,7 +90,7 @@ __decorate([
     property()
 ], SideNavigationItemBase.prototype, "tooltip", void 0);
 __decorate([
-    property({ defaultValue: "-1", noAttribute: true })
+    property({ noAttribute: true })
 ], SideNavigationItemBase.prototype, "forcedTabIndex", void 0);
 __decorate([
     property({ type: Boolean })
@@ -79,5 +98,9 @@ __decorate([
 __decorate([
     property({ type: Boolean })
 ], SideNavigationItemBase.prototype, "inPopover", void 0);
+const isInstanceOfSideNavigationItemBase = (object) => {
+    return "isSideNavigationItemBase" in object;
+};
 export default SideNavigationItemBase;
+export { isInstanceOfSideNavigationItemBase };
 //# sourceMappingURL=SideNavigationItemBase.js.map

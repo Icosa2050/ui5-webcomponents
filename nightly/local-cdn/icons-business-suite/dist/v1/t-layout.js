@@ -1,7 +1,7 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "t-layout";
-const pathData = "M512 512H0V0h512v512zM32 32v208h448V32H32zm448 240H272v208h208V272zm-448 0v208h208V272H32z";
+const pathData = "M0 0h512v512H0V0zm32 240h448V32H32v208zm240 32v208h208V272H272zm-240 0v208h208V272H32z";
 const ltr = false;
 const accData = null;
 const collection = "business-suite-v1";

@@ -1,8 +1,7 @@
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
-import type { I18nText } from "@ui5/webcomponents-base/dist/i18nBundle.js";
 import type I18nBundle from "@ui5/webcomponents-base/dist/i18nBundle.js";
-import "@ui5/webcomponents-icons/dist/slim-arrow-left.js";
-import "@ui5/webcomponents-icons/dist/slim-arrow-right.js";
+import "@ui5/webcomponents-icons/dist/vertical-grip.js";
+import type { PassiveEventListenerObject, AriaLandmarkRole } from "@ui5/webcomponents-base";
 import FCLLayout from "./types/FCLLayout.js";
 import type { LayoutConfiguration } from "./fcl-utils/FCLLayout.js";
 declare enum MEDIA {
@@ -10,6 +9,16 @@ declare enum MEDIA {
     TABLET = "tablet",
     DESKTOP = "desktop"
 }
+declare const COLUMN: {
+    readonly START: 0;
+    readonly MID: 1;
+    readonly END: 2;
+};
+type SeparatorMovementSession = {
+    separator: HTMLElement;
+    cursorPositionX: number;
+    tmpFCLLayout: FCLLayout;
+};
 type FlexibleColumnLayoutColumnLayout = Array<string | number>;
 type FlexibleColumnLayoutLayoutChangeEventDetail = {
     layout: `${FCLLayout}`;
@@ -17,27 +26,39 @@ type FlexibleColumnLayoutLayoutChangeEventDetail = {
     startColumnVisible: boolean;
     midColumnVisible: boolean;
     endColumnVisible: boolean;
-    arrowUsed: boolean;
-    arrowsUsed: boolean;
-    resize: boolean;
+    separatorsUsed: boolean;
+    resized: boolean;
 };
-type FlexibleColumnLayoutAccessibilityTexts = {
-    startColumnAccessibleName?: I18nText;
-    startArrowContainerAccessibleName?: I18nText;
-    startArrowLeftText?: I18nText;
-    startArrowRightText?: I18nText;
-    midColumnAccessibleName?: I18nText;
-    endColumnAccessibleName?: I18nText;
-    endArrowContainerAccessibleName?: I18nText;
-    endArrowRightText?: I18nText;
-    endArrowLeftText?: I18nText;
+type FCLAccessibilityRoles = Extract<AriaLandmarkRole, "none" | "complementary" | "contentinfo" | "main" | "region">;
+type FCLAccessibilityAttributes = {
+    startColumn?: {
+        role: FCLAccessibilityRoles;
+        name: string;
+    };
+    midColumn?: {
+        role: FCLAccessibilityRoles;
+        name: string;
+    };
+    endColumn?: {
+        role: FCLAccessibilityRoles;
+        name: string;
+    };
+    startSeparator?: {
+        role: FCLAccessibilityRoles;
+        name: string;
+    };
+    endSeparator?: {
+        role: FCLAccessibilityRoles;
+        name: string;
+    };
 };
-type FlexibleColumnLayoutAccessibilityRoles = {
-    startColumnRole?: I18nText;
-    midColumnRole?: I18nText;
-    endColumnRole?: I18nText;
-    startArrowContainerRole?: I18nText;
-    endArrowContainerRole?: I18nText;
+type UserDefinedColumnLayouts = {
+    "tablet": {
+        [layoutName in FCLLayout]?: FlexibleColumnLayoutColumnLayout;
+    };
+    "desktop": {
+        [layoutName in FCLLayout]?: FlexibleColumnLayoutColumnLayout;
+    };
 };
 /**
  * @class
@@ -45,7 +66,7 @@ type FlexibleColumnLayoutAccessibilityRoles = {
  * ### Overview
  *
  * The `FlexibleColumnLayout` implements the list-detail-detail paradigm by displaying up to three pages in separate columns.
- * There are several possible layouts that can be changed either with the component API, or by pressing the arrows, displayed between the columns.
+ * There are several possible layouts that can be changed either with the component API, or by dragging the column separators.
  *
  * ### Usage
  *
@@ -58,11 +79,19 @@ type FlexibleColumnLayoutAccessibilityRoles = {
  * The component would display 1 column for window size smaller than 599px, up to two columns between 599px and 1023px,
  * and 3 columns for sizes bigger than 1023px.
  *
+ * **Note:** When the component displays more than one column, the minimal width of each column is 248px. Consequently, when the user drags a column separator to resize the columns, the minimal allowed width of any resized column is 248px.
+ *
  * ### Keyboard Handling
  *
  * #### Basic Navigation
  *
- * - [Space] / [Enter] or [Return] - If focus is on the layout toggle button (arrow button), once activated, it triggers the associated action (such as expand/collapse the column).
+ * When a column separator is focused,  the following keyboard
+ * shortcuts allow the user to resize the columns and change the layout:
+ *
+ * - [Shift] + [Left] or [Shift] + [Right] - Moves the separator to the left or right, which resizes the columns accordingly.
+ * - [Left] or [Right] - Moves the separator to the left or right with a bigger step, which resizes the columns accordingly.
+ * - [Home] - Moves the separator to the start position.
+ * - [End] - Moves the separator to the end position.
  * - This component provides a build in fast navigation group which can be used via [F6] / [Shift] + [F6] / [Ctrl] + [Alt/Option] / [Down] or [Ctrl] + [Alt/Option] + [Up].
  * In order to use this functionality, you need to import the following module:
  * `import "@ui5/webcomponents-base/dist/features/F6Navigation.js"`
@@ -81,6 +110,9 @@ type FlexibleColumnLayoutAccessibilityRoles = {
  * @since 1.0.0-rc.8
  */
 declare class FlexibleColumnLayout extends UI5Element {
+    eventDetails: {
+        "layout-change": FlexibleColumnLayoutLayoutChangeEventDetail;
+    };
     /**
     * Defines the columns layout and their proportion.
     *
@@ -94,45 +126,37 @@ declare class FlexibleColumnLayout extends UI5Element {
     */
     layout: `${FCLLayout}`;
     /**
-    * Defines the visibility of the arrows,
-    * used for expanding and shrinking the columns.
+    * Specifies if the user is allowed to change the columns layout by dragging the separator between the columns.
     * @default false
     * @public
-    * @since 1.0.0-rc.15
+    * @since 2.0.0
     */
-    hideArrows: boolean;
+    disableResizing: boolean;
     /**
-    * An object of strings that defines several additional accessibility texts for even further customization.
+    * Defines additional accessibility attributes on different areas of the component.
     *
-    * It supports the following fields:
-    *  - `startColumnAccessibleName`: the accessibility name for the `startColumn` region
-    *  - `midColumnAccessibleName`: the accessibility name for the `midColumn` region
-    *  - `endColumnAccessibleName`: the accessibility name for the `endColumn` region
-    *  - `startArrowLeftText`: the text that the first arrow (between the `begin` and `mid` columns) will have when pointing to the left
-    *  - `startArrowRightText`: the text that the first arrow (between the `begin` and `mid` columns) will have when pointing to the right
-    *  - `endArrowLeftText`: the text that the second arrow (between the `mid` and `end` columns) will have when pointing to the left
-    *  - `endArrowRightText`: the text that the second arrow (between the `mid` and `end` columns) will have when pointing to the right
-    *  - `startArrowContainerAccessibleName`: the text that the first arrow container (between the `begin` and `mid` columns) will have as `aria-label`
-    *  - `endArrowContainerAccessibleName`: the text that the second arrow container (between the `mid` and `end` columns) will have as `aria-label`
+    * The accessibilityAttributes object has the following fields,
+    * where each field is an object supporting one or more accessibility attributes:
+    *
+    *  - **startColumn**: `startColumn.role` and `startColumn.name`.
+    *  - **midColumn**: `midColumn.role` and `midColumn.name`.
+    *  - **endColumn**: `endColumn.role` and `endColumn.name`.
+    *  - **startSeparator**: `startSeparator.role` and `startSeparator.name`.
+    *  - **endSeparator**: `endSeparator.role` and `endSeparator.name`.
+    *
+    * The accessibility attributes support the following values:
+    *
+    * - **role**: Defines the accessible ARIA landmark role of the area.
+    * Accepts the following values: `none`, `complementary`, `contentinfo`, `main` or `region`.
+    *
+    * - **name**: Defines the accessible ARIA name of the area.
+    * Accepts any string.
+    *
     * @default {}
     * @public
-    * @since 1.0.0-rc.11
+    * @since 2.0.0
     */
-    accessibilityTexts: FlexibleColumnLayoutAccessibilityTexts;
-    /**
-    * An object of strings that defines additional accessibility roles for further customization.
-    *
-    * It supports the following fields:
-    *  - `startColumnRole`: the accessibility role for the `startColumn`
-    *  - `startArrowContainerRole`: the accessibility role for the first arrow container (between the `begin` and `mid` columns)
-    *  - `midColumnRole`: the accessibility role for the `midColumn`
-    *  - `endArrowContainerRole`: the accessibility role for the second arrow container (between the `mid` and `end` columns)
-    *  - `endColumnRole`: the accessibility role for the `endColumn`
-    * @default {}
-    * @public
-    * @since 1.1.0
-    */
-    accessibilityRoles: FlexibleColumnLayoutAccessibilityRoles;
+    accessibilityAttributes: FCLAccessibilityAttributes;
     /**
     * Defines the component width in px.
     * @default 0
@@ -153,6 +177,12 @@ declare class FlexibleColumnLayout extends UI5Element {
     * @private
     */
     _visibleColumns: number;
+    /**
+    * Defines if the user is currently resizing the columns by dragging their separator.
+    * @default false
+    * @private
+    */
+    _resizing: boolean;
     /**
     * Allows the user to replace the whole layouts configuration
     * @private
@@ -175,34 +205,54 @@ declare class FlexibleColumnLayout extends UI5Element {
     endColumn: Array<HTMLElement>;
     initialRendering: boolean;
     _handleResize: () => void;
+    _onSeparatorMove: (e: TouchEvent | MouseEvent) => void;
+    _onSeparatorMoveEnd: (e: TouchEvent | MouseEvent) => void;
     static i18nBundle: I18nBundle;
     _prevLayout: `${FCLLayout}` | null;
+    _userDefinedColumnLayouts: UserDefinedColumnLayouts;
+    _ontouchstart: PassiveEventListenerObject;
+    separatorMovementSession?: SeparatorMovementSession | null;
     constructor();
-    static onDefine(): Promise<void>;
     static get ANIMATION_DURATION(): 0 | 560;
     onEnterDOM(): void;
     onExitDOM(): void;
     onAfterRendering(): void;
     handleInitialRendering(): void;
     handleResize(): void;
-    startArrowClick(): void;
-    endArrowClick(): void;
-    arrowClick(options: {
-        start: boolean;
-        end: boolean;
-    }): void;
     updateLayout(): void;
     syncLayout(): void;
     toggleColumns(): void;
     toggleColumn(column: string): void;
     columnResizeHandler: (e: Event) => void;
-    nextLayout(layout: `${FCLLayout}`, arrowsInfo: {
-        start: boolean;
-        end: boolean;
-    }): undefined;
-    nextColumnLayout(layout: `${FCLLayout}`): string[];
+    nextColumnLayout(layout: `${FCLLayout}`): FlexibleColumnLayoutColumnLayout;
     calcVisibleColumns(colLayout: FlexibleColumnLayoutColumnLayout): number;
-    fireLayoutChange(arrowUsed: boolean, resize: boolean): void;
+    fireLayoutChange(separatorUsed: boolean, resized: boolean): void;
+    onSeparatorPress(e: TouchEvent | MouseEvent): void;
+    onSeparatorMove(e: TouchEvent | MouseEvent): void;
+    private onSeparatorMoveEnd;
+    initSeparatorMovementSession(separator: HTMLElement, cursorPositionX: number, isTouch: boolean): {
+        separator: HTMLElement;
+        cursorPositionX: number;
+        tmpFCLLayout: FCLLayout;
+    };
+    exitSeparatorMovementSession(): void;
+    saveUserDefinedColumnLayout(newLayout: FCLLayout, newColumnLayout: FlexibleColumnLayoutColumnLayout): void;
+    private isSeparatorAheadOfCursor;
+    calculateNewColumnWidth(columnToResize: typeof COLUMN.START | typeof COLUMN.END, widthDelta: number): number;
+    moveSeparator(separator: HTMLElement, offsetX: number, fclLayoutBeforeMove: FCLLayout): FCLLayout;
+    adjustColumnLayout(columnToResize: typeof COLUMN.START | typeof COLUMN.END, newSize: number, createNewArray?: boolean): FlexibleColumnLayoutColumnLayout | undefined;
+    _onArrowKeydown(e: KeyboardEvent): void;
+    _onSeparatorKeydown(e: KeyboardEvent): Promise<void>;
+    _onSeparatorKeyUp(): void;
+    private attachMoveListeners;
+    private detachMoveListeners;
+    private toggleSideAnimations;
+    private getPageXValueFromEvent;
+    convertColumnWidthToPixels(width: string | number): number;
+    convertToRelativeColumnWidth(pxWidth: string | number): string;
+    getNextLayoutOnSeparatorMovement(separator: HTMLElement, isStartToEndDirection: boolean, fclLayoutBeforeMove: FCLLayout, columnLayoutAfterMove: FlexibleColumnLayoutColumnLayout): FCLLayout;
+    switchLayoutOnArrowPress(): void;
+    get _availableWidthForColumns(): number;
     /**
      * Checks if a column is hidden based on its width.
      */
@@ -240,98 +290,62 @@ declare class FlexibleColumnLayout extends UI5Element {
     * @public
     */
     get visibleColumns(): number;
-    get classes(): {
-        root: {
-            "ui5-fcl-root": boolean;
-        };
-        columns: {
-            start: {
-                "ui5-fcl-column": boolean;
-                "ui5-fcl-column-animation": boolean;
-                "ui5-fcl-column--start": boolean;
-            };
-            middle: {
-                "ui5-fcl-column": boolean;
-                "ui5-fcl-column-animation": boolean;
-                "ui5-fcl-column--middle": boolean;
-            };
-            end: {
-                "ui5-fcl-column": boolean;
-                "ui5-fcl-column-animation": boolean;
-                "ui5-fcl-column--end": boolean;
-            };
-        };
-    };
-    get styles(): {
-        arrowsContainer: {
-            start: {
-                display: string;
-            };
-            end: {
-                display: string;
-            };
-        };
-        arrows: {
-            start: {
-                display: string;
-                transform: string;
-            };
-            end: {
-                display: string;
-                transform: string;
-            };
-        };
-    };
     get startColumnWidth(): string | number;
     get midColumnWidth(): string | number;
     get endColumnWidth(): string | number;
     get showStartSeparator(): boolean;
     get showEndSeparator(): boolean;
-    get showStartArrow(): boolean;
-    get showEndArrow(): boolean;
-    get startArrowVisibility(): boolean;
-    get endArrowVisibility(): boolean;
-    get startArrowDirection(): string | null;
-    get endArrowDirection(): string | null;
-    get effectiveArrowsInfo(): {
+    get showStartSeparatorGrip(): boolean | undefined;
+    get showStartSeparatorArrow(): boolean | undefined;
+    get showEndSeparatorGrip(): boolean | undefined;
+    get startSeparatorGripVisibility(): boolean | undefined;
+    get endSeparatorGripVisibility(): boolean | undefined;
+    get startSeparatorArrowVisibility(): boolean | undefined;
+    get startArrowDirection(): "forward" | "backward" | undefined;
+    get startArrowDOM(): HTMLElement;
+    get effectiveSeparatorsInfo(): {
         visible: boolean;
-        dir: string | null;
-        separator?: boolean | undefined;
+        gripVisible?: boolean;
+        arrowVisible?: boolean;
+        arrowDirection?: "forward" | "backward";
     }[];
+    get effectiveLayout(): "OneColumn" | "TwoColumnsStartExpanded" | "TwoColumnsMidExpanded" | "ThreeColumnsMidExpanded" | "ThreeColumnsEndExpanded" | "ThreeColumnsStartExpandedEndHidden" | "ThreeColumnsMidExpandedEndHidden" | "ThreeColumnsStartHiddenMidExpanded" | "ThreeColumnsStartHiddenEndExpanded" | "MidColumnFullScreen" | "EndColumnFullScreen" | FCLLayout;
+    get startSeparatorDOM(): HTMLElement;
+    get endSeparatorDOM(): HTMLElement;
+    get startSeparatorTabIndex(): 0 | undefined;
+    get endSeparatorTabIndex(): 0 | -1;
     get media(): MEDIA;
     get widthDOM(): number;
     get startColumnDOM(): HTMLElement;
     get midColumnDOM(): HTMLElement;
     get endColumnDOM(): HTMLElement;
-    get accStartColumnText(): string | I18nText;
-    get accMiddleColumnText(): string | I18nText;
-    get accEndColumnText(): string | I18nText;
-    get accStartArrowContainerText(): I18nText | undefined;
-    get accEndArrowContainerText(): I18nText | undefined;
-    get accStartColumnRole(): I18nText | "region" | undefined;
-    get accMiddleColumnRole(): I18nText | "region" | undefined;
-    get accEndColumnRole(): I18nText | "region" | undefined;
-    get accStartArrowContainerRole(): I18nText | undefined;
-    get accEndArrowContainerRole(): I18nText | undefined;
+    get accStartColumnText(): string;
+    get accMiddleColumnText(): string;
+    get accEndColumnText(): string;
+    get accStartSeparatorText(): string | undefined;
+    get accEndSeparatorText(): string;
+    get accStartColumnRole(): FCLAccessibilityRoles | undefined;
+    get accMiddleColumnRole(): FCLAccessibilityRoles | undefined;
+    get accEndColumnRole(): FCLAccessibilityRoles | undefined;
+    get accStartSeparatorRole(): "separator" | FCLAccessibilityRoles;
+    get accEndSeparatorRole(): "separator" | FCLAccessibilityRoles;
     get _effectiveLayoutsByMedia(): LayoutConfiguration;
     get _accAttributes(): {
         columns: {
             start: {
-                role: string | I18nText | undefined;
+                role: FCLAccessibilityRoles | undefined;
                 ariaHidden: true | undefined;
             };
             middle: {
-                role: string | I18nText | undefined;
+                role: FCLAccessibilityRoles | undefined;
                 ariaHidden: true | undefined;
             };
             end: {
-                role: string | I18nText | undefined;
+                role: FCLAccessibilityRoles | undefined;
                 ariaHidden: true | undefined;
             };
         };
     };
-    get accStartArrowText(): string | I18nText;
-    get accEndArrowText(): string | I18nText;
 }
 export default FlexibleColumnLayout;
-export type { MEDIA, FlexibleColumnLayoutLayoutChangeEventDetail, FlexibleColumnLayoutAccessibilityTexts, FlexibleColumnLayoutAccessibilityRoles, FlexibleColumnLayoutColumnLayout, };
+export type { MEDIA, FlexibleColumnLayoutLayoutChangeEventDetail, FCLAccessibilityAttributes, FlexibleColumnLayoutColumnLayout, };

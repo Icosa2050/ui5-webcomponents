@@ -29,20 +29,20 @@ declare class WizardStep extends UI5Element {
      * Defines the `titleText` of the step.
      *
      * **Note:** The text is displayed in the `ui5-wizard` navigation header.
-     * @default ""
+     * @default undefined
      * @public
      * @since 1.0.0-rc.15
      */
-    titleText: string;
+    titleText?: string;
     /**
      * Defines the `subtitleText` of the step.
      *
      * **Note:** the text is displayed in the `ui5-wizard` navigation header.
-     * @default ""
+     * @default undefined
      * @public
      * @since 1.0.0-rc.15
      */
-    subtitleText: string;
+    subtitleText?: string;
     /**
      * Defines the `icon` of the step.
      *
@@ -50,10 +50,10 @@ declare class WizardStep extends UI5Element {
      *
      * The SAP-icons font provides numerous options.
      * See all the available icons in the [Icon Explorer](https://sdk.openui5.org/test-resources/sap/m/demokit/iconExplorer/webapp/index.html).
-     * @default ""
+     * @default undefined
      * @public
      */
-    icon: string;
+    icon?: string;
     /**
      * Defines if the step is `disabled`. When disabled the step is displayed,
      * but the user can't select the step by clicking or navigate to it with scrolling.

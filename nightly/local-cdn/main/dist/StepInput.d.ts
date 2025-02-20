@@ -1,11 +1,12 @@
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
 import type I18nBundle from "@ui5/webcomponents-base/dist/i18nBundle.js";
 import ValueState from "@ui5/webcomponents-base/dist/types/ValueState.js";
-import { Timeout } from "@ui5/webcomponents-base/dist/types.js";
-import type { IFormElement } from "./features/InputElementsFormSupport.js";
+import type { Timeout } from "@ui5/webcomponents-base/dist/types.js";
+import type { IFormInputElement } from "@ui5/webcomponents-base/dist/features/InputElementsFormSupport.js";
 import "@ui5/webcomponents-icons/dist/less.js";
 import "@ui5/webcomponents-icons/dist/add.js";
-import Input from "./Input.js";
+import type Input from "./Input.js";
+import type { InputAccInfo, InputEventDetail } from "./Input.js";
 import InputType from "./types/InputType.js";
 type StepInputValueStateChangeEventDetail = {
     valueState: `${ValueState}`;
@@ -52,7 +53,12 @@ type StepInputValueStateChangeEventDetail = {
  * @since 1.0.0-rc.13
  * @public
  */
-declare class StepInput extends UI5Element implements IFormElement {
+declare class StepInput extends UI5Element implements IFormInputElement {
+    eventDetails: {
+        change: void;
+        input: InputEventDetail;
+        "value-state-change": StepInputValueStateChangeEventDetail;
+    };
     /**
      * Defines a value of the component.
      * @default 0
@@ -112,18 +118,13 @@ declare class StepInput extends UI5Element implements IFormElement {
      */
     placeholder?: string;
     /**
-     * Determines the name with which the component will be submitted in an HTML form.
+     * Determines the name by which the component will be identified upon submission in an HTML form.
      *
-     * **Important:** For the `name` property to have effect, you must add the following import to your project:
-     * `import "@ui5/webcomponents/dist/features/InputElementsFormSupport.js";`
-     *
-     * **Note:** When set, a native `input` HTML element
-     * will be created inside the component so that it can be submitted as
-     * part of an HTML form. Do not use this property unless you need to submit a form.
-     * @default ""
+     * **Note:** This property is only applicable within the context of an HTML Form element.
+     * @default undefined
      * @public
      */
-    name: string;
+    name?: string;
     /**
      * Determines the number of digits after the decimal point of the component.
      * @default 0
@@ -132,18 +133,18 @@ declare class StepInput extends UI5Element implements IFormElement {
     valuePrecision: number;
     /**
      * Defines the accessible ARIA name of the component.
-     * @default ""
+     * @default undefined
      * @public
      * @since 1.0.0-rc.15
      */
-    accessibleName: string;
+    accessibleName?: string;
     /**
      * Receives id(or many ids) of the elements that label the component.
-     * @default ""
+     * @default undefined
      * @public
      * @since 1.0.0-rc.15
      */
-    accessibleNameRef: string;
+    accessibleNameRef?: string;
     _decIconDisabled: boolean;
     _incIconDisabled: boolean;
     focused: boolean;
@@ -151,8 +152,8 @@ declare class StepInput extends UI5Element implements IFormElement {
     _previousValue: number;
     _waitTimeout: number;
     _speed: number;
-    _btnDown: boolean;
-    _spinTimeoutId: Timeout;
+    _btnDown?: boolean;
+    _spinTimeoutId?: Timeout;
     _spinStarted: boolean;
     /**
      * Defines the value state message that will be displayed as pop up under the component.
@@ -160,32 +161,22 @@ declare class StepInput extends UI5Element implements IFormElement {
      * **Note:** If not specified, a default text (in the respective language) will be displayed.
      *
      * **Note:** The `valueStateMessage` would be displayed,
-     * when the component is in `Information`, `Warning` or `Error` value state.
+     * when the component is in `Information`, `Critical` or `Negative` value state.
      * @public
      */
     valueStateMessage: Array<HTMLElement>;
-    /**
-     * The slot is used to render native `input` HTML element within Light DOM to enable form submit,
-     * when `name` property is set.
-     * @private
-     */
-    formSupport: Array<HTMLElement>;
     _initialValueState?: `${ValueState}`;
     static i18nBundle: I18nBundle;
-    static onDefine(): Promise<void>;
+    formElementAnchor(): Promise<HTMLElement | undefined>;
+    get formFormattedValue(): FormData | string | null;
     get type(): InputType;
     get decIconTitle(): string;
-    get decIconName(): string;
     get incIconTitle(): string;
-    get incIconName(): string;
     get _decIconClickable(): boolean;
     get _incIconClickable(): boolean;
     get _isFocused(): boolean;
-    get _valuePrecisioned(): string;
-    get accInfo(): {
-        ariaRequired: boolean;
-        ariaLabel: string | undefined;
-    };
+    get _displayValue(): string;
+    get accInfo(): InputAccInfo;
     get inputAttributes(): {
         min: number | undefined;
         max: number | undefined;
@@ -193,8 +184,10 @@ declare class StepInput extends UI5Element implements IFormElement {
     };
     onBeforeRendering(): void;
     get input(): Input;
+    get innerInput(): HTMLInputElement;
     get inputOuter(): Element;
     _onButtonFocusOut(): void;
+    _onInput(e: CustomEvent<InputEventDetail>): void;
     _onInputFocusIn(): void;
     _onInputFocusOut(): void;
     _setButtonState(): void;
@@ -210,9 +203,13 @@ declare class StepInput extends UI5Element implements IFormElement {
      * @param fireChangeEvent if `true`, fires `change` event when the value is changed
      */
     _modifyValue(modifier: number, fireChangeEvent?: boolean): void;
-    _incValue(e: CustomEvent): void;
-    _decValue(e: CustomEvent): void;
+    _incValue(): void;
+    _decValue(): void;
+    get _isValueWithCorrectPrecision(): boolean;
     _onInputChange(): void;
+    _setDefaultInputValueIfNeeded(): void;
+    _isValueChanged(inputValue: number): boolean;
+    _updateValueAndValidate(inputValue: number): void;
     _onfocusin(): void;
     _onfocusout(): void;
     _onkeydown(e: KeyboardEvent): void;

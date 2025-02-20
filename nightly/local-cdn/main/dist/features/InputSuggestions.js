@@ -1,18 +1,8 @@
-import { renderFinished } from "@ui5/webcomponents-base/dist/Render.js";
-import { registerFeature } from "@ui5/webcomponents-base/dist/FeaturesRegistry.js";
-import { getI18nBundle } from "@ui5/webcomponents-base/dist/i18nBundle.js";
-// @ts-ignore
-import encodeXML from "@ui5/webcomponents-base/dist/sap/base/security/encodeXML.js";
 import generateHighlightedMarkup from "@ui5/webcomponents-base/dist/util/generateHighlightedMarkup.js";
-import List from "../List.js";
-import ResponsivePopover from "../ResponsivePopover.js";
-import SuggestionItem from "../SuggestionItem.js";
-import SuggestionGroupItem from "../SuggestionGroupItem.js";
-import Button from "../Button.js";
-import Icon from "../Icon.js";
-import Popover from "../Popover.js";
-import GroupHeaderListItem from "../GroupHeaderListItem.js";
-import SuggestionListItem from "../SuggestionListItem.js";
+import "../SuggestionItem.js";
+import "../SuggestionItemGroup.js";
+import InputSuggestionsTemplate from "./InputSuggestionsTemplate.js";
+import Input from "../Input.js";
 import { LIST_ITEM_POSITION, LIST_ITEM_GROUP_HEADER, } from "../generated/i18n/i18n-defaults.js";
 /**
  * A class to manage the `Input` suggestion items.
@@ -20,6 +10,9 @@ import { LIST_ITEM_POSITION, LIST_ITEM_GROUP_HEADER, } from "../generated/i18n/i
  * @private
  */
 class Suggestions {
+    get template() {
+        return InputSuggestionsTemplate;
+    }
     constructor(component, slotName, highlight, handleFocus) {
         // The component, that the suggestion would plug into.
         this.component = component;
@@ -29,62 +22,37 @@ class Suggestions {
         this.handleFocus = handleFocus;
         // Defines, if the suggestions should highlight.
         this.highlight = highlight;
-        // Press and Focus handlers
-        this.fnOnSuggestionItemPress = this.onItemPress.bind(this);
-        this.fnOnSuggestionItemMouseOver = this.onItemMouseOver.bind(this);
-        this.fnOnSuggestionItemMouseOut = this.onItemMouseOut.bind(this);
-        this._getSuggestionPopover();
         // An integer value to store the currently selected item position,
         // that changes due to user interaction.
         this.selectedItemIndex = -1;
     }
-    /* Public methods */
-    defaultSlotProperties(hightlightValue) {
-        const inputSuggestionItems = this._getComponent().suggestionItems;
-        const highlight = this.highlight && !!hightlightValue;
-        const suggestions = [];
-        inputSuggestionItems.map((suggestion, idx) => {
-            const text = highlight ? this.getHighlightedText(suggestion, hightlightValue) : this.getRowText(suggestion);
-            const description = highlight ? this.getHighlightedDesc(suggestion, hightlightValue) : this.getRowDesc(suggestion);
-            return suggestions.push({
-                text,
-                description,
-                image: suggestion.image || undefined,
-                icon: suggestion.icon || undefined,
-                type: suggestion.type || undefined,
-                additionalText: suggestion.additionalText || undefined,
-                additionalTextState: suggestion.additionalTextState,
-                groupItem: suggestion.groupItem,
-                key: idx,
-            });
-        });
-        return suggestions;
-    }
-    onUp(e) {
+    onUp(e, indexOfItem) {
         e.preventDefault();
-        this._handleItemNavigation(false /* forward */);
+        const index = !this.isOpened && this._hasValueState && indexOfItem === -1 ? 0 : indexOfItem;
+        this._handleItemNavigation(false /* forward */, index);
         return true;
     }
-    onDown(e) {
+    onDown(e, indexOfItem) {
         e.preventDefault();
-        this._handleItemNavigation(true /* forward */);
+        const index = !this.isOpened && this._hasValueState && indexOfItem === -1 ? 0 : indexOfItem;
+        this._handleItemNavigation(true /* forward */, index);
         return true;
     }
     onSpace(e) {
         if (this._isItemOnTarget()) {
             e.preventDefault();
-            this.onItemSelected(null, true /* keyboardUsed */);
+            this.onItemSelected(this._selectedItem, true /* keyboardUsed */);
             return true;
         }
         return false;
     }
     onEnter(e) {
-        if (this._isGroupOrInactiveItem) {
+        if (this._isGroupItem) {
             e.preventDefault();
             return false;
         }
         if (this._isItemOnTarget()) {
-            this.onItemSelected(null, true /* keyboardUsed */);
+            this.onItemSelected(this._selectedItem, true /* keyboardUsed */);
             return true;
         }
         return false;
@@ -132,34 +100,33 @@ class Suggestions {
     }
     onTab() {
         if (this._isItemOnTarget()) {
-            this.onItemSelected(null, true);
+            this.onItemSelected(this._selectedItem, true);
             return true;
         }
         return false;
     }
-    async toggle(bToggle, options) {
+    toggle(bToggle, options) {
         const toggle = bToggle !== undefined ? bToggle : !this.isOpened();
         if (toggle) {
-            await this.open();
+            this._getComponent().open = true;
         }
         else {
-            await this.close(options.preventFocusRestore);
+            this.close(options.preventFocusRestore);
         }
     }
-    async _isScrollable() {
-        const sc = await this._getScrollContainer();
+    get _selectedItem() {
+        return this._getNonGroupItems().find(item => item.selected);
+    }
+    _isScrollable() {
+        const sc = this._getScrollContainer();
         return sc.offsetHeight < sc.scrollHeight;
     }
-    async open() {
-        this._getComponent().open = true;
-        this._beforeOpen();
-        await (await this._getSuggestionPopover()).showAt(this._getComponent());
-    }
-    async close(preventFocusRestore = false) {
+    close(preventFocusRestore = false) {
         const selectedItem = this._getItems() && this._getItems()[this.selectedItemIndex];
         this._getComponent().open = false;
-        this.responsivePopover = await this._getSuggestionPopover();
-        this.responsivePopover.close(false, false, preventFocusRestore);
+        const picker = this._getPicker();
+        picker.preventFocusRestore = preventFocusRestore;
+        picker.open = false;
         if (selectedItem && selectedItem.focused) {
             selectedItem.focused = false;
         }
@@ -167,38 +134,26 @@ class Suggestions {
     updateSelectedItemPosition(pos) {
         this.selectedItemIndex = pos;
     }
-    /* Interface methods */
-    onItemMouseOver(e) {
-        this._getComponent().onItemMouseOver(e);
-    }
-    onItemMouseOut(e) {
-        this._getComponent().onItemMouseOut(e);
-    }
     onItemSelected(selectedItem, keyboardUsed) {
-        const allItems = this._getItems();
-        const item = selectedItem || allItems[this.selectedItemIndex];
+        const item = selectedItem;
         const nonGroupItems = this._getNonGroupItems();
-        this.selectedItemIndex = allItems.indexOf(item);
-        this.accInfo = {
-            isGroup: item.groupItem,
-            currentPos: nonGroupItems.indexOf(item) + 1,
-            listSize: nonGroupItems.length,
-            itemText: this._getRealItems()[this.selectedItemIndex].text,
-            description: this._getRealItems()[this.selectedItemIndex].description,
-            additionalText: this._getRealItems()[this.selectedItemIndex].additionalText,
-        };
-        // If the item is "Inactive", prevent selection with SPACE or ENTER
-        // to have consistency with the way "Inactive" items behave in the ui5-list
-        if (item.type === "Inactive" || item.groupItem) {
+        if (!item) {
             return;
         }
-        this._getComponent().onItemSelected(this._getRealItems()[this.selectedItemIndex], keyboardUsed);
+        this.accInfo = {
+            isGroup: item.hasAttribute("ui5-suggestion-item-group"),
+            currentPos: nonGroupItems.indexOf(item) + 1,
+            listSize: nonGroupItems.length,
+            itemText: item.text || "",
+            additionalText: item.additionalText,
+        };
+        this._getComponent().onItemSelected(item, keyboardUsed);
         item.selected = false;
         item.focused = false;
         this._getComponent().open = false;
     }
-    onItemPreviewed(item) {
-        this._getComponent().onItemPreviewed(item);
+    onItemSelect(item) {
+        this._getComponent().onItemSelect(item);
     }
     /* Private methods */
     // Note: Split into two separate handlers
@@ -219,59 +174,24 @@ class Suggestions {
         }
         this.onItemSelected(pressedItem, false /* keyboardUsed */);
     }
-    _beforeOpen() {
-        this._attachItemsListeners();
-        this._attachPopupListeners();
-    }
-    async _attachItemsListeners() {
-        const list = await this._getList();
-        list.removeEventListener("ui5-item-click", this.fnOnSuggestionItemPress);
-        list.addEventListener("ui5-item-click", this.fnOnSuggestionItemPress);
-        list.removeEventListener("ui5-selection-change", this.fnOnSuggestionItemPress);
-        list.addEventListener("ui5-selection-change", this.fnOnSuggestionItemPress);
-        list.removeEventListener("mouseover", this.fnOnSuggestionItemMouseOver);
-        list.addEventListener("mouseover", this.fnOnSuggestionItemMouseOver);
-        list.removeEventListener("mouseout", this.fnOnSuggestionItemMouseOut);
-        list.addEventListener("mouseout", this.fnOnSuggestionItemMouseOut);
-    }
-    _attachPopupListeners() {
-        if (!this.handleFocus) {
-            return;
-        }
-        if (!this.attachedAfterOpened) {
-            this.responsivePopover.addEventListener("ui5-after-open", this._onOpen.bind(this));
-            this.attachedAfterOpened = true;
-        }
-        if (!this.attachedAfterClose) {
-            this.responsivePopover.addEventListener("ui5-after-close", this._onClose.bind(this));
-            this.attachedAfterClose = true;
-        }
-    }
-    _onOpen() {
-        this._applyFocus();
-    }
     _onClose() {
         this._handledPress = false;
     }
-    _applyFocus() {
-        if (this.selectedItemIndex) {
-            this._getItems()[this.selectedItemIndex].focus();
-        }
-    }
     _isItemOnTarget() {
-        return this.isOpened() && this.selectedItemIndex !== null && this.selectedItemIndex !== -1 && !this._isGroupOrInactiveItem;
+        return this.isOpened() && this.selectedItemIndex !== null && this.selectedItemIndex !== -1 && !this._isGroupItem;
     }
-    get _isGroupOrInactiveItem() {
+    get _isGroupItem() {
         const items = this._getItems();
         if (!items || !items[this.selectedItemIndex]) {
             return false;
         }
-        return (items[this.selectedItemIndex].groupItem || items[this.selectedItemIndex].type === "Inactive");
+        return items[this.selectedItemIndex].hasAttribute("ui5-suggestion-item-group");
     }
     isOpened() {
-        return !!(this.responsivePopover && this.responsivePopover.open);
+        return !!(this._getPicker()?.open);
     }
-    _handleItemNavigation(forward) {
+    _handleItemNavigation(forward, index) {
+        this.selectedItemIndex = index;
         if (!this._getItems().length) {
             return;
         }
@@ -306,7 +226,9 @@ class Suggestions {
             this.component._isValueStateFocused = true;
             this.selectedItemIndex = 0;
             items[0].focused = false;
-            items[0].selected = false;
+            if (items[0].hasAttribute("ui5-suggestion-item")) {
+                items[0].selected = false;
+            }
             return;
         }
         if (this.component._isValueStateFocused) {
@@ -319,7 +241,9 @@ class Suggestions {
             return;
         }
         if (previousSelectedIdx - 1 < 0) {
-            items[previousSelectedIdx].selected = false;
+            if (items[previousSelectedIdx].hasAttribute("ui5-suggestion-item") || items[previousSelectedIdx].hasAttribute("ui5-suggestion-item-custom")) {
+                items[previousSelectedIdx].selected = false;
+            }
             items[previousSelectedIdx].focused = false;
             this.component.focused = true;
             this.component.hasSuggestionItemSelected = false;
@@ -333,26 +257,32 @@ class Suggestions {
         const currentItem = items[nextIdx];
         const previousItem = items[previousIdx];
         const nonGroupItems = this._getNonGroupItems();
+        const isGroupItem = currentItem.hasAttribute("ui5-suggestion-item-group");
         if (!currentItem) {
             return;
         }
         this.component.focused = false;
         this._clearValueStateFocus();
+        const selectedItem = this._getItems()[this.selectedItemIndex];
         this.accInfo = {
-            isGroup: currentItem.groupItem,
-            currentPos: nonGroupItems.indexOf(currentItem) + 1,
-            listSize: nonGroupItems.length,
-            itemText: this._getRealItems()[this.selectedItemIndex].text,
-            description: this._getRealItems()[items.indexOf(currentItem)].description,
-            additionalText: this._getRealItems()[items.indexOf(currentItem)].additionalText,
+            isGroup: isGroupItem,
+            currentPos: items.indexOf(currentItem) + 1,
+            itemText: (isGroupItem ? selectedItem.headerText : selectedItem.text) || "",
         };
+        if (currentItem.hasAttribute("ui5-suggestion-item") || currentItem.hasAttribute("ui5-suggestion-item-custom")) {
+            this.accInfo.additionalText = currentItem.additionalText || "";
+            this.accInfo.currentPos = nonGroupItems.indexOf(currentItem) + 1;
+            this.accInfo.listSize = nonGroupItems.length;
+        }
         if (previousItem) {
-            previousItem.selected = false;
             previousItem.focused = false;
+        }
+        if (previousItem?.hasAttribute("ui5-suggestion-item") || previousItem?.hasAttribute("ui5-suggestion-item-custom")) {
+            previousItem.selected = false;
         }
         if (currentItem) {
             currentItem.focused = true;
-            if (currentItem.type === "Active") {
+            if (!isGroupItem) {
                 currentItem.selected = true;
             }
             if (this.handleFocus) {
@@ -360,15 +290,18 @@ class Suggestions {
             }
         }
         this.component.hasSuggestionItemSelected = true;
-        this.onItemPreviewed(currentItem);
+        this.onItemSelect(currentItem);
         if (!this._isItemIntoView(currentItem)) {
-            this._scrollItemIntoView(currentItem);
+            const itemRef = this._isGroupItem ? currentItem.shadowRoot.querySelector("[ui5-li-group-header]") : currentItem;
+            this._scrollItemIntoView(itemRef);
         }
     }
     _deselectItems() {
         const items = this._getItems();
         items.forEach(item => {
-            item.selected = false;
+            if (item.hasAttribute("ui5-suggestion-item")) {
+                item.selected = false;
+            }
             item.focused = false;
         });
     }
@@ -382,75 +315,63 @@ class Suggestions {
         const rectItem = item.getDomRef().getBoundingClientRect();
         const rectInput = this._getComponent().getDomRef().getBoundingClientRect();
         const windowHeight = (window.innerHeight || document.documentElement.clientHeight);
-        return (rectItem.top + Suggestions.SCROLL_STEP <= windowHeight) && (rectItem.top >= rectInput.top);
+        let headerHeight = 0;
+        if (this._hasValueState) {
+            const valueStateHeader = this._getPicker().querySelector("[slot=header]");
+            headerHeight = valueStateHeader.getBoundingClientRect().height;
+        }
+        return (rectItem.top + Suggestions.SCROLL_STEP <= windowHeight) && (rectItem.top >= rectInput.top + headerHeight);
     }
-    async _scrollItemIntoView(item) {
-        const pos = item.getDomRef().offsetTop;
-        const scrollContainer = await this._getScrollContainer();
-        scrollContainer.scrollTop = pos;
+    _scrollItemIntoView(item) {
+        item.scrollIntoView({
+            behavior: "auto",
+            block: "nearest",
+            inline: "nearest",
+        });
     }
-    async _getScrollContainer() {
+    _getScrollContainer() {
         if (!this._scrollContainer) {
-            await this._getSuggestionPopover();
-            this._scrollContainer = this.responsivePopover.shadowRoot.querySelector(".ui5-popup-content");
+            this._scrollContainer = this._getPicker().shadowRoot.querySelector(".ui5-popup-content");
         }
         return this._scrollContainer;
     }
+    /**
+     * Returns the items in 1D array.
+     *
+     */
     _getItems() {
-        return this.responsivePopover ? [...this.responsivePopover.querySelector("[ui5-list]").children] : [];
+        const suggestionComponent = this._getComponent();
+        return suggestionComponent.getSlottedNodes("suggestionItems").flatMap(item => {
+            return item.hasAttribute("ui5-suggestion-item-group") ? [item, ...item.items] : [item];
+        });
     }
     _getNonGroupItems() {
-        return this._getItems().filter(item => !item.groupItem);
+        return this._getItems().filter(item => !item.hasAttribute("ui5-suggestion-item-group"));
     }
     _getComponent() {
         return this.component;
     }
-    async _getList() {
-        this.responsivePopover = await this._getSuggestionPopover();
-        return this.responsivePopover.querySelector("[ui5-list]");
+    _getList() {
+        return this._getPicker().querySelector("[ui5-list]");
     }
-    async _getListWidth() {
-        const list = await this._getList();
-        return list.offsetWidth;
+    _getListWidth() {
+        return this._getList()?.offsetWidth;
     }
-    _getRealItems() {
-        return this._getComponent().getSlottedNodes(this.slotName);
-    }
-    async _getSuggestionPopover() {
-        if (this.responsivePopover) {
-            return this.responsivePopover;
-        }
-        await renderFinished();
-        this.responsivePopover = this._getComponent().shadowRoot.querySelector("[ui5-responsive-popover]");
-        return this.responsivePopover;
+    _getPicker() {
+        return this._getComponent().shadowRoot.querySelector("[ui5-responsive-popover]");
     }
     get itemSelectionAnnounce() {
         if (!this.accInfo) {
             return "";
         }
-        const itemPositionText = Suggestions.i18nBundle.getText(LIST_ITEM_POSITION, this.accInfo.currentPos, this.accInfo.listSize);
-        const groupItemText = Suggestions.i18nBundle.getText(LIST_ITEM_GROUP_HEADER);
-        return this.accInfo.isGroup ? `${groupItemText} ${this.accInfo.itemText}` : `${this.accInfo.description} ${this.accInfo.additionalText} ${itemPositionText}`;
-    }
-    getRowText(suggestion) {
-        return this.sanitizeText(suggestion.text || suggestion.textContent || "");
-    }
-    getRowDesc(suggestion) {
-        return this.sanitizeText(suggestion.description || "");
-    }
-    getHighlightedText(suggestion, input) {
-        const text = suggestion.text || suggestion.textContent || "";
-        return this.hightlightInput(text, input);
-    }
-    getHighlightedDesc(suggestion, input) {
-        const text = suggestion.description || "";
-        return this.hightlightInput(text, input);
+        if (this.accInfo.isGroup) {
+            return `${Suggestions.i18nBundle.getText(LIST_ITEM_GROUP_HEADER)} ${this.accInfo.itemText}`;
+        }
+        const itemPositionText = Suggestions.i18nBundle.getText(LIST_ITEM_POSITION, this.accInfo.currentPos || 0, this.accInfo.listSize || 0);
+        return `${this.accInfo.additionalText} ${itemPositionText}`;
     }
     hightlightInput(text, input) {
         return generateHighlightedMarkup(text, input);
-    }
-    sanitizeText(text) {
-        return encodeXML(text);
     }
     get _hasValueState() {
         return this.component.hasValueStateMessage;
@@ -466,29 +387,12 @@ class Suggestions {
     _clearValueStateFocus() {
         this.component._isValueStateFocused = false;
     }
-    _clearSelectedSuggestionAndAccInfo() {
+    _clearSelectedSuggestionAndaccInfo() {
         this.accInfo = undefined;
         this.selectedItemIndex = 0;
     }
-    static get dependencies() {
-        return [
-            SuggestionItem,
-            SuggestionGroupItem,
-            ResponsivePopover,
-            List,
-            SuggestionListItem,
-            GroupHeaderListItem,
-            Button,
-            Icon,
-            Popover,
-        ];
-    }
-    static async init() {
-        Suggestions.i18nBundle = await getI18nBundle("@ui5/webcomponents");
-    }
 }
 Suggestions.SCROLL_STEP = 60;
-// Add suggestions support to the global features registry so that Input.js can use it
-registerFeature("InputSuggestions", Suggestions);
+Input.SuggestionsClass = Suggestions;
 export default Suggestions;
 //# sourceMappingURL=InputSuggestions.js.map

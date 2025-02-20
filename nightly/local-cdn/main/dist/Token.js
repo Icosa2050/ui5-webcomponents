@@ -5,20 +5,17 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 var Token_1;
+// eslint-disable-next-line max-classes-per-file
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
 import property from "@ui5/webcomponents-base/dist/decorators/property.js";
 import slot from "@ui5/webcomponents-base/dist/decorators/slot.js";
-import event from "@ui5/webcomponents-base/dist/decorators/event.js";
+import event from "@ui5/webcomponents-base/dist/decorators/event-strict.js";
 import customElement from "@ui5/webcomponents-base/dist/decorators/customElement.js";
-import litRender from "@ui5/webcomponents-base/dist/renderer/LitRenderer.js";
-import { getTheme } from "@ui5/webcomponents-base/dist/config/Theme.js";
+import jsxRenderer from "@ui5/webcomponents-base/dist/renderer/JsxRenderer.js";
 import { isBackSpace, isSpace, isDelete, isSpaceCtrl, } from "@ui5/webcomponents-base/dist/Keys.js";
-import "@ui5/webcomponents-icons/dist/decline.js";
-import "@ui5/webcomponents-icons/dist/sys-cancel.js";
-import { getI18nBundle } from "@ui5/webcomponents-base/dist/i18nBundle.js";
-import { TOKEN_ARIA_DELETABLE } from "./generated/i18n/i18n-defaults.js";
-import Icon from "./Icon.js";
-import TokenTemplate from "./generated/templates/TokenTemplate.lit.js";
+import i18n from "@ui5/webcomponents-base/dist/decorators/i18n.js";
+import { TOKEN_ARIA_DELETABLE, TOKEN_ARIA_LABEL } from "./generated/i18n/i18n-defaults.js";
+import TokenTemplate from "./TokenTemplate.js";
 // Styles
 import tokenStyles from "./generated/themes/Token.css.js";
 /**
@@ -38,10 +35,56 @@ import tokenStyles from "./generated/themes/Token.css.js";
  * @public
  */
 let Token = Token_1 = class Token extends UI5Element {
+    constructor() {
+        super(...arguments);
+        /**
+         * Defines whether the component is selected or not.
+         * @default false
+         * @public
+         */
+        this.selected = false;
+        /**
+         * Defines whether the component is read-only.
+         *
+         * **Note:** A read-only component can not be deleted or selected,
+         * but still provides visual feedback upon user interaction.
+         * @default false
+         * @private
+         */
+        this.readonly = false;
+        /**
+         * Set by the tokenizer when a token is in the "more" area (overflowing)
+         * @default false
+         * @private
+         */
+        this.overflows = false;
+        this.singleToken = false;
+        /**
+         * Defines whether the component is focused or not.
+         * @default false
+         * @private
+         */
+        this.focused = false;
+        /**
+         * Defines whether the token is being deleted
+         * This flag is used in the ui5-multi-combobox
+         * @default false
+         * @private
+         */
+        this.toBeDeleted = false;
+        /**
+         * Defines the tabIndex of the component.
+         * @private
+         */
+        this.forcedTabIndex = "-1";
+        // fireMyEvent(name: keyof this["_events"]) {
+        // 	console.log(name);
+        // }
+    }
     _handleSelect() {
         if (!this.toBeDeleted) {
             this.selected = !this.selected;
-            this.fireEvent("select");
+            this.fireDecoratorEvent("select");
         }
     }
     _focusin() {
@@ -52,14 +95,14 @@ let Token = Token_1 = class Token extends UI5Element {
     }
     _delete() {
         this.toBeDeleted = true;
-        this.fireEvent("delete");
+        this.fireDecoratorEvent("delete");
     }
     _keydown(e) {
         const isBackSpacePressed = isBackSpace(e);
         const isDeletePressed = isDelete(e);
         if (!this.readonly && (isBackSpacePressed || isDeletePressed)) {
             e.preventDefault();
-            this.fireEvent("delete", {
+            this.fireDecoratorEvent("delete", {
                 backSpace: isBackSpacePressed,
                 "delete": isDeletePressed,
             });
@@ -71,15 +114,10 @@ let Token = Token_1 = class Token extends UI5Element {
     }
     onBeforeRendering() {
         this.toBeDeleted = false;
+        // this.fireMyEvent("select");
     }
     get tokenDeletableText() {
         return Token_1.i18nBundle.getText(TOKEN_ARIA_DELETABLE);
-    }
-    get iconURI() {
-        if (getTheme().includes("sap_belize")) {
-            return "sys-cancel";
-        }
-        return "decline";
     }
     get textDom() {
         return this.getDomRef()?.querySelector(".ui5-token--text");
@@ -90,8 +128,12 @@ let Token = Token_1 = class Token extends UI5Element {
         }
         return Math.ceil(this.textDom.getBoundingClientRect().width) < Math.ceil(this.textDom.scrollWidth);
     }
-    static async onDefine() {
-        Token_1.i18nBundle = await getI18nBundle("@ui5/webcomponents");
+    get ariaDescription() {
+        let description = Token_1.i18nBundle.getText(TOKEN_ARIA_LABEL);
+        if (!this.readonly) {
+            description += ` ${Token_1.i18nBundle.getText(TOKEN_ARIA_DELETABLE)}`;
+        }
+        return description;
     }
 };
 __decorate([
@@ -99,10 +141,10 @@ __decorate([
 ], Token.prototype, "text", void 0);
 __decorate([
     property({ type: Boolean })
-], Token.prototype, "readonly", void 0);
+], Token.prototype, "selected", void 0);
 __decorate([
     property({ type: Boolean })
-], Token.prototype, "selected", void 0);
+], Token.prototype, "readonly", void 0);
 __decorate([
     property({ type: Boolean })
 ], Token.prototype, "overflows", void 0);
@@ -116,26 +158,30 @@ __decorate([
     property({ type: Boolean })
 ], Token.prototype, "toBeDeleted", void 0);
 __decorate([
-    property({ defaultValue: "-1", noAttribute: true })
+    property({ noAttribute: true })
 ], Token.prototype, "forcedTabIndex", void 0);
 __decorate([
     slot()
 ], Token.prototype, "closeIcon", void 0);
+__decorate([
+    i18n("@ui5/webcomponents")
+], Token, "i18nBundle", void 0);
 Token = Token_1 = __decorate([
     customElement({
         tag: "ui5-token",
         languageAware: true,
-        renderer: litRender,
+        renderer: jsxRenderer,
         template: TokenTemplate,
         styles: tokenStyles,
-        dependencies: [Icon],
     })
     /**
      * Fired when the the component is selected by user interaction with mouse or by clicking space.
-     * @public
+     * @private
      */
     ,
-    event("select")
+    event("select", {
+        bubbles: true,
+    })
     /**
      * Fired when the backspace, delete or close icon of the token is pressed
      * @param {Boolean} backSpace Indicates whether token is deleted by backspace key.
@@ -144,10 +190,7 @@ Token = Token_1 = __decorate([
      */
     ,
     event("delete", {
-        detail: {
-            "backSpace": { type: Boolean },
-            "delete": { type: Boolean },
-        },
+        bubbles: true,
     })
 ], Token);
 Token.define();

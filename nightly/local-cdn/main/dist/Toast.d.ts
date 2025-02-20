@@ -1,5 +1,5 @@
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
-import ToastPlacement from "./types/ToastPlacement.js";
+import type ToastPlacement from "./types/ToastPlacement.js";
 /**
  * @class
  *
@@ -36,6 +36,9 @@ import ToastPlacement from "./types/ToastPlacement.js";
  * **Note:** Although this slot accepts HTML Elements, it is strongly recommended that you only use text in order to preserve the intended design.
  */
 declare class Toast extends UI5Element {
+    eventDetails: {
+        "close": void;
+    };
     /**
      * Defines the duration in milliseconds for which component
      * remains on the screen before it's automatically closed.
@@ -54,7 +57,9 @@ declare class Toast extends UI5Element {
     placement: `${ToastPlacement}`;
     /**
      * Indicates whether the component is open (visible).
-     * @private
+     * @default false
+     * @public
+     * @since 2.0.0
      */
     open: boolean;
     /**
@@ -62,11 +67,6 @@ declare class Toast extends UI5Element {
      * @private
      */
     hover: boolean;
-    /**
-     * Indicates whether the component DOM is rendered.
-     * @private
-     */
-    domRendered: boolean;
     /**
      * Indicates whether the toast could be focused
      * This happens when ctr / command + shift + m is pressed
@@ -79,15 +79,15 @@ declare class Toast extends UI5Element {
      * @private
      */
     focused: boolean;
-    _reopen: boolean;
+    _onfocusinFn: () => void;
+    _onfocusoutFn: () => void;
+    _onkeydownFn: (e: KeyboardEvent) => void;
+    _onmouseoverFn: () => void;
+    _onmouseleaveFn: () => void;
+    _ontransitionendFn: () => void;
     constructor();
     onBeforeRendering(): void;
     onAfterRendering(): void;
-    /**
-     * Shows the component.
-     * @public
-     */
-    show(): void;
     _onfocusin(): void;
     _onfocusout(): void;
     /**
@@ -96,11 +96,12 @@ declare class Toast extends UI5Element {
      * @private
      */
     get effectiveDuration(): number;
-    _initiateOpening(): void;
     _ontransitionend(): void;
     _onmouseover(): void;
     _onmouseleave(): void;
     _onkeydown(e: KeyboardEvent): void;
-    get _tabindex(): "0" | "-1";
+    get _tabindex(): 0 | -1;
+    onEnterDOM(): void;
+    onExitDOM(): void;
 }
 export default Toast;

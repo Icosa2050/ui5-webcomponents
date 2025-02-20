@@ -9,20 +9,18 @@ import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
 import customElement from "@ui5/webcomponents-base/dist/decorators/customElement.js";
 import property from "@ui5/webcomponents-base/dist/decorators/property.js";
 import slot from "@ui5/webcomponents-base/dist/decorators/slot.js";
+import i18n from "@ui5/webcomponents-base/dist/decorators/i18n.js";
 import ResizeHandler from "@ui5/webcomponents-base/dist/delegate/ResizeHandler.js";
 import { getIllustrationDataSync, getIllustrationData } from "@ui5/webcomponents-base/dist/asset-registries/Illustrations.js";
-import { getEffectiveAriaLabelText } from "@ui5/webcomponents-base/dist/util/AriaLabelHelper.js";
-import { getI18nBundle } from "@ui5/webcomponents-base/dist/i18nBundle.js";
-import Title from "@ui5/webcomponents/dist/Title.js";
-import TitleLevel from "@ui5/webcomponents/dist/types/TitleLevel.js";
-import litRender from "@ui5/webcomponents-base/dist/renderer/LitRenderer.js";
-import IllustrationMessageSize from "./types/IllustrationMessageSize.js";
+import { getEffectiveAriaLabelText } from "@ui5/webcomponents-base/dist/util/AccessibilityTextsHelper.js";
+import jsxRenderer from "@ui5/webcomponents-base/dist/renderer/JsxRenderer.js";
+import IllustrationMessageDesign from "./types/IllustrationMessageDesign.js";
 import IllustrationMessageType from "./types/IllustrationMessageType.js";
 import "./illustrations/BeforeSearch.js";
 // Styles
 import IllustratedMessageCss from "./generated/themes/IllustratedMessage.css.js";
 // Template
-import IllustratedMessageTemplate from "./generated/templates/IllustratedMessageTemplate.lit.js";
+import IllustratedMessageTemplate from "./IllustratedMessageTemplate.js";
 const getEffectiveIllustrationName = (name) => {
     if (name.startsWith("Tnt")) {
         return name.replace("Tnt", "tnt/");
@@ -77,15 +75,48 @@ const getEffectiveIllustrationName = (name) => {
 let IllustratedMessage = IllustratedMessage_1 = class IllustratedMessage extends UI5Element {
     constructor() {
         super();
+        /**
+        * Defines the illustration name that will be displayed in the component.
+        *
+        * Example:
+        *
+        * `name='BeforeSearch'`, `name='UnableToUpload'`, etc..
+        *
+        * **Note:** To use the TNT illustrations,
+        * you need to set the `tnt` or `Tnt` prefix in front of the icon's name.
+        *
+        * Example:
+        *
+        * `name='tnt/Avatar'` or `name='TntAvatar'`.
+        *
+        * **Note:** By default the `BeforeSearch` illustration is loaded.
+        * When using an illustration type, other than the default, it should be loaded in addition:
+        *
+        * `import "@ui5/webcomponents-fiori/dist/illustrations/NoData.js";`
+        *
+        * For TNT illustrations:
+        *
+        * `import "@ui5/webcomponents-fiori/dist/illustrations/tnt/SessionExpired.js";`
+        * @default "BeforeSearch"
+        * @public
+        */
+        this.name = "BeforeSearch";
+        /**
+        * Determines which illustration breakpoint variant is used.
+        *
+        * As `IllustratedMessage` adapts itself around the `Illustration`, the other
+        * elements of the component are displayed differently on the different breakpoints/illustration designs.
+        * @default "Auto"
+        * @public
+        * @since 2.0.0
+        */
+        this.design = "Auto";
         this._handleResize = this.handleResize.bind(this);
         // this will store the last known offsetWidth of the IllustratedMessage DOM node for a given media (e.g. "Spot")
         this._lastKnownOffsetWidthForMedia = {};
         this._lastKnownOffsetHeightForMedia = {};
         // this will store the last known media, in order to detect if IllustratedMessage has been hidden by expand/collapse container
         this._lastKnownMedia = "base";
-    }
-    static async onDefine() {
-        IllustratedMessage_1.i18nBundle = await getI18nBundle("@ui5/webcomponents-fiori");
     }
     static get BREAKPOINTS() {
         return {
@@ -130,7 +161,7 @@ let IllustratedMessage = IllustratedMessage_1 = class IllustratedMessage extends
         this.sceneSvg = illustrationData.sceneSvg;
         this.illustrationTitle = IllustratedMessage_1.i18nBundle.getText(illustrationData.title);
         this.illustrationSubtitle = IllustratedMessage_1.i18nBundle.getText(illustrationData.subtitle);
-        if (this.design !== IllustrationMessageSize.Auto) {
+        if (this.design !== IllustrationMessageDesign.Auto) {
             this._handleCustomSize();
         }
     }
@@ -141,7 +172,7 @@ let IllustratedMessage = IllustratedMessage_1 = class IllustratedMessage extends
         ResizeHandler.deregister(this, this._handleResize);
     }
     handleResize() {
-        if (this.design !== IllustrationMessageSize.Auto) {
+        if (this.design !== IllustrationMessageDesign.Auto) {
             this._adjustHeightToFitContainer();
             return;
         }
@@ -212,16 +243,16 @@ let IllustratedMessage = IllustratedMessage_1 = class IllustratedMessage extends
      */
     _handleCustomSize() {
         switch (this.design) {
-            case IllustrationMessageSize.Base:
+            case IllustrationMessageDesign.Base:
                 this.media = IllustratedMessage_1.MEDIA.BASE;
                 return;
-            case IllustrationMessageSize.Dot:
+            case IllustrationMessageDesign.Dot:
                 this.media = IllustratedMessage_1.MEDIA.DOT;
                 return;
-            case IllustrationMessageSize.Spot:
+            case IllustrationMessageDesign.Spot:
                 this.media = IllustratedMessage_1.MEDIA.SPOT;
                 return;
-            case IllustrationMessageSize.Dialog:
+            case IllustrationMessageDesign.Dialog:
                 this.media = IllustratedMessage_1.MEDIA.DIALOG;
                 return;
             default:
@@ -272,10 +303,10 @@ let IllustratedMessage = IllustratedMessage_1 = class IllustratedMessage extends
     }
 };
 __decorate([
-    property({ type: String, defaultValue: IllustrationMessageType.BeforeSearch })
+    property()
 ], IllustratedMessage.prototype, "name", void 0);
 __decorate([
-    property({ type: IllustrationMessageSize, defaultValue: IllustrationMessageSize.Auto })
+    property()
 ], IllustratedMessage.prototype, "design", void 0);
 __decorate([
     property()
@@ -284,11 +315,8 @@ __decorate([
     property()
 ], IllustratedMessage.prototype, "titleText", void 0);
 __decorate([
-    property({ defaultValue: "" })
+    property()
 ], IllustratedMessage.prototype, "accessibleNameRef", void 0);
-__decorate([
-    property({ type: TitleLevel, defaultValue: TitleLevel.H2 })
-], IllustratedMessage.prototype, "titleLevel", void 0);
 __decorate([
     property({ noAttribute: true })
 ], IllustratedMessage.prototype, "dotSvg", void 0);
@@ -313,15 +341,17 @@ __decorate([
 __decorate([
     slot({ type: HTMLElement, "default": true })
 ], IllustratedMessage.prototype, "actions", void 0);
+__decorate([
+    i18n("@ui5/webcomponents-fiori")
+], IllustratedMessage, "i18nBundle", void 0);
 IllustratedMessage = IllustratedMessage_1 = __decorate([
     customElement({
         tag: "ui5-illustrated-message",
         languageAware: true,
         themeAware: true,
-        renderer: litRender,
+        renderer: jsxRenderer,
         styles: IllustratedMessageCss,
         template: IllustratedMessageTemplate,
-        dependencies: [Title],
     })
 ], IllustratedMessage);
 IllustratedMessage.define();

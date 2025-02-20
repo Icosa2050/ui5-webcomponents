@@ -1,7 +1,9 @@
-import UI5Element, { ChangeInfo } from "@ui5/webcomponents-base/dist/UI5Element.js";
+import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
 import type I18nBundle from "@ui5/webcomponents-base/dist/i18nBundle.js";
-import Dialog from "@ui5/webcomponents/dist/Dialog.js";
-declare const BrowserMultiFormatReader: typeof import("@zxing/library/esm5/index.js").BrowserMultiFormatReader;
+import type Dialog from "@ui5/webcomponents/dist/Dialog.js";
+import type { Result, Exception } from "@zxing/library";
+import type { Interval } from "@ui5/webcomponents-base/dist/types.js";
+declare const BrowserMultiFormatReader: typeof import("@zxing/library").BrowserMultiFormatReader;
 type BarcodeScannerDialogScanSuccessEventDetail = {
     text: string;
     rawBytes: Uint8Array;
@@ -29,52 +31,106 @@ type BarcodeScannerDialogScanErrorEventDetail = {
  * @since 1.0.0-rc.15
  */
 declare class BarcodeScannerDialog extends UI5Element {
+    eventDetails: {
+        close: void;
+        "scan-success": BarcodeScannerDialogScanSuccessEventDetail;
+        "scan-error": BarcodeScannerDialogScanErrorEventDetail;
+    };
+    /**
+     * Defines the header HTML Element.
+     *
+     * **Note:** If `header` slot is provided, the labelling of the dialog is a responsibility of the application developer.
+     * `accessibleName` should be used.
+     *
+     * @public
+     * @since 2.4.0
+     */
+    header: Array<HTMLElement>;
+    /**
+     * Defines the footer HTML Element.
+     *
+     * **Note:** When you provide custom content for the `footer` slot, the default close button is not rendered.
+     * This means you need to include your own mechanism within the custom `footer` to close the dialog,
+     * such as a button with an event listener that closes the dialog.
+     *
+     * **Note:** If the `footer` slot is not provided, a default footer with a close button is rendered automatically,
+     * allowing users to close the dialog without any additional implementation.
+     *
+     * @public
+     * @since 2.4.0
+     */
+    footer: Array<HTMLElement>;
     /**
      * Indicates whether the dialog is open.
      *
      * @public
      * @default false
      * @since 1.24.0
-    */
+     */
     open: boolean;
     /**
-     * Indicates whether a loading indicator should be displayed in the dialog.
+     * Indicates whether a loading indicator should be displayed while the scanner is loading.
      * @default false
      * @private
      */
     loading: boolean;
-    _codeReader: InstanceType<typeof BrowserMultiFormatReader>;
+    /**
+     * Indicates whether the scanner is ready to scan.
+     * @default false
+     * @private
+     */
+    isReadyToScan: boolean;
     dialog?: Dialog;
     static i18nBundle: I18nBundle;
+    _codeReader: InstanceType<typeof BrowserMultiFormatReader>;
+    _tempCanvas: HTMLCanvasElement;
+    _scanInterval: Interval | null;
+    _handleVideoPlayingBound: () => void;
+    _handleCaptureRegionBound: () => void;
     constructor();
-    static onDefine(): Promise<void>;
-    onInvalidation(changeInfo: ChangeInfo): void;
-    /**
-     * Shows a dialog with the camera videostream. Starts a scan session.
-     * @public
-     * @deprecated The method is deprecated in favour of <code>open</code> property.
-     */
-    show(): void;
-    /**
-     * Closes the dialog and the scan session.
-     * @public
-     * @deprecated The method is deprecated in favour of <code>open</code> property.
-     */
-    close(): void;
-    /**
-     *  PRIVATE METHODS
-     */
-    _hasGetUserMedia(): boolean;
-    _getUserPermission(): Promise<MediaStream>;
-    _getDialog(): Dialog;
-    _getVideoElement(): HTMLVideoElement;
-    _showDialog(): void;
-    _closeDialog(): void;
-    _startReader(): void;
-    _resetReader(): void;
-    _decodeFromCamera(): void;
+    onAfterRendering(): Promise<void>;
+    onEnterDOM(): void;
+    onExitDOM(): void;
+    get _open(): boolean;
     get _cancelButtonText(): string;
     get _busyIndicatorText(): string;
+    _hasGetUserMedia(): boolean;
+    _getUserPermission(): Promise<MediaStream>;
+    _getVideoElement(): HTMLVideoElement;
+    _getOverlayCanvasElement(): HTMLCanvasElement;
+    /**
+     * CALCULATIONS
+     *
+     * The following methods are used to calculate the capture region
+     * and draw it on the overlay canvas.
+     * The capture region is a square area in the center of the video element
+     * where the barcode scanning is performed.
+     * The region is defined as a proportion of the video element's dimensions.
+     * The overlay canvas is used to draw a semi-transparent black overlay
+     * over the video element and a red border around the capture region.
+     * The overlay canvas is updated on every frame to ensure the capture region is always visible.
+     * The capture region is used to crop the video frame and extract the barcode image.
+     * The extracted image is then processed by the zxing-js library to decode the barcode.
+     */
+    _calculateCaptureRegion(clientWidth: number, clientHeight: number): {
+        scanHeight: number;
+        scanWidth: number;
+        xOffset: number;
+        yOffset: number;
+    };
+    _drawCaptureRegion(): void;
+    _getTempCanvasElement(): HTMLCanvasElement;
+    _captureFrame(): HTMLCanvasElement;
+    /**
+     * HANDLERS
+     */
+    _processFrame(): Promise<void>;
+    _handleScanSuccess(result: Result): void;
+    _handleScanError(error: Exception): void;
+    _handleVideoPlaying(): void;
+    _handleDrawCaptureRegion(): void;
+    _closeDialog(): void;
+    _resetReader(): void;
 }
 export default BarcodeScannerDialog;
 export type { BarcodeScannerDialogScanErrorEventDetail, BarcodeScannerDialogScanSuccessEventDetail, };

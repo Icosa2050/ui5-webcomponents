@@ -1,35 +1,27 @@
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
-import type { ClassMap } from "@ui5/webcomponents-base/dist/types.js";
 import type I18nBundle from "@ui5/webcomponents-base/dist/i18nBundle.js";
-import "@ui5/webcomponents-icons/dist/decline.js";
-import "@ui5/webcomponents-icons/dist/information.js";
-import "@ui5/webcomponents-icons/dist/sys-enter-2.js";
-import "@ui5/webcomponents-icons/dist/error.js";
-import "@ui5/webcomponents-icons/dist/alert.js";
-import MessageStripDesign from "./types/MessageStripDesign.js";
+import type MessageStripDesign from "./types/MessageStripDesign.js";
 import type { IIcon } from "./Icon.js";
 declare enum DesignClassesMapping {
     Information = "ui5-message-strip-root--info",
     Positive = "ui5-message-strip-root--positive",
     Negative = "ui5-message-strip-root--negative",
-    Warning = "ui5-message-strip-root--warning"
-}
-declare enum IconMapping {
-    Information = "information",
-    Positive = "sys-enter-2",
-    Negative = "error",
-    Warning = "alert"
+    Critical = "ui5-message-strip-root--critical",
+    ColorSet1 = "ui5-message-strip-root--color-set-1",
+    ColorSet2 = "ui5-message-strip-root--color-set-2"
 }
 type DesignTypeAnnouncemnt = Record<MessageStripDesign, string>;
+type DesignCloseButtonTooltip = Record<MessageStripDesign, string>;
 /**
  * @class
  *
  * ### Overview
  *
- * The `ui5-message-strip` component enables the embedding of app-related messages.
- * It displays 4 designs of messages, each with corresponding semantic color and icon: Information, Positive, Warning and Negative.
- * Each message can have a Close button, so that it can be removed from the UI, if needed.
- *
+ * The ui5-message-strip component allows for the embedding of application-related messages.
+ * It supports four semantic designs, each with its own color and icon: "Information", "Positive", "Critical", and "Negative".
+ * Additionally, users can choose from two color sets ("ColorSet1" and "ColorSet2"), each containing 10 predefined color schemes.
+ * Each message shows a "Close" button, so that it can be removed from the UI, if needed.
+
  * ### Usage
  *
  * For the `ui5-message-strip` component, you can define whether it displays
@@ -56,6 +48,9 @@ type DesignTypeAnnouncemnt = Record<MessageStripDesign, string>;
  * **Note:** Although this slot accepts HTML Elements, it is strongly recommended that you only use text in order to preserve the intended design.
  */
 declare class MessageStrip extends UI5Element {
+    eventDetails: {
+        close: void;
+    };
     /**
      * Defines the component type.
      * @default "Information"
@@ -64,8 +59,21 @@ declare class MessageStrip extends UI5Element {
      */
     design: `${MessageStripDesign}`;
     /**
+     * Defines the color scheme of the component.
+     * There are 10 predefined schemes.
+     * To use one you can set a number from `"1"` to `"10"`. The `colorScheme` `"1"` will be set by default.
+     *
+     * @default "1"
+     * @public
+     * @since 2.0.0
+     */
+    colorScheme: string;
+    /**
      * Defines whether the MessageStrip will show an icon in the beginning.
      * You can directly provide an icon with the `icon` slot. Otherwise, the default icon for the type will be used.
+     *
+     *  * **Note:** If <code>MessageStripDesign.ColorSet1</code> or <code>MessageStripDesign.ColorSet2</code> value is set to the <code>design</code> property, default icon will not be presented.
+     *
      * @default false
      * @public
      * @since 1.0.0-rc.15
@@ -89,14 +97,13 @@ declare class MessageStrip extends UI5Element {
     icon: Array<IIcon>;
     static i18nBundle: I18nBundle;
     _closeClick(): void;
-    static onDefine(): Promise<void>;
     static designAnnouncementMappings(): DesignTypeAnnouncemnt;
     get hiddenText(): string;
+    get shouldHideIcon(): boolean;
+    static closeButtonMappings(): DesignCloseButtonTooltip;
     get _closeButtonText(): string;
     get _closableText(): string;
-    get classes(): ClassMap;
     get iconProvided(): boolean;
-    get standardIconName(): IconMapping;
     get designClasses(): DesignClassesMapping;
 }
 export default MessageStrip;

@@ -1,12 +1,8 @@
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
 import type I18nBundle from "@ui5/webcomponents-base/dist/i18nBundle.js";
 import ValueState from "@ui5/webcomponents-base/dist/types/ValueState.js";
-import "@ui5/webcomponents-icons/dist/accept.js";
-import "@ui5/webcomponents-icons/dist/complete.js";
-import "@ui5/webcomponents-icons/dist/border.js";
-import "@ui5/webcomponents-icons/dist/tri-state.js";
-import WrappingType from "./types/WrappingType.js";
-import type { IFormElement } from "./features/InputElementsFormSupport.js";
+import type { IFormInputElement } from "@ui5/webcomponents-base/dist/features/InputElementsFormSupport.js";
+import type WrappingType from "./types/WrappingType.js";
 /**
  * @class
  *
@@ -25,7 +21,7 @@ import type { IFormElement } from "./features/InputElementsFormSupport.js";
  * ### Usage
  *
  * You can define the checkbox text with via the `text` property. If the text exceeds the available width, it is truncated by default.
- * In case you prefer text to wrap, set the `wrappingType` property to "Normal".
+ * In case you prefer text to truncate, set the `wrappingType` property to "None".
  * The touchable area for toggling the `ui5-checkbox` ends where the text ends.
  *
  * You can disable the `ui5-checkbox` by setting the `disabled` property to
@@ -49,21 +45,25 @@ import type { IFormElement } from "./features/InputElementsFormSupport.js";
  * @csspart label - Used to style the label of the `ui5-checkbox`
  * @csspart icon - Used to style the icon of the `ui5-checkbox`
  */
-declare class CheckBox extends UI5Element implements IFormElement {
+declare class CheckBox extends UI5Element implements IFormInputElement {
+    eventDetails: {
+        "change": void;
+        "value-changed": void;
+    };
     /**
      * Receives id(or many ids) of the elements that label the component
-     * @default ""
+     * @default undefined
      * @public
      * @since 1.1.0
      */
-    accessibleNameRef: string;
+    accessibleNameRef?: string;
     /**
      * Defines the accessible ARIA name of the component.
      * @public
-     * @default ""
+     * @default undefined
      * @since 1.1.0
      */
-    accessibleName: string;
+    accessibleName?: string;
     /**
      * Defines whether the component is disabled.
      *
@@ -129,10 +129,10 @@ declare class CheckBox extends UI5Element implements IFormElement {
     checked: boolean;
     /**
      * Defines the text of the component.
-     * @default ""
+     * @default undefined
      * @public
      */
-    text: string;
+    text?: string;
     /**
      * Defines the value state of the component.
      * @default "None"
@@ -143,40 +143,32 @@ declare class CheckBox extends UI5Element implements IFormElement {
      * Defines whether the component text wraps when there is not enough space.
      *
      * **Note:** for option "Normal" the text will wrap and the words will not be broken based on hyphenation.
-     * @default "None"
+     * **Note:** for option "None" the text will be truncated with an ellipsis.
+     * @default "Normal"
      * @public
      */
     wrappingType: `${WrappingType}`;
     /**
-     * Determines the name with which the component will be submitted in an HTML form.
+     * Determines the name by which the component will be identified upon submission in an HTML form.
      *
-     * **Important:** For the `name` property to have effect, you must add the following import to your project:
-     * `import "@ui5/webcomponents/dist/features/InputElementsFormSupport.js";`
-     *
-     * **Note:** When set, a native `input` HTML element
-     * will be created inside the component so that it can be submitted as
-     * part of an HTML form. Do not use this property unless you need to submit a form.
-     * @default ""
+     * **Note:** This property is only applicable within the context of an HTML Form element.
+     * @default undefined
      * @public
      */
-    name: string;
+    name?: string;
     /**
      * Defines the active state (pressed or not) of the component.
      * @private
      */
     active: boolean;
-    /**
-     * The slot is used to render native `input` HTML element within Light DOM to enable form submit,
-     * when `name` property is set.
-     * @private
-     */
-    formSupport: Array<HTMLElement>;
     static i18nBundle: I18nBundle;
     _deactivate: () => void;
+    get formValidityMessage(): string;
+    get formValidity(): ValidityStateFlags;
+    formElementAnchor(): Promise<HTMLElement | undefined>;
+    get formFormattedValue(): "on" | null;
     constructor();
-    onBeforeRendering(): void;
     onEnterDOM(): void;
-    _enableFormSupport(): void;
     _onclick(): void;
     _onmousedown(): void;
     _onmouseup(): void;
@@ -186,9 +178,9 @@ declare class CheckBox extends UI5Element implements IFormElement {
     toggle(): this;
     canToggle(): boolean;
     valueStateTextMappings(): {
-        Error: string;
-        Warning: string;
-        Success: string;
+        Negative: string;
+        Critical: string;
+        Positive: string;
     };
     get ariaLabelText(): string | undefined;
     get classes(): {
@@ -203,10 +195,9 @@ declare class CheckBox extends UI5Element implements IFormElement {
     get ariaDescribedBy(): string | undefined;
     get hasValueState(): boolean;
     get valueStateText(): string | undefined;
-    get effectiveTabIndex(): string | undefined;
+    get effectiveTabIndex(): number | undefined;
+    get tabbable(): boolean;
     get isCompletelyChecked(): boolean;
     get isDisplayOnly(): boolean;
-    get displayOnlyIcon(): "complete" | "tri-state" | "border";
-    static onDefine(): Promise<void>;
 }
 export default CheckBox;

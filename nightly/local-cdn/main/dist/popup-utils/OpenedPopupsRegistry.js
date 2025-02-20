@@ -1,6 +1,5 @@
 import getSharedResource from "@ui5/webcomponents-base/dist/getSharedResource.js";
 import { isEscape } from "@ui5/webcomponents-base/dist/Keys.js";
-import "../Popup.js";
 const OpenedPopupsRegistry = getSharedResource("OpenedPopupsRegistry", { openedRegistry: [] });
 const addOpenedPopup = (instance, parentPopovers = []) => {
     if (!OpenedPopupsRegistry.openedRegistry.some(popup => popup.instance === instance)) {
@@ -32,7 +31,7 @@ const _keydownListener = (event) => {
     }
     if (isEscape(event)) {
         event.stopPropagation();
-        OpenedPopupsRegistry.openedRegistry[OpenedPopupsRegistry.openedRegistry.length - 1].instance.close(true);
+        OpenedPopupsRegistry.openedRegistry[OpenedPopupsRegistry.openedRegistry.length - 1].instance.closePopup(true);
     }
 };
 const attachGlobalListener = () => {

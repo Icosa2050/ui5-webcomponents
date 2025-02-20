@@ -1,7 +1,8 @@
+import type { IFormInputElement } from "@ui5/webcomponents-base/dist/features/InputElementsFormSupport.js";
 import DatePicker from "./DatePicker.js";
-import CalendarPickersMode from "./types/CalendarPickersMode.js";
 import type { DatePickerChangeEventDetail as DateRangePickerChangeEventDetail, DatePickerInputEventDetail as DateRangePickerInputEventDetail } from "./DatePicker.js";
 import type { CalendarSelectionChangeEventDetail } from "./Calendar.js";
+import type CalendarSelectionMode from "./types/CalendarSelectionMode.js";
 /**
  * @class
  *
@@ -34,7 +35,7 @@ import type { CalendarSelectionChangeEventDetail } from "./Calendar.js";
  * @since 1.0.0-rc.8
  * @public
  */
-declare class DateRangePicker extends DatePicker {
+declare class DateRangePicker extends DatePicker implements IFormInputElement {
     /**
     * Determines the symbol which separates the dates.
     * If not supplied, the default time interval delimiter for the current locale will be used.
@@ -46,8 +47,9 @@ declare class DateRangePicker extends DatePicker {
     * The first date in the range during selection (this is a temporary value, not the first date in the value range)
     * @private
     */
-    _tempValue: string;
+    _tempValue?: string;
     private _prevDelimiter;
+    get formFormattedValue(): string | FormData;
     constructor();
     /**
      * **Note:** The getter method is inherited and not supported. If called it will return an empty value.
@@ -63,12 +65,12 @@ declare class DateRangePicker extends DatePicker {
     get dateValueUTC(): Date | null;
     get _startDateTimestamp(): number | undefined;
     get _endDateTimestamp(): number | undefined;
-    get _tempTimestamp(): number | "";
+    get _tempTimestamp(): number | "" | undefined;
     /**
      * Required by DatePicker.js
      * @override
      */
-    get _calendarSelectionMode(): string;
+    get _calendarSelectionMode(): `${CalendarSelectionMode}`;
     /**
      * Required by DatePicker.js - set the calendar focus on the first selected date (or today if not set)
      * @override
@@ -91,11 +93,20 @@ declare class DateRangePicker extends DatePicker {
      * @default null
      */
     get endDateValue(): Date | null;
+    get startValue(): string;
+    get endValue(): string;
     /**
      * @override
      */
     get _placeholder(): string;
+    /**
+     * @override
+     */
     get dateAriaDescription(): string;
+    /**
+     * @override
+     */
+    get pickerAccessibleName(): string;
     /**
      * @override
      */
@@ -142,10 +153,6 @@ declare class DateRangePicker extends DatePicker {
      * @private
      */
     _buildValue(firstDateTimestamp: number | undefined, lastDateTimestamp: number | undefined): string;
-    /**
-     * @override
-     */
-    get _calendarPickersMode(): CalendarPickersMode;
 }
 export default DateRangePicker;
 export type { DateRangePickerChangeEventDetail, DateRangePickerInputEventDetail, };

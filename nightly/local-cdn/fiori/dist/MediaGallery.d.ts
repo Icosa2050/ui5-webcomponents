@@ -7,16 +7,15 @@ import type { ITabbable } from "@ui5/webcomponents-base/dist/delegate/ItemNaviga
 import MediaGalleryItem from "./MediaGalleryItem.js";
 import MediaGalleryItemLayout from "./types/MediaGalleryItemLayout.js";
 import MediaGalleryLayout from "./types/MediaGalleryLayout.js";
-import MediaGalleryMenuHorizontalAlign from "./types/MediaGalleryMenuHorizontalAlign.js";
-import MediaGalleryMenuVerticalAlign from "./types/MediaGalleryMenuVerticalAlign.js";
+import type MediaGalleryMenuHorizontalAlign from "./types/MediaGalleryMenuHorizontalAlign.js";
+import type MediaGalleryMenuVerticalAlign from "./types/MediaGalleryMenuVerticalAlign.js";
 /**
  * Interface for components that can be slotted inside `ui5-media-gallery` as items.
  * @public
  */
-interface IMediaGalleryItem extends HTMLElement, ITabbable {
+interface IMediaGalleryItem extends UI5Element, ITabbable {
     selected: boolean;
     disabled: boolean;
-    focused: boolean;
     displayedContent: HTMLElement | null;
     layout: `${MediaGalleryItemLayout}`;
 }
@@ -59,6 +58,11 @@ type MediaGallerySelectionChangeEventDetail = {
  * @since 1.1.0
  */
 declare class MediaGallery extends UI5Element {
+    eventDetails: {
+        "selection-change": MediaGallerySelectionChangeEventDetail;
+        "overflow-click": void;
+        "display-area-click": void;
+    };
     /**
      * If set to `true`, all thumbnails are rendered in a scrollable container.
      * If `false`, only up to five thumbnails are rendered, followed by

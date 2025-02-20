@@ -8,7 +8,7 @@ import TimezoneUtils from "../../../base/i18n/date/TimezoneUtils.js";
  * Static collection of utility functions to handle time zone related conversions
  *
  * @author SAP SE
- * @version 1.120.5
+ * @version 1.120.17
  * @namespace
  * @name module:sap/ui/core/format/TimezoneUtils
  * @private

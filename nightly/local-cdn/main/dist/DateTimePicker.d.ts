@@ -1,6 +1,8 @@
 import type { ResizeObserverCallback } from "@ui5/webcomponents-base/dist/delegate/ResizeHandler.js";
+import type { IFormInputElement } from "@ui5/webcomponents-base/dist/features/InputElementsFormSupport.js";
 import "@ui5/webcomponents-icons/dist/date-time.js";
 import type ResponsivePopover from "./ResponsivePopover.js";
+import type { SegmentedButtonSelectionChangeEventDetail } from "./SegmentedButton.js";
 import type { CalendarSelectionChangeEventDetail } from "./Calendar.js";
 import DatePicker from "./DatePicker.js";
 import type { DatePickerChangeEventDetail as DateTimePickerChangeEventDetail, DatePickerInputEventDetail as DateTimePickerInputEventDetail } from "./DatePicker.js";
@@ -73,7 +75,7 @@ type PreviewValues = {
  * @since 1.0.0-rc.7
  * @public
  */
-declare class DateTimePicker extends DatePicker {
+declare class DateTimePicker extends DatePicker implements IFormInputElement {
     /**
      * Defines the visibility of the time view in `phoneMode`.
      * For more information, see the `phoneMode` property.
@@ -109,13 +111,10 @@ declare class DateTimePicker extends DatePicker {
     onEnterDOM(): void;
     onExitDOM(): void;
     /**
-     * PUBLIC METHODS
+     * @override
+     * @private
      */
-    /**
-     * Opens the picker.
-     * @public
-     */
-    openPicker(): Promise<void>;
+    _togglePicker(): void;
     /**
      * Read-only getters
      */
@@ -144,7 +143,14 @@ declare class DateTimePicker extends DatePicker {
     get showDateView(): boolean;
     get showTimeView(): boolean;
     get phone(): boolean;
+    /**
+     * @override
+     */
     get dateAriaDescription(): string;
+    /**
+     * @override
+     */
+    get pickerAccessibleName(): string;
     /**
      * Defines whether the dialog on mobile should have header
      * @private
@@ -177,13 +183,14 @@ declare class DateTimePicker extends DatePicker {
      * between the date and time views.
      * @param e
      */
-    _dateTimeSwitchChange(e: CustomEvent): void;
+    _dateTimeSwitchChange(e: CustomEvent<SegmentedButtonSelectionChangeEventDetail>): void;
     /**
      * @override
      */
     _modifyDateValue(amount: number, unit: string, preserveDate: boolean): void;
     getPicker(): ResponsivePopover;
     getSelectedDateTime(): Date;
+    getFormat(): import("sap/ui/core/format/DateFormat").default;
     /**
      * @override
      */

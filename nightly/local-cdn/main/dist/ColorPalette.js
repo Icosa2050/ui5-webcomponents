@@ -9,19 +9,16 @@ import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
 import customElement from "@ui5/webcomponents-base/dist/decorators/customElement.js";
 import property from "@ui5/webcomponents-base/dist/decorators/property.js";
 import slot from "@ui5/webcomponents-base/dist/decorators/slot.js";
-import event from "@ui5/webcomponents-base/dist/decorators/event.js";
-import litRender from "@ui5/webcomponents-base/dist/renderer/LitRenderer.js";
-import { getI18nBundle } from "@ui5/webcomponents-base/dist/i18nBundle.js";
+import event from "@ui5/webcomponents-base/dist/decorators/event-strict.js";
+import jsxRenderer from "@ui5/webcomponents-base/dist/renderer/JsxRenderer.js";
+import i18n from "@ui5/webcomponents-base/dist/decorators/i18n.js";
 import ItemNavigation from "@ui5/webcomponents-base/dist/delegate/ItemNavigation.js";
-import CSSColor from "@ui5/webcomponents-base/dist/types/CSSColor.js";
 import ItemNavigationBehavior from "@ui5/webcomponents-base/dist/types/ItemNavigationBehavior.js";
 import { isPhone } from "@ui5/webcomponents-base/dist/Device.js";
 import { isSpace, isEnter, isDown, isUp, isTabNext, } from "@ui5/webcomponents-base/dist/Keys.js";
-import { getFeature } from "@ui5/webcomponents-base/dist/FeaturesRegistry.js";
-import ColorPaletteTemplate from "./generated/templates/ColorPaletteTemplate.lit.js";
-import ColorPaletteItem from "./ColorPaletteItem.js";
-import Button from "./Button.js";
-import { COLORPALETTE_CONTAINER_LABEL, COLOR_PALETTE_MORE_COLORS_TEXT, COLOR_PALETTE_DEFAULT_COLOR_TEXT, } from "./generated/i18n/i18n-defaults.js";
+import ColorPaletteTemplate from "./ColorPaletteTemplate.js";
+import "./ColorPaletteItem.js";
+import { COLORPALETTE_CONTAINER_LABEL, COLOR_PALETTE_MORE_COLORS_TEXT, COLOR_PALETTE_DEFAULT_COLOR_TEXT, COLOR_PALETTE_DIALOG_CANCEL_BUTTON, COLOR_PALETTE_DIALOG_OK_BUTTON, COLOR_PALETTE_DIALOG_TITLE, } from "./generated/i18n/i18n-defaults.js";
 // Styles
 import ColorPaletteCss from "./generated/themes/ColorPalette.css.js";
 import ColorPaletteDialogCss from "./generated/themes/ColorPaletteDialog.css.js";
@@ -45,16 +42,47 @@ import ColorPaletteDialogCss from "./generated/themes/ColorPaletteDialog.css.js"
  * @public
  */
 let ColorPalette = ColorPalette_1 = class ColorPalette extends UI5Element {
-    static async onDefine() {
-        const colorPaletteMoreColors = getFeature("ColorPaletteMoreColors");
-        [ColorPalette_1.i18nBundle] = await Promise.all([
-            getI18nBundle("@ui5/webcomponents"),
-            colorPaletteMoreColors ? colorPaletteMoreColors.init() : Promise.resolve(),
-        ]);
-    }
     constructor() {
         super();
-        this.moreColorsFeature = {};
+        /**
+         * Defines whether the user can see the last used colors in the bottom of the component
+         * @private
+         * @since 1.0.0-rc.15
+         */
+        this.showRecentColors = false;
+        /**
+         * Defines whether the user can choose a custom color from a color picker
+         *
+         * @private
+         * @since 1.0.0-rc.15
+         */
+        this.showMoreColors = false;
+        /**
+         * Defines whether the user can choose the default color from a button.
+         * @default false
+         * @private
+         * @since 1.0.0-rc.16
+         */
+        this.showDefaultColor = false;
+        /**
+         * Defines if the palette is in Popup or Embeded mode.
+         * @private
+         */
+        this.popupMode = false;
+        /**
+         * Defines if the palette is rendered on phone.
+         * @private
+         */
+        this.onPhone = false;
+        /**
+         * @private
+         */
+        this.dialogOpen = false;
+        /**
+         * @private
+         */
+        this.colorPickerValue = "rgba(255,255,255,1)";
+        this._shouldFocusRecentColors = false;
         this._itemNavigation = new ItemNavigation(this, {
             getItemsCallback: () => this.displayedColors,
             rowSize: this.rowSize,
@@ -68,28 +96,38 @@ let ColorPalette = ColorPalette_1 = class ColorPalette extends UI5Element {
         this._recentColors = [];
     }
     onBeforeRendering() {
+        this._ensureSingleSelectionOrDeselectAll();
+        const selectedItem = this.selectedItem;
+        if (selectedItem && !this.showRecentColors) {
+            this._selectedColor = selectedItem.value;
+        }
         this.displayedColors.forEach((item, index) => {
             item.index = index + 1;
         });
         if (this.showMoreColors) {
-            const ColorPaletteMoreColorsClass = getFeature("ColorPaletteMoreColors");
-            if (ColorPaletteMoreColorsClass) {
-                this.moreColorsFeature = new ColorPaletteMoreColorsClass();
+            // If the feature is preloaded (the user manually imported ColorPaletteMoreColors.js), the teplate is already available on the constructor
+            if (ColorPalette_1.ColorPaletteMoreColorsTemplate) {
+                this.showMoreColorsTemplate = ColorPalette_1.ColorPaletteMoreColorsTemplate;
+                // If feature is not preloaded, load the template dynamically
             }
             else {
-                throw new Error(`You have to import "@ui5/webcomponents/dist/features/ColorPaletteMoreColors.js" module to use the more-colors functionality.`);
+                import("./features/ColorPaletteMoreColorsTemplate.js").then(module => {
+                    this.showMoreColorsTemplate = module.default;
+                });
             }
         }
         this.onPhone = isPhone();
     }
     onAfterRendering() {
-        if (this.popupMode) {
-            if (this.showDefaultColor) {
-                this.focusFirstFocusableElement();
+        if (this.hasRecentColors && this._shouldFocusRecentColors) {
+            if (this.selectedItem) {
+                this.selectedItem.selected = false;
             }
-            else {
-                this.focusFirstDisplayColorElement();
-            }
+            const firstRecentColor = this.recentColorsElements[0];
+            firstRecentColor.selected = true;
+            this._currentlySelected = firstRecentColor;
+            this._currentlySelected.focus();
+            this._shouldFocusRecentColors = false;
         }
     }
     selectColor(item) {
@@ -109,36 +147,89 @@ let ColorPalette = ColorPalette_1 = class ColorPalette extends UI5Element {
                 this._recentColors.unshift(this._recentColors.splice(this._recentColors.indexOf(this._selectedColor), 1)[0]);
             }
             else {
-                this._recentColors.unshift(this._selectedColor);
+                this._addRecentColor(this._selectedColor);
             }
         }
-        this.fireEvent("item-click", {
+        this.fireDecoratorEvent("item-click", {
             color: this._selectedColor,
         });
     }
-    _onclick(e) {
-        const target = e.target;
-        if (target.hasAttribute("ui5-color-palette-item")) {
-            this.selectColor(target);
+    get effectiveColorItems() {
+        let colorItems = this.colors;
+        if (this.popupMode) {
+            colorItems = this.getSlottedNodes("colors");
         }
+        return colorItems;
+    }
+    /**
+     * Ensures that only one item is selected or only the last selected item remains active if more than one are explicitly set as 'selected'.
+     * @private
+     */
+    _ensureSingleSelectionOrDeselectAll() {
+        let lastSelectedItem;
+        this.allColorsInPalette.forEach(item => {
+            if (item.selected) {
+                if (lastSelectedItem) {
+                    lastSelectedItem.selected = false;
+                }
+                lastSelectedItem = item;
+            }
+        });
+    }
+    _onclick(e) {
+        this.handleSelection(e.target);
     }
     _onkeyup(e) {
         const target = e.target;
-        if (isSpace(e) && target.hasAttribute("ui5-color-palette-item")) {
+        if (isSpace(e)) {
             e.preventDefault();
-            this.selectColor(target);
+            this.handleSelection(target);
         }
     }
     _onkeydown(e) {
         const target = e.target;
-        if (isEnter(e) && target.hasAttribute("ui5-color-palette-item")) {
-            this.selectColor(target);
+        if (isEnter(e)) {
+            this.handleSelection(target);
+        }
+        if (isSpace(e)) {
+            e.preventDefault();
+        }
+    }
+    handleSelection(target) {
+        if (!target.hasAttribute("ui5-color-palette-item") || !target.value) {
+            return;
+        }
+        this._shouldFocusRecentColors = false;
+        this.selectColor(target);
+        // Handle selection for items within the 'recentColorsElements'
+        if (this.recentColorsElements.includes(target)) {
+            this.recentColorsElements[0].selected = true;
+            this.recentColorsElements[0].focus();
+            this._currentlySelected = this.recentColorsElements[0];
+        }
+        else {
+            this.allColorsInPalette.forEach(item => {
+                item.selected = item === target;
+            });
+            this._currentlySelected = target;
+        }
+        this._ensureSingleSelectionOrDeselectAll();
+    }
+    _handleDefaultColorClick(e) {
+        e.preventDefault();
+        this._onDefaultColorClick();
+    }
+    _onDefaultColorKeyUp(e) {
+        if (isSpace(e)) {
+            this._handleDefaultColorClick(e);
         }
     }
     _onDefaultColorKeyDown(e) {
         if (isTabNext(e) && this.popupMode) {
-            e.preventDefault();
-            this._onDefaultColorClick();
+            this._handleDefaultColorClick(e);
+        }
+        if (isEnter(e)) {
+            this._handleDefaultColorClick(e);
         }
         if (isDown(e)) {
             e.stopPropagation();
@@ -180,9 +271,15 @@ let ColorPalette = ColorPalette_1 = class ColorPalette extends UI5Element {
             }
         }
     }
+    _isUpOrDownNavigatableColorPaletteItem(e) {
+        return (isUp(e) || isDown(e)) && this._currentlySelected && this.colorPaletteNavigationElements.includes(this._currentlySelected);
+    }
     _onColorContainerKeyDown(e) {
         const target = e.target;
         const lastElementInNavigation = this.colorPaletteNavigationElements[this.colorPaletteNavigationElements.length - 1];
+        if (this._isUpOrDownNavigatableColorPaletteItem(e)) {
+            this._currentlySelected = undefined;
+        }
         if (isTabNext(e) && this.popupMode) {
             e.preventDefault();
             this.selectColor(target);
@@ -217,6 +314,9 @@ let ColorPalette = ColorPalette_1 = class ColorPalette extends UI5Element {
         }
     }
     _onRecentColorsContainerKeyDown(e) {
+        if (this._isUpOrDownNavigatableColorPaletteItem(e)) {
+            this._currentlySelected = undefined;
+        }
         if (isUp(e)) {
             if (this.showMoreColors) {
                 const navigationElementsIndex = this.showDefaultColor ? 2 : 1;
@@ -242,32 +342,62 @@ let ColorPalette = ColorPalette_1 = class ColorPalette extends UI5Element {
         itemNavigation.setCurrentItem(element);
         itemNavigation._focusCurrentItem();
     }
-    focusFirstDisplayColorElement() {
-        this.focusColorElement(this.displayedColors[0], this._itemNavigation);
-    }
-    focusFirstFocusableElement() {
-        this.firstFocusableElement.focus();
-    }
     get firstFocusableElement() {
         return this.colorPaletteNavigationElements[0];
     }
+    onColorPickerChange(e) {
+        this.colorPickerValue = e.target.value;
+    }
     _chooseCustomColor() {
-        const colorPicker = this.getColorPicker();
-        this._setColor(colorPicker.value);
+        this._setColor(this.colorPickerValue);
         this._closeDialog();
+        this._shouldFocusRecentColors = true;
+    }
+    _addRecentColor(color) {
+        if (this.showRecentColors && !this._recentColors.includes(color)) {
+            this._recentColors.unshift(color);
+            if (this._recentColors.length > this.rowSize) {
+                this._recentColors.pop();
+            }
+        }
     }
     _closeDialog() {
-        const dialog = this._getDialog();
-        dialog.close();
+        this.dialogOpen = false;
     }
     _openMoreColorsDialog() {
-        const dialog = this._getDialog();
-        dialog.show();
+        const value = this._currentlySelected ? this._currentlySelected.value : undefined;
+        if (value) {
+            this.colorPickerValue = value;
+        }
+        this.dialogOpen = true;
     }
     _onDefaultColorClick() {
         if (this.defaultColor) {
             this._setColor(this.defaultColor);
+            this._addRecentColor(this.defaultColor);
+            if (this.selectedItem) {
+                this.selectedItem.selected = false;
+                this._currentlySelected = undefined;
+            }
         }
+    }
+    /**
+     * Returns the selected item.
+     */
+    get selectedItem() {
+        return this.allColorsInPalette.find(item => item.selected);
+    }
+    get allColorsInPalette() {
+        return [...this.effectiveColorItems, ...this.recentColorsElements];
+    }
+    get colorPaletteDialogTitle() {
+        return ColorPalette_1.i18nBundle.getText(COLOR_PALETTE_DIALOG_TITLE);
+    }
+    get colorPaletteDialogOKButton() {
+        return ColorPalette_1.i18nBundle.getText(COLOR_PALETTE_DIALOG_OK_BUTTON);
+    }
+    get colorPaletteCancelButton() {
+        return ColorPalette_1.i18nBundle.getText(COLOR_PALETTE_DIALOG_CANCEL_BUTTON);
     }
     /**
      * Returns the selected color.
@@ -287,9 +417,6 @@ let ColorPalette = ColorPalette_1 = class ColorPalette extends UI5Element {
     }
     get colorPaletteDefaultColorText() {
         return ColorPalette_1.i18nBundle.getText(COLOR_PALETTE_DEFAULT_COLOR_TEXT);
-    }
-    get _showMoreColors() {
-        return this.showMoreColors && this.moreColorsFeature;
     }
     get rowSize() {
         return 5;
@@ -316,6 +443,9 @@ let ColorPalette = ColorPalette_1 = class ColorPalette extends UI5Element {
     get colorPaletteNavigationElements() {
         const navigationElements = [];
         const rootElement = this.shadowRoot.querySelector(".ui5-cp-root");
+        if (this._currentlySelected) {
+            navigationElements.push(this._currentlySelected);
+        }
         if (this.showDefaultColor) {
             navigationElements.push(rootElement.querySelector(".ui5-cp-default-color-button"));
         }
@@ -329,19 +459,13 @@ let ColorPalette = ColorPalette_1 = class ColorPalette extends UI5Element {
         return navigationElements;
     }
     get classes() {
+        // Remove after deleting the hbs template, it's added in the jsx template
         return {
             colorPaletteRoot: {
                 "ui5-cp-root": true,
                 "ui5-cp-root-phone": isPhone(),
             },
         };
-    }
-    _getDialog() {
-        return this.shadowRoot.querySelector("[ui5-dialog]");
-    }
-    getColorPicker() {
-        const dialog = this._getDialog();
-        return dialog.content[0].querySelector("[ui5-color-picker]");
     }
 };
 __decorate([
@@ -354,10 +478,10 @@ __decorate([
     property({ type: Boolean })
 ], ColorPalette.prototype, "showDefaultColor", void 0);
 __decorate([
-    property({ validator: CSSColor })
+    property()
 ], ColorPalette.prototype, "defaultColor", void 0);
 __decorate([
-    property({ validator: CSSColor })
+    property()
 ], ColorPalette.prototype, "_selectedColor", void 0);
 __decorate([
     property({ type: Boolean })
@@ -366,6 +490,15 @@ __decorate([
     property({ type: Boolean })
 ], ColorPalette.prototype, "onPhone", void 0);
 __decorate([
+    property({ noAttribute: true })
+], ColorPalette.prototype, "showMoreColorsTemplate", void 0);
+__decorate([
+    property({ type: Boolean })
+], ColorPalette.prototype, "dialogOpen", void 0);
+__decorate([
+    property()
+], ColorPalette.prototype, "colorPickerValue", void 0);
+__decorate([
     slot({
         "default": true,
         type: HTMLElement,
@@ -373,16 +506,15 @@ __decorate([
         individualSlots: true,
     })
 ], ColorPalette.prototype, "colors", void 0);
+__decorate([
+    i18n("@ui5/webcomponents")
+], ColorPalette, "i18nBundle", void 0);
 ColorPalette = ColorPalette_1 = __decorate([
     customElement({
         tag: "ui5-color-palette",
-        renderer: litRender,
+        renderer: jsxRenderer,
         template: ColorPaletteTemplate,
         styles: [ColorPaletteCss, ColorPaletteDialogCss],
-        get dependencies() {
-            const colorPaletteMoreColors = getFeature("ColorPaletteMoreColors");
-            return [ColorPaletteItem, Button].concat(colorPaletteMoreColors ? colorPaletteMoreColors.dependencies : []);
-        },
     })
     /**
      * Fired when the user selects a color.
@@ -391,16 +523,7 @@ ColorPalette = ColorPalette_1 = __decorate([
      * @param {string} color the selected color
      */
     ,
-    event("item-click", {
-        detail: {
-            /**
-             * @public
-             */
-            color: {
-                type: String,
-            },
-        },
-    })
+    event("item-click")
 ], ColorPalette);
 ColorPalette.define();
 export default ColorPalette;

@@ -10,8 +10,8 @@ const StartsWithPerTerm = (value, items, propName) => {
         return reg.test(text.toLowerCase());
     });
 };
-const StartsWith = (value, items, propName) => items.filter(item => item[propName].toLowerCase().startsWith(value.toLowerCase()));
-const Contains = (value, items, propName) => items.filter(item => item[propName].toLowerCase().includes(value.toLowerCase()));
+const StartsWith = (value, items, propName) => items.filter(item => (item[propName] || "").toLowerCase().startsWith(value.toLowerCase()));
+const Contains = (value, items, propName) => items.filter(item => (item[propName] || "").toLowerCase().includes(value.toLowerCase()));
 const None = (_, items) => items;
 export { StartsWithPerTerm, StartsWith, Contains, None, };
 //# sourceMappingURL=Filters.js.map

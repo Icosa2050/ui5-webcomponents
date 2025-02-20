@@ -1,9 +1,9 @@
 import type I18nBundle from "@ui5/webcomponents-base/dist/i18nBundle.js";
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
 import type { ChangeInfo } from "@ui5/webcomponents-base/dist/UI5Element.js";
-import Dialog from "@ui5/webcomponents/dist/Dialog.js";
-import List from "@ui5/webcomponents/dist/List.js";
-import type { ListItemClickEventDetail } from "@ui5/webcomponents/dist/List.js";
+import type Dialog from "@ui5/webcomponents/dist/Dialog.js";
+import type List from "@ui5/webcomponents/dist/List.js";
+import type { ListItemClickEventDetail, ListSelectionChangeEventDetail } from "@ui5/webcomponents/dist/List.js";
 import ViewSettingsDialogMode from "./types/ViewSettingsDialogMode.js";
 import "@ui5/webcomponents-icons/dist/sort.js";
 import "@ui5/webcomponents-icons/dist/filter.js";
@@ -26,7 +26,7 @@ type ViewSettingsDialogCancelEventDetail = VSDSettings & {
     sortDescending: boolean;
 };
 type VSDItem = {
-    text: string;
+    text?: string;
     selected: boolean;
 };
 type VSDInternalSettings = {
@@ -66,6 +66,13 @@ type VSDInternalSettings = {
  * @public
  */
 declare class ViewSettingsDialog extends UI5Element {
+    eventDetails: {
+        "confirm": ViewSettingsDialogConfirmEventDetail;
+        "cancel": ViewSettingsDialogCancelEventDetail;
+        "before-open": void;
+        "open": void;
+        "close": void;
+    };
     /**
      * Defines the initial sort order.
      * @default false
@@ -73,10 +80,22 @@ declare class ViewSettingsDialog extends UI5Element {
      */
     sortDescending: boolean;
     /**
+     * Indicates if the dialog is open.
+     * @public
+     * @default false
+     * @since 2.0.0
+     */
+    open: boolean;
+    /**
      * Keeps recently focused list in order to focus it on next dialog open.
      * @private
      */
-    _recentlyFocused: List;
+    _recentlyFocused?: List;
+    /**
+     * Stores current settings of the dialog.
+     * @private
+     */
+    _currentSettings: VSDInternalSettings;
     /**
      * Stores settings of the dialog before the initial open.
      * @private
@@ -88,16 +107,11 @@ declare class ViewSettingsDialog extends UI5Element {
      */
     _confirmedSettings: VSDInternalSettings;
     /**
-     * Stores current settings of the dialog.
-     * @private
-     */
-    _currentSettings: VSDInternalSettings;
-    /**
      * Defnies the current mode of the component.
      * @since 1.0.0-rc.16
      * @private
      */
-    _currentMode: ViewSettingsDialogMode;
+    _currentMode: `${ViewSettingsDialogMode}`;
     /**
      * When in Filter By mode, defines whether we need to show the list of keys, or the list with values.
      * @since 1.0.0-rc.16
@@ -122,13 +136,11 @@ declare class ViewSettingsDialog extends UI5Element {
     _sortOrder?: List;
     _sortBy?: List;
     static i18nBundle: I18nBundle;
-    constructor();
     onBeforeRendering(): void;
     onInvalidation(changeInfo: ChangeInfo): void;
     _setAdditionalTexts(): void;
-    static onDefine(): Promise<void>;
     get _selectedFilter(): (VSDItem & {
-        filterOptions: VSDItem[];
+        filterOptions: Array<VSDItem>;
     }) | undefined;
     get shouldBuildSort(): boolean;
     get shouldBuildFilter(): boolean;
@@ -143,6 +155,9 @@ declare class ViewSettingsDialog extends UI5Element {
     get _sortOrderLabel(): string;
     get _filterByLabel(): string;
     get _sortByLabel(): string;
+    get _sortButtonTooltip(): string;
+    get _filterButtonTooltip(): string;
+    get _resetButtonAction(): string;
     get _isPhone(): boolean;
     get _sortAscending(): boolean;
     get _title(): string;
@@ -157,7 +172,7 @@ declare class ViewSettingsDialog extends UI5Element {
      */
     get _settings(): VSDInternalSettings;
     get initSortByItems(): {
-        text: string;
+        text: string | undefined;
         selected: boolean;
         index: number;
     }[];
@@ -174,17 +189,19 @@ declare class ViewSettingsDialog extends UI5Element {
     get _dialogDomRef(): Dialog;
     /**
      * Shows the dialog.
-     * @public
      */
-    show(): void;
+    beforeDialogOpen(): void;
+    afterDialogOpen(): void;
+    afterDialogClose(): void;
     _handleModeChange(e: CustomEvent): void;
-    _handleFilterValueItemClick(e: CustomEvent<ListItemClickEventDetail>): void;
+    _handleFilterValueItemClick(e: CustomEvent<ListSelectionChangeEventDetail>): void;
+    /**
+     * Sets the selected property of the clicked item.
+     * @private
+     */
+    _setSelectedProp(itemText: string): void;
     _navigateToFilters(): void;
     _changeCurrentFilter(e: CustomEvent<ListItemClickEventDetail>): void;
-    /**
-     * Closes the dialog.
-     */
-    close(): void;
     /**
      * Sets focus on recently used control within the dialog.
      */
@@ -203,6 +220,7 @@ declare class ViewSettingsDialog extends UI5Element {
         sortBy: string;
         sortByItem: SortItem;
         filters: VSDFilters;
+        filterItems: FilterItem[];
     };
     get selectedFilters(): VSDFilters;
     /**
@@ -222,11 +240,11 @@ declare class ViewSettingsDialog extends UI5Element {
     /**
      * Stores `Sort Order` list as recently used control and its selected item in current state.
      */
-    _onSortOrderChange(e: CustomEvent<ListItemClickEventDetail>): void;
+    _onSortOrderChange(e: CustomEvent<ListSelectionChangeEventDetail>): void;
     /**
      * Stores `Sort By` list as recently used control and its selected item in current state.
      */
-    _onSortByChange(e: CustomEvent<ListItemClickEventDetail>): void;
+    _onSortByChange(e: CustomEvent<ListSelectionChangeEventDetail>): void;
     /**
      * Sets a JavaScript object, as settings to the `ui5-view-settings-dialog`.
      * This method can be used after the dialog is initially open, as the dialog needs

@@ -48,7 +48,7 @@ const detectExternalTheme = async (theme) => {
         const varsLoaded = openUI5Support.cssVariablesLoaded();
         if (varsLoaded) {
             return {
-                themeName: openUI5Support.getConfigurationSettingsObject()?.theme,
+                themeName: openUI5Support.getConfigurationSettingsObject()?.theme, // just themeName
                 baseThemeName: "", // baseThemeName is only relevant for custom themes
             };
         }

@@ -1,4 +1,4 @@
-import { TemplateResult } from "lit-html";
+import type { TemplateResult } from "lit-html";
 import type { Renderer } from "../UI5Element.js";
 declare const effectiveHtml: (strings: TemplateStringsArray, ...values: Array<unknown>) => TemplateResult;
 declare const effectiveSvg: (strings: TemplateStringsArray, ...values: Array<unknown>) => TemplateResult;

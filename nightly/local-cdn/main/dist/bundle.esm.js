@@ -1,65 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-// OpenUI5 integration
-import "@ui5/webcomponents-base/dist/features/OpenUI5Support.js";
-// Assets
-import "./Assets.js";
-// Icons
-import "@ui5/webcomponents-icons/dist/Assets.js";
-import "@ui5/webcomponents-icons/dist/AllIcons.js";
-// TNT Icons
-import "@ui5/webcomponents-icons-tnt/dist/Assets.js";
-import "@ui5/webcomponents-icons-tnt/dist/AllIcons.js";
-// SAP Business Suite Icons
-import "@ui5/webcomponents-icons-business-suite/dist/Assets.js";
-import "@ui5/webcomponents-icons-business-suite/dist/AllIcons.js";
-import "@ui5/webcomponents-base/dist/features/F6Navigation.js";
-import { addCustomCSS, attachThemeLoaded, detachThemeLoaded } from "@ui5/webcomponents-base/dist/Theming.js";
-// import "./customI18n.js";
-import "./bundle.common.bootstrap.js"; // code that needs to be executed before other modules
-// Calendars
-import "@ui5/webcomponents-localization/dist/features/calendar/Buddhist.js";
-import "@ui5/webcomponents-localization/dist/features/calendar/Islamic.js";
-import "@ui5/webcomponents-localization/dist/features/calendar/Japanese.js";
-import "@ui5/webcomponents-localization/dist/features/calendar/Persian.js";
-// CLDR
-import getLocaleData from "@ui5/webcomponents-localization/dist/locale/getLocaleData.js";
-// import { registerCustomThemePropertiesLoader } from "@ui5/webcomponents-base/dist/AssetRegistry.js";
-// import { getScopedVarName } from "@ui5/webcomponents-base/dist/CustomElementsScope.js";
-// const customThemeLoader = theme => Promise.resolve(`:root {
-// 	${getScopedVarName("--_ui5_button_base_height")}: 4rem;
-// 	${getScopedVarName("--_ui5_button_base_padding")}: 2rem;
-// }`);
-// registerCustomThemePropertiesLoader("@ui5/webcomponents", "my_custom_theme", customThemeLoader);
-// Uncomment to test the registration of custom properties and JSON bundles - use the TextArea test page
-// import { registerI18nLoader } from "@ui5/webcomponents-base/dist/asset-registries/i18n.js";
-// import parse from "@ui5/webcomponents-base/dist/PropertiesFileFormat.js";
-// const bg = "https://sdk.openui5.org/resources/sap/ui/core/messagebundle_bg.properties";
-// registerI18nLoader("@ui5/webcomponents", "bg", async (localeId) => {
-// 	const props = await (await fetch(bg)).text();
-// 	return parse(props);
-// });
-// registerI18nLoader("@ui5/webcomponents", "fr", async (localeId) => {
-// 	return await (await fetch("fr")).json();
-// });
-// used in test pages
-import { renderFinished } from "@ui5/webcomponents-base/dist/Render.js";
-import { sanitizeHTML, URLListValidator } from "@ui5/webcomponents-base/dist/util/HTMLSanitizer.js";
-import { getAnimationMode, setAnimationMode } from "@ui5/webcomponents-base/dist/config/AnimationMode.js";
-import { getTheme, setTheme, isLegacyThemeFamily } from "@ui5/webcomponents-base/dist/config/Theme.js";
-import { getThemeRoot, setThemeRoot } from "@ui5/webcomponents-base/dist/config/ThemeRoot.js";
-import { getTimezone, setTimezone } from "@ui5/webcomponents-base/dist/config/Timezone.js";
-import { getLanguage, setLanguage } from "@ui5/webcomponents-base/dist/config/Language.js";
-import getEffectiveIconCollection from "@ui5/webcomponents-base/dist/asset-registries/util/getIconCollectionByTheme.js";
-import { setNoConflict } from "@ui5/webcomponents-base/dist/config/NoConflict.js";
-import { getFirstDayOfWeek } from "@ui5/webcomponents-base/dist/config/FormatSettings.js";
-import { _getRegisteredNames as getIconNames, getIconAccessibleName, registerIconLoader } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
-import applyDirection from "@ui5/webcomponents-base/dist/locale/applyDirection.js";
-import { attachDirectionChange } from "@ui5/webcomponents-base/dist/locale/directionChange.js";
-import ResizeHandler from "@ui5/webcomponents-base/dist/delegate/ResizeHandler.js";
-import announce from "@ui5/webcomponents-base/dist/util/InvisibleMessage.js";
-import { ignoreCustomElements, shouldIgnoreCustomElement } from "@ui5/webcomponents-base/dist/IgnoreCustomElements.js";
+// eslint-disable-next-line
+import testAssetsCommon from "./bundle.common.bootstrap.js"; // code that needs to be executed before other modules
+import { registerIconLoader } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 // SAP Icons
-import accept from "@ui5/webcomponents-icons/dist/accept.js";
+import accept, { getPathData } from "@ui5/webcomponents-icons/dist/accept.js";
 import acceptv4 from "@ui5/webcomponents-icons/dist/v4/accept.js";
 import acceptv5 from "@ui5/webcomponents-icons/dist/v5/accept.js";
 // SAP TNT Icons
@@ -70,7 +14,8 @@ import actorv3 from "@ui5/webcomponents-icons-tnt/dist/v3/actor.js";
 import icon3d from "@ui5/webcomponents-icons-business-suite/dist/3d.js";
 import icon3dv1 from "@ui5/webcomponents-icons-business-suite/dist/v1/3d.js";
 import icon3dv2 from "@ui5/webcomponents-icons-business-suite/dist/v2/3d.js";
-import * as defaultTexts from "./generated/i18n/i18n-defaults.js";
+import generateHighlightedMarkup from "@ui5/webcomponents-base/dist/util/generateHighlightedMarkup.js";
+import { getAllRegisteredTags } from "@ui5/webcomponents-base/dist/CustomElementsRegistry.js";
 // The SAP Icons V4 icon collection is set by default in sap_fiori_3,
 // but it's configurable:
 // import { setDefaultIconCollection } from  "@ui5/webcomponents-base/dist/config/Icons.js";
@@ -79,132 +24,102 @@ import * as defaultTexts from "./generated/i18n/i18n-defaults.js";
 // setDefaultIconCollection("my_custom_theme", "SAP-icons-v5");
 // or for custom icon collection
 // setDefaultIconCollection("sap_fiori_3", "my-custom-icons");
-import "./Avatar.js";
-import "./AvatarGroup.js";
-import "./Badge.js";
-import "./Bar.js";
-import "./Breadcrumbs.js";
-import "./BusyIndicator.js";
-import "./Button.js";
-import "./Card.js";
-import "./CardHeader.js";
-import "./Carousel.js";
-import "./CheckBox.js";
-import "./ColorPalette.js";
-import "./ColorPaletteItem.js";
-import "./ColorPalettePopover.js";
-import "./ColorPicker.js";
-import "./ComboBox.js";
-import "./DatePicker.js";
-import "./DateRangePicker.js";
-import "./DateTimePicker.js";
-import "./Dialog.js";
-import "./FileUploader.js";
-import "./Icon.js";
-import "./Input.js";
-import "./MultiInput.js";
-import "./Label.js";
-import "./Link.js";
-import "./Menu.js";
-import "./NavigationMenu.js";
-import "./NavigationMenuItem.js";
-import "./MenuItem.js";
-import "./Popover.js";
-import "./Panel.js";
-import "./RadioButton.js";
-import "./ResponsivePopover.js";
-import "./SegmentedButton.js";
-import "./SegmentedButtonItem.js";
-import "./Select.js";
-import "./SelectMenu.js";
-import "./SelectMenuOption.js";
-import "./Slider.js";
-import "./SplitButton.js";
-import "./StepInput.js";
-import "./RangeSlider.js";
-import "./Switch.js";
-import "./MessageStrip.js";
-import "./MultiComboBox.js";
-import "./ProgressIndicator.js";
-import "./RatingIndicator.js";
-import "./Text.js";
-import "./TabContainer.js";
-import "./Tab.js";
-import "./TabSeparator.js";
-import "./Table.js";
-import "./TableColumn.js";
-import "./TableRow.js";
-import "./TableGroupRow.js";
-import "./TableCell.js";
-import "./TextArea.js";
-import "./TimeSelection.js";
-import "./TimePicker.js";
-import "./TimePickerClock.js";
-import "./TimeSelectionClocks.js";
-import "./Title.js";
-import "./Toast.js";
-import "./ToggleButton.js";
-// console.log({ToggleButton})
-import "./Toolbar.js";
-import "./ToolbarButton.js";
-import "./ToolbarSeparator.js";
-import "./ToolbarSpacer.js";
-import "./ToolbarSelect.js";
-import "./ToolbarSelectOption.js";
-import "./Tree.js";
-import "./TreeList.js";
-import "./TreeItem.js";
-import "./TreeItemCustom.js";
-import "./List.js";
-// console.log({List})
-import "./StandardListItem.js";
-import "./CustomListItem.js";
-import "./GroupHeaderListItem.js";
-// Features
-import "./features/InputElementsFormSupport.js";
-import "./features/ColorPaletteMoreColors.js";
-import "./features/InputSuggestions.js";
-// @ts-ignore
-window.sanitizeHTML = sanitizeHTML;
-// @ts-ignore
-window.URLListValidator = URLListValidator;
-ignoreCustomElements("app-");
-ignoreCustomElements("my-");
+import Avatar from "./Avatar.js";
+import AvatarGroup from "./AvatarGroup.js";
+import Bar from "./Bar.js";
+import Breadcrumbs from "./Breadcrumbs.js";
+import BusyIndicator from "./BusyIndicator.js";
+import Button from "./Button.js";
+import ButtonBadge from "./ButtonBadge.js";
+import Card from "./Card.js";
+import CalendarLegend from "./CalendarLegend.js";
+import CardHeader from "./CardHeader.js";
+import Carousel from "./Carousel.js";
+import CheckBox from "./CheckBox.js";
+import ColorPalette from "./ColorPalette.js";
+import ColorPaletteItem from "./ColorPaletteItem.js";
+import ColorPalettePopover from "./ColorPalettePopover.js";
+import ColorPicker from "./ColorPicker.js";
+import ComboBox from "./ComboBox.js";
+import DatePicker from "./DatePicker.js";
+import DateRangePicker from "./DateRangePicker.js";
+import DateTimePicker from "./DateTimePicker.js";
+import Dialog from "./Dialog.js";
+import ExpandableText from "./ExpandableText.js";
+import Form from "./Form.js";
+import FormItem from "./FormItem.js";
+import FormGroup from "./FormGroup.js";
+import FileUploader from "./FileUploader.js";
+import Table from "./Table.js";
+import TableHeaderCell from "./TableHeaderCell.js";
+import TableHeaderCellActionAI from "./TableHeaderCellActionAI.js";
+import TableHeaderRow from "./TableHeaderRow.js";
+import TableGrowing from "./TableGrowing.js";
+import TableSelection from "./TableSelection.js";
+import TableVirtualizer from "./TableVirtualizer.js";
+import TableRowAction from "./TableRowAction.js";
+import TableRowActionNavigation from "./TableRowActionNavigation.js";
+import Icon from "./Icon.js";
+import Input from "./Input.js";
+import SuggestionItemCustom from "./SuggestionItemCustom.js";
+import MultiInput from "./MultiInput.js";
+import Label from "./Label.js";
+import Link from "./Link.js";
+import Menu from "./Menu.js";
+import MenuItem from "./MenuItem.js";
+import MenuSeparator from "./MenuSeparator.js";
+import Popover from "./Popover.js";
+import Panel from "./Panel.js";
+import RadioButton from "./RadioButton.js";
+import ResponsivePopover from "./ResponsivePopover.js";
+import SegmentedButton from "./SegmentedButton.js";
+import SegmentedButtonItem from "./SegmentedButtonItem.js";
+import Select from "./Select.js";
+import Option from "./Option.js";
+import CustomOption from "./OptionCustom.js";
+import Slider from "./Slider.js";
+import SplitButton from "./SplitButton.js";
+import StepInput from "./StepInput.js";
+import RangeSlider from "./RangeSlider.js";
+import Switch from "./Switch.js";
+import MessageStrip from "./MessageStrip.js";
+import MultiComboBox from "./MultiComboBox.js";
+import ProgressIndicator from "./ProgressIndicator.js";
+import RatingIndicator from "./RatingIndicator.js";
+import Tag from "./Tag.js";
+import TabContainer from "./TabContainer.js";
+import Tab from "./Tab.js";
+import TabSeparator from "./TabSeparator.js";
+import Text from "./Text.js";
+import TextArea from "./TextArea.js";
+import TimePicker from "./TimePicker.js";
+import TimePickerClock from "./TimePickerClock.js";
+import TimeSelectionClocks from "./TimeSelectionClocks.js";
+import Title from "./Title.js";
+import Toast from "./Toast.js";
+import ToggleButton from "./ToggleButton.js";
+import Toolbar from "./Toolbar.js";
+import ToolbarButton from "./ToolbarButton.js";
+import ToolbarSeparator from "./ToolbarSeparator.js";
+import ToolbarSpacer from "./ToolbarSpacer.js";
+import ToolbarSelect from "./ToolbarSelect.js";
+import ToolbarSelectOption from "./ToolbarSelectOption.js";
+import Tree from "./Tree.js";
+import TreeList from "./TreeList.js";
+import TreeItem from "./TreeItem.js";
+import TreeItemCustom from "./TreeItemCustom.js";
+import List from "./List.js";
+import ListItemStandard from "./ListItemStandard.js";
+import ListItemCustom from "./ListItemCustom.js";
+import ListItemGroupHeader from "./ListItemGroupHeader.js";
+import ListItemGroup from "./ListItemGroup.js";
 const icons = [accept, acceptv4, acceptv5, actor, actorv2, actorv3, icon3d, icon3dv1, icon3dv2];
 const testAssets = {
-    configuration: {
-        getAnimationMode,
-        setAnimationMode,
-        getTheme,
-        setTheme,
-        getThemeRoot,
-        setThemeRoot,
-        isLegacyThemeFamily,
-        getLanguage,
-        setLanguage,
-        setNoConflict,
-        getFirstDayOfWeek,
-        getTimezone,
-        setTimezone,
-    },
-    invisibleMessage: {
-        announce,
-    },
-    getLocaleData,
-    applyDirection,
-    attachDirectionChange,
-    ResizeHandler,
-    addCustomCSS,
-    attachThemeLoaded,
-    detachThemeLoaded,
-    getIconNames,
-    getIconAccessibleName,
-    renderFinished,
-    defaultTexts,
+    ...testAssetsCommon,
+    getAcceptIconPathData: getPathData,
+    generateHighlightedMarkup,
     getExportedIconsValues: () => icons,
-    getEffectiveIconCollection,
-    ignoreCustomElements,
-    shouldIgnoreCustomElement,
+    getAllRegisteredTags,
 };
 registerIconLoader("my-icons", () => {
     return Promise.resolve([{

@@ -1,6 +1,6 @@
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
 import type I18nBundle from "@ui5/webcomponents-base/dist/i18nBundle.js";
-import { ITabbable } from "@ui5/webcomponents-base/dist/delegate/ItemNavigation.js";
+import type { ITabbable } from "@ui5/webcomponents-base/dist/delegate/ItemNavigation.js";
 import CalendarLegendItemType from "./types/CalendarLegendItemType.js";
 /**
  * @class
@@ -26,10 +26,10 @@ import CalendarLegendItemType from "./types/CalendarLegendItemType.js";
 declare class CalendarLegendItem extends UI5Element implements ITabbable {
     /**
      * Defines the text content of the Calendar Legend Item.
-     * @default ""
+     * @default undefined
      * @public
      */
-    text: string;
+    text?: string;
     /**
      * Defines the type of the Calendar Legend Item.
      * @default "None"
@@ -42,7 +42,6 @@ declare class CalendarLegendItem extends UI5Element implements ITabbable {
      */
     forcedTabIndex: string;
     static i18nBundle: I18nBundle;
-    static onDefine(): Promise<void>;
     get effectiveText(): string;
 }
 export default CalendarLegendItem;

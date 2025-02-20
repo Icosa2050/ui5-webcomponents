@@ -1,3 +1,2 @@
-import type { StyleData } from "@ui5/webcomponents-base/dist/types.js";
-declare const styleData: StyleData;
-export default styleData;
+declare const _default: ":host([_popin]){color:var(--sapContent_LabelColor);padding-inline-start:0;padding-inline-end:0;align-items:center}.popin-colon{padding-inline-end:.5rem}\n";
+export default _default;

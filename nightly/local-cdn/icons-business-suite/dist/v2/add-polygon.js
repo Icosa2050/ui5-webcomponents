@@ -1,7 +1,7 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "add-polygon";
-const pathData = "M429 368h48c14 0 25 11 25 24 0 14-11 25-25 25h-48v49c0 14-11 25-24 25-14 0-25-11-25-25v-49h-49c-14 0-25-11-25-25 0-13 11-24 25-24h49v-50c0-13 11-24 25-24 13 0 24 11 24 24v50zM355 27v193c0 13-11 24-24 24H35c-14 0-25-11-25-24V69c0-12 8-23 21-25L326 3c15-2 29 9 29 24z";
+const pathData = "M10 220V69c0-12 8-22 21-25L326 3c15 0 29 7 29 24v193c0 13-11 24-24 24H35c-15 0-25-11-25-24zm296 172c0-13 10-24 25-24h49v-50c0-13 10-24 25-24 13 0 24 11 24 24v50h48c15 0 25 11 25 24 0 15-10 25-25 25h-48v49c0 15-11 25-24 25-15 0-25-10-25-25v-49h-49c-15 0-25-10-25-25z";
 const ltr = false;
 const accData = null;
 const collection = "business-suite-v2";

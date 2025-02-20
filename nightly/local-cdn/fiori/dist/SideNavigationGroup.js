@@ -6,16 +6,13 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 var SideNavigationGroup_1;
 import property from "@ui5/webcomponents-base/dist/decorators/property.js";
-import litRender from "@ui5/webcomponents-base/dist/renderer/LitRenderer.js";
+import jsxRender from "@ui5/webcomponents-base/dist/renderer/JsxRenderer.js";
 import slot from "@ui5/webcomponents-base/dist/decorators/slot.js";
+import i18n from "@ui5/webcomponents-base/dist/decorators/i18n.js";
 import { isLeft, isRight, } from "@ui5/webcomponents-base/dist/Keys.js";
 import customElement from "@ui5/webcomponents-base/dist/decorators/customElement.js";
-import { getI18nBundle } from "@ui5/webcomponents-base/dist/i18nBundle.js";
-import "@ui5/webcomponents-icons/dist/navigation-right-arrow.js";
-import "@ui5/webcomponents-icons/dist/navigation-down-arrow.js";
-import Icon from "@ui5/webcomponents/dist/Icon.js";
 import SideNavigationItemBase from "./SideNavigationItemBase.js";
-import SideNavigationGroupTemplate from "./generated/templates/SideNavigationGroupTemplate.lit.js";
+import SideNavigationGroupTemplate from "./SideNavigationGroupTemplate.js";
 import { SIDE_NAVIGATION_GROUP_HEADER_DESC, } from "./generated/i18n/i18n-defaults.js";
 // Styles
 import SideNavigationGroupCss from "./generated/themes/SideNavigationGroup.css.js";
@@ -40,22 +37,13 @@ import SideNavigationGroupCss from "./generated/themes/SideNavigationGroup.css.j
 let SideNavigationGroup = SideNavigationGroup_1 = class SideNavigationGroup extends SideNavigationItemBase {
     constructor() {
         super(...arguments);
-        this._onkeydown = (e) => {
-            if (isLeft(e)) {
-                this.expanded = false;
-                return;
-            }
-            if (isRight(e)) {
-                this.expanded = true;
-            }
-        };
-        this._onclick = () => {
-            this._toggle();
-        };
-        this._onfocusin = (e) => {
-            e.stopPropagation();
-            this.sideNavigation?.focusItem(this);
-        };
+        /**
+         * Defines if the item is expanded
+         *
+         * @public
+         * @default false
+         */
+        this.expanded = false;
     }
     get overflowItems() {
         const separator1 = this.shadowRoot.querySelector(".ui5-sn-item-separator:first-child");
@@ -98,11 +86,8 @@ let SideNavigationGroup = SideNavigationGroup_1 = class SideNavigationGroup exte
         }
         return this.expanded;
     }
-    get _toggleIconName() {
-        return this.expanded ? "navigation-down-arrow" : "navigation-right-arrow";
-    }
     get belowGroupClassName() {
-        if (this.previousElementSibling instanceof SideNavigationGroup_1) {
+        if (isInstanceOfSideNavigationGroup(this.previousElementSibling)) {
             return "ui5-sn-item-group-below-group";
         }
         return "";
@@ -110,14 +95,27 @@ let SideNavigationGroup = SideNavigationGroup_1 = class SideNavigationGroup exte
     get accDescription() {
         return SideNavigationGroup_1.i18nBundle.getText(SIDE_NAVIGATION_GROUP_HEADER_DESC);
     }
+    _onkeydown(e) {
+        if (isLeft(e)) {
+            this.expanded = false;
+            return;
+        }
+        if (isRight(e)) {
+            this.expanded = true;
+        }
+    }
+    _onclick() {
+        this._toggle();
+    }
+    _onfocusin(e) {
+        e.stopPropagation();
+        this.sideNavigation?.focusItem(this);
+    }
     _toggle() {
         this.expanded = !this.expanded;
     }
-    static async onDefine() {
-        [SideNavigationGroup_1.i18nBundle] = await Promise.all([
-            getI18nBundle("@ui5/webcomponents-fiori"),
-            super.onDefine(),
-        ]);
+    get isSideNavigationGroup() {
+        return true;
     }
 };
 __decorate([
@@ -126,17 +124,21 @@ __decorate([
 __decorate([
     slot({ type: HTMLElement, invalidateOnChildChange: true, "default": true })
 ], SideNavigationGroup.prototype, "items", void 0);
+__decorate([
+    i18n("@ui5/webcomponents-fiori")
+], SideNavigationGroup, "i18nBundle", void 0);
 SideNavigationGroup = SideNavigationGroup_1 = __decorate([
     customElement({
         tag: "ui5-side-navigation-group",
-        renderer: litRender,
+        renderer: jsxRender,
         template: SideNavigationGroupTemplate,
         styles: SideNavigationGroupCss,
-        dependencies: [
-            Icon,
-        ],
     })
 ], SideNavigationGroup);
 SideNavigationGroup.define();
+const isInstanceOfSideNavigationGroup = (object) => {
+    return "isSideNavigationGroup" in object;
+};
 export default SideNavigationGroup;
+export { isInstanceOfSideNavigationGroup };
 //# sourceMappingURL=SideNavigationGroup.js.map

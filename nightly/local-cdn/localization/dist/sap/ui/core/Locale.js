@@ -19,7 +19,7 @@ var mCache = Object.create(null);
  *
  * @extends sap.ui.base.Object
  * @author SAP SE
- * @version 1.120.5
+ * @version 1.120.17
  * @public
  * @alias sap.ui.core.Locale
  */

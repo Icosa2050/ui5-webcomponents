@@ -1,13 +1,12 @@
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
-import type { PassiveEventListenerObject } from "@ui5/webcomponents-base/dist/types.js";
+import type { AccessibilityAttributes, AriaRole } from "@ui5/webcomponents-base";
 import type { ITabbable } from "@ui5/webcomponents-base/dist/delegate/ItemNavigation.js";
 import type I18nBundle from "@ui5/webcomponents-base/dist/i18nBundle.js";
 import type { I18nText } from "@ui5/webcomponents-base/dist/i18nBundle.js";
-import type { IFormElement } from "./features/InputElementsFormSupport.js";
 import ButtonDesign from "./types/ButtonDesign.js";
 import ButtonType from "./types/ButtonType.js";
-import ButtonAccessibleRole from "./types/ButtonAccessibleRole.js";
-import HasPopup from "./types/HasPopup.js";
+import type ButtonAccessibleRole from "./types/ButtonAccessibleRole.js";
+import type ButtonBadge from "./ButtonBadge.js";
 /**
  * Interface for components that may be used as a button inside numerous higher-order components
  * @public
@@ -15,11 +14,7 @@ import HasPopup from "./types/HasPopup.js";
 interface IButton extends HTMLElement, ITabbable {
     nonInteractive: boolean;
 }
-type AccessibilityAttributes = {
-    expanded?: "true" | "false" | boolean;
-    hasPopup?: `${HasPopup}`;
-    controls?: string;
-};
+type ButtonAccessibilityAttributes = Pick<AccessibilityAttributes, "expanded" | "hasPopup" | "controls">;
 /**
  * @class
  *
@@ -46,12 +41,17 @@ type AccessibilityAttributes = {
  *
  * `import "@ui5/webcomponents/dist/Button.js";`
  * @csspart button - Used to style the native button element
+ * @csspart icon - Used to style the icon in the native button element
+ * @csspart endIcon - Used to style the end icon in the native button element
  * @constructor
  * @extends UI5Element
  * @implements { IButton }
  * @public
  */
-declare class Button extends UI5Element implements IFormElement, IButton {
+declare class Button extends UI5Element implements IButton {
+    eventDetails: {
+        "active-state-change": void;
+    };
     /**
      * Defines the component design.
      * @default "Default"
@@ -72,22 +72,29 @@ declare class Button extends UI5Element implements IFormElement, IButton {
      *
      * Example:
      * See all the available icons within the [Icon Explorer](https://sdk.openui5.org/test-resources/sap/m/demokit/iconExplorer/webapp/index.html).
-     * @default ""
+     * @default undefined
      * @public
      */
-    icon: string;
+    icon?: string;
     /**
-     * Defines whether the icon should be displayed after the component text.
-     * @default false
+     * Defines the icon, displayed as graphical element within the component after the button text.
+     *
+     * **Note:** It is highly recommended to use `endIcon` property only together with `icon` and/or `text` properties.
+     * Usage of `endIcon` only should be avoided.
+     *
+     * The SAP-icons font provides numerous options.
+     *
+     * Example:
+     * See all the available icons within the [Icon Explorer](https://sdk.openui5.org/test-resources/sap/m/demokit/iconExplorer/webapp/index.html).
+     * @default undefined
      * @public
      */
-    iconEnd: boolean;
+    endIcon?: string;
     /**
      * When set to `true`, the component will
      * automatically submit the nearest HTML form element on `press`.
      *
-     * **Note:** For the `submits` property to have effect, you must add the following import to your project:
-     * `import "@ui5/webcomponents/dist/features/InputElementsFormSupport.js";`
+     * **Note:** This property is only applicable within the context of an HTML Form element.`
      * @default false
      * @public
      * @deprecated Set the "type" property to "Submit" to achieve the same result. The "submits" property is ignored if "type" is set to any value other than "Button".
@@ -97,11 +104,11 @@ declare class Button extends UI5Element implements IFormElement, IButton {
      * Defines the tooltip of the component.
      *
      * **Note:** A tooltip attribute should be provided for icon-only buttons, in order to represent their exact meaning/function.
-     * @default ""
+     * @default undefined
      * @public
      * @since 1.2.0
      */
-    tooltip: string;
+    tooltip?: string;
     /**
      * Defines the accessible ARIA name of the component.
      * @default undefined
@@ -111,39 +118,40 @@ declare class Button extends UI5Element implements IFormElement, IButton {
     accessibleName?: string;
     /**
      * Receives id(or many ids) of the elements that label the component.
-     * @default ""
+     * @default undefined
      * @public
      * @since 1.1.0
      */
-    accessibleNameRef: string;
+    accessibleNameRef?: string;
     /**
-     * An object of strings that defines several additional accessibility attribute values
-     * for customization depending on the use case.
+     * Defines the additional accessibility attributes that will be applied to the component.
+     * The following fields are supported:
      *
-     * It supports the following fields:
+     * - **expanded**: Indicates whether the button, or another grouping element it controls, is currently expanded or collapsed.
+     * Accepts the following string values: `true` or `false`
      *
-     * - `expanded`: Indicates whether the button, or another grouping element it controls, is currently expanded or collapsed. Accepts the following string values:
-     *	- `true`
-     *	- `false`
+     * - **hasPopup**: Indicates the availability and type of interactive popup element, such as menu or dialog, that can be triggered by the button.
+     * Accepts the following string values: `dialog`, `grid`, `listbox`, `menu` or `tree`.
      *
-     * - `hasPopup`: Indicates the availability and type of interactive popup element, such as menu or dialog, that can be triggered by the button. Accepts the following string values:
-     *	- `Dialog`
-     *	- `Grid`
-     *	- `ListBox`
-     *	- `Menu`
-     *	- `Tree`
+     * - **controls**: Identifies the element (or elements) whose contents or presence are controlled by the button element.
+     * Accepts a lowercase string value.
      *
-     * - `controls`: Identifies the element (or elements) whose contents or presence are controlled by the button element. Accepts a string value.
      * @public
      * @since 1.2.0
      * @default {}
      */
-    accessibilityAttributes: AccessibilityAttributes;
+    accessibilityAttributes: ButtonAccessibilityAttributes;
+    /**
+     * Defines the accessible description of the component.
+     * @default undefined
+     * @public
+     * @since 2.5.0
+     */
+    accessibleDescription?: string;
     /**
      * Defines whether the button has special form-related functionality.
      *
-     * **Note:** For the `type` property to have effect, you must add the following import to your project:
-     * `import "@ui5/webcomponents/dist/features/InputElementsFormSupport.js";`
+     * **Note:** This property is only applicable within the context of an HTML Form element.
      * @default "Button"
      * @public
      * @since 1.15.0
@@ -152,7 +160,7 @@ declare class Button extends UI5Element implements IFormElement, IButton {
     /**
      * Describes the accessibility role of the button.
      *
-     * **Note:** Use link role only with a press handler, which performs a navigation. In all other scenarios the default button semantics are recommended.
+     * **Note:** Use <code>ButtonAccessibleRole.Link</code> role only with a press handler, which performs a navigation. In all other scenarios the default button semantics are recommended.
      *
      * @default "Button"
      * @public
@@ -174,6 +182,11 @@ declare class Button extends UI5Element implements IFormElement, IButton {
      * @private
      */
     hasIcon: boolean;
+    /**
+     * Indicates if the elements has a slotted end icon
+     * @private
+     */
+    hasEndIcon: boolean;
     /**
      * Indicates if the element is focusable
      * @private
@@ -198,6 +211,7 @@ declare class Button extends UI5Element implements IFormElement, IButton {
      * @private
      */
     _isTouch: boolean;
+    _cancelAction: boolean;
     /**
      * Defines the text of the component.
      *
@@ -205,34 +219,41 @@ declare class Button extends UI5Element implements IFormElement, IButton {
      * @public
      */
     text: Array<Node>;
+    /**
+     * Adds a badge to the button.
+     * @since 2.7.0
+     * @public
+     */
+    badge: Array<ButtonBadge>;
     _deactivate: () => void;
-    _ontouchstart: PassiveEventListenerObject;
     static i18nBundle: I18nBundle;
     constructor();
+    _ontouchstart(): void;
     onEnterDOM(): void;
     onBeforeRendering(): Promise<void>;
-    _onclick(e: MouseEvent): void;
-    _onmousedown(e: MouseEvent): void;
+    _setBadgeOverlayStyle(): void;
+    _onclick(): void;
+    _onmousedown(): void;
     _ontouchend(e: TouchEvent): void;
-    _onmouseup(e: MouseEvent): void;
     _onkeydown(e: KeyboardEvent): void;
     _onkeyup(e: KeyboardEvent): void;
     _onfocusout(): void;
-    _onfocusin(e: FocusEvent): void;
     _setActiveState(active: boolean): void;
-    get _hasPopup(): string | undefined;
+    get _hasPopup(): import("@ui5/webcomponents-base").AriaHasPopup | undefined;
     get hasButtonType(): boolean;
-    get iconRole(): "" | "presentation";
     get isIconOnly(): boolean;
     static typeTextMappings(): Record<string, I18nText>;
+    getDefaultTooltip(): Promise<string | undefined> | undefined;
     get buttonTypeText(): string;
-    get buttonAccessibleRole(): string;
-    get tabIndexValue(): string;
+    get effectiveAccRole(): AriaRole;
+    get tabIndexValue(): number | undefined;
     get showIconTooltip(): boolean;
     get ariaLabelText(): string | undefined;
+    get ariaDescribedbyText(): "ui5-button-hiddenText-type" | undefined;
+    get ariaDescriptionText(): string | undefined;
     get _isSubmit(): boolean;
     get _isReset(): boolean;
-    static onDefine(): Promise<void>;
+    get shouldRenderBadge(): boolean;
 }
 export default Button;
-export type { AccessibilityAttributes, IButton, };
+export type { ButtonAccessibilityAttributes, IButton, };

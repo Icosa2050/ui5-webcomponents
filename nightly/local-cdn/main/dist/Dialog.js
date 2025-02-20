@@ -5,26 +5,24 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 var Dialog_1;
-import { isPhone, isDesktop } from "@ui5/webcomponents-base/dist/Device.js";
 import customElement from "@ui5/webcomponents-base/dist/decorators/customElement.js";
 import slot from "@ui5/webcomponents-base/dist/decorators/slot.js";
 import property from "@ui5/webcomponents-base/dist/decorators/property.js";
 import clamp from "@ui5/webcomponents-base/dist/util/clamp.js";
+import getEffectiveScrollbarStyle from "@ui5/webcomponents-base/dist/util/getEffectiveScrollbarStyle.js";
 import { isUp, isDown, isLeft, isRight, isUpShift, isDownShift, isLeftShift, isRightShift, } from "@ui5/webcomponents-base/dist/Keys.js";
 import ValueState from "@ui5/webcomponents-base/dist/types/ValueState.js";
-import { getI18nBundle } from "@ui5/webcomponents-base/dist/i18nBundle.js";
+import i18n from "@ui5/webcomponents-base/dist/decorators/i18n.js";
+import toLowercaseEnumValue from "@ui5/webcomponents-base/dist/util/toLowercaseEnumValue.js";
 import Popup from "./Popup.js";
-import Icon from "./Icon.js";
-import "@ui5/webcomponents-icons/dist/resize-corner.js";
 import "@ui5/webcomponents-icons/dist/error.js";
 import "@ui5/webcomponents-icons/dist/alert.js";
 import "@ui5/webcomponents-icons/dist/sys-enter-2.js";
 import "@ui5/webcomponents-icons/dist/information.js";
 import { DIALOG_HEADER_ARIA_ROLE_DESCRIPTION, DIALOG_HEADER_ARIA_DESCRIBEDBY_RESIZABLE, DIALOG_HEADER_ARIA_DESCRIBEDBY_DRAGGABLE, DIALOG_HEADER_ARIA_DESCRIBEDBY_DRAGGABLE_RESIZABLE, } from "./generated/i18n/i18n-defaults.js";
 // Template
-import DialogTemplate from "./generated/templates/DialogTemplate.lit.js";
+import DialogTemplate from "./DialogTemplate.js";
 // Styles
-import browserScrollbarCSS from "./generated/themes/BrowserScrollbar.css.js";
 import PopupsCommonCss from "./generated/themes/PopupsCommon.css.js";
 import dialogCSS from "./generated/themes/Dialog.css.js";
 import PopupAccessibleRole from "./types/PopupAccessibleRole.js";
@@ -36,9 +34,9 @@ const STEP_SIZE = 16;
  * Defines the icons corresponding to the dialog's state.
  */
 const ICON_PER_STATE = {
-    [ValueState.Error]: "error",
-    [ValueState.Warning]: "alert",
-    [ValueState.Success]: "sys-enter-2",
+    [ValueState.Negative]: "error",
+    [ValueState.Critical]: "alert",
+    [ValueState.Positive]: "sys-enter-2",
     [ValueState.Information]: "information",
 };
 /**
@@ -52,7 +50,7 @@ const ICON_PER_STATE = {
  * The dialog combines concepts known from other technologies where the windows have
  * names such as dialog box, dialog window, pop-up, pop-up window, alert box, or message box.
  *
- * The `ui5-dialog` is modal, which means that an user action is required before it is possible to return to the parent window.
+ * The `ui5-dialog` is modal, which means that a user action is required before it is possible to return to the parent window.
  * To open multiple dialogs, each dialog element should be separate in the markup. This will ensure the correct modal behavior. Avoid nesting dialogs within each other.
  * The content of the `ui5-dialog` is fully customizable.
  *
@@ -63,8 +61,7 @@ const ICON_PER_STATE = {
 
  *
  * ### Responsive Behavior
- * The `stretch` property can be used to stretch the
- * `ui5-dialog` on full screen.
+ * The `stretch` property can be used to stretch the `ui5-dialog` to full screen. For better usability, it's recommended to stretch the dialog to full screen on phone devices.
  *
  * **Note:** When a `ui5-bar` is used in the header or in the footer, you should remove the default dialog's paddings.
  *
@@ -90,12 +87,6 @@ const ICON_PER_STATE = {
  *
  * `import "@ui5/webcomponents/dist/Dialog";`
  *
- * **Note:** We recommend placing popup-like components (`ui5-dialog` and `ui5-popover`)
- * outside any other components. Preferably, the popup-like components should be placed
- * in an upper level HTML element. Otherwise, in some cases the parent HTML elements can break
- * the position and/or z-index management of the popup-like components.
- *
- * **Note:** We don't recommend nesting popup-like components (`ui5-dialog`, `ui5-popover`).
  * @constructor
  * @extends Popup
  * @public
@@ -106,6 +97,52 @@ const ICON_PER_STATE = {
 let Dialog = Dialog_1 = class Dialog extends Popup {
     constructor() {
         super();
+        /**
+         * Determines if the dialog will be stretched to full screen on mobile. On desktop,
+         * the dialog will be stretched to approximately 90% of the viewport.
+         *
+         * **Note:** For better usability of the component it is recommended to set this property to "true" when the dialog is opened on phone.
+         * @default false
+         * @public
+         */
+        this.stretch = false;
+        /**
+         * Determines whether the component is draggable.
+         * If this property is set to true, the Dialog will be draggable by its header.
+         *
+         * **Note:** The component can be draggable only in desktop mode.
+         *
+         * **Note:** This property overrides the default HTML "draggable" attribute native behavior.
+         * When "draggable" is set to true, the native browser "draggable"
+         * behavior is prevented and only the Dialog custom logic ("draggable by its header") works.
+         * @default false
+         * @since 1.0.0-rc.9
+         * @public
+         */
+        this.draggable = false;
+        /**
+         * Configures the component to be resizable.
+         * If this property is set to true, the Dialog will have a resize handle in its bottom right corner in LTR languages.
+         * In RTL languages, the resize handle will be placed in the bottom left corner.
+         *
+         * **Note:** The component can be resizable only in desktop mode.
+         *
+         * **Note:** Upon resizing, externally defined height and width styling will be ignored.
+         * @default false
+         * @since 1.0.0-rc.10
+         * @public
+         */
+        this.resizable = false;
+        /**
+         * Defines the state of the `Dialog`.
+         *
+         * **Note:** If `"Negative"` and `"Critical"` states is set, it will change the
+         * accessibility role to "alertdialog", if the accessibleRole property is set to `"Dialog"`.
+         * @default "None"
+         * @public
+         * @since 1.0.0-rc.15
+         */
+        this.state = "None";
         this._draggedOrResized = false;
         this._revertSize = () => {
             Object.assign(this.style, {
@@ -122,30 +159,15 @@ let Dialog = Dialog_1 = class Dialog extends Popup {
         this._resizeMouseUpHandler = this._onResizeMouseUp.bind(this);
         this._dragStartHandler = this._handleDragStart.bind(this);
     }
-    static async onDefine() {
-        Dialog_1.i18nBundle = await getI18nBundle("@ui5/webcomponents");
-    }
     static _isHeader(element) {
         return element.classList.contains("ui5-popup-header-root") || element.getAttribute("slot") === "header";
-    }
-    /**
-     * Shows the dialog.
-     * @param [preventInitialFocus=false] Prevents applying the focus inside the popup
-     * @public
-     * @returns Resolves when the dialog is open
-     */
-    async show(preventInitialFocus = false) {
-        await super._open(preventInitialFocus);
     }
     get isModal() {
         return true;
     }
-    get shouldHideBackdrop() {
-        return false;
-    }
     get _ariaLabelledBy() {
         let ariaLabelledById;
-        if (this.headerText !== "" && !this._ariaLabel) {
+        if (this.headerText && !this._ariaLabel) {
             ariaLabelledById = "ui5-popup-header-text";
         }
         return ariaLabelledById;
@@ -175,7 +197,7 @@ let Dialog = Dialog_1 = class Dialog extends Popup {
         return !this.stretch && this.onDesktop && (this.draggable || this.resizable);
     }
     get _headerTabIndex() {
-        return this._movable ? "0" : undefined;
+        return this._movable ? 0 : undefined;
     }
     get _showResizeHandle() {
         return this.resizable && this.onDesktop;
@@ -202,10 +224,10 @@ let Dialog = Dialog_1 = class Dialog extends Popup {
         if (this.accessibleRole === PopupAccessibleRole.None) {
             return undefined;
         }
-        if (this.state === ValueState.Error || this.state === ValueState.Warning) {
-            return PopupAccessibleRole.AlertDialog.toLowerCase();
+        if (this.state === ValueState.Negative || this.state === ValueState.Critical) {
+            return toLowercaseEnumValue(PopupAccessibleRole.AlertDialog);
         }
-        return this.accessibleRole.toLowerCase();
+        return toLowercaseEnumValue(this.accessibleRole);
     }
     _show() {
         super._show();
@@ -214,13 +236,12 @@ let Dialog = Dialog_1 = class Dialog extends Popup {
     onBeforeRendering() {
         super.onBeforeRendering();
         this._isRTL = this.effectiveDir === "rtl";
-        this.onPhone = isPhone();
-        this.onDesktop = isDesktop();
     }
     onEnterDOM() {
         super.onEnterDOM();
         this._attachScreenResizeHandler();
         this.addEventListener("dragstart", this._dragStartHandler);
+        this.setAttribute("data-sap-ui-fastnavgroup-container", "true");
     }
     onExitDOM() {
         super.onExitDOM();
@@ -266,7 +287,6 @@ let Dialog = Dialog_1 = class Dialog extends Popup {
         if (!this._movable || !this.draggable || !Dialog_1._isHeader(e.target)) {
             return;
         }
-        e.preventDefault();
         const { top, left, } = this.getBoundingClientRect();
         const { width, height, } = window.getComputedStyle(this);
         Object.assign(this.style, {
@@ -447,32 +467,26 @@ __decorate([
     property({ type: Boolean })
 ], Dialog.prototype, "resizable", void 0);
 __decorate([
-    property({ type: ValueState, defaultValue: ValueState.None })
+    property()
 ], Dialog.prototype, "state", void 0);
-__decorate([
-    property({ type: Boolean })
-], Dialog.prototype, "onPhone", void 0);
-__decorate([
-    property({ type: Boolean })
-], Dialog.prototype, "onDesktop", void 0);
 __decorate([
     slot()
 ], Dialog.prototype, "header", void 0);
 __decorate([
     slot()
 ], Dialog.prototype, "footer", void 0);
+__decorate([
+    i18n("@ui5/webcomponents")
+], Dialog, "i18nBundle", void 0);
 Dialog = Dialog_1 = __decorate([
     customElement({
         tag: "ui5-dialog",
         template: DialogTemplate,
         styles: [
             Popup.styles,
-            browserScrollbarCSS,
             PopupsCommonCss,
             dialogCSS,
-        ],
-        dependencies: [
-            Icon,
+            getEffectiveScrollbarStyle(),
         ],
     })
 ], Dialog);

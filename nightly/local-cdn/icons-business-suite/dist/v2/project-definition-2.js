@@ -1,7 +1,7 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "project-definition-2";
-const pathData = "M446 25v95c0 13-9 24-23 24H90c-13 0-24-11-24-24V25C66 12 77 1 90 1h333c14 0 23 11 23 24zM75 405l138-234c12-17 27-27 46-27 18 0 33 8 44 27l135 234c1 4 5 9 7 13 1 4 0 10 1 14v4c0 15-4 25-16 32s-24 12-38 12H121c-5 0-15-1-20-3-7-1-12-5-18-9-5-4-9-8-12-13-2-6-5-12-5-19v-4c0-4 1-10 3-14 1-4 5-8 6-13z";
+const pathData = "M71 455c-3-7-5-12-5-19v-4c0-5 1-10 3-14 1-4 5-8 6-13l138-234c13-18 28-27 46-27H90c-13 0-24-11-24-24V25C66 12 77 1 90 1h333c15 0 23 11 23 24v95c0 13-8 24-23 24H259c19 0 33 9 44 27l135 234c1 4 4 9 7 13 1 4 0 10 1 14v4c0 29-27 44-54 44H121c-5 0-15 0-20-3-7-1-11-5-18-9-5-4-9-8-12-13z";
 const ltr = false;
 const accData = null;
 const collection = "business-suite-v2";

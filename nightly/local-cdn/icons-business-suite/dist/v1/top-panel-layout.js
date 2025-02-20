@@ -1,7 +1,7 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "top-panel-layout";
-const pathData = "M512 512H0V0h512v512zM480 32H32v96h448V32zM32 160v320h448V160H32z";
+const pathData = "M0 512V0h512v512H0zm480-352H32v320h448V160zM32 32v96h448V32H32z";
 const ltr = false;
 const accData = null;
 const collection = "business-suite-v1";

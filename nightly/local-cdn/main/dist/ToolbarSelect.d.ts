@@ -1,10 +1,11 @@
-import ValueState from "@ui5/webcomponents-base/dist/types/ValueState.js";
-import ToolbarSelectTemplate from "./generated/templates/ToolbarSelectTemplate.lit.js";
-import ToolbarPopoverSelectTemplate from "./generated/templates/ToolbarPopoverSelectTemplate.lit.js";
+import type ValueState from "@ui5/webcomponents-base/dist/types/ValueState.js";
+import ToolbarSelectTemplate from "./ToolbarSelectTemplate.js";
+import ToolbarPopoverSelectTemplate from "./ToolbarPopoverSelectTemplate.js";
 import ToolbarItem from "./ToolbarItem.js";
+import type { ToolbarItemEventDetail } from "./ToolbarItem.js";
 import type ToolbarSelectOption from "./ToolbarSelectOption.js";
 import type { SelectChangeEventDetail } from "./Select.js";
-type ToolbarSelectChangeEventDetail = SelectChangeEventDetail;
+type ToolbarSelectChangeEventDetail = ToolbarItemEventDetail & SelectChangeEventDetail;
 /**
  * @class
  *
@@ -23,6 +24,11 @@ type ToolbarSelectChangeEventDetail = SelectChangeEventDetail;
  * @since 1.17.0
  */
 declare class ToolbarSelect extends ToolbarItem {
+    eventDetails: ToolbarItem["eventDetails"] & {
+        change: ToolbarSelectChangeEventDetail;
+        open: ToolbarItemEventDetail;
+        close: ToolbarItemEventDetail;
+    };
     /**
      * Defines the width of the select.
      *
@@ -58,25 +64,22 @@ declare class ToolbarSelect extends ToolbarItem {
     /**
      * Defines the accessible ARIA name of the component.
      * @public
-     * @default ""
+     * @default undefined
      */
-    accessibleName: string;
+    accessibleName?: string;
     /**
      * Receives id(or many ids) of the elements that label the select.
-     * @default ""
+     * @default undefined
      * @public
      */
-    accessibleNameRef: string;
-    _onEvent: EventListener;
+    accessibleNameRef?: string;
     static get toolbarTemplate(): typeof ToolbarSelectTemplate;
     static get toolbarPopoverTemplate(): typeof ToolbarPopoverSelectTemplate;
-    get subscribedEvents(): Map<any, any>;
-    constructor();
-    onEnterDOM(): void;
-    onExitDOM(): void;
-    attachEventListeners(): void;
-    detachEventListeners(): void;
-    _onEventHandler(e: Event): void;
+    onClick(e: Event): void;
+    onOpen(e: Event): void;
+    onClose(e: Event): void;
+    onChange(e: CustomEvent<SelectChangeEventDetail>): void;
+    _syncOptions(selectedOption: HTMLElement): void;
     get styles(): {
         width: string | undefined;
     };

@@ -1,14 +1,19 @@
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
-import type { ClassMap } from "@ui5/webcomponents-base/dist/types.js";
 import type I18nBundle from "@ui5/webcomponents-base/dist/i18nBundle.js";
 import SideContentPosition from "./types/SideContentPosition.js";
 import SideContentVisibility from "./types/SideContentVisibility.js";
 import SideContentFallDown from "./types/SideContentFallDown.js";
+import type { AccessibilityAttributes } from "@ui5/webcomponents-base";
 type DynamicSideContentLayoutChangeEventDetail = {
     currentBreakpoint: string;
-    previousBreakpoint: string;
+    previousBreakpoint: string | undefined;
     mainContentVisible: boolean;
     sideContentVisible: boolean;
+};
+type DynamicSideContentAriaAccessibilityAttributes = Pick<AccessibilityAttributes, "ariaLabel">;
+type DynamicSideContentAccessibilityAttributes = {
+    mainContent?: DynamicSideContentAriaAccessibilityAttributes;
+    sideContent?: DynamicSideContentAriaAccessibilityAttributes;
 };
 /**
  * @class
@@ -83,6 +88,9 @@ type DynamicSideContentLayoutChangeEventDetail = {
  * @slot {Array<HTMLElement>} default - Defines the main content.
  */
 declare class DynamicSideContent extends UI5Element {
+    eventDetails: {
+        "layout-change": DynamicSideContentLayoutChangeEventDetail;
+    };
     /**
      * Defines the visibility of the main content.
      * @default false
@@ -131,6 +139,19 @@ declare class DynamicSideContent extends UI5Element {
      */
     equalSplit: boolean;
     /**
+    * Defines additional accessibility attributes on different areas of the component.
+    *
+    * The accessibilityAttributes object has the following fields:
+    *
+    *  - **mainContent**: `mainContent.ariaLabel` defines the aria-label of the main content area. Accepts any string.
+    *  - **sideContent**: `sideContent.ariaLabel` defines the aria-label of the side content area. Accepts any string.
+    *
+    * @default {}
+    * @public
+    * @since 2.6.0
+    */
+    accessibilityAttributes: DynamicSideContentAccessibilityAttributes;
+    /**
      * @private
      */
     _mcSpan: string;
@@ -145,7 +166,7 @@ declare class DynamicSideContent extends UI5Element {
     /**
      * @private
      */
-    _currentBreakpoint: string;
+    _currentBreakpoint?: string;
     /**
      * Defines the side content.
      * @public
@@ -154,7 +175,6 @@ declare class DynamicSideContent extends UI5Element {
     constructor();
     _handleResizeBound: () => void;
     static i18nBundle: I18nBundle;
-    static onDefine(): Promise<void>;
     onAfterRendering(): void;
     onEnterDOM(): void;
     onExitDOM(): void;
@@ -163,7 +183,16 @@ declare class DynamicSideContent extends UI5Element {
      * @public
      */
     toggleContents(): void;
-    get classes(): ClassMap;
+    get classes(): {
+        main: {
+            [x: string]: boolean;
+            "ui5-dsc-main": boolean;
+        };
+        side: {
+            [x: string]: boolean;
+            "ui5-dsc-side": boolean;
+        };
+    };
     get styles(): {
         root: {
             "flex-wrap": string;
@@ -175,9 +204,7 @@ declare class DynamicSideContent extends UI5Element {
             height: string;
         };
     };
-    get accInfo(): {
-        label: string;
-    };
+    get accInfo(): DynamicSideContentAccessibilityAttributes;
     get sizeS(): string;
     get sizeM(): string;
     get sizeL(): string;
@@ -198,4 +225,4 @@ declare class DynamicSideContent extends UI5Element {
     _setSpanSizes(mainSize: string, sideSize: string): void;
 }
 export default DynamicSideContent;
-export type { DynamicSideContentLayoutChangeEventDetail, };
+export type { DynamicSideContentLayoutChangeEventDetail, DynamicSideContentAccessibilityAttributes, };

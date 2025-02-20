@@ -1,8 +1,8 @@
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
 import type I18nBundle from "@ui5/webcomponents-base/dist/i18nBundle.js";
 import ValueState from "@ui5/webcomponents-base/dist/types/ValueState.js";
-import WrappingType from "./types/WrappingType.js";
-import type { IFormElement } from "./features/InputElementsFormSupport.js";
+import type { IFormInputElement } from "@ui5/webcomponents-base/dist/features/InputElementsFormSupport.js";
+import type WrappingType from "./types/WrappingType.js";
 /**
  * @class
  *
@@ -34,7 +34,10 @@ import type { IFormElement } from "./features/InputElementsFormSupport.js";
  * @csspart outer-ring - Used to style the outer ring of the `ui5-radio-button`.
  * @csspart inner-ring - Used to style the inner ring of the `ui5-radio-button`.
  */
-declare class RadioButton extends UI5Element implements IFormElement {
+declare class RadioButton extends UI5Element implements IFormInputElement {
+    eventDetails: {
+        change: void;
+    };
     /**
      * Defines whether the component is disabled.
      *
@@ -46,8 +49,8 @@ declare class RadioButton extends UI5Element implements IFormElement {
     /**
      * Defines whether the component is read-only.
      *
-     * **Note:** A read-only component is not editable,
-     * but still provides visual feedback upon user interaction.
+     * **Note:** A read-only component isn't editable or selectable.
+     * However, because it's focusable, it still provides visual feedback upon user interaction.
      * @default false
      * @public
      */
@@ -65,6 +68,9 @@ declare class RadioButton extends UI5Element implements IFormElement {
      * **Note:** The property value can be changed with user interaction,
      * either by clicking/tapping on the component,
      * or by using the Space or Enter key.
+     *
+     * **Note:** Only enabled radio buttons can be checked.
+     * Read-only radio buttons are not selectable, and therefore are always unchecked.
      * @default false
      * @formEvents change
      * @formProperty
@@ -74,10 +80,10 @@ declare class RadioButton extends UI5Element implements IFormElement {
     checked: boolean;
     /**
      * Defines the text of the component.
-     * @default ""
+     * @default undefined
      * @public
      */
-    text: string;
+    text?: string;
     /**
      * Defines the value state of the component.
      * @default "None"
@@ -85,32 +91,23 @@ declare class RadioButton extends UI5Element implements IFormElement {
      */
     valueState: `${ValueState}`;
     /**
-     * Defines the name of the component.
+     * Determines the name by which the component will be identified upon submission in an HTML form.
+     *
      * Radio buttons with the same `name` will form a radio button group.
      *
-     * **Note:**
-     * The selection can be changed with `ARROW_UP/DOWN` and `ARROW_LEFT/RIGHT` keys between radio buttons in same group.
+     * **Note:** By this name the component will be identified upon submission in an HTML form.
      *
-     * **Note:**
-     * Only one radio button can be selected per group.
+     * **Note:** The selection can be changed with `ARROW_UP/DOWN` and `ARROW_LEFT/RIGHT` keys between radio buttons in same group.
      *
-     * **Important:** For the `name` property to have effect when submitting forms, you must add the following import to your project:
-     * `import "@ui5/webcomponents/dist/features/InputElementsFormSupport.js";`
-     *
-     * **Note:** When set, a native `input` HTML element
-     * will be created inside the component so that it can be submitted as
-     * part of an HTML form.
-     * @default ""
+     * **Note:** Only one radio button can be selected per group.
+     * @default undefined
      * @public
      */
-    name: string;
+    name?: string;
     /**
      * Defines the form value of the component.
      * When a form with a radio button group is submitted, the group's value
      * will be the value of the currently selected radio button.
-     *
-     * **Important:** For the `value` property to have effect, you must add the following import to your project:
-     * `import "@ui5/webcomponents/dist/features/InputElementsFormSupport.js";`
      * @default ""
      * @public
      */
@@ -119,25 +116,25 @@ declare class RadioButton extends UI5Element implements IFormElement {
      * Defines whether the component text wraps when there is not enough space.
      *
      * **Note:** for option "Normal" the text will wrap and the words will not be broken based on hyphenation.
-     * @default "None"
+     * @default "Normal"
      * @public
      */
     wrappingType: `${WrappingType}`;
     /**
      * Defines the accessible ARIA name of the component.
-     * @default ""
+     * @default undefined
      * @public
      * @since 1.6.0
      */
-    accessibleName: string;
+    accessibleName?: string;
     /**
      * Defines the IDs of the elements that label the component.
-     * @default ""
+     * @default undefined
      * @public
      * @since 1.1.0
      */
-    accessibleNameRef: string;
-    _tabIndex: string;
+    accessibleNameRef?: string;
+    _tabIndex?: number;
     /**
      * Defines the active state (pressed or not) of the component.
      * @default false
@@ -145,27 +142,25 @@ declare class RadioButton extends UI5Element implements IFormElement {
      */
     active: boolean;
     /**
-     * The slot is used to render native `input` HTML element within Light DOM to enable form submit,
-     * when `name` property is set.
+     * Defines if the component is selected in specific group
+     * @default false
      * @private
      */
-    formSupport: Array<HTMLElement>;
+    _groupChecked: boolean;
+    _groupRequired: boolean;
     _deactivate: () => void;
     _name: string;
     _checked: boolean;
-    _internals: ElementInternals;
-    static get formAssociated(): boolean;
+    get formValidityMessage(): string;
+    get formValidity(): ValidityStateFlags;
+    formElementAnchor(): Promise<HTMLElement | undefined>;
+    get formFormattedValue(): string | null;
     static i18nBundle: I18nBundle;
     constructor();
-    static onDefine(): Promise<void>;
-    onBeforeRendering(): void;
+    onAfterRendering(): void;
     onEnterDOM(): void;
     onExitDOM(): void;
     syncGroup(forceRemove?: boolean): void;
-    _enableFormSupport(): void;
-    _setFormValue(): void;
-    _resetFormValidity(): void;
-    _invalidateForm(): void;
     _onclick(): this;
     _handleDown(e: KeyboardEvent): void;
     _handleUp(e: KeyboardEvent): void;
@@ -176,17 +171,11 @@ declare class RadioButton extends UI5Element implements IFormElement {
     _onfocusout(): void;
     toggle(): this;
     canToggle(): boolean;
-    get classes(): {
-        inner: {
-            "ui5-radio-inner--hoverable": boolean;
-        };
-    };
-    get effectiveAriaDisabled(): "true" | null;
+    get effectiveAriaDisabled(): true | undefined;
     get ariaLabelText(): string;
     get effectiveAriaDescribedBy(): string | undefined;
     get hasValueState(): boolean;
     get valueStateText(): string;
-    get radioButtonGroupRequiredText(): string;
-    get effectiveTabIndex(): string;
+    get effectiveTabIndex(): number | undefined;
 }
 export default RadioButton;

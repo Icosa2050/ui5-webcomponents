@@ -1,4 +1,4 @@
-import { CLDRData } from "../asset-registries/LocaleData.js";
+import type { CLDRData } from "../asset-registries/LocaleData.js";
 import type { LegacyDateCalendarCustomizing } from "../features/LegacyDateFormats.js";
 declare class OpenUI5Support {
     static isAtLeastVersion116(): boolean;

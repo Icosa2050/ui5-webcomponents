@@ -16,7 +16,7 @@ const property = (propData) => {
         }
         const propsMetadata = metadata.properties;
         if (!propsMetadata[propertyKey]) {
-            propsMetadata[propertyKey] = propData || { type: String };
+            propsMetadata[propertyKey] = propData ?? {};
         }
     };
 };

@@ -7,22 +7,17 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var Panel_1;
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
 import customElement from "@ui5/webcomponents-base/dist/decorators/customElement.js";
-import event from "@ui5/webcomponents-base/dist/decorators/event.js";
+import event from "@ui5/webcomponents-base/dist/decorators/event-strict.js";
 import property from "@ui5/webcomponents-base/dist/decorators/property.js";
 import slot from "@ui5/webcomponents-base/dist/decorators/slot.js";
-import litRender from "@ui5/webcomponents-base/dist/renderer/LitRenderer.js";
+import jsxRenderer from "@ui5/webcomponents-base/dist/renderer/JsxRenderer.js";
 import slideDown from "@ui5/webcomponents-base/dist/animations/slideDown.js";
 import slideUp from "@ui5/webcomponents-base/dist/animations/slideUp.js";
 import { isSpace, isEnter } from "@ui5/webcomponents-base/dist/Keys.js";
 import AnimationMode from "@ui5/webcomponents-base/dist/types/AnimationMode.js";
 import { getAnimationMode } from "@ui5/webcomponents-base/dist/config/AnimationMode.js";
-import { getI18nBundle } from "@ui5/webcomponents-base/dist/i18nBundle.js";
-import "@ui5/webcomponents-icons/dist/slim-arrow-right.js";
-import Button from "./Button.js";
-import Icon from "./Icon.js";
-import TitleLevel from "./types/TitleLevel.js";
-import PanelAccessibleRole from "./types/PanelAccessibleRole.js";
-import PanelTemplate from "./generated/templates/PanelTemplate.lit.js";
+import i18n from "@ui5/webcomponents-base/dist/decorators/i18n.js";
+import PanelTemplate from "./PanelTemplate.js";
 import { PANEL_ICON } from "./generated/i18n/i18n-defaults.js";
 // Styles
 import panelCss from "./generated/themes/Panel.css.js";
@@ -83,6 +78,68 @@ import panelCss from "./generated/themes/Panel.css.js";
  * @csspart content - Used to style the wrapper of the content.
  */
 let Panel = Panel_1 = class Panel extends UI5Element {
+    constructor() {
+        super(...arguments);
+        /**
+         * Determines whether the component is in a fixed state that is not
+         * expandable/collapsible by user interaction.
+         * @default false
+         * @public
+         */
+        this.fixed = false;
+        /**
+         * Indicates whether the component is collapsed and only the header is displayed.
+         * @default false
+         * @public
+         */
+        this.collapsed = false;
+        /**
+         * Indicates whether the transition between the expanded and the collapsed state of the component is animated. By default the animation is enabled.
+         * @default false
+         * @public
+         * @since 1.0.0-rc.16
+         */
+        this.noAnimation = false;
+        /**
+         * Sets the accessible ARIA role of the component.
+         * Depending on the usage, you can change the role from the default `Form`
+         * to `Region` or `Complementary`.
+         * @default "Form"
+         * @public
+         */
+        this.accessibleRole = "Form";
+        /**
+         * Defines the "aria-level" of component heading,
+         * set by the `headerText`.
+         * @default "H2"
+         * @public
+        */
+        this.headerLevel = "H2";
+        /**
+         * Indicates whether the Panel header is sticky or not.
+         * If stickyHeader is set to true, then whenever you scroll the content or
+         * the application, the header of the panel will be always visible and
+         * a solid color will be used for its design.
+         * @default false
+         * @public
+         * @since 1.16.0-rc.1
+         */
+        this.stickyHeader = false;
+        /**
+         * When set to `true`, the `accessibleName` property will be
+         * applied not only on the panel root itself, but on its toggle button too.
+         * **Note:** This property only has effect if `accessibleName` is set and a header slot is provided.
+         * @default false
+         * @private
+          */
+        this.useAccessibleNameForToggleButton = false;
+        /**
+         * @private
+         */
+        this._hasHeader = false;
+        this._contentExpanded = false;
+        this._animationRunning = false;
+    }
     onBeforeRendering() {
         // If the animation is running, it will set the content expanded state at the end
         if (!this._animationRunning) {
@@ -97,7 +154,7 @@ let Panel = Panel_1 = class Panel extends UI5Element {
         }
         return true;
     }
-    shouldNotAnimate() {
+    get shouldNotAnimate() {
         return this.noAnimation || getAnimationMode() === AnimationMode.None;
     }
     _headerClick(e) {
@@ -138,8 +195,8 @@ let Panel = Panel_1 = class Panel extends UI5Element {
             return;
         }
         this.collapsed = !this.collapsed;
-        if (this.shouldNotAnimate()) {
-            this.fireEvent("toggle");
+        if (this.shouldNotAnimate) {
+            this.fireDecoratorEvent("toggle");
             return;
         }
         this._animationRunning = true;
@@ -156,21 +213,11 @@ let Panel = Panel_1 = class Panel extends UI5Element {
         Promise.all(animations).then(() => {
             this._animationRunning = false;
             this._contentExpanded = !this.collapsed;
-            this.fireEvent("toggle");
+            this.fireDecoratorEvent("toggle");
         });
     }
     _headerOnTarget(target) {
         return target.classList.contains("sapMPanelWrappingDiv");
-    }
-    get classes() {
-        return {
-            headerBtn: {
-                "ui5-panel-header-button-animated": !this.shouldNotAnimate(),
-            },
-            stickyHeaderClass: {
-                "ui5-panel-heading-wrapper-sticky": this.stickyHeader,
-            },
-        };
     }
     get toggleButtonTitle() {
         return Panel_1.i18nBundle.getText(PANEL_ICON);
@@ -206,10 +253,10 @@ let Panel = Panel_1 = class Panel extends UI5Element {
         return this.fixed && !this.effectiveAccessibleName ? `${this._id}-header-title` : undefined;
     }
     get headerAriaLevel() {
-        return this.headerLevel.slice(1);
+        return Number.parseInt(this.headerLevel.slice(1));
     }
     get headerTabIndex() {
-        return (this.header.length || this.fixed) ? "-1" : "0";
+        return (this.header.length || this.fixed) ? -1 : 0;
     }
     get headingWrapperAriaLevel() {
         return !this._hasHeader ? this.headerAriaLevel : undefined;
@@ -226,16 +273,6 @@ let Panel = Panel_1 = class Panel extends UI5Element {
     get nonFocusableButton() {
         return !this.header.length;
     }
-    get styles() {
-        return {
-            content: {
-                display: this._contentExpanded ? "block" : "none",
-            },
-        };
-    }
-    static async onDefine() {
-        Panel_1.i18nBundle = await getI18nBundle("@ui5/webcomponents");
-    }
 };
 __decorate([
     property()
@@ -250,10 +287,10 @@ __decorate([
     property({ type: Boolean })
 ], Panel.prototype, "noAnimation", void 0);
 __decorate([
-    property({ type: PanelAccessibleRole, defaultValue: PanelAccessibleRole.Form })
+    property()
 ], Panel.prototype, "accessibleRole", void 0);
 __decorate([
-    property({ type: TitleLevel, defaultValue: TitleLevel.H2 })
+    property()
 ], Panel.prototype, "headerLevel", void 0);
 __decorate([
     property()
@@ -276,22 +313,26 @@ __decorate([
 __decorate([
     slot()
 ], Panel.prototype, "header", void 0);
+__decorate([
+    i18n("@ui5/webcomponents")
+], Panel, "i18nBundle", void 0);
 Panel = Panel_1 = __decorate([
     customElement({
         tag: "ui5-panel",
         fastNavigation: true,
         languageAware: true,
-        renderer: litRender,
+        renderer: jsxRenderer,
         template: PanelTemplate,
         styles: panelCss,
-        dependencies: [Button, Icon],
     })
     /**
      * Fired when the component is expanded/collapsed by user interaction.
      * @public
      */
     ,
-    event("toggle")
+    event("toggle", {
+        bubbles: true,
+    })
 ], Panel);
 Panel.define();
 export default Panel;

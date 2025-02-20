@@ -6,20 +6,16 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 var RatingIndicator_1;
 import customElement from "@ui5/webcomponents-base/dist/decorators/customElement.js";
-import event from "@ui5/webcomponents-base/dist/decorators/event.js";
+import event from "@ui5/webcomponents-base/dist/decorators/event-strict.js";
 import property from "@ui5/webcomponents-base/dist/decorators/property.js";
+import { getEnableDefaultTooltips } from "@ui5/webcomponents-base/dist/config/Tooltips.js";
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
-import litRender from "@ui5/webcomponents-base/dist/renderer/LitRenderer.js";
+import jsxRenderer from "@ui5/webcomponents-base/dist/renderer/JsxRenderer.js";
 import { isDown, isUp, isLeft, isRight, isSpace, isEnter, isHome, isEnd, } from "@ui5/webcomponents-base/dist/Keys.js";
-import { getEffectiveAriaLabelText } from "@ui5/webcomponents-base/dist/util/AriaLabelHelper.js";
-import { getI18nBundle } from "@ui5/webcomponents-base/dist/i18nBundle.js";
-import Integer from "@ui5/webcomponents-base/dist/types/Integer.js";
-import Float from "@ui5/webcomponents-base/dist/types/Float.js";
+import { getEffectiveAriaLabelText } from "@ui5/webcomponents-base/dist/util/AccessibilityTextsHelper.js";
+import i18n from "@ui5/webcomponents-base/dist/decorators/i18n.js";
 import { RATING_INDICATOR_TEXT, RATING_INDICATOR_TOOLTIP_TEXT, RATING_INDICATOR_ARIA_DESCRIPTION, } from "./generated/i18n/i18n-defaults.js";
-import RatingIndicatorTemplate from "./generated/templates/RatingIndicatorTemplate.lit.js";
-import Icon from "./Icon.js";
-import "@ui5/webcomponents-icons/dist/favorite.js";
-import "@ui5/webcomponents-icons/dist/unfavorite.js";
+import RatingIndicatorTemplate from "./RatingIndicatorTemplate.js";
 // Styles
 import RatingIndicatorCss from "./generated/themes/RatingIndicator.css.js";
 /**
@@ -57,11 +53,66 @@ import RatingIndicatorCss from "./generated/themes/RatingIndicator.css.js";
  * @since 1.0.0-rc.8
  */
 let RatingIndicator = RatingIndicator_1 = class RatingIndicator extends UI5Element {
-    static async onDefine() {
-        RatingIndicator_1.i18nBundle = await getI18nBundle("@ui5/webcomponents");
-    }
     constructor() {
         super();
+        /**
+         * The indicated value of the rating.
+         *
+         * **Note:** If you set a number which is not round, it would be shown as follows:
+         *
+         * - 1.0 - 1.2 -> 1
+         * - 1.3 - 1.7 -> 1.5
+         * - 1.8 - 1.9 -> 2
+         * @default 0
+         * @public
+         */
+        this.value = 0;
+        /**
+         * The number of displayed rating symbols.
+         * @default 5
+         * @public
+         * @since 1.0.0-rc.15
+         */
+        this.max = 5;
+        /**
+         * Defines the size of the component.
+         * @default "M"
+         * @public
+         * @since 2.6.0
+         */
+        this.size = "M";
+        /**
+         * Defines whether the component is disabled.
+         *
+         * **Note:** A disabled component is completely noninteractive.
+         * @default false
+         * @public
+         */
+        this.disabled = false;
+        /**
+         * Defines whether the component is read-only.
+         *
+         * **Note:** A read-only component is not editable,
+         * but still provides visual feedback upon user interaction.
+         * @default false
+         * @public
+         */
+        this.readonly = false;
+        /**
+        * Defines whether the component is required.
+        * @default false
+        * @public
+        * @since 1.15.0
+        */
+        this.required = false;
+        /**
+         * @private
+         */
+        this._stars = [];
+        /**
+         * @private
+         */
+        this._focused = false;
     }
     onBeforeRendering() {
         this.calcState();
@@ -99,13 +150,17 @@ let RatingIndicator = RatingIndicator_1 = class RatingIndicator extends UI5Eleme
                 this.value = 0;
             }
             if (this._liveValue !== this.value) {
-                this.fireEvent("change");
+                this.fireDecoratorEvent("change");
                 this._liveValue = this.value;
             }
         }
     }
     _onkeydown(e) {
         if (this.disabled || this.readonly) {
+            // prevent page scrolling
+            if (isSpace(e)) {
+                e.preventDefault();
+            }
             return;
         }
         const isDecrease = isDown(e) || isLeft(e);
@@ -136,7 +191,7 @@ let RatingIndicator = RatingIndicator_1 = class RatingIndicator extends UI5Eleme
                 const pressedNumber = parseInt(e.key);
                 this.value = pressedNumber > this.max ? this.max : pressedNumber;
             }
-            this.fireEvent("change");
+            this.fireDecoratorEvent("change");
         }
     }
     _onfocusin() {
@@ -151,10 +206,16 @@ let RatingIndicator = RatingIndicator_1 = class RatingIndicator extends UI5Eleme
     }
     get effectiveTabIndex() {
         const tabindex = this.getAttribute("tabindex");
-        return this.disabled ? "-1" : tabindex || "0";
+        if (this.disabled) {
+            return -1;
+        }
+        return tabindex ? parseInt(tabindex) : 0;
     }
     get ratingTooltip() {
-        return this.tooltip || this.defaultTooltip;
+        if (this.tooltip) {
+            return this.tooltip;
+        }
+        return getEnableDefaultTooltips() ? this.defaultTooltip : undefined;
     }
     get defaultTooltip() {
         return RatingIndicator_1.i18nBundle.getText(RATING_INDICATOR_TOOLTIP_TEXT);
@@ -176,11 +237,14 @@ let RatingIndicator = RatingIndicator_1 = class RatingIndicator extends UI5Eleme
     }
 };
 __decorate([
-    property({ validator: Float, defaultValue: 0 })
+    property({ type: Number })
 ], RatingIndicator.prototype, "value", void 0);
 __decorate([
-    property({ validator: Integer, defaultValue: 5 })
+    property({ type: Number })
 ], RatingIndicator.prototype, "max", void 0);
+__decorate([
+    property()
+], RatingIndicator.prototype, "size", void 0);
 __decorate([
     property({ type: Boolean })
 ], RatingIndicator.prototype, "disabled", void 0);
@@ -191,7 +255,7 @@ __decorate([
     property()
 ], RatingIndicator.prototype, "accessibleName", void 0);
 __decorate([
-    property({ defaultValue: "" })
+    property()
 ], RatingIndicator.prototype, "accessibleNameRef", void 0);
 __decorate([
     property({ type: Boolean })
@@ -200,26 +264,30 @@ __decorate([
     property()
 ], RatingIndicator.prototype, "tooltip", void 0);
 __decorate([
-    property({ type: Object, multiple: true })
+    property({ type: Array })
 ], RatingIndicator.prototype, "_stars", void 0);
 __decorate([
     property({ type: Boolean })
 ], RatingIndicator.prototype, "_focused", void 0);
+__decorate([
+    i18n("@ui5/webcomponents")
+], RatingIndicator, "i18nBundle", void 0);
 RatingIndicator = RatingIndicator_1 = __decorate([
     customElement({
         tag: "ui5-rating-indicator",
         languageAware: true,
-        renderer: litRender,
+        renderer: jsxRenderer,
         styles: RatingIndicatorCss,
         template: RatingIndicatorTemplate,
-        dependencies: [Icon],
     })
     /**
      * The event is fired when the value changes.
      * @public
      */
     ,
-    event("change")
+    event("change", {
+        bubbles: true,
+    })
 ], RatingIndicator);
 RatingIndicator.define();
 export default RatingIndicator;

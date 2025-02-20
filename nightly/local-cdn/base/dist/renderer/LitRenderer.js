@@ -10,12 +10,13 @@ const effectiveSvg = (strings, ...values) => {
     const fn = litStatic ? litStatic.svg : svg;
     return fn(strings, ...values);
 };
-const litRender = (templateResult, container, options) => {
+const litRender = (instance, container) => {
+    let templateResult = instance.render();
     const openUI5Enablement = getFeature("OpenUI5Enablement");
     if (openUI5Enablement) {
-        templateResult = openUI5Enablement.wrapTemplateResultInBusyMarkup(effectiveHtml, options.host, templateResult);
+        templateResult = openUI5Enablement.wrapTemplateResultInBusyMarkup(effectiveHtml, instance, templateResult);
     }
-    render(templateResult, container, options);
+    render(templateResult, container, { host: instance });
 };
 const scopeTag = (tag, tags, suffix) => {
     const litStatic = getFeature("LitStatic");

@@ -1,7 +1,7 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "increase";
-const pathData = "M266.5 243l118-149 118 149h-74v104h-88V243h-74zm-240 237V286h269v194h-269z";
+const pathData = "M26.5 286h269v194h-269V286zm240-43l118-149 118 149h-74v104h-88V243h-74z";
 const ltr = false;
 const accData = null;
 const collection = "business-suite-v1";

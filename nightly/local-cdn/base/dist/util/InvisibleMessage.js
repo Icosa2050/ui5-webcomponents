@@ -25,8 +25,8 @@ attachBoot(() => {
     assertiveSpan.setAttribute("role", "alert");
     setOutOfViewportStyles(politeSpan);
     setOutOfViewportStyles(assertiveSpan);
-    getSingletonElementInstance("ui5-static-area").appendChild(politeSpan);
-    getSingletonElementInstance("ui5-static-area").appendChild(assertiveSpan);
+    getSingletonElementInstance("ui5-announcement-area").appendChild(politeSpan);
+    getSingletonElementInstance("ui5-announcement-area").appendChild(assertiveSpan);
 });
 /**
  * Inserts the string into the respective span, depending on the mode provided.

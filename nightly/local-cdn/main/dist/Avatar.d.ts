@@ -1,14 +1,15 @@
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
+import type { AccessibilityAttributes } from "@ui5/webcomponents-base/dist/types.js";
 import type I18nBundle from "@ui5/webcomponents-base/dist/i18nBundle.js";
 import type { ITabbable } from "@ui5/webcomponents-base/dist/delegate/ItemNavigation.js";
 import type { ResizeObserverCallback } from "@ui5/webcomponents-base/dist/delegate/ResizeHandler.js";
 import type { IAvatarGroupItem } from "./AvatarGroup.js";
-import Icon from "./Icon.js";
+import type Icon from "./Icon.js";
 import AvatarSize from "./types/AvatarSize.js";
-import AvatarShape from "./types/AvatarShape.js";
-import AvatarColorScheme from "./types/AvatarColorScheme.js";
+import type AvatarShape from "./types/AvatarShape.js";
+import type AvatarColorScheme from "./types/AvatarColorScheme.js";
 import "@ui5/webcomponents-icons/dist/employee.js";
-import "@ui5/webcomponents-icons/dist/alert.js";
+type AvatarAccessibilityAttributes = Pick<AccessibilityAttributes, "hasPopup">;
 /**
  * @class
  * ### Overview
@@ -33,6 +34,9 @@ import "@ui5/webcomponents-icons/dist/alert.js";
  * @public
  */
 declare class Avatar extends UI5Element implements ITabbable, IAvatarGroupItem {
+    eventDetails: {
+        click: void;
+    };
     /**
      * Defines whether the component is disabled.
      * A disabled component can't be pressed or
@@ -64,10 +68,10 @@ declare class Avatar extends UI5Element implements ITabbable, IAvatarGroupItem {
      * **Note:** If no icon or an empty one is provided, by default the "employee" icon should be displayed.
      *
      * See all the available icons in the [Icon Explorer](https://sdk.openui5.org/test-resources/sap/m/demokit/iconExplorer/webapp/index.html).
-     * @default ""
+     * @default undefined
      * @public
      */
-    icon: string;
+    icon?: string;
     /**
      * Defines the name of the fallback icon, which should be displayed in the following cases:
      *
@@ -84,7 +88,7 @@ declare class Avatar extends UI5Element implements ITabbable, IAvatarGroupItem {
      * `<ui5-avatar fallback-icon="alert">`
      *
      * See all the available icons in the [Icon Explorer](https://sdk.openui5.org/test-resources/sap/m/demokit/iconExplorer/webapp/index.html).
-     * @default ""
+     * @default "employee"
      * @public
      */
     fallbackIcon: string;
@@ -92,10 +96,10 @@ declare class Avatar extends UI5Element implements ITabbable, IAvatarGroupItem {
      * Defines the displayed initials.
      *
      * Up to three Latin letters can be displayed as initials.
-     * @default ""
+     * @default undefined
      * @public
      */
-    initials: string;
+    initials?: string;
     /**
      * Defines the shape of the component.
      * @default "Circle"
@@ -109,10 +113,6 @@ declare class Avatar extends UI5Element implements ITabbable, IAvatarGroupItem {
      */
     size: `${AvatarSize}`;
     /**
-     * @private
-     */
-    _size: AvatarSize;
-    /**
      * Defines the background color of the desired image.
      * @default "Accent6"
      * @public
@@ -121,22 +121,28 @@ declare class Avatar extends UI5Element implements ITabbable, IAvatarGroupItem {
     /**
      * @private
      */
-    _colorScheme: AvatarColorScheme;
+    _colorScheme: `${AvatarColorScheme}`;
     /**
      * Defines the text alternative of the component.
      * If not provided a default text alternative will be set, if present.
-     * @default ""
+     * @default undefined
      * @public
      * @since 1.0.0-rc.7
      */
-    accessibleName: string;
+    accessibleName?: string;
     /**
-     * Defines the aria-haspopup value of the component when `interactive` property is `true`.
-     * @since 1.0.0-rc.15
-     * @protected
+     * Defines the additional accessibility attributes that will be applied to the component.
+     * The following field is supported:
+     *
+     * - **hasPopup**: Indicates the availability and type of interactive popup element, such as menu or dialog, that can be triggered by the button.
+     * Accepts the following string values: `dialog`, `grid`, `listbox`, `menu` or `tree`.
+     *
+     * @public
+     * @since 2.0.0
+     * @default {}
      */
-    ariaHaspopup: string;
-    forcedTabIndex: string;
+    accessibilityAttributes: AvatarAccessibilityAttributes;
+    forcedTabIndex?: string;
     _hasImage: boolean;
     /**
      * Receives the desired `<img>` tag
@@ -150,18 +156,16 @@ declare class Avatar extends UI5Element implements ITabbable, IAvatarGroupItem {
      * Defines the optional badge that will be used for visual affordance.
      *
      * **Note:** While the slot allows for custom badges, to achieve
-     * the Fiori design, please use `ui5-badge` with `ui5-icon`
+     * the Fiori design, you can use the `ui5-tag` with `ui5-icon`
      * in the corresponding `icon` slot, without text nodes.
      * @public
      * @since 1.7.0
      */
     badge: Array<HTMLElement>;
-    _onclick?: (e: MouseEvent) => void;
     static i18nBundle: I18nBundle;
     _handleResizeBound: ResizeObserverCallback;
     constructor();
-    static onDefine(): Promise<void>;
-    get tabindex(): string;
+    get tabindex(): number | undefined;
     /**
      * Returns the effective avatar size.
      * @default "S"
@@ -175,15 +179,13 @@ declare class Avatar extends UI5Element implements ITabbable, IAvatarGroupItem {
      */
     get еffectiveBackgroundColor(): AvatarColorScheme;
     get _role(): "button" | "img";
-    get _ariaHasPopup(): string | undefined;
-    get _fallbackIcon(): string;
+    get _ariaHasPopup(): import("@ui5/webcomponents-base/dist/types.js").AriaHasPopup | undefined;
     get _interactive(): boolean;
-    get validInitials(): string | null;
-    get accessibleNameText(): string | undefined;
+    get validInitials(): string | null | undefined;
+    get accessibleNameText(): string;
     get hasImage(): boolean;
     get initialsContainer(): HTMLObjectElement | null;
     get fallBackIconDomRef(): Icon | null;
-    onBeforeRendering(): void;
     onAfterRendering(): Promise<void>;
     onEnterDOM(): void;
     onExitDOM(): void;
@@ -191,10 +193,11 @@ declare class Avatar extends UI5Element implements ITabbable, IAvatarGroupItem {
     _checkInitials(): void;
     showFallbackIcon(): void;
     showInitials(): void;
-    _onClickHandler(e: MouseEvent): void;
+    _onclick(e: MouseEvent): void;
     _onkeydown(e: KeyboardEvent): void;
     _onkeyup(e: KeyboardEvent): void;
     _fireClick(): void;
-    _getAriaHasPopup(): string | undefined;
+    _getAriaHasPopup(): import("@ui5/webcomponents-base/dist/types.js").AriaHasPopup | undefined;
 }
 export default Avatar;
+export type { AvatarAccessibilityAttributes, };

@@ -8,18 +8,18 @@ var SegmentedButton_1;
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
 import customElement from "@ui5/webcomponents-base/dist/decorators/customElement.js";
 import property from "@ui5/webcomponents-base/dist/decorators/property.js";
-import event from "@ui5/webcomponents-base/dist/decorators/event.js";
+import event from "@ui5/webcomponents-base/dist/decorators/event-strict.js";
 import slot from "@ui5/webcomponents-base/dist/decorators/slot.js";
+import jsxRenderer from "@ui5/webcomponents-base/dist/renderer/JsxRenderer.js";
 import ItemNavigation from "@ui5/webcomponents-base/dist/delegate/ItemNavigation.js";
-import litRender from "@ui5/webcomponents-base/dist/renderer/LitRenderer.js";
-import { getI18nBundle } from "@ui5/webcomponents-base/dist/i18nBundle.js";
+import i18n from "@ui5/webcomponents-base/dist/decorators/i18n.js";
 import { getScopedVarName } from "@ui5/webcomponents-base/dist/CustomElementsScope.js";
 import { isSpace, isEnter, } from "@ui5/webcomponents-base/dist/Keys.js";
 import { SEGMENTEDBUTTON_ARIA_DESCRIPTION, SEGMENTEDBUTTON_ARIA_DESCRIBEDBY } from "./generated/i18n/i18n-defaults.js";
-import SegmentedButtonItem from "./SegmentedButtonItem.js";
-import SegmentedButtonMode from "./types/SegmentedButtonMode.js";
+import "./SegmentedButtonItem.js";
+import SegmentedButtonSelectionMode from "./types/SegmentedButtonSelectionMode.js";
 // Template
-import SegmentedButtonTemplate from "./generated/templates/SegmentedButtonTemplate.lit.js";
+import SegmentedButtonTemplate from "./SegmentedButtonTemplate.js";
 // Styles
 import SegmentedButtonCss from "./generated/themes/SegmentedButton.css.js";
 /**
@@ -31,7 +31,6 @@ import SegmentedButtonCss from "./generated/themes/SegmentedButton.css.js";
  * one of the items, it stays in a pressed state. It automatically resizes the items
  * to fit proportionally within the component. When no width is set, the component uses the available width.
  *
- * **Note:** There can be just one selected `item` at a time.
  *
  * ### ES6 Module Import
  *
@@ -42,13 +41,17 @@ import SegmentedButtonCss from "./generated/themes/SegmentedButton.css.js";
  * @public
  */
 let SegmentedButton = SegmentedButton_1 = class SegmentedButton extends UI5Element {
-    static async onDefine() {
-        SegmentedButton_1.i18nBundle = await getI18nBundle("@ui5/webcomponents");
-    }
     constructor() {
         super();
+        /**
+         * Defines the component selection mode.
+         * @default "Single"
+         * @public
+         * @since 1.14.0
+         */
+        this.selectionMode = "Single";
         this._itemNavigation = new ItemNavigation(this, {
-            getItemsCallback: () => this.getSlottedNodes("items"),
+            getItemsCallback: () => this.navigatableItems,
         });
         this.hasPreviouslyFocusedItem = false;
     }
@@ -65,8 +68,8 @@ let SegmentedButton = SegmentedButton_1 = class SegmentedButton extends UI5Eleme
         if (!this.items.length) {
             return;
         }
-        switch (this.mode) {
-            case SegmentedButtonMode.SingleSelect: {
+        switch (this.selectionMode) {
+            case SegmentedButtonSelectionMode.Single: {
                 const selectedItems = this.selectedItems;
                 const selectedItemIndex = this._selectedItem ? selectedItems.indexOf(this._selectedItem) : -1;
                 if (this._selectedItem && selectedItems.length > 1) {
@@ -85,28 +88,26 @@ let SegmentedButton = SegmentedButton_1 = class SegmentedButton extends UI5Eleme
         if (target.disabled || target === this.getDomRef() || !isTargetSegmentedButtonItem) {
             return;
         }
-        switch (this.mode) {
-            case SegmentedButtonMode.MultiSelect:
+        switch (this.selectionMode) {
+            case SegmentedButtonSelectionMode.Multiple:
                 if (e instanceof KeyboardEvent) {
-                    target.pressed = !target.pressed;
+                    target.selected = !target.selected;
                 }
                 break;
             default:
                 this._applySingleSelection(target);
         }
-        this.fireEvent("selection-change", {
-            selectedItem: target,
+        this.fireDecoratorEvent("selection-change", {
             selectedItems: this.selectedItems,
         });
         this._itemNavigation.setCurrentItem(target);
-        target.focus();
         return this;
     }
     _applySingleSelection(item) {
         this.items.forEach(currentItem => {
-            currentItem.pressed = false;
+            currentItem.selected = false;
         });
-        item.pressed = true;
+        item.selected = true;
         this._selectedItem = item;
     }
     _onclick(e) {
@@ -143,20 +144,10 @@ let SegmentedButton = SegmentedButton_1 = class SegmentedButton extends UI5Eleme
         // If the component is focused for the first time
         // focus the selected item if such is present
         if (this.selectedItems.length) {
-            this.selectedItems[0].focus();
             this._itemNavigation.setCurrentItem(this.selectedItems[0]);
+            this.selectedItems[0].focus();
             this.hasPreviouslyFocusedItem = true;
         }
-    }
-    /**
-     * Currently selected item.
-     * @deprecated since 1.14.0. This method will be removed in the next major release.
-     * Please use the `selectedItems` property instead.
-     * @public
-     * @default undefined
-     */
-    get selectedItem() {
-        return this._selectedItem;
     }
     /**
      * Returns an array of the currently selected items.
@@ -165,7 +156,12 @@ let SegmentedButton = SegmentedButton_1 = class SegmentedButton extends UI5Eleme
      * @default []
      */
     get selectedItems() {
-        return this.items.filter(item => item.pressed);
+        return this.items.filter(item => item.selected);
+    }
+    get navigatableItems() {
+        return this.getSlottedNodes("items").filter(item => {
+            return !item.disabled;
+        });
     }
     get ariaDescribedBy() {
         return SegmentedButton_1.i18nBundle.getText(SEGMENTEDBUTTON_ARIA_DESCRIBEDBY);
@@ -175,43 +171,33 @@ let SegmentedButton = SegmentedButton_1 = class SegmentedButton extends UI5Eleme
     }
 };
 __decorate([
-    property({ defaultValue: undefined })
+    property()
 ], SegmentedButton.prototype, "accessibleName", void 0);
 __decorate([
-    property({ type: SegmentedButtonMode, defaultValue: SegmentedButtonMode.SingleSelect })
-], SegmentedButton.prototype, "mode", void 0);
+    property()
+], SegmentedButton.prototype, "selectionMode", void 0);
 __decorate([
     slot({ type: HTMLElement, invalidateOnChildChange: true, "default": true })
 ], SegmentedButton.prototype, "items", void 0);
+__decorate([
+    i18n("@ui5/webcomponents")
+], SegmentedButton, "i18nBundle", void 0);
 SegmentedButton = SegmentedButton_1 = __decorate([
     customElement({
         tag: "ui5-segmented-button",
         languageAware: true,
-        renderer: litRender,
+        renderer: jsxRenderer,
         template: SegmentedButtonTemplate,
         styles: SegmentedButtonCss,
-        dependencies: [SegmentedButtonItem],
     })
     /**
      * Fired when the selected item changes.
-     * @param {ISegmentedButtonItem} selectedItem the pressed item.
-     * @param {Array<ISegmentedButtonItem>} selectedItems an array of selected items.
+     * @param {Array<ISegmentedButtonItem>} selectedItems an array of selected items. Since: 1.14.0
      * @public
      */
     ,
     event("selection-change", {
-        detail: {
-            /**
-             * @public
-             * @deprecated deprecated since 1.14.0 and will be removed in the next major release, use the `selectedItems` parameter instead.
-             */
-            selectedItem: { type: HTMLElement },
-            /**
-             * @public
-             * @since 1.14.0
-             */
-            selectedItems: { type: Array },
-        },
+        bubbles: true,
     })
 ], SegmentedButton);
 SegmentedButton.define();

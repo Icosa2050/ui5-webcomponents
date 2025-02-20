@@ -3,7 +3,7 @@ import { getIconCollectionByAlias } from "./util/IconCollectionsAlias.js";
 import { registerIconCollectionForTheme } from "./util/IconCollectionsByTheme.js";
 import getEffectiveIconCollection from "./util/getIconCollectionByTheme.js";
 import { getI18nBundle } from "../i18nBundle.js";
-const DEFAULT_THEME_FAMILY = "legacy"; // includes sap_belize_* and sap_fiori_*
+const DEFAULT_THEME_FAMILY = "legacy"; // includes sap_fiori_*
 const loaders = new Map();
 const registry = getSharedResource("SVGIcons.registry", new Map());
 const iconCollectionPromises = getSharedResource("SVGIcons.promises", new Map());

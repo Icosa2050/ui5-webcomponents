@@ -37,7 +37,7 @@ declare enum IllustrationMessageType {
      * "No Email v1" illustration type.
      * @public
      */
-    NoMail_v1 = "NoMail_v1",
+    NoMail_v1 = "NoMail_v1",// eslint-disable-line
     /**
      * "No Entries" illustration type.
      * @public
@@ -57,7 +57,7 @@ declare enum IllustrationMessageType {
      * "No Saved Items v1" illustration type.
      * @public
      */
-    NoSavedItems_v1 = "NoSavedItems_v1",
+    NoSavedItems_v1 = "NoSavedItems_v1",// eslint-disable-line
     /**
      * "No Search Results" illustration type.
      * @public
@@ -72,7 +72,7 @@ declare enum IllustrationMessageType {
      * "No Tasks v1" illustration type.
      * @public
      */
-    NoTasks_v1 = "NoTasks_v1",
+    NoTasks_v1 = "NoTasks_v1",// eslint-disable-line
     /**
      * "No Dimensions Set" illustration type.
      * @public

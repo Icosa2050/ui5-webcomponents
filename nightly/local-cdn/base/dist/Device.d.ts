@@ -1,3 +1,18 @@
+declare const internals: {
+    readonly userAgent: string;
+    readonly touch: boolean;
+    readonly chrome: boolean;
+    readonly firefox: boolean;
+    readonly safari: boolean;
+    readonly webkit: boolean;
+    readonly windows: boolean;
+    readonly macOS: boolean;
+    readonly iOS: boolean;
+    readonly android: boolean;
+    readonly androidPhone: boolean;
+    readonly ipad: boolean;
+    _isPhone(): boolean;
+};
 declare const supportsTouch: () => boolean;
 declare const isSafari: () => boolean;
 declare const isChrome: () => boolean;
@@ -9,4 +24,4 @@ declare const isCombi: () => boolean;
 declare const isIOS: () => boolean;
 declare const isMac: () => boolean;
 declare const isAndroid: () => boolean;
-export { supportsTouch, isSafari, isChrome, isFirefox, isPhone, isTablet, isDesktop, isCombi, isIOS, isAndroid, isMac, };
+export { internals, supportsTouch, isSafari, isChrome, isFirefox, isPhone, isTablet, isDesktop, isCombi, isIOS, isAndroid, isMac, };

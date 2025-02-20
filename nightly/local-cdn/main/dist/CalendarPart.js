@@ -6,7 +6,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 import customElement from "@ui5/webcomponents-base/dist/decorators/customElement.js";
 import property from "@ui5/webcomponents-base/dist/decorators/property.js";
-import Integer from "@ui5/webcomponents-base/dist/types/Integer.js";
 import CalendarDate from "@ui5/webcomponents-localization/dist/dates/CalendarDate.js";
 import modifyDateBy from "@ui5/webcomponents-localization/dist/dates/modifyDateBy.js";
 import getTodayUTCTimestamp from "@ui5/webcomponents-localization/dist/dates/getTodayUTCTimestamp.js";
@@ -86,7 +85,7 @@ let CalendarPart = class CalendarPart extends DateComponentBase {
     }
 };
 __decorate([
-    property({ validator: Integer })
+    property({ type: Number })
 ], CalendarPart.prototype, "timestamp", void 0);
 CalendarPart = __decorate([
     customElement()

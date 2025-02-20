@@ -1,362 +1,319 @@
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
+import TableHeaderRow from "./TableHeaderRow.js";
+import TableRow from "./TableRow.js";
+import TableNavigation from "./TableNavigation.js";
+import TableOverflowMode from "./types/TableOverflowMode.js";
+import TableDragAndDrop from "./TableDragAndDrop.js";
+import DropIndicator from "./DropIndicator.js";
 import type { ResizeObserverCallback } from "@ui5/webcomponents-base/dist/delegate/ResizeHandler.js";
-import ItemNavigation from "@ui5/webcomponents-base/dist/delegate/ItemNavigation.js";
-import type { ITabbable } from "@ui5/webcomponents-base/dist/delegate/ItemNavigation.js";
+import type { MoveEventDetail } from "@ui5/webcomponents-base/dist/util/dragAndDrop/DragRegistry.js";
+import type TableHeaderCell from "./TableHeaderCell.js";
+import type TableSelection from "./TableSelection.js";
+import type TableRowActionBase from "./TableRowActionBase.js";
+import type TableVirtualizer from "./TableVirtualizer.js";
 import type I18nBundle from "@ui5/webcomponents-base/dist/i18nBundle.js";
-import TableGrowingMode from "./types/TableGrowingMode.js";
-import type { TableRowClickEventDetail, TableRowSelectionRequestedEventDetail, TableRowF7PressEventDetail, TableRowForwardBeforeEventDetail, TableRowForwardAfterEventDetail } from "./TableRow.js";
-import type TableCell from "./TableCell.js";
-import type TableColumn from "./TableColumn.js";
-import type TableColumnPopinDisplay from "./types/TableColumnPopinDisplay.js";
-import TableMode from "./types/TableMode.js";
 /**
- * Interface for components that may be slotted inside a `ui5-table` as rows
+ * Interface for components that can be slotted inside the `features` slot of the `ui5-table`.
+ *
+ * @public
+ * @experimental
+ */
+interface ITableFeature extends UI5Element {
+    readonly identifier: string;
+    /**
+     * Called when the table is activated.
+     * @param table table instance
+     */
+    onTableActivate?(table: Table): void;
+    /**
+     * Called when the table finished rendering.
+     */
+    onTableAfterRendering?(table?: Table): void;
+}
+/**
+ * Interface for components that can be slotted inside the `features` slot of the `ui5-table`
+ * and provide growing/data loading functionality.
+ * @public
+ * @experimental
+ */
+interface ITableGrowing extends ITableFeature {
+    /**
+     * Called when the table needs to load more data.
+     */
+    loadMore(): void;
+    /**
+     * Determines whether the table has a growing control, that should be rendered in the table.
+     */
+    hasGrowingComponent(): boolean;
+    _individualSlot?: string;
+}
+/**
+ * Fired when an interactive row is clicked.
+ *
+ * @param {TableRow} row The clicked row instance
  * @public
  */
-interface ITableRow extends HTMLElement, ITabbable {
-    mode: `${TableMode}`;
-    selected: boolean;
-    forcedBusy: boolean;
-    forcedAriaPosition: string;
-    _columnsInfoString: string;
-    _columnsInfo: Array<TableColumnInfo>;
-    tabbableElements: Array<HTMLElement>;
-}
-type TableColumnInfo = {
-    cell?: TableCell;
-    index?: number;
-    text?: string | null;
-    visible?: boolean;
-    demandPopin?: boolean;
-    popinText?: string;
-    popinDisplay?: `${TableColumnPopinDisplay}`;
-    popinDisplayInline?: boolean;
-    classes?: string;
-    minWidth?: number;
+type TableRowClickEventDetail = {
+    row: TableRow;
 };
-type TableColumnHeaderInfo = ITabbable;
-type TableSelectionChangeEventDetail = {
-    selectedRows: Array<ITableRow>;
-    previouslySelectedRows: Array<ITableRow>;
+type TableMoveEventDetail = MoveEventDetail;
+/**
+ * Fired when a row action is clicked.
+ *
+ * @param {TableRowActionBase} action The row action instance
+ * @param {TableRow} row The row instance
+ * @public
+ */
+type TableRowActionClickEventDetail = {
+    action: TableRowActionBase;
+    row: TableRow;
 };
-type TablePopinChangeEventDetail = {
-    poppedColumns: Array<TableColumnInfo>;
-};
-declare enum TableFocusTargetElement {
-    Row = "tableRow",
-    GroupRow = "tableGroupRow",
-    ColumnHeader = "columnHeader",
-    MoreButton = "moreButton"
-}
 /**
  * @class
  *
  * ### Overview
  *
- * The `ui5-table` component provides a set of sophisticated and convenient functions for responsive table design.
- * It provides a comprehensive set of features for displaying and dealing with vast amounts of data.
+ * The `ui5-table` component provides a set of sophisticated features for displaying and dealing with vast amounts of data in a responsive manner.
+ * To render the `ui5-table`, you need to define the columns and rows. You can use the provided `ui5-table-header-row` and `ui5-table-row` components for this purpose.
  *
- * To render the `Table` properly, the order of the `columns` should match with the
- * order of the item `cells` in the `rows`.
+ * ### Features
  *
- * Desktop and tablet devices are supported.
- * On tablets, special consideration should be given to the number of visible columns
- * and rows due to the limited performance of some devices.
+ * The `ui5-table` can be enhanced in its functionalities by applying different features.
+ * Features can be slotted into the `features` slot, to enable them in the component.
+ * Features need to be imported separately, as they are not enabled by default.
  *
- * ### Selection
- * To benefit from the selection mechanism of `ui5-table` component, you can use the available selection modes:
- * `SingleSelect` and `MultiSelect`.
+ * The following features are currently available:
  *
- * In additition to the used mode, you can also specify the `ui5-table-row` type choosing between
- * `Active` or `Inactive`.
- *
- * In `SingleSelect` mode, you can select both an `Active` and `Inactive` row via mouse or
- * by pressing the `Space` or `Enter` keys.
- *
- * In `MultiSelect` mode, you can select both an `Active` and `Inactive` row by pressing the
- * `Space` key when a row is on focus or via mouse click over the selection checkbox of the row.
- * In order to select all the available rows at once, you can use the selection checkbox presented in the table's header.
- *
- * **Note:** Currently, when a column is shown as a pop-in, the visual indication for selection is not presented over it.
+ * * [TableSelection](../TableSelection) - adds selection capabilities to the table
+ * * [TableGrowing](../TableGrowing) - provides growing capabilities to load more data
  *
  * ### Keyboard Handling
  *
- * #### Fast Navigation
  * This component provides a build in fast navigation group which can be used via [F6] / [Shift] + [F6] / [Ctrl] + [Alt/Option] / [Down] or [Ctrl] + [Alt/Option] + [Up].
  * In order to use this functionality, you need to import the following module:
  * `import "@ui5/webcomponents-base/dist/features/F6Navigation.js"`
  *
- * Furthermore, you can interact with `ui5-table` via the following keys.
+ * Furthermore, you can interact with `ui5-table` via the following keys:
  *
- * - [F7] - If focus is on an interactive control inside an item, moves focus to the corresponding item.
- * - [Ctrl]+[A] - Selects all items, if MultiSelect mode is enabled.
- * - [Home]/[End] - Focuses the first/last item.
- * - [Page Up]/[Page Down] - Moves focus up/down by page size (20 items by default).
- * - [Alt]+[Down]/[Up] - Switches focus between header, last focused item, and More button (if applies) in either direction.
- * - [Shift]+[Down]/[Up] - Selects the next/previous item in a MultiSelect table, if the current item is selected (Range selection). Otherwise, deselects them (Range deselection).
- * - [Shift]+[Home]/[End] - Range selection to the first/last item of the List.
- * - [Ctrl]+[Home]/[End] - Same behavior as HOME & END.
+ * If the focus is on a row, the following keyboard shortcuts are available:
+ * * <kbd>Down</kbd> - Navigates down
+ * * <kbd>Up</kbd> - Navigates up
+ * * <kbd>Right</kbd> - Selects the first cell of the row
+ * * <kbd>Space</kbd> - Toggles the selection of the row
+ * * <kbd>Ctrl/Cmd + A</kbd> - In multi selection mode, toggles the selection of all rows
+ * * <kbd>Home</kbd> - Navigates to the first row, if the focus is on the first row, navigates to the header row
+ * * <kbd>End</kbd> - Navigates to the last row, if the focus is on the last row, navigates to the growing button
+ * * <kbd>Page Up</kbd> - Navigates one page up, if the focus is on the first row, navigates to the header row
+ * * <kbd>Page Down</kbd> - Navigates one page down, if the focus is on the last row, navigates to the growing button
+ * * <kbd>F2</kbd> - Focuses the first tabbable element in the row
+ * * <kbd>F7</kbd> - If focus position is remembered, moves focus to the corresponding focus position row, otherwise to the first tabbable element within the row
+ * * <kbd>[Shift]Tab</kbd> - Move focus to the element in the tab chain outside the table
+
+ *
+ * If the focus is on a cell, the following keyboard shortcuts are available:
+ * * <kbd>Down</kbd> - Navigates down
+ * * <kbd>Up</kbd> - Navigates up
+ * * <kbd>Right</kbd> - Navigates right
+ * * <kbd>Left</kbd> - Navigates left, if the focus is on the first cell of the row, the focus is moved to the row.
+ * * <kbd>Home</kbd> - Navigates to the first cell of the current row, if the focus is on the first cell, navigates to the corresponding row
+ * * <kbd>End</kbd> - Navigates to the last cell of the current row, if the focus is on the last cell, navigates to the corresponding row
+ * * <kbd>Page Up</kbd> - Navigates one page up while keeping the focus in same column
+ * * <kbd>Page Down</kbd> - Navigates one page down while keeping the focus in same column
+ * * <kbd>F2</kbd> - Toggles the focus between the first tabbable cell content and the cell
+ * * <kbd>Enter</kbd> - Focuses the first tabbable cell content
+ * * <kbd>F7</kbd> - If the focus is on an interactive element inside a row, moves focus to the corresponding row and remembers the focus position of the element within the row
+ * * <kbd>[Shift]Tab</kbd> - Move focus to the element in the tab chain outside the table
+
+ *
+ * If the focus is on an interactive cell content, the following keyboard shortcuts are available:
+ * * <kbd>Down</kbd> - Move the focus to the interactive element in the same column of the previous row, unless the focused element prevents the default
+ * * <kbd>Up</kbd> - Move the focus to the interactive element in the same column of the next row, unless the focused element prevents the default
+ * * <kbd>[Shift]Tab</kbd> - Move the focus to the element in the tab chain
  *
  * ### ES6 Module Import
  *
- * `import "@ui5/webcomponents/dist/Table.js";`
- * `import "@ui5/webcomponents/dist/TableColumn.js";` (`ui5-table-column`)
- * `import "@ui5/webcomponents/dist/TableRow.js";` (`ui5-table-row`)
- * `import "@ui5/webcomponents/dist/TableGroupRow.js";` (`ui5-table-group-row`)
- * `import "@ui5/webcomponents/dist/TableCell.js";` (`ui5-table-cell`)
+ * `import "@ui5/webcomponents/dist/Table.js";`\
+ * `import "@ui5/webcomponents/dist/TableRow.js";` (`ui5-table-row`)\
+ * `import "@ui5/webcomponents/dist/TableCell.js";` (`ui5-table-cell`)\
+ * `import "@ui5/webcomponents/dist/TableHeaderRow.js";` (`ui5-table-header-row`)\
+ * `import "@ui5/webcomponents/dist/TableHeaderCell.js";` (`ui5-table-header-cell`)
+ *
  * @constructor
  * @extends UI5Element
+ * @since 2.0.0
  * @public
+ * @experimental This Table web component is available since 2.0 and has been newly implemented to provide better screen reader and keyboard handling support.
+ * Currently, it's considered experimental as its API is subject to change.
+ * This Table replaces the previous Table web component, that has been part of **@ui5/webcomponents** version 1.x.
+ * For compatibility reasons, we moved the previous Table implementation to the **@ui5/webcomponents-compat** package
+ * and will be maintained until the new Table is experimental.
+ * Keep in mind that you can use either the compat/Table, or the main/Table - you can't use them both as they both define the `ui5-table` tag name.
  */
 declare class Table extends UI5Element {
+    eventDetails: {
+        "row-click": TableRowClickEventDetail;
+        "move-over": TableMoveEventDetail;
+        "move": TableMoveEventDetail;
+        "row-action-click": TableRowActionClickEventDetail;
+    };
     /**
-     * Defines the text that will be displayed when there is no data and `hideNoData` is not present.
-     * @default ""
+     * Defines the rows of the component.
+     *
+     * **Note:** Use `ui5-table-row` for the intended design.
+     *
      * @public
      */
-    noDataText: string;
+    rows: Array<TableRow>;
     /**
-     * Defines the text that will be displayed inside the growing button at the bottom of the table,
-     * meant for loading more rows upon press.
+     * Defines the header row of the component.
      *
-     * **Note:** If not specified a built-in text will be displayed.
+     * **Note:** Use `ui5-table-header-row` for the intended design.
      *
-     * **Note:** This property takes effect if `growing` is set to `Button`.
-     * @default ""
-     * @since 1.0.0-rc.15
      * @public
      */
-    growingButtonText: string;
+    headerRow: Array<TableHeaderRow>;
     /**
-     * Defines the subtext that will be displayed under the `growingButtonText`.
+     * Defines the custom visualization if there is no data available.
      *
-     * **Note:** This property takes effect if `growing` is set to `Button`.
-     * @default ""
-     * @since 1.0.0-rc.15
      * @public
      */
-    growingButtonSubtext: string;
+    nodata: Array<HTMLElement>;
     /**
-     * Defines if the value of `noDataText` will be diplayed when there is no rows present in the table.
-     * @default false
-     * @public
-     * @since 1.0.0-rc.15
-     */
-    hideNoData: boolean;
-    /**
-     * Defines whether the table will have growing capability either by pressing a `More` button,
-     * or via user scroll. In both cases `load-more` event is fired.
+     * Defines the features of the component.
      *
-     * Available options:
-     *
-     * `Button` - Shows a `More` button at the bottom of the table, pressing of which triggers the `load-more` event.
-     *
-     * `Scroll` - The `load-more` event is triggered when the user scrolls to the bottom of the table;
-     *
-     * `None` (default) - The growing is off.
-     *
-     * **Restrictions:** `growing="Scroll"` is not supported for Internet Explorer,
-     * and the component will fallback to `growing="Button"`.
-     * @default "None"
-     * @since 1.0.0-rc.12
      * @public
      */
-    growing: `${TableGrowingMode}`;
-    /**
-     * Defines if the table is in busy state.
-     *
-     * In this state the component's opacity is reduced
-     * and busy indicator is displayed at the bottom of the table.
-     * @default false
-     * @since 1.0.0-rc.12
-     * @public
-     */
-    busy: boolean;
-    /**
-     * Defines the delay in milliseconds, after which the busy indicator will show up for this component.
-     * @default 1000
-     * @public
-     */
-    busyDelay: number;
-    /**
-     * Determines whether the column headers remain fixed at the top of the page during
-     * vertical scrolling as long as the Web Component is in the viewport.
-     *
-     * **Restrictions:**
-     *
-     * - Browsers that do not support this feature:
-     *
-     * - Internet Explorer
-     * - Microsoft Edge lower than version 41 (EdgeHTML 16)
-     * - Mozilla Firefox lower than version 59
-     *
-     * - Scrolling behavior:
-     *
-     * - If the Web Component is placed in layout containers that have the `overflow: hidden`
-     * or `overflow: auto` style definition, this can
-     * prevent the sticky elements of the Web Component from becoming fixed at the top of the viewport.
-     * @default false
-     * @public
-     */
-    stickyColumnHeader: boolean;
-    /**
-     * Defines the mode of the component.
-     * @default "None"
-     * @since 1.0.0-rc.15
-     * @public
-     */
-    mode: `${TableMode}`;
+    features: Array<ITableFeature>;
     /**
      * Defines the accessible ARIA name of the component.
+     *
      * @default undefined
      * @public
-     * @since 1.3.0
      */
     accessibleName?: string;
     /**
-     * Receives id(or many ids) of the elements that label the component.
-     * @default ""
+     * Identifies the element (or elements) that labels the component.
+     *
+     * @default undefined
      * @public
-     * @since 1.3.0
      */
-    accessibleNameRef: string;
-    _hiddenColumns: Array<TableColumnInfo>;
-    _noDataDisplayed: boolean;
+    accessibleNameRef?: string;
     /**
-     * Defines the active state of the `More` button.
-     * @private
+     * Defines the text to be displayed when there are no rows in the component.
+     *
+     * @default undefined
+     * @public
      */
-    _loadMoreActive: boolean;
+    noDataText?: string;
     /**
-     * Used to represent the table column header for the purpose of the item navigation as it does not work with DOM objects directly
-     * @private
+     * Defines the mode of the <code>ui5-table</code> overflow behavior.
+     *
+     * Available options are:
+     *
+     * <code>Scroll</code> - Columns are shown as regular columns and horizontal scrolling is enabled.
+     *
+     * <code>Popin</code> - Columns are shown as pop-ins instead of regular columns.
+     *
+     * @default "Scroll"
+     * @public
      */
-    _columnHeader: TableColumnHeaderInfo;
+    overflowMode: `${TableOverflowMode}`;
     /**
-     * Defines if the entire table is in view port.
-     * @private
-     */
-    _inViewport: boolean;
-    /**
-     * Defines whether all rows are selected or not when table is in MultiSelect mode.
+     * Defines if the loading indicator should be shown.
+     *
+     * **Note:** When the component is loading, it is not interactive.
      * @default false
-     * @since 1.0.0-rc.15
-     * @private
-     */
-    _allRowsSelected: boolean;
-    /**
-     * Defines the component rows.
-     *
-     * **Note:** Use `ui5-table-row` for the intended design.
      * @public
      */
-    rows: Array<ITableRow>;
+    loading: boolean;
     /**
-     * Defines the configuration for the columns of the component.
+     * Defines the delay in milliseconds, after which the loading indicator will show up for this component.
      *
-     * **Note:** Use `ui5-table-column` for the intended design.
+     * @default 1000
      * @public
      */
-    columns: Array<TableColumn>;
-    static onDefine(): Promise<void>;
+    loadingDelay: number;
+    /**
+     * Defines the sticky top offset of the table, if other sticky elements outside of the table exist.
+     */
+    stickyTop: string;
+    /**
+     * Defines the maximum number of row actions that is displayed, which determines the width of the row action column.
+     *
+     * **Note:** It is recommended to use a maximum of 3 row actions, as exceeding this limit may take up too much space on smaller screens.
+     *
+     * @default 0
+     * @since 2.7.0
+     * @public
+     */
+    rowActionCount: number;
+    _invalidate: number;
+    _renderNavigated: boolean;
     static i18nBundle: I18nBundle;
-    fnHandleF7: (e: CustomEvent) => void;
-    fnOnRowFocused: (e: CustomEvent) => void;
-    _handleResize: ResizeObserverCallback;
-    moreDataText?: string;
-    tableEndObserved: boolean;
-    visibleColumns: Array<TableColumn>;
-    visibleColumnsCount?: number;
-    lastFocusedElement: HTMLElement | null;
-    growingIntersectionObserver?: IntersectionObserver | null;
-    initialIntersection: boolean;
-    _forwardingFocus: boolean;
-    _prevNestedElementIndex: number;
-    _itemNavigation: ItemNavigation;
-    _prevFocusedRow?: ITableRow;
-    _afterElement?: HTMLElement;
-    _beforeElement?: HTMLElement;
+    _events: string[];
+    _onEventBound: (e: Event) => void;
+    _onResizeBound: ResizeObserverCallback;
+    _tableNavigation?: TableNavigation;
+    _tableDragAndDrop?: TableDragAndDrop;
+    _poppedIn: Array<{
+        col: TableHeaderCell;
+        width: float;
+    }>;
+    _containerWidth: number;
+    _rowsLength: number;
     constructor();
-    onBeforeRendering(): void;
-    onAfterRendering(): void;
     onEnterDOM(): void;
     onExitDOM(): void;
-    _onkeydown(e: KeyboardEvent): void;
-    _handleTab(e: KeyboardEvent): false | void;
-    _focusNextElement(): void;
-    _handleArrowNav(e: KeyboardEvent): void;
-    _handleHomeEndSelection(e: KeyboardEvent): void;
-    /**
-     * Handles Alt + Up/Down.
-     * Switches focus between column header, last focused item, and "More" button (if applicable).
-     * @private
-     */
-    _handleArrowAlt(e: KeyboardEvent): void;
-    /**
-     * Determines the type of the currently focused element.
-     * @private
-     */
-    getFocusedElementType(element: HTMLElement): TableFocusTargetElement | undefined;
-    /**
-     * Toggles focus between the table row's root and the last focused nested element.
-     * @private
-     */
-    _handleF7(e: CustomEvent<TableRowF7PressEventDetail>): void;
+    onBeforeRendering(): void;
+    onAfterRendering(): void;
+    _getSelection(): TableSelection | undefined;
+    _getVirtualizer(): TableVirtualizer | undefined;
+    _onEvent(e: Event): void;
+    _onResize(): void;
     _onfocusin(e: FocusEvent): void;
-    _onForwardBefore(e: CustomEvent<TableRowForwardBeforeEventDetail>): void;
-    _onForwardAfter(e: CustomEvent<TableRowForwardAfterEventDetail>): void;
-    _focusForwardElement(isAfter: boolean): void;
-    _isForwardElement(element: HTMLElement): boolean;
-    _getForwardElement(isAfter: boolean): HTMLElement | null;
-    _getAfterForwardElement(): HTMLElement;
-    _getBeforeForwardElement(): HTMLElement;
-    onRowFocused(e: CustomEvent): void;
-    _onColumnHeaderFocused(): void;
-    _onColumnHeaderClick(e: MouseEvent | KeyboardEvent): void;
-    _onColumnHeaderKeydown(e: KeyboardEvent): void;
-    _onLoadMoreKeydown(e: KeyboardEvent): void;
-    _onLoadMoreKeyup(e: KeyboardEvent): void;
-    _onLoadMoreClick(): void;
-    observeTableEnd(): void;
-    onInteresection(entries: Array<IntersectionObserverEntry>): void;
-    loadMore(): void;
-    _handleSingleSelect(e: CustomEvent<TableRowSelectionRequestedEventDetail>): void;
-    _handleMultiSelect(e: CustomEvent<TableRowSelectionRequestedEventDetail>): void;
-    _handleSelect(e: CustomEvent<TableRowSelectionRequestedEventDetail>): void;
-    _selectAll(): void;
-    getRowParent(child: HTMLElement): ITableRow | undefined;
-    get columnHeader(): HTMLElement | null;
-    get morеBtn(): HTMLElement | null;
-    handleResize(): void;
-    checkTableInViewport(): void;
-    popinContent(): void;
     /**
-     * Gets settings to be propagated from columns to rows.
+     * Refreshes the popin state of the columns.
+     * Syncs the popin state of the columns with the popin state of the header cells.
+     * This is needed when additional rows are manually added and no resize happens.
+     * @private
      */
-    getColumnPropagationSettings(): Array<TableColumnInfo>;
-    getIntersectionObserver(): IntersectionObserver;
+    _refreshPopinState(): void;
+    _onGrow(): void;
+    _getPopinOrderedColumns(reverse: boolean): TableHeaderCell[];
+    _setHeaderPopinState(headerCell: TableHeaderCell, inPopin: boolean, popinWidth: number): void;
+    _isFeature(feature: any): boolean;
+    _isGrowingFeature(feature: any): boolean;
+    _onRowClick(row: TableRow): void;
+    _onRowActionClick(action: TableRowActionBase): void;
     get styles(): {
-        busy: {
-            position: string;
+        table: {
+            "grid-template-columns": string | undefined;
+            "--row-height": string;
+        };
+        spacer: {
+            transform: string | undefined;
+            "will-change": string | undefined;
         };
     };
-    get growsWithButton(): boolean;
-    get growsOnScroll(): boolean;
-    get _growingButtonText(): string;
-    get ariaLabelText(): string;
-    get tableAriaLabelText(): string | undefined;
-    get ariaLabelSelectAllText(): string;
-    get loadMoreAriaLabelledBy(): string;
-    get tableEndDOM(): Element;
-    get busyIndPosition(): string;
-    get isMultiSelect(): boolean;
-    get isSingleSelect(): boolean;
-    get selectedRows(): Array<ITableRow>;
-    get currentItemIdx(): number;
-    get currentItem(): ITableRow;
-    get currentElement(): HTMLElement | undefined;
-    get columnHeaderTabbables(): Array<HTMLElement>;
-    get columnHeaderLastElement(): HTMLElement | null;
+    get _gridTemplateColumns(): string | undefined;
+    get _tableOverflowX(): "auto" | "clip";
+    get _tableOverflowY(): string;
+    get _nodataRow(): TableRow;
+    get _beforeElement(): HTMLElement;
+    get _afterElement(): HTMLElement;
+    get _tableElement(): HTMLElement;
+    get _loadingElement(): HTMLElement;
+    get _effectiveNoDataText(): string;
+    get _ariaLabel(): string | undefined;
+    get _ariaRowCount(): number | undefined;
+    get _ariaMultiSelectable(): boolean | undefined;
+    get _shouldRenderGrowing(): boolean | 0;
+    get _growing(): ITableGrowing;
+    get _stickyElements(): (TableHeaderCell | TableHeaderRow)[];
+    get _scrollContainer(): HTMLElement;
+    get isTable(): boolean;
+    get dropIndicatorDOM(): DropIndicator | null;
+    get _hasRowActions(): boolean;
 }
 export default Table;
-export type { ITableRow, TableColumnInfo, TableRowClickEventDetail, TableSelectionChangeEventDetail, TablePopinChangeEventDetail, };
+export type { ITableFeature, ITableGrowing, TableRowClickEventDetail, TableMoveEventDetail, TableRowActionClickEventDetail, };

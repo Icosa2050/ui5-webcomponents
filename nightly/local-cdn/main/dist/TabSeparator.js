@@ -6,13 +6,13 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 var TabSeparator_1;
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
-import litRender from "@ui5/webcomponents-base/dist/renderer/LitRenderer.js";
+import jsxRenderer from "@ui5/webcomponents-base/dist/renderer/JsxRenderer.js";
 import executeTemplate from "@ui5/webcomponents-base/dist/renderer/executeTemplate.js";
 import customElement from "@ui5/webcomponents-base/dist/decorators/customElement.js";
 import TabContainer from "./TabContainer.js";
 // Templates
-import TabSeparatorInStripTemplate from "./generated/templates/TabSeparatorInStripTemplate.lit.js";
-import TabSeparatorInOverflowTemplate from "./generated/templates/TabSeparatorInOverflowTemplate.lit.js";
+import TabSeparatorInStripTemplate from "./TabSeparatorInStripTemplate.js";
+import TabSeparatorInOverflowTemplate from "./TabSeparatorInOverflowTemplate.js";
 // Styles
 import stripCss from "./generated/themes/TabSeparatorInStrip.css.js";
 import overflowCss from "./generated/themes/TabSeparatorInOverflow.css.js";
@@ -31,13 +31,6 @@ let TabSeparator = TabSeparator_1 = class TabSeparator extends UI5Element {
     }
     static get overflowTemplate() {
         return TabSeparatorInOverflowTemplate;
-    }
-    get classes() {
-        return {
-            root: {
-                "ui5-tc__separator": true,
-            },
-        };
     }
     get isSeparator() {
         return true;
@@ -66,11 +59,16 @@ let TabSeparator = TabSeparator_1 = class TabSeparator extends UI5Element {
     get overflowPresentation() {
         return executeTemplate(TabSeparator_1.overflowTemplate, this);
     }
+    captureRef(ref) {
+        if (ref) {
+            ref.realTabReference = this;
+        }
+    }
 };
 TabSeparator = TabSeparator_1 = __decorate([
     customElement({
         tag: "ui5-tab-separator",
-        renderer: litRender,
+        renderer: jsxRenderer,
     })
 ], TabSeparator);
 TabSeparator.define();

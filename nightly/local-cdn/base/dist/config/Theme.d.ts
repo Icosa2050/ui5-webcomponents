@@ -28,11 +28,12 @@ declare const getDefaultTheme: () => string;
  */
 declare const isTheme: (theme: string) => boolean;
 /**
- * Returns if the currently set theme is part of legacy theme families ("sap_belize" or "sap_fiori_3").
+ * Returns if the currently set theme is part of legacy theme families ("sap_fiori_3").
  * **Note**: in addition, the method checks the base theme of a custom theme, built via the ThemeDesigner.
  *
  * @private
  * @returns { boolean }
  */
 declare const isLegacyThemeFamily: () => boolean;
-export { getTheme, setTheme, isTheme, isLegacyThemeFamily, getDefaultTheme, };
+declare const isLegacyThemeFamilyAsync: () => Promise<boolean>;
+export { getTheme, setTheme, isTheme, isLegacyThemeFamily, isLegacyThemeFamilyAsync, getDefaultTheme, };

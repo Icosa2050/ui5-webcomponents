@@ -47,12 +47,5 @@ declare class DropIndicator extends UI5Element {
     get _positionProperty(): "top" | "left";
     constructor();
     onAfterRendering(): void;
-    get classes(): {
-        root: {
-            "ui5-di-rect": boolean;
-            "ui5-di-needle": boolean;
-        };
-    };
-    get _needle(): HTMLElement | null;
 }
 export default DropIndicator;

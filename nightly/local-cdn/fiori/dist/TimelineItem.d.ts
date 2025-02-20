@@ -1,6 +1,9 @@
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
+import type I18nBundle from "@ui5/webcomponents-base/dist/i18nBundle.js";
+import type { I18nText } from "@ui5/webcomponents-base/dist/i18nBundle.js";
 import type { ITimelineItem } from "./Timeline.js";
-import TimelineLayout from "./types/TimelineLayout.js";
+import type ValueState from "@ui5/webcomponents-base/dist/types/ValueState.js";
+import type TimelineLayout from "./types/TimelineLayout.js";
 /**
  * @class
  *
@@ -11,24 +14,26 @@ import TimelineLayout from "./types/TimelineLayout.js";
  * @extends UI5Element
  * @implements { ITimelineItem }
  * @public
- * @slot {Node[]} default - Determines the description of the `ui5-timeline-item`.
  */
 declare class TimelineItem extends UI5Element implements ITimelineItem {
+    eventDetails: {
+        "name-click": void;
+    };
     /**
      * Defines the icon to be displayed as graphical element within the `ui5-timeline-item`.
      * SAP-icons font provides numerous options.
      *
      * See all the available icons in the [Icon Explorer](https://sdk.openui5.org/test-resources/sap/m/demokit/iconExplorer/webapp/index.html).
-     * @default ""
+     * @default undefined
      * @public
      */
-    icon: string;
+    icon?: string;
     /**
      * Defines the name of the item, displayed before the `title-text`.
-     * @default ""
+     * @default undefined
      * @public
      */
-    name: string;
+    name?: string;
     /**
      * Defines if the `name` is clickable.
      * @default false
@@ -37,16 +42,36 @@ declare class TimelineItem extends UI5Element implements ITimelineItem {
     nameClickable: boolean;
     /**
      * Defines the title text of the component.
-     * @default ""
+     * @default undefined
      * @public
      */
-    titleText: string;
+    titleText?: string;
     /**
      * Defines the subtitle text of the component.
-     * @default ""
+     * @default undefined
      * @public
      */
-    subtitleText: string;
+    subtitleText?: string;
+    /**
+     * Defines the state of the icon displayed in the `ui5-timeline-item`.
+     * @default "None"
+     * @public
+     * @since 2.7.0
+     */
+    state: `${ValueState}`;
+    /**
+     * Defines the content of the `ui5-timeline-item`.
+     * @public
+     */
+    content: Array<Node>;
+    /**
+     * @private
+     */
+    firstItemInTimeline: boolean;
+    /**
+     * @private
+     */
+    isNextItemGroup: boolean;
     forcedTabIndex: string;
     /**
      * Defines the items orientation.
@@ -58,24 +83,34 @@ declare class TimelineItem extends UI5Element implements ITimelineItem {
      * Defines the indicator line width.
      * @private
      */
-    forcedLineWidth: string;
+    forcedLineWidth?: string;
+    /**
+     * @private
+     */
+    hideBubble: boolean;
+    /**
+     * Marks the last `<ui5-timeline-item>`
+     * @private
+     */
+    lastItem: boolean;
+    /**
+     * @private
+     */
+    hidden: boolean;
+    /**
+     * Defines the position of the item in a group.
+     * @private
+     */
+    positionInGroup?: number;
+    static i18nBundle: I18nBundle;
     constructor();
     onNamePress(): void;
     /**
      * Focus the internal link.
      */
     focusLink(): void;
-    get classes(): {
-        indicator: {
-            "ui5-tli-indicator": boolean;
-            "ui5-tli-indicator-short-line": boolean;
-            "ui5-tli-indicator-large-line": boolean;
-        };
-        bubbleArrowPosition: {
-            "ui5-tli-bubble-arrow": boolean;
-            "ui5-tli-bubble-arrow--left": boolean;
-            "ui5-tli-bubble-arrow--top": boolean;
-        };
-    };
+    static typeTextMappings(): Record<string, I18nText>;
+    get timelineItemStateText(): string | undefined;
+    get isGroupItem(): boolean;
 }
 export default TimelineItem;

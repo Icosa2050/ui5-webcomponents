@@ -1,4 +1,6 @@
 import type I18nBundle from "@ui5/webcomponents-base/dist/i18nBundle.js";
+import type { IFormInputElement } from "@ui5/webcomponents-base/dist/features/InputElementsFormSupport.js";
+import type ValueState from "@ui5/webcomponents-base/dist/types/ValueState.js";
 import SliderBase from "./SliderBase.js";
 /**
  * @class
@@ -54,7 +56,7 @@ import SliderBase from "./SliderBase.js";
  * @csspart progress-bar - Used to style the progress bar, which shows the progress of the `ui5-slider`.
  * @csspart handle - Used to style the handle of the `ui5-slider`.
  */
-declare class Slider extends SliderBase {
+declare class Slider extends SliderBase implements IFormInputElement {
     /**
      * Current value of the slider
      * @default 0
@@ -67,6 +69,10 @@ declare class Slider extends SliderBase {
     _valueOnInteractionStart?: number;
     _progressPercentage: number;
     _handlePositionFromStart: number;
+    _lastValidInputValue: string;
+    _tooltipInputValue: string;
+    _tooltipInputValueState: `${ValueState}`;
+    get formFormattedValue(): string;
     static i18nBundle: I18nBundle;
     constructor();
     /**
@@ -88,7 +94,7 @@ declare class Slider extends SliderBase {
      */
     _onmousedown(e: TouchEvent | MouseEvent): void;
     _onfocusin(): void;
-    _onfocusout(): void;
+    _onfocusout(e: FocusEvent): void;
     /**
      * Called when the user moves the slider
      * @private
@@ -97,7 +103,9 @@ declare class Slider extends SliderBase {
     /** Called when the user finish interacting with the slider
      * @private
      */
-    _handleUp(): void;
+    _handleUp(e: TouchEvent | MouseEvent): void;
+    _onInputFocusOut(e: FocusEvent): void;
+    _updateInputValue(): void;
     /** Determines if the press is over the handle
      * @private
      */
@@ -107,6 +115,7 @@ declare class Slider extends SliderBase {
      */
     _updateHandleAndProgress(newValue: number): void;
     _handleActionKeyPress(e: KeyboardEvent): void;
+    get inputValue(): string;
     get styles(): {
         progress: {
             transform: string;
@@ -130,7 +139,8 @@ declare class Slider extends SliderBase {
     get tooltipValue(): string;
     get _ariaDisabled(): true | undefined;
     get _ariaLabelledByText(): string;
-    static onDefine(): Promise<void>;
+    get _ariaDescribedByInputText(): string;
+    get _ariaLabelledByInputText(): string;
     get tickmarksObject(): boolean[];
 }
 export default Slider;

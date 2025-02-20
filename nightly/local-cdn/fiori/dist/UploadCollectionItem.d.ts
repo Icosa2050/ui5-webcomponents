@@ -1,5 +1,6 @@
 import type I18nBundle from "@ui5/webcomponents-base/dist/i18nBundle.js";
 import ValueState from "@ui5/webcomponents-base/dist/types/ValueState.js";
+import type Input from "@ui5/webcomponents/dist/Input.js";
 import ListItem from "@ui5/webcomponents/dist/ListItem.js";
 import UploadState from "./types/UploadState.js";
 import "@ui5/webcomponents-icons/dist/refresh.js";
@@ -21,12 +22,21 @@ import "@ui5/webcomponents-icons/dist/edit.js";
  * @since 1.0.0-rc.7
  */
 declare class UploadCollectionItem extends ListItem {
+    eventDetails: ListItem["eventDetails"] & {
+        "file-name-click": void;
+        "rename": void;
+        "terminate": void;
+        "retry": void;
+        "focus-requested": void;
+        "_uci-delete": void;
+        "request-delete": void;
+    };
     /**
      * Holds an instance of `File` associated with this item.
      * @default null
      * @public
      */
-    file?: File | null;
+    file: File | null;
     /**
      * The name of the file.
      * @default ""
@@ -72,9 +82,15 @@ declare class UploadCollectionItem extends ListItem {
      */
     progress: number;
     /**
-     * If set to `Uploading` or `Error`, a progress indicator showing the `progress` is displayed.
-     * Also if set to `Error`, a refresh button is shown. When this icon is pressed `retry` event is fired.
-     * If set to `Uploading`, a terminate button is shown. When this icon is pressed `terminate` event is fired.
+     * Upload state.
+     *
+     * Depending on this property, the item displays the following:
+     *
+     * - `Ready` - progress indicator is displayed.
+     * - `Uploading` - progress indicator and terminate button are displayed. When the terminate button is pressed, `terminate` event is fired.
+     * - `Error` - progress indicator and retry button are displayed. When the retry button is pressed, `retry` event is fired.
+     * - `Complete` - progress indicator is not displayed.
+     *
      * @default "Ready"
      * @public
      */
@@ -93,18 +109,19 @@ declare class UploadCollectionItem extends ListItem {
      */
     thumbnail: Array<HTMLElement>;
     static i18nFioriBundle: I18nBundle;
-    static onDefine(): Promise<void>;
     /**
      * @override
      */
     onDetailClick(): Promise<void>;
     _initInputField(): Promise<void>;
+    get editInpElement(): Input | null;
+    _onkeyup(e: KeyboardEvent): void;
     _onDetailKeyup(e: KeyboardEvent): void;
     _onInputFocusin(e: FocusEvent): void;
     _onInputKeyDown(e: KeyboardEvent): void;
     _onRename(): void;
     _onRenameKeyup(e: KeyboardEvent): void;
-    _onRenameCancel(e: KeyboardEvent): Promise<void>;
+    _onRenameCancel(e: KeyboardEvent | MouseEvent): Promise<void>;
     _onRenameCancelKeyup(e: KeyboardEvent): void;
     _focus(): void;
     _onFileNameClick(): void;

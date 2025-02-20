@@ -23,7 +23,17 @@ var MessageStripDesign;
      * Message is a warning
      * @public
      */
-    MessageStripDesign["Warning"] = "Warning";
+    MessageStripDesign["Critical"] = "Critical";
+    /**
+    * Message uses custom color set 1
+    * @public
+    */
+    MessageStripDesign["ColorSet1"] = "ColorSet1";
+    /**
+    *  Message uses custom color set 2
+    * @public
+    */
+    MessageStripDesign["ColorSet2"] = "ColorSet2";
 })(MessageStripDesign || (MessageStripDesign = {}));
 export default MessageStripDesign;
 //# sourceMappingURL=MessageStripDesign.js.map

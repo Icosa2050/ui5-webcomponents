@@ -1,5 +1,5 @@
-import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
 import type { IOption } from "./Select.js";
+import ListItemBase from "./ListItemBase.js";
 /**
  * @class
  *
@@ -11,56 +11,12 @@ import type { IOption } from "./Select.js";
  *
  * `import "@ui5/webcomponents/dist/Option.js";`
  * @constructor
- * @extends UI5Element
+ * @extends ListItemBase
  * @implements {IOption}
  * @public
- * @abstract
  */
-declare class Option extends UI5Element implements IOption {
-    /**
-     * Defines the selected state of the component.
-     * @default false
-     * @public
-     */
-    selected: boolean;
-    /**
-     * Defines the tooltip of the component.
-     * @default ""
-     * @private
-     * @since 1.1.0
-     */
-    title: string;
-    /**
-     * Defines the `icon` source URI.
-     *
-     * **Note:**
-     * SAP-icons font provides numerous built-in icons. To find all the available icons, see the
-     * [Icon Explorer](https://sdk.openui5.org/test-resources/sap/m/demokit/iconExplorer/webapp/index.html).
-     * @default null
-     * @public
-     */
-    icon?: string | null;
-    /**
-     * Defines the value of the `ui5-select` inside an HTML Form element when this component is selected.
-     * For more information on HTML Form support, see the `name` property of `ui5-select`.
-     * @default ""
-     * @public
-     */
-    value: string;
-    /**
-     * Defines the additional text displayed at the end of the option element.
-     * @default ""
-     * @public
-     * @since 1.3.0
-     */
-    additionalText: string;
-    /**
-     * Defines the focused state of the component.
-     * @default false
-     * @since 1.0.0-rc.13
-     * @private
-     */
-    focused: boolean;
+declare class Option extends ListItemBase implements IOption {
+    eventDetails: ListItemBase["eventDetails"];
     /**
      * Defines the text of the component.
      *
@@ -68,6 +24,44 @@ declare class Option extends UI5Element implements IOption {
      * @public
      */
     text: Array<Node>;
-    get stableDomRef(): string;
+    /**
+     * Defines the value of the `ui5-select` inside an HTML Form element when this component is selected.
+     * For more information on HTML Form support, see the `name` property of `ui5-select`.
+     * @default undefined
+     * @public
+     */
+    value?: string;
+    /**
+     * Defines the `icon` source URI.
+     *
+     * **Note:**
+     * SAP-icons font provides numerous built-in icons. To find all the available icons, see the
+     * [Icon Explorer](https://sdk.openui5.org/test-resources/sap/m/demokit/iconExplorer/webapp/index.html).
+     * @default undefined
+     * @public
+     */
+    icon?: string;
+    /**
+     * Defines the `additionalText`, displayed in the end of the option.
+     * @default undefined
+     * @public
+     * @since 1.0.0-rc.15
+     */
+    additionalText?: string;
+    /**
+     * Defines the tooltip of the option.
+     * @default undefined
+     * @public
+     * @since 2.0.0
+     */
+    tooltip?: string;
+    /**
+     * Defines the selected state of the component.
+     * @default false
+     * @public
+     */
+    selected: boolean;
+    get displayIconBegin(): boolean;
+    get effectiveDisplayText(): string;
 }
 export default Option;

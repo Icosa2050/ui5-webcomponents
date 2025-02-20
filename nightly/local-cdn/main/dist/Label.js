@@ -6,14 +6,13 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 var Label_1;
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
-import litRender from "@ui5/webcomponents-base/dist/renderer/LitRenderer.js";
-import property from "@ui5/webcomponents-base/dist/decorators/property.js";
 import customElement from "@ui5/webcomponents-base/dist/decorators/customElement.js";
-import { getI18nBundle } from "@ui5/webcomponents-base/dist/i18nBundle.js";
-import WrappingType from "./types/WrappingType.js";
+import property from "@ui5/webcomponents-base/dist/decorators/property.js";
+import i18n from "@ui5/webcomponents-base/dist/decorators/i18n.js";
+import jsxRenderer from "@ui5/webcomponents-base/dist/renderer/JsxRenderer.js";
 import { LABEL_COLON } from "./generated/i18n/i18n-defaults.js";
 // Template
-import LabelTemplate from "./generated/templates/LabelTemplate.lit.js";
+import LabelTemplate from "./LabelTemplate.js";
 // Styles
 import labelCss from "./generated/themes/Label.css.js";
 /**
@@ -41,8 +40,34 @@ import labelCss from "./generated/themes/Label.css.js";
  * **Note:** Although this slot accepts HTML Elements, it is strongly recommended that you only use text in order to preserve the intended design.
  */
 let Label = Label_1 = class Label extends UI5Element {
-    static async onDefine() {
-        Label_1.i18nBundle = await getI18nBundle("@ui5/webcomponents");
+    constructor() {
+        super(...arguments);
+        /**
+         * Defines whether colon is added to the component text.
+         *
+         * **Note:** Usually used in forms.
+         * @default false
+         * @public
+         */
+        this.showColon = false;
+        /**
+         * Defines whether an asterisk character is added to the component text.
+         *
+         * **Note:** Usually indicates that user input (bound with the `for` property) is required.
+         * In that case the `required` property of
+         * the corresponding input should also be set.
+         * @default false
+         * @public
+         */
+        this.required = false;
+        /**
+         * Defines how the text of a component will be displayed when there is not enough space.
+         *
+         * **Note:** for option "Normal" the text will wrap and the words will not be broken based on hyphenation.
+         * @default "Normal"
+         * @public
+         */
+        this.wrappingType = "Normal";
     }
     _onclick() {
         if (!this.for) {
@@ -67,12 +92,15 @@ __decorate([
     property({ type: Boolean })
 ], Label.prototype, "required", void 0);
 __decorate([
-    property({ type: WrappingType, defaultValue: WrappingType.None })
+    property()
 ], Label.prototype, "wrappingType", void 0);
+__decorate([
+    i18n("@ui5/webcomponents")
+], Label, "i18nBundle", void 0);
 Label = Label_1 = __decorate([
     customElement({
         tag: "ui5-label",
-        renderer: litRender,
+        renderer: jsxRenderer,
         template: LabelTemplate,
         styles: labelCss,
         languageAware: true,

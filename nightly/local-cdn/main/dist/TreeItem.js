@@ -5,10 +5,11 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 import customElement from "@ui5/webcomponents-base/dist/decorators/customElement.js";
+import jsxRenderer from "@ui5/webcomponents-base/dist/renderer/JsxRenderer.js";
 import property from "@ui5/webcomponents-base/dist/decorators/property.js";
 import TreeItemBase from "./TreeItemBase.js";
 // Template
-import TreeItemTemplate from "./generated/templates/TreeItemTemplate.lit.js";
+import TreeItemTemplate from "./TreeItemTemplate.js";
 // Styles
 import treeItemCss from "./generated/themes/TreeItem.css.js";
 /**
@@ -31,7 +32,7 @@ import treeItemCss from "./generated/themes/TreeItem.css.js";
  */
 let TreeItem = class TreeItem extends TreeItemBase {
     get _showTitle() {
-        return this.text.length;
+        return this.text?.length;
     }
 };
 __decorate([
@@ -42,6 +43,7 @@ __decorate([
 ], TreeItem.prototype, "additionalText", void 0);
 TreeItem = __decorate([
     customElement({
+        renderer: jsxRenderer,
         tag: "ui5-tree-item",
         template: TreeItemTemplate,
         styles: [TreeItemBase.styles, treeItemCss],

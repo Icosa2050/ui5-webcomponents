@@ -1,7 +1,7 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "data-input-arrow";
-const pathData = "M0 350V192c0-5 2-7 7-7h201c5 0 7-2 7-7V69c0-4 2-6 7-6 2 0 3 0 4 1l282 200c3 2 4 4 4 6s-1 4-4 6L226 478c-1 1-3 2-4 2-5 0-7-2-7-7V364c0-5-2-7-7-7H7c-5 0-7-2-7-7zm38-120v82c0 5 2 7 7 7h201c5 0 7 2 7 7v72c0 5 2 7 7 7 1 0 3-1 4-2l177-127c3-2 4-4 4-6s-1-4-4-6L264 138c-1-1-2-1-4-1-5 0-7 2-7 6v73c0 5-2 7-7 7H45c-5 0-7 2-7 7z";
+const pathData = "M501 232c7 4 10 12 10 21s-4 17-10 21L256 447c-5 3-10 5-15 5h-3c-15 0-26-11-26-26v-70H24c-13 0-25-12-25-26V176c0-14 12-25 25-25h188V80c0-14 11-26 26-26 6 0 14 2 18 6zM263 379l178-126-178-126v75H50v103h213v74z";
 const ltr = false;
 const accData = null;
 const collection = "tnt-v3";

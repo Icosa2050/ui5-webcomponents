@@ -3,11 +3,10 @@ import type I18nBundle from "@ui5/webcomponents-base/dist/i18nBundle.js";
 import type { ListSelectionChangeEventDetail } from "@ui5/webcomponents/dist/List.js";
 import "./illustrations/Tent.js";
 import type UploadCollectionItem from "./UploadCollectionItem.js";
-import "@ui5/webcomponents-icons/dist/upload-to-cloud.js";
 import "@ui5/webcomponents-icons/dist/document.js";
 import type { DnDEventListener, DnDEventListenerParam } from "./upload-utils/UploadCollectionBodyDnD.js";
 import UploadCollectionDnDOverlayMode from "./types/UploadCollectionDnDMode.js";
-import UploadCollectionSelectionMode from "./types/UploadCollectionSelectionMode.js";
+import type UploadCollectionSelectionMode from "./types/UploadCollectionSelectionMode.js";
 type UploadCollectionSelectionChangeEventDetail = {
     selectedItems: Array<UploadCollectionItem>;
 };
@@ -31,6 +30,10 @@ type UploadCollectionItemDeleteEventDetail = {
  * @since 1.0.0-rc.7
  */
 declare class UploadCollection extends UI5Element {
+    eventDetails: {
+        "item-delete": UploadCollectionItemDeleteEventDetail;
+        "selection-change": UploadCollectionSelectionChangeEventDetail;
+    };
     /**
      * Defines the selection mode of the `ui5-upload-collection`.
      *
@@ -40,16 +43,16 @@ declare class UploadCollection extends UI5Element {
     selectionMode: `${UploadCollectionSelectionMode}`;
     /**
      * Allows you to set your own text for the 'No data' description.
-     * @default ""
+     * @default undefined
      * @public
      */
-    noDataDescription: string;
+    noDataDescription?: string;
     /**
      * Allows you to set your own text for the 'No data' text.
-     * @default ""
+     * @default undefined
      * @public
      */
-    noDataText: string;
+    noDataText?: string;
     /**
      * By default there will be drag and drop overlay shown over the `ui5-upload-collection` when files
      * are dragged. If you don't intend to use drag and drop, set this property.
@@ -62,17 +65,17 @@ declare class UploadCollection extends UI5Element {
     hideDragOverlay: boolean;
     /**
      * Defines the accessible ARIA name of the component.
-     * @default ""
+     * @default undefined
      * @public
      * @since 1.0.0-rc.16
      */
-    accessibleName: string;
+    accessibleName?: string;
     /**
      * Indicates what overlay to show when files are being dragged.
      * @default "None"
      * @private
      */
-    _dndOverlayMode: UploadCollectionDnDOverlayMode;
+    _dndOverlayMode: `${UploadCollectionDnDOverlayMode}`;
     /**
      * Defines the items of the `ui5-upload-collection`.
      *
@@ -91,7 +94,6 @@ declare class UploadCollection extends UI5Element {
     header: Array<HTMLElement>;
     _bodyDnDHandler: DnDEventListener;
     static i18nBundle: I18nBundle;
-    static onDefine(): Promise<void>;
     constructor();
     bodyDnDHandler(e: DnDEventListenerParam): void;
     onEnterDOM(): void;
@@ -106,15 +108,6 @@ declare class UploadCollection extends UI5Element {
         content: {
             "ui5-uc-content": boolean;
             "ui5-uc-content-no-data": boolean;
-        };
-        dndOverlay: {
-            "uc-dnd-overlay": boolean;
-            "uc-drag-overlay": boolean;
-            "uc-drop-overlay": boolean;
-        };
-        noFiles: {
-            "uc-no-files": boolean;
-            "uc-no-files-dnd-overlay": boolean;
         };
     };
     get _root(): Element | null;

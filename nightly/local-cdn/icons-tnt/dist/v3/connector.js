@@ -1,7 +1,7 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "connector";
-const pathData = "M16 180h480c11 0 16 5 16 16s-5 16-16 16H16c-11 0-16-5-16-16s5-16 16-16zm459 99v-11c11-7 20-12 27-24h8v96h-12v-75c-4 4-8 7-11 8-3 3-7 5-12 6zM16 257c5-5 8-9 9-13h7v96H21v-75c-3 3-6 6-10 8-4 3-8 5-11 6v-11c7-3 11-7 16-11z";
+const pathData = "M483 224H29c-16 0-29-13-29-29s13-28 29-28h454c16 0 29 12 29 28s-13 29-29 29zm0 191c-11 0-21-10-21-21v-84l-15 5c-11 3-24-3-27-13-4-12 3-23 14-28l42-14c7-3 15-1 20 3 6 4 9 10 9 17v114c0 11-10 21-22 21zm-405 0c-12 0-20-10-20-21v-84l-16 5c-10 3-23-3-26-13-4-12 1-23 13-28l43-14c6-1 13-1 19 3 5 4 8 10 8 17v114c0 11-8 21-21 21z";
 const ltr = false;
 const accData = null;
 const collection = "tnt-v3";

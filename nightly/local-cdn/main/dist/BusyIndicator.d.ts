@@ -1,7 +1,7 @@
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
 import type I18nBundle from "@ui5/webcomponents-base/dist/i18nBundle.js";
 import type { Timeout } from "@ui5/webcomponents-base/dist/types.js";
-import BusyIndicatorSize from "./types/BusyIndicatorSize.js";
+import type BusyIndicatorSize from "./types/BusyIndicatorSize.js";
 import BusyIndicatorTextPlacement from "./types/BusyIndicatorTextPlacement.js";
 /**
  * @class
@@ -45,10 +45,10 @@ declare class BusyIndicator extends UI5Element {
     /**
      * Defines text to be displayed below the component. It can be used to inform the user of the current operation.
      * @public
-     * @default ""
+     * @default undefined
      * @since 1.0.0-rc.7
      */
-    text: string;
+    text?: string;
     /**
      * Defines the size of the component.
      * @default "M"
@@ -87,17 +87,11 @@ declare class BusyIndicator extends UI5Element {
     constructor();
     onEnterDOM(): void;
     onExitDOM(): void;
-    static onDefine(): Promise<void>;
     get ariaTitle(): string;
     get labelId(): string | undefined;
-    get classes(): {
-        root: {
-            "ui5-busy-indicator-root": boolean;
-        };
-    };
     get textPosition(): {
-        top: boolean | "";
-        bottom: boolean | "";
+        top: boolean | "" | undefined;
+        bottom: boolean | "" | undefined;
     };
     onBeforeRendering(): void;
     _handleKeydown(e: KeyboardEvent): void;

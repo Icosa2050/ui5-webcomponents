@@ -1,3 +1,2 @@
-import type { StyleData } from "@ui5/webcomponents-base/dist/types.js";
-declare const styleData: StyleData;
-export default styleData;
+declare const _default: ":host{display:inline-block;width:100%}.ui5-tab-root{width:100%;height:100%}\n";
+export default _default;

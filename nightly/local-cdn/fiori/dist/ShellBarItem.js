@@ -6,7 +6,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
 import property from "@ui5/webcomponents-base/dist/decorators/property.js";
-import event from "@ui5/webcomponents-base/dist/decorators/event.js";
+import event from "@ui5/webcomponents-base/dist/decorators/event-strict.js";
 import customElement from "@ui5/webcomponents-base/dist/decorators/customElement.js";
 /**
  * Interface for components that may be slotted inside `ui5-shellbar` as items
@@ -29,9 +29,9 @@ let ShellBarItem = class ShellBarItem extends UI5Element {
         return this.getAttribute("stable-dom-ref") || `${this._id}-stable-dom-ref`;
     }
     fireClickEvent(e) {
-        return this.fireEvent("click", {
+        return this.fireDecoratorEvent("click", {
             targetRef: e.target,
-        }, true);
+        });
     }
 };
 __decorate([
@@ -47,15 +47,13 @@ ShellBarItem = __decorate([
     customElement("ui5-shellbar-item")
     /**
      * Fired, when the item is pressed.
-     * @allowPreventDefault
      * @param {HTMLElement} targetRef DOM ref of the clicked element
      * @public
      */
     ,
     event("click", {
-        detail: {
-            targetRef: { type: HTMLElement },
-        },
+        bubbles: true,
+        cancelable: true,
     })
 ], ShellBarItem);
 ShellBarItem.define();

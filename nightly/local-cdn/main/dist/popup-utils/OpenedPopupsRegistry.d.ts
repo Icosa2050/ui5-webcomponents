@@ -1,4 +1,4 @@
-import Popup from "../Popup.js";
+import type Popup from "../Popup.js";
 type RegisteredPopup = {
     instance: Popup;
     parentPopovers: Array<Popup>;

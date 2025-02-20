@@ -12,15 +12,15 @@ var ValueState;
     /**
      * @public
      */
-    ValueState["Success"] = "Success";
+    ValueState["Positive"] = "Positive";
     /**
      * @public
      */
-    ValueState["Warning"] = "Warning";
+    ValueState["Critical"] = "Critical";
     /**
      * @public
      */
-    ValueState["Error"] = "Error";
+    ValueState["Negative"] = "Negative";
     /**
      * @public
      */

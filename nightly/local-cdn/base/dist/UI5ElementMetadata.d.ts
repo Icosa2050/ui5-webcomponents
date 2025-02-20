@@ -1,4 +1,4 @@
-import DataType from "./types/DataType.js";
+import type UI5Element from "./UI5Element.js";
 type SlotInvalidation = {
     properties: boolean | Array<string>;
     slots: boolean | Array<string>;
@@ -9,19 +9,27 @@ type Slot = {
     propertyName?: string;
     individualSlots?: boolean;
     invalidateOnChildChange?: boolean | SlotInvalidation;
-    cloned?: boolean;
 };
 type SlotValue = Node;
 type Property = {
-    type?: BooleanConstructor | StringConstructor | ObjectConstructor | DataType;
-    validator?: DataType;
-    defaultValue?: PropertyValue;
+    type?: BooleanConstructor | StringConstructor | ObjectConstructor | NumberConstructor | ArrayConstructor;
     noAttribute?: boolean;
-    multiple?: boolean;
-    compareValues?: boolean;
+    converter?: {
+        fromAttribute(value: string | null, type: unknown): string | number | boolean | null | undefined;
+        toAttribute(value: unknown, type: unknown): string | null;
+    };
 };
-type PropertyValue = boolean | number | string | object | undefined | null | DataType;
-type EventData = Record<string, object>;
+type PropertyValue = boolean | number | string | object | undefined | null;
+type EventData = Record<string, {
+    detail?: Record<string, object>;
+    cancelable?: boolean;
+    bubbles?: boolean;
+}>;
+type I18nBundleAccessorValue = {
+    bundleName: string;
+    target: typeof UI5Element;
+};
+type I18nBundleAccessors = Record<string, I18nBundleAccessorValue>;
 type Metadata = {
     tag?: string;
     managedSlots?: boolean;
@@ -31,7 +39,11 @@ type Metadata = {
     fastNavigation?: boolean;
     themeAware?: boolean;
     languageAware?: boolean;
+    cldr?: boolean;
+    formAssociated?: boolean;
     shadowRootOptions?: Partial<ShadowRootInit>;
+    features?: Array<string>;
+    i18n?: I18nBundleAccessors;
 };
 type State = Record<string, PropertyValue | Array<SlotValue>>;
 /**
@@ -43,13 +55,6 @@ declare class UI5ElementMetadata {
     _initialState: State | undefined;
     constructor(metadata: Metadata);
     getInitialState(): State;
-    /**
-     * Validates the property's value and returns it if correct
-     * or returns the default value if not.
-     * **Note:** Only intended for use by UI5Element.js
-     * @public
-     */
-    static validatePropertyValue(value: PropertyValue, propData: Property): PropertyValue;
     /**
      * Validates the slot's value and returns it if correct
      * or throws an exception if not.
@@ -130,7 +135,15 @@ declare class UI5ElementMetadata {
      * Determines whether this UI5 Element has any theme dependant carachteristics.
      */
     isThemeAware(): boolean;
+    /**
+     * Determines whether this UI5 Element needs CLDR assets to be fetched to work correctly
+     */
+    needsCLDR(): boolean;
     getShadowRootOptions(): Partial<ShadowRootInit>;
+    /**
+     * Determines whether this UI5 Element has any theme dependant carachteristics.
+     */
+    isFormAssociated(): boolean;
     /**
      * Matches a changed entity (property/slot) with the given name against the "invalidateOnChildChange" configuration
      * and determines whether this should cause and invalidation
@@ -140,6 +153,7 @@ declare class UI5ElementMetadata {
      * @param name the name of the property/slot that changed
      */
     shouldInvalidateOnChildChange(slotName: string, type: "property" | "slot", name: string): boolean;
+    getI18n(): I18nBundleAccessors;
 }
 export default UI5ElementMetadata;
 export type { Property, PropertyValue, Slot, SlotValue, EventData, State, Metadata, };

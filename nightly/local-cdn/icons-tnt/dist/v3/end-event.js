@@ -1,7 +1,7 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "end-event";
-const pathData = "M256 0c141 0 256 115 256 256S397 512 256 512 0 397 0 256 115 0 256 0zm-1 448c107 0 192-85 192-192S362 64 255 64 63 149 63 256s85 192 192 192z";
+const pathData = "M255 512C114 512-1 397-1 255-1 114 114 0 255 0s256 114 256 255c0 142-115 257-256 257zm0-423c-93 0-166 74-166 166 0 94 73 167 166 167 94 0 166-73 166-167 0-92-72-166-166-166z";
 const ltr = false;
 const accData = null;
 const collection = "tnt-v3";

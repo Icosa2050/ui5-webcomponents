@@ -1,20 +1,19 @@
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
+import type { AccessibilityAttributes } from "@ui5/webcomponents-base/dist/types.js";
 import type { I18nText } from "@ui5/webcomponents-base/dist/i18nBundle.js";
 import type I18nBundle from "@ui5/webcomponents-base/dist/i18nBundle.js";
 import type { ITabbable } from "@ui5/webcomponents-base/dist/delegate/ItemNavigation.js";
 import LinkDesign from "./types/LinkDesign.js";
-import WrappingType from "./types/WrappingType.js";
-import HasPopup from "./types/HasPopup.js";
+import type WrappingType from "./types/WrappingType.js";
+import type LinkAccessibleRole from "./types/LinkAccessibleRole.js";
+import type InteractiveAreaSize from "./types/InteractiveAreaSize.js";
 type LinkClickEventDetail = {
     altKey: boolean;
     ctrlKey: boolean;
     metaKey: boolean;
     shiftKey: boolean;
 };
-type AccessibilityAttributes = {
-    expanded?: "true" | "false" | boolean;
-    hasPopup?: `${HasPopup}`;
-};
+type LinkAccessibilityAttributes = Pick<AccessibilityAttributes, "expanded" | "hasPopup" | "current">;
 /**
  * @class
  *
@@ -49,11 +48,16 @@ type AccessibilityAttributes = {
  * @constructor
  * @extends UI5Element
  * @public
+ * @csspart icon - Used to style the provided icon within the link
+ * @csspart endIcon - Used to style the provided endIcon within the link
  * @slot {Array<Node>} default - Defines the text of the component.
  *
  * **Note:** Although this slot accepts HTML Elements, it is strongly recommended that you only use text in order to preserve the intended design.
  */
 declare class Link extends UI5Element implements ITabbable {
+    eventDetails: {
+        click: LinkClickEventDetail;
+    };
     /**
      * Defines whether the component is disabled.
      *
@@ -64,19 +68,19 @@ declare class Link extends UI5Element implements ITabbable {
     disabled: boolean;
     /**
      * Defines the tooltip of the component.
-     * @default ""
-     * @private
-     * @since 1.18.0
+     * @default undefined
+     * @public
+     * @since 2.0.0
      */
-    title: string;
+    tooltip?: string;
     /**
      * Defines the component href.
      *
      * **Note:** Standard hyperlink behavior is supported.
-     * @default ""
+     * @default undefined
      * @public
      */
-    href: string;
+    href?: string;
     /**
      * Defines the component target.
      *
@@ -89,10 +93,10 @@ declare class Link extends UI5Element implements ITabbable {
      * - `_search`
      *
      * **This property must only be used when the `href` property is set.**
-     * @default ""
+     * @default undefined
      * @public
      */
-    target: string;
+    target?: string;
     /**
      * Defines the component design.
      *
@@ -102,82 +106,120 @@ declare class Link extends UI5Element implements ITabbable {
      */
     design: `${LinkDesign}`;
     /**
+     * Defines the target area size of the link:
+     * - **InteractiveAreaSize.Normal**: The default target area size.
+     * - **InteractiveAreaSize.Large**: The target area size is enlarged to 24px in height.
+     *
+     * **Note:**The property is designed to make links easier to activate and helps meet the WCAG 2.2 Target Size requirement. It is applicable only for the SAP Horizon themes.
+     * **Note:**To improve <code>ui5-link</code>'s reliability and usability, it is recommended to use the <code>InteractiveAreaSize.Large</code> value in scenarios where the <code>ui5-link</code> component is placed inside another interactive component, such as a list item or a table cell.
+     * Setting the <code>interactiveAreaSize</code> property to <code>InteractiveAreaSize.Large</code> increases the <code>ui5-link</code>'s invisible touch area. As a result, the user's intended one-time selection command is more likely to activate the desired <code>ui5-link</code>, with minimal chance of unintentionally activating the underlying component.
+     *
+     * @public
+     * @since 2.8.0
+     * @default "Normal"
+     */
+    interactiveAreaSize: `${InteractiveAreaSize}`;
+    /**
      * Defines how the text of a component will be displayed when there is not enough space.
      *
-     * **Note:** for option "Normal" the text will wrap and the words will not be broken based on hyphenation.
-     * @default "None"
+     * **Note:** By default the text will wrap. If "None" is set - the text will truncate.
+     * @default "Normal"
      * @public
      */
     wrappingType: `${WrappingType}`;
     /**
      * Defines the accessible ARIA name of the component.
-     * @default ""
+     * @default undefined
      * @public
      * @since 1.2.0
      */
-    accessibleName: string;
+    accessibleName?: string;
     /**
      * Receives id(or many ids) of the elements that label the input
-     * @default ""
+     * @default undefined
      * @public
      * @since 1.0.0-rc.15
      */
-    accessibleNameRef: string;
+    accessibleNameRef?: string;
     /**
      * Defines the ARIA role of the component.
      *
-     * **Note:** Use the "button" role in cases when navigation is not expected to occur and the href property is not defined.
-     * @default "link"
+     * **Note:** Use the <code>LinkAccessibleRole.Button</code> role in cases when navigation is not expected to occur and the href property is not defined.
+     * @default "Link"
      * @public
      * @since 1.9.0
      */
-    accessibleRole: string;
+    accessibleRole: `${LinkAccessibleRole}`;
     /**
-     * An object of strings that defines several additional accessibility attribute values
-     * for customization depending on the use case.
+     * Defines the additional accessibility attributes that will be applied to the component.
+     * The following fields are supported:
      *
-     * It supports the following fields:
+     * - **expanded**: Indicates whether the button, or another grouping element it controls, is currently expanded or collapsed.
+     * Accepts the following string values: `true` or `false`.
      *
-     * - `expanded`: Indicates whether the anchor element, or another grouping element it controls, is currently expanded or collapsed. Accepts the following string values:
-     *	- `true`
-     *	- `false`
-     * - `hasPopup`: Indicates the availability and type of interactive popup element, such as menu or dialog, that can be triggered by the anchor element. Accepts the following string values:
-     *	- `Dialog`
-     *	- `Grid`
-     *	- `ListBox`
-     *	- `Menu`
-     *	- `Tree`
+     * - **hasPopup**: Indicates the availability and type of interactive popup element, such as menu or dialog, that can be triggered by the button.
+     * Accepts the following string values: `dialog`, `grid`, `listbox`, `menu` or `tree`.
+     *
      * @public
      * @since 1.1.0
      * @default {}
      */
-    accessibilityAttributes: AccessibilityAttributes;
-    _rel: string | undefined;
-    forcedTabIndex: string;
+    accessibilityAttributes: LinkAccessibilityAttributes;
     /**
-     * Indicates if the element is on focus.
-     * @private
+     * Defines the accessible description of the component.
+     * @default undefined
+     * @public
+     * @since 2.5.0
      */
-    focused: boolean;
+    accessibleDescription?: string;
+    /**
+     * Defines the icon, displayed as graphical element within the component before the link's text.
+     * The SAP-icons font provides numerous options.
+     *
+     * **Note:** Usage of icon-only link is not supported, the link must always have a text.
+     *
+     * **Note:** We recommend using аn icon in the beginning or the end only, and with text.
+     *
+     * See all the available icons within the [Icon Explorer](https://sdk.openui5.org/test-resources/sap/m/demokit/iconExplorer/webapp/index.html).
+     * @default undefined
+     * @since 2.0.0
+     * @public
+     */
+    icon?: string;
+    /**
+     * Defines the icon, displayed as graphical element within the component after the link's text.
+     * The SAP-icons font provides numerous options.
+     *
+     * **Note:** Usage of icon-only link is not supported, the link must always have a text.
+     *
+     * **Note:** We recommend using аn icon in the beginning or the end only, and with text.
+     *
+     * See all the available icons within the [Icon Explorer](https://sdk.openui5.org/test-resources/sap/m/demokit/iconExplorer/webapp/index.html).
+     * @default undefined
+     * @since 2.0.0
+     * @public
+     */
+    endIcon?: string;
+    _rel: string | undefined;
+    forcedTabIndex?: string;
     _dummyAnchor: HTMLAnchorElement;
     static i18nBundle: I18nBundle;
     constructor();
+    onEnterDOM(): void;
     onBeforeRendering(): void;
-    _isCrossOrigin(): boolean;
-    get effectiveTabIndex(): string;
+    _isCrossOrigin(href: string): boolean;
+    get effectiveTabIndex(): number;
     get ariaLabelText(): string | undefined;
     get hasLinkType(): boolean;
     static typeTextMappings(): Record<string, I18nText>;
     get linkTypeText(): string;
     get parsedRef(): string | undefined;
-    get effectiveAccRole(): string;
-    get _hasPopup(): string | undefined;
-    static onDefine(): Promise<void>;
+    get effectiveAccRole(): "button" | "link";
+    get ariaDescriptionText(): string | undefined;
+    get _hasPopup(): import("@ui5/webcomponents-base/dist/types.js").AriaHasPopup | undefined;
     _onclick(e: MouseEvent | KeyboardEvent): void;
-    _onfocusin(e: FocusEvent): void;
-    _onfocusout(): void;
     _onkeydown(e: KeyboardEvent): void;
     _onkeyup(e: KeyboardEvent): void;
 }
 export default Link;
-export type { LinkClickEventDetail, AccessibilityAttributes, };
+export type { LinkClickEventDetail, LinkAccessibilityAttributes, };

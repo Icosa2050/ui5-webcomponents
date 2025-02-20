@@ -9,7 +9,7 @@ import property from "@ui5/webcomponents-base/dist/decorators/property.js";
 import { isSpaceShift } from "@ui5/webcomponents-base/dist/Keys.js";
 import { isSafari } from "@ui5/webcomponents-base/dist/Device.js";
 import Button from "./Button.js";
-import ToggleButtonTemplate from "./generated/templates/ToggleButtonTemplate.lit.js";
+import ToggleButtonTemplate from "./ToggleButtonTemplate.js";
 // Styles
 import toggleBtnCss from "./generated/themes/ToggleButton.css.js";
 /**
@@ -34,6 +34,15 @@ import toggleBtnCss from "./generated/themes/ToggleButton.css.js";
  * @public
  */
 let ToggleButton = class ToggleButton extends Button {
+    constructor() {
+        super(...arguments);
+        /**
+         * Determines whether the component is displayed as pressed.
+         * @default false
+         * @public
+         */
+        this.pressed = false;
+    }
     _onclick() {
         this.pressed = !this.pressed;
         if (isSafari()) {

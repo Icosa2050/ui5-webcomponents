@@ -3,217 +3,269 @@ const getLayoutsByMedia = () => {
         desktop: {
             "OneColumn": {
                 layout: ["100%", "0px", "0px"],
-                arrows: [
-                    { visible: false, dir: null },
-                    { visible: false, dir: null },
+                separators: [
+                    { visible: false },
+                    { visible: false },
                 ],
             },
             "TwoColumnsStartExpanded": {
                 layout: ["67%", "33%", "0px"],
-                arrows: [
-                    { visible: true, dir: "mirror" },
-                    { visible: false, dir: null },
+                separators: [
+                    { visible: true, gripVisible: true },
+                    { visible: false },
                 ],
             },
             "TwoColumnsMidExpanded": {
                 layout: ["33%", "67%", "0px"],
-                arrows: [
-                    { visible: true, dir: null },
-                    { visible: false, dir: null },
+                separators: [
+                    { visible: true, gripVisible: true },
+                    { visible: false },
                 ],
             },
             "ThreeColumnsMidExpanded": {
                 layout: ["25%", "50%", "25%"],
-                arrows: [
-                    { visible: true, dir: null },
-                    { visible: true, dir: null },
+                separators: [
+                    {
+                        visible: true,
+                        gripVisible: true,
+                        arrowVisible: true,
+                        arrowDirection: "backward",
+                    },
+                    { visible: true, gripVisible: true },
                 ],
             },
             "ThreeColumnsEndExpanded": {
                 layout: ["25%", "25%", "50%"],
-                arrows: [
-                    { visible: false, dir: null, separator: true },
-                    { visible: true, dir: "mirror" },
+                separators: [
+                    {
+                        visible: true,
+                        gripVisible: false,
+                        arrowVisible: true,
+                        arrowDirection: "backward",
+                    },
+                    { visible: true, gripVisible: true },
                 ],
             },
             "ThreeColumnsStartExpandedEndHidden": {
                 layout: ["67%", "33%", "0px"],
-                arrows: [
-                    { visible: true, dir: "mirror" },
-                    { visible: false, dir: null },
+                separators: [
+                    { visible: true, gripVisible: true },
+                    { visible: false },
                 ],
             },
             "ThreeColumnsMidExpandedEndHidden": {
                 layout: ["33%", "67%", "0px"],
-                arrows: [
-                    { visible: true, dir: null },
-                    { visible: true, dir: null },
+                separators: [
+                    { visible: true, gripVisible: true },
+                    { visible: true, gripVisible: true },
+                ],
+            },
+            "ThreeColumnsStartHiddenMidExpanded": {
+                layout: ["0px", "33%", "67%"],
+                separators: [
+                    {
+                        visible: true,
+                        gripVisible: true,
+                        arrowVisible: true,
+                        arrowDirection: "forward",
+                    },
+                    { visible: true, gripVisible: true },
+                ],
+            },
+            "ThreeColumnsStartHiddenEndExpanded": {
+                layout: ["0px", "33%", "67%"],
+                separators: [
+                    {
+                        visible: true,
+                        gripVisible: false,
+                        arrowVisible: true,
+                        arrowDirection: "forward",
+                    },
+                    { visible: true, gripVisible: true },
                 ],
             },
             "MidColumnFullScreen": {
                 layout: ["0px", "100%", "0px"],
-                arrows: [
-                    { visible: false, dir: null },
-                    { visible: false, dir: null },
+                separators: [
+                    { visible: false },
+                    { visible: false },
                 ],
             },
             "EndColumnFullScreen": {
                 layout: ["0px", "0px", "100%"],
-                arrows: [
-                    { visible: false, dir: null },
-                    { visible: false, dir: null },
+                separators: [
+                    { visible: false },
+                    { visible: false },
                 ],
             },
         },
         tablet: {
             "OneColumn": {
                 layout: ["100%", "0px", "0px"],
-                arrows: [
-                    { visible: false, dir: null },
-                    { visible: false, dir: null },
+                separators: [
+                    { visible: false },
+                    { visible: false },
                 ],
             },
             "TwoColumnsStartExpanded": {
                 layout: ["67%", "33%", "0px"],
-                arrows: [
-                    { visible: true, dir: "mirror" },
-                    { visible: false, dir: null },
+                separators: [
+                    { visible: true, gripVisible: true },
+                    { visible: false },
                 ],
             },
             "TwoColumnsMidExpanded": {
                 layout: ["33%", "67%", "0px"],
-                arrows: [
-                    { visible: true, dir: null },
-                    { visible: false, dir: null },
+                separators: [
+                    { visible: true, gripVisible: true },
+                    { visible: false },
                 ],
             },
             "ThreeColumnsMidExpanded": {
                 layout: ["0px", "67%", "33%"],
-                arrows: [
-                    { visible: true, dir: null },
-                    { visible: true, dir: null },
+                separators: [
+                    { visible: true, gripVisible: true },
+                    { visible: true, gripVisible: true },
                 ],
             },
             "ThreeColumnsEndExpanded": {
                 layout: ["0px", "33%", "67%"],
-                arrows: [
-                    { visible: false, dir: null },
-                    { visible: true, dir: "mirror" },
+                separators: [
+                    { visible: false },
+                    { visible: true, gripVisible: true },
                 ],
             },
             "ThreeColumnsStartExpandedEndHidden": {
                 layout: ["67%", "33%", "0px"],
-                arrows: [
-                    { visible: true, dir: "mirror" },
-                    { visible: false, dir: null },
+                separators: [
+                    { visible: true, gripVisible: true },
+                    { visible: false },
                 ],
             },
             "ThreeColumnsMidExpandedEndHidden": {
                 layout: ["33%", "67%", "0px"],
-                arrows: [
-                    { visible: true, dir: null },
-                    { visible: true, dir: null },
+                separators: [
+                    { visible: true, gripVisible: true },
+                    { visible: true, gripVisible: true },
+                ],
+            },
+            "ThreeColumnsStartHiddenMidExpanded": {
+                layout: ["0px", "67%", "33%"],
+                separators: [
+                    { visible: true, gripVisible: true },
+                    { visible: true, gripVisible: true },
+                ],
+            },
+            "ThreeColumnsStartHiddenEndExpanded": {
+                layout: ["0px", "33%", "67%"],
+                separators: [
+                    { visible: false },
+                    { visible: true, gripVisible: true },
                 ],
             },
             "MidColumnFullScreen": {
                 layout: ["0px", "100%", "0px"],
-                arrows: [
-                    { visible: false, dir: null },
-                    { visible: false, dir: null },
+                separators: [
+                    { visible: false },
+                    { visible: false },
                 ],
             },
             "EndColumnFullScreen": {
                 layout: ["0px", "0px", "100%"],
-                arrows: [
-                    { visible: false, dir: null },
-                    { visible: false, dir: null },
+                separators: [
+                    { visible: false },
+                    { visible: false },
                 ],
             },
         },
         phone: {
             "OneColumn": {
                 layout: ["100%", "0px", "0px"],
-                arrows: [
-                    { visible: false, dir: null },
-                    { visible: false, dir: null },
+                separators: [
+                    { visible: false },
+                    { visible: false },
                 ],
             },
             "TwoColumnsStartExpanded": {
                 layout: ["0px", "100%", "0px"],
-                arrows: [
-                    { visible: false, dir: null },
-                    { visible: false, dir: null },
+                separators: [
+                    { visible: false },
+                    { visible: false },
                 ],
             },
             "TwoColumnsMidExpanded": {
                 layout: ["0px", "100%", "0px"],
-                arrows: [
-                    { visible: false, dir: null },
-                    { visible: false, dir: null },
+                separators: [
+                    { visible: false },
+                    { visible: false },
                 ],
             },
             "ThreeColumnsMidExpanded": {
                 layout: ["0px", "0px", "100%"],
-                arrows: [
-                    { visible: false, dir: null },
-                    { visible: false, dir: null },
+                separators: [
+                    { visible: false },
+                    { visible: false },
                 ],
             },
             "ThreeColumnsEndExpanded": {
                 layout: ["0px", "0px", "100%"],
-                arrows: [
-                    { visible: false, dir: null },
-                    { visible: false, dir: null },
+                separators: [
+                    { visible: false },
+                    { visible: false },
                 ],
             },
             "ThreeColumnsStartExpandedEndHidden": {
                 layout: ["0px", "0px", "100%"],
-                arrows: [
-                    { visible: false, dir: null },
-                    { visible: false, dir: null },
+                separators: [
+                    { visible: false },
+                    { visible: false },
                 ],
             },
             "ThreeColumnsMidExpandedEndHidden": {
                 layout: ["0px", "0px", "100%"],
-                arrows: [
-                    { visible: false, dir: null },
-                    { visible: false, dir: null },
+                separators: [
+                    { visible: false },
+                    { visible: false },
+                ],
+            },
+            "ThreeColumnsStartHiddenMidExpanded": {
+                layout: ["0px", "0px", "100%"],
+                separators: [
+                    { visible: false },
+                    { visible: false },
+                ],
+            },
+            "ThreeColumnsStartHiddenEndExpanded": {
+                layout: ["0px", "0px", "100%"],
+                separators: [
+                    { visible: false },
+                    { visible: false },
                 ],
             },
             "MidColumnFullScreen": {
                 layout: ["0px", "100%", "0px"],
-                arrows: [
-                    { visible: false, dir: null },
-                    { visible: false, dir: null },
+                separators: [
+                    { visible: false },
+                    { visible: false },
                 ],
             },
             "EndColumnFullScreen": {
                 layout: ["0px", "0px", "100%"],
-                arrows: [
-                    { visible: false, dir: null },
-                    { visible: false, dir: null },
+                separators: [
+                    { visible: false },
+                    { visible: false },
                 ],
             },
         },
     };
 };
-const getNextLayoutByStartArrow = () => {
+const getNextLayoutByArrowPress = () => {
     return {
-        "TwoColumnsStartExpanded": "TwoColumnsMidExpanded",
-        "TwoColumnsMidExpanded": "TwoColumnsStartExpanded",
-        "ThreeColumnsMidExpanded": "ThreeColumnsMidExpandedEndHidden",
-        "ThreeColumnsEndExpanded": "ThreeColumnsStartExpandedEndHidden",
-        "ThreeColumnsStartExpandedEndHidden": "ThreeColumnsMidExpandedEndHidden",
-        "ThreeColumnsMidExpandedEndHidden": "ThreeColumnsStartExpandedEndHidden",
+        "ThreeColumnsMidExpanded": "ThreeColumnsStartHiddenMidExpanded",
+        "ThreeColumnsEndExpanded": "ThreeColumnsStartHiddenEndExpanded",
+        "ThreeColumnsStartHiddenMidExpanded": "ThreeColumnsMidExpanded",
+        "ThreeColumnsStartHiddenEndExpanded": "ThreeColumnsEndExpanded",
     };
 };
-const getNextLayoutByEndArrow = () => {
-    return {
-        "ThreeColumnsMidExpanded": "ThreeColumnsEndExpanded",
-        "ThreeColumnsEndExpanded": "ThreeColumnsMidExpanded",
-        "ThreeColumnsStartExpandedEndHidden": "ThreeColumnsMidExpanded",
-        "ThreeColumnsMidExpandedEndHidden": "ThreeColumnsMidExpanded",
-    };
-};
-export { getLayoutsByMedia, getNextLayoutByStartArrow, getNextLayoutByEndArrow, };
+export { getLayoutsByMedia, getNextLayoutByArrowPress, };
 //# sourceMappingURL=FCLLayout.js.map

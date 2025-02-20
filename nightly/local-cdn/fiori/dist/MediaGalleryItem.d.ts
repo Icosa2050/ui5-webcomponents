@@ -1,6 +1,5 @@
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
-import "@ui5/webcomponents-icons/dist/background.js";
-import MediaGalleryItemLayout from "./types/MediaGalleryItemLayout.js";
+import type MediaGalleryItemLayout from "./types/MediaGalleryItemLayout.js";
 import type { IMediaGalleryItem } from "./MediaGallery.js";
 /**
  * @class
@@ -26,6 +25,11 @@ import type { IMediaGalleryItem } from "./MediaGallery.js";
  * @since 1.1.0
  */
 declare class MediaGalleryItem extends UI5Element implements IMediaGalleryItem {
+    eventDetails: {
+        click: {
+            item: MediaGalleryItem;
+        };
+    };
     /**
      * Defines the selected state of the component.
      * @default false
@@ -67,15 +71,11 @@ declare class MediaGalleryItem extends UI5Element implements IMediaGalleryItem {
     /**
      * @private
      */
-    focused: boolean;
+    forcedTabIndex?: string;
     /**
      * @private
      */
-    forcedTabIndex: string;
-    /**
-     * @private
-     */
-    contentHeight: string;
+    contentHeight?: string;
     /**
      * Defines the content of the component.
      * @public
@@ -96,11 +96,11 @@ declare class MediaGalleryItem extends UI5Element implements IMediaGalleryItem {
     get _isContentAvailable(): boolean | null;
     get _useThumbnail(): boolean | null;
     get _useContent(): boolean | null;
-    get effectiveTabIndex(): string | undefined;
+    get effectiveTabIndex(): number | undefined;
     get _showBackgroundIcon(): boolean;
     get styles(): {
         wrapper: {
-            height: string;
+            height: string | undefined;
         };
     };
     get _role(): "button" | undefined;
@@ -111,8 +111,6 @@ declare class MediaGalleryItem extends UI5Element implements IMediaGalleryItem {
     _updateThumbnailLoaded(image: HTMLImageElement): void;
     _onkeydown(e: KeyboardEvent): void;
     _onkeyup(e: KeyboardEvent): void;
-    _onfocusout(): void;
-    _onfocusin(): void;
     _fireItemClick(): void;
 }
 export default MediaGalleryItem;

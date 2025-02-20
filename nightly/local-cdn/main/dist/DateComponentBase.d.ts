@@ -1,9 +1,9 @@
-/// <reference types="openui5" />
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
 import type I18nBundle from "@ui5/webcomponents-base/dist/i18nBundle.js";
 import DateFormat from "@ui5/webcomponents-localization/dist/DateFormat.js";
-import CalendarType from "@ui5/webcomponents-base/dist/types/CalendarType.js";
+import type CalendarType from "@ui5/webcomponents-base/dist/types/CalendarType.js";
 import CalendarDate from "@ui5/webcomponents-localization/dist/dates/CalendarDate.js";
+import type CalendarWeekNumbering from "./types/CalendarWeekNumbering.js";
 /**
  * @class
  *
@@ -35,10 +35,10 @@ declare class DateComponentBase extends UI5Element {
     secondaryCalendarType?: `${CalendarType}`;
     /**
      * Determines the format, displayed in the input field.
-     * @default ""
+     * @default undefined
      * @public
      */
-    formatPattern: string;
+    formatPattern?: string;
     /**
      * Determines the minimum date available for selection.
      *
@@ -57,6 +57,14 @@ declare class DateComponentBase extends UI5Element {
      * @public
      */
     maxDate: string;
+    /**
+     * Defines how to calculate calendar weeks and first day of the week.
+     * If not set, the calendar will be displayed according to the currently set global configuration.
+     * @default "Default"
+     * @since 2.2.0
+     * @public
+     */
+    calendarWeekNumbering: `${CalendarWeekNumbering}`;
     static i18nBundle?: I18nBundle;
     /**
      * Cached instance of DateFormat with a format pattern of "YYYY-MM-dd".
@@ -78,6 +86,5 @@ declare class DateComponentBase extends UI5Element {
     _getStringFromTimestamp(timestamp: number): string;
     getFormat(): import("sap/ui/core/format/DateFormat").default;
     getISOFormat(): DateFormat;
-    static onDefine(): Promise<void>;
 }
 export default DateComponentBase;

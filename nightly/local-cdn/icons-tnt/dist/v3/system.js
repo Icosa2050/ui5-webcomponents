@@ -1,7 +1,7 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "system";
-const pathData = "M64 32h384c17 0 32 15 32 32v384c0 19-15 32-32 32H64c-19 0-32-13-32-32V64c0-17 13-32 32-32zm384 416V64H64v384h384z";
+const pathData = "M485 512H27c-15 0-27-12-27-26V27C0 12 12 0 27 0h458c15 0 27 12 27 27v459c0 14-12 26-27 26zM53 53v406h406V53H53z";
 const ltr = false;
 const accData = null;
 const collection = "tnt-v3";

@@ -64,7 +64,7 @@ function addLeadingZeros(iValue, iLength) {
  * @hideconstructor
  * @public
  * @since 1.111.0
- * @version 1.120.5
+ * @version 1.120.17
  */
 function UI5Date(vDateParts, sTimezoneID) {
   var oDateInstance = UI5Date._createDateInstance(vDateParts);

@@ -1,20 +1,17 @@
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
-import { TemplateFunction } from "@ui5/webcomponents-base/dist/renderer/executeTemplate.js";
-import ToolbarItemOverflowBehavior from "./types/ToolbarItemOverflowBehavior.js";
+import type { TemplateFunction } from "@ui5/webcomponents-base/dist/renderer/executeTemplate.js";
+import type ToolbarItemOverflowBehavior from "./types/ToolbarItemOverflowBehavior.js";
 type IEventOptions = {
     preventClosing: boolean;
 };
-/**
- * @class
- *
- * Represents an abstract class for items, used in the `ui5-toolbar`.
- * @constructor
- * @extends UI5Element
- * @abstract
- * @public
- * @since 1.17.0
- */
+type ToolbarItemEventDetail = {
+    targetRef: HTMLElement;
+};
 declare class ToolbarItem extends UI5Element {
+    eventDetails: {
+        click: ToolbarItemEventDetail;
+        "close-overflow": void;
+    };
     /**
      * Property used to define the access of the item to the overflow Popover. If "NeverOverflow" option is set,
      * the item never goes in the Popover, if "AlwaysOverflow" - it never comes out of it.
@@ -68,12 +65,7 @@ declare class ToolbarItem extends UI5Element {
      * @protected
      */
     static get toolbarPopoverTemplate(): TemplateFunction;
-    /**
-     * Returns the events that the item is subscribed to.
-     * @protected
-     */
-    get subscribedEvents(): Map<string, IEventOptions>;
     get stableDomRef(): string;
 }
-export type { IEventOptions };
+export type { IEventOptions, ToolbarItemEventDetail, };
 export default ToolbarItem;

@@ -39,7 +39,12 @@ const findFastNavigationGroups = (container, startFromContainer) => {
         if (child.nodeType === 1) {
             findFastNavigationGroups(child, false);
         }
-        child = assignedElements && assignedElements.length ? assignedElements[++index] : originalChild.nextElementSibling;
+        if (child === container) {
+            child = assignedElements && assignedElements.length ? assignedElements[++index] : null;
+        }
+        else {
+            child = assignedElements && assignedElements.length ? assignedElements[++index] : originalChild.nextElementSibling;
+        }
     }
 };
 const getFastNavigationGroups = (container) => {

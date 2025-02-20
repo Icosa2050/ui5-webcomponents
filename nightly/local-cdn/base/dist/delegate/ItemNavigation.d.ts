@@ -3,7 +3,7 @@ import ItemNavigationBehavior from "../types/ItemNavigationBehavior.js";
 import type UI5Element from "../UI5Element.js";
 interface ITabbable {
     id: string;
-    forcedTabIndex: string;
+    forcedTabIndex?: string;
 }
 type ItemNavigationOptions = {
     currentIndex?: number;

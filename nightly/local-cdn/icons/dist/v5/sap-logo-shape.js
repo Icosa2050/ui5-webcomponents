@@ -1,7 +1,7 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "sap-logo-shape";
-const pathData = "M486 192q11 0 18.5 7.5T512 218t-9 19L273 441q-7 7-17 7H26q-11 0-18.5-7.5T0 422V218q0-11 7.5-18.5T26 192h460z";
+const pathData = "M486 192q11 0 18.5 7.5T512 218t-9 19L273 442q-7 6-17 6H26q-11 0-18.5-7.5T0 422V218q0-11 7.5-18.5T26 192h460z";
 const ltr = true;
 const accData = null;
 const collection = "SAP-icons-v5";

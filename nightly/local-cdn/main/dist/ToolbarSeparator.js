@@ -6,8 +6,8 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 import customElement from "@ui5/webcomponents-base/dist/decorators/customElement.js";
 import property from "@ui5/webcomponents-base/dist/decorators/property.js";
-import ToolbarSeparatorTemplate from "./generated/templates/ToolbarSeparatorTemplate.lit.js";
-import ToolbarPopoverSeparatorTemplate from "./generated/templates/ToolbarPopoverSeparatorTemplate.lit.js";
+import ToolbarSeparatorTemplate from "./ToolbarSeparatorTemplate.js";
+import ToolbarPopoverSeparatorTemplate from "./ToolbarPopoverSeparatorTemplate.js";
 import { registerToolbarItem } from "./ToolbarRegistry.js";
 import ToolbarItem from "./ToolbarItem.js";
 /**
@@ -23,6 +23,10 @@ import ToolbarItem from "./ToolbarItem.js";
  * @public
  */
 let ToolbarSeparator = class ToolbarSeparator extends ToolbarItem {
+    constructor() {
+        super(...arguments);
+        this.visible = false;
+    }
     static get toolbarTemplate() {
         return ToolbarSeparatorTemplate;
     }

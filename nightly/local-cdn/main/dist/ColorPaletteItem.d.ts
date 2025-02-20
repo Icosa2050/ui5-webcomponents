@@ -18,10 +18,21 @@ declare class ColorPaletteItem extends UI5Element implements IColorPaletteItem {
      * Defines the colour of the component.
      *
      * **Note:** The value should be a valid CSS color.
-     * @default undefined
+     * @default ""
      * @public
      */
-    value?: string;
+    value: string;
+    /**
+     * Defines if the component is selected.
+     *
+     * **Note:** Only one item must be selected per <code>ui5-color-palette</code>.
+     * If more than one item is defined as selected, the last one would be considered as the selected one.
+     *
+     * @public
+     * @default false
+     * @since 2.0.0
+     */
+    selected: boolean;
     /**
      * Defines the tab-index of the element, helper information for the ItemNavigation.
      * @private
@@ -43,13 +54,17 @@ declare class ColorPaletteItem extends UI5Element implements IColorPaletteItem {
      */
     _disabled: boolean;
     static i18nBundle: I18nBundle;
-    static onDefine(): Promise<void>;
     constructor();
     onBeforeRendering(): void;
     get colorLabel(): string;
     get styles(): {
         root: {
-            "background-color": string | undefined;
+            "background-color": string;
+        };
+    };
+    get classes(): {
+        root: {
+            "ui5-cp-item": boolean;
         };
     };
 }

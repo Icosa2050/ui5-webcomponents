@@ -55,8 +55,7 @@ const _getThemeProperties = async (packageName, themeName, forCustomTheme = fals
         console.error(packageName, e.message); /* eslint-disable-line */
         return;
     }
-    const themeProps = data._ || data; // Refactor: remove _ everywhere
-    return themeProps;
+    return data;
 };
 const getRegisteredPackages = () => {
     return registeredPackages;

@@ -4,28 +4,21 @@ type LayoutConfiguration = {
     [device in MEDIA]: {
         [layoutName in FCLLayout]: {
             layout: Array<string>;
-            arrows: Array<{
+            separators: Array<{
                 visible: boolean;
-                dir: null | string;
-                separator?: boolean;
+                gripVisible?: boolean;
+                arrowVisible?: boolean;
+                arrowDirection?: "forward" | "backward";
             }>;
         };
     };
 };
 declare const getLayoutsByMedia: () => LayoutConfiguration;
-declare const getNextLayoutByStartArrow: () => {
-    TwoColumnsStartExpanded: string;
-    TwoColumnsMidExpanded: string;
+declare const getNextLayoutByArrowPress: () => {
     ThreeColumnsMidExpanded: string;
     ThreeColumnsEndExpanded: string;
-    ThreeColumnsStartExpandedEndHidden: string;
-    ThreeColumnsMidExpandedEndHidden: string;
+    ThreeColumnsStartHiddenMidExpanded: string;
+    ThreeColumnsStartHiddenEndExpanded: string;
 };
-declare const getNextLayoutByEndArrow: () => {
-    ThreeColumnsMidExpanded: string;
-    ThreeColumnsEndExpanded: string;
-    ThreeColumnsStartExpandedEndHidden: string;
-    ThreeColumnsMidExpandedEndHidden: string;
-};
-export { getLayoutsByMedia, getNextLayoutByStartArrow, getNextLayoutByEndArrow, };
+export { getLayoutsByMedia, getNextLayoutByArrowPress, };
 export type { LayoutConfiguration, FCLLayout, };

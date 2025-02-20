@@ -3,7 +3,6 @@ import defaultThemeBase from "@ui5/webcomponents-theming/dist/generated/themes/s
 import defaultTheme from "./sap_horizon/parameters-bundle.css.js";
 registerThemePropertiesLoader("@ui5/webcomponents-theming", "sap_horizon", async () => defaultThemeBase);
 registerThemePropertiesLoader("@ui5/webcomponents", "sap_horizon", async () => defaultTheme);
-const styleData = { packageName: "@ui5/webcomponents", fileName: "themes/TapHighlightColor.css.ts", content: `:host{-webkit-tap-highlight-color:rgba(0,0,0,0)}
-` };
-export default styleData;
+export default `:host{-webkit-tap-highlight-color:rgba(0,0,0,0)}
+`;
 //# sourceMappingURL=TapHighlightColor.css.js.map

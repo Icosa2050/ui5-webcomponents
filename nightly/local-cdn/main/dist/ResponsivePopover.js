@@ -8,14 +8,10 @@ var ResponsivePopover_1;
 import customElement from "@ui5/webcomponents-base/dist/decorators/customElement.js";
 import property from "@ui5/webcomponents-base/dist/decorators/property.js";
 import { isPhone } from "@ui5/webcomponents-base/dist/Device.js";
-import { getI18nBundle } from "@ui5/webcomponents-base/dist/i18nBundle.js";
+import i18n from "@ui5/webcomponents-base/dist/decorators/i18n.js";
 import { RESPONSIVE_POPOVER_CLOSE_DIALOG_BUTTON } from "./generated/i18n/i18n-defaults.js";
-import ResponsivePopoverTemplate from "./generated/templates/ResponsivePopoverTemplate.lit.js";
+import ResponsivePopoverTemplate from "./ResponsivePopoverTemplate.js";
 import Popover from "./Popover.js";
-import Dialog from "./Dialog.js";
-import Button from "./Button.js";
-import Title from "./Title.js";
-import "@ui5/webcomponents-icons/dist/decline.js";
 // Styles
 import ResponsivePopoverCss from "./generated/themes/ResponsivePopover.css.js";
 /**
@@ -42,52 +38,61 @@ import ResponsivePopoverCss from "./generated/themes/ResponsivePopover.css.js";
 let ResponsivePopover = ResponsivePopover_1 = class ResponsivePopover extends Popover {
     constructor() {
         super();
+        /**
+         * Defines if only the content would be displayed (without header and footer) in the popover on Desktop.
+         * By default both the header and footer would be displayed.
+         * @private
+         */
+        this.contentOnlyOnDesktop = false;
+        /**
+         * Used internaly for controls which must not have header.
+         * @private
+         */
+        this._hideHeader = false;
+        /**
+         * Defines whether a close button will be rendered in the header of the component
+         * **Note:** If you are using the `header` slot, this property will have no effect
+         * @private
+         * @default false
+         * @since 1.0.0-rc.16
+         */
+        this._hideCloseButton = false;
     }
-    /**
-     * Shows popover on desktop and dialog on mobile.
-     * @param opener the element that the popover is shown at
-     * @param [preventInitialFocus=false] Prevents applying the focus inside the popup
-     * @public
-     * @returns Resolves when the responsive popover is open
-     */
-    async showAt(opener, preventInitialFocus = false) {
+    async openPopup() {
         if (!isPhone()) {
-            await super.showAt(opener, preventInitialFocus);
+            await super.openPopup();
         }
-        else {
-            this.style.display = "contents";
-            await this._dialog.show(preventInitialFocus);
+        else if (this._dialog) {
+            this._dialog.open = true;
         }
     }
-    _show() {
+    async _show() {
         if (!isPhone()) {
-            super._show();
+            return super._show();
         }
+    }
+    _dialogCloseButtonClick() {
+        this.closePopup();
     }
     /**
      * Closes the popover/dialog.
-     * @public
+     * @override
      */
-    close(escPressed = false, preventRegistryUpdate = false, preventFocusRestore = false) {
+    closePopup(escPressed = false, preventRegistryUpdate = false, preventFocusRestore = false) {
         if (!isPhone()) {
-            super.close(escPressed, preventRegistryUpdate, preventFocusRestore);
+            super.closePopup(escPressed, preventRegistryUpdate, preventFocusRestore);
         }
         else {
-            this._dialog.close(escPressed, preventRegistryUpdate, preventFocusRestore);
+            this._dialog?.closePopup(escPressed, preventRegistryUpdate, preventFocusRestore);
         }
     }
     toggle(opener) {
-        if (this.isOpen()) {
-            return this.close();
+        if (this.open) {
+            this.closePopup();
+            return;
         }
-        this.showAt(opener);
-    }
-    /**
-     * Tells if the responsive popover is open.
-     * @public
-     */
-    isOpen() {
-        return (isPhone() && this._dialog) ? this._dialog.isOpen() : super.isOpen();
+        this.opener = opener;
+        this.open = true;
     }
     get classes() {
         const allClasses = super.classes;
@@ -115,28 +120,27 @@ let ResponsivePopover = ResponsivePopover_1 = class ResponsivePopover extends Po
     get _closeDialogAriaLabel() {
         return ResponsivePopover_1.i18nBundle.getText(RESPONSIVE_POPOVER_CLOSE_DIALOG_BUTTON);
     }
-    _beforeDialogOpen(e) {
-        this._isOpened = true;
+    _beforeDialogOpen() {
+        this._opened = true;
         this.open = true;
-        this._propagateDialogEvent(e);
+        this.fireDecoratorEvent("before-open");
     }
-    _afterDialogClose(e) {
-        this._isOpened = false;
+    _afterDialogOpen() {
+        this.fireDecoratorEvent("open");
+    }
+    _beforeDialogClose(e) {
+        this.fireDecoratorEvent("before-close", e.detail);
+    }
+    _afterDialogClose() {
+        this._opened = false;
         this.open = false;
-        this._propagateDialogEvent(e);
-    }
-    _propagateDialogEvent(e) {
-        const type = e.type.replace("ui5-", "");
-        this.fireEvent(type, e.detail);
+        this.fireDecoratorEvent("close");
     }
     get isModal() {
         if (!isPhone()) {
             return super.isModal;
         }
         return this._dialog.isModal;
-    }
-    static async onDefine() {
-        ResponsivePopover_1.i18nBundle = await getI18nBundle("@ui5/webcomponents");
     }
 };
 __decorate([
@@ -148,17 +152,14 @@ __decorate([
 __decorate([
     property({ type: Boolean })
 ], ResponsivePopover.prototype, "_hideCloseButton", void 0);
+__decorate([
+    i18n("@ui5/webcomponents")
+], ResponsivePopover, "i18nBundle", void 0);
 ResponsivePopover = ResponsivePopover_1 = __decorate([
     customElement({
         tag: "ui5-responsive-popover",
         styles: [Popover.styles, ResponsivePopoverCss],
         template: ResponsivePopoverTemplate,
-        dependencies: [
-            ...Popover.dependencies,
-            Button,
-            Dialog,
-            Title,
-        ],
     })
 ], ResponsivePopover);
 ResponsivePopover.define();

@@ -7,16 +7,12 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 import customElement from "@ui5/webcomponents-base/dist/decorators/customElement.js";
 import property from "@ui5/webcomponents-base/dist/decorators/property.js";
 import slot from "@ui5/webcomponents-base/dist/decorators/slot.js";
-import event from "@ui5/webcomponents-base/dist/decorators/event.js";
-import ValueState from "@ui5/webcomponents-base/dist/types/ValueState.js";
-import CSSSize from "@ui5/webcomponents-base/dist/types/CSSSize.js";
+import event from "@ui5/webcomponents-base/dist/decorators/event-strict.js";
 import { registerToolbarItem } from "./ToolbarRegistry.js";
 // Templates
-import ToolbarSelectTemplate from "./generated/templates/ToolbarSelectTemplate.lit.js";
-import ToolbarPopoverSelectTemplate from "./generated/templates/ToolbarPopoverSelectTemplate.lit.js";
+import ToolbarSelectTemplate from "./ToolbarSelectTemplate.js";
+import ToolbarPopoverSelectTemplate from "./ToolbarPopoverSelectTemplate.js";
 import ToolbarItem from "./ToolbarItem.js";
-import Select from "./Select.js";
-import Option from "./Option.js";
 /**
  * @class
  *
@@ -35,54 +31,68 @@ import Option from "./Option.js";
  * @since 1.17.0
  */
 let ToolbarSelect = class ToolbarSelect extends ToolbarItem {
+    constructor() {
+        super(...arguments);
+        /**
+         * Defines the value state of the component.
+         * @default "None"
+         * @public
+         */
+        this.valueState = "None";
+        /**
+         * Defines whether the component is in disabled state.
+         *
+         * **Note:** A disabled component is noninteractive.
+         * @default false
+         * @public
+         */
+        this.disabled = false;
+    }
     static get toolbarTemplate() {
         return ToolbarSelectTemplate;
     }
     static get toolbarPopoverTemplate() {
         return ToolbarPopoverSelectTemplate;
     }
-    get subscribedEvents() {
-        const map = new Map();
-        map.set("click", { preventClosing: true });
-        map.set("ui5-change", { preventClosing: false });
-        map.set("ui5-open", { preventClosing: true });
-        map.set("ui5-close", { preventClosing: true });
-        return map;
-    }
-    constructor() {
-        super();
-        this._onEvent = this._onEventHandler.bind(this);
-    }
-    onEnterDOM() {
-        this.attachEventListeners();
-    }
-    onExitDOM() {
-        this.detachEventListeners();
-    }
-    attachEventListeners() {
-        [...this.subscribedEvents.keys()].forEach(e => {
-            this.addEventListener(e, this._onEvent);
-        });
-    }
-    detachEventListeners() {
-        [...this.subscribedEvents.keys()].forEach(e => {
-            this.removeEventListener(e, this._onEvent);
-        });
-    }
-    _onEventHandler(e) {
-        if (e.type === "ui5-change") {
-            // update options
-            const selectedOption = e.detail.selectedOption;
-            const selectedOptionIndex = Number(selectedOption?.getAttribute("data-ui5-external-action-item-index"));
-            this.options.forEach((option, index) => {
-                if (index === selectedOptionIndex) {
-                    option.setAttribute("selected", "");
-                }
-                else {
-                    option.removeAttribute("selected");
-                }
-            });
+    onClick(e) {
+        e.stopImmediatePropagation();
+        const prevented = !this.fireDecoratorEvent("click", { targetRef: e.target });
+        if (prevented && !this.preventOverflowClosing) {
+            this.fireDecoratorEvent("close-overflow");
         }
+    }
+    onOpen(e) {
+        e.stopImmediatePropagation();
+        const prevented = !this.fireDecoratorEvent("open", { targetRef: e.target });
+        if (prevented) {
+            this.fireDecoratorEvent("close-overflow");
+        }
+    }
+    onClose(e) {
+        e.stopImmediatePropagation();
+        const prevented = !this.fireDecoratorEvent("close", { targetRef: e.target });
+        if (prevented) {
+            this.fireDecoratorEvent("close-overflow");
+        }
+    }
+    onChange(e) {
+        e.stopImmediatePropagation();
+        const prevented = !this.fireDecoratorEvent("change", { ...e.detail, targetRef: e.target });
+        if (!prevented) {
+            this.fireDecoratorEvent("close-overflow");
+        }
+        this._syncOptions(e.detail.selectedOption);
+    }
+    _syncOptions(selectedOption) {
+        const selectedOptionIndex = Number(selectedOption?.getAttribute("data-ui5-external-action-item-index"));
+        this.options.forEach((option, index) => {
+            if (index === selectedOptionIndex) {
+                option.setAttribute("selected", "");
+            }
+            else {
+                option.removeAttribute("selected");
+            }
+        });
     }
     get styles() {
         return {
@@ -91,13 +101,13 @@ let ToolbarSelect = class ToolbarSelect extends ToolbarItem {
     }
 };
 __decorate([
-    property({ validator: CSSSize })
+    property()
 ], ToolbarSelect.prototype, "width", void 0);
 __decorate([
     slot({ "default": true, type: HTMLElement, invalidateOnChildChange: true })
 ], ToolbarSelect.prototype, "options", void 0);
 __decorate([
-    property({ type: ValueState, defaultValue: ValueState.None })
+    property()
 ], ToolbarSelect.prototype, "valueState", void 0);
 __decorate([
     property({ type: Boolean })
@@ -111,29 +121,25 @@ __decorate([
 ToolbarSelect = __decorate([
     customElement({
         tag: "ui5-toolbar-select",
-        dependencies: [Select, Option],
     })
     /**
      * Fired when the selected option changes.
-     * @allowPreventDefault
      * @param {HTMLElement} selectedOption the selected option.
      * @public
      */
     ,
     event("change", {
-        detail: {
-            /**
-            * @public
-            */
-            selectedOption: { type: HTMLElement },
-        },
+        bubbles: true,
+        cancelable: true,
     })
     /**
      * Fired after the component's dropdown menu opens.
      * @public
      */
     ,
-    event("open")
+    event("open", {
+        bubbles: true,
+    })
     /**
      * Fired after the component's dropdown menu closes.
      * @public

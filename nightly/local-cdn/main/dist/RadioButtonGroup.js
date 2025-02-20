@@ -1,3 +1,4 @@
+import getActiveElement from "@ui5/webcomponents-base/dist/util/getActiveElement.js";
 class RadioButtonGroup {
     static hasGroup(groupName) {
         return this.groups.has(groupName);
@@ -60,22 +61,23 @@ class RadioButtonGroup {
         if (groupLength <= 1) {
             return;
         }
-        const nextItemToSelect = this._nextSelectable(currentItemPosition, group);
-        if (!nextItemToSelect) {
+        const nextItemToFocus = this._nextFocusable(currentItemPosition, group);
+        if (!nextItemToFocus) {
             return;
         }
-        this.updateSelectionInGroup(nextItemToSelect, groupName);
+        this.updateSelectionInGroup(nextItemToFocus, groupName);
     }
     static updateFormValidity(groupName) {
         const group = this.getGroup(groupName);
         if (!group) {
             return;
         }
-        group.forEach(r => r._resetFormValidity());
-        const groupRequiresValue = group.some(r => r.required) && group.every(r => !r.checked);
-        if (groupRequiresValue) {
-            group[0]._invalidateForm();
-        }
+        const hasRequired = group.some(r => r.required);
+        const hasChecked = group.some(r => r.checked);
+        group.forEach(r => {
+            r._groupChecked = hasChecked;
+            r._groupRequired = hasRequired;
+        });
     }
     static updateTabOrder(groupName) {
         const group = this.getGroup(groupName);
@@ -84,11 +86,23 @@ class RadioButtonGroup {
         }
         const hasCheckedRadio = group.some(radioBtn => radioBtn.checked);
         group.filter(radioBtn => !radioBtn.disabled).forEach((radioBtn, idx) => {
+            let activeElement = getActiveElement();
+            if (activeElement?.classList.contains("ui5-radio-root")) {
+                activeElement = activeElement.getRootNode();
+                if (activeElement instanceof ShadowRoot) {
+                    activeElement = activeElement.host;
+                }
+            }
             if (hasCheckedRadio) {
-                radioBtn._tabIndex = radioBtn.checked ? "0" : "-1";
+                if (activeElement?.hasAttribute("ui5-radio-button") && activeElement.readonly) {
+                    radioBtn._tabIndex = activeElement === radioBtn && radioBtn.readonly ? 0 : -1;
+                }
+                else {
+                    radioBtn._tabIndex = radioBtn.checked ? 0 : -1;
+                }
             }
             else {
-                radioBtn._tabIndex = idx === 0 ? "0" : "-1";
+                radioBtn._tabIndex = idx === 0 ? 0 : -1;
             }
         });
     }
@@ -101,23 +115,36 @@ class RadioButtonGroup {
         if (groupLength <= 1) {
             return;
         }
-        const previousItemToSelect = this._previousSelectable(currentItemPosition, group);
-        if (!previousItemToSelect) {
+        const previousItemToFocus = this._previousFocusable(currentItemPosition, group);
+        if (!previousItemToFocus) {
             return;
         }
-        this.updateSelectionInGroup(previousItemToSelect, groupName);
+        this.updateSelectionInGroup(previousItemToFocus, groupName);
     }
     static selectItem(item, groupName) {
         this.updateSelectionInGroup(item, groupName);
         this.updateTabOrder(groupName);
+        this.updateFormValidity(groupName);
     }
     static updateSelectionInGroup(radioBtnToSelect, groupName) {
         const checkedRadio = this.getCheckedRadioFromGroup(groupName);
-        if (checkedRadio) {
+        if (checkedRadio && !radioBtnToSelect.readonly) {
             this._deselectRadio(checkedRadio);
+            this.checkedRadios.set(groupName, radioBtnToSelect);
         }
-        this._selectRadio(radioBtnToSelect);
-        this.checkedRadios.set(groupName, radioBtnToSelect);
+        // the focusable radio buttons are the enabled and the read-only ones, but only the enabled are selectable
+        if (radioBtnToSelect) {
+            radioBtnToSelect.focus();
+            if (!radioBtnToSelect.readonly) {
+                this._selectRadio(radioBtnToSelect);
+            }
+            else {
+                // Ensure updateTabOrder is called after focus
+                setTimeout(() => {
+                    this.updateTabOrder(groupName);
+                }, 0);
+            }
+        }
     }
     static _deselectRadio(radioBtn) {
         if (radioBtn) {
@@ -125,49 +152,46 @@ class RadioButtonGroup {
         }
     }
     static _selectRadio(radioBtn) {
-        if (radioBtn) {
-            radioBtn.focus();
-            radioBtn.checked = true;
-            radioBtn._checked = true;
-            radioBtn.fireEvent("change");
-        }
+        radioBtn.checked = true;
+        radioBtn._checked = true;
+        radioBtn.fireDecoratorEvent("change");
     }
-    static _nextSelectable(pos, group) {
+    static _nextFocusable(pos, group) {
         if (!group) {
             return null;
         }
         const groupLength = group.length;
-        let nextRadioToSelect = null;
+        let nextRadioToFocus = null;
         if (pos === groupLength - 1) {
-            if (group[0].disabled || group[0].readonly) {
-                return this._nextSelectable(1, group);
+            if (group[0].disabled) {
+                return this._nextFocusable(1, group);
             }
-            nextRadioToSelect = group[0];
+            nextRadioToFocus = group[0];
         }
-        else if (group[pos + 1].disabled || group[pos + 1].readonly) {
-            return this._nextSelectable(pos + 1, group);
+        else if (group[pos + 1].disabled) {
+            return this._nextFocusable(pos + 1, group);
         }
         else {
-            nextRadioToSelect = group[pos + 1];
+            nextRadioToFocus = group[pos + 1];
         }
-        return nextRadioToSelect;
+        return nextRadioToFocus;
     }
-    static _previousSelectable(pos, group) {
+    static _previousFocusable(pos, group) {
         const groupLength = group.length;
-        let previousRadioToSelect = null;
+        let previousRadioToFocus = null;
         if (pos === 0) {
-            if (group[groupLength - 1].disabled || group[groupLength - 1].readonly) {
-                return this._previousSelectable(groupLength - 1, group);
+            if (group[groupLength - 1].disabled) {
+                return this._previousFocusable(groupLength - 1, group);
             }
-            previousRadioToSelect = group[groupLength - 1];
+            previousRadioToFocus = group[groupLength - 1];
         }
-        else if (group[pos - 1].disabled || group[pos - 1].readonly) {
-            return this._previousSelectable(pos - 1, group);
+        else if (group[pos - 1].disabled) {
+            return this._previousFocusable(pos - 1, group);
         }
         else {
-            previousRadioToSelect = group[pos - 1];
+            previousRadioToFocus = group[pos - 1];
         }
-        return previousRadioToSelect;
+        return previousRadioToFocus;
     }
     static enforceSingleSelection(radioBtn, groupName) {
         const checkedRadio = this.getCheckedRadioFromGroup(groupName);

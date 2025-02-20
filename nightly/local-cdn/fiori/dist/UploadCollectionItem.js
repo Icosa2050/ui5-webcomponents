@@ -6,29 +6,24 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 var UploadCollectionItem_1;
 import customElement from "@ui5/webcomponents-base/dist/decorators/customElement.js";
-import event from "@ui5/webcomponents-base/dist/decorators/event.js";
+import jsxRenderer from "@ui5/webcomponents-base/dist/renderer/JsxRenderer.js";
+import event from "@ui5/webcomponents-base/dist/decorators/event-strict.js";
 import property from "@ui5/webcomponents-base/dist/decorators/property.js";
 import slot from "@ui5/webcomponents-base/dist/decorators/slot.js";
-import { getI18nBundle } from "@ui5/webcomponents-base/dist/i18nBundle.js";
-import Integer from "@ui5/webcomponents-base/dist/types/Integer.js";
+import i18n from "@ui5/webcomponents-base/dist/decorators/i18n.js";
 import ValueState from "@ui5/webcomponents-base/dist/types/ValueState.js";
 import ListItemType from "@ui5/webcomponents/dist/types/ListItemType.js";
-import Button from "@ui5/webcomponents/dist/Button.js";
-import Input from "@ui5/webcomponents/dist/Input.js";
-import Label from "@ui5/webcomponents/dist/Label.js";
-import Link from "@ui5/webcomponents/dist/Link.js";
-import ProgressIndicator from "@ui5/webcomponents/dist/ProgressIndicator.js";
 import ListItem from "@ui5/webcomponents/dist/ListItem.js";
 import getFileExtension from "@ui5/webcomponents-base/dist/util/getFileExtension.js";
 import { renderFinished } from "@ui5/webcomponents-base/dist/Render.js";
-import { isEnter, isEscape, isSpace } from "@ui5/webcomponents-base/dist/Keys.js";
+import { isDelete, isEnter, isEscape, isSpace, } from "@ui5/webcomponents-base/dist/Keys.js";
 import UploadState from "./types/UploadState.js";
 import "@ui5/webcomponents-icons/dist/refresh.js";
 import "@ui5/webcomponents-icons/dist/stop.js";
 import "@ui5/webcomponents-icons/dist/edit.js";
 import { UPLOADCOLLECTIONITEM_CANCELBUTTON_TEXT, UPLOADCOLLECTIONITEM_RENAMEBUTTON_TEXT, UPLOADCOLLECTIONITEM_ERROR_STATE, UPLOADCOLLECTIONITEM_UPLOADING_STATE, UPLOADCOLLECTIONITEM_READY_STATE, UPLOADCOLLECTIONITEM_RETRY_BUTTON_TEXT, UPLOADCOLLECTIONITEM_TERMINATE_BUTTON_TEXT, UPLOADCOLLECTIONITEM_EDIT_BUTTON_TEXT, } from "./generated/i18n/i18n-defaults.js";
 // Template
-import UploadCollectionItemTemplate from "./generated/templates/UploadCollectionItemTemplate.lit.js";
+import UploadCollectionItemTemplate from "./UploadCollectionItemTemplate.js";
 // Styles
 import UploadCollectionItemCss from "./generated/themes/UploadCollectionItem.css.js";
 /**
@@ -47,11 +42,78 @@ import UploadCollectionItemCss from "./generated/themes/UploadCollectionItem.css
  * @since 1.0.0-rc.7
  */
 let UploadCollectionItem = UploadCollectionItem_1 = class UploadCollectionItem extends ListItem {
-    static async onDefine() {
-        [UploadCollectionItem_1.i18nFioriBundle] = await Promise.all([
-            getI18nBundle("@ui5/webcomponents-fiori"),
-            super.onDefine(),
-        ]);
+    constructor() {
+        super(...arguments);
+        /**
+         * Holds an instance of `File` associated with this item.
+         * @default null
+         * @public
+         */
+        this.file = null;
+        /**
+         * The name of the file.
+         * @default ""
+         * @public
+         */
+        this.fileName = "";
+        /**
+         * If set to `true` the file name will be clickable and it will fire `file-name-click` event upon click.
+         * @default false
+         * @public
+         */
+        this.fileNameClickable = false;
+        /**
+         * Disables the delete button.
+         * @default false
+         * @public
+         */
+        this.disableDeleteButton = false;
+        /**
+         * Hides the delete button.
+         * @default false
+         * @public
+         */
+        this.hideDeleteButton = false;
+        /**
+         * Hides the retry button when `uploadState` property is `Error`.
+         * @default false
+         * @public
+         */
+        this.hideRetryButton = false;
+        /**
+         * Hides the terminate button when `uploadState` property is `Uploading`.
+         * @default false
+         * @public
+         */
+        this.hideTerminateButton = false;
+        /**
+         * The upload progress in percentage.
+         *
+         * **Note:** Expected values are in the interval [0, 100].
+         * @default 0
+         * @public
+         */
+        this.progress = 0;
+        /**
+         * Upload state.
+         *
+         * Depending on this property, the item displays the following:
+         *
+         * - `Ready` - progress indicator is displayed.
+         * - `Uploading` - progress indicator and terminate button are displayed. When the terminate button is pressed, `terminate` event is fired.
+         * - `Error` - progress indicator and retry button are displayed. When the retry button is pressed, `retry` event is fired.
+         * - `Complete` - progress indicator is not displayed.
+         *
+         * @default "Ready"
+         * @public
+         */
+        this.uploadState = "Ready";
+        /**
+         * Indicates if editing.
+         * @default false
+         * @private
+         */
+        this._editing = false;
     }
     /**
      * @override
@@ -63,13 +125,23 @@ let UploadCollectionItem = UploadCollectionItem_1 = class UploadCollectionItem e
     }
     async _initInputField() {
         await renderFinished();
-        const inp = this.shadowRoot.querySelector("#ui5-uci-edit-input");
-        inp.value = this._fileNameWithoutExtension;
+        if (this.editInpElement) {
+            this.editInpElement.value = this._fileNameWithoutExtension;
+        }
         await renderFinished();
-        const inpFocusDomRef = inp.getFocusDomRef();
+        const inpFocusDomRef = this.editInpElement?.getFocusDomRef();
         if (inpFocusDomRef) {
             inpFocusDomRef.focus();
             inpFocusDomRef.setSelectionRange(0, this._fileNameWithoutExtension.length);
+        }
+    }
+    get editInpElement() {
+        return this.shadowRoot.querySelector("#ui5-uci-edit-input");
+    }
+    _onkeyup(e) {
+        super._onkeyup(e);
+        if (isDelete(e) && !this.disableDeleteButton && !this.hideDeleteButton && !this.disabled) {
+            this._onDelete();
         }
     }
     _onDetailKeyup(e) {
@@ -95,7 +167,7 @@ let UploadCollectionItem = UploadCollectionItem_1 = class UploadCollectionItem e
     _onRename() {
         const inp = this.shadowRoot.querySelector("#ui5-uci-edit-input");
         this.fileName = inp.value + this._fileExtension;
-        this.fireEvent("rename");
+        this.fireDecoratorEvent("rename");
         this._editing = false;
         this._focus();
     }
@@ -120,13 +192,13 @@ let UploadCollectionItem = UploadCollectionItem_1 = class UploadCollectionItem e
         }
     }
     _focus() {
-        this.fireEvent("_focus-requested");
+        this.fireDecoratorEvent("focus-requested");
     }
     _onFileNameClick() {
-        this.fireEvent("file-name-click");
+        this.fireDecoratorEvent("file-name-click");
     }
     _onRetry() {
-        this.fireEvent("retry");
+        this.fireDecoratorEvent("retry");
     }
     _onRetryKeyup(e) {
         if (isSpace(e)) {
@@ -134,7 +206,7 @@ let UploadCollectionItem = UploadCollectionItem_1 = class UploadCollectionItem e
         }
     }
     _onTerminate() {
-        this.fireEvent("terminate");
+        this.fireDecoratorEvent("terminate");
     }
     _onTerminateKeyup(e) {
         if (isSpace(e)) {
@@ -142,7 +214,7 @@ let UploadCollectionItem = UploadCollectionItem_1 = class UploadCollectionItem e
         }
     }
     _onDelete() {
-        this.fireEvent("_uci-delete");
+        this.fireDecoratorEvent("request-delete");
     }
     getFocusDomRef() {
         return this.getDomRef();
@@ -202,7 +274,7 @@ let UploadCollectionItem = UploadCollectionItem_1 = class UploadCollectionItem e
     }
     get valueStateName() {
         if (this.uploadState === UploadState.Error) {
-            return ValueState.Error;
+            return ValueState.Negative;
         }
         if (this.uploadState === UploadState.Ready || this.uploadState === UploadState.Uploading) {
             return ValueState.Information;
@@ -220,7 +292,7 @@ let UploadCollectionItem = UploadCollectionItem_1 = class UploadCollectionItem e
     }
 };
 __decorate([
-    property({ type: Object, noAttribute: true, defaultValue: null })
+    property({ type: Object, noAttribute: true })
 ], UploadCollectionItem.prototype, "file", void 0);
 __decorate([
     property()
@@ -229,7 +301,7 @@ __decorate([
     property({ type: Boolean })
 ], UploadCollectionItem.prototype, "fileNameClickable", void 0);
 __decorate([
-    property({ type: Boolean, noAttribute: false })
+    property({ type: Boolean })
 ], UploadCollectionItem.prototype, "disableDeleteButton", void 0);
 __decorate([
     property({ type: Boolean })
@@ -241,10 +313,10 @@ __decorate([
     property({ type: Boolean })
 ], UploadCollectionItem.prototype, "hideTerminateButton", void 0);
 __decorate([
-    property({ validator: Integer, defaultValue: 0 })
+    property({ type: Number })
 ], UploadCollectionItem.prototype, "progress", void 0);
 __decorate([
-    property({ type: UploadState, defaultValue: UploadState.Ready })
+    property()
 ], UploadCollectionItem.prototype, "uploadState", void 0);
 __decorate([
     property({ type: Boolean })
@@ -252,20 +324,16 @@ __decorate([
 __decorate([
     slot({ type: HTMLElement })
 ], UploadCollectionItem.prototype, "thumbnail", void 0);
+__decorate([
+    i18n("@ui5/webcomponents-fiori")
+], UploadCollectionItem, "i18nFioriBundle", void 0);
 UploadCollectionItem = UploadCollectionItem_1 = __decorate([
     customElement({
         tag: "ui5-upload-collection-item",
         languageAware: true,
+        renderer: jsxRenderer,
         styles: [ListItem.styles, UploadCollectionItemCss],
         template: UploadCollectionItemTemplate,
-        dependencies: [
-            ...ListItem.dependencies,
-            Button,
-            Input,
-            Link,
-            Label,
-            ProgressIndicator,
-        ],
     })
     /**
      * Fired when the file name is clicked.
@@ -274,7 +342,9 @@ UploadCollectionItem = UploadCollectionItem_1 = __decorate([
      * @public
      */
     ,
-    event("file-name-click")
+    event("file-name-click", {
+        bubbles: true,
+    })
     /**
      * Fired when the `fileName` property gets changed.
      *
@@ -283,7 +353,9 @@ UploadCollectionItem = UploadCollectionItem_1 = __decorate([
      * @public
      */
     ,
-    event("rename")
+    event("rename", {
+        bubbles: true,
+    })
     /**
      * Fired when the terminate button is pressed.
      *
@@ -291,7 +363,9 @@ UploadCollectionItem = UploadCollectionItem_1 = __decorate([
      * @public
      */
     ,
-    event("terminate")
+    event("terminate", {
+        bubbles: true,
+    })
     /**
      * Fired when the retry button is pressed.
      *
@@ -299,18 +373,24 @@ UploadCollectionItem = UploadCollectionItem_1 = __decorate([
      * @public
      */
     ,
-    event("retry")
+    event("retry", {
+        bubbles: true,
+    })
     /**
      * @since 1.0.0-rc.8
      * @private
      */
     ,
-    event("_focus-requested")
+    event("focus-requested", {
+        bubbles: true,
+    })
     /**
      * @private
      */
     ,
-    event("_uci-delete")
+    event("request-delete", {
+        bubbles: true,
+    })
 ], UploadCollectionItem);
 UploadCollectionItem.define();
 export default UploadCollectionItem;

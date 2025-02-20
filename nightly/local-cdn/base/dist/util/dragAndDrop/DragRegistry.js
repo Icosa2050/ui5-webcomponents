@@ -6,8 +6,6 @@ const ondragstart = (e) => {
     if (!e.dataTransfer || !(e.target instanceof HTMLElement)) {
         return;
     }
-    e.dataTransfer.dropEffect = "move";
-    e.dataTransfer.effectAllowed = "move";
     if (!selfManagedDragAreas.has(e.target)) {
         draggedElement = e.target;
     }

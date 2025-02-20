@@ -6,31 +6,30 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 var ListItem_1;
 import customElement from "@ui5/webcomponents-base/dist/decorators/customElement.js";
-import { getEventMark } from "@ui5/webcomponents-base/dist/MarkedEvents.js";
-import { isSpace, isEnter, isDelete } from "@ui5/webcomponents-base/dist/Keys.js";
-import { getI18nBundle } from "@ui5/webcomponents-base/dist/i18nBundle.js";
+import { isSpace, isEnter, isDelete, isF2, } from "@ui5/webcomponents-base/dist/Keys.js";
+import jsxRenderer from "@ui5/webcomponents-base/dist/renderer/JsxRenderer.js";
+import getActiveElement from "@ui5/webcomponents-base/dist/util/getActiveElement.js";
+import { getFirstFocusableElement } from "@ui5/webcomponents-base/dist/util/FocusableElements.js";
 import property from "@ui5/webcomponents-base/dist/decorators/property.js";
-import event from "@ui5/webcomponents-base/dist/decorators/event.js";
+import event from "@ui5/webcomponents-base/dist/decorators/event-strict.js";
 import slot from "@ui5/webcomponents-base/dist/decorators/slot.js";
+import i18n from "@ui5/webcomponents-base/dist/decorators/i18n.js";
 import "@ui5/webcomponents-icons/dist/decline.js";
 import "@ui5/webcomponents-icons/dist/edit.js";
-import HighlightTypes from "./types/HighlightTypes.js";
+import Highlight from "./types/Highlight.js";
 import ListItemType from "./types/ListItemType.js";
 import ListSelectionMode from "./types/ListSelectionMode.js";
 import ListItemBase from "./ListItemBase.js";
-import RadioButton from "./RadioButton.js";
-import CheckBox from "./CheckBox.js";
-import Button from "./Button.js";
 import { DELETE, ARIA_LABEL_LIST_ITEM_CHECKBOX, ARIA_LABEL_LIST_ITEM_RADIO_BUTTON, LIST_ITEM_SELECTED, LIST_ITEM_NOT_SELECTED, } from "./generated/i18n/i18n-defaults.js";
 // Styles
 import styles from "./generated/themes/ListItem.css.js";
-import HasPopup from "./types/HasPopup.js";
+import listItemAdditionalTextCss from "./generated/themes/ListItemAdditionalText.css.js";
 // Icons
 import "@ui5/webcomponents-icons/dist/slim-arrow-right.js";
 /**
  * @class
  * A class to serve as a base
- * for the `StandardListItem` and `CustomListItem` classes.
+ * for the `ListItemStandard` and `ListItemCustom` classes.
  * @constructor
  * @abstract
  * @extends ListItemBase
@@ -39,6 +38,61 @@ import "@ui5/webcomponents-icons/dist/slim-arrow-right.js";
 let ListItem = ListItem_1 = class ListItem extends ListItemBase {
     constructor() {
         super();
+        /**
+         * Defines the visual indication and behavior of the list items.
+         * Available options are `Active` (by default), `Inactive`, `Detail` and `Navigation`.
+         *
+         * **Note:** When set to `Active` or `Navigation`, the item will provide visual response upon press and hover,
+         * while with type `Inactive` and `Detail` - will not.
+         * @default "Active"
+         * @public
+        */
+        this.type = "Active";
+        /**
+         * Defines the additional accessibility attributes that will be applied to the component.
+         * The following fields are supported:
+         *
+         * - **ariaSetsize**: Defines the number of items in the current set  when not all items in the set are present in the DOM.
+         * **Note:** The value is an integer reflecting the number of items in the complete set. If the size of the entire set is unknown, set `-1`.
+         *
+         * 	- **ariaPosinset**: Defines an element's number or position in the current set when not all items are present in the DOM.
+         * 	**Note:** The value is an integer greater than or equal to 1, and less than or equal to the size of the set when that size is known.
+         *
+         * @default {}
+         * @public
+         * @since 1.15.0
+         */
+        this.accessibilityAttributes = {};
+        /**
+         * The navigated state of the list item.
+         * If set to `true`, a navigation indicator is displayed at the end of the list item.
+         * @default false
+         * @public
+         * @since 1.10.0
+         */
+        this.navigated = false;
+        /**
+         * Indicates if the list item is active, e.g pressed down with the mouse or the keyboard keys.
+         * @private
+        */
+        this.active = false;
+        /**
+         * Defines the highlight state of the list items.
+         * Available options are: `"None"` (by default), `"Positive"`, `"Critical"`, `"Information"` and `"Negative"`.
+         * @default "None"
+         * @public
+         * @since 1.24
+         */
+        this.highlight = "None";
+        /**
+         * Used to define the role of the list item.
+         * @private
+         * @default "ListItem"
+         * @since 1.3.0
+         *
+         */
+        this.accessibleRole = "ListItem";
+        this._selectionMode = "None";
         this.deactivateByKey = (e) => {
             if (isEnter(e)) {
                 this.deactivate();
@@ -49,18 +103,13 @@ let ListItem = ListItem_1 = class ListItem extends ListItemBase {
                 this.active = false;
             }
         };
-        const handleTouchStartEvent = (e) => {
-            this._onmousedown(e);
-        };
-        this._ontouchstart = {
-            handleEvent: handleTouchStartEvent,
-            passive: true,
-        };
     }
     onBeforeRendering() {
+        super.onBeforeRendering();
         this.actionable = (this.type === ListItemType.Active || this.type === ListItemType.Navigation) && (this._selectionMode !== ListSelectionMode.Delete);
     }
     onEnterDOM() {
+        super.onEnterDOM();
         document.addEventListener("mouseup", this.deactivate);
         document.addEventListener("touchend", this.deactivate);
         document.addEventListener("keyup", this.deactivateByKey);
@@ -70,58 +119,68 @@ let ListItem = ListItem_1 = class ListItem extends ListItemBase {
         document.removeEventListener("keyup", this.deactivateByKey);
         document.removeEventListener("touchend", this.deactivate);
     }
-    _onkeydown(e) {
+    async _onkeydown(e) {
+        if ((isSpace(e) || isEnter(e)) && this._isTargetSelfFocusDomRef(e)) {
+            return;
+        }
         super._onkeydown(e);
         const itemActive = this.type === ListItemType.Active, itemNavigated = this.typeNavigation;
-        if (isSpace(e)) {
-            e.preventDefault();
-        }
         if ((isSpace(e) || isEnter(e)) && (itemActive || itemNavigated)) {
             this.activate();
         }
-        if (isEnter(e)) {
-            this.fireItemPress(e);
+        if (isF2(e)) {
+            const activeElement = getActiveElement();
+            const focusDomRef = this.getFocusDomRef();
+            if (activeElement === focusDomRef) {
+                const firstFocusable = await getFirstFocusableElement(focusDomRef);
+                firstFocusable?.focus();
+            }
+            else {
+                focusDomRef.focus();
+            }
         }
     }
     _onkeyup(e) {
+        super._onkeyup(e);
         if (isSpace(e) || isEnter(e)) {
             this.deactivate();
-        }
-        if (isSpace(e)) {
-            this.fireItemPress(e);
         }
         if (this.modeDelete && isDelete(e)) {
             this.onDelete();
         }
     }
-    _onmousedown(e) {
-        if (getEventMark(e) === "button") {
-            return;
-        }
+    _onmousedown() {
         this.activate();
     }
-    _onmouseup(e) {
-        if (getEventMark(e) === "button") {
+    _onmouseup() {
+        if (this.getFocusDomRef().matches(":has(:focus-within)")) {
             return;
         }
         this.deactivate();
     }
-    _ontouchend(e) {
-        this._onmouseup(e);
+    _ontouchend() {
+        this._onmouseup();
     }
-    _onfocusout() {
-        super._onfocusout();
-        this.deactivate();
+    _onfocusin(e) {
+        super._onfocusin(e);
+        if (e.target !== this.getFocusDomRef()) {
+            this.deactivate();
+        }
     }
-    _onclick(e) {
-        if (getEventMark(e) === "button") {
+    _onfocusout(e) {
+        if (e.target !== this.getFocusDomRef()) {
             return;
         }
-        this.fireItemPress(e);
+        this.deactivate();
     }
     _ondragstart(e) {
+        if (!e.dataTransfer) {
+            return;
+        }
         if (e.target === this._listItem) {
             this.setAttribute("data-moving", "");
+            e.dataTransfer.dropEffect = "move";
+            e.dataTransfer.effectAllowed = "move";
         }
     }
     _ondragend(e) {
@@ -129,7 +188,11 @@ let ListItem = ListItem_1 = class ListItem extends ListItemBase {
             this.removeAttribute("data-moving");
         }
     }
-    /*
+    _isTargetSelfFocusDomRef(e) {
+        const target = e.target, focusDomRef = this.getFocusDomRef();
+        return target !== focusDomRef;
+    }
+    /**
      * Called when selection components in Single (ui5-radio-button)
      * and Multi (ui5-checkbox) selection modes are used.
      */
@@ -137,13 +200,13 @@ let ListItem = ListItem_1 = class ListItem extends ListItemBase {
         if (this.isInactive) {
             return;
         }
-        this.fireEvent("_selection-requested", { item: this, selected: e.target.checked, selectionComponentPressed: true });
+        this.fireDecoratorEvent("selection-requested", { item: this, selected: e.target.checked, selectionComponentPressed: true });
     }
     onSingleSelectionComponentPress(e) {
         if (this.isInactive) {
             return;
         }
-        this.fireEvent("_selection-requested", { item: this, selected: !e.target.checked, selectionComponentPressed: true });
+        this.fireDecoratorEvent("selection-requested", { item: this, selected: !e.target.checked, selectionComponentPressed: true });
     }
     activate() {
         if (this.type === ListItemType.Active || this.type === ListItemType.Navigation) {
@@ -151,19 +214,19 @@ let ListItem = ListItem_1 = class ListItem extends ListItemBase {
         }
     }
     onDelete() {
-        this.fireEvent("_selection-requested", { item: this, selectionComponentPressed: false });
+        this.fireDecoratorEvent("selection-requested", { item: this, selectionComponentPressed: false });
     }
     onDetailClick() {
-        this.fireEvent("detail-click", { item: this, selected: this.selected });
+        this.fireDecoratorEvent("detail-click", { item: this, selected: this.selected });
     }
     fireItemPress(e) {
-        if (this.isInactive || this.disabled) {
+        if (this.isInactive) {
             return;
         }
-        if (isEnter(e)) {
-            e.preventDefault();
+        super.fireItemPress(e);
+        if (document.activeElement !== this) {
+            this.focus();
         }
-        this.fireEvent("_press", { item: this, selected: this.selected, key: e.key });
     }
     get isInactive() {
         return this.type === ListItemType.Inactive || this.type === ListItemType.Detail;
@@ -189,15 +252,6 @@ let ListItem = ListItem_1 = class ListItem extends ListItemBase {
     get modeDelete() {
         return this._selectionMode === ListSelectionMode.Delete;
     }
-    /**
-     * Used in UploadCollectionItem
-     */
-    get renderDeleteButton() {
-        return this.modeDelete;
-    }
-    /**
-     * End
-     */
     get typeDetail() {
         return this.type === ListItemType.Detail;
     }
@@ -212,6 +266,9 @@ let ListItem = ListItem_1 = class ListItem extends ListItemBase {
             return this.selected;
         }
         return undefined;
+    }
+    get listItemAccessibleRole() {
+        return (this._forcedAccessibleRole || this.accessibleRole.toLowerCase());
     }
     get ariaSelectedText() {
         let ariaSelectedText;
@@ -240,20 +297,20 @@ let ListItem = ListItem_1 = class ListItem extends ListItemBase {
     }
     get _accInfo() {
         return {
-            role: this.accessibleRole || this.role,
+            role: this.listItemAccessibleRole,
             ariaExpanded: undefined,
             ariaLevel: undefined,
             ariaLabel: ListItem_1.i18nBundle.getText(ARIA_LABEL_LIST_ITEM_CHECKBOX),
             ariaLabelRadioButton: ListItem_1.i18nBundle.getText(ARIA_LABEL_LIST_ITEM_RADIO_BUTTON),
             ariaSelectedText: this.ariaSelectedText,
-            ariaHaspopup: this.ariaHaspopup?.toLowerCase() || undefined,
+            ariaHaspopup: this.accessibilityAttributes.hasPopup,
             setsize: this.accessibilityAttributes.ariaSetsize,
             posinset: this.accessibilityAttributes.ariaPosinset,
-            tooltip: this.tooltip || this.title,
+            tooltip: this.tooltip,
         };
     }
     get _hasHighlightColor() {
-        return this.highlight !== HighlightTypes.None;
+        return this.highlight !== Highlight.None;
     }
     get hasConfigurableMode() {
         return true;
@@ -261,12 +318,9 @@ let ListItem = ListItem_1 = class ListItem extends ListItemBase {
     get _listItem() {
         return this.shadowRoot.querySelector("li");
     }
-    static async onDefine() {
-        ListItem_1.i18nBundle = await getI18nBundle("@ui5/webcomponents");
-    }
 };
 __decorate([
-    property({ type: ListItemType, defaultValue: ListItemType.Active })
+    property()
 ], ListItem.prototype, "type", void 0);
 __decorate([
     property({ type: Object })
@@ -275,46 +329,40 @@ __decorate([
     property({ type: Boolean })
 ], ListItem.prototype, "navigated", void 0);
 __decorate([
-    property({ type: String, defaultValue: "" })
+    property()
 ], ListItem.prototype, "tooltip", void 0);
 __decorate([
     property({ type: Boolean })
 ], ListItem.prototype, "active", void 0);
 __decorate([
     property()
-], ListItem.prototype, "title", void 0);
-__decorate([
-    property({ type: HighlightTypes, defaultValue: HighlightTypes.None })
 ], ListItem.prototype, "highlight", void 0);
 __decorate([
     property({ type: Boolean })
-], ListItem.prototype, "actionable", void 0);
-__decorate([
-    property({ defaultValue: "listitem" })
-], ListItem.prototype, "role", void 0);
-__decorate([
-    property({ defaultValue: undefined, noAttribute: true })
-], ListItem.prototype, "accessibleRoleDescription", void 0);
+], ListItem.prototype, "selected", void 0);
 __decorate([
     property()
 ], ListItem.prototype, "accessibleRole", void 0);
 __decorate([
-    property({ type: ListSelectionMode, defaultValue: ListSelectionMode.None })
-], ListItem.prototype, "_selectionMode", void 0);
+    property()
+], ListItem.prototype, "_forcedAccessibleRole", void 0);
 __decorate([
-    property({ type: HasPopup, noAttribute: true })
-], ListItem.prototype, "ariaHaspopup", void 0);
+    property()
+], ListItem.prototype, "_selectionMode", void 0);
 __decorate([
     slot()
 ], ListItem.prototype, "deleteButton", void 0);
+__decorate([
+    i18n("@ui5/webcomponents")
+], ListItem, "i18nBundle", void 0);
 ListItem = ListItem_1 = __decorate([
     customElement({
         languageAware: true,
-        styles: [ListItemBase.styles, styles],
-        dependencies: [
-            Button,
-            RadioButton,
-            CheckBox,
+        renderer: jsxRenderer,
+        styles: [
+            ListItemBase.styles,
+            listItemAdditionalTextCss,
+            styles,
         ],
     })
     /**
@@ -322,10 +370,12 @@ ListItem = ListItem_1 = __decorate([
      * @public
      */
     ,
-    event("detail-click"),
-    event("_press"),
-    event("_focused"),
-    event("_selection-requested")
+    event("detail-click", {
+        bubbles: true,
+    }),
+    event("selection-requested", {
+        bubbles: true,
+    })
 ], ListItem);
 export default ListItem;
 //# sourceMappingURL=ListItem.js.map

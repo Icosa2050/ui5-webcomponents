@@ -5,17 +5,16 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 var ProductSwitch_1;
-import { getI18nBundle } from "@ui5/webcomponents-base/dist/i18nBundle.js";
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
 import ItemNavigation from "@ui5/webcomponents-base/dist/delegate/ItemNavigation.js";
 import property from "@ui5/webcomponents-base/dist/decorators/property.js";
 import slot from "@ui5/webcomponents-base/dist/decorators/slot.js";
 import customElement from "@ui5/webcomponents-base/dist/decorators/customElement.js";
+import i18n from "@ui5/webcomponents-base/dist/decorators/i18n.js";
 import ResizeHandler from "@ui5/webcomponents-base/dist/delegate/ResizeHandler.js";
-import Integer from "@ui5/webcomponents-base/dist/types/Integer.js";
-import litRender from "@ui5/webcomponents-base/dist/renderer/LitRenderer.js";
+import jsxRenderer from "@ui5/webcomponents-base/dist/renderer/JsxRenderer.js";
 import { isDown, isUp, } from "@ui5/webcomponents-base/dist/Keys.js";
-import ProductSwitchTemplate from "./generated/templates/ProductSwitchTemplate.lit.js";
+import ProductSwitchTemplate from "./ProductSwitchTemplate.js";
 import { PRODUCT_SWITCH_CONTAINER_LABEL, } from "./generated/i18n/i18n-defaults.js";
 // Styles
 import ProductSwitchCss from "./generated/themes/ProductSwitch.css.js";
@@ -60,9 +59,6 @@ let ProductSwitch = ProductSwitch_1 = class ProductSwitch extends UI5Element {
             ONE_COLUMN: 600,
             THREE_COLUMN: 900,
         };
-    }
-    static async onDefine() {
-        ProductSwitch_1.i18nBundle = await getI18nBundle("@ui5/webcomponents-fiori");
     }
     get _ariaLabelText() {
         return ProductSwitch_1.i18nBundle.getText(PRODUCT_SWITCH_CONTAINER_LABEL);
@@ -122,15 +118,18 @@ let ProductSwitch = ProductSwitch_1 = class ProductSwitch extends UI5Element {
     }
 };
 __decorate([
-    property({ validator: Integer })
+    property({ type: Number })
 ], ProductSwitch.prototype, "desktopColumns", void 0);
 __decorate([
     slot({ type: HTMLElement, "default": true })
 ], ProductSwitch.prototype, "items", void 0);
+__decorate([
+    i18n("@ui5/webcomponents-fiori")
+], ProductSwitch, "i18nBundle", void 0);
 ProductSwitch = ProductSwitch_1 = __decorate([
     customElement({
         tag: "ui5-product-switch",
-        renderer: litRender,
+        renderer: jsxRenderer,
         styles: ProductSwitchCss,
         template: ProductSwitchTemplate,
     })

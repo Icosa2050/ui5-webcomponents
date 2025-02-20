@@ -1,20 +1,20 @@
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
-import type { StyleData } from "@ui5/webcomponents-base/dist/types.js";
+import type { AccessibilityAttributes } from "@ui5/webcomponents-base/dist/types.js";
 import ItemNavigation from "@ui5/webcomponents-base/dist/delegate/ItemNavigation.js";
 import type I18nBundle from "@ui5/webcomponents-base/dist/i18nBundle.js";
 import "@ui5/webcomponents-icons/dist/slim-arrow-up.js";
 import "@ui5/webcomponents-icons/dist/slim-arrow-down.js";
 import type { SetDraggedElementFunction } from "@ui5/webcomponents-base/dist/util/dragAndDrop/DragRegistry.js";
 import MovePlacement from "@ui5/webcomponents-base/dist/types/MovePlacement.js";
-import Button from "./Button.js";
-import DropIndicator from "./DropIndicator.js";
+import type Button from "./Button.js";
+import type DropIndicator from "./DropIndicator.js";
 import type Tab from "./Tab.js";
 import type { TabInStrip, TabInOverflow } from "./Tab.js";
-import type { TabSeparatorInStrip } from "./TabSeparator.js";
+import type { TabSeparatorInOverflow, TabSeparatorInStrip } from "./TabSeparator.js";
 import type { ListItemClickEventDetail, ListMoveEventDetail } from "./List.js";
-import ResponsivePopover from "./ResponsivePopover.js";
+import type ResponsivePopover from "./ResponsivePopover.js";
 import TabContainerTabsPlacement from "./types/TabContainerTabsPlacement.js";
-import BackgroundDesign from "./types/BackgroundDesign.js";
+import type BackgroundDesign from "./types/BackgroundDesign.js";
 import TabLayout from "./types/TabLayout.js";
 import OverflowMode from "./types/OverflowMode.js";
 import type { IButton } from "./Button.js";
@@ -28,6 +28,7 @@ type TabContainerStripInfo = {
     isTopLevelTab?: boolean;
 };
 type TabContainerOverflowInfo = {
+    getElementInOverflow: () => HTMLElement | undefined;
     style: Record<string, any>;
 };
 type TabContainerTabSelectEventDetail = {
@@ -98,6 +99,11 @@ interface ITab extends UI5Element {
  * @csspart tabstrip - Used to style the tabstrip of the component
  */
 declare class TabContainer extends UI5Element {
+    eventDetails: {
+        "tab-select": TabContainerTabSelectEventDetail;
+        "move-over": TabContainerMoveEventDetail;
+        "move": TabContainerMoveEventDetail;
+    };
     /**
      * Defines whether the tab content is collapsed.
      * @default false
@@ -155,8 +161,8 @@ declare class TabContainer extends UI5Element {
      * Defines the current media query size.
      * @private
      */
-    mediaRange: string;
-    _selectedTab: Tab;
+    mediaRange?: string;
+    _selectedTab?: Tab;
     _animationRunning: boolean;
     _contentCollapsed: boolean;
     _startOverflowText: string;
@@ -185,12 +191,12 @@ declare class TabContainer extends UI5Element {
      */
     startOverflowButton: Array<IButton>;
     _itemNavigation: ItemNavigation;
-    _itemsFlat?: Array<ITab>;
+    _itemsFlat: Array<ITab>;
     responsivePopover?: ResponsivePopover;
     _hasScheduledPopoverOpen: boolean;
     _handleResizeBound: () => void;
     _setDraggedElement?: SetDraggedElementFunction;
-    static registerTabStyles(styles: StyleData): void;
+    static registerTabStyles(styles: string): void;
     static i18nBundle: I18nBundle;
     constructor();
     onBeforeRendering(): void;
@@ -203,16 +209,19 @@ declare class TabContainer extends UI5Element {
     _onHeaderFocusin(e: FocusEvent): void;
     _onDragStart(e: DragEvent): void;
     _onHeaderDragEnter(e: DragEvent): void;
-    _onHeaderDragOver(e: DragEvent, isLongDragOver: boolean): void;
+    _onHeaderDragOver(e: DragEvent, isLongDragOver?: boolean): void;
     _onHeaderDrop(e: DragEvent): void;
+    _moveHeaderItem(tab: Tab, e: KeyboardEvent): void;
     _onHeaderDragLeave(e: DragEvent): void;
     _onPopoverListMoveOver(e: CustomEvent<ListMoveEventDetail>): void;
     _onPopoverListMove(e: CustomEvent<ListMoveEventDetail>): void;
+    _onPopoverListKeyDown(e: KeyboardEvent): void;
     _onTabStripClick(e: Event): Promise<void>;
     _onTabExpandButtonClick(e: Event): Promise<void>;
     _setPopoverInitialFocus(): void;
     _getSelectedTabInOverflow(): TabInOverflow;
     _getFirstFocusableItemInOverflow(): TabInOverflow;
+    _findTabInOverflow(realTab: ITab): TabSeparatorInOverflow | undefined;
     _onTabStripKeyDown(e: KeyboardEvent): void;
     _onTabStripKeyUp(e: KeyboardEvent): void;
     _onHeaderItemSelect(tab: HTMLElement): void;
@@ -239,11 +248,10 @@ declare class TabContainer extends UI5Element {
     slideContentDown(element: HTMLElement): Promise<void | Error>;
     slideContentUp(element: HTMLElement): Promise<void | Error>;
     _onOverflowClick(e: Event): Promise<void>;
-    _setIndentLevels(items: Array<ITab>, level: number, extraIndent: boolean): void;
     _sendOverflowPresentationInfos(items: Array<ITab>): void;
     _onOverflowKeyDown(e: KeyboardEvent): Promise<void>;
     _setItemsForStrip(): void;
-    _getRootTab(tab: Tab): Tab;
+    _getRootTab(tab: Tab | undefined): Tab | undefined;
     _updateEndOverflow(itemsDomRefs: Array<TabInStrip | TabSeparatorInStrip>): void;
     _updateStartAndEndOverflow(itemsDomRefs: Array<TabInStrip | TabSeparatorInStrip>): void;
     _hasStartOverflow(containerWidth: number, itemsDomRefs: Array<TabInStrip | TabSeparatorInStrip>, selectedItemIndexAndWidth: {
@@ -255,7 +263,7 @@ declare class TabContainer extends UI5Element {
         index: number;
     }): boolean;
     _getItemWidth(itemDomRef: HTMLElement): number;
-    _getSelectedItemIndexAndWidth(itemsDomRefs: Array<TabInStrip | TabSeparatorInStrip>, selectedTabDomRef: TabInStrip): {
+    _getSelectedItemIndexAndWidth(itemsDomRefs: Array<TabInStrip | TabSeparatorInStrip>, selectedTabDomRef: TabInStrip | undefined): {
         index: number;
         width: number;
     };
@@ -280,6 +288,7 @@ declare class TabContainer extends UI5Element {
     _respPopover(): Promise<ResponsivePopover>;
     _closePopover(): void;
     get dropIndicatorDOM(): DropIndicator | null;
+    _findSiblings(tab: Tab): ITab[];
     get classes(): {
         root: {
             "ui5-tc-root": boolean;
@@ -309,12 +318,12 @@ declare class TabContainer extends UI5Element {
     get nextIconACCName(): string;
     get overflowMenuTitle(): string;
     get tabsAtTheBottom(): boolean;
-    get overflowMenuIcon(): "slim-arrow-up" | "slim-arrow-down";
+    get overflowMenuIcon(): "slim-arrow-down" | "slim-arrow-up";
     get overflowButtonText(): string;
     get popoverCancelButtonText(): string;
     get accInvisibleText(): string;
+    get overflowBtnAccessibilityAttributes(): Pick<AccessibilityAttributes, "hasPopup">;
     get tablistAriaDescribedById(): string | undefined;
-    static onDefine(): Promise<void>;
 }
 export default TabContainer;
 export type { TabContainerTabSelectEventDetail, TabContainerMoveEventDetail, TabContainerStripInfo, TabContainerOverflowInfo, ITab, };

@@ -6,17 +6,14 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 import customElement from "@ui5/webcomponents-base/dist/decorators/customElement.js";
 import property from "@ui5/webcomponents-base/dist/decorators/property.js";
-import litRender from "@ui5/webcomponents-base/dist/renderer/LitRenderer.js";
+import event from "@ui5/webcomponents-base/dist/decorators/event-strict.js";
 import "@ui5/webcomponents-localization/dist/features/calendar/Gregorian.js"; // default calendar for bundling
-import Integer from "@ui5/webcomponents-base/dist/types/Integer.js";
 import { isEnter, isNumber, } from "@ui5/webcomponents-base/dist/Keys.js";
 import TimePickerInternals from "./TimePickerInternals.js";
-import Input from "./Input.js";
-import SegmentedButton from "./SegmentedButton.js";
 import InputType from "./types/InputType.js";
 import { TIMEPICKER_INPUTS_ENTER_HOURS, TIMEPICKER_INPUTS_ENTER_MINUTES, TIMEPICKER_INPUTS_ENTER_SECONDS, } from "./generated/i18n/i18n-defaults.js";
 // Template
-import TimeSelectionInputsTemplate from "./generated/templates/TimeSelectionInputsTemplate.lit.js";
+import TimeSelectionInputsTemplate from "./TimeSelectionInputsTemplate.js";
 // Styles
 import TimeSelectionInputsCss from "./generated/themes/TimeSelectionInputs.css.js";
 /**
@@ -37,6 +34,10 @@ import TimeSelectionInputsCss from "./generated/themes/TimeSelectionInputs.css.j
  * @private
  */
 let TimeSelectionInputs = class TimeSelectionInputs extends TimePickerInternals {
+    constructor() {
+        super(...arguments);
+        this._editedInput = -1;
+    }
     get enterHoursLabel() {
         return TimePickerInternals.i18nBundle.getText(TIMEPICKER_INPUTS_ENTER_HOURS);
     }
@@ -54,7 +55,7 @@ let TimeSelectionInputs = class TimeSelectionInputs extends TimePickerInternals 
         return this._componentMap[key] === this._activeIndex;
     }
     get _is24HoursFormat() {
-        return this.formatPattern.indexOf("HH") !== -1 || this.formatPattern.indexOf("H") !== -1;
+        return this.formatPattern?.includes("HH") || this.formatPattern?.includes("H");
     }
     onBeforeRendering() {
         this._createComponents();
@@ -206,7 +207,7 @@ let TimeSelectionInputs = class TimeSelectionInputs extends TimePickerInternals 
         }
         if (isEnter(evt)) {
             // Accept the time and close the popover
-            this.fireEvent("close-inputs");
+            this.fireDecoratorEvent("close-inputs");
         }
         else if (isNumber(evt) && this._entities[this._activeIndex]) {
             const char = evt.key;
@@ -289,7 +290,7 @@ let TimeSelectionInputs = class TimeSelectionInputs extends TimePickerInternals 
     }
 };
 __decorate([
-    property({ validator: Integer, defaultValue: -1 })
+    property({ type: Number })
 ], TimeSelectionInputs.prototype, "_editedInput", void 0);
 __decorate([
     property()
@@ -297,13 +298,11 @@ __decorate([
 TimeSelectionInputs = __decorate([
     customElement({
         tag: "ui5-time-selection-inputs",
-        renderer: litRender,
         styles: TimeSelectionInputsCss,
         template: TimeSelectionInputsTemplate,
-        dependencies: [
-            Input,
-            SegmentedButton,
-        ],
+    }),
+    event("close-inputs", {
+        bubbles: true,
     })
 ], TimeSelectionInputs);
 TimeSelectionInputs.define();

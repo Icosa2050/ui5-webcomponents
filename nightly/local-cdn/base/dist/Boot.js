@@ -7,6 +7,7 @@ import applyTheme from "./theming/applyTheme.js";
 import { registerCurrentRuntime } from "./Runtimes.js";
 import { getFeature } from "./FeaturesRegistry.js";
 import { attachThemeRegistered } from "./theming/ThemeRegistered.js";
+import fixSafariActiveState from "./util/fixSafariActiveState.js";
 let booted = false;
 let bootPromise;
 const eventProvider = new EventProvider();
@@ -31,12 +32,12 @@ const boot = async () => {
         return bootPromise;
     }
     const bootExecutor = async (resolve) => {
+        registerCurrentRuntime();
         if (typeof document === "undefined") {
             resolve();
             return;
         }
         attachThemeRegistered(onThemeRegistered);
-        registerCurrentRuntime();
         const openUI5Support = getFeature("OpenUI5Support");
         const isOpenUI5Loaded = openUI5Support ? openUI5Support.isOpenUI5Detected() : false;
         const f6Navigation = getFeature("F6Navigation");
@@ -51,9 +52,10 @@ const boot = async () => {
         openUI5Support && openUI5Support.attachListeners();
         insertFontFace();
         insertSystemCSSVars();
+        fixSafariActiveState();
         resolve();
         booted = true;
-        await eventProvider.fireEventAsync("boot");
+        eventProvider.fireEvent("boot");
     };
     bootPromise = new Promise(bootExecutor);
     return bootPromise;
@@ -65,9 +67,8 @@ const boot = async () => {
  * @param { string } theme
  */
 const onThemeRegistered = (theme) => {
-    const currentTheme = getTheme();
-    if (booted && theme === currentTheme) {
-        applyTheme(currentTheme);
+    if (booted && theme === getTheme()) { // getTheme should only be called if "booted" is true
+        applyTheme(getTheme());
     }
 };
 export { boot, attachBoot, isBooted, };

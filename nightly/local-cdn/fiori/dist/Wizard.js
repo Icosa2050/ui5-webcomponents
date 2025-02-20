@@ -8,30 +8,22 @@ var Wizard_1;
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
 import property from "@ui5/webcomponents-base/dist/decorators/property.js";
 import slot from "@ui5/webcomponents-base/dist/decorators/slot.js";
-import event from "@ui5/webcomponents-base/dist/decorators/event.js";
+import event from "@ui5/webcomponents-base/dist/decorators/event-strict.js";
 import customElement from "@ui5/webcomponents-base/dist/decorators/customElement.js";
-import litRender from "@ui5/webcomponents-base/dist/renderer/LitRenderer.js";
-import { getI18nBundle } from "@ui5/webcomponents-base/dist/i18nBundle.js";
+import i18n from "@ui5/webcomponents-base/dist/decorators/i18n.js";
+import jsxRenderer from "@ui5/webcomponents-base/dist/renderer/JsxRenderer.js";
 import getEffectiveScrollbarStyle from "@ui5/webcomponents-base/dist/util/getEffectiveScrollbarStyle.js";
 import ItemNavigation from "@ui5/webcomponents-base/dist/delegate/ItemNavigation.js";
 import NavigationMode from "@ui5/webcomponents-base/dist/types/NavigationMode.js";
-import Float from "@ui5/webcomponents-base/dist/types/Float.js";
 import clamp from "@ui5/webcomponents-base/dist/util/clamp.js";
 import ResizeHandler from "@ui5/webcomponents-base/dist/delegate/ResizeHandler.js";
-import { isPhone } from "@ui5/webcomponents-base/dist/Device.js";
 import debounce from "@ui5/webcomponents-base/dist/util/debounce.js";
 import { getFirstFocusableElement } from "@ui5/webcomponents-base/dist/util/FocusableElements.js";
-import Button from "@ui5/webcomponents/dist/Button.js";
-import ResponsivePopover from "@ui5/webcomponents/dist/ResponsivePopover.js";
-import browserScrollbarCSS from "@ui5/webcomponents/dist/generated/themes/BrowserScrollbar.css.js";
-import WizardContentLayout from "./types/WizardContentLayout.js";
+import "./WizardStep.js";
 // Texts
 import { WIZARD_NAV_STEP_DEFAULT_HEADING, WIZARD_NAV_ARIA_ROLE_DESCRIPTION, WIZARD_NAV_ARIA_LABEL, WIZARD_LIST_ARIA_LABEL, WIZARD_LIST_ARIA_DESCRIBEDBY, WIZARD_ACTIONSHEET_STEPS_ARIA_LABEL, WIZARD_OPTIONAL_STEP_ARIA_LABEL, WIZARD_STEP_ARIA_LABEL, WIZARD_STEP_ACTIVE, WIZARD_STEP_INACTIVE, } from "./generated/i18n/i18n-defaults.js";
-// Step in header and content
-import WizardTab from "./WizardTab.js";
-import WizardStep from "./WizardStep.js";
 // Template and Styles
-import WizardTemplate from "./generated/templates/WizardTemplate.lit.js";
+import WizardTemplate from "./WizardTemplate.js";
 import WizardCss from "./generated/themes/Wizard.css.js";
 import WizardPopoverCss from "./generated/themes/WizardPopover.css.js";
 const MIN_STEP_WIDTH_NO_TITLE = 64;
@@ -44,12 +36,6 @@ const STEP_SWITCH_THRESHOLDS = {
     MIN: 0.5,
     DEFAULT: 0.7,
     MAX: 1,
-};
-const RESPONSIVE_BREAKPOINTS = {
-    "0": "S",
-    "599": "M",
-    "1023": "L",
-    "1439": "XL",
 };
 /**
  * @class
@@ -139,11 +125,36 @@ const RESPONSIVE_BREAKPOINTS = {
 let Wizard = Wizard_1 = class Wizard extends UI5Element {
     constructor() {
         super();
+        /**
+         * Defines how the content of the `ui5-wizard` would be visualized.
+         * @public
+         * @since 1.14.0
+         * @default "MultipleSteps"
+         */
+        this.contentLayout = "MultipleSteps";
+        /**
+         * Defines the threshold to switch between steps upon user scrolling.
+         *
+         * **For Example:**
+         *
+         * (1) To switch to the next step, when half of the step is scrolled out - set `step-switch-threshold="0.5"`.
+         * (2) To switch to the next step, when the entire current step is scrolled out - set `step-switch-threshold="1"`.
+         *
+         * **Note:** Supported values are between 0.5 and 1
+         * and values out of the range will be normalized to 0.5 and 1 respectively.
+         * @private
+         * @default 0.7
+         * @since 1.0.0-rc.13
+         */
+        this.stepSwitchThreshold = STEP_SWITCH_THRESHOLDS.DEFAULT;
+        /**
+         * Stores references to the grouped steps.
+         * @private
+         */
+        this._groupedTabs = [];
         // Stores the scroll offsets of the steps,
         // e.g. the steps' starting point.
         this.stepScrollOffsets = [];
-        // Stores references to the grouped steps.
-        this._groupedTabs = [];
         // Keeps track of the currently selected step index.
         this.selectedStepIndex = 0;
         // Keeps track of the previously selected step index.
@@ -163,22 +174,6 @@ let Wizard = Wizard_1 = class Wizard extends UI5Element {
             getItemsCallback: () => this.enabledStepsInHeaderDOM,
         });
         this._onStepResize = this.onStepResize.bind(this);
-    }
-    get classes() {
-        return {
-            root: {
-                "ui5-wiz-root": true,
-                "ui5-content-native-scrollbars": getEffectiveScrollbarStyle(),
-            },
-            popover: {
-                "ui5-wizard-responsive-popover": true,
-                "ui5-wizard-popover": !isPhone(),
-                "ui5-wizard-dialog": isPhone(),
-            },
-        };
-    }
-    static async onDefine() {
-        Wizard_1.i18nBundle = await getI18nBundle("@ui5/webcomponents-fiori");
     }
     static get SCROLL_DEBOUNCE_RATE() {
         return 25;
@@ -224,6 +219,14 @@ let Wizard = Wizard_1 = class Wizard extends UI5Element {
         }
         // Place for improvement: If the selected step is not the first, enable all the prior steps
         this.selectedStepIndex = this.getSelectedStepIndex();
+        if (this.selectedStep && this.stepsInHeaderDOM.length) {
+            if (this._itemNavigation._getItems().includes(this.stepsInHeaderDOM[this.selectedStepIndex])) {
+                this._itemNavigation.setCurrentItem(this.stepsInHeaderDOM[this.selectedStepIndex]);
+            }
+            else {
+                this._itemNavigation.setCurrentItem(this.stepsInHeaderDOM.find(el => el.selected));
+            }
+        }
     }
     /**
      * Selects the first step.
@@ -287,7 +290,9 @@ let Wizard = Wizard_1 = class Wizard extends UI5Element {
             this.selectionRequestedByClick = false;
             return;
         }
-        debounce(this.changeSelectionByScroll.bind(this, e.target.scrollTop), Wizard_1.SCROLL_DEBOUNCE_RATE);
+        if (this.contentLayout !== "SingleStep") {
+            debounce(this.changeSelectionByScroll.bind(this, e.target.scrollTop), Wizard_1.SCROLL_DEBOUNCE_RATE);
+        }
     }
     /**
      * Handles when a step in the header is focused in order to update the `ItemNavigation`.
@@ -311,7 +316,6 @@ let Wizard = Wizard_1 = class Wizard extends UI5Element {
         }
         this._prevWidth = this.width;
         this._prevContentHeight = this.contentHeight;
-        this._calcCurrentBreakpoint();
     }
     attachStepsResizeObserver() {
         this.stepsDOM.forEach(stepDOM => {
@@ -323,11 +327,6 @@ let Wizard = Wizard_1 = class Wizard extends UI5Element {
         this.stepsDOM.forEach(stepDOM => {
             ResizeHandler.deregister(stepDOM, this._onStepResize);
         });
-    }
-    _calcCurrentBreakpoint() {
-        const breakpointDimensions = Object.keys(RESPONSIVE_BREAKPOINTS).reverse();
-        const breakpoint = breakpointDimensions.find((size) => Number(size) < this.width);
-        this._breakpoint = breakpoint ? RESPONSIVE_BREAKPOINTS[breakpoint] : RESPONSIVE_BREAKPOINTS["0"];
     }
     /**
      * Updates the expanded attribute for each ui5-wizard-tab based on the ui5-wizard width
@@ -417,7 +416,8 @@ let Wizard = Wizard_1 = class Wizard extends UI5Element {
             this._groupedTabs.push(tabs[i]);
         }
         const responsivePopover = this._respPopover();
-        responsivePopover.showAt(oDomTarget);
+        responsivePopover.opener = oDomTarget;
+        responsivePopover.open = true;
     }
     _onGroupedTabClick(e) {
         const eTarget = e.target;
@@ -435,13 +435,15 @@ let Wizard = Wizard_1 = class Wizard extends UI5Element {
         const stepToSelect = this.slottedSteps[Number(stepRefId) - 1];
         const selectedStep = this.selectedStep;
         const newlySelectedIndex = this.slottedSteps.indexOf(stepToSelect);
-        this.switchSelectionFromOldToNewStep(selectedStep, stepToSelect, newlySelectedIndex, true);
+        this.switchSelectionFromOldToNewStep(selectedStep, stepToSelect, newlySelectedIndex, false);
         this._closeRespPopover();
         tabs[newlySelectedIndex].focus();
     }
     _closeRespPopover() {
         const responsivePopover = this._respPopover();
-        responsivePopover && responsivePopover.close();
+        if (responsivePopover) {
+            responsivePopover.open = false;
+        }
     }
     _respPopover() {
         return this.shadowRoot.querySelector(`.ui5-wizard-responsive-popover`);
@@ -462,7 +464,7 @@ let Wizard = Wizard_1 = class Wizard extends UI5Element {
         // If the calculated index is in range,
         // change selection and fire "step-change".
         if (!stepToSelect.disabled && newlySelectedIndex >= 0 && newlySelectedIndex <= this.stepsCount - 1) {
-            this.switchSelectionFromOldToNewStep(this.selectedStep, stepToSelect, newlySelectedIndex, false);
+            this.switchSelectionFromOldToNewStep(this.selectedStep, stepToSelect, newlySelectedIndex, true);
             this.selectionRequestedByScroll = true;
         }
     }
@@ -493,7 +495,7 @@ let Wizard = Wizard_1 = class Wizard extends UI5Element {
         }
         if (bExpanded || (!bExpanded && (newlySelectedIndex === 0 || newlySelectedIndex === this.steps.length - 1))) {
             // Change selection and fire "step-change".
-            this.switchSelectionFromOldToNewStep(selectedStep, stepToSelect, newlySelectedIndex, true);
+            this.switchSelectionFromOldToNewStep(selectedStep, stepToSelect, newlySelectedIndex, false);
         }
     }
     getContentHeight() {
@@ -558,7 +560,7 @@ let Wizard = Wizard_1 = class Wizard extends UI5Element {
         return Array.from(this.shadowRoot.querySelectorAll("[ui5-wizard-tab]"));
     }
     get enabledStepsInHeaderDOM() {
-        return this.stepsInHeaderDOM;
+        return this.stepsInHeaderDOM.filter(step => !step.disabled);
     }
     get navAriaRoleDescription() {
         return Wizard_1.i18nBundle.getText(WIZARD_NAV_ARIA_ROLE_DESCRIPTION);
@@ -631,7 +633,6 @@ let Wizard = Wizard_1 = class Wizard extends UI5Element {
                 pos,
                 accInfo,
                 refStepId: step._id,
-                tabIndex: this.selectedStepIndex === idx ? "0" : "-1",
                 styles: {
                     zIndex: isAfterCurrent ? --inintialZIndex : 1,
                 },
@@ -733,20 +734,20 @@ let Wizard = Wizard_1 = class Wizard extends UI5Element {
      * @param selectedStep the old step
      * @param stepToSelect the step to be selected
      * @param stepToSelectIndex the index of the newly selected step
-     * @param changeWithClick the selection changed due to user click in the step navigation
+     * @param withScroll the selection changed due to user scrolling
      * @private
      */
-    switchSelectionFromOldToNewStep(selectedStep, stepToSelect, stepToSelectIndex, changeWithClick) {
+    switchSelectionFromOldToNewStep(selectedStep, stepToSelect, stepToSelectIndex, withScroll) {
         if (selectedStep && stepToSelect) {
             // keep the selection if next step is disabled
             if (!stepToSelect.disabled) {
                 selectedStep.selected = false;
                 stepToSelect.selected = true;
             }
-            this.fireEvent("step-change", {
+            this.fireDecoratorEvent("step-change", {
                 step: stepToSelect,
                 previousStep: selectedStep,
-                changeWithClick,
+                withScroll,
             });
             this.selectedStepIndex = stepToSelectIndex;
         }
@@ -766,23 +767,20 @@ let Wizard = Wizard_1 = class Wizard extends UI5Element {
     }
 };
 __decorate([
-    property({ type: WizardContentLayout, defaultValue: WizardContentLayout.MultipleSteps })
+    property()
 ], Wizard.prototype, "contentLayout", void 0);
 __decorate([
-    property({ validator: Float })
+    property({ type: Number })
 ], Wizard.prototype, "width", void 0);
 __decorate([
-    property({ validator: Float, defaultValue: STEP_SWITCH_THRESHOLDS.DEFAULT })
+    property({ type: Number })
 ], Wizard.prototype, "stepSwitchThreshold", void 0);
 __decorate([
-    property({ validator: Float })
+    property({ type: Number })
 ], Wizard.prototype, "contentHeight", void 0);
 __decorate([
-    property({ type: Object, multiple: true })
+    property({ type: Array })
 ], Wizard.prototype, "_groupedTabs", void 0);
-__decorate([
-    property()
-], Wizard.prototype, "_breakpoint", void 0);
 __decorate([
     slot({
         "default": true,
@@ -791,49 +789,33 @@ __decorate([
         invalidateOnChildChange: true,
     })
 ], Wizard.prototype, "steps", void 0);
+__decorate([
+    i18n("@ui5/webcomponents-fiori")
+], Wizard, "i18nBundle", void 0);
 Wizard = Wizard_1 = __decorate([
     customElement({
         tag: "ui5-wizard",
         languageAware: true,
         fastNavigation: true,
-        renderer: litRender,
+        renderer: jsxRenderer,
         styles: [
-            browserScrollbarCSS,
             WizardCss,
             WizardPopoverCss,
+            getEffectiveScrollbarStyle(),
         ],
         template: WizardTemplate,
-        dependencies: [
-            WizardTab,
-            WizardStep,
-            ResponsivePopover,
-            Button,
-        ],
     })
     /**
      * Fired when the step is changed by user interaction - either with scrolling,
      * or by clicking on the steps within the component header.
      * @param {WizardStep} step The new step.
      * @param {WizardStep} previousStep The previous step.
-     * @param {boolean} changeWithClick The step change occurs due to user's click or 'Enter'/'Space' key press on step within the navigation.
+     * @param {boolean} withScroll true when the event occurs due to user scrolling.
      * @public
      */
     ,
     event("step-change", {
-        detail: {
-            /**
-            * @public
-            */
-            step: { type: HTMLElement },
-            /**
-            * @public
-            */
-            previousStep: { type: HTMLElement },
-            /**
-            * @public
-            */
-            changeWithClick: { type: Boolean },
-        },
+        bubbles: true,
     })
 ], Wizard);
 Wizard.define();

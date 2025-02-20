@@ -1,7 +1,7 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "requirement-containment-relationship";
-const pathData = "M32 464c0-4 2-8 5-11l241-242c-15-19-22-42-22-67 0-61 51-112 112-112s112 51 112 112-51 112-112 112c-25 0-48-7-67-22L59 475c-3 3-7 5-11 5-8 0-16-8-16-16zM384 66v62h62c-7-31-31-55-62-62zm-94 62h62V66c-31 7-55 31-62 62zm156 32h-62v62c31-7 55-31 62-62zm-94 62v-62h-62c7 31 31 55 62 62z";
+const pathData = "M374 273c-29 0-55-9-77-23L45 502c-5 5-11 7-17 7-7 0-14-2-19-7-9-11-9-27 0-37l252-251c-15-22-24-48-24-77C237 60 298 0 374 0c75 0 133 57 137 131 0 80-56 142-137 142zm25-164l57-1c-9-26-30-46-57-54v55zm-107 1l56-1V55c-27 8-47 29-56 55zm107 50v59c29-8 51-31 58-60zm-51 59v-58h-56c8 28 29 49 56 58z";
 const ltr = false;
 const accData = null;
 const collection = "tnt-v3";

@@ -4,7 +4,9 @@ type Rules = {
 };
 /**
  * Sets the suffix to be used for custom elements scoping, f.e. pass "demo" to get tags such as "ui5-button-demo".
- * Note: by default all tags starting with "ui5-" will be scoped, unless you change this by calling "setCustomElementsScopingRules"
+ *
+ * **Note:** By default all tags starting with "ui5-" will be scoped, unless you change this by calling "setCustomElementsScopingRules"
+ * **Note:** Setting the scoping suffix must be done before importing any components.
  *
  * @public
  * @param suffix The scoping suffix

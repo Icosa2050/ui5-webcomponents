@@ -46,7 +46,7 @@ const aSupportedWidths = ["narrow", "abbreviated", "wide"];
  *
  * @extends sap.ui.base.Object
  * @author SAP SE
- * @version 1.120.5
+ * @version 1.120.17
  * @public
  * @alias sap.ui.core.LocaleData
  */

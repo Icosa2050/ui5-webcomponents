@@ -1,4 +1,4 @@
-import ToolbarSpacerTemplate from "./generated/templates/ToolbarSpacerTemplate.lit.js";
+import ToolbarSpacerTemplate from "./ToolbarSpacerTemplate.js";
 import ToolbarItem from "./ToolbarItem.js";
 /**
  * @class

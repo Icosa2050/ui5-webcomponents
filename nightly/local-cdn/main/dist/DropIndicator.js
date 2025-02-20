@@ -7,10 +7,10 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
 import customElement from "@ui5/webcomponents-base/dist/decorators/customElement.js";
 import property from "@ui5/webcomponents-base/dist/decorators/property.js";
-import litRender from "@ui5/webcomponents-base/dist/renderer/LitRenderer.js";
+import jsxRenderer from "@ui5/webcomponents-base/dist/renderer/JsxRenderer.js";
 import MovePlacement from "@ui5/webcomponents-base/dist/types/MovePlacement.js";
 import Orientation from "@ui5/webcomponents-base/dist/types/Orientation.js";
-import DropIndicatorTemplate from "./generated/templates/DropIndicatorTemplate.lit.js";
+import DropIndicatorTemplate from "./DropIndicatorTemplate.js";
 // Styles
 import DropIndicatorCss from "./generated/themes/DropIndicator.css.js";
 /**
@@ -37,6 +37,33 @@ let DropIndicator = class DropIndicator extends UI5Element {
     }
     constructor() {
         super();
+        /**
+         * Element where the drop indicator will be shown.
+         *
+         * @public
+         * @default null
+         */
+        this.targetReference = null;
+        /**
+         * Owner of the indicator and the target.
+         * @public
+         * @default null
+         */
+        this.ownerReference = null;
+        /**
+         * Placement of the indicator relative to the target.
+         *
+         * @default "Before"
+         * @public
+         */
+        this.placement = "Before";
+        /**
+         * Orientation of the indicator.
+         *
+         * @default "Vertical"
+         * @public
+         */
+        this.orientation = "Vertical";
     }
     onAfterRendering() {
         if (!this.targetReference || !this.ownerReference) {
@@ -46,7 +73,7 @@ let DropIndicator = class DropIndicator extends UI5Element {
             return;
         }
         const { left, width, right, top, bottom, height, } = this.targetReference.getBoundingClientRect();
-        const { top: containerTop, } = this.ownerReference.getBoundingClientRect();
+        const { top: containerTop, height: containerHeight, } = this.ownerReference.getBoundingClientRect();
         const style = {
             display: "",
             [this._positionProperty]: "",
@@ -54,17 +81,19 @@ let DropIndicator = class DropIndicator extends UI5Element {
             height: "",
         };
         let position = 0;
+        let isLast = false;
+        let isFirst = false;
         if (this.orientation === Orientation.Vertical) {
             switch (this.placement) {
                 case MovePlacement.Before:
-                    position = left - this._needle.offsetWidth / 2;
+                    position = left;
                     break;
                 case MovePlacement.On:
                     style.width = `${width}px`;
                     position = left;
                     break;
                 case MovePlacement.After:
-                    position = right - this._needle.offsetWidth / 2;
+                    position = right;
                     break;
             }
             style.height = `${height}px`;
@@ -84,41 +113,37 @@ let DropIndicator = class DropIndicator extends UI5Element {
             }
             style.width = `${width}px`;
             position -= containerTop;
+            if (position <= 0) {
+                isFirst = true;
+            }
+            if (position >= containerHeight) {
+                isLast = true;
+            }
         }
         style[this._positionProperty] = `${position}px`;
+        this.toggleAttribute("first", isFirst);
+        this.toggleAttribute("last", isLast);
         Object.assign(this.style, style);
-    }
-    get classes() {
-        return {
-            root: {
-                "ui5-di-rect": this.placement === MovePlacement.On,
-                "ui5-di-needle": this.placement !== MovePlacement.On,
-            },
-        };
-    }
-    get _needle() {
-        return this.shadowRoot.querySelector(".ui5-di-needle");
     }
 };
 __decorate([
-    property({ type: Object, defaultValue: null })
+    property({ type: Object })
 ], DropIndicator.prototype, "targetReference", void 0);
 __decorate([
-    property({ type: Object, defaultValue: null })
+    property({ type: Object })
 ], DropIndicator.prototype, "ownerReference", void 0);
 __decorate([
-    property({ type: MovePlacement, defaultValue: MovePlacement.Before })
+    property()
 ], DropIndicator.prototype, "placement", void 0);
 __decorate([
-    property({ type: Orientation, defaultValue: Orientation.Vertical })
+    property()
 ], DropIndicator.prototype, "orientation", void 0);
 DropIndicator = __decorate([
     customElement({
         tag: "ui5-drop-indicator",
-        renderer: litRender,
+        renderer: jsxRenderer,
         styles: DropIndicatorCss,
         template: DropIndicatorTemplate,
-        dependencies: [],
     })
 ], DropIndicator);
 DropIndicator.define();

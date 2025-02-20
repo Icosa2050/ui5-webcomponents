@@ -1,16 +1,15 @@
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
-import ResponsivePopover from "@ui5/webcomponents/dist/ResponsivePopover.js";
-import NavigationMenu from "@ui5/webcomponents/dist/NavigationMenu.js";
+import type ResponsivePopover from "@ui5/webcomponents/dist/ResponsivePopover.js";
+import type NavigationMenu from "./NavigationMenu.js";
 import type { MenuItemClickEventDetail } from "@ui5/webcomponents/dist/Menu.js";
 import type I18nBundle from "@ui5/webcomponents-base/dist/i18nBundle.js";
 import ItemNavigation from "@ui5/webcomponents-base/dist/delegate/ItemNavigation.js";
 import type { ITabbable } from "@ui5/webcomponents-base/dist/delegate/ItemNavigation.js";
-import "@ui5/webcomponents-icons/dist/overflow.js";
-import SideNavigationItemBase from "./SideNavigationItemBase.js";
-import SideNavigationSelectableItemBase from "./SideNavigationSelectableItemBase.js";
-import SideNavigationItem from "./SideNavigationItem.js";
-import SideNavigationSubItem from "./SideNavigationSubItem.js";
-import SideNavigationGroup from "./SideNavigationGroup.js";
+import type SideNavigationItemBase from "./SideNavigationItemBase.js";
+import type SideNavigationSelectableItemBase from "./SideNavigationSelectableItemBase.js";
+import type SideNavigationItem from "./SideNavigationItem.js";
+import type SideNavigationSubItem from "./SideNavigationSubItem.js";
+import type SideNavigationGroup from "./SideNavigationGroup.js";
 type SideNavigationPopoverContents = {
     item: SideNavigationItem;
     subItems: Array<SideNavigationSubItem>;
@@ -42,6 +41,10 @@ type NavigationMenuClickEventDetail = MenuItemClickEventDetail & {
  * The items can consist of text only or an icon with text. The use or non-use of icons must be consistent for all items on one level.
  * You must not combine entries with and without icons on the same level. We strongly recommend that you do not use icons on the second level.
  *
+ * The `ui5-side-navigation` component is intended for use within an `ui5-navigation-layout` component.
+ * While it can function independently, it is recommended to use it with
+ * the `ui5-navigation-layout` for optimal user experience.
+ *
  * ### Keyboard Handling
  *
  * ### Fast Navigation
@@ -65,6 +68,9 @@ type NavigationMenuClickEventDetail = MenuItemClickEventDetail & {
  * @public
  */
 declare class SideNavigation extends UI5Element {
+    eventDetails: {
+        "selection-change": SideNavigationSelectionChangeEventDetail;
+    };
     /**
      * Defines whether the `ui5-side-navigation` is expanded or collapsed.
      *
@@ -73,16 +79,13 @@ declare class SideNavigation extends UI5Element {
      */
     collapsed: boolean;
     /**
-     * Defines the main items of the `ui5-side-navigation`. Use the `ui5-side-navigation-item` component
-     * for the top-level items, and the `ui5-side-navigation-sub-item` component for second-level items, nested
-     * inside the items.
+     * Defines the main items of the component.
      *
      * @public
      */
     items: Array<SideNavigationItemBase>;
     /**
-     * Defines the fixed items at the bottom of the `ui5-side-navigation`. Use the `ui5-side-navigation-item` component
-     * for the fixed items, and optionally the `ui5-side-navigation-sub-item` component to provide second-level items inside them.
+     * Defines the fixed items at the bottom of the component.
      *
      * **Note:** In order to achieve the best user experience, it is recommended that you keep the fixed items "flat" (do not pass sub-items)
      *
@@ -103,10 +106,10 @@ declare class SideNavigation extends UI5Element {
      */
     _popoverContents: SideNavigationPopoverContents;
     inPopover: boolean;
+    _menuPopoverItems: Array<SideNavigationItem>;
     _isOverflow: boolean;
     _flexibleItemNavigation: ItemNavigation;
     _fixedItemNavigation: ItemNavigation;
-    _menuPopoverItems: Array<HTMLElement>;
     /**
      * @private
      */
@@ -136,11 +139,6 @@ declare class SideNavigation extends UI5Element {
     get showHeader(): boolean;
     get hasFixedItems(): boolean;
     get _rootRole(): "none" | undefined;
-    get classes(): {
-        root: {
-            "ui5-sn-collapsed": boolean;
-        };
-    };
     getEnabledFixedItems(): Array<ITabbable>;
     getEnabledFlexibleItems(): Array<ITabbable>;
     getEnabledItems(items: Array<SideNavigationItem | SideNavigationGroup>): Array<ITabbable>;
@@ -156,15 +154,17 @@ declare class SideNavigation extends UI5Element {
     _getAllItems(items: Array<SideNavigationItem | SideNavigationGroup>): Array<SideNavigationItemBase>;
     _findSelectedItem(items: Array<SideNavigationItem | SideNavigationGroup>): SideNavigationSelectableItemBase | undefined;
     get overflowItems(): Array<HTMLElement>;
-    _handleItemClick(e: KeyboardEvent | PointerEvent, item: SideNavigationSelectableItemBase): void;
+    _handleItemClick(e: KeyboardEvent | MouseEvent, item: SideNavigationSelectableItemBase): void;
     _handleOverflowClick(): void;
-    _getOverflowItems(): Array<SideNavigationSelectableItemBase>;
+    _getOverflowItems(): Array<SideNavigationItem>;
     _selectItem(item: SideNavigationSelectableItemBase): void;
     get _overflowItem(): SideNavigationItem | null;
     get isOverflow(): boolean;
     _onkeydownOverflow(e: KeyboardEvent): void;
     _onkeyupOverflow(e: KeyboardEvent): void;
-    static onDefine(): Promise<void>;
+    captureRef(ref: HTMLElement & {
+        associatedItem?: UI5Element;
+    } | null): void;
 }
 export default SideNavigation;
 export type { SideNavigationSelectionChangeEventDetail, };

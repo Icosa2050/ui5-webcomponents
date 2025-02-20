@@ -1,4 +1,3 @@
-/// <reference types="openui5" />
 import type CalendarType from "@ui5/webcomponents-base/dist/types/CalendarType.js";
 import UI5Date from "./UI5Date.js";
 import UniversalDate from "./UniversalDate.js";

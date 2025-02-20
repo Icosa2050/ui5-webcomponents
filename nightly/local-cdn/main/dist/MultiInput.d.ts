@@ -1,17 +1,19 @@
+import type UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
 import type { ITabbable } from "@ui5/webcomponents-base/dist/delegate/ItemNavigation.js";
+import type { IFormInputElement } from "@ui5/webcomponents-base/dist/features/InputElementsFormSupport.js";
 import Input from "./Input.js";
-import Tokenizer from "./Tokenizer.js";
+import type Token from "./Token.js";
+import type Tokenizer from "./Tokenizer.js";
 import type { TokenizerTokenDeleteEventDetail } from "./Tokenizer.js";
-import "@ui5/webcomponents-icons/dist/value-help.js";
-import type { InputSuggestionItemSelectEventDetail as MultiInputSuggestionItemSelectEventDetail, InputSuggestionItemPreviewEventDetail as MultiInputSuggestionItemPreviewEventDetail } from "./Input.js";
-interface IToken extends HTMLElement, ITabbable {
-    text: string;
+import type { InputSelectionChangeEventDetail as MultiInputSelectionChangeEventDetail } from "./Input.js";
+interface IToken extends UI5Element, ITabbable {
+    text?: string;
     readonly: boolean;
     selected: boolean;
     isTruncatable: boolean;
 }
 type MultiInputTokenDeleteEventDetail = {
-    token: IToken;
+    tokens: Token[];
 };
 /**
  * @class
@@ -22,7 +24,8 @@ type MultiInputTokenDeleteEventDetail = {
  * Fiori Guidelines say that user should create tokens when:
  *
  * - Type a value in the input and press enter or focus out the input field (`change` event is fired)
- * - Select a value from the suggestion list (`suggestion-item-select` event is fired)
+ * - Move between suggestion items (`selection-change` event is fired)
+ * - Clicking on a suggestion item (`selection-change` event is fired if the clicked item is different than the current value. Also `change` event is fired )
  *
  * ### ES6 Module Import
  *
@@ -32,7 +35,11 @@ type MultiInputTokenDeleteEventDetail = {
  * @since 1.0.0-rc.9
  * @public
  */
-declare class MultiInput extends Input {
+declare class MultiInput extends Input implements IFormInputElement {
+    eventDetails: Input["eventDetails"] & {
+        "value-help-trigger": void;
+        "token-delete": MultiInputTokenDeleteEventDetail;
+    };
     /**
      * Determines whether a value help icon will be visualized in the end of the input.
      * Pressing the icon will fire `value-help-trigger` event.
@@ -41,17 +48,21 @@ declare class MultiInput extends Input {
      */
     showValueHelpIcon: boolean;
     /**
-     * Indicates whether the tokenizer is expanded or collapsed(shows the n more label)
-     * @default false
-     * @private
-     */
-    expandedTokenizer: boolean;
-    /**
      * Indicates whether the tokenizer has tokens
      * @default false
      * @private
      */
     tokenizerAvailable: boolean;
+    /**
+     * Determines the name by which the component will be identified upon submission in an HTML form.
+     *
+     * **Note:** This property is only applicable within the context of an HTML Form element.
+     * **Note:** When the component is used inside a form element,
+     * the value is sent as the first element in the form data, even if it's empty.
+     * @default undefined
+     * @public
+     */
+    name?: string;
     /**
      * Defines the component tokens.
      * @public
@@ -59,9 +70,10 @@ declare class MultiInput extends Input {
     tokens: Array<IToken>;
     _skipOpenSuggestions: boolean;
     _valueHelpIconPressed: boolean;
+    get formValidity(): ValidityStateFlags;
+    get formFormattedValue(): FormData | string | null;
     constructor();
     valueHelpPress(): void;
-    showMorePress(): void;
     tokenDelete(e: CustomEvent<TokenizerTokenDeleteEventDetail>): void;
     valueHelpMouseDown(e: MouseEvent): void;
     _tokenizerFocusOut(e: FocusEvent): void;
@@ -70,40 +82,41 @@ declare class MultiInput extends Input {
     _onkeydown(e: KeyboardEvent): void;
     _onTokenizerKeydown(e: KeyboardEvent): void;
     _handleLeft(e: KeyboardEvent): void;
+    _handleBackspace(e: KeyboardEvent): void;
     _focusFirstToken(e: KeyboardEvent): void;
     _onfocusout(e: FocusEvent): void;
     /**
      * @override
      */
-    _onfocusin(e: FocusEvent): Promise<void>;
-    lastItemDeleted(): void;
+    _onfocusin(e: FocusEvent): void;
     onBeforeRendering(): void;
+    onAfterRendering(): void;
     get iconsCount(): number;
     get tokenizer(): Tokenizer;
-    get _tokensCountText(): string | undefined;
+    get tokenizerExpanded(): boolean;
+    get _tokensCountText(): string;
     get _tokensCountTextId(): string;
     /**
      * Returns the placeholder value when there are no tokens.
      * @protected
      */
-    get _placeholder(): string;
+    get _placeholder(): string | undefined;
     get accInfo(): {
-        input: {
-            ariaRoledescription: string;
-            ariaDescribedBy: string;
-            ariaInvalid: string | undefined;
-            ariaHasPopup: string | undefined;
-            ariaAutoComplete: string | undefined;
-            role: string | undefined;
-            ariaControls: string | undefined;
-            ariaExpanded: string | undefined;
-            ariaDescription: string | undefined;
-            ariaLabel: string | undefined;
-        };
+        ariaRoledescription: string;
+        ariaDescribedBy: string;
+        ariaInvalid: boolean | undefined;
+        ariaHasPopup: import("@ui5/webcomponents-base/dist/types.js").AriaHasPopup | undefined;
+        ariaAutoComplete: "list" | "none" | "inline" | "both" | undefined;
+        role: import("@ui5/webcomponents-base/dist/thirdparty/preact/jsx.js").JSXInternal.AriaRole | undefined;
+        ariaControls: string | undefined;
+        ariaExpanded: boolean | undefined;
+        ariaDescription: string | undefined;
+        ariaLabel: string | undefined;
     };
+    get valueHelpLabel(): string;
     get ariaRoleDescription(): string;
     get morePopoverOpener(): HTMLElement;
     get shouldDisplayOnlyValueStateMessage(): boolean;
 }
 export default MultiInput;
-export type { IToken, MultiInputTokenDeleteEventDetail, MultiInputSuggestionItemSelectEventDetail, MultiInputSuggestionItemPreviewEventDetail, };
+export type { IToken, MultiInputTokenDeleteEventDetail, MultiInputSelectionChangeEventDetail, };

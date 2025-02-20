@@ -17,8 +17,8 @@ declare class RadioButtonGroup {
     static updateSelectionInGroup(radioBtnToSelect: RadioButton, groupName: string): void;
     static _deselectRadio(radioBtn: RadioButton): void;
     static _selectRadio(radioBtn: RadioButton): void;
-    static _nextSelectable(pos: number, group: RadioButton[]): RadioButton | null;
-    static _previousSelectable(pos: number, group: RadioButton[]): RadioButton | null;
+    static _nextFocusable(pos: number, group: RadioButton[]): RadioButton | null;
+    static _previousFocusable(pos: number, group: RadioButton[]): RadioButton | null;
     static enforceSingleSelection(radioBtn: RadioButton, groupName: string): void;
     static get groups(): Map<string, RadioButton[]>;
     static get checkedRadios(): Map<string, RadioButton | null>;

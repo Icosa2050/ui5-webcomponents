@@ -2,7 +2,7 @@
  * Static collection of utility functions to handle time zone related conversions
  *
  * @author SAP SE
- * @version 1.120.5
+ * @version 1.120.17
  * @namespace
  * @alias module:sap/base/i18n/date/TimezoneUtils
  * @private

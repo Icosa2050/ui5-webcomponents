@@ -9,19 +9,18 @@ import customElement from "@ui5/webcomponents-base/dist/decorators/customElement
 import property from "@ui5/webcomponents-base/dist/decorators/property.js";
 import slot from "@ui5/webcomponents-base/dist/decorators/slot.js";
 import DragRegistry from "@ui5/webcomponents-base/dist/util/dragAndDrop/DragRegistry.js";
-import findClosestPosition from "@ui5/webcomponents-base/dist/util/dragAndDrop/findClosestPosition.js";
+import handleDragOver from "@ui5/webcomponents-base/dist/util/dragAndDrop/handleDragOver.js";
+import handleDrop from "@ui5/webcomponents-base/dist/util/dragAndDrop/handleDrop.js";
+import { findClosestPosition } from "@ui5/webcomponents-base/dist/util/dragAndDrop/findClosestPosition.js";
 import Orientation from "@ui5/webcomponents-base/dist/types/Orientation.js";
 import MovePlacement from "@ui5/webcomponents-base/dist/types/MovePlacement.js";
-import event from "@ui5/webcomponents-base/dist/decorators/event.js";
-import litRender from "@ui5/webcomponents-base/dist/renderer/LitRenderer.js";
-import { getEffectiveAriaLabelText } from "@ui5/webcomponents-base/dist/util/AriaLabelHelper.js";
-import DropIndicator from "./DropIndicator.js";
-import TreeItem from "./TreeItem.js";
-import TreeItemCustom from "./TreeItemCustom.js";
-import TreeList from "./TreeList.js";
-import ListSelectionMode from "./types/ListSelectionMode.js";
+import event from "@ui5/webcomponents-base/dist/decorators/event-strict.js";
+import jsxRenderer from "@ui5/webcomponents-base/dist/renderer/JsxRenderer.js";
+import "./TreeItem.js";
+import "./TreeItemCustom.js";
+import ListAccessibleRole from "./types/ListAccessibleRole.js";
 // Template
-import TreeTemplate from "./generated/templates/TreeTemplate.lit.js";
+import TreeTemplate from "./TreeTemplate.js";
 // Styles
 import TreeCss from "./generated/themes/Tree.css.js";
 /**
@@ -68,6 +67,16 @@ import TreeCss from "./generated/themes/Tree.css.js";
  * @since 1.0.0-rc.8
  */
 let Tree = class Tree extends UI5Element {
+    constructor() {
+        super(...arguments);
+        /**
+         * Defines the selection mode of the component. Since the tree uses a `ui5-list` to display its structure,
+         * the tree modes are exactly the same as the list modes, and are all applicable.
+         * @public
+         * @default "None"
+         */
+        this.selectionMode = "None";
+    }
     onEnterDOM() {
         DragRegistry.subscribe(this);
     }
@@ -89,10 +98,7 @@ let Tree = class Tree extends UI5Element {
         return this.getDomRef();
     }
     get _role() {
-        return "tree";
-    }
-    get _label() {
-        return getEffectiveAriaLabelText(this);
+        return ListAccessibleRole.Tree;
     }
     get _hasHeader() {
         return !!this.header.length;
@@ -120,50 +126,22 @@ let Tree = class Tree extends UI5Element {
             this.dropIndicatorDOM.targetReference = null;
             return;
         }
-        let placements = closestPosition.placements;
         closestPosition.element = closestPosition.element.getRootNode().host;
         if (draggedElement.contains(closestPosition.element)) {
             return;
         }
         if (closestPosition.element === draggedElement) {
-            placements = placements.filter(placement => placement !== MovePlacement.On);
+            closestPosition.placements = closestPosition.placements.filter(placement => placement !== MovePlacement.On);
         }
-        const placementAccepted = placements.some(placement => {
-            const closestElement = closestPosition.element;
-            const beforeItemMovePrevented = !this.fireEvent("move-over", {
-                source: {
-                    element: draggedElement,
-                },
-                destination: {
-                    element: closestElement,
-                    placement,
-                },
-            }, true);
-            if (beforeItemMovePrevented) {
-                e.preventDefault();
-                this.dropIndicatorDOM.targetReference = closestElement;
-                this.dropIndicatorDOM.placement = placement;
-                return true;
-            }
-            return false;
-        });
-        if (!placementAccepted) {
-            this.dropIndicatorDOM.targetReference = null;
-        }
+        const { targetReference, placement } = handleDragOver(e, this, closestPosition, closestPosition.element);
+        this.dropIndicatorDOM.targetReference = targetReference;
+        this.dropIndicatorDOM.placement = placement;
     }
     _ondrop(e) {
-        e.preventDefault();
-        const draggedElement = DragRegistry.getDraggedElement();
-        this.fireEvent("move", {
-            source: {
-                element: draggedElement,
-            },
-            destination: {
-                element: this.dropIndicatorDOM.targetReference,
-                placement: this.dropIndicatorDOM.placement,
-            },
-        });
-        draggedElement.focus();
+        if (!this.dropIndicatorDOM?.targetReference || !this.dropIndicatorDOM?.placement) {
+            return;
+        }
+        handleDrop(e, this, this.dropIndicatorDOM.targetReference, this.dropIndicatorDOM.placement);
         this.dropIndicatorDOM.targetReference = null;
     }
     _onListItemStepIn(e) {
@@ -184,35 +162,35 @@ let Tree = class Tree extends UI5Element {
     }
     _onListItemToggle(e) {
         const treeItem = e.detail.item;
-        const defaultPrevented = !this.fireEvent("item-toggle", { item: treeItem }, true);
+        const defaultPrevented = !this.fireDecoratorEvent("item-toggle", { item: treeItem });
         if (!defaultPrevented) {
             treeItem.toggle();
         }
     }
     _onListItemClick(e) {
         const treeItem = e.detail.item;
-        if (!this.fireEvent("item-click", { item: treeItem }, true)) {
+        if (!this.fireDecoratorEvent("item-click", { item: treeItem })) {
             e.preventDefault();
         }
     }
     _onListItemDelete(e) {
         const treeItem = e.detail.item;
-        this.fireEvent("item-delete", { item: treeItem });
+        this.fireDecoratorEvent("item-delete", { item: treeItem });
     }
     _onListItemFocus(e) {
         const treeItem = e.detail.item;
-        this.fireEvent("item-focus", { item: treeItem });
+        this.fireDecoratorEvent("item-focus", { item: treeItem });
     }
     _onListItemMouseOver(e) {
         const target = e.target;
         if (this._isInstanceOfTreeItemBase(target)) {
-            this.fireEvent("item-mouseover", { item: target });
+            this.fireDecoratorEvent("item-mouseover", { item: target });
         }
     }
     _onListItemMouseOut(e) {
         const target = e.target;
         if (this._isInstanceOfTreeItemBase(target)) {
-            this.fireEvent("item-mouseout", { item: target });
+            this.fireDecoratorEvent("item-mouseout", { item: target });
         }
     }
     _onListSelectionChange(e) {
@@ -225,7 +203,7 @@ let Tree = class Tree extends UI5Element {
         selectedItems.forEach(item => {
             item.selected = true;
         });
-        this.fireEvent("selection-change", {
+        this.fireDecoratorEvent("selection-change", {
             previouslySelectedItems,
             selectedItems,
             targetItem,
@@ -279,7 +257,7 @@ let Tree = class Tree extends UI5Element {
     }
 };
 __decorate([
-    property({ type: ListSelectionMode, defaultValue: ListSelectionMode.None })
+    property()
 ], Tree.prototype, "selectionMode", void 0);
 __decorate([
     property()
@@ -297,8 +275,11 @@ __decorate([
     property()
 ], Tree.prototype, "accessibleNameRef", void 0);
 __decorate([
-    property({ defaultValue: undefined, noAttribute: true })
-], Tree.prototype, "accessibleRoleDescription", void 0);
+    property()
+], Tree.prototype, "accessibleDescription", void 0);
+__decorate([
+    property()
+], Tree.prototype, "accessibleDescriptionRef", void 0);
 __decorate([
     slot({ type: HTMLElement, invalidateOnChildChange: true, "default": true })
 ], Tree.prototype, "items", void 0);
@@ -308,15 +289,9 @@ __decorate([
 Tree = __decorate([
     customElement({
         tag: "ui5-tree",
-        renderer: litRender,
+        renderer: jsxRenderer,
         styles: TreeCss,
         template: TreeTemplate,
-        dependencies: [
-            TreeList,
-            TreeItem,
-            TreeItemCustom,
-            DropIndicator,
-        ],
     })
     /**
      * Fired when a tree item is expanded or collapsed.
@@ -325,17 +300,12 @@ Tree = __decorate([
      * This may be handy for example if you want to dynamically load tree items upon the user expanding a node.
      * Even if you prevented the event's default behavior, you can always manually call `toggle()` on a tree item.
      * @param {HTMLElement} item the toggled item.
-     * @allowPreventDefault
      * @public
      */
     ,
     event("item-toggle", {
-        detail: {
-            /**
-             * @public
-             */
-            item: { type: HTMLElement },
-        },
+        bubbles: true,
+        cancelable: true,
     })
     /**
      * Fired when the mouse cursor enters the tree item borders.
@@ -345,12 +315,7 @@ Tree = __decorate([
      */
     ,
     event("item-mouseover", {
-        detail: {
-            /**
-             * @public
-             */
-            item: { type: HTMLElement },
-        },
+        bubbles: true,
     })
     /**
      * Fired when the mouse cursor leaves the tree item borders.
@@ -360,27 +325,17 @@ Tree = __decorate([
      */
     ,
     event("item-mouseout", {
-        detail: {
-            /**
-             * @public
-             */
-            item: { type: HTMLElement },
-        },
+        bubbles: true,
     })
     /**
      * Fired when a tree item is activated.
-     * @allowPreventDefault
      * @param {HTMLElement} item The clicked item.
      * @public
      */
     ,
     event("item-click", {
-        detail: {
-            /**
-             * @public
-             */
-            item: { type: HTMLElement },
-        },
+        bubbles: true,
+        cancelable: true,
     })
     /**
      * Fired when the Delete button of any tree item is pressed.
@@ -392,12 +347,7 @@ Tree = __decorate([
      */
     ,
     event("item-delete", {
-        detail: {
-            /**
-             * @public
-             */
-            item: { type: HTMLElement },
-        },
+        bubbles: true,
     })
     /**
      * Fired when a tree item is focused.
@@ -406,9 +356,7 @@ Tree = __decorate([
      */
     ,
     event("item-focus", {
-        detail: {
-            item: { type: HTMLElement },
-        },
+        bubbles: true,
     })
     /**
      * Fired when selection is changed by user interaction
@@ -420,20 +368,14 @@ Tree = __decorate([
      */
     ,
     event("selection-change", {
-        detail: {
-            /**
-             * @public
-             */
-            selectedItems: { type: Array },
-            /**
-             * @public
-             */
-            previouslySelectedItems: { type: Array },
-            /**
-             * @public
-             */
-            targetItem: { type: HTMLElement },
-        },
+        bubbles: true,
+    }),
+    event("move", {
+        bubbles: true,
+    }),
+    event("move-over", {
+        bubbles: true,
+        cancelable: true,
     })
 ], Tree);
 const walkTree = (el, level, callback) => {

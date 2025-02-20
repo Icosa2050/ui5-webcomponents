@@ -10,7 +10,6 @@ const isElementTabbable = (el) => {
     if (!el) {
         return false;
     }
-    const nodeName = el.nodeName.toLowerCase();
     if (el.hasAttribute("data-sap-no-tab-ref")) {
         return false;
     }
@@ -21,7 +20,8 @@ const isElementTabbable = (el) => {
     if (tabIndex !== null && tabIndex !== undefined) {
         return parseInt(tabIndex) >= 0;
     }
-    if (nodeName === "a" || /input|select|textarea|button|object/.test(nodeName)) {
+    const nodeName = el.nodeName.toLowerCase();
+    if (nodeName === "a" || /^(input|select|textarea|button|object)$/.test(nodeName)) {
         return !el.disabled;
     }
     return false;

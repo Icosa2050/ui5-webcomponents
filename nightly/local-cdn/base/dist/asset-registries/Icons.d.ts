@@ -33,7 +33,7 @@ declare const getIconData: (iconName: string) => Promise<IconData | "ICON_NOT_FO
  * @param { string } name
  * @return { Promise }
  */
-declare const getIconAccessibleName: (name: string) => Promise<string | undefined>;
+declare const getIconAccessibleName: (name: string | undefined) => Promise<string | undefined>;
 declare const _getRegisteredNames: () => Promise<string[]>;
 export { registerIconLoader, getIconData, getIconDataSync, getIconAccessibleName, registerIcon, _getRegisteredNames, };
 export type { IconData, CollectionData, };

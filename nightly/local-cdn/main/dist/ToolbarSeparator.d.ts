@@ -1,5 +1,5 @@
-import ToolbarSeparatorTemplate from "./generated/templates/ToolbarSeparatorTemplate.lit.js";
-import ToolbarPopoverSeparatorTemplate from "./generated/templates/ToolbarPopoverSeparatorTemplate.lit.js";
+import ToolbarSeparatorTemplate from "./ToolbarSeparatorTemplate.js";
+import ToolbarPopoverSeparatorTemplate from "./ToolbarPopoverSeparatorTemplate.js";
 import ToolbarItem from "./ToolbarItem.js";
 /**
  * @class

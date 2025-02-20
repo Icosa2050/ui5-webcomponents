@@ -24,11 +24,11 @@ import type I18nBundle from "@ui5/webcomponents-base/dist/i18nBundle.js";
 declare class ProgressIndicator extends UI5Element {
     /**
      * Defines the accessible ARIA name of the component.
-     * @default ""
+     * @default undefined
      * @public
      * @since 1.16.0
     */
-    accessibleName: string;
+    accessibleName?: string;
     /**
      * Defines whether the component value is shown.
      * @default false
@@ -51,10 +51,10 @@ declare class ProgressIndicator extends UI5Element {
      *
      * - If there is no value provided or the value is empty, the default percentage value is shown.
      * - If `hideValue` property is `true` both the `displayValue` and `value` property values are not shown.
-     * @default null
+     * @default undefined
      * @public
      */
-    displayValue?: string | null;
+    displayValue?: string;
     /**
      * Defines the value state of the component.
      * @default "None"
@@ -67,25 +67,10 @@ declare class ProgressIndicator extends UI5Element {
     constructor();
     onBeforeRendering(): void;
     valueStateTextMappings(): Record<string, string>;
-    valueStateIconMappings(): Record<string, string>;
-    get styles(): {
-        bar: {
-            width: string;
-            "transition-duration": string;
-        };
-    };
-    get classes(): {
-        root: {
-            "ui5-progress-indicator-max-value": boolean;
-            "ui5-progress-indicator-min-value": boolean;
-        };
-    };
     get validatedValue(): number;
     get showValueInRemainingBar(): boolean;
     get shouldAnimate(): boolean;
     get valueStateText(): string;
     get showIcon(): boolean;
-    get valueStateIcon(): string;
-    static onDefine(): Promise<void>;
 }
 export default ProgressIndicator;

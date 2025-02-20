@@ -1,6 +1,6 @@
 import "@ui5/webcomponents-localization/dist/features/calendar/Gregorian.js";
 import TimePickerInternals from "./TimePickerInternals.js";
-import Input from "./Input.js";
+import type Input from "./Input.js";
 import InputType from "./types/InputType.js";
 /**
  * @class
@@ -20,14 +20,17 @@ import InputType from "./types/InputType.js";
  * @private
  */
 declare class TimeSelectionInputs extends TimePickerInternals {
+    eventDetails: TimePickerInternals["eventDetails"] & {
+        "close-inputs": void;
+    };
     _editedInput: number;
-    _editedInputValue: string;
+    _editedInputValue?: string;
     get enterHoursLabel(): string;
     get enterMinutesLabel(): string;
     get enterSecondsLabel(): string;
     get _numberType(): InputType;
     get _isHoursInput(): boolean;
-    get _is24HoursFormat(): boolean;
+    get _is24HoursFormat(): boolean | undefined;
     onBeforeRendering(): void;
     _addNumericAttributes(): void;
     /**

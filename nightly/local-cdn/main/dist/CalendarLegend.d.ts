@@ -1,7 +1,9 @@
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
 import ItemNavigation from "@ui5/webcomponents-base/dist/delegate/ItemNavigation.js";
+import type I18nBundle from "@ui5/webcomponents-base/dist/i18nBundle.js";
 import CalendarLegendItemType from "./types/CalendarLegendItemType.js";
-import CalendarLegendItem from "./CalendarLegendItem.js";
+import "./CalendarLegendItem.js";
+import type CalendarLegendItem from "./CalendarLegendItem.js";
 type CalendarLegendItemSelectionChangeEventDetail = {
     item: CalendarLegendItem;
 };
@@ -23,6 +25,10 @@ type CalendarLegendItemSelectionChangeEventDetail = {
  * @since 1.23.0
  */
 declare class CalendarLegend extends UI5Element {
+    eventDetails: {
+        "calendar-legend-selection-change": CalendarLegendItemSelectionChangeEventDetail;
+        "calendar-legend-focus-out": void;
+    };
     /**
      * Hides the Today item in the legend.
      * @default false
@@ -54,6 +60,7 @@ declare class CalendarLegend extends UI5Element {
     items: Array<CalendarLegendItem>;
     _itemNavigation: ItemNavigation;
     _lastFocusedItemIndex: number | null;
+    static i18nBundle: I18nBundle;
     constructor();
     onAfterRendering(): void;
     _onMouseDown(e: MouseEvent): void;
@@ -63,9 +70,10 @@ declare class CalendarLegend extends UI5Element {
     get focusableElements(): CalendarLegendItem[];
     get legendItems(): CalendarLegendItem[];
     get defaultItemsMapping(): {
-        type: CalendarLegendItemType[];
+        type: CalendarLegendItemType;
         hide: boolean;
     }[];
+    get _roleDescription(): string;
 }
 export default CalendarLegend;
 export type { CalendarLegendItemSelectionChangeEventDetail, };

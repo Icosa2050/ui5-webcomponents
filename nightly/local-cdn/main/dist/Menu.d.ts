@@ -1,18 +1,21 @@
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
 import type I18nBundle from "@ui5/webcomponents-base/dist/i18nBundle.js";
 import "@ui5/webcomponents-icons/dist/slim-arrow-right.js";
-import { Timeout } from "@ui5/webcomponents-base/dist/types.js";
-import ResponsivePopover from "./ResponsivePopover.js";
-import type { ResponsivePopoverBeforeCloseEventDetail } from "./ResponsivePopover.js";
-import StandardListItem from "./StandardListItem.js";
+import type { Timeout } from "@ui5/webcomponents-base/dist/types.js";
+import type ResponsivePopover from "./ResponsivePopover.js";
 import type MenuItem from "./MenuItem.js";
-import PopoverPlacement from "./types/PopoverPlacement.js";
+import "./MenuItem.js";
+import "./MenuSeparator.js";
 import type { ListItemClickEventDetail } from "./List.js";
-type CurrentItem = {
-    item: MenuItem;
-    position: number;
-    ariaHasPopup: string | undefined;
-};
+/**
+ * Interface for components that may be slotted inside a `ui5-menu`.
+ *
+ * **Note:** Use with `ui5-menu-item` or `ui5-menu-separator`. Implementing the interface does not guarantee that any other classes can work with the `ui5-menu`.
+ * @public
+ */
+interface IMenuItem extends UI5Element {
+    isSeparator: boolean;
+}
 type MenuItemClickEventDetail = {
     item: MenuItem;
     text: string;
@@ -23,13 +26,6 @@ type MenuBeforeOpenEventDetail = {
 type MenuBeforeCloseEventDetail = {
     escPressed: boolean;
 };
-type MenuItemFocusEventDetail = {
-    ref: HTMLElement;
-    item: MenuItem;
-};
-type OpenerStandardListItem = StandardListItem & {
-    associatedItem: MenuItem;
-};
 /**
  * @class
  *
@@ -37,9 +33,13 @@ type OpenerStandardListItem = StandardListItem & {
  *
  * `ui5-menu` component represents a hierarchical menu structure.
  *
- * ### Usage
+ * ### Structure
  *
- * `ui5-menu` contains `ui5-menu-item` components.
+ * The `ui5-menu` can hold two types of entities:
+ *
+ * - `ui5-menu-item` components
+ * - `ui5-menu-separator` - used to separate menu items with a line
+ *
  * An arbitrary hierarchy structure can be represented by recursively nesting menu items.
  *
  * ### Keyboard Handling
@@ -52,6 +52,10 @@ type OpenerStandardListItem = StandardListItem & {
  * in the currently clicked menu item.
  * - `Arrow Left` or `Escape` - Closes the currently opened sub-menu.
  *
+ * when there is `endContent` :
+ * - `Arrow Left` or `ArrowRight` - Navigate between the menu item actions and the menu item itself
+ * - `Arrow Up` / `Arrow Down` - Navigates up and down the currently visible menu items
+ *
  * Note: if the text ditrection is set to Right-to-left (RTL), `Arrow Right` and `Arrow Left` functionality is swapped.
  *
  * ### ES6 Module Import
@@ -63,12 +67,20 @@ type OpenerStandardListItem = StandardListItem & {
  * @public
  */
 declare class Menu extends UI5Element {
+    eventDetails: {
+        "item-click": MenuItemClickEventDetail;
+        "before-open": MenuBeforeOpenEventDetail;
+        "open": void;
+        "before-close": MenuBeforeCloseEventDetail;
+        "close": void;
+        "close-menu": void;
+    };
     /**
      * Defines the header text of the menu (displayed on mobile).
-     * @default ""
+     * @default undefined
      * @public
      */
-    headerText: string;
+    headerText?: string;
     /**
      * Indicates if the menu is open
      * @public
@@ -82,114 +94,52 @@ declare class Menu extends UI5Element {
      * @public
      * @since 1.13.0
      */
-    busy: boolean;
+    loading: boolean;
     /**
-     * Defines the delay in milliseconds, after which the busy indicator will be displayed inside the corresponding ui5-menu popover..
+     * Defines the delay in milliseconds, after which the loading indicator will be displayed inside the corresponding ui5-menu popover..
      * @default 1000
      * @public
      * @since 1.13.0
      */
-    busyDelay: number;
+    loadingDelay: number;
     /**
-     * Defines the ID or DOM Reference of the element that the menu is shown at
+     * Defines the ID or DOM Reference of the element at which the menu is shown.
+     * When using this attribute in a declarative way, you must only use the `id` (as a string) of the element at which you want to show the popover.
+     * You can only set the `opener` attribute to a DOM Reference when using JavaScript.
      * @public
-     * @default ""
+     * @default undefined
      * @since 1.10.0
      */
-    opener: HTMLElement | string;
-    /**
-     * Defines if the menu is sub-menu (not first-level).
-     * @default false
-     * @private
-     */
-    _isSubMenu: boolean;
-    /**
-     * Stores id of a list item that opened sub-menu.
-     * @private
-     */
-    _subMenuOpenerId: string;
-    /**
-     * Defines the currently available menu items.
-     * (in case of non-phone devices these are the items of the menu,
-     * but for phone devices the items of the currently opened sub-menu
-     * will be populated here)
-     * @private
-     */
-    _currentItems: Array<CurrentItem>;
-    /**
-     * Stores the ResponsivePopover instance
-     */
-    _popover?: ResponsivePopover;
-    /**
-     * Stores parent menu item (if there is such).
-     */
-    _parentMenuItem?: MenuItem;
-    /**
-     * Stores parent menu item DOM representation (if there is such).
-     */
-    _opener?: HTMLElement;
-    /**
-     * Stores menu item that have sub-menu opened.
-     */
-    _openedSubMenuItem?: MenuItem;
+    opener?: HTMLElement | string;
     /**
      * Defines the items of this component.
      *
-     * **Note:** Use `ui5-menu-item` for the intended design.
+     * **Note:** Use `ui5-menu-item` and `ui5-menu-separator` for their intended design.
      * @public
      */
-    items: Array<MenuItem>;
+    items: Array<IMenuItem>;
     static i18nBundle: I18nBundle;
     _timeout?: Timeout;
-    static onDefine(): Promise<void>;
-    get itemsWithChildren(): boolean;
-    get itemsWithIcon(): boolean;
     get isRtl(): boolean;
-    get placement(): `${PopoverPlacement}`;
-    get verticalAlign(): "Top" | "Bottom";
-    get labelBack(): string;
     get labelClose(): string;
     get isPhone(): boolean;
-    get isSubMenuOpened(): boolean | undefined;
-    get menuHeaderTextPhone(): string;
+    get _popover(): ResponsivePopover;
+    get _menuItems(): MenuItem[];
+    get acessibleNameText(): string;
     onBeforeRendering(): void;
-    onAfterRendering(): void;
-    /**
-     * Shows the Menu near the opener element.
-     * @param opener the element that the popover is shown at
-     * @public
-     */
-    showAt(opener: HTMLElement): Promise<void>;
-    /**
-     * Closes the Menu.
-     * @public
-     */
-    close(): void;
-    _createPopover(): Promise<ResponsivePopover>;
-    getOpener(): HTMLElement | null;
-    _navigateBack(): void;
-    _closeAll(): void;
-    _prepareCurrentItems(items: Array<MenuItem>): void;
-    _createSubMenu(item: MenuItem, opener: HTMLElement): void;
-    _clonedItemsFragment(item: MenuItem): DocumentFragment;
-    _openItemSubMenu(item: MenuItem, opener: HTMLElement): void;
-    _closeItemSubMenu(item: MenuItem, forceClose?: boolean, keyboard?: boolean): void;
-    _closeSubMenuPopover(subMenu: Menu, forceClose?: boolean, keyboard?: boolean): void;
-    _prepareSubMenu(item: MenuItem, opener: HTMLElement): void;
-    _onfocusin(e: FocusEvent): void;
-    _startOpenTimeout(item: MenuItem, opener: OpenerStandardListItem): void;
-    _startCloseTimeout(item: MenuItem): void;
+    _close(): void;
+    _openItemSubMenu(item: MenuItem): void;
+    _closeItemSubMenu(item: MenuItem): void;
     _itemMouseOver(e: MouseEvent): void;
-    _busyMouseOver(): void;
-    _itemMouseOut(e: MouseEvent): void;
-    _itemKeyDown(e: KeyboardEvent): void;
+    focus(focusOptions?: FocusOptions): Promise<void>;
+    _startOpenTimeout(item: MenuItem): void;
     _itemClick(e: CustomEvent<ListItemClickEventDetail>): void;
-    _findMainMenu(element: MenuItem | Menu): Menu;
-    _isMenu(element: HTMLElement): boolean;
+    _itemKeyDown(e: KeyboardEvent): void;
+    _navigateOutOfEndContent(menuItem: MenuItem, isDownwards?: boolean): void;
     _beforePopoverOpen(e: CustomEvent): void;
     _afterPopoverOpen(): void;
-    _beforePopoverClose(e: CustomEvent<ResponsivePopoverBeforeCloseEventDetail>): void;
+    _beforePopoverClose(e: CustomEvent): void;
     _afterPopoverClose(): void;
 }
 export default Menu;
-export type { MenuItemClickEventDetail, MenuBeforeCloseEventDetail, MenuBeforeOpenEventDetail, MenuItemFocusEventDetail, };
+export type { MenuItemClickEventDetail, MenuBeforeCloseEventDetail, MenuBeforeOpenEventDetail, IMenuItem, };

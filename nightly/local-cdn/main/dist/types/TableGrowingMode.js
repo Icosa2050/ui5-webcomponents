@@ -1,25 +1,22 @@
 /**
- * Different table growing modes.
+ * Growing mode of the &lt;ui5-table&gt; component.
+ *
  * @public
  */
 var TableGrowingMode;
 (function (TableGrowingMode) {
     /**
-     * Component `load-more` is fired
-     * upon pressing a "More" button at the bottom.
+     * Renders a growing button, which can be pressed to load more data.
      * @public
      */
     TableGrowingMode["Button"] = "Button";
     /**
-     * Component `load-more` is fired upon scroll.
+     * Scroll to load more data.
+     *
+     * **Note:** If the table is not scrollable, a growing button will be rendered instead to ensure growing functionality.
      * @public
      */
     TableGrowingMode["Scroll"] = "Scroll";
-    /**
-     * Component growing is not enabled.
-     * @public
-     */
-    TableGrowingMode["None"] = "None";
 })(TableGrowingMode || (TableGrowingMode = {}));
 export default TableGrowingMode;
 //# sourceMappingURL=TableGrowingMode.js.map

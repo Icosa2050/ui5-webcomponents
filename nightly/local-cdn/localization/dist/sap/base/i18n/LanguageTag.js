@@ -31,7 +31,7 @@ var rLanguageTag = /^((?:[A-Z]{2,3}(?:-[A-Z]{3}){0,3})|[A-Z]{4}|[A-Z]{5,8})(?:-(
  * @param {string} sLanguageTag the language tag identifier, in format en-US or en_US.
  *
  * @author SAP SE
- * @version 1.120.5
+ * @version 1.120.17
  * @public
  * @alias module:sap/base/i18n/LanguageTag
  */

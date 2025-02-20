@@ -28,18 +28,18 @@ declare class Card extends UI5Element {
      * Defines the accessible name of the component, which is used as the name of the card region and should be unique per card.
      *
      * **Note:** `accessibleName` should be always set, unless `accessibleNameRef` is set.
-     * @default ""
+     * @default undefined
      * @public
      * @since 1.0.0-rc.16
     */
-    accessibleName: string;
+    accessibleName?: string;
     /**
      * Defines the IDs of the elements that label the component.
-     * @default ""
+     * @default undefined
      * @public
      * @since 1.0.0-rc.16
     */
-    accessibleNameRef: string;
+    accessibleNameRef?: string;
     /**
      * Defines the content of the component.
      * @public
@@ -53,17 +53,23 @@ declare class Card extends UI5Element {
      * @public
     */
     header: Array<CardHeader>;
+    /**
+     * Defines if a loading indicator would be displayed over the card.
+     * @default false
+     * @public
+     * @since 2.1.0
+     */
+    loading: boolean;
+    /**
+     * Defines the delay in milliseconds, after which the loading indicator will show up for this card.
+     * @default 1000
+     * @public
+     * @since 2.1.0
+     */
+    loadingDelay: number;
     static i18nBundle: I18nBundle;
-    get classes(): {
-        root: {
-            "ui5-card-root": boolean;
-            "ui5-card--interactive": boolean;
-            "ui5-card--nocontent": boolean;
-        };
-    };
     get _hasHeader(): boolean;
     get _getAriaLabel(): string;
     get _ariaCardContentLabel(): string;
-    static onDefine(): Promise<void>;
 }
 export default Card;

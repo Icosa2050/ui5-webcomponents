@@ -8,21 +8,18 @@ var Switch_1;
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
 import customElement from "@ui5/webcomponents-base/dist/decorators/customElement.js";
 import property from "@ui5/webcomponents-base/dist/decorators/property.js";
-import event from "@ui5/webcomponents-base/dist/decorators/event.js";
-import slot from "@ui5/webcomponents-base/dist/decorators/slot.js";
-import litRender from "@ui5/webcomponents-base/dist/renderer/LitRenderer.js";
+import event from "@ui5/webcomponents-base/dist/decorators/event-strict.js";
+import jsxRenderer from "@ui5/webcomponents-base/dist/renderer/JsxRenderer.js";
 import { isSpace, isEnter } from "@ui5/webcomponents-base/dist/Keys.js";
-import { isDesktop, isSafari } from "@ui5/webcomponents-base/dist/Device.js";
-import { getI18nBundle } from "@ui5/webcomponents-base/dist/i18nBundle.js";
-import { getEffectiveAriaLabelText } from "@ui5/webcomponents-base/dist/util/AriaLabelHelper.js";
+import i18n from "@ui5/webcomponents-base/dist/decorators/i18n.js";
+import { getEffectiveAriaLabelText } from "@ui5/webcomponents-base/dist/util/AccessibilityTextsHelper.js";
 import "@ui5/webcomponents-icons/dist/accept.js";
 import "@ui5/webcomponents-icons/dist/decline.js";
 import "@ui5/webcomponents-icons/dist/less.js";
-import { getFeature } from "@ui5/webcomponents-base/dist/FeaturesRegistry.js";
-import Icon from "./Icon.js";
 import SwitchDesign from "./types/SwitchDesign.js";
+import { FORM_CHECKABLE_REQUIRED } from "./generated/i18n/i18n-defaults.js";
 // Template
-import SwitchTemplate from "./generated/templates/SwitchTemplate.lit.js";
+import SwitchTemplate from "./SwitchTemplate.js";
 // Styles
 import switchCss from "./generated/themes/Switch.css.js";
 /**
@@ -54,22 +51,55 @@ import switchCss from "./generated/themes/Switch.css.js";
  * @csspart handle - Used to style the handle of the switch
  */
 let Switch = Switch_1 = class Switch extends UI5Element {
-    onBeforeRendering() {
-        this._enableFormSupport();
+    constructor() {
+        super(...arguments);
+        /**
+         * Defines the component design.
+         *
+         * **Note:** If `Graphical` type is set,
+         * positive and negative icons will replace the `textOn` and `textOff`.
+         * @public
+         * @default "Textual"
+         */
+        this.design = "Textual";
+        /**
+         * Defines if the component is checked.
+         *
+         * **Note:** The property can be changed with user interaction,
+         * either by cliking the component, or by pressing the `Enter` or `Space` key.
+         * @default false
+         * @formEvents change
+         * @formProperty
+         * @public
+         */
+        this.checked = false;
+        /**
+         * Defines whether the component is disabled.
+         *
+         * **Note:** A disabled component is noninteractive.
+         * @default false
+         * @public
+         */
+        this.disabled = false;
+        /**
+         * Defines whether the component is required.
+         * @default false
+         * @public
+         * @since 1.16.0
+         */
+        this.required = false;
     }
-    _enableFormSupport() {
-        const formSupport = getFeature("FormSupport");
-        if (formSupport) {
-            formSupport.syncNativeHiddenInput(this, (element, nativeInput) => {
-                const switchComponent = element;
-                nativeInput.checked = !!switchComponent.checked;
-                nativeInput.disabled = !!switchComponent.disabled;
-                nativeInput.value = switchComponent.checked ? "on" : "";
-            });
-        }
-        else if (this.name) {
-            console.warn(`In order for the "name" property to have effect, you should also: import "@ui5/webcomponents/dist/features/InputElementsFormSupport.js";`); // eslint-disable-line
-        }
+    get formValidityMessage() {
+        return Switch_1.i18nBundle.getText(FORM_CHECKABLE_REQUIRED);
+    }
+    get formValidity() {
+        return { valueMissing: this.required && !this.checked };
+    }
+    async formElementAnchor() {
+        return this.getFocusDomRefAsync();
+    }
+    get formFormattedValue() {
+        return this.checked ? "on" : null;
     }
     get sapNextIcon() {
         return this.checked ? "accept" : "less";
@@ -93,9 +123,9 @@ let Switch = Switch_1 = class Switch extends UI5Element {
     toggle() {
         if (!this.disabled) {
             this.checked = !this.checked;
-            const changePrevented = !this.fireEvent("change", null, true);
+            const changePrevented = !this.fireDecoratorEvent("change");
             // Angular two way data binding;
-            const valueChangePrevented = !this.fireEvent("value-changed", null, true);
+            const valueChangePrevented = !this.fireDecoratorEvent("value-changed");
             if (changePrevented || valueChangePrevented) {
                 this.checked = !this.checked;
             }
@@ -114,20 +144,7 @@ let Switch = Switch_1 = class Switch extends UI5Element {
         return this.graphical ? "" : this.textOff;
     }
     get effectiveTabIndex() {
-        return this.disabled ? undefined : "0";
-    }
-    get classes() {
-        const hasLabel = this.graphical || this.textOn || this.textOff;
-        return {
-            main: {
-                "ui5-switch--desktop": isDesktop(),
-                "ui5-switch--disabled": this.disabled,
-                "ui5-switch--checked": this.checked,
-                "ui5-switch--semantic": this.graphical,
-                "ui5-switch--no-label": !hasLabel,
-                "ui5-switch--safari": isSafari(),
-            },
-        };
+        return this.disabled ? undefined : 0;
     }
     get effectiveAriaDisabled() {
         return this.disabled ? "true" : undefined;
@@ -144,12 +161,9 @@ let Switch = Switch_1 = class Switch extends UI5Element {
     get ariaLabelText() {
         return [getEffectiveAriaLabelText(this), this.hiddenText].join(" ").trim();
     }
-    static async onDefine() {
-        Switch_1.i18nBundle = await getI18nBundle("@ui5/webcomponents");
-    }
 };
 __decorate([
-    property({ type: SwitchDesign, defaultValue: SwitchDesign.Textual })
+    property()
 ], Switch.prototype, "design", void 0);
 __decorate([
     property({ type: Boolean })
@@ -167,7 +181,7 @@ __decorate([
     property()
 ], Switch.prototype, "accessibleName", void 0);
 __decorate([
-    property({ defaultValue: "" })
+    property()
 ], Switch.prototype, "accessibleNameRef", void 0);
 __decorate([
     property()
@@ -179,24 +193,36 @@ __decorate([
     property()
 ], Switch.prototype, "name", void 0);
 __decorate([
-    slot()
-], Switch.prototype, "formSupport", void 0);
+    i18n("@ui5/webcomponents")
+], Switch, "i18nBundle", void 0);
 Switch = Switch_1 = __decorate([
     customElement({
         tag: "ui5-switch",
+        formAssociated: true,
         languageAware: true,
         styles: switchCss,
-        renderer: litRender,
+        renderer: jsxRenderer,
         template: SwitchTemplate,
-        dependencies: [Icon],
+        shadowRootOptions: { delegatesFocus: true },
     })
     /**
      * Fired when the component checked state changes.
      * @public
-     * @allowPreventDefault
      */
     ,
-    event("change")
+    event("change", {
+        bubbles: true,
+        cancelable: true,
+    })
+    /**
+     * Fired to make Angular two way data binding work properly.
+     * @private
+     */
+    ,
+    event("value-changed", {
+        bubbles: true,
+        cancelable: true,
+    })
 ], Switch);
 Switch.define();
 export default Switch;

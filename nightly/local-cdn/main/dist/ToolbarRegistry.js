@@ -1,7 +1,7 @@
 import getSharedResource from "@ui5/webcomponents-base/dist/getSharedResource.js";
 const registry = getSharedResource("ToolbarItem.registry", new Map());
 const registerToolbarItem = (ElementClass) => {
-    registry.set(ElementClass.name, ElementClass);
+    registry.set(ElementClass.getMetadata().getPureTag(), ElementClass);
 };
 const getRegisteredToolbarItem = (name) => {
     if (!registry.has(name)) {
@@ -12,8 +12,5 @@ const getRegisteredToolbarItem = (name) => {
 const getRegisteredStyles = () => {
     return [...registry.values()].map((ElementClass) => ElementClass.styles);
 };
-const getRegisteredDependencies = () => {
-    return [...registry.values()].map((ElementClass) => ElementClass.dependencies).flat();
-};
-export { registerToolbarItem, getRegisteredToolbarItem, getRegisteredStyles, getRegisteredDependencies, };
+export { registerToolbarItem, getRegisteredToolbarItem, getRegisteredStyles, };
 //# sourceMappingURL=ToolbarRegistry.js.map

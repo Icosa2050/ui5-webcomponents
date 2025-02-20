@@ -8,16 +8,14 @@ var ProgressIndicator_1;
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
 import customElement from "@ui5/webcomponents-base/dist/decorators/customElement.js";
 import property from "@ui5/webcomponents-base/dist/decorators/property.js";
-import litRender from "@ui5/webcomponents-base/dist/renderer/LitRenderer.js";
+import jsxRenderer from "@ui5/webcomponents-base/dist/renderer/JsxRenderer.js";
 import AnimationMode from "@ui5/webcomponents-base/dist/types/AnimationMode.js";
 import ValueState from "@ui5/webcomponents-base/dist/types/ValueState.js";
-import Integer from "@ui5/webcomponents-base/dist/types/Integer.js";
 import { getAnimationMode } from "@ui5/webcomponents-base/dist/config/AnimationMode.js";
-import { getI18nBundle } from "@ui5/webcomponents-base/dist/i18nBundle.js";
-import Icon from "./Icon.js";
+import i18n from "@ui5/webcomponents-base/dist/decorators/i18n.js";
 import { VALUE_STATE_ERROR, VALUE_STATE_WARNING, VALUE_STATE_SUCCESS, VALUE_STATE_INFORMATION, } from "./generated/i18n/i18n-defaults.js";
 // Template
-import ProgressIndicatorTemplate from "./generated/templates/ProgressIndicatorTemplate.lit.js";
+import ProgressIndicatorTemplate from "./ProgressIndicatorTemplate.js";
 // Styles
 import ProgressIndicatorCss from "./generated/themes/ProgressIndicator.css.js";
 /**
@@ -43,6 +41,27 @@ import ProgressIndicatorCss from "./generated/themes/ProgressIndicator.css.js";
 let ProgressIndicator = ProgressIndicator_1 = class ProgressIndicator extends UI5Element {
     constructor() {
         super();
+        /**
+         * Defines whether the component value is shown.
+         * @default false
+         * @public
+         */
+        this.hideValue = false;
+        /**
+         * Specifies the numerical value in percent for the length of the component.
+         *
+         * **Note:**
+         * If a value greater than 100 is provided, the percentValue is set to 100. In other cases of invalid value, percentValue is set to its default of 0.
+         * @default 0
+         * @public
+         */
+        this.value = 0;
+        /**
+         * Defines the value state of the component.
+         * @default "None"
+         * @public
+         */
+        this.valueState = "None";
         this._previousValue = 0;
         this._transitionDuration = 0;
     }
@@ -52,34 +71,10 @@ let ProgressIndicator = ProgressIndicator_1 = class ProgressIndicator extends UI
     }
     valueStateTextMappings() {
         return {
-            "Error": ProgressIndicator_1.i18nBundle.getText(VALUE_STATE_ERROR),
-            "Warning": ProgressIndicator_1.i18nBundle.getText(VALUE_STATE_WARNING),
-            "Success": ProgressIndicator_1.i18nBundle.getText(VALUE_STATE_SUCCESS),
+            "Negative": ProgressIndicator_1.i18nBundle.getText(VALUE_STATE_ERROR),
+            "Critical": ProgressIndicator_1.i18nBundle.getText(VALUE_STATE_WARNING),
+            "Positive": ProgressIndicator_1.i18nBundle.getText(VALUE_STATE_SUCCESS),
             "Information": ProgressIndicator_1.i18nBundle.getText(VALUE_STATE_INFORMATION),
-        };
-    }
-    valueStateIconMappings() {
-        return {
-            "Error": "status-negative",
-            "Warning": "status-critical",
-            "Success": "status-positive",
-            "Information": "information",
-        };
-    }
-    get styles() {
-        return {
-            bar: {
-                "width": `${this.validatedValue}%`,
-                "transition-duration": this.shouldAnimate ? `${this._transitionDuration}ms` : "none",
-            },
-        };
-    }
-    get classes() {
-        return {
-            root: {
-                "ui5-progress-indicator-max-value": this.validatedValue === 100,
-                "ui5-progress-indicator-min-value": this.validatedValue === 0,
-            },
         };
     }
     get validatedValue() {
@@ -105,12 +100,6 @@ let ProgressIndicator = ProgressIndicator_1 = class ProgressIndicator extends UI
     get showIcon() {
         return this.valueState !== ValueState.None;
     }
-    get valueStateIcon() {
-        return this.valueStateIconMappings()[this.valueState];
-    }
-    static async onDefine() {
-        ProgressIndicator_1.i18nBundle = await getI18nBundle("@ui5/webcomponents");
-    }
 };
 __decorate([
     property()
@@ -119,21 +108,23 @@ __decorate([
     property({ type: Boolean })
 ], ProgressIndicator.prototype, "hideValue", void 0);
 __decorate([
-    property({ validator: Integer, defaultValue: 0 })
+    property({ type: Number })
 ], ProgressIndicator.prototype, "value", void 0);
 __decorate([
-    property({ defaultValue: null })
+    property()
 ], ProgressIndicator.prototype, "displayValue", void 0);
 __decorate([
-    property({ type: ValueState, defaultValue: ValueState.None })
+    property()
 ], ProgressIndicator.prototype, "valueState", void 0);
+__decorate([
+    i18n("@ui5/webcomponents")
+], ProgressIndicator, "i18nBundle", void 0);
 ProgressIndicator = ProgressIndicator_1 = __decorate([
     customElement({
         tag: "ui5-progress-indicator",
-        renderer: litRender,
+        renderer: jsxRenderer,
         styles: ProgressIndicatorCss,
         template: ProgressIndicatorTemplate,
-        dependencies: [Icon],
     })
 ], ProgressIndicator);
 ProgressIndicator.define();

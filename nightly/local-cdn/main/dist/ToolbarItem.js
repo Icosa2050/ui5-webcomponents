@@ -5,9 +5,9 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
-import "@ui5/webcomponents-base/dist/renderer/executeTemplate.js";
 import property from "@ui5/webcomponents-base/dist/decorators/property.js";
-import ToolbarItemOverflowBehavior from "./types/ToolbarItemOverflowBehavior.js";
+import event from "@ui5/webcomponents-base/dist/decorators/event-strict.js";
+let ToolbarItem = 
 /**
  * @class
  *
@@ -19,6 +19,23 @@ import ToolbarItemOverflowBehavior from "./types/ToolbarItemOverflowBehavior.js"
  * @since 1.17.0
  */
 class ToolbarItem extends UI5Element {
+    constructor() {
+        super(...arguments);
+        /**
+         * Property used to define the access of the item to the overflow Popover. If "NeverOverflow" option is set,
+         * the item never goes in the Popover, if "AlwaysOverflow" - it never comes out of it.
+         * @public
+         * @default "Default"
+         */
+        this.overflowPriority = "Default";
+        /**
+         * Defines if the toolbar overflow popup should close upon intereaction with the item.
+         * It will close by default.
+         * @default false
+         * @public
+         */
+        this.preventOverflowClosing = false;
+    }
     /**
     * Defines if the width of the item should be ignored in calculating the whole width of the toolbar
     * @protected
@@ -72,22 +89,30 @@ class ToolbarItem extends UI5Element {
     static get toolbarPopoverTemplate() {
         throw new Error("Popover template must be defined");
     }
-    /**
-     * Returns the events that the item is subscribed to.
-     * @protected
-     */
-    get subscribedEvents() {
-        return new Map();
-    }
     get stableDomRef() {
         return this.getAttribute("stable-dom-ref") || `${this._id}-stable-dom-ref`;
     }
-}
+};
 __decorate([
-    property({ type: ToolbarItemOverflowBehavior, defaultValue: ToolbarItemOverflowBehavior.Default })
+    property()
 ], ToolbarItem.prototype, "overflowPriority", void 0);
 __decorate([
     property({ type: Boolean })
 ], ToolbarItem.prototype, "preventOverflowClosing", void 0);
+ToolbarItem = __decorate([
+    event("close-overflow", {
+        bubbles: true,
+    })
+    /**
+     * @class
+     *
+     * Represents an abstract class for items, used in the `ui5-toolbar`.
+     * @constructor
+     * @extends UI5Element
+     * @abstract
+     * @public
+     * @since 1.17.0
+     */
+], ToolbarItem);
 export default ToolbarItem;
 //# sourceMappingURL=ToolbarItem.js.map

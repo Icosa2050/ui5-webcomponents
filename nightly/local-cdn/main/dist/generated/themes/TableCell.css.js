@@ -3,7 +3,6 @@ import defaultThemeBase from "@ui5/webcomponents-theming/dist/generated/themes/s
 import defaultTheme from "./sap_horizon/parameters-bundle.css.js";
 registerThemePropertiesLoader("@ui5/webcomponents-theming", "sap_horizon", async () => defaultThemeBase);
 registerThemePropertiesLoader("@ui5/webcomponents", "sap_horizon", async () => defaultTheme);
-const styleData = { packageName: "@ui5/webcomponents", fileName: "themes/TableCell.css.ts", content: `:host{display:table-cell;font-family:"72override",var(--sapFontFamily);font-size:.875rem;height:var(--ui5-v2-0-0-rc-1_table_row_height);box-sizing:border-box;color:var(--sapList_TextColor);word-break:break-word;vertical-align:middle}td{display:contents}:host([popined]){padding-left:0;padding-top:.25rem}:host([_popined-inline]){padding-top:0}::slotted([ui5-label]){color:inherit}
-` };
-export default styleData;
+export default `:host([_popin]){color:var(--sapContent_LabelColor);padding-inline-start:0;padding-inline-end:0;align-items:center}.popin-colon{padding-inline-end:.5rem}
+`;
 //# sourceMappingURL=TableCell.css.js.map

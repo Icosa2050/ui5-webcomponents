@@ -1,6 +1,7 @@
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
 import type I18nBundle from "@ui5/webcomponents-base/dist/i18nBundle.js";
-import ResponsivePopover from "./ResponsivePopover.js";
+import type ResponsivePopover from "./ResponsivePopover.js";
+import type ColorPalette from "./ColorPalette.js";
 import type { ColorPaletteItemClickEventDetail, IColorPaletteItem } from "./ColorPalette.js";
 import type ColorPaletteItem from "./ColorPaletteItem.js";
 type ColorPalettePopoverItemClickEventDetail = ColorPaletteItemClickEventDetail;
@@ -30,6 +31,10 @@ type ColorPalettePopoverItemClickEventDetail = ColorPaletteItemClickEventDetail;
  * @since 1.0.0-rc.16
  */
 declare class ColorPalettePopover extends UI5Element {
+    eventDetails: {
+        "item-click": ColorPalettePopoverItemClickEventDetail;
+        "close": void;
+    };
     /**
      * Defines whether the user can see the last used colors in the bottom of the component
      * @default false
@@ -39,7 +44,6 @@ declare class ColorPalettePopover extends UI5Element {
     /**
      * Defines whether the user can choose a custom color from a component.
      *
-     * **Note:** In order to use this property you need to import the following module: `"@ui5/webcomponents/dist/features/ColorPaletteMoreColors.js"`
      * @default false
      * @public
      */
@@ -67,6 +71,8 @@ declare class ColorPalettePopover extends UI5Element {
     open: boolean;
     /**
      * Defines the ID or DOM Reference of the element that the popover is shown at.
+     * When using this attribute in a declarative way, you must only use the `id` (as a string) of the element at which you want to show the popover.
+     * You can only set the `opener` attribute to a DOM Reference when using JavaScript.
      * @public
      * @default undefined
      * @since 1.21.0
@@ -78,13 +84,14 @@ declare class ColorPalettePopover extends UI5Element {
      */
     colors: Array<IColorPaletteItem>;
     static i18nBundle: I18nBundle;
-    static onDefine(): Promise<void>;
     constructor();
     get responsivePopover(): ResponsivePopover;
     get respPopover(): ResponsivePopover;
     closePopover(): void;
     onAfterClose(): void;
+    onAfterOpen(): void;
     onSelectedColor(e: CustomEvent<ColorPaletteItemClickEventDetail>): void;
+    get _colorPalette(): ColorPalette;
     /**
      * Returns if the component is opened.
      * @protected

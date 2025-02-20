@@ -1,9 +1,8 @@
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
 import type { ResizeObserverCallback } from "@ui5/webcomponents-base/dist/delegate/ResizeHandler.js";
 import type I18nBundle from "@ui5/webcomponents-base/dist/i18nBundle.js";
-import TitleLevel from "@ui5/webcomponents/dist/types/TitleLevel.js";
 import type { IButton } from "@ui5/webcomponents/dist/Button.js";
-import IllustrationMessageSize from "./types/IllustrationMessageSize.js";
+import IllustrationMessageDesign from "./types/IllustrationMessageDesign.js";
 import "./illustrations/BeforeSearch.js";
 /**
  * @class
@@ -81,76 +80,65 @@ declare class IllustratedMessage extends UI5Element {
     * elements of the component are displayed differently on the different breakpoints/illustration designs.
     * @default "Auto"
     * @public
-    * @since 1.5.0
+    * @since 2.0.0
     */
-    design: `${IllustrationMessageSize}`;
+    design: `${IllustrationMessageDesign}`;
     /**
     * Defines the subtitle of the component.
     *
     * **Note:** Using this property, the default subtitle text of illustration will be overwritten.
     *
     * **Note:** Using `subtitle` slot, the default of this property will be overwritten.
-    * @default ""
+    * @default undefined
     * @public
     */
-    subtitleText: string;
+    subtitleText?: string;
     /**
     * Defines the title of the component.
     *
     * **Note:** Using this property, the default title text of illustration will be overwritten.
-    * @default ""
+    * @default undefined
     * @public
     */
-    titleText: string;
+    titleText?: string;
     /**
     * Receives id(or many ids) of the elements that label the component.
-    * @default ""
+    * @default undefined
     * @public
     * @since 1.7.0
     */
-    accessibleNameRef: string;
-    /**
-    * Defines the semantic level of the title.
-    *
-    * **Note:** Used for accessibility purposes only.
-    *
-    * **Note:** Doesn't take effect when `title` slot is being used.
-    * @default "H2"
-    * @public
-    * @since 1.20.0
-    */
-    titleLevel: `${TitleLevel}`;
+    accessibleNameRef?: string;
     /**
     * Illustration breakpoint variant for the <code>Dot</code> design.
     *
     * @private
     * @since 1.24.0
     */
-    dotSvg: string;
+    dotSvg?: string;
     /**
     * Illustration breakpoint variant for the <code>Spot</code> design.
     *
     * @private
     * @since 1.9.0
     */
-    spotSvg: string;
+    spotSvg?: string;
     /**
     * Illustration breakpoint variant for the `Scene` design.
     * @private
     * @since 1.9.0
     */
-    sceneSvg: string;
+    sceneSvg?: string;
     /**
     * Illustration breakpoint variant for the `Dialog` design.
     * @private
     * @since 1.9.0
     */
-    dialogSvg: string;
+    dialogSvg?: string;
     /**
     * Determinates what is the current media of the component based on its width.
     * @private
     */
-    media: string;
+    media?: string;
     /**
     * Defines the title of the component.
     *
@@ -180,7 +168,6 @@ declare class IllustratedMessage extends UI5Element {
     _lastKnownMedia: string;
     _handleResize: ResizeObserverCallback;
     constructor();
-    static onDefine(): Promise<void>;
     static get BREAKPOINTS(): {
         DIALOG: number;
         SPOT: number;
@@ -216,7 +203,7 @@ declare class IllustratedMessage extends UI5Element {
      */
     _handleCustomSize(): void;
     get ariaLabelText(): string | undefined;
-    get effectiveIllustration(): string;
+    get effectiveIllustration(): string | undefined;
     get hasFormattedSubtitle(): boolean;
     get hasFormattedTitle(): boolean;
     get effectiveTitleText(): string | undefined;

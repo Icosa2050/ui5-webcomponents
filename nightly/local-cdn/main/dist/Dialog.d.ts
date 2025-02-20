@@ -1,8 +1,6 @@
 import ValueState from "@ui5/webcomponents-base/dist/types/ValueState.js";
 import type I18nBundle from "@ui5/webcomponents-base/dist/i18nBundle.js";
 import Popup from "./Popup.js";
-import type { PopupBeforeCloseEventDetail as DialogBeforeCloseEventDetail } from "./Popup.js";
-import "@ui5/webcomponents-icons/dist/resize-corner.js";
 import "@ui5/webcomponents-icons/dist/error.js";
 import "@ui5/webcomponents-icons/dist/alert.js";
 import "@ui5/webcomponents-icons/dist/sys-enter-2.js";
@@ -18,7 +16,7 @@ import "@ui5/webcomponents-icons/dist/information.js";
  * The dialog combines concepts known from other technologies where the windows have
  * names such as dialog box, dialog window, pop-up, pop-up window, alert box, or message box.
  *
- * The `ui5-dialog` is modal, which means that an user action is required before it is possible to return to the parent window.
+ * The `ui5-dialog` is modal, which means that a user action is required before it is possible to return to the parent window.
  * To open multiple dialogs, each dialog element should be separate in the markup. This will ensure the correct modal behavior. Avoid nesting dialogs within each other.
  * The content of the `ui5-dialog` is fully customizable.
  *
@@ -29,8 +27,7 @@ import "@ui5/webcomponents-icons/dist/information.js";
 
  *
  * ### Responsive Behavior
- * The `stretch` property can be used to stretch the
- * `ui5-dialog` on full screen.
+ * The `stretch` property can be used to stretch the `ui5-dialog` to full screen. For better usability, it's recommended to stretch the dialog to full screen on phone devices.
  *
  * **Note:** When a `ui5-bar` is used in the header or in the footer, you should remove the default dialog's paddings.
  *
@@ -56,12 +53,6 @@ import "@ui5/webcomponents-icons/dist/information.js";
  *
  * `import "@ui5/webcomponents/dist/Dialog";`
  *
- * **Note:** We recommend placing popup-like components (`ui5-dialog` and `ui5-popover`)
- * outside any other components. Preferably, the popup-like components should be placed
- * in an upper level HTML element. Otherwise, in some cases the parent HTML elements can break
- * the position and/or z-index management of the popup-like components.
- *
- * **Note:** We don't recommend nesting popup-like components (`ui5-dialog`, `ui5-popover`).
  * @constructor
  * @extends Popup
  * @public
@@ -70,19 +61,20 @@ import "@ui5/webcomponents-icons/dist/information.js";
  * @csspart footer - Used to style the footer of the component
  */
 declare class Dialog extends Popup {
+    eventDetails: Popup["eventDetails"];
     /**
      * Defines the header text.
      *
      * **Note:** If `header` slot is provided, the `headerText` is ignored.
-     * @default ""
+     * @default undefined
      * @public
      */
-    headerText: string;
+    headerText?: string;
     /**
-     * Determines whether the component should be stretched to fullscreen.
+     * Determines if the dialog will be stretched to full screen on mobile. On desktop,
+     * the dialog will be stretched to approximately 90% of the viewport.
      *
-     * **Note:** The component will be stretched to approximately
-     * 90% of the viewport.
+     * **Note:** For better usability of the component it is recommended to set this property to "true" when the dialog is opened on phone.
      * @default false
      * @public
      */
@@ -117,21 +109,13 @@ declare class Dialog extends Popup {
     /**
      * Defines the state of the `Dialog`.
      *
-     * **Note:** If `"Error"` and `"Warning"` state is set, it will change the
+     * **Note:** If `"Negative"` and `"Critical"` states is set, it will change the
      * accessibility role to "alertdialog", if the accessibleRole property is set to `"Dialog"`.
      * @default "None"
      * @public
      * @since 1.0.0-rc.15
      */
     state: `${ValueState}`;
-    /**
-     * @private
-     */
-    onPhone: boolean;
-    /**
-     * @private
-     */
-    onDesktop: boolean;
     _screenResizeHandler: () => void;
     _dragMouseMoveHandler: (e: MouseEvent) => void;
     _dragMouseUpHandler: (e: MouseEvent) => void;
@@ -170,17 +154,8 @@ declare class Dialog extends Popup {
     footer: Array<HTMLElement>;
     static i18nBundle: I18nBundle;
     constructor();
-    static onDefine(): Promise<void>;
     static _isHeader(element: HTMLElement): boolean;
-    /**
-     * Shows the dialog.
-     * @param [preventInitialFocus=false] Prevents applying the focus inside the popup
-     * @public
-     * @returns Resolves when the dialog is open
-     */
-    show(preventInitialFocus?: boolean): Promise<void>;
     get isModal(): boolean;
-    get shouldHideBackdrop(): boolean;
     get _ariaLabelledBy(): string | undefined;
     get ariaRoleDescriptionHeaderText(): string | undefined;
     get effectiveAriaDescribedBy(): string | undefined;
@@ -192,12 +167,12 @@ declare class Dialog extends Popup {
      */
     get _displayHeader(): string | number | boolean;
     get _movable(): boolean;
-    get _headerTabIndex(): "0" | undefined;
+    get _headerTabIndex(): 0 | undefined;
     get _showResizeHandle(): boolean;
     get _minHeight(): number;
     get hasValueState(): boolean;
     get _dialogStateIcon(): string;
-    get _role(): string | undefined;
+    get _role(): "dialog" | "alertdialog" | undefined;
     _show(): void;
     onBeforeRendering(): void;
     onEnterDOM(): void;
@@ -214,7 +189,7 @@ declare class Dialog extends Popup {
     /**
      * Event handlers
      */
-    _onDragMouseDown(e: DragEvent): void;
+    _onDragMouseDown(e: MouseEvent): void;
     _onDragMouseMove(e: MouseEvent): void;
     _onDragMouseUp(): void;
     _onDragOrResizeKeyDown(e: KeyboardEvent): void;
@@ -230,4 +205,3 @@ declare class Dialog extends Popup {
     _detachMouseResizeHandlers(): void;
 }
 export default Dialog;
-export type { DialogBeforeCloseEventDetail, };

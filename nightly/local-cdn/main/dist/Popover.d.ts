@@ -1,5 +1,5 @@
+import type UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
 import Popup from "./Popup.js";
-import type { PopupBeforeCloseEventDetail as PopoverBeforeCloseEventDetail } from "./Popup.js";
 import PopoverPlacement from "./types/PopoverPlacement.js";
 import PopoverVerticalAlign from "./types/PopoverVerticalAlign.js";
 import PopoverHorizontalAlign from "./types/PopoverHorizontalAlign.js";
@@ -44,12 +44,6 @@ type CalculatedPlacement = {
  *
  * `import "@ui5/webcomponents/dist/Popover.js";`
  *
- * **Note: ** We recommend placing popup-like components (`ui5-dialog` and `ui5-popover`)
- * outside any other components. Preferably, the popup-like components should be placed
- * in an upper level HTML element. Otherwise, in some cases the parent HTML elements can break
- * the position and/or z-index management of the popup-like components.
- *
- * **Note:** We don't recommend nesting popup-like components (`ui5-dialog`, `ui5-popover`).
  * @constructor
  * @extends Popup
  * @since 1.0.0-rc.6
@@ -59,14 +53,15 @@ type CalculatedPlacement = {
  * @csspart footer - Used to style the footer of the component
  */
 declare class Popover extends Popup {
+    eventDetails: Popup["eventDetails"];
     /**
      * Defines the header text.
      *
      * **Note:** If `header` slot is provided, the `headerText` is ignored.
-     * @default ""
+     * @default undefined
      * @public
      */
-    headerText: string;
+    headerText?: string;
     /**
      * Determines on which side the component is placed at.
      * @default "End"
@@ -93,13 +88,6 @@ declare class Popover extends Popup {
      * @public
      */
     modal: boolean;
-    /**
-     * Defines whether the block layer will be shown if modal property is set to true.
-     * @default false
-     * @public
-     * @since 1.0.0-rc.10
-     */
-    hideBackdrop: boolean;
     /**
      * Determines whether the component arrow is hidden.
      * @default false
@@ -147,33 +135,28 @@ declare class Popover extends Popup {
      * @public
      */
     footer: Array<HTMLElement>;
-    _opener?: HTMLElement;
+    _opener?: HTMLElement | string;
     _openerRect?: DOMRect;
     _preventRepositionAndClose?: boolean;
     _top?: number;
     _left?: number;
     _oldPlacement?: CalculatedPlacement;
     _width?: string;
+    _height?: string;
     static get VIEWPORT_MARGIN(): number;
     constructor();
     /**
-     * Defines the ID or DOM Reference of the element that the popover is shown at
+     * Defines the ID or DOM Reference of the element at which the popover is shown.
+     * When using this attribute in a declarative way, you must only use the `id` (as a string) of the element at which you want to show the popover.
+     * You can only set the `opener` attribute to a DOM Reference when using JavaScript.
      * @public
      * @default undefined
      * @since 1.2.0
      */
-    set opener(value: HTMLElement);
-    get opener(): HTMLElement | undefined;
+    set opener(value: HTMLElement | string);
+    get opener(): HTMLElement | string | undefined;
     openPopup(): Promise<void>;
     isOpenerClicked(e: MouseEvent): boolean;
-    /**
-     * Shows the popover.
-     * @param opener the element that the popover is shown at
-     * @param [preventInitialFocus=false] prevents applying the focus inside the popover
-     * @public
-     * @returns Resolved when the popover is open
-     */
-    showAt(opener: HTMLElement, preventInitialFocus?: boolean): Promise<void>;
     /**
      * Override for the _addOpenedPopup hook, which would otherwise just call addOpenedPopup(this)
      * @private
@@ -184,6 +167,7 @@ declare class Popover extends Popup {
      * @private
      */
     _removeOpenedPopup(): void;
+    getOpenerHTMLElement(opener: HTMLElement | string | undefined): HTMLElement | null | undefined;
     shouldCloseDueToOverflow(placement: `${PopoverPlacement}`, openerRect: DOMRect): boolean;
     shouldCloseDueToNoOpener(openerRect: DOMRect): boolean;
     isOpenerOutsideViewport(openerRect: DOMRect): boolean;
@@ -192,7 +176,7 @@ declare class Popover extends Popup {
      */
     _resize(): void;
     reposition(): void;
-    _show(): void;
+    _show(): Promise<void>;
     /**
      * Adjust the desired top position to compensate for shift of the screen
      * caused by opened keyboard on iOS which affects all elements with position:fixed.
@@ -201,17 +185,19 @@ declare class Popover extends Popup {
      * @returns The adjusted top in px.
      */
     _adjustForIOSKeyboard(top: number): number;
-    _getContainingBlockClientLocation(): DOMRect | {
-        left: number;
-        top: number;
-    };
     getPopoverSize(): PopoverSize;
     _showOutsideViewport(): void;
+    _isUI5AbstractElement(el: HTMLElement): el is UI5Element;
     get arrowDOM(): Element;
+    /**
+     * @protected
+     */
+    focusOpener(): void;
     /**
      * @private
      */
     calcPlacement(targetRect: DOMRect, popoverSize: PopoverSize): CalculatedPlacement;
+    getRTLCorrectionLeft(): number;
     /**
      * Calculates the position for the arrow.
      * @private
@@ -233,7 +219,6 @@ declare class Popover extends Popup {
     getVerticalLeft(targetRect: DOMRect, popoverSize: PopoverSize): number;
     getHorizontalTop(targetRect: DOMRect, popoverSize: PopoverSize): number;
     get isModal(): boolean;
-    get shouldHideBackdrop(): boolean;
     get _ariaLabelledBy(): "ui5-popup-header" | undefined;
     get styles(): {
         root: {
@@ -259,4 +244,3 @@ declare class Popover extends Popup {
 declare const instanceOfPopover: (object: any) => object is Popover;
 export default Popover;
 export { instanceOfPopover };
-export type { PopoverBeforeCloseEventDetail, };

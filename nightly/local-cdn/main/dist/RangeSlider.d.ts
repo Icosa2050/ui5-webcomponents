@@ -1,4 +1,5 @@
 import type I18nBundle from "@ui5/webcomponents-base/dist/i18nBundle.js";
+import type { IFormInputElement } from "@ui5/webcomponents-base/dist/features/InputElementsFormSupport.js";
 import SliderBase from "./SliderBase.js";
 type AriaHandlesText = {
     startHandleText?: string;
@@ -59,7 +60,7 @@ type AffectedValue = "startValue" | "endValue";
  * @csspart progress-bar - Used to style the progress bar, which shows the progress of the `ui5-range-slider`.
  * @csspart handle - Used to style the handles of the `ui5-range-slider`.
  */
-declare class RangeSlider extends SliderBase {
+declare class RangeSlider extends SliderBase implements IFormInputElement {
     /**
      * Defines start point of a selection - position of a first handle on the slider.
      * @default 0
@@ -77,6 +78,8 @@ declare class RangeSlider extends SliderBase {
      */
     endValue: number;
     rangePressed: boolean;
+    _isStartValueValid: boolean;
+    _isEndValueValid: boolean;
     _startValueInitial?: number;
     _endValueInitial?: number;
     _valueAffected?: AffectedValue;
@@ -90,7 +93,11 @@ declare class RangeSlider extends SliderBase {
     _secondHandlePositionFromStart?: number;
     _selectedRange?: number;
     _reversedValues: boolean;
+    _lastValidStartValue: string;
+    _lastValidEndValue: string;
+    _areInputValuesSwapped: boolean;
     static i18nBundle: I18nBundle;
+    get formFormattedValue(): FormData;
     constructor();
     get tooltipStartValue(): string;
     get tooltipEndValue(): string;
@@ -122,14 +129,15 @@ declare class RangeSlider extends SliderBase {
      * Resets the stored Range Slider's initial values saved when it was first focused
      * @private
      */
-    _onfocusout(): void;
+    _onfocusout(e: FocusEvent): void;
+    _onInputFocusOut(e: FocusEvent): void;
     /**
     * Handles keyup logic. If one of the handles came across the other
     * swap the start and end values. Reset the affected value by the finished
     * user interaction.
     * @private
     */
-    _onkeyup(): void;
+    _onkeyup(e: KeyboardEvent): void;
     _handleActionKeyPress(e: KeyboardEvent): void;
     /**
      * Determines affected value (start/end) depending on the currently
@@ -180,7 +188,8 @@ declare class RangeSlider extends SliderBase {
      * @private
      */
     _updateValueOnRangeDrag(event: TouchEvent | MouseEvent): void;
-    _handleUp(): void;
+    _handleUp(e: MouseEvent): void;
+    _updateValueFromInput(e: Event): void;
     /**
      * Determines where the press occured and which values of the Range Slider
      * handles should be updated on further interaction.
@@ -259,6 +268,10 @@ declare class RangeSlider extends SliderBase {
      * @private
      */
     _updateHandlesAndRange(newValue: number): void;
+    _onInputKeydown(e: KeyboardEvent): void;
+    _updateInputValue(): void;
+    _saveInputValues(): void;
+    _getFormattedValue(value: string): string;
     /**
      * Swaps the start and end values of the handles if one came accros the other:
      * - If the start value is greater than the endValue swap them and their handles
@@ -284,9 +297,10 @@ declare class RangeSlider extends SliderBase {
     get _startHandle(): HTMLElement;
     get _endHandle(): HTMLElement;
     get _progressBar(): HTMLElement;
-    get _ariaLabelledByStartHandleRefs(): string;
-    get _ariaLabelledByEndHandleRefs(): string;
-    get _ariaLabelledByProgressBarRefs(): string;
+    get _ariaLabelledByStartHandleText(): string;
+    get _ariaLabelledByEndHandleText(): string;
+    get _ariaLabelledByInputText(): string;
+    get _ariaDescribedByInputText(): string;
     get styles(): {
         progress: {
             [x: string]: string;
@@ -310,6 +324,5 @@ declare class RangeSlider extends SliderBase {
             visibility: string;
         };
     };
-    static onDefine(): Promise<void>;
 }
 export default RangeSlider;

@@ -21,16 +21,16 @@ declare class TreeItem extends TreeItemBase {
     /**
      * Defines the text of the tree item.
      * @public
-     * @default ""
+     * @default undefined
      */
-    text: string;
+    text?: string;
     /**
      * Defines the `additionalText`, displayed in the end of the tree item.
-     * @default ""
+     * @default undefined
      * @public
      * @since 1.0.0-rc.15
      */
-    additionalText: string;
-    get _showTitle(): number;
+    additionalText?: string;
+    get _showTitle(): number | undefined;
 }
 export default TreeItem;

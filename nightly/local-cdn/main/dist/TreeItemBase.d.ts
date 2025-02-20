@@ -1,5 +1,6 @@
 import type { ClassMap } from "@ui5/webcomponents-base/dist/types.js";
-import ValueState from "@ui5/webcomponents-base/dist/types/ValueState.js";
+import type I18nBundle from "@ui5/webcomponents-base/dist/i18nBundle.js";
+import type ValueState from "@ui5/webcomponents-base/dist/types/ValueState.js";
 import ListItem from "./ListItem.js";
 import "@ui5/webcomponents-icons/dist/navigation-right-arrow.js";
 import "@ui5/webcomponents-icons/dist/navigation-down-arrow.js";
@@ -18,6 +19,11 @@ type TreeItemBaseStepOutEventDetail = TreeItemBaseEventDetail;
  * @public
  */
 declare class TreeItemBase extends ListItem {
+    eventDetails: ListItem["eventDetails"] & {
+        toggle: TreeItemBaseToggleEventDetail;
+        "step-in": TreeItemBaseStepInEventDetail;
+        "step-out": TreeItemBaseStepOutEventDetail;
+    };
     /**
      * Defines the indentation of the tree list item. Use level 1 for tree list items, representing top-level tree nodes.
      * @protected
@@ -27,9 +33,9 @@ declare class TreeItemBase extends ListItem {
     /**
      * If set, an icon will be displayed before the text of the tree list item.
      * @public
-     * @default ""
+     * @default undefined
      */
-    icon: string;
+    icon?: string;
     /**
      * Defines whether the tree list item should display an expand/collapse button.
      * @default false
@@ -42,6 +48,13 @@ declare class TreeItemBase extends ListItem {
      * @public
      */
     expanded: boolean;
+    /**
+     * Defines whether the item is movable.
+     * @default false
+     * @public
+     * @since 2.0.0
+     */
+    movable: boolean;
     /**
     * Defines whether the selection of a tree node is displayed as partially selected.
     *
@@ -72,7 +85,7 @@ declare class TreeItemBase extends ListItem {
     /**
      * Defines the state of the `additionalText`.
      *
-     * Available options are: `"None"` (by default), `"Success"`, `"Warning"`, `"Information"` and `"Error"`.
+     * Available options are: `"None"` (by default), `"Positive"`, `"Critical"`, `"Information"` and `"Negative"`.
      * @default "None"
      * @public
      * @since 1.0.0-rc.15
@@ -80,11 +93,11 @@ declare class TreeItemBase extends ListItem {
     additionalTextState: `${ValueState}`;
     /**
      * Defines the accessible name of the component.
-     * @default ""
+     * @default undefined
      * @public
      * @since 1.8.0
      */
-    accessibleName: string;
+    accessibleName?: string;
     /**
      * @private
      * @since 1.0.0-rc.11
@@ -109,6 +122,7 @@ declare class TreeItemBase extends ListItem {
      * @public
      */
     items: Array<TreeItemBase>;
+    static i18nBundle: I18nBundle;
     onBeforeRendering(): void;
     get classes(): ClassMap;
     get styles(): {
@@ -119,10 +133,10 @@ declare class TreeItemBase extends ListItem {
     get requiresToggleButton(): boolean;
     get effectiveLevel(): number;
     get hasParent(): boolean;
-    get _toggleIconName(): "navigation-down-arrow" | "navigation-right-arrow";
-    get _ariaLabel(): string | undefined;
+    get _toggleIconName(): "navigation-right-arrow" | "navigation-down-arrow";
+    get _ariaLabel(): string;
     get _accInfo(): {
-        role: string;
+        role: "treeitem";
         ariaExpanded: boolean | undefined;
         ariaLevel: number;
         posinset: number;
@@ -130,12 +144,13 @@ declare class TreeItemBase extends ListItem {
         ariaSelectedText: string | undefined;
         listItemAriaLabel: string | undefined;
         ariaOwns: string | undefined;
-        ariaHaspopup: "dialog" | "menu" | "grid" | "listbox" | "tree";
+        ariaHaspopup: import("@ui5/webcomponents-base/dist/types.js").AriaHasPopup | undefined;
         ariaLabel: string;
         ariaLabelRadioButton: string;
-        ariaSelected?: boolean | undefined;
-        ariaChecked?: boolean | undefined;
-        tooltip?: string | undefined;
+        ariaSelected?: boolean;
+        ariaChecked?: boolean;
+        tooltip?: string;
+        ariaKeyShortcuts?: string;
     };
     /**
      * Used to duck-type TreeItem elements without using instanceof
@@ -149,9 +164,8 @@ declare class TreeItemBase extends ListItem {
      */
     toggle(): void;
     _toggleClick(e: MouseEvent | KeyboardEvent): void;
-    _onkeydown(e: KeyboardEvent): void;
+    _onkeydown(e: KeyboardEvent): Promise<void>;
     get iconAccessibleName(): string;
-    static onDefine(): Promise<void>;
 }
 export default TreeItemBase;
 export type { TreeItemBaseToggleEventDetail, TreeItemBaseStepInEventDetail, TreeItemBaseStepOutEventDetail, };

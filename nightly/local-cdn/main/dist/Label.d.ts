@@ -1,6 +1,6 @@
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
 import type I18nBundle from "@ui5/webcomponents-base/dist/i18nBundle.js";
-import WrappingType from "./types/WrappingType.js";
+import type WrappingType from "./types/WrappingType.js";
 /**
  * @class
  *
@@ -30,10 +30,10 @@ declare class Label extends UI5Element {
      * Defines the labeled input by providing its ID.
      *
      * **Note:** Can be used with both `ui5-input` and native input.
-     * @default ""
+     * @default undefined
      * @public
      */
-    for: string;
+    for?: string;
     /**
      * Defines whether colon is added to the component text.
      *
@@ -56,12 +56,11 @@ declare class Label extends UI5Element {
      * Defines how the text of a component will be displayed when there is not enough space.
      *
      * **Note:** for option "Normal" the text will wrap and the words will not be broken based on hyphenation.
-     * @default "None"
+     * @default "Normal"
      * @public
      */
     wrappingType: `${WrappingType}`;
     static i18nBundle: I18nBundle;
-    static onDefine(): Promise<void>;
     _onclick(): void;
     get _colonSymbol(): string;
 }

@@ -13,18 +13,20 @@ type Day = {
     timestamp: string;
     day: number;
     focusRef: boolean;
-    _tabIndex: string;
+    _tabIndex: number;
     selected: boolean;
     _isSecondaryCalendarType: boolean;
     classes: string;
+    tooltip?: string;
     ariaLabel: string;
-    ariaSelected: string;
-    ariaDisabled: string | undefined;
+    ariaSelected: boolean;
+    ariaDisabled: boolean | undefined;
     disabled: boolean;
     secondDay?: number;
     weekNum?: number;
     isHidden?: boolean;
     type?: string;
+    parts: string;
 };
 type WeekNumber = {
     weekNum: number;
@@ -47,10 +49,13 @@ type DayPickerNavigateEventDetail = {
  * @private
  */
 declare class DayPicker extends CalendarPart implements ICalendarPicker {
+    eventDetails: CalendarPart["eventDetails"] & {
+        "change": DayPickerChangeEventDetail;
+        "navigate": DayPickerNavigateEventDetail;
+    };
     /**
      * An array of UTC timestamps representing the selected date or dates depending on the capabilities of the picker component.
      * @default []
-     * @public
      */
     selectedDates: Array<number>;
     /**
@@ -61,7 +66,6 @@ declare class DayPicker extends CalendarPart implements ICalendarPicker {
      * - `CalendarSelectionMode.Range` - enables selection of a date range.
      * - `CalendarSelectionMode.Multiple` - enables selection of multiple dates.
      * @default "Single"
-     * @public
      */
     selectionMode: `${CalendarSelectionMode}`;
     /**
@@ -70,7 +74,6 @@ declare class DayPicker extends CalendarPart implements ICalendarPicker {
      * **Note:** For calendars other than Gregorian,
      * the week numbers are not displayed regardless of what is set.
      * @default false
-     * @public
      * @since 1.0.0-rc.8
      */
     hideWeekNumbers: boolean;
@@ -103,6 +106,7 @@ declare class DayPicker extends CalendarPart implements ICalendarPicker {
      * @private
      */
     _buildWeeks(localeData: LocaleData): void;
+    _calculateWeekNumber(date: Date): number;
     /**
      * Builds the dayNames object (header of the month).
      * @param localeData
@@ -137,6 +141,7 @@ declare class DayPicker extends CalendarPart implements ICalendarPicker {
      * @private
      */
     _selectDate(e: Event, isShift: boolean): void;
+    _updateSelectedDates(timestamp: number, isShift: boolean): void;
     /**
      * Selects/deselects the whole row (week).
      * @private
@@ -214,14 +219,9 @@ declare class DayPicker extends CalendarPart implements ICalendarPicker {
     _updateSecondTimestamp(): void;
     get _specialCalendarDates(): SpecialCalendarDateT[];
     get shouldHideWeekNumbers(): boolean;
-    get classes(): {
-        root: {
-            "ui5-dp-root": boolean;
-            "ui5-dp-twocalendartypes": boolean;
-        };
-    };
     _isWeekend(oDate: CalendarDate): boolean;
     _isDayPressed(target: HTMLElement): boolean;
+    _isDefaultCalendarLegendType(type: string): boolean;
     _getSecondaryDay(tempDate: CalendarDate): CalendarDate;
     _getFirstDay(): CalendarDate;
     _getFirstDayOfWeek(): number;

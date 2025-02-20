@@ -1,9 +1,7 @@
 import type I18nBundle from "@ui5/webcomponents-base/dist/i18nBundle.js";
-import type { PopupBeforeCloseEventDetail } from "./Popup.js";
 import Popover from "./Popover.js";
-import Dialog from "./Dialog.js";
-import "@ui5/webcomponents-icons/dist/decline.js";
-type ResponsivePopoverBeforeCloseEventDetail = PopupBeforeCloseEventDetail;
+import type Dialog from "./Dialog.js";
+import type { PopupBeforeCloseEventDetail } from "./Popup.js";
 /**
  * @class
  *
@@ -26,6 +24,7 @@ type ResponsivePopoverBeforeCloseEventDetail = PopupBeforeCloseEventDetail;
  * @csspart footer - Used to style the footer of the component
  */
 declare class ResponsivePopover extends Popover {
+    eventDetails: Popover["eventDetails"];
     /**
      * Defines if only the content would be displayed (without header and footer) in the popover on Desktop.
      * By default both the header and footer would be displayed.
@@ -47,26 +46,15 @@ declare class ResponsivePopover extends Popover {
     _hideCloseButton: boolean;
     static i18nBundle: I18nBundle;
     constructor();
-    /**
-     * Shows popover on desktop and dialog on mobile.
-     * @param opener the element that the popover is shown at
-     * @param [preventInitialFocus=false] Prevents applying the focus inside the popup
-     * @public
-     * @returns Resolves when the responsive popover is open
-     */
-    showAt(opener: HTMLElement, preventInitialFocus?: boolean): Promise<void>;
-    _show(): void;
+    openPopup(): Promise<void>;
+    _show(): Promise<void>;
+    _dialogCloseButtonClick(): void;
     /**
      * Closes the popover/dialog.
-     * @public
+     * @override
      */
-    close(escPressed?: boolean, preventRegistryUpdate?: boolean, preventFocusRestore?: boolean): void;
+    closePopup(escPressed?: boolean, preventRegistryUpdate?: boolean, preventFocusRestore?: boolean): void;
     toggle(opener: HTMLElement): void;
-    /**
-     * Tells if the responsive popover is open.
-     * @public
-     */
-    isOpen(): boolean;
     get classes(): import("@ui5/webcomponents-base/dist/types.js").ClassMap;
     get _dialog(): Dialog;
     get contentDOM(): HTMLElement;
@@ -74,11 +62,10 @@ declare class ResponsivePopover extends Popover {
     get _displayHeader(): boolean;
     get _displayFooter(): boolean;
     get _closeDialogAriaLabel(): string;
-    _beforeDialogOpen(e: CustomEvent<PopupBeforeCloseEventDetail>): void;
-    _afterDialogClose(e: CustomEvent): void;
-    _propagateDialogEvent(e: CustomEvent): void;
+    _beforeDialogOpen(): void;
+    _afterDialogOpen(): void;
+    _beforeDialogClose(e: CustomEvent<PopupBeforeCloseEventDetail>): void;
+    _afterDialogClose(): void;
     get isModal(): boolean;
-    static onDefine(): Promise<void>;
 }
 export default ResponsivePopover;
-export type { ResponsivePopoverBeforeCloseEventDetail, };

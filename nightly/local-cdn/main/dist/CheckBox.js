@@ -9,26 +9,17 @@ import { isDesktop } from "@ui5/webcomponents-base/dist/Device.js";
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
 import customElement from "@ui5/webcomponents-base/dist/decorators/customElement.js";
 import property from "@ui5/webcomponents-base/dist/decorators/property.js";
-import slot from "@ui5/webcomponents-base/dist/decorators/slot.js";
-import event from "@ui5/webcomponents-base/dist/decorators/event.js";
-import litRender from "@ui5/webcomponents-base/dist/renderer/LitRenderer.js";
-import { getI18nBundle } from "@ui5/webcomponents-base/dist/i18nBundle.js";
+import event from "@ui5/webcomponents-base/dist/decorators/event-strict.js";
+import jsxRenderer from "@ui5/webcomponents-base/dist/renderer/JsxRenderer.js";
+import i18n from "@ui5/webcomponents-base/dist/decorators/i18n.js";
 import ValueState from "@ui5/webcomponents-base/dist/types/ValueState.js";
-import { getFeature } from "@ui5/webcomponents-base/dist/FeaturesRegistry.js";
-import { getEffectiveAriaLabelText } from "@ui5/webcomponents-base/dist/util/AriaLabelHelper.js";
+import { getEffectiveAriaLabelText } from "@ui5/webcomponents-base/dist/util/AccessibilityTextsHelper.js";
 import { isSpace, isEnter } from "@ui5/webcomponents-base/dist/Keys.js";
-import "@ui5/webcomponents-icons/dist/accept.js";
-import "@ui5/webcomponents-icons/dist/complete.js";
-import "@ui5/webcomponents-icons/dist/border.js";
-import "@ui5/webcomponents-icons/dist/tri-state.js";
-import Icon from "./Icon.js";
-import Label from "./Label.js";
-import WrappingType from "./types/WrappingType.js";
-import { VALUE_STATE_ERROR, VALUE_STATE_WARNING, VALUE_STATE_SUCCESS, } from "./generated/i18n/i18n-defaults.js";
+import { VALUE_STATE_ERROR, VALUE_STATE_WARNING, VALUE_STATE_SUCCESS, FORM_CHECKABLE_REQUIRED, } from "./generated/i18n/i18n-defaults.js";
 // Styles
 import checkboxCss from "./generated/themes/CheckBox.css.js";
 // Template
-import CheckBoxTemplate from "./generated/templates/CheckBoxTemplate.lit.js";
+import CheckBoxTemplate from "./CheckBoxTemplate.js";
 let isGlobalHandlerAttached = false;
 let activeCb;
 /**
@@ -49,7 +40,7 @@ let activeCb;
  * ### Usage
  *
  * You can define the checkbox text with via the `text` property. If the text exceeds the available width, it is truncated by default.
- * In case you prefer text to wrap, set the `wrappingType` property to "Normal".
+ * In case you prefer text to truncate, set the `wrappingType` property to "None".
  * The touchable area for toggling the `ui5-checkbox` ends where the text ends.
  *
  * You can disable the `ui5-checkbox` by setting the `disabled` property to
@@ -74,8 +65,103 @@ let activeCb;
  * @csspart icon - Used to style the icon of the `ui5-checkbox`
  */
 let CheckBox = CheckBox_1 = class CheckBox extends UI5Element {
+    get formValidityMessage() {
+        return CheckBox_1.i18nBundle.getText(FORM_CHECKABLE_REQUIRED);
+    }
+    get formValidity() {
+        return { valueMissing: this.required && !this.checked };
+    }
+    async formElementAnchor() {
+        return this.getFocusDomRefAsync();
+    }
+    get formFormattedValue() {
+        return this.checked ? "on" : null;
+    }
     constructor() {
         super();
+        /**
+         * Defines whether the component is disabled.
+         *
+         * **Note:** A disabled component is completely noninteractive.
+         * @default false
+         * @public
+         */
+        this.disabled = false;
+        /**
+         * Defines whether the component is read-only.
+         *
+         * **Note:** A read-only component is not editable,
+         * but still provides visual feedback upon user interaction.
+         * @default false
+         * @public
+         */
+        this.readonly = false;
+        /**
+         * Determines whether the `ui5-checkbox` is in display only state.
+         *
+         * When set to `true`, the `ui5-checkbox` is not interactive, not editable, not focusable
+         * and not in the tab chain. This setting is used for forms in review mode.
+         *
+         * **Note:** When the property `disabled` is set to `true` this property has no effect.
+         * @since 1.22.0
+         * @public
+         * @default false
+         */
+        this.displayOnly = false;
+        /**
+         * Defines whether the component is required.
+         * @default false
+         * @public
+         * @since 1.3.0
+         */
+        this.required = false;
+        /**
+        * Defines whether the component is displayed as partially checked.
+        *
+        * **Note:** The indeterminate state can be set only programmatically and can’t be achieved by user
+        * interaction and the resulting visual state depends on the values of the `indeterminate`
+        * and `checked` properties:
+        *
+        * -  If the component is checked and indeterminate, it will be displayed as partially checked
+        * -  If the component is checked and it is not indeterminate, it will be displayed as checked
+        * -  If the component is not checked, it will be displayed as not checked regardless value of the indeterminate attribute
+        * @default false
+        * @public
+        * @since 1.0.0-rc.15
+        */
+        this.indeterminate = false;
+        /**
+         * Defines if the component is checked.
+         *
+         * **Note:** The property can be changed with user interaction,
+         * either by cliking/tapping on the component, or by
+         * pressing the Enter or Space key.
+         * @default false
+         * @formEvents change
+         * @formProperty
+         * @public
+         */
+        this.checked = false;
+        /**
+         * Defines the value state of the component.
+         * @default "None"
+         * @public
+         */
+        this.valueState = "None";
+        /**
+         * Defines whether the component text wraps when there is not enough space.
+         *
+         * **Note:** for option "Normal" the text will wrap and the words will not be broken based on hyphenation.
+         * **Note:** for option "None" the text will be truncated with an ellipsis.
+         * @default "Normal"
+         * @public
+         */
+        this.wrappingType = "Normal";
+        /**
+         * Defines the active state (pressed or not) of the component.
+         * @private
+         */
+        this.active = false;
         this._deactivate = () => {
             if (activeCb) {
                 activeCb.active = false;
@@ -86,25 +172,9 @@ let CheckBox = CheckBox_1 = class CheckBox extends UI5Element {
             isGlobalHandlerAttached = true;
         }
     }
-    onBeforeRendering() {
-        this._enableFormSupport();
-    }
     onEnterDOM() {
         if (isDesktop()) {
             this.setAttribute("desktop", "");
-        }
-    }
-    _enableFormSupport() {
-        const formSupport = getFeature("FormSupport");
-        if (formSupport) {
-            formSupport.syncNativeHiddenInput(this, (element, nativeInput) => {
-                nativeInput.disabled = !!element.disabled;
-                nativeInput.checked = !!element.checked;
-                nativeInput.value = element.checked ? "on" : "";
-            });
-        }
-        else if (this.name) {
-            console.warn(`In order for the "name" property to have effect, you should also: import "@ui5/webcomponents/dist/features/InputElementsFormSupport.js";`); // eslint-disable-line
         }
     }
     _onclick() {
@@ -154,10 +224,10 @@ let CheckBox = CheckBox_1 = class CheckBox extends UI5Element {
             else {
                 this.checked = !this.checked;
             }
-            const changePrevented = !this.fireEvent("change", null, true);
+            const changePrevented = !this.fireDecoratorEvent("change");
             // Angular two way data binding
-            const valueChagnePrevented = !this.fireEvent("value-changed", null, true);
-            if (changePrevented || valueChagnePrevented) {
+            const valueChangePrevented = !this.fireDecoratorEvent("value-changed");
+            if (changePrevented || valueChangePrevented) {
                 this.checked = lastState.checked;
                 this.indeterminate = lastState.indeterminate;
             }
@@ -169,9 +239,9 @@ let CheckBox = CheckBox_1 = class CheckBox extends UI5Element {
     }
     valueStateTextMappings() {
         return {
-            "Error": CheckBox_1.i18nBundle.getText(VALUE_STATE_ERROR),
-            "Warning": CheckBox_1.i18nBundle.getText(VALUE_STATE_WARNING),
-            "Success": CheckBox_1.i18nBundle.getText(VALUE_STATE_SUCCESS),
+            "Negative": CheckBox_1.i18nBundle.getText(VALUE_STATE_ERROR),
+            "Critical": CheckBox_1.i18nBundle.getText(VALUE_STATE_WARNING),
+            "Positive": CheckBox_1.i18nBundle.getText(VALUE_STATE_SUCCESS),
         };
     }
     get ariaLabelText() {
@@ -212,25 +282,18 @@ let CheckBox = CheckBox_1 = class CheckBox extends UI5Element {
     }
     get effectiveTabIndex() {
         const tabindex = this.getAttribute("tabindex");
-        return this.disabled || this.displayOnly ? undefined : tabindex || "0";
+        if (this.tabbable) {
+            return tabindex ? parseInt(tabindex) : 0;
+        }
+    }
+    get tabbable() {
+        return !this.disabled && !this.displayOnly;
     }
     get isCompletelyChecked() {
         return this.checked && !this.indeterminate;
     }
     get isDisplayOnly() {
         return this.displayOnly && !this.disabled;
-    }
-    get displayOnlyIcon() {
-        if (this.isCompletelyChecked) {
-            return "complete";
-        }
-        if (this.checked && this.indeterminate) {
-            return "tri-state";
-        }
-        return "border";
-    }
-    static async onDefine() {
-        CheckBox_1.i18nBundle = await getI18nBundle("@ui5/webcomponents");
     }
 };
 __decorate([
@@ -261,10 +324,10 @@ __decorate([
     property()
 ], CheckBox.prototype, "text", void 0);
 __decorate([
-    property({ type: ValueState, defaultValue: ValueState.None })
+    property()
 ], CheckBox.prototype, "valueState", void 0);
 __decorate([
-    property({ type: WrappingType, defaultValue: WrappingType.None })
+    property()
 ], CheckBox.prototype, "wrappingType", void 0);
 __decorate([
     property()
@@ -273,27 +336,35 @@ __decorate([
     property({ type: Boolean })
 ], CheckBox.prototype, "active", void 0);
 __decorate([
-    slot()
-], CheckBox.prototype, "formSupport", void 0);
+    i18n("@ui5/webcomponents")
+], CheckBox, "i18nBundle", void 0);
 CheckBox = CheckBox_1 = __decorate([
     customElement({
         tag: "ui5-checkbox",
         languageAware: true,
-        renderer: litRender,
+        formAssociated: true,
+        renderer: jsxRenderer,
         template: CheckBoxTemplate,
         styles: checkboxCss,
-        dependencies: [
-            Label,
-            Icon,
-        ],
     })
     /**
      * Fired when the component checked state changes.
      * @public
-     * @allowPreventDefault
      */
     ,
-    event("change")
+    event("change", {
+        bubbles: true,
+        cancelable: true,
+    })
+    /**
+     * Fired to make Angular two way data binding work properly.
+     * @private
+     */
+    ,
+    event("value-changed", {
+        bubbles: true,
+        cancelable: true,
+    })
 ], CheckBox);
 CheckBox.define();
 export default CheckBox;

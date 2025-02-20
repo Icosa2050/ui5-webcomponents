@@ -1,9 +1,16 @@
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
 import ValueState from "@ui5/webcomponents-base/dist/types/ValueState.js";
 import type I18nBundle from "@ui5/webcomponents-base/dist/i18nBundle.js";
-import Input from "./Input.js";
-import Popover from "./Popover.js";
-import type { IFormElement } from "./features/InputElementsFormSupport.js";
+import type { IFormInputElement } from "@ui5/webcomponents-base/dist/features/InputElementsFormSupport.js";
+import type Input from "./Input.js";
+import type Popover from "./Popover.js";
+type FileData = {
+    fileName: string;
+    fileSize: number;
+};
+type FileUploaderFileSizeExceedEventDetail = {
+    filesData: Array<FileData>;
+};
 type FileUploaderChangeEventDetail = {
     files: FileList | null;
 };
@@ -31,15 +38,19 @@ type FileUploaderChangeEventDetail = {
  * @extends UI5Element
  * @public
  */
-declare class FileUploader extends UI5Element implements IFormElement {
+declare class FileUploader extends UI5Element implements IFormInputElement {
+    eventDetails: {
+        "change": FileUploaderChangeEventDetail;
+        "file-size-exceed": FileUploaderFileSizeExceedEventDetail;
+    };
     /**
      * Comma-separated list of file types that the component should accept.
      *
      * **Note:** Please make sure you are adding the `.` in front on the file type, e.g. `.png` in case you want to accept png's only.
-     * @default ""
+     * @default undefined
      * @public
      */
-    accept: string;
+    accept?: string;
     /**
      * If set to "true", the input field of component will not be rendered. Only the default slot that is passed will be rendered.
      * @default false
@@ -61,24 +72,19 @@ declare class FileUploader extends UI5Element implements IFormElement {
      */
     multiple: boolean;
     /**
-     * Determines the name with which the component will be submitted in an HTML form.
+     * Determines the name by which the component will be identified upon submission in an HTML form.
      *
-     * **Important:** For the `name` property to have effect, you must add the following import to your project:
-     * `import "@ui5/webcomponents/dist/features/InputElementsFormSupport.js";`
-     *
-     * **Note:** When set, a native `input` HTML element
-     * will be created inside the component so that it can be submitted as
-     * part of an HTML form. Do not use this property unless you need to submit a form.
-     * @default ""
+     * **Note:** This property is only applicable within the context of an HTML Form element.
+     * @default undefined
      * @public
      */
-    name: string;
+    name?: string;
     /**
      * Defines a short hint intended to aid the user with data entry when the component has no value.
-     * @default ""
+     * @default undefined
      * @public
      */
-    placeholder: string;
+    placeholder?: string;
     /**
      * Defines the name/names of the file/files to upload.
      * @default ""
@@ -87,6 +93,13 @@ declare class FileUploader extends UI5Element implements IFormElement {
      * @public
      */
     value: string;
+    /**
+     * Defines the maximum file size in megabytes which prevents the upload if at least one file exceeds it.
+     * @default undefined
+     * @since 2.2.0
+     * @public
+     */
+    maxFileSize?: number;
     /**
      * Defines the value state of the component.
      * @default "None"
@@ -111,27 +124,26 @@ declare class FileUploader extends UI5Element implements IFormElement {
      * **Note:** If not specified, a default text (in the respective language) will be displayed.
      *
      * **Note:** The `valueStateMessage` would be displayed,
-     * when the component is in `Information`, `Warning` or `Error` value state.
+     * when the component is in `Information`, `Critical` or `Negative` value state.
      * @since 1.0.0-rc.9
      * @public
      */
     valueStateMessage: Array<HTMLElement>;
-    /**
-     * The slot is used to render native `input` HTML element within Light DOM to enable form submit,
-     * when `name` property is set.
-     * @private
-     */
-    formSupport: Array<HTMLElement>;
-    _internals: ElementInternals;
     static emptyInput: HTMLInputElement;
     static i18nBundle: I18nBundle;
-    static get formAssociated(): boolean;
-    constructor();
+    formElementAnchor(): Promise<HTMLElement | undefined>;
+    /**
+     * @override
+     */
+    getFocusDomRef(): HTMLElement | undefined;
+    get formFormattedValue(): FormData | null;
     _onmouseover(): void;
     _onmouseout(): void;
-    _onclick(e: MouseEvent): void;
+    _onclick(): void;
     _onkeydown(e: KeyboardEvent): void;
     _onkeyup(e: KeyboardEvent): void;
+    _ondrag(e: DragEvent): void;
+    _ondrop(e: DragEvent): void;
     _onfocusin(): void;
     _onfocusout(): void;
     /**
@@ -140,12 +152,16 @@ declare class FileUploader extends UI5Element implements IFormElement {
      * @default null
      */
     get files(): FileList | null;
-    onBeforeRendering(): void;
     onAfterRendering(): void;
-    _enableFormSupport(): void;
     _onChange(e: Event): void;
     _updateValue(files: FileList | null): void;
-    _setFormValue(): void;
+    /**
+     * Checks whether all files are below `maxFileSize` (if set),
+     * and fires a `file-size-exceed` event if any file exceeds it.
+     * @private
+     */
+    _validateFiles(changedFiles: FileList): FileList;
+    _getExceededFiles(files: FileList): Array<FileData>;
     toggleValueStatePopover(open: boolean): void;
     openValueStatePopover(): void;
     closeValueStatePopover(): void;
@@ -157,36 +173,18 @@ declare class FileUploader extends UI5Element implements IFormElement {
     static get _emptyFilesList(): FileList | null;
     get browseText(): string;
     get titleText(): string;
-    get _canUseNativeFormSupport(): boolean;
-    get _keepInputInShadowDOM(): boolean;
     get _input(): HTMLInputElement;
     get valueStateTextMappings(): Record<string, string>;
     get valueStateText(): string;
     get hasValueState(): boolean;
     get hasValueStateText(): boolean;
-    get valueStateMessageText(): Node[];
     get shouldDisplayDefaultValueStateMessage(): boolean;
     get shouldOpenValueStateMessagePopover(): boolean;
     /**
      * This method is relevant for sap_horizon theme only
      */
     get _valueStateMessageInputIcon(): string;
-    get classes(): {
-        popoverValueState: {
-            "ui5-valuestatemessage-root": boolean;
-            "ui5-valuestatemessage--success": boolean;
-            "ui5-valuestatemessage--error": boolean;
-            "ui5-valuestatemessage--warning": boolean;
-            "ui5-valuestatemessage--information": boolean;
-        };
-    };
-    get styles(): {
-        popoverHeader: {
-            width: string;
-        };
-    };
     get ui5Input(): Input | null;
-    static onDefine(): Promise<void>;
 }
 export default FileUploader;
-export type { FileUploaderChangeEventDetail, };
+export type { FileData, FileUploaderChangeEventDetail, FileUploaderFileSizeExceedEventDetail, };

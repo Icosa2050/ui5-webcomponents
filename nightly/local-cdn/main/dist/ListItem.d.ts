@@ -1,13 +1,13 @@
-import type { PassiveEventListenerObject } from "@ui5/webcomponents-base/dist/types.js";
 import type I18nBundle from "@ui5/webcomponents-base/dist/i18nBundle.js";
+import type { AccessibilityAttributes, AriaRole, AriaHasPopup } from "@ui5/webcomponents-base";
 import "@ui5/webcomponents-icons/dist/decline.js";
 import "@ui5/webcomponents-icons/dist/edit.js";
-import HighlightTypes from "./types/HighlightTypes.js";
+import Highlight from "./types/Highlight.js";
 import ListItemType from "./types/ListItemType.js";
 import ListSelectionMode from "./types/ListSelectionMode.js";
 import ListItemBase from "./ListItemBase.js";
 import type { IButton } from "./Button.js";
-import HasPopup from "./types/HasPopup.js";
+import type ListItemAccessibleRole from "./types/ListItemAccessibleRole.js";
 import "@ui5/webcomponents-icons/dist/slim-arrow-right.js";
 interface IAccessibleListItem {
     accessibleName?: string;
@@ -19,19 +19,14 @@ type SelectionRequestEventDetail = {
     selected?: boolean;
     key?: string;
 };
-type PressEventDetail = {
-    item: ListItem;
-    selected: boolean;
-    key: string;
-};
 type AccInfo = {
-    role: string;
+    role?: AriaRole | undefined;
     ariaExpanded?: boolean;
     ariaLevel?: number;
     ariaLabel: string;
     ariaLabelRadioButton: string;
     ariaSelectedText?: string;
-    ariaHaspopup?: `${Lowercase<HasPopup>}`;
+    ariaHaspopup?: `${AriaHasPopup}`;
     posinset?: number;
     setsize?: number;
     ariaSelected?: boolean;
@@ -39,21 +34,26 @@ type AccInfo = {
     listItemAriaLabel?: string;
     ariaOwns?: string;
     tooltip?: string;
+    ariaKeyShortcuts?: string;
 };
-type AccessibilityAttributes = {
-    ariaSetsize?: number;
-    ariaPosinset?: number;
-};
+type ListItemAccessibilityAttributes = Pick<AccessibilityAttributes, "hasPopup" | "ariaSetsize" | "ariaPosinset">;
 /**
  * @class
  * A class to serve as a base
- * for the `StandardListItem` and `CustomListItem` classes.
+ * for the `ListItemStandard` and `ListItemCustom` classes.
  * @constructor
  * @abstract
  * @extends ListItemBase
  * @public
  */
 declare abstract class ListItem extends ListItemBase {
+    eventDetails: ListItemBase["eventDetails"] & {
+        "detail-click": {
+            item: ListItem;
+            selected: boolean;
+        };
+        "selection-requested": SelectionRequestEventDetail;
+    };
     /**
      * Defines the visual indication and behavior of the list items.
      * Available options are `Active` (by default), `Inactive`, `Detail` and `Navigation`.
@@ -65,22 +65,20 @@ declare abstract class ListItem extends ListItemBase {
     */
     type: `${ListItemType}`;
     /**
-     * An object of strings that defines several additional accessibility attribute values
-     * for customization depending on the use case.
+     * Defines the additional accessibility attributes that will be applied to the component.
+     * The following fields are supported:
      *
-     *  It supports the following fields:
+     * - **ariaSetsize**: Defines the number of items in the current set  when not all items in the set are present in the DOM.
+     * **Note:** The value is an integer reflecting the number of items in the complete set. If the size of the entire set is unknown, set `-1`.
      *
-     * - `ariaSetsize`: Defines the number of items in the current set of listitems or treeitems when not all items in the set are present in the DOM.
-     * 	The value of each `aria-setsize` is an integer reflecting number of items in the complete set.
+     * 	- **ariaPosinset**: Defines an element's number or position in the current set when not all items are present in the DOM.
+     * 	**Note:** The value is an integer greater than or equal to 1, and less than or equal to the size of the set when that size is known.
      *
-     * 	**Note:** If the size of the entire set is unknown, set `aria-setsize="-1"`.
-     * 	- `ariaPosinset`: Defines an element's number or position in the current set of listitems or treeitems when not all items are present in the DOM.
-     * 	The value of each `aria-posinset` is an integer greater than or equal to 1, and less than or equal to the size of the set when that size is known.
      * @default {}
      * @public
      * @since 1.15.0
      */
-    accessibilityAttributes: AccessibilityAttributes;
+    accessibilityAttributes: ListItemAccessibilityAttributes;
     /**
      * The navigated state of the list item.
      * If set to `true`, a navigation indicator is displayed at the end of the list item.
@@ -91,67 +89,40 @@ declare abstract class ListItem extends ListItemBase {
     navigated: boolean;
     /**
      * Defines the text of the tooltip that would be displayed for the list item.
-     * @default ""
+     * @default undefined
      * @public
      * @since 1.23.0
      */
-    tooltip: string;
+    tooltip?: string;
     /**
      * Indicates if the list item is active, e.g pressed down with the mouse or the keyboard keys.
      * @private
     */
     active: boolean;
     /**
-     * Defines the tooltip of the component.
-     * @default ""
-     * @deprecated
-     * @private
-     * @since 1.0.0-rc.15
-     */
-    title: string;
-    /**
      * Defines the highlight state of the list items.
-     * Available options are: `"None"` (by default), `"Success"`, `"Warning"`, `"Information"` and `"Error"`.
+     * Available options are: `"None"` (by default), `"Positive"`, `"Critical"`, `"Information"` and `"Negative"`.
      * @default "None"
      * @public
      * @since 1.24
      */
-    highlight: `${HighlightTypes}`;
+    highlight: `${Highlight}`;
     /**
-     * Indicates if the list item is actionable, e.g has hover and pressed effects.
-     * @private
-    */
-    actionable: boolean;
+     * Defines the selected state of the component.
+     * @default false
+     * @public
+     */
+    selected: boolean;
     /**
      * Used to define the role of the list item.
      * @private
-     * @default "listitem"
-     * @since 1.0.0-rc.9
-     *
-     */
-    role: string;
-    /**
-     * Defines the description for the accessible role of the component.
-     * @protected
-     * @default undefined
-     * @since 1.10.0
-     */
-    accessibleRoleDescription?: string;
-    /**
-     * Used to define the role of the list item.
-     * @private
-     * @default ""
+     * @default "ListItem"
      * @since 1.3.0
      *
      */
-    accessibleRole: string;
+    accessibleRole: `${ListItemAccessibleRole}`;
+    _forcedAccessibleRole?: string;
     _selectionMode: `${ListSelectionMode}`;
-    /**
-     * Defines the availability and type of interactive popup element that can be triggered by the component on which the property is set.
-     * @since 1.10.0
-     * @private
-     */
-    ariaHaspopup?: `${HasPopup}`;
     /**
      * Defines the delete button, displayed in "Delete" mode.
      * **Note:** While the slot allows custom buttons, to match
@@ -163,26 +134,29 @@ declare abstract class ListItem extends ListItemBase {
     deleteButton: Array<IButton>;
     deactivateByKey: (e: KeyboardEvent) => void;
     deactivate: () => void;
-    _ontouchstart: PassiveEventListenerObject;
     accessibleName?: string;
     indeterminate?: boolean;
-    disableDeleteButton?: boolean;
     static i18nBundle: I18nBundle;
     constructor();
     onBeforeRendering(): void;
     onEnterDOM(): void;
     onExitDOM(): void;
-    _onkeydown(e: KeyboardEvent): void;
+    _onkeydown(e: KeyboardEvent): Promise<void>;
     _onkeyup(e: KeyboardEvent): void;
-    _onmousedown(e: MouseEvent): void;
-    _onmouseup(e: MouseEvent): void;
-    _ontouchend(e: TouchEvent): void;
-    _onfocusout(): void;
-    _onclick(e: MouseEvent): void;
+    _onmousedown(): void;
+    _onmouseup(): void;
+    _ontouchend(): void;
+    _onfocusin(e: FocusEvent): void;
+    _onfocusout(e: FocusEvent): void;
     _ondragstart(e: DragEvent): void;
     _ondragend(e: DragEvent): void;
-    onMultiSelectionComponentPress(e: MouseEvent): void;
-    onSingleSelectionComponentPress(e: MouseEvent): void;
+    _isTargetSelfFocusDomRef(e: KeyboardEvent): boolean;
+    /**
+     * Called when selection components in Single (ui5-radio-button)
+     * and Multi (ui5-checkbox) selection modes are used.
+     */
+    onMultiSelectionComponentPress(e: CustomEvent): void;
+    onSingleSelectionComponentPress(e: CustomEvent): void;
     activate(): void;
     onDelete(): void;
     onDetailClick(): void;
@@ -193,17 +167,11 @@ declare abstract class ListItem extends ListItemBase {
     get modeSingleSelect(): boolean;
     get modeMultiple(): boolean;
     get modeDelete(): boolean;
-    /**
-     * Used in UploadCollectionItem
-     */
-    get renderDeleteButton(): boolean;
-    /**
-     * End
-     */
     get typeDetail(): boolean;
     get typeNavigation(): boolean;
     get typeActive(): boolean;
     get _ariaSelected(): boolean | undefined;
+    get listItemAccessibleRole(): AriaRole | undefined;
     get ariaSelectedText(): string | undefined;
     get deleteText(): string;
     get hasDeleteButtonSlot(): boolean;
@@ -212,7 +180,6 @@ declare abstract class ListItem extends ListItemBase {
     get _hasHighlightColor(): boolean;
     get hasConfigurableMode(): boolean;
     get _listItem(): HTMLLIElement | null;
-    static onDefine(): Promise<void>;
 }
 export default ListItem;
-export type { IAccessibleListItem, SelectionRequestEventDetail, PressEventDetail, AccessibilityAttributes, };
+export type { IAccessibleListItem, SelectionRequestEventDetail, ListItemAccessibilityAttributes, };

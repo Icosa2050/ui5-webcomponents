@@ -2,19 +2,23 @@ import CalendarDate from "@ui5/webcomponents-localization/dist/dates/CalendarDat
 import type I18nBundle from "@ui5/webcomponents-base/dist/i18nBundle.js";
 import CalendarPart from "./CalendarPart.js";
 import type { ICalendarPicker } from "./Calendar.js";
+import CalendarSelectionMode from "./types/CalendarSelectionMode.js";
 type Month = {
     timestamp: string;
     focusRef: boolean;
-    _tabIndex: string;
+    _tabIndex: number;
     selected: boolean;
-    ariaSelected: string;
+    ariaSelected: boolean;
     name: string;
     nameInSecType: string;
     disabled: boolean;
+    ariaDisabled: boolean | undefined;
     classes: string;
+    parts: string;
 };
 type MonthInterval = Array<Array<Month>>;
 type MonthPickerChangeEventDetail = {
+    dates: Array<number>;
     timestamp: number;
 };
 type MonthPickerNavigateEventDetail = {
@@ -30,25 +34,51 @@ type MonthPickerNavigateEventDetail = {
  * @private
  */
 declare class MonthPicker extends CalendarPart implements ICalendarPicker {
+    eventDetails: CalendarPart["eventDetails"] & {
+        change: MonthPickerChangeEventDetail;
+        navigate: MonthPickerNavigateEventDetail;
+    };
     /**
      * An array of UTC timestamps representing the selected date
      * or dates depending on the capabilities of the picker component.
-     * @public
      * @default []
      */
     selectedDates: Array<number>;
-    _months: MonthInterval;
+    /**
+     * Defines the type of selection used in the month picker component.
+     * Accepted property values are:
+     *
+     * - `CalendarSelectionMode.Single` - enables election of a single month.
+     * - `CalendarSelectionMode.Range` - enables selection of a month range.
+     *
+     * Note that 'CalendarSelectionMode.Multiple` is not supported for Month Picker!
+     * @default "Single"
+     * @since 2.2.0
+     */
+    selectionMode: `${CalendarSelectionMode}`;
+    _monthsInterval: MonthInterval;
     _hidden: boolean;
+    /**
+     * When selectionMode="Range" and the first month in the range is selected, this is the currently hovered or focused month.
+     *
+     * @private
+     */
+    _secondTimestamp?: number;
     static i18nBundle: I18nBundle;
-    static onDefine(): Promise<void>;
     get roleDescription(): string;
     onBeforeRendering(): void;
     onAfterRendering(): void;
+    get rowSize(): 2 | 3;
     _buildMonths(): void;
     _getDisplayedSecondaryMonthText(timestamp: number): {
         text: any;
         textInfo: any;
     };
+    /**
+      * Returns true if month timestamp is inside the selection range.
+      * @private
+      */
+    _isMonthInsideSelectionRange(timestamp: number): boolean;
     _onkeydown(e: KeyboardEvent): void;
     _onHomeOrEnd(homePressed: boolean): void;
     /**
@@ -57,6 +87,18 @@ declare class MonthPicker extends CalendarPart implements ICalendarPicker {
      * @private
      */
     _setTimestamp(value: number): void;
+    /**
+     * In range selection, the currently focused or hovered month is considered the "second day".
+     * @private
+     */
+    _updateSecondTimestamp(): void;
+    /**
+     * Set the hovered day as the "_secondTimestamp".
+     *
+     * @param e
+     * @private
+     */
+    _onmouseover(e: MouseEvent): void;
     /**
      * Modifies timestamp by a given amount of months and,
      * if necessary, loads the prev/next page.
@@ -67,11 +109,12 @@ declare class MonthPicker extends CalendarPart implements ICalendarPicker {
     _modifyTimestampBy(amount: number, preserveDate?: boolean): void;
     _onkeyup(e: KeyboardEvent): void;
     /**
-     * Selects a month, when the user clicks or presses "Enter" or "Space".
+     * Selects a month, when user made selection with mouse or using Space/Enter.
      * @param e
      * @private
      */
     _selectMonth(e: Event): void;
+    _updateSelectedDates(timestamp: number): void;
     /**
      * Called by the Calendar component.
      * @protected
