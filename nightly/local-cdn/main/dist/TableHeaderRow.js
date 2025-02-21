@@ -87,7 +87,7 @@ __decorate([
         type: HTMLElement,
         "default": true,
         invalidateOnChildChange: {
-            properties: ["width", "_popin", "horizontalAlign"],
+            properties: ["width", "_popin", "horizontalAlign", "popinHidden"],
             slots: false,
         },
         individualSlots: true,

@@ -2,6 +2,7 @@
  * Selection modes of the &lt;ui5-table&gt; component.
  *
  * @public
+ * @experimental
  */
 var TableSelectionMode;
 (function (TableSelectionMode) {

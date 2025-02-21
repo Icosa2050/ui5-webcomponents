@@ -1,5 +1,5 @@
-commit f7611dd8e4bd9db3d2026480cf8fcf0b19e00603
-Author: Stefan Dimitrov <115184100+StefanDimitrov04@users.noreply.github.com>
-Date:   Wed Feb 19 09:32:12 2025 +0200
+commit 3f2bb39755164a9074948fca90a65818ac89af7c
+Author: ui5-webcomponents-bot <ui5-webcomponents-bot@sap.com>
+Date:   Thu Feb 20 08:08:34 2025 +0000
 
-    refactor(ui5-input): prevent bubbling on close (#10886)
+    chore(release): publish v2.8.0-rc.2 [ci skip]

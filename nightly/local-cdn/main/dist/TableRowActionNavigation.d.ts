@@ -16,6 +16,7 @@ import type I18nBundle from "@ui5/webcomponents-base/dist/i18nBundle.js";
  * @extends TableRowActionBase
  * @since 2.7.0
  * @public
+ * @experimental
  */
 declare class TableRowActionNavigation extends TableRowActionBase {
     /**

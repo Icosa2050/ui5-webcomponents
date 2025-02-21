@@ -24,6 +24,7 @@ import "@ui5/webcomponents-icons/dist/ai.js";
  * @extends TableHeaderCellActionBase
  * @since 2.8.0
  * @public
+ * @experimental
  */
 let TableHeaderCellActionAI = TableHeaderCellActionAI_1 = class TableHeaderCellActionAI extends TableHeaderCellActionBase {
     getRenderInfo() {

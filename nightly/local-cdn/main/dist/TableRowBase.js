@@ -86,7 +86,7 @@ let TableRowBase = TableRowBase_1 = class TableRowBase extends UI5Element {
         return this.cells.filter(c => !c._popin);
     }
     get _popinCells() {
-        return this.cells.filter(c => c._popin);
+        return this.cells.filter(c => c._popin && !c._popinHidden);
     }
     get _stickyCells() {
         const selectionCell = this.shadowRoot?.querySelector("#selection-cell"), navigatedCell = this.shadowRoot?.querySelector("#navigated-cell");

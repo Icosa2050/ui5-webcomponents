@@ -24,6 +24,7 @@ let TableCellBase = class TableCellBase extends UI5Element {
     constructor() {
         super(...arguments);
         this._popin = false;
+        this._popinHidden = false;
         this.ariaRole = "gridcell";
     }
     onEnterDOM() {
@@ -53,6 +54,9 @@ __decorate([
 __decorate([
     property({ type: Boolean })
 ], TableCellBase.prototype, "_popin", void 0);
+__decorate([
+    property({ type: Boolean, noAttribute: true })
+], TableCellBase.prototype, "_popinHidden", void 0);
 __decorate([
     i18n("@ui5/webcomponents")
 ], TableCellBase, "i18nBundle", void 0);

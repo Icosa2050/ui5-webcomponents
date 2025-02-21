@@ -271,6 +271,8 @@ declare class Table extends UI5Element {
     _onEvent(e: Event): void;
     _onResize(): void;
     _onfocusin(e: FocusEvent): void;
+    _onGrow(): void;
+    _getPopinOrderedColumns(reverse: boolean): TableHeaderCell[];
     /**
      * Refreshes the popin state of the columns.
      * Syncs the popin state of the columns with the popin state of the header cells.
@@ -278,8 +280,6 @@ declare class Table extends UI5Element {
      * @private
      */
     _refreshPopinState(): void;
-    _onGrow(): void;
-    _getPopinOrderedColumns(reverse: boolean): TableHeaderCell[];
     _setHeaderPopinState(headerCell: TableHeaderCell, inPopin: boolean, popinWidth: number): void;
     _isFeature(feature: any): boolean;
     _isGrowingFeature(feature: any): boolean;

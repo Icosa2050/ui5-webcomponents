@@ -254,22 +254,6 @@ let Table = Table_1 = class Table extends UI5Element {
         // Handles focus in the table, when the focus is below a sticky element
         scrollElementIntoView(this._scrollContainer, e.target, this._stickyElements, this.effectiveDir === "rtl");
     }
-    /**
-     * Refreshes the popin state of the columns.
-     * Syncs the popin state of the columns with the popin state of the header cells.
-     * This is needed when additional rows are manually added and no resize happens.
-     * @private
-     */
-    _refreshPopinState() {
-        this.headerRow[0]?.cells.forEach((header, index) => {
-            this.rows.forEach(row => {
-                const cell = row.cells[index];
-                if (cell && cell._popin !== header._popin) {
-                    cell._popin = header._popin;
-                }
-            });
-        });
-    }
     _onGrow() {
         this._growing?.loadMore();
     }
@@ -283,11 +267,29 @@ let Table = Table_1 = class Table extends UI5Element {
         }
         return headers;
     }
+    /**
+     * Refreshes the popin state of the columns.
+     * Syncs the popin state of the columns with the popin state of the header cells.
+     * This is needed when additional rows are manually added and no resize happens.
+     * @private
+     */
+    _refreshPopinState() {
+        this.headerRow[0]?.cells.forEach((header, index) => {
+            this.rows.forEach(row => {
+                const cell = row.cells[index];
+                if (cell) {
+                    cell._popinHidden = header.popinHidden;
+                    cell._popin = header._popin;
+                }
+            });
+        });
+    }
     _setHeaderPopinState(headerCell, inPopin, popinWidth) {
         const headerIndex = this.headerRow[0].cells.indexOf(headerCell);
         headerCell._popin = inPopin;
         headerCell._popinWidth = popinWidth;
         this.rows.forEach(row => {
+            row.cells[headerIndex]._popinHidden = headerCell.popinHidden;
             row.cells[headerIndex]._popin = inPopin;
         });
     }

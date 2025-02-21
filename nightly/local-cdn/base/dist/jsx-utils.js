@@ -7,10 +7,19 @@ function convertEventScoping(type, props, key) {
             // Exteract the kebab-case event: onChange - change, onSelectionChange - selection-change, etc.
             const pascalEvent = prop.slice("on".length);
             const kebabCaseEvent = pascalToKebabCase(pascalEvent);
-            // Attach for the "ui5-" preffixed event
+            // Also support camelCase events
+            const camelCaseEvent = pascalEvent.charAt(0).toLowerCase() + pascalEvent.slice(1);
+            let origEvent;
             if (kebabCaseEvent in events) {
+                origEvent = kebabCaseEvent;
+            }
+            else if (camelCaseEvent in events) {
+                origEvent = camelCaseEvent;
+            }
+            // Attach for the "ui5-" preffixed event
+            if (origEvent) {
                 if ((prop !== "onClick")) {
-                    props[`onui5-${kebabCaseEvent}`] = props[prop];
+                    props[`onui5-${origEvent}`] = props[prop];
                     // TODO keep native events for now, find a way to mark them for runtime
                     delete props[prop];
                 }

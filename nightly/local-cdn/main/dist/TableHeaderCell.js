@@ -80,6 +80,17 @@ let TableHeaderCell = class TableHeaderCell extends TableCellBase {
          * @public
          */
         this.sortIndicator = "None";
+        /**
+         * Defines if the column is hidden in the popin.
+         *
+         * **Note:** Please be aware that hiding the column in the popin might lead to accessibility issues as
+         * users might not be able to access the content of the column on small screens.
+         *
+         * @default false
+         * @since 2.8.0
+         * @public
+         */
+        this.popinHidden = false;
         this._popin = false;
         this.ariaRole = "columnheader";
         this._popinWidth = 0;
@@ -127,6 +138,9 @@ __decorate([
 __decorate([
     property()
 ], TableHeaderCell.prototype, "sortIndicator", void 0);
+__decorate([
+    property({ type: Boolean })
+], TableHeaderCell.prototype, "popinHidden", void 0);
 __decorate([
     slot()
 ], TableHeaderCell.prototype, "action", void 0);
