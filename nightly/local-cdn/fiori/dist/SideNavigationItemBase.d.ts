@@ -54,6 +54,10 @@ declare class SideNavigationItemBase extends UI5Element implements ITabbable {
     set sideNavigation(sideNavigation: SideNavigation);
     get isFixedItem(): boolean;
     get isSideNavigationItemBase(): boolean;
+    /**
+     * @private
+     */
+    applyInitialFocusInPopover(): void;
 }
 declare const isInstanceOfSideNavigationItemBase: (object: any) => object is SideNavigationItemBase;
 export default SideNavigationItemBase;

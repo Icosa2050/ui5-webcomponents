@@ -648,6 +648,9 @@ __decorate([
     property()
 ], Select.prototype, "accessibleNameRef", void 0);
 __decorate([
+    property()
+], Select.prototype, "tooltip", void 0);
+__decorate([
     property({ type: Boolean, noAttribute: true })
 ], Select.prototype, "_iconPressed", void 0);
 __decorate([

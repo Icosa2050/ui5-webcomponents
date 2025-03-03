@@ -6,6 +6,11 @@
 var ListItemAccessibleRole;
 (function (ListItemAccessibleRole) {
     /**
+     * Represents the ARIA role "group".
+     * @private
+     */
+    ListItemAccessibleRole["Group"] = "Group";
+    /**
      * Represents the ARIA role "listitem". (by default)
      * @public
      */

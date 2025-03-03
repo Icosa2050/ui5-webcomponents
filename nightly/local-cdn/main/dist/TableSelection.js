@@ -17,7 +17,7 @@ import { isSelectionCheckbox, isHeaderSelector, findRowInPath } from "./TableUti
  *
  * ### Overview
  *
- * The `ui5-table-selection` component is used inside the `ui5-table` ti add key-based selection capabilities to the `ui5-table`.
+ * The `ui5-table-selection` component is used inside the `ui5-table` to add key-based selection capabilities to the `ui5-table`.
  *
  * The component offers three selection modes:
  * * Single - select a single row.
@@ -47,6 +47,7 @@ import { isSelectionCheckbox, isHeaderSelector, findRowInPath } from "./TableUti
  * @since 2.0.0
  * @public
  * @experimental This web component is available since 2.0 with an experimental flag and its API and behavior are subject to change.
+ * @deprecated This component is deprecated and will be removed in future releases. Use the `ui5-table-selection-single` or `ui5-table-selection-multi` components instead.
  */
 let TableSelection = class TableSelection extends UI5Element {
     constructor() {
@@ -66,6 +67,7 @@ let TableSelection = class TableSelection extends UI5Element {
          */
         this.selected = "";
         this.identifier = "TableSelection";
+        this._rowsLength = 0;
     }
     onTableActivate(table) {
         this._table = table;
@@ -79,17 +81,23 @@ let TableSelection = class TableSelection extends UI5Element {
     onBeforeRendering() {
         this._invalidateTableAndRows();
     }
+    onTableBeforeRendering() {
+        if (this.isMultiSelectable() && this._table && this._table.headerRow[0] && this._rowsLength !== this._table.rows.length) {
+            this._rowsLength = this._table.rows.length;
+            this._table.headerRow[0]._invalidate++;
+        }
+    }
     isSelectable() {
         return this.mode !== TableSelectionMode.None;
     }
-    isMultiSelect() {
+    isMultiSelectable() {
         return this.mode === TableSelectionMode.Multiple;
     }
-    hasRowSelector() {
+    isRowSelectorRequired() {
         return this.mode !== TableSelectionMode.None;
     }
-    getRowIdentifier(row) {
-        return row.rowKey;
+    getRowKey(row) {
+        return row.rowKey || "";
     }
     isSelected(row) {
         if (!this._table || !this.isSelectable()) {
@@ -98,8 +106,8 @@ let TableSelection = class TableSelection extends UI5Element {
         if (row.isHeaderRow()) {
             return this.areAllRowsSelected();
         }
-        const rowIdentifier = this.getRowIdentifier(row);
-        return this.selectedAsArray.includes(rowIdentifier);
+        const rowKey = this.getRowKey(row);
+        return this.selectedAsArray.includes(rowKey);
     }
     hasSelectedRow() {
         if (!this._table || !this.isSelectable()) {
@@ -107,8 +115,8 @@ let TableSelection = class TableSelection extends UI5Element {
         }
         const selectedArray = this.selectedAsArray;
         return this._table.rows.some(row => {
-            const rowIdentifier = this.getRowIdentifier(row);
-            return selectedArray.includes(rowIdentifier);
+            const rowKey = this.getRowKey(row);
+            return selectedArray.includes(rowKey);
         });
     }
     areAllRowsSelected() {
@@ -117,19 +125,22 @@ let TableSelection = class TableSelection extends UI5Element {
         }
         const selectedArray = this.selectedAsArray;
         return this._table.rows.every(row => {
-            const rowIdentifier = this.getRowIdentifier(row);
-            return selectedArray.includes(rowIdentifier);
+            const rowKey = this.getRowKey(row);
+            return selectedArray.includes(rowKey);
         });
     }
-    informSelectionChange(row) {
+    setSelected(row, selected, fireEvent = false) {
         if (this._rangeSelection?.isMouse && this._rangeSelection.shiftPressed) {
             return;
         }
         if (row.isHeaderRow()) {
-            this._informHeaderRowSelectionChange();
+            this._selectHeaderRow(selected);
         }
         else {
-            this._informRowSelectionChange(row);
+            this._selectRow(row, selected);
+        }
+        if (fireEvent) {
+            this.fireDecoratorEvent("change");
         }
     }
     get selectedAsArray() {
@@ -145,30 +156,23 @@ let TableSelection = class TableSelection extends UI5Element {
         this.selectedAsArray = [...selectedSet];
     }
     _selectRow(row, selected) {
-        const rowIdentifier = this.getRowIdentifier(row);
+        const rowKey = this.getRowKey(row);
         if (this.mode === TableSelectionMode.Multiple) {
             const selectedSet = this.selectedAsSet;
-            selectedSet[selected ? "add" : "delete"](rowIdentifier);
+            selectedSet[selected ? "add" : "delete"](rowKey);
             this.selectedAsSet = selectedSet;
         }
         else {
-            this.selected = selected ? rowIdentifier : "";
+            this.selected = selected ? rowKey : "";
         }
     }
-    _informRowSelectionChange(row) {
-        const isRowSelected = this.isMultiSelect() ? !this.isSelected(row) : true;
-        this._selectRow(row, isRowSelected);
-        this.fireDecoratorEvent("change");
-    }
-    _informHeaderRowSelectionChange() {
-        const isRowSelected = this.areAllRowsSelected();
+    _selectHeaderRow(selected) {
         const selectedSet = this.selectedAsSet;
         this._table.rows.forEach(row => {
-            const rowIdentifier = this.getRowIdentifier(row);
-            selectedSet[isRowSelected ? "delete" : "add"](rowIdentifier);
+            const rowKey = this.getRowKey(row);
+            selectedSet[selected ? "add" : "delete"](rowKey);
         });
         this.selectedAsSet = selectedSet;
-        this.fireDecoratorEvent("change");
     }
     _invalidateTableAndRows() {
         if (!this._table) {
@@ -177,7 +181,7 @@ let TableSelection = class TableSelection extends UI5Element {
         if (!this.isSelectable()) {
             this.selected = "";
         }
-        else if (!this.isMultiSelect()) {
+        else if (!this.isMultiSelectable()) {
             this.selected = this.selectedAsArray.shift() || "";
         }
         this._table._invalidate++;
@@ -185,7 +189,7 @@ let TableSelection = class TableSelection extends UI5Element {
         this._table.rows.forEach(row => row._invalidate++);
     }
     _onkeydown(e) {
-        if (!this.isMultiSelect() || !this._table || !e.shiftKey) {
+        if (!this.isMultiSelectable() || !this._table || !e.shiftKey) {
             return;
         }
         const focusedElement = getActiveElement(); // Assumption: The focused element is always the "next" row after navigation.
@@ -321,7 +325,7 @@ __decorate([
 TableSelection = __decorate([
     customElement({ tag: "ui5-table-selection" })
     /**
-     * Fired when selection is changed by user interaction.
+     * Fired when the selection is changed by user interaction.
      *
      * @public
      */

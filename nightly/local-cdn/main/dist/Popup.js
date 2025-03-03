@@ -162,7 +162,8 @@ let Popup = Popup_1 = class Popup extends UI5Element {
             return;
         }
         const prevented = !this.fireDecoratorEvent("before-open");
-        if (prevented || this._opened) {
+        if (prevented) {
+            this.open = false;
             return;
         }
         this._opened = true;
@@ -337,6 +338,7 @@ let Popup = Popup_1 = class Popup extends UI5Element {
         }
         const prevented = !this.fireDecoratorEvent("before-close", { escPressed });
         if (prevented) {
+            this.open = true;
             return;
         }
         this._opened = false;

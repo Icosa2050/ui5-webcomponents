@@ -9,7 +9,15 @@ import property from "@ui5/webcomponents-base/dist/decorators/property.js";
 import TableRowActionBase from "./TableRowActionBase.js";
 /**
  * @class
- * The `TableRowAction` class defines a row action for table rows.
+ *
+ * ### Overview
+ *
+ * The `ui5-table-row-action` component defines an action for table rows.
+ *
+ * ### ES6 Module Import
+ *
+ * `import "@ui5/webcomponents/dist/TableRowAction.js";`
+ *
  * @constructor
  * @extends TableRowActionBase
  * @since 2.7.0
@@ -40,13 +48,6 @@ let TableRowAction = class TableRowAction extends TableRowActionBase {
          * @public
          */
         this.text = "";
-        /**
-         * Defines the disabled state of the row action.
-         *
-         * @default false
-         * @public
-         */
-        this.disabled = false;
     }
     getRenderInfo() {
         return {
@@ -62,9 +63,6 @@ __decorate([
 __decorate([
     property()
 ], TableRowAction.prototype, "text", void 0);
-__decorate([
-    property({ type: Boolean })
-], TableRowAction.prototype, "disabled", void 0);
 TableRowAction = __decorate([
     customElement({ tag: "ui5-table-row-action" })
 ], TableRowAction);

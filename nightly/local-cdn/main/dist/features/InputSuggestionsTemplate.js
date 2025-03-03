@@ -5,6 +5,7 @@ import decline from "@ui5/webcomponents-icons/dist/decline.js";
 import List from "../List.js";
 import ResponsivePopover from "../ResponsivePopover.js";
 import Button from "../Button.js";
+import ListAccessibleRole from "../types/ListAccessibleRole.js";
 export default function InputSuggestionsTemplate(hooks) {
     const suggestionsList = hooks?.suggestionsList || defaultSuggestionsList;
     const valueStateMessage = hooks?.valueStateMessage;
@@ -20,6 +21,6 @@ export default function InputSuggestionsTemplate(hooks) {
                 _jsx("div", { slot: "footer", class: "ui5-responsive-popover-footer", children: _jsx(Button, { design: "Transparent", onClick: this._closePicker, children: "OK" }) })] }));
 }
 function defaultSuggestionsList() {
-    return (_jsx(List, { separators: this.suggestionSeparators, selectionMode: "Single", onMouseDown: this.onItemMouseDown, onItemClick: this._handleSuggestionItemPress, onSelectionChange: this._handleSelectionChange, children: _jsx("slot", {}) }));
+    return (_jsx(List, { accessibleRole: ListAccessibleRole.ListBox, separators: this.suggestionSeparators, selectionMode: "Single", onMouseDown: this.onItemMouseDown, onItemClick: this._handleSuggestionItemPress, onSelectionChange: this._handleSelectionChange, children: _jsx("slot", {}) }));
 }
 //# sourceMappingURL=InputSuggestionsTemplate.js.map

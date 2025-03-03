@@ -16,6 +16,8 @@ declare class NotificationListGroupList extends List {
     onItemTabIndexChange(): void;
     onItemFocused(): void;
     _onfocusin(e: FocusEvent): void;
+    _onkeydown(): void;
     focusItem(item: ListItemBase): void;
+    _onLoadMoreKeydown(e: KeyboardEvent): void;
 }
 export default NotificationListGroupList;

@@ -18,7 +18,7 @@ const i18n = (bundleName) => {
         }
         Object.defineProperty(target, propertyName, {
             get() {
-                return target.i18nBundles[propertyName];
+                return target.i18nBundles[bundleName];
             },
             set() { },
         });

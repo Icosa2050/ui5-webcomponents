@@ -45,12 +45,14 @@ declare class SideNavigationItem extends SideNavigationSelectableItemBase {
     get selectableItems(): Array<SideNavigationSelectableItemBase>;
     get focusableItems(): Array<SideNavigationItemBase>;
     get allItems(): Array<SideNavigationItemBase>;
+    get effectiveTabIndex(): string | undefined;
     get _ariaHasPopup(): import("@ui5/webcomponents-base/dist/types.js").AriaHasPopup | undefined;
     get _ariaChecked(): boolean | undefined;
     get _groupId(): string | undefined;
     get _expanded(): boolean | undefined;
     get classesArray(): string[];
     get _selected(): boolean;
+    applyInitialFocusInPopover(): void;
     _onToggleClick(e: CustomEvent): void;
     _onkeydown(e: KeyboardEvent): void;
     _onkeyup(e: KeyboardEvent): void;

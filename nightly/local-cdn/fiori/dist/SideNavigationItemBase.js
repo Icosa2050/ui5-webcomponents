@@ -79,6 +79,11 @@ class SideNavigationItemBase extends UI5Element {
     get isSideNavigationItemBase() {
         return true;
     }
+    /**
+     * @private
+     */
+    applyInitialFocusInPopover() {
+    }
 }
 __decorate([
     property()

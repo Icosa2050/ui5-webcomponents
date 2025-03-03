@@ -271,7 +271,7 @@ let ShellBar = ShellBar_1 = class ShellBar extends UI5Element {
     }
     _menuItemPress(e) {
         const shouldContinue = this.fireDecoratorEvent("menu-item-click", {
-            item: e.detail.selectedItems[0],
+            item: e.detail.item,
         });
         if (shouldContinue) {
             this.menuPopover.open = false;
@@ -686,8 +686,8 @@ let ShellBar = ShellBar_1 = class ShellBar extends UI5Element {
         this._overflowNotifications = overflowNotifications;
     }
     _observeContentItems() {
-        if (JSON.stringify(this.contentItems) === JSON.stringify(this._observableContent)) {
-            return false;
+        if (this.hasMatchingContent) {
+            return;
         }
         this.contentItems.forEach(item => {
             if (!this._observableContent.includes(item)) {
@@ -714,6 +714,13 @@ let ShellBar = ShellBar_1 = class ShellBar extends UI5Element {
             return false;
         }
         return itemInfo.classes.indexOf("ui5-shellbar-hidden-button") !== -1;
+    }
+    get hasMatchingContent() {
+        if (this._observableContent.length !== this.contentItems.length) {
+            return false;
+        }
+        const observableContentSet = new WeakSet(this._observableContent);
+        return this.contentItems.every(item => observableContentSet.has(item));
     }
     get contentItemsSorted() {
         return this.contentItems.toReversed().sort((a, b) => {

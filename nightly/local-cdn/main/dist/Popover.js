@@ -108,12 +108,6 @@ let Popover = Popover_1 = class Popover extends Popup {
          */
         this.allowTargetOverlap = false;
         /**
-         * Defines whether the content is scrollable.
-         * @default false
-         * @private
-         */
-        this.disableScrolling = false;
-        /**
          * Sets the X translation of the arrow
          * @private
          */
@@ -639,9 +633,6 @@ __decorate([
 __decorate([
     property({ type: Boolean })
 ], Popover.prototype, "allowTargetOverlap", void 0);
-__decorate([
-    property({ type: Boolean })
-], Popover.prototype, "disableScrolling", void 0);
 __decorate([
     property({ type: Number, noAttribute: true })
 ], Popover.prototype, "arrowTranslateX", void 0);

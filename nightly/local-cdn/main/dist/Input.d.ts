@@ -325,7 +325,7 @@ declare class Input extends UI5Element implements SuggestionComponent, IFormInpu
     _handleResizeBound: ResizeObserverCallback;
     _keepInnerValue: boolean;
     _shouldAutocomplete?: boolean;
-    _keyDown?: boolean;
+    _enterKeyDown?: boolean;
     _isKeyNavigation?: boolean;
     _indexOfSelectedItem: number;
     _selectedText?: string;

@@ -6,11 +6,9 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
 import { customElement, property } from "@ui5/webcomponents-base/dist/decorators.js";
-import litRender from "@ui5/webcomponents-base/dist/renderer/LitRenderer.js";
-import TableRowActionBaseTemplate from "./generated/templates/TableRowActionBaseTemplate.lit.js";
+import jsxRenderer from "@ui5/webcomponents-base/dist/renderer/JsxRenderer.js";
+import TableRowActionBaseTemplate from "./TableRowActionBaseTemplate.js";
 import TableRowActionBaseStyles from "./generated/themes/TableRowActionBase.css.js";
-import Icon from "./Icon.js";
-import Button from "./Button.js";
 let MenuConstructor;
 let MenuItemConstructor;
 /**
@@ -90,10 +88,9 @@ __decorate([
 ], TableRowActionBase.prototype, "invisible", void 0);
 TableRowActionBase = __decorate([
     customElement({
-        renderer: litRender,
+        renderer: jsxRenderer,
         styles: TableRowActionBaseStyles,
         template: TableRowActionBaseTemplate,
-        dependencies: [Button, Icon],
     })
 ], TableRowActionBase);
 export default TableRowActionBase;

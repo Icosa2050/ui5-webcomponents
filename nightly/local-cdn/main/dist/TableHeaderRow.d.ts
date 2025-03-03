@@ -1,5 +1,5 @@
 import TableRowBase from "./TableRowBase.js";
-import TableHeaderCell from "./TableHeaderCell.js";
+import type TableHeaderCell from "./TableHeaderCell.js";
 /**
  * @class
  *
@@ -42,8 +42,7 @@ declare class TableHeaderRow extends TableRowBase {
     onBeforeRendering(): void;
     isHeaderRow(): boolean;
     get _hasRowActions(): boolean;
-    get _isSelectable(): boolean | undefined;
-    get _isSelected(): boolean | undefined;
+    get _isSelectable(): boolean;
     get _i18nSelection(): string;
     get _i18nRowPopin(): string;
     get _i18nRowActions(): string;

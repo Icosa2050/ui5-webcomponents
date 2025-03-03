@@ -182,7 +182,6 @@ declare class NotificationListItem extends NotificationListItemBase {
     _onclick(): void;
     _onShowMoreClick(e: UI5CustomEvent<Link, "click">): void;
     _onkeydown(e: KeyboardEvent): Promise<void>;
-    focusSameItemOnNextRow(e: KeyboardEvent): void;
     _onkeyup(e: KeyboardEvent): void;
     _onBtnCloseClick(): void;
     _onBtnMenuClick(): void;

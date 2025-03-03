@@ -18,7 +18,7 @@ import log from "@ui5/webcomponents-icons/dist/log.js";
 import decline from "@ui5/webcomponents-icons/dist/decline.js";
 import addEmployee from "@ui5/webcomponents-icons/dist/add-employee.js";
 export default function UserMenuTemplate() {
-    return (_jsxs(ResponsivePopover, { id: "user-menu-rp", class: "ui5-pm-rp", tabIndex: -1, placement: "Bottom", verticalAlign: "Bottom", horizontalAlign: "End", preventInitialFocus: true, accessibleName: this.accessibleNameText, open: this.open, opener: this.opener, onClose: this._handlePopoverAfterClose, onOpen: this._handlePopoverAfterOpen, children: [this._isPhone ?
+    return (_jsxs(ResponsivePopover, { id: "user-menu-rp", class: "ui5-pm-rp", tabIndex: -1, placement: "Bottom", verticalAlign: "Bottom", horizontalAlign: "End", accessibleName: this.accessibleNameText, open: this.open, opener: this.opener, onClose: this._handlePopoverAfterClose, onOpen: this._handlePopoverAfterOpen, children: [this._isPhone ?
                 _jsxs(_Fragment, { children: [_jsxs(Bar, { class: "ui5-pm-phone-header", slot: "header", children: [this._manageAccountVisibleInHeader &&
                                     _jsx(Button, { icon: userSettings, onClick: this._handleManageAccountClick, slot: "startContent" }), this._titleMovedToHeader &&
                                     _jsx(Title, { level: "H1", wrappingType: "None", children: this._selectedAccount.titleText }), _jsx(Button, { icon: decline, design: "Transparent", accessibleName: this._closeDialogAriaLabel, onClick: this._closeUserMenu, slot: "endContent" })] }), _jsx("div", { class: "ui5-pm-header", children: headerContent.call(this) })] })

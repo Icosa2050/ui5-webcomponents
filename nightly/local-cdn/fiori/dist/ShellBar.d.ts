@@ -1,5 +1,5 @@
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
-import type { ListSelectionChangeEventDetail } from "@ui5/webcomponents/dist/List.js";
+import type { ListItemClickEventDetail } from "@ui5/webcomponents/dist/List.js";
 import type { ResizeObserverCallback } from "@ui5/webcomponents-base/dist/delegate/ResizeHandler.js";
 import Popover from "@ui5/webcomponents/dist/Popover.js";
 import type Input from "@ui5/webcomponents/dist/Input.js";
@@ -294,7 +294,7 @@ declare class ShellBar extends UI5Element {
     _getNavigableContent(): HTMLElement[];
     _getRightChildItems(): HTMLElement[];
     _getVisibleAndInteractiveItems(): HTMLElement[];
-    _menuItemPress(e: CustomEvent<ListSelectionChangeEventDetail>): void;
+    _menuItemPress(e: CustomEvent<ListItemClickEventDetail>): void;
     _logoPress(): void;
     _menuPopoverBeforeOpen(): void;
     _menuPopoverAfterClose(): void;
@@ -377,10 +377,11 @@ declare class ShellBar extends UI5Element {
     _updateContentInfo(newContentInfo: Array<IShellBarContentItem>): void;
     _fireContentItemVisibilityChangeEvent(): void;
     _updateOverflowNotifications(): void;
-    _observeContentItems(): false | undefined;
+    _observeContentItems(): void;
     _getOverflowPopover(): Popover;
     _getMenuPopover(): Popover;
     isIconHidden(name: string): boolean;
+    get hasMatchingContent(): boolean;
     get contentItemsSorted(): UI5Element[];
     get contentItemsWrappersSorted(): HTMLElement[];
     get autoSearchField(): boolean;

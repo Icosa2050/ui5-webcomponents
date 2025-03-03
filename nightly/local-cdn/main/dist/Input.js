@@ -353,6 +353,11 @@ let Input = Input_1 = class Input extends UI5Element {
             return this._handleTab();
         }
         if (isEnter(e)) {
+            const isValueUnchanged = this.previousValue === this.getInputDOMRefSync().value;
+            this._enterKeyDown = true;
+            if (isValueUnchanged && this._internals.form) {
+                submitForm(this);
+            }
             return this._handleEnter(e);
         }
         if (isPageUp(e)) {
@@ -373,7 +378,6 @@ let Input = Input_1 = class Input extends UI5Element {
         if (this.showSuggestions) {
             this._clearPopoverFocusAndSelection();
         }
-        this._keyDown = true;
         this._isKeyNavigation = false;
     }
     _onkeyup(e) {
@@ -382,7 +386,7 @@ let Input = Input_1 = class Input extends UI5Element {
         if (isDelete(e)) {
             this.value = e.target.value;
         }
-        this._keyDown = false;
+        this._enterKeyDown = false;
     }
     get currentItemIndex() {
         const allItems = this.Suggestions?._getItems();
@@ -431,9 +435,6 @@ let Input = Input_1 = class Input extends UI5Element {
         }
         if (!suggestionItemPressed) {
             this.lastConfirmedValue = this.value;
-            if (this._internals.form) {
-                submitForm(this);
-            }
             return;
         }
         this.focused = true;
@@ -557,6 +558,9 @@ let Input = Input_1 = class Input extends UI5Element {
             }
             else {
                 fireChange();
+                if (this._enterKeyDown && this._internals.form) {
+                    submitForm(this);
+                }
             }
         }
     }
@@ -706,6 +710,7 @@ let Input = Input_1 = class Input extends UI5Element {
             this.focused = false;
         }
         if (this._changeToBeFired && !this._isChangeTriggeredBySuggestion) {
+            this.previousValue = this.value;
             this.fireDecoratorEvent(INPUT_EVENTS.CHANGE);
         }
         else {

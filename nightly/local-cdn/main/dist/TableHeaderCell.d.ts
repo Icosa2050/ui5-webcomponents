@@ -1,8 +1,6 @@
 import TableCellBase from "./TableCellBase.js";
 import SortOrder from "@ui5/webcomponents-base/dist/types/SortOrder.js";
 import type TableHeaderCellActionBase from "./TableHeaderCellActionBase.js";
-import "@ui5/webcomponents-icons/dist/sort-ascending.js";
-import "@ui5/webcomponents-icons/dist/sort-descending.js";
 /**
  * @class
  *
@@ -102,6 +100,5 @@ declare class TableHeaderCell extends TableCellBase {
     _popinWidth: number;
     onEnterDOM(): void;
     onBeforeRendering(): void;
-    get _sortIcon(): string | undefined;
 }
 export default TableHeaderCell;

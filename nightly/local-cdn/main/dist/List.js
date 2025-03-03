@@ -30,13 +30,14 @@ import debounce from "@ui5/webcomponents-base/dist/util/debounce.js";
 import isElementInView from "@ui5/webcomponents-base/dist/util/isElementInView.js";
 import ListSelectionMode from "./types/ListSelectionMode.js";
 import ListGrowingMode from "./types/ListGrowingMode.js";
+import ListAccessibleRole from "./types/ListAccessibleRole.js";
 import ListSeparator from "./types/ListSeparator.js";
 // Template
 import ListTemplate from "./ListTemplate.js";
 // Styles
 import listCss from "./generated/themes/List.css.js";
 // Texts
-import { LOAD_MORE_TEXT, ARIA_LABEL_LIST_SELECTABLE, ARIA_LABEL_LIST_MULTISELECTABLE, ARIA_LABEL_LIST_DELETABLE, } from "./generated/i18n/i18n-defaults.js";
+import { LIST_ROLE_LIST_GROUP_DESCRIPTION, LIST_ROLE_LISTBOX_GROUP_DESCRIPTION, LOAD_MORE_TEXT, ARIA_LABEL_LIST_SELECTABLE, ARIA_LABEL_LIST_MULTISELECTABLE, ARIA_LABEL_LIST_DELETABLE, } from "./generated/i18n/i18n-defaults.js";
 import { isInstanceOfListItemGroup } from "./ListItemGroup.js";
 const INFINITE_SCROLL_DEBOUNCE_RATE = 250; // ms
 const PAGE_UP_DOWN_SIZE = 10;
@@ -176,6 +177,8 @@ let List = List_1 = class List extends UI5Element {
         // Indicates the List bottom most part has been detected by the IntersectionObserver
         // for the first time.
         this.initialIntersection = true;
+        this._groupCount = 0;
+        this._groupItemCount = 0;
         this.onItemFocusedBound = this.onItemFocused.bind(this);
         this.onForwardAfterBound = this.onForwardAfter.bind(this);
         this.onForwardBeforeBound = this.onForwardBefore.bind(this);
@@ -303,7 +306,19 @@ let List = List_1 = class List extends UI5Element {
         return this._associatedLabelsRefTexts || getEffectiveAriaLabelText(this);
     }
     get ariaDescriptionText() {
-        return this._associatedDescriptionRefTexts || getEffectiveAriaDescriptionText(this);
+        return this._associatedDescriptionRefTexts || getEffectiveAriaDescriptionText(this) || this._getDescriptionForGroups();
+    }
+    _getDescriptionForGroups() {
+        let description = "";
+        if (this._groupCount > 0) {
+            if (this.accessibleRole === ListAccessibleRole.List) {
+                description = List_1.i18nBundle.getText(LIST_ROLE_LIST_GROUP_DESCRIPTION, this._groupCount, this._groupItemCount);
+            }
+            else if (this.accessibleRole === ListAccessibleRole.ListBox) {
+                description = List_1.i18nBundle.getText(LIST_ROLE_LISTBOX_GROUP_DESCRIPTION, this._groupCount);
+            }
+        }
+        return description;
     }
     get ariaLabelModeText() {
         if (this.hasData) {
@@ -438,15 +453,22 @@ let List = List_1 = class List extends UI5Element {
         // drill down when we see ui5-li-group and get the items
         const items = [];
         const slottedItems = this.getSlottedNodes("items");
+        let groupCount = 0;
+        let groupItemCount = 0;
         slottedItems.forEach(item => {
             if (isInstanceOfListItemGroup(item)) {
                 const groupItems = [item.groupHeaderItem, ...item.items.filter(listItem => listItem.assignedSlot)].filter(Boolean);
                 items.push(...groupItems);
+                groupCount++;
+                // subtract group itself for proper group header item count
+                groupItemCount += groupItems.length - 1;
             }
             else {
                 item.assignedSlot && items.push(item);
             }
         });
+        this._groupCount = groupCount;
+        this._groupItemCount = groupItemCount;
         return items;
     }
     getItemsForProcessing() {

@@ -1,7 +1,7 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "text-align-center";
-const pathData = "M432 448q16 0 16 16t-16 16H80q-16 0-16-16t16-16h352zM80 96q-16 0-16-16t16-16h352q16 0 16 16t-16 16H80zm352 160q16 0 16 16t-16 16H80q-16 0-16-16t16-16h352zm-64 96q16 0 16 16t-16 16H144q-16 0-16-16t16-16h224zm0-192q16 0 16 16t-16 16H144q-16 0-16-16t16-16h224z";
+const pathData = "M80 96q-16 0-16-16t16-16h352q16 0 16 16t-16 16H80zm288 64q16 0 16 16t-16 16H144q-16 0-16-16t16-16h224zm0 192q16 0 16 16t-16 16H144q-16 0-16-16t16-16h224zm64-96q16 0 16 16t-16 16H80q-16 0-16-16t16-16h352zm0 192q16 0 16 16t-16 16H80q-16 0-16-16t16-16h352z";
 const ltr = true;
 const accData = null;
 const collection = "SAP-icons-v4";

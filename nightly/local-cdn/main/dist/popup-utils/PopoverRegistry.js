@@ -37,10 +37,10 @@ const detachScrollHandler = (popover) => {
     popover && popover.shadowRoot.removeEventListener("scroll", repositionPopovers, { capture: true });
 };
 const attachGlobalClickHandler = () => {
-    document.addEventListener("mousedown", clickHandler);
+    document.addEventListener("mousedown", clickHandler, { capture: true });
 };
 const detachGlobalClickHandler = () => {
-    document.removeEventListener("mousedown", clickHandler);
+    document.removeEventListener("mousedown", clickHandler, { capture: true });
 };
 const clickHandler = (event) => {
     const openedPopups = getOpenedPopups();

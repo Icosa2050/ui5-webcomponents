@@ -141,13 +141,16 @@ let NotificationListGroupItem = NotificationListGroupItem_1 = class Notification
     _onLoadMore() {
         this.fireDecoratorEvent("load-more");
     }
-    get loadMoreButton() {
+    getGrowingButton() {
         const innerList = this.getDomRef()?.querySelector("[ui5-notification-group-list]");
-        return innerList.getDomRef()?.querySelector(".ui5-growing-button-inner");
+        return innerList.getGrowingButton();
     }
     async _onkeydown(e) {
         const isFocused = this.matches(":focus");
         if (!isFocused) {
+            return;
+        }
+        if (this.getGrowingButton()?.matches(":focus")) {
             return;
         }
         await super._onkeydown(e);

@@ -5,15 +5,16 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 var ListItemGroupHeader_1;
-import property from "@ui5/webcomponents-base/dist/decorators/property.js";
-import customElement from "@ui5/webcomponents-base/dist/decorators/customElement.js";
+import { slot, property, customElement } from "@ui5/webcomponents-base/dist/decorators.js";
 import i18n from "@ui5/webcomponents-base/dist/decorators/i18n.js";
+import toLowercaseEnumValue from "@ui5/webcomponents-base/dist/util/toLowercaseEnumValue.js";
 import ListItemBase from "./ListItemBase.js";
 import { GROUP_HEADER_TEXT } from "./generated/i18n/i18n-defaults.js";
 // Template
 import ListItemGroupHeaderTemplate from "./ListItemGroupHeaderTemplate.js";
 // Styles
 import ListItemGroupHeaderCss from "./generated/themes/ListItemGroupHeader.css.js";
+import ListItemAccessibleRole from "./types/ListItemAccessibleRole.js";
 /**
  * @class
  * The `ui5-li-group-header` is a special list item, used only to separate other list items into logical groups.
@@ -25,6 +26,13 @@ import ListItemGroupHeaderCss from "./generated/themes/ListItemGroupHeader.css.j
  * @private
  */
 let ListItemGroupHeader = ListItemGroupHeader_1 = class ListItemGroupHeader extends ListItemBase {
+    constructor() {
+        super(...arguments);
+        this.accessibleRole = ListItemAccessibleRole.ListItem;
+    }
+    get effectiveAccRole() {
+        return toLowercaseEnumValue(this.accessibleRole);
+    }
     get groupItem() {
         return true;
     }
@@ -37,12 +45,21 @@ let ListItemGroupHeader = ListItemGroupHeader_1 = class ListItemGroupHeader exte
     get ariaLabelText() {
         return [this.textContent, this.accessibleName].filter(Boolean).join(" ");
     }
+    get hasSubItems() {
+        return this.subItems.length > 0;
+    }
 };
 __decorate([
     property()
 ], ListItemGroupHeader.prototype, "accessibleName", void 0);
 __decorate([
-    i18n("@ui5/webcomponents")
+    property()
+], ListItemGroupHeader.prototype, "accessibleRole", void 0);
+__decorate([
+    slot()
+], ListItemGroupHeader.prototype, "subItems", void 0);
+__decorate([
+    i18n("@ui5/wezbcomponents")
 ], ListItemGroupHeader, "i18nBundle", void 0);
 ListItemGroupHeader = ListItemGroupHeader_1 = __decorate([
     customElement({

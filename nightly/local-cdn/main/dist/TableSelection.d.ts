@@ -9,7 +9,7 @@ import type TableRowBase from "./TableRowBase.js";
  *
  * ### Overview
  *
- * The `ui5-table-selection` component is used inside the `ui5-table` ti add key-based selection capabilities to the `ui5-table`.
+ * The `ui5-table-selection` component is used inside the `ui5-table` to add key-based selection capabilities to the `ui5-table`.
  *
  * The component offers three selection modes:
  * * Single - select a single row.
@@ -39,6 +39,7 @@ import type TableRowBase from "./TableRowBase.js";
  * @since 2.0.0
  * @public
  * @experimental This web component is available since 2.0 with an experimental flag and its API and behavior are subject to change.
+ * @deprecated This component is deprecated and will be removed in future releases. Use the `ui5-table-selection-single` or `ui5-table-selection-multi` components instead.
  */
 declare class TableSelection extends UI5Element implements ITableFeature {
     eventDetails: {
@@ -60,6 +61,7 @@ declare class TableSelection extends UI5Element implements ITableFeature {
     selected: string;
     readonly identifier = "TableSelection";
     _table?: Table;
+    _rowsLength: number;
     _rangeSelection?: {
         selected: boolean;
         isUp: boolean | null;
@@ -70,21 +72,21 @@ declare class TableSelection extends UI5Element implements ITableFeature {
     onTableActivate(table: Table): void;
     onExitDOM(): void;
     onBeforeRendering(): void;
+    onTableBeforeRendering(): void;
     isSelectable(): boolean;
-    isMultiSelect(): boolean;
-    hasRowSelector(): boolean;
-    getRowIdentifier(row: TableRow): string;
+    isMultiSelectable(): boolean;
+    isRowSelectorRequired(): boolean;
+    getRowKey(row: TableRow): string;
     isSelected(row: TableRowBase): boolean;
     hasSelectedRow(): boolean;
     areAllRowsSelected(): boolean;
-    informSelectionChange(row: TableRowBase): void;
+    setSelected(row: TableRowBase, selected: boolean, fireEvent?: boolean): void;
     get selectedAsArray(): string[];
     set selectedAsArray(selectedArray: string[]);
     get selectedAsSet(): Set<string>;
     set selectedAsSet(selectedSet: Set<string>);
     _selectRow(row: TableRow, selected: boolean): void;
-    _informRowSelectionChange(row: TableRow): void;
-    _informHeaderRowSelectionChange(): void;
+    _selectHeaderRow(selected: boolean): void;
     _invalidateTableAndRows(): void;
     _onkeydown(e: KeyboardEvent): void;
     _onkeyup(e: KeyboardEvent, eventOrigin: HTMLElement): void;

@@ -6,7 +6,7 @@ import type { MoveEventDetail } from "@ui5/webcomponents-base/dist/util/dragAndD
 import type I18nBundle from "@ui5/webcomponents-base/dist/i18nBundle.js";
 import ListSelectionMode from "./types/ListSelectionMode.js";
 import ListGrowingMode from "./types/ListGrowingMode.js";
-import type ListAccessibleRole from "./types/ListAccessibleRole.js";
+import ListAccessibleRole from "./types/ListAccessibleRole.js";
 import type ListItemBase from "./ListItemBase.js";
 import type { ListItemBasePressEventDetail } from "./ListItemBase.js";
 import type DropIndicator from "./DropIndicator.js";
@@ -256,6 +256,8 @@ declare class List extends UI5Element {
     _handleResize: ResizeObserverCallback;
     initialIntersection: boolean;
     _selectionRequested?: boolean;
+    _groupCount: number;
+    _groupItemCount: number;
     growingIntersectionObserver?: IntersectionObserver | null;
     _itemNavigation: ItemNavigation;
     _beforeElement?: HTMLElement | null;
@@ -293,7 +295,8 @@ declare class List extends UI5Element {
     get isMultiple(): boolean;
     get ariaLabelledBy(): string | undefined;
     get ariaLabelTxt(): string | undefined;
-    get ariaDescriptionText(): string | undefined;
+    get ariaDescriptionText(): string;
+    _getDescriptionForGroups(): string;
     get ariaLabelModeText(): string;
     get grows(): boolean;
     get growsOnScroll(): boolean;

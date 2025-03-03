@@ -9,12 +9,9 @@ import slot from "@ui5/webcomponents-base/dist/decorators/slot.js";
 import property from "@ui5/webcomponents-base/dist/decorators/property.js";
 import { isEnter } from "@ui5/webcomponents-base/dist/Keys.js";
 import getActiveElement from "@ui5/webcomponents-base/dist/util/getActiveElement.js";
-import Button from "./Button.js";
-import RadioButton from "./RadioButton.js";
-import TableRowTemplate from "./generated/templates/TableRowTemplate.lit.js";
+import TableRowTemplate from "./TableRowTemplate.js";
 import TableRowBase from "./TableRowBase.js";
 import TableRowCss from "./generated/themes/TableRow.css.js";
-import TableCell from "./TableCell.js";
 import "@ui5/webcomponents-icons/dist/overflow.js";
 /**
  * @class
@@ -37,14 +34,7 @@ let TableRow = class TableRow extends TableRowBase {
     constructor() {
         super(...arguments);
         /**
-         * Unique identifier of the row.
-         *
-         * @default ""
-         * @public
-         */
-        this.rowKey = "";
-        /**
-         * Defines the position of the row respect to the total number of rows within the table when the `ui5-table-virtualizer` feature is used.
+         * Defines the position of the row related to the total number of rows within the table when the `ui5-table-virtualizer` feature is used.
          *
          * @default -1
          * @since 2.5.0
@@ -128,7 +118,8 @@ let TableRow = class TableRow extends TableRowBase {
         return this.interactive;
     }
     get _hasRowActions() {
-        return this._rowActionCount > 0 && this.actions.some(action => action.isFixedAction() || !action.invisible);
+        // even if there are no actions visible or fixed, we still need to render the action cell to ensure alignment
+        return this._rowActionCount > 0;
     }
     get _hasOverflowActions() {
         let renderedActionsCount = 0;
@@ -215,7 +206,6 @@ TableRow = __decorate([
         tag: "ui5-table-row",
         styles: [TableRowBase.styles, TableRowCss],
         template: TableRowTemplate,
-        dependencies: [...TableRowBase.dependencies, RadioButton, TableCell, Button],
     })
 ], TableRow);
 TableRow.define();

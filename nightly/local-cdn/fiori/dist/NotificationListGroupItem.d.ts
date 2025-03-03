@@ -84,7 +84,7 @@ declare class NotificationListGroupItem extends NotificationListItemBase {
      */
     _onHeaderToggleClick(): void;
     _onLoadMore(): void;
-    get loadMoreButton(): HTMLElement;
+    getGrowingButton(): HTMLElement;
     _onkeydown(e: KeyboardEvent): Promise<void>;
     getHeaderDomRef(): HTMLElement;
 }

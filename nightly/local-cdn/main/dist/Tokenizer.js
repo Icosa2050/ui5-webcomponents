@@ -179,10 +179,10 @@ let Tokenizer = Tokenizer_1 = class Tokenizer extends UI5Element {
         });
     }
     onEnterDOM() {
-        ResizeHandler.register(this.contentDom, this._resizeHandler);
+        ResizeHandler.register(this, this._resizeHandler);
     }
     onExitDOM() {
-        ResizeHandler.deregister(this.contentDom, this._resizeHandler);
+        ResizeHandler.deregister(this, this._resizeHandler);
     }
     _handleNMoreClick() {
         if (this.disabled) {

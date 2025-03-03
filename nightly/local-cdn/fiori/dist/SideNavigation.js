@@ -122,7 +122,7 @@ let SideNavigation = SideNavigation_1 = class SideNavigation extends UI5Element 
             selectedItem.focus();
         }
         else {
-            tree.items[0]?.focus();
+            tree.items[0]?.applyInitialFocusInPopover();
         }
     }
     _onBeforePopoverOpen() {
@@ -156,6 +156,9 @@ let SideNavigation = SideNavigation_1 = class SideNavigation extends UI5Element 
     }
     handlePopupItemClick(e) {
         const associatedItem = e.target.associatedItem;
+        if (isInstanceOfSideNavigationItem(associatedItem) && associatedItem.unselectable) {
+            return;
+        }
         e.stopPropagation();
         associatedItem.fireEvent("click");
         if (associatedItem.selected) {

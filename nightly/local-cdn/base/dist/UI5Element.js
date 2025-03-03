@@ -953,8 +953,12 @@ class UI5Element extends HTMLElement {
                             oldValue: oldState,
                         });
                         if (this._rendered) {
-                            // is already rendered so it is not the constructor - can set the attribute synchronously
-                            this._updateAttribute(prop, value);
+                            // the component is already rendered, indicating it is not the constructor -
+                            // therefore the attribute can be set synchronously.
+                            // get the effective value of the property,
+                            // as it might differ from the provided value
+                            const newValue = origGet ? origGet.call(this) : this._state[prop];
+                            this._updateAttribute(prop, newValue);
                         }
                         if (ctor.getMetadata().isFormAssociated()) {
                             setFormValue(this);
@@ -1053,8 +1057,8 @@ class UI5Element extends HTMLElement {
             ]);
             const [i18nBundles] = result;
             Object.entries(this.getMetadata().getI18n()).forEach((pair, index) => {
-                const propertyName = pair[0];
-                this.i18nBundleStorage[propertyName] = i18nBundles[index];
+                const bundleName = pair[1].bundleName;
+                this.i18nBundleStorage[bundleName] = i18nBundles[index];
             });
             this.asyncFinished = true;
         };

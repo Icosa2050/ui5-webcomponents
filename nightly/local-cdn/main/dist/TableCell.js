@@ -5,7 +5,8 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 import customElement from "@ui5/webcomponents-base/dist/decorators/customElement.js";
-import TableCellTemplate from "./generated/templates/TableCellTemplate.lit.js";
+import jsxRenderer from "@ui5/webcomponents-base/dist/renderer/JsxRenderer.js";
+import TableCellTemplate from "./TableCellTemplate.js";
 import TableCellStyles from "./generated/themes/TableCell.css.js";
 import TableCellBase from "./TableCellBase.js";
 import { LABEL_COLON } from "./generated/i18n/i18n-defaults.js";
@@ -37,6 +38,11 @@ let TableCell = class TableCell extends TableCellBase {
             this.style.justifyContent = `var(--horizontal-align-${this._individualSlot})`;
         }
     }
+    injectHeaderNodes(ref) {
+        if (ref && !ref.hasChildNodes()) {
+            ref.replaceChildren(...this._popinHeaderNodes);
+        }
+    }
     get _headerCell() {
         const row = this.parentElement;
         const table = row.parentElement;
@@ -64,6 +70,7 @@ let TableCell = class TableCell extends TableCellBase {
 TableCell = __decorate([
     customElement({
         tag: "ui5-table-cell",
+        renderer: jsxRenderer,
         styles: [TableCellBase.styles, TableCellStyles],
         template: TableCellTemplate,
     })
