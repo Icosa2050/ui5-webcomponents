@@ -19,7 +19,7 @@ import ViewSettingsDialogMode from "./types/ViewSettingsDialogMode.js";
 import "@ui5/webcomponents-icons/dist/sort.js";
 import "@ui5/webcomponents-icons/dist/filter.js";
 import "@ui5/webcomponents-icons/dist/nav-back.js";
-import { VSD_DIALOG_TITLE_SORT, VSD_SUBMIT_BUTTON, VSD_CANCEL_BUTTON, VSD_RESET_BUTTON, VSD_SORT_ORDER, VSD_SORT_BY, VSD_ORDER_ASCENDING, VSD_ORDER_DESCENDING, VSD_FILTER_BY, VSD_SORT_TOOLTIP, VSD_FILTER_TOOLTIP, VSD_RESET_BUTTON_ACTION, } from "./generated/i18n/i18n-defaults.js";
+import { VSD_DIALOG_TITLE_SORT, VSD_SUBMIT_BUTTON, VSD_CANCEL_BUTTON, VSD_RESET_BUTTON, VSD_SORT_ORDER, VSD_SORT_BY, VSD_ORDER_ASCENDING, VSD_ORDER_DESCENDING, VSD_FILTER_BY, VSD_SORT_TOOLTIP, VSD_FILTER_TOOLTIP, VSD_RESET_BUTTON_ACTION, VSD_FILTER_ITEM_LABEL_TEXT, } from "./generated/i18n/i18n-defaults.js";
 // Template
 import ViewSettingsDialogTemplate from "./ViewSettingsDialogTemplate.js";
 // Styles
@@ -130,6 +130,11 @@ let ViewSettingsDialog = ViewSettingsDialog_1 = class ViewSettingsDialog extends
                 return this._currentSettings.filters[i];
             }
         }
+    }
+    _selectedFiltersLabel(item) {
+        const text = item.text ? `${item.text},` : "";
+        const additionalText = item.additionalText ? `${item.additionalText},` : "";
+        return additionalText ? ViewSettingsDialog_1.i18nBundle.getText(VSD_FILTER_ITEM_LABEL_TEXT, text, additionalText) : text;
     }
     get shouldBuildSort() {
         return !!this.sortItems.length;
@@ -424,7 +429,7 @@ let ViewSettingsDialog = ViewSettingsDialog_1 = class ViewSettingsDialog extends
         this._restoreSettings(this._initialSettings);
         this._recentlyFocused = this._sortOrder;
         this._focusRecentlyUsedControl();
-        announce(this._resetButtonAction, InvisibleMessageMode.Polite);
+        announce(this._resetButtonAction, InvisibleMessageMode.Assertive);
     }
     /**
      * Sets current settings to ones passed as `settings` argument.

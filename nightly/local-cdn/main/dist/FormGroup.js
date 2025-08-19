@@ -38,6 +38,14 @@ let FormGroup = class FormGroup extends UI5Element {
     constructor() {
         super(...arguments);
         /**
+         * Defines the compoennt heading level,
+         * set by the `headerText`.
+         * @default "H3"
+         * @public
+         * @since 2.10.0
+        */
+        this.headerLevel = "H3";
+        /**
          * @private
          */
         this.colsS = 1;
@@ -61,6 +69,9 @@ let FormGroup = class FormGroup extends UI5Element {
 __decorate([
     property()
 ], FormGroup.prototype, "headerText", void 0);
+__decorate([
+    property()
+], FormGroup.prototype, "headerLevel", void 0);
 __decorate([
     property({ type: Number })
 ], FormGroup.prototype, "columnSpan", void 0);

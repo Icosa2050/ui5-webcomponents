@@ -18,7 +18,6 @@ import type TableHeaderCell from "./TableHeaderCell.js";
  * @extends TableRowBase
  * @since 2.0.0
  * @public
- * @experimental This web component is available since 2.0 with an experimental flag and its API and behavior are subject to change.
  */
 declare class TableHeaderRow extends TableRowBase {
     /**
@@ -41,10 +40,14 @@ declare class TableHeaderRow extends TableRowBase {
     onEnterDOM(): void;
     onBeforeRendering(): void;
     isHeaderRow(): boolean;
-    get _hasRowActions(): boolean;
     get _isSelectable(): boolean;
+    get _hasSelectedRows(): boolean;
+    get _shouldRenderClearAll(): boolean;
+    get _selectionCellAriaDescription(): string | undefined;
     get _i18nSelection(): string;
     get _i18nRowPopin(): string;
     get _i18nRowActions(): string;
+    get _i18nSelectAllRows(): string;
+    get _i18nDeselectAllRows(): string;
 }
 export default TableHeaderRow;

@@ -1,4 +1,5 @@
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
+import DragAndDropHandler from "./delegate/DragAndDropHandler.js";
 import MovePlacement from "@ui5/webcomponents-base/dist/types/MovePlacement.js";
 import type DropIndicator from "./DropIndicator.js";
 import "./TreeItem.js";
@@ -158,6 +159,8 @@ declare class Tree extends UI5Element {
      * @public
      */
     header: Array<HTMLElement>;
+    _dragAndDropHandler: DragAndDropHandler;
+    constructor();
     onEnterDOM(): void;
     onExitDOM(): void;
     onBeforeRendering(): void;
@@ -204,6 +207,10 @@ declare class Tree extends UI5Element {
      * @param callback function to execute on each node of the tree with 3 arguments: the node, the level and the index
      */
     walk(callback: WalkCallback): void;
+    _getItems(): Array<HTMLElement>;
+    _transformElement(element: HTMLElement): HTMLElement;
+    _validateDraggedElement(draggedElement: HTMLElement, targetElement: HTMLElement): boolean;
+    _filterPlacements(placements: MovePlacement[], draggedElement: HTMLElement, targetElement: HTMLElement): MovePlacement[];
     _isInstanceOfTreeItemBase(object: any): object is TreeItemBase;
 }
 export default Tree;

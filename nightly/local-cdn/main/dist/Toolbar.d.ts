@@ -80,6 +80,7 @@ declare class Toolbar extends UI5Element {
      * @since 2.0.0
      */
     design: `${ToolbarDesign}`;
+    popoverOpen: boolean;
     /**
      * Defines the items of the component.
      *
@@ -92,10 +93,8 @@ declare class Toolbar extends UI5Element {
     itemsToOverflow: Array<ToolbarItem>;
     itemsWidth: number;
     minContentWidth: number;
-    popoverOpen: boolean;
-    itemsWidthMeasured: boolean;
     ITEMS_WIDTH_MAP: Map<string, number>;
-    static get styles(): import("@ui5/webcomponents-base").ComponentStylesData[];
+    static get styles(): string[];
     constructor();
     /**
      * Read-only members
@@ -104,18 +103,10 @@ declare class Toolbar extends UI5Element {
     get padding(): number;
     get alwaysOverflowItems(): ToolbarItem[];
     get movableItems(): ToolbarItem[];
-    get overflowItems(): {
-        toolbarTemplate: import("@ui5/webcomponents-base/dist/renderer/executeTemplate.js").TemplateFunction;
-        toolbarPopoverTemplate: import("@ui5/webcomponents-base/dist/renderer/executeTemplate.js").TemplateFunction;
-        context: ToolbarItem;
-    }[];
-    get standardItems(): {
-        toolbarTemplate: import("@ui5/webcomponents-base/dist/renderer/executeTemplate.js").TemplateFunction;
-        toolbarPopoverTemplate: import("@ui5/webcomponents-base/dist/renderer/executeTemplate.js").TemplateFunction;
-        context: ToolbarItem;
-    }[];
+    get overflowItems(): ToolbarItem[];
+    get standardItems(): ToolbarItem[];
     get hideOverflowButton(): boolean;
-    get interactiveItemsCount(): number;
+    get interactiveItems(): ToolbarItem[];
     /**
      * Accessibility
      */
@@ -131,17 +122,18 @@ declare class Toolbar extends UI5Element {
             accessibleName: string;
             tooltip: string;
             accessibilityAttributes: {
-                expanded: boolean | "false" | "true" | undefined;
+                expanded: boolean;
                 hasPopup: "menu";
             };
+        };
+        popover: {
+            accessibleName: string;
         };
     };
     /**
      * Toolbar Overflow Popover
      */
     get overflowButtonDOM(): Button | null;
-    get itemsDOM(): Element | null;
-    get hasItemWithText(): boolean;
     get hasFlexibleSpacers(): boolean;
     /**
      * Lifecycle methods
@@ -182,16 +174,8 @@ declare class Toolbar extends UI5Element {
     attachListeners(): void;
     detachListeners(): void;
     onToolbarItemChange(): void;
-    getItemsInfo(items: Array<ToolbarItem>): {
-        toolbarTemplate: import("@ui5/webcomponents-base/dist/renderer/executeTemplate.js").TemplateFunction;
-        toolbarPopoverTemplate: import("@ui5/webcomponents-base/dist/renderer/executeTemplate.js").TemplateFunction;
-        context: ToolbarItem;
-    }[];
     getItemWidth(item: ToolbarItem): number;
     getCachedItemWidth(id: string): number | undefined;
-    getItemByID(id: string): ToolbarItem | undefined;
-    getRegisteredToolbarItemByID(id: string): HTMLElement | null;
-    preprocessItems(): void;
 }
 export default Toolbar;
 export type { ToolbarMinWidthChangeEventDetail, };

@@ -2,6 +2,7 @@ import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
 import type { ResizeObserverCallback } from "@ui5/webcomponents-base/dist/delegate/ResizeHandler.js";
 import ItemNavigation from "@ui5/webcomponents-base/dist/delegate/ItemNavigation.js";
 import type { ClassMap } from "@ui5/webcomponents-base/dist/types.js";
+import DragAndDropHandler from "./delegate/DragAndDropHandler.js";
 import type { MoveEventDetail } from "@ui5/webcomponents-base/dist/util/dragAndDrop/DragRegistry.js";
 import type I18nBundle from "@ui5/webcomponents-base/dist/i18nBundle.js";
 import ListSelectionMode from "./types/ListSelectionMode.js";
@@ -36,6 +37,11 @@ type ListItemClickEventDetail = {
     item: ListItemBase;
 };
 type ListMoveEventDetail = MoveEventDetail;
+type ListAccessibilityAttributes = {
+    growingButton?: {
+        name?: string;
+    };
+};
 /**
  * @class
  *
@@ -186,6 +192,24 @@ declare class List extends UI5Element {
      */
     accessibleName?: string;
     /**
+    * Defines additional accessibility attributes on different areas of the component.
+    *
+    * The accessibilityAttributes object has the following field:
+    *
+    *  - **growingButton**: `growingButton.name`.
+    *
+    * The accessibility attributes support the following values:
+    *
+    * - **name**: Defines the accessible ARIA name of the growing button.
+    * Accepts any string.
+    *
+    * **Note:** The `accessibilityAttributes` property is in an experimental state and is a subject to change.
+    * @default {}
+    * @public
+    * @since 2.13.0
+    */
+    accessibilityAttributes: ListAccessibilityAttributes;
+    /**
      * Defines the IDs of the elements that label the component.
      * @default undefined
      * @public
@@ -234,6 +258,12 @@ declare class List extends UI5Element {
      */
     _loadMoreActive: boolean;
     /**
+     * Defines the current media query size.
+     * @default "S"
+     * @private
+     */
+    mediaRange: string;
+    /**
      * Defines the items of the component.
      *
      * **Note:** Use `ui5-li`, `ui5-li-custom`, and `ui5-li-group` for the intended design.
@@ -251,9 +281,8 @@ declare class List extends UI5Element {
     static i18nBundle: I18nBundle;
     _previouslyFocusedItem: ListItemBase | null;
     _forwardingFocus: boolean;
-    resizeListenerAttached: boolean;
     listEndObserved: boolean;
-    _handleResize: ResizeObserverCallback;
+    _handleResizeCallback: ResizeObserverCallback;
     initialIntersection: boolean;
     _selectionRequested?: boolean;
     _groupCount: number;
@@ -266,6 +295,7 @@ declare class List extends UI5Element {
     onForwardAfterBound: (e: CustomEvent) => void;
     onForwardBeforeBound: (e: CustomEvent) => void;
     onItemTabIndexChangeBound: (e: CustomEvent) => void;
+    _dragAndDropHandler: DragAndDropHandler;
     constructor();
     /**
      * Returns an array containing the list item instances without the groups in a flat structure.
@@ -281,7 +311,7 @@ declare class List extends UI5Element {
     onAfterRendering(): void;
     attachGroupHeaderEvents(): void;
     detachGroupHeaderEvents(): void;
-    attachForResize(): void;
+    getFocusDomRef(): HTMLElement | undefined;
     get shouldRenderH1(): string | false | undefined;
     get headerID(): string;
     get modeLabelID(): string;
@@ -296,6 +326,10 @@ declare class List extends UI5Element {
     get ariaLabelledBy(): string | undefined;
     get ariaLabelTxt(): string | undefined;
     get ariaDescriptionText(): string;
+    get growingButtonAriaLabel(): string | undefined;
+    get growingButtonAriaLabelledBy(): string | undefined;
+    get scrollContainer(): HTMLElement | null;
+    hasGrowingComponent(): boolean;
     _getDescriptionForGroups(): string;
     get ariaLabelModeText(): string;
     get grows(): boolean;
@@ -331,6 +365,7 @@ declare class List extends UI5Element {
     _handleLodeMoreUp(e: KeyboardEvent): void;
     checkListInViewport(): void;
     loadMore(): void;
+    _handleResize(): void;
     _handleTabNext(e: KeyboardEvent): void;
     _handleHome(): void;
     _handleEnd(): void;
@@ -378,4 +413,4 @@ declare class List extends UI5Element {
     getIntersectionObserver(): IntersectionObserver;
 }
 export default List;
-export type { ListItemClickEventDetail, ListItemFocusEventDetail, ListItemDeleteEventDetail, ListItemCloseEventDetail, ListItemToggleEventDetail, ListSelectionChangeEventDetail, ListMoveEventDetail, };
+export type { ListItemClickEventDetail, ListItemFocusEventDetail, ListItemDeleteEventDetail, ListItemCloseEventDetail, ListItemToggleEventDetail, ListSelectionChangeEventDetail, ListMoveEventDetail, ListAccessibilityAttributes, };

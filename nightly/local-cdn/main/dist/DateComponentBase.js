@@ -35,7 +35,7 @@ let DateComponentBase = class DateComponentBase extends UI5Element {
         /**
          * Determines the minimum date available for selection.
          *
-         * **Note:** If the formatPattern property is not set, the minDate value must be provided in the ISO date format (YYYY-MM-dd).
+         * **Note:** If the formatPattern property is not set, the minDate value must be provided in the ISO date format (yyyy-MM-dd).
          * @default ""
          * @since 1.0.0-rc.6
          * @public
@@ -44,7 +44,7 @@ let DateComponentBase = class DateComponentBase extends UI5Element {
         /**
          * Determines the maximum date available for selection.
          *
-         * **Note:** If the formatPattern property is not set, the maxDate value must be provided in the ISO date format (YYYY-MM-dd).
+         * **Note:** If the formatPattern property is not set, the maxDate value must be provided in the ISO date format (yyyy-MM-dd).
          * @default ""
          * @since 1.0.0-rc.6
          * @public
@@ -86,6 +86,12 @@ let DateComponentBase = class DateComponentBase extends UI5Element {
     get _isPattern() {
         return this._formatPattern !== "medium" && this._formatPattern !== "short" && this._formatPattern !== "long";
     }
+    get _isValueFormatPattern() {
+        return this._valueFormat !== "medium" && this._valueFormat !== "short" && this._valueFormat !== "long";
+    }
+    get _isDisplayFormatPattern() {
+        return this._displayFormat !== "medium" && this._displayFormat !== "short" && this._displayFormat !== "long";
+    }
     get hasSecondaryCalendarType() {
         return !!this.secondaryCalendarType && this.secondaryCalendarType !== this.primaryCalendarType;
     }
@@ -99,7 +105,13 @@ let DateComponentBase = class DateComponentBase extends UI5Element {
         }
     }
     _getCalendarDateFromString(value) {
-        const jsDate = this.getFormat().parse(value);
+        const jsDate = this.getValueFormat().parse(value);
+        if (jsDate) {
+            return CalendarDate.fromLocalJSDate(jsDate, this._primaryCalendarType);
+        }
+    }
+    _getCalendarDateFromStringDisplayValue(value) {
+        const jsDate = this.getDisplayFormat().parse(value);
         if (jsDate) {
             return CalendarDate.fromLocalJSDate(jsDate, this._primaryCalendarType);
         }
@@ -111,8 +123,25 @@ let DateComponentBase = class DateComponentBase extends UI5Element {
         }
     }
     _getStringFromTimestamp(timestamp) {
+        if (!timestamp) {
+            return "";
+        }
         const localDate = UI5Date.getInstance(timestamp);
         return this.getFormat().format(localDate, true);
+    }
+    _getDisplayStringFromTimestamp(timestamp) {
+        if (!timestamp) {
+            return "";
+        }
+        const localDate = UI5Date.getInstance(timestamp);
+        return this.getDisplayFormat().format(localDate, true);
+    }
+    _getValueStringFromTimestamp(timestamp) {
+        if (!timestamp) {
+            return "";
+        }
+        const localDate = UI5Date.getInstance(timestamp);
+        return this.getValueFormat().format(localDate, true);
     }
     getFormat() {
         return this._isPattern
@@ -127,11 +156,55 @@ let DateComponentBase = class DateComponentBase extends UI5Element {
                 calendarType: this._primaryCalendarType,
             });
     }
+    get _displayFormat() {
+        if (this.displayFormat) {
+            return this.displayFormat;
+        }
+        return this._formatPattern;
+    }
+    get _valueFormat() {
+        if (this.valueFormat) {
+            return this.valueFormat;
+        }
+        if (this._formatPattern) {
+            return this._formatPattern;
+        }
+        return "";
+    }
+    getDisplayFormat() {
+        return this._isDisplayFormatPattern
+            ? DateFormat.getDateInstance({
+                strictParsing: true,
+                pattern: this._displayFormat,
+                calendarType: this._primaryCalendarType,
+            })
+            : DateFormat.getDateInstance({
+                strictParsing: true,
+                style: this._displayFormat,
+                calendarType: this._primaryCalendarType,
+            });
+    }
+    getValueFormat() {
+        if (!this._valueFormat) {
+            return this.getISOFormat();
+        }
+        return this._isValueFormatPattern
+            ? DateFormat.getDateInstance({
+                strictParsing: true,
+                pattern: this._valueFormat,
+                calendarType: this._primaryCalendarType,
+            })
+            : DateFormat.getDateInstance({
+                strictParsing: true,
+                style: this._valueFormat,
+                calendarType: this._primaryCalendarType,
+            });
+    }
     getISOFormat() {
         if (!this._isoFormatInstance) {
             this._isoFormatInstance = DateFormat.getDateInstance({
                 strictParsing: true,
-                pattern: "YYYY-MM-dd",
+                pattern: "yyyy-MM-dd",
                 calendarType: this._primaryCalendarType,
             });
         }
@@ -147,6 +220,12 @@ __decorate([
 __decorate([
     property()
 ], DateComponentBase.prototype, "formatPattern", void 0);
+__decorate([
+    property()
+], DateComponentBase.prototype, "displayFormat", void 0);
+__decorate([
+    property()
+], DateComponentBase.prototype, "valueFormat", void 0);
 __decorate([
     property()
 ], DateComponentBase.prototype, "minDate", void 0);

@@ -77,7 +77,7 @@ declare class ColorPalettePopover extends UI5Element {
      * @default undefined
      * @since 1.21.0
      */
-    opener?: HTMLElement | string;
+    opener?: HTMLElement | string | null;
     /**
      * Defines the content of the component.
      * @public

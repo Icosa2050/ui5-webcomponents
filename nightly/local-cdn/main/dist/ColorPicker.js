@@ -175,7 +175,7 @@ let ColorPicker = ColorPicker_1 = class ColorPicker extends UI5Element {
         this._changeSelectedColor(e.offsetX, e.offsetY);
     }
     _handleAlphaInput(e) {
-        const aphaInputValue = e.target.value;
+        const aphaInputValue = String(e.currentTarget.value);
         this._alpha = parseFloat(aphaInputValue);
         if (Number.isNaN(this._alpha)) {
             this._alpha = 1;
@@ -223,26 +223,34 @@ let ColorPicker = ColorPicker_1 = class ColorPicker extends UI5Element {
     _handleColorInputChange(e) {
         const target = e.target;
         const targetValue = parseInt(target.value) || 0;
+        let normalizedValue = targetValue;
         switch (target.id) {
             case "red":
                 this._colorValue.R = targetValue;
+                normalizedValue = this._colorValue.R;
                 break;
             case "green":
                 this._colorValue.G = targetValue;
+                normalizedValue = this._colorValue.G;
                 break;
             case "blue":
                 this._colorValue.B = targetValue;
+                normalizedValue = this._colorValue.B;
                 break;
             case "hue":
                 this._colorValue.H = targetValue;
+                normalizedValue = this._colorValue.H;
                 break;
             case "saturation":
                 this._colorValue.S = targetValue;
+                normalizedValue = this._colorValue.S;
                 break;
             case "light":
                 this._colorValue.L = targetValue;
+                normalizedValue = this._colorValue.L;
                 break;
         }
+        target.value = String(normalizedValue);
         const color = this._colorValue.toRGBString();
         this._setValue(color);
         this._updateColorGrid();

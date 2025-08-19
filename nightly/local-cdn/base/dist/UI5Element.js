@@ -22,6 +22,7 @@ import { updateFormValue, setFormValue } from "./features/InputElementsFormSuppo
 import { getI18nBundle } from "./i18nBundle.js";
 import { fetchCldr } from "./asset-registries/LocaleData.js";
 import getLocale from "./locale/getLocale.js";
+import { getLanguageChangePending } from "./config/Language.js";
 const DEV_MODE = true;
 let autoId = 0;
 const elementTimeouts = new Map();
@@ -62,6 +63,13 @@ function _invalidate(changeInfo) {
     if (this._suppressInvalidation) {
         return;
     }
+    const ctor = this.constructor;
+    // Skip re-rendering of language-aware components while language-specific data (e.g., CLDR, language bundles) is still loading.
+    // Once all necessary language data has been loaded, the language change
+    // will trigger a re-render of all language-aware components.
+    if (ctor.getMetadata().isLanguageAware() && getLanguageChangePending()) {
+        return;
+    }
     // Call the onInvalidation hook
     this.onInvalidation(changeInfo);
     this._changedState.push(changeInfo);
@@ -94,6 +102,7 @@ function getPropertyDescriptor(proto, name) {
 class UI5Element extends HTMLElement {
     constructor() {
         super();
+        this.__shouldHydrate = false;
         // used to differentiate whether a setter is called from the constructor (from an initializer) or later
         // setters from the constructor should not set attributes, this is delegated after the first rendering but is async
         // setters after the constructor can set attributes synchronously for more convinient development
@@ -131,7 +140,14 @@ class UI5Element extends HTMLElement {
         const ctor = this.constructor;
         if (ctor._needsShadowDOM()) {
             const defaultOptions = { mode: "open" };
-            this.attachShadow({ ...defaultOptions, ...ctor.getMetadata().getShadowRootOptions() });
+            if (!this.shadowRoot) {
+                this.attachShadow({ ...defaultOptions, ...ctor.getMetadata().getShadowRootOptions() });
+            }
+            else {
+                // The shadow root is initially rendered. This applies to case where the component's template
+                // is inserted into the DOM declaratively using a <template> tag.
+                this.__shouldHydrate = true;
+            }
             const slotsAreManaged = ctor.getMetadata().slotsAreManaged();
             if (slotsAreManaged) {
                 this.shadowRoot.addEventListener("slotchange", this._onShadowRootSlotChange.bind(this));
@@ -180,7 +196,7 @@ class UI5Element extends HTMLElement {
         }
         const ctor = this.constructor;
         this.setAttribute(ctor.getMetadata().getPureTag(), "");
-        if (ctor.getMetadata().supportsF6FastNavigation()) {
+        if (ctor.getMetadata().supportsF6FastNavigation() && !this.hasAttribute("data-sap-ui-fastnavgroup")) {
             this.setAttribute("data-sap-ui-fastnavgroup", "true");
         }
         const slotsAreManaged = ctor.getMetadata().slotsAreManaged();
@@ -190,11 +206,11 @@ class UI5Element extends HTMLElement {
             this._startObservingDOMChildren();
             await this._processChildren();
         }
-        if (!this._inDOM) { // Component removed from DOM while _processChildren was running
-            return;
-        }
         if (!ctor.asyncFinished) {
             await ctor.definePromise;
+        }
+        if (!this._inDOM) { // Component removed from DOM while _processChildren was running
+            return;
         }
         renderImmediately(this);
         this._domRefReadyPromise._deferredResolve();
@@ -738,7 +754,7 @@ class UI5Element extends HTMLElement {
     async focus(focusOptions) {
         await this._waitForDomRef();
         const focusDomRef = this.getFocusDomRef();
-        if (focusDomRef === this) {
+        if (focusDomRef === this || !this.isConnected) {
             HTMLElement.prototype.focus.call(this, focusOptions);
         }
         else if (focusDomRef && typeof focusDomRef.focus === "function") {

@@ -8,7 +8,7 @@ import { customElement, slot, property } from "@ui5/webcomponents-base/dist/deco
 import TableRowBase from "./TableRowBase.js";
 import TableHeaderRowTemplate from "./TableHeaderRowTemplate.js";
 import TableHeaderRowStyles from "./generated/themes/TableHeaderRow.css.js";
-import { TABLE_SELECTION, TABLE_ROW_POPIN, TABLE_ROW_ACTIONS, TABLE_COLUMN_HEADER_ROW, } from "./generated/i18n/i18n-defaults.js";
+import { TABLE_SELECTION, TABLE_ROW_POPIN, TABLE_ROW_ACTIONS, TABLE_COLUMN_HEADER_ROW, TABLE_SELECT_ALL_ROWS, TABLE_DESELECT_ALL_ROWS, } from "./generated/i18n/i18n-defaults.js";
 /**
  * @class
  *
@@ -27,7 +27,6 @@ import { TABLE_SELECTION, TABLE_ROW_POPIN, TABLE_ROW_ACTIONS, TABLE_COLUMN_HEADE
  * @extends TableRowBase
  * @since 2.0.0
  * @public
- * @experimental This web component is available since 2.0 with an experimental flag and its API and behavior are subject to change.
  */
 let TableHeaderRow = 
 /**
@@ -51,7 +50,8 @@ class TableHeaderRow extends TableRowBase {
     }
     onEnterDOM() {
         super.onEnterDOM();
-        this.setAttribute("aria-roledescription", TableRowBase.i18nBundle.getText(TABLE_COLUMN_HEADER_ROW));
+        this.ariaRowIndex = "1";
+        this.ariaRoleDescription = TableRowBase.i18nBundle.getText(TABLE_COLUMN_HEADER_ROW);
     }
     onBeforeRendering() {
         super.onBeforeRendering();
@@ -62,11 +62,17 @@ class TableHeaderRow extends TableRowBase {
     isHeaderRow() {
         return true;
     }
-    get _hasRowActions() {
-        return this._table ? this._table._hasRowActions : false;
-    }
     get _isSelectable() {
         return this._isMultiSelect;
+    }
+    get _hasSelectedRows() {
+        return this._tableSelection.getSelectedRows().length > 0;
+    }
+    get _shouldRenderClearAll() {
+        return this._tableSelection.headerSelector === "ClearAll";
+    }
+    get _selectionCellAriaDescription() {
+        return this._tableSelection?.getAriaDescriptionForColumnHeader();
     }
     get _i18nSelection() {
         return TableRowBase.i18nBundle.getText(TABLE_SELECTION);
@@ -76,6 +82,12 @@ class TableHeaderRow extends TableRowBase {
     }
     get _i18nRowActions() {
         return TableRowBase.i18nBundle.getText(TABLE_ROW_ACTIONS);
+    }
+    get _i18nSelectAllRows() {
+        return TableRowBase.i18nBundle.getText(TABLE_SELECT_ALL_ROWS);
+    }
+    get _i18nDeselectAllRows() {
+        return TableRowBase.i18nBundle.getText(TABLE_DESELECT_ALL_ROWS);
     }
 };
 __decorate([

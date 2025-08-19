@@ -79,6 +79,9 @@ let CalendarLegend = CalendarLegend_1 = class CalendarLegend extends UI5Element 
             this._itemNavigation.setCurrentItem(this.focusableElements[focusableItemIndex]);
         }
     }
+    getFocusDomRef() {
+        return this._itemNavigation._getCurrentItem();
+    }
     _onMouseDown(e) {
         e.stopPropagation();
         const target = e.target;

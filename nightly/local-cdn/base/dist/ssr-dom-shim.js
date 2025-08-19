@@ -53,8 +53,9 @@ globalThis.ResizeObserver = class ResizeObserver {
         // do nothing
     }
 };
-// empty showPopover method
+// empty showPopover & hidePopover method
 globalThis.HTMLElement.prototype.showPopover = function () { };
+globalThis.HTMLElement.prototype.hidePopover = function () { };
 //  ElementInternals
 globalThis.HTMLElement.prototype.attachInternals = function () {
     return new ElementInternals();

@@ -1,14 +1,16 @@
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
+import type { UI5CustomEvent } from "@ui5/webcomponents-base";
+import type Button from "./Button.js";
 /**
- * @class
- * The `TableRowActionBase` class serves as a foundation for table row actions.
- * @constructor
- * @abstract
- * @extends UI5Element
- * @since 2.7.0
+ * Fired when a row action is clicked.
+ *
  * @public
+ * @since 2.9.0
  */
 declare abstract class TableRowActionBase extends UI5Element {
+    eventDetails: {
+        "click": void;
+    };
     /**
      * Defines the visibility of the row action.
      *
@@ -28,7 +30,8 @@ declare abstract class TableRowActionBase extends UI5Element {
     };
     isFixedAction(): boolean;
     onEnterDOM(): void;
-    _onActionClick(): void;
+    _fireClickEvent(): void;
+    _onActionClick(e: UI5CustomEvent<Button, "click">): void;
     get _text(): string;
     get _icon(): string;
     get _isInteractive(): boolean;

@@ -116,6 +116,9 @@ let ProductSwitch = ProductSwitch_1 = class ProductSwitch extends UI5Element {
             e.stopPropagation();
         }
     }
+    getFocusDomRef() {
+        return this._itemNavigation._getCurrentItem();
+    }
 };
 __decorate([
     property({ type: Number })

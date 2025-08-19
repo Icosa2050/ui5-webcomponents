@@ -2,10 +2,10 @@ import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
 import type I18nBundle from "@ui5/webcomponents-base/dist/i18nBundle.js";
 import "@ui5/webcomponents-icons/dist/slim-arrow-right.js";
 import type { Timeout } from "@ui5/webcomponents-base/dist/types.js";
+import type List from "./List.js";
 import type ResponsivePopover from "./ResponsivePopover.js";
 import type MenuItem from "./MenuItem.js";
-import "./MenuItem.js";
-import "./MenuSeparator.js";
+import type PopoverHorizontalAlign from "./types/PopoverHorizontalAlign.js";
 import type { ListItemClickEventDetail } from "./List.js";
 /**
  * Interface for components that may be slotted inside a `ui5-menu`.
@@ -14,7 +14,9 @@ import type { ListItemClickEventDetail } from "./List.js";
  * @public
  */
 interface IMenuItem extends UI5Element {
-    isSeparator: boolean;
+    isMenuItem?: boolean;
+    isSeparator?: boolean;
+    isGroup?: boolean;
 }
 type MenuItemClickEventDetail = {
     item: MenuItem;
@@ -56,7 +58,11 @@ type MenuBeforeCloseEventDetail = {
  * - `Arrow Left` or `ArrowRight` - Navigate between the menu item actions and the menu item itself
  * - `Arrow Up` / `Arrow Down` - Navigates up and down the currently visible menu items
  *
- * Note: if the text ditrection is set to Right-to-left (RTL), `Arrow Right` and `Arrow Left` functionality is swapped.
+ * **Note:** If the text direction is set to Right-to-left (RTL), `Arrow Right` and `Arrow Left` functionality is swapped.
+ *
+ * Application developers are responsible for ensuring that interactive elements placed in the `endContent` slot
+ * have the correct accessibility behaviour, including their enabled or disabled states.
+ * The menu does not manage these aspects when the menu item state changes.
  *
  * ### ES6 Module Import
  *
@@ -82,12 +88,18 @@ declare class Menu extends UI5Element {
      */
     headerText?: string;
     /**
-     * Indicates if the menu is open
+     * Indicates if the menu is open.
      * @public
      * @default false
      * @since 1.10.0
      */
     open: boolean;
+    /**
+     * Determines the horizontal alignment of the menu relative to its opener control.
+     * @default "Start"
+     * @public
+     */
+    horizontalAlign: `${PopoverHorizontalAlign}`;
     /**
      * Defines if a loading indicator would be displayed inside the corresponding ui5-menu popover.
      * @default false
@@ -96,7 +108,7 @@ declare class Menu extends UI5Element {
      */
     loading: boolean;
     /**
-     * Defines the delay in milliseconds, after which the loading indicator will be displayed inside the corresponding ui5-menu popover..
+     * Defines the delay in milliseconds, after which the loading indicator will be displayed inside the corresponding ui5-menu popover.
      * @default 1000
      * @public
      * @since 1.13.0
@@ -110,7 +122,7 @@ declare class Menu extends UI5Element {
      * @default undefined
      * @since 1.10.0
      */
-    opener?: HTMLElement | string;
+    opener?: HTMLElement | string | null;
     /**
      * Defines the items of this component.
      *
@@ -124,18 +136,28 @@ declare class Menu extends UI5Element {
     get labelClose(): string;
     get isPhone(): boolean;
     get _popover(): ResponsivePopover;
+    get _list(): List | null;
+    /** Returns menu item groups */
+    get _menuItemGroups(): import("./MenuItemGroup.js").default[];
+    /** Returns menu items */
     get _menuItems(): MenuItem[];
+    /** Returns all menu items (including those in groups */
+    get _allMenuItems(): MenuItem[];
+    /** Returns menu items included in the ItemNavigation */
+    get _navigatableMenuItems(): MenuItem[];
     get acessibleNameText(): string;
     onBeforeRendering(): void;
+    getFocusDomRef(): HTMLElement | undefined;
+    _setupItemNavigation(): void;
     _close(): void;
     _openItemSubMenu(item: MenuItem): void;
-    _closeItemSubMenu(item: MenuItem): void;
     _itemMouseOver(e: MouseEvent): void;
     focus(focusOptions?: FocusOptions): Promise<void>;
+    _closeOtherSubMenus(item: MenuItem): void;
     _startOpenTimeout(item: MenuItem): void;
     _itemClick(e: CustomEvent<ListItemClickEventDetail>): void;
     _itemKeyDown(e: KeyboardEvent): void;
-    _navigateOutOfEndContent(menuItem: MenuItem, isDownwards?: boolean): void;
+    _navigateOutOfEndContent(e: CustomEvent): void;
     _beforePopoverOpen(e: CustomEvent): void;
     _afterPopoverOpen(): void;
     _beforePopoverClose(e: CustomEvent): void;

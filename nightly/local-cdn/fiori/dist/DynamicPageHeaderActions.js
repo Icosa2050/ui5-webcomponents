@@ -21,7 +21,7 @@ import DynamicPageHeaderActionsTemplate from "./DynamicPageHeaderActionsTemplate
 // Styles
 import DynamicPageHeaderActionsCss from "./generated/themes/DynamicPageHeaderActions.css.js";
 // Texts
-import { DYNAMIC_PAGE_ARIA_LABEL_EXPAND_HEADER, DYNAMIC_PAGE_ARIA_LABEL_SNAP_HEADER, DYNAMIC_PAGE_ARIA_LABEL_PIN_HEADER, } from "./generated/i18n/i18n-defaults.js";
+import { DYNAMIC_PAGE_ARIA_LABEL_EXPAND_HEADER, DYNAMIC_PAGE_ARIA_LABEL_SNAP_HEADER, DYNAMIC_PAGE_ARIA_LABEL_PIN_HEADER, DYNAMIC_PAGE_ARIA_LABEL_UNPIN_HEADER, } from "./generated/i18n/i18n-defaults.js";
 /**
  * @class
  *
@@ -86,7 +86,9 @@ let DynamicPageHeaderActions = DynamicPageHeaderActions_1 = class DynamicPageHea
         return this.shadowRoot.querySelector(".ui5-dynamic-page-header-action-pin");
     }
     get pinLabel() {
-        return DynamicPageHeaderActions_1.i18nBundle.getText(DYNAMIC_PAGE_ARIA_LABEL_PIN_HEADER);
+        return this.pinned
+            ? DynamicPageHeaderActions_1.i18nBundle.getText(DYNAMIC_PAGE_ARIA_LABEL_UNPIN_HEADER)
+            : DynamicPageHeaderActions_1.i18nBundle.getText(DYNAMIC_PAGE_ARIA_LABEL_PIN_HEADER);
     }
     get expandLabel() {
         return this.snapped

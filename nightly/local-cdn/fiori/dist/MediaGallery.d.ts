@@ -147,6 +147,7 @@ declare class MediaGallery extends UI5Element {
     _getMaxAllowedThumbnailsInColumn(columnHeight: number): number;
     _getOverflowSize(columnHeight: number, columnsCount: number): number;
     _getFocusableItems(): ITabbable[];
+    getFocusDomRef(): HTMLElement | undefined;
     _selectItem(item: IMediaGalleryItem, userInteraction?: boolean): void;
     _updateSelectedFlag(itemToSelect: IMediaGalleryItem): void;
     _selectItemOnPhone(item: IMediaGalleryItem): void;

@@ -16,7 +16,6 @@ import type I18nBundle from "@ui5/webcomponents-base/dist/i18nBundle.js";
  * @extends TableRowActionBase
  * @since 2.7.0
  * @public
- * @experimental
  */
 declare class TableRowActionNavigation extends TableRowActionBase {
     /**
@@ -27,12 +26,12 @@ declare class TableRowActionNavigation extends TableRowActionBase {
      */
     interactive: boolean;
     static i18nBundle: I18nBundle;
+    isFixedAction(): boolean;
     getRenderInfo(): {
         text: string;
         icon: string;
         interactive: boolean;
     };
-    isFixedAction(): boolean;
     get _i18nNavigation(): string;
 }
 export default TableRowActionNavigation;

@@ -1,7 +1,9 @@
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
 import type I18nBundle from "@ui5/webcomponents-base/dist/i18nBundle.js";
 import type ValueState from "@ui5/webcomponents-base/dist/types/ValueState.js";
-import type { IInputSuggestionItem, InputEventDetail } from "@ui5/webcomponents/dist/Input.js";
+import type { IInputSuggestionItem } from "@ui5/webcomponents/dist/Input.js";
+import type Input from "@ui5/webcomponents/dist/Input.js";
+import type { UI5CustomEvent } from "@ui5/webcomponents-base/dist/index.js";
 /**
  * @class
  * ### Overview
@@ -136,10 +138,10 @@ declare class PromptInput extends UI5Element {
     valueStateMessage: Array<HTMLElement>;
     static i18nBundle: I18nBundle;
     _onkeydown(e: KeyboardEvent): void;
-    _onInnerInput(e: CustomEvent<InputEventDetail>): void;
+    _onInnerInput(e: UI5CustomEvent<Input, "input">): void;
     _onInnerChange(): void;
     _onButtonClick(): void;
-    _onTypeAhead(e: CustomEvent): void;
+    _onTypeAhead(e: UI5CustomEvent<Input, "type-ahead">): void;
     get _exceededText(): string | undefined;
     get _maxLenght(): number | undefined;
     get _submitButtonDisabled(): boolean;

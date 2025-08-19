@@ -103,9 +103,8 @@ declare class Slider extends SliderBase implements IFormInputElement {
     /** Called when the user finish interacting with the slider
      * @private
      */
-    _handleUp(e: TouchEvent | MouseEvent): void;
-    _onInputFocusOut(e: FocusEvent): void;
-    _updateInputValue(): void;
+    _handleUp(): void;
+    _onkeyup(e: KeyboardEvent): void;
     /** Determines if the press is over the handle
      * @private
      */
@@ -115,6 +114,7 @@ declare class Slider extends SliderBase implements IFormInputElement {
      */
     _updateHandleAndProgress(newValue: number): void;
     _handleActionKeyPress(e: KeyboardEvent): void;
+    _onTooltopForwardFocus(e: CustomEvent): void;
     get inputValue(): string;
     get styles(): {
         progress: {
@@ -123,16 +123,6 @@ declare class Slider extends SliderBase implements IFormInputElement {
         };
         handle: {
             [x: string]: string;
-        };
-        label: {
-            width: string;
-        };
-        labelContainer: {
-            [x: string]: string;
-            width: string;
-        };
-        tooltip: {
-            visibility: string;
         };
     };
     get _sliderHandle(): Element;

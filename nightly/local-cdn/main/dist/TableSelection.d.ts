@@ -38,8 +38,8 @@ import type TableRowBase from "./TableRowBase.js";
  * @extends UI5Element
  * @since 2.0.0
  * @public
- * @experimental This web component is available since 2.0 with an experimental flag and its API and behavior are subject to change.
  * @deprecated This component is deprecated and will be removed in future releases. Use the `ui5-table-selection-single` or `ui5-table-selection-multi` components instead.
+ * @experimental This web component is available since 2.0 with an experimental flag and its API and behavior are subject to change.
  */
 declare class TableSelection extends UI5Element implements ITableFeature {
     eventDetails: {
@@ -69,13 +69,18 @@ declare class TableSelection extends UI5Element implements ITableFeature {
         isMouse: boolean;
         shiftPressed: boolean;
     } | null;
+    onClickCaptureBound: (e: MouseEvent) => void;
+    constructor();
     onTableActivate(table: Table): void;
     onExitDOM(): void;
     onBeforeRendering(): void;
     onTableBeforeRendering(): void;
+    onTableAfterRendering(): void;
     isSelectable(): boolean;
     isMultiSelectable(): boolean;
     isRowSelectorRequired(): boolean;
+    getAriaDescriptionForTable(): string | undefined;
+    getAriaDescriptionForColumnHeader(): string | undefined;
     getRowKey(row: TableRow): string;
     isSelected(row: TableRowBase): boolean;
     hasSelectedRow(): boolean;
@@ -90,13 +95,13 @@ declare class TableSelection extends UI5Element implements ITableFeature {
     _invalidateTableAndRows(): void;
     _onkeydown(e: KeyboardEvent): void;
     _onkeyup(e: KeyboardEvent, eventOrigin: HTMLElement): void;
-    _onclick(e: MouseEvent): void;
+    _onClickCapture(e: MouseEvent): void;
     /**
      * Start the range selection and initialises the range selection state
      * @param row starting row
      * @private
      */
-    _startRangeSelection(row: TableRow, isMouse?: boolean): void;
+    _startRangeSelection(row: TableRow, selected: boolean, isMouse?: boolean): void;
     /**
      * Handles the range selection
      * @param targetRow row that is currently focused

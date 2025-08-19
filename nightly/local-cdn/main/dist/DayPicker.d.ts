@@ -97,6 +97,7 @@ declare class DayPicker extends CalendarPart implements ICalendarPicker {
      * @private
      */
     specialCalendarDates: Array<SpecialCalendarDateT>;
+    _focusableDay: HTMLElement;
     _autoFocus?: boolean;
     static i18nBundle: I18nBundle;
     onBeforeRendering(): void;
@@ -120,6 +121,8 @@ declare class DayPicker extends CalendarPart implements ICalendarPicker {
      */
     namesTooLong(dayNames: Array<string>): boolean;
     onAfterRendering(): void;
+    _focusCorrectDay(): void;
+    get _shouldFocusDay(): boolean;
     _onfocusin(): void;
     _onfocusout(): void;
     /**

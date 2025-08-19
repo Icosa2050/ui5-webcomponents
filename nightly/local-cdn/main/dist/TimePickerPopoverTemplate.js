@@ -23,7 +23,12 @@ function valueStateTextHeader(style) {
     }
     return (_jsxs("div", { slot: "header", class: {
             "ui5-popover-header": true,
-            ...this.classes.popoverValueState,
+            "ui5-valuestatemessage-header": true,
+            "ui5-valuestatemessage-root": true,
+            "ui5-valuestatemessage--success": this.valueState === ValueState.Positive,
+            "ui5-valuestatemessage--error": this.valueState === ValueState.Negative,
+            "ui5-valuestatemessage--warning": this.valueState === ValueState.Critical,
+            "ui5-valuestatemessage--information": this.valueState === ValueState.Information,
         }, style: style, children: [_jsx(Icon, { class: "ui5-input-value-state-message-icon", name: valueStateMessageInputIcon.call(this) }), valueStateMessage.call(this)] }));
 }
 function valueStateMessageInputIcon() {

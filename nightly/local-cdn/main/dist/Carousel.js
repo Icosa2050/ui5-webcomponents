@@ -20,7 +20,7 @@ import { isDesktop } from "@ui5/webcomponents-base/dist/Device.js";
 import AnimationMode from "@ui5/webcomponents-base/dist/types/AnimationMode.js";
 import { getAnimationMode } from "@ui5/webcomponents-base/dist/config/AnimationMode.js";
 import { getEffectiveAriaLabelText } from "@ui5/webcomponents-base/dist/util/AccessibilityTextsHelper.js";
-import { CAROUSEL_OF_TEXT, CAROUSEL_DOT_TEXT, CAROUSEL_PREVIOUS_ARROW_TEXT, CAROUSEL_NEXT_ARROW_TEXT, } from "./generated/i18n/i18n-defaults.js";
+import { CAROUSEL_OF_TEXT, CAROUSEL_DOT_TEXT, CAROUSEL_PREVIOUS_ARROW_TEXT, CAROUSEL_NEXT_ARROW_TEXT, CAROUSEL_ARIA_ROLE_DESCRIPTION, } from "./generated/i18n/i18n-defaults.js";
 import CarouselArrowsPlacement from "./types/CarouselArrowsPlacement.js";
 import CarouselPageIndicatorType from "./types/CarouselPageIndicatorType.js";
 import CarouselTemplate from "./CarouselTemplate.js";
@@ -509,6 +509,9 @@ let Carousel = Carousel_1 = class Carousel extends UI5Element {
     }
     get previousPageText() {
         return Carousel_1.i18nBundle.getText(CAROUSEL_PREVIOUS_ARROW_TEXT);
+    }
+    get _roleDescription() {
+        return Carousel_1.i18nBundle.getText(CAROUSEL_ARIA_ROLE_DESCRIPTION);
     }
     /**
      * The indices of the currently visible items of the component.

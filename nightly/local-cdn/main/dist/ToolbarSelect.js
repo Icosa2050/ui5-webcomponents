@@ -4,14 +4,14 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+import jsxRenderer from "@ui5/webcomponents-base/dist/renderer/JsxRenderer.js";
 import customElement from "@ui5/webcomponents-base/dist/decorators/customElement.js";
 import property from "@ui5/webcomponents-base/dist/decorators/property.js";
 import slot from "@ui5/webcomponents-base/dist/decorators/slot.js";
 import event from "@ui5/webcomponents-base/dist/decorators/event-strict.js";
-import { registerToolbarItem } from "./ToolbarRegistry.js";
+import ToolbarSelectCss from "./generated/themes/ToolbarSelect.css.js";
 // Templates
 import ToolbarSelectTemplate from "./ToolbarSelectTemplate.js";
-import ToolbarPopoverSelectTemplate from "./ToolbarPopoverSelectTemplate.js";
 import ToolbarItem from "./ToolbarItem.js";
 /**
  * @class
@@ -47,12 +47,6 @@ let ToolbarSelect = class ToolbarSelect extends ToolbarItem {
          * @public
          */
         this.disabled = false;
-    }
-    static get toolbarTemplate() {
-        return ToolbarSelectTemplate;
-    }
-    static get toolbarPopoverTemplate() {
-        return ToolbarPopoverSelectTemplate;
     }
     onClick(e) {
         e.stopImmediatePropagation();
@@ -121,6 +115,9 @@ __decorate([
 ToolbarSelect = __decorate([
     customElement({
         tag: "ui5-toolbar-select",
+        template: ToolbarSelectTemplate,
+        renderer: jsxRenderer,
+        styles: ToolbarSelectCss,
     })
     /**
      * Fired when the selected option changes.
@@ -147,7 +144,6 @@ ToolbarSelect = __decorate([
     ,
     event("close")
 ], ToolbarSelect);
-registerToolbarItem(ToolbarSelect);
 ToolbarSelect.define();
 export default ToolbarSelect;
 //# sourceMappingURL=ToolbarSelect.js.map

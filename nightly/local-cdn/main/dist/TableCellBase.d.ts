@@ -13,6 +13,7 @@ import type TableCellHorizontalAlign from "./types/TableCellHorizontalAlign.js";
 declare abstract class TableCellBase extends UI5Element {
     /**
      * Defines the content of the component.
+     *
      * @public
      */
     content: Array<Node>;

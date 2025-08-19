@@ -109,11 +109,11 @@ let Icon = class Icon extends UI5Element {
         this.showTooltip = false;
         /**
          * Defines the mode of the component.
-         * @default "Image"
+         * @default "Decorative"
          * @public
          * @since 2.0.0
          */
-        this.mode = "Image";
+        this.mode = "Decorative";
         /**
          * @private
          */
@@ -169,8 +169,7 @@ let Icon = class Icon extends UI5Element {
     async onBeforeRendering() {
         const name = this.name;
         if (!name) {
-            /* eslint-disable-next-line */
-            return console.warn("Icon name property is required", this);
+            return;
         }
         let iconData = getIconDataSync(name);
         if (!iconData) {
@@ -252,8 +251,8 @@ Icon = __decorate([
      * Fired on mouseup, `SPACE` and `ENTER`.
      * - on mouse click, the icon fires native `click` event
      * - on `SPACE` and `ENTER`, the icon fires custom `click` event
-     * @private
-     * @since 1.0.0-rc.8
+     * @public
+     * @since 2.11.0
      */
     ,
     event("click", {

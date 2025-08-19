@@ -38,7 +38,7 @@ declare class TableSelectionSingle extends TableSelectionBase {
      */
     selected?: string;
     isSelected(row: TableRow): boolean;
-    setSelected(row: TableRow, selected: boolean, _fireEvent?: boolean): void;
+    setSelected(row: TableRow, selected: boolean, fireEvent?: boolean): void;
     /**
      * Returns the selected row.
      *

@@ -5,6 +5,11 @@
 declare enum AvatarColorScheme {
     /**
      * @public
+     * @since 2.9.0
+     */
+    Auto = "Auto",
+    /**
+     * @public
      */
     Accent1 = "Accent1",
     /**
@@ -46,6 +51,10 @@ declare enum AvatarColorScheme {
     /**
      * @public
      */
-    Placeholder = "Placeholder"
+    Placeholder = "Placeholder",
+    /**
+     * @public
+     */
+    Transparent = "Transparent"
 }
 export default AvatarColorScheme;

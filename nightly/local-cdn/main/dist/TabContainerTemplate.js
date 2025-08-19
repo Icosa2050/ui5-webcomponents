@@ -21,6 +21,7 @@ export default function TabContainerTemplate(injectedPartials) {
                     "ui5-tc--textOnly": this.textOnly,
                     "ui5-tc--withAdditionalText": this.withAdditionalText,
                     "ui5-tc--standardTabLayout": this.standardTabLayout,
+                    "ui5-tc--noTabSelected": !this._selectedTab,
                 }, children: [this.tabsAtTheBottom && partials.contentArea.call(this), _jsxs("div", { class: "ui5-tc__header", id: `${this._id}-header`, onFocusIn: this._onHeaderFocusin, onDragStart: this._onDragStart, onDragEnter: this._onHeaderDragEnter, onDragOver: this._onHeaderDragOver, onDrop: this._onHeaderDrop, onDragLeave: this._onHeaderDragLeave, part: "tabstrip", children: [_jsx("div", { class: "ui5-tc__overflow ui5-tc__overflow--start", onClick: this._onOverflowClick, onKeyDown: this._onOverflowKeyDown, hidden: true, children: this.startOverflowButton.length ?
                                     _jsx("slot", { name: "startOverflowButton" })
                                     : // else

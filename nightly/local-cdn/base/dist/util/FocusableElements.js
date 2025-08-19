@@ -25,6 +25,15 @@ const getLastFocusableElement = async (container, startFromContainer) => {
 const isElemFocusable = (el) => {
     return el.hasAttribute("data-ui5-focus-redirect") || !isElementHidden(el);
 };
+const isUI5ElementWithNegativeTabIndex = (el) => {
+    if (instanceOfUI5Element(el)) {
+        const tabIndex = el.getAttribute("tabindex");
+        if (tabIndex !== null && parseInt(tabIndex) < 0) {
+            return true;
+        }
+    }
+    return false;
+};
 const findFocusableElement = async (container, forward, startFromContainer) => {
     let child;
     let assignedElements;
@@ -33,7 +42,7 @@ const findFocusableElement = async (container, forward, startFromContainer) => {
         child = forward ? container.shadowRoot.firstChild : container.shadowRoot.lastChild;
     }
     else if (container instanceof HTMLSlotElement && container.assignedNodes()) {
-        assignedElements = container.assignedNodes();
+        assignedElements = container.assignedElements();
         currentIndex = forward ? 0 : assignedElements.length - 1;
         child = assignedElements[currentIndex];
     }
@@ -47,9 +56,16 @@ const findFocusableElement = async (container, forward, startFromContainer) => {
     /* eslint-disable no-await-in-loop */
     while (child) {
         const originalChild = child;
-        if (!isElementHidden(originalChild)) {
+        if (!isElementHidden(originalChild) && !isUI5ElementWithNegativeTabIndex(originalChild)) {
             if (instanceOfUI5Element(child)) {
-                child = await child.getFocusDomRefAsync();
+                // getDomRef is used because some components mark their focusable ref in an inner
+                // html but there might also be focusable targets outside of it
+                // as an example - TreeItemBase
+                // div - root of the component returned by getDomRef()
+                // 	li.ui5-li-tree - returned by getFocusDomRef() and may not be focusable (ItemNavigation manages tabindex)
+                // 	ul.subtree - may still contain focusable targets (sub nodes of the tree item)
+                await child._waitForDomRef();
+                child = child.getDomRef();
             }
             if (!child || isElementHidden(child)) {
                 return null;
@@ -68,7 +84,7 @@ const findFocusableElement = async (container, forward, startFromContainer) => {
                 }
             }
         }
-        child = forward ? originalChild.nextSibling : originalChild.previousSibling;
+        child = forward ? originalChild.nextElementSibling : originalChild.previousElementSibling;
         // If the child element is not part of the currently assigned element,
         // we have to check the next/previous element assigned to the slot or continue with the next/previous sibling of the slot,
         // otherwise, the nextSibling/previousSibling is the next element inside the light DOM

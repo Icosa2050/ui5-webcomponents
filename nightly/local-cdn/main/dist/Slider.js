@@ -101,9 +101,6 @@ let Slider = Slider_1 = class Slider extends SliderBase {
      *
      */
     onBeforeRendering() {
-        if (this.editableTooltip) {
-            this._updateInputValue();
-        }
         if (!this.isCurrentStateOutdated()) {
             return;
         }
@@ -143,7 +140,7 @@ let Slider = Slider_1 = class Slider extends SliderBase {
     _onmousedown(e) {
         // If step is 0 no interaction is available because there is no constant
         // (equal for all user environments) quantitative representation of the value
-        if (this.disabled || this.step === 0 || e.target.hasAttribute("ui5-input")) {
+        if (this.disabled || this.step === 0 || e.target.hasAttribute("ui5-slider-tooltip")) {
             return;
         }
         const newValue = this.handleDownBase(e);
@@ -168,7 +165,7 @@ let Slider = Slider_1 = class Slider extends SliderBase {
             this._valueInitial = this.value;
         }
         if (this.showTooltip) {
-            this._tooltipVisibility = SliderBase.TOOLTIP_VISIBILITY.VISIBLE;
+            this._tooltipsOpen = true;
         }
     }
     _onfocusout(e) {
@@ -181,8 +178,8 @@ let Slider = Slider_1 = class Slider extends SliderBase {
         // Reset focus state and the stored Slider's initial
         // value that was saved when it was first focused in
         this._valueInitial = undefined;
-        if (this.showTooltip && !e.relatedTarget?.hasAttribute("ui5-input")) {
-            this._tooltipVisibility = SliderBase.TOOLTIP_VISIBILITY.HIDDEN;
+        if (this.showTooltip && !e.relatedTarget?.hasAttribute("ui5-slider-tooltip")) {
+            this._tooltipsOpen = false;
         }
     }
     /**
@@ -190,9 +187,6 @@ let Slider = Slider_1 = class Slider extends SliderBase {
      * @private
      */
     _handleMove(e) {
-        if (e.target.hasAttribute("ui5-input")) {
-            return;
-        }
         e.preventDefault();
         // If step is 0 no interaction is available because there is no constant
         // (equal for all user environments) quantitative representation of the value
@@ -208,41 +202,20 @@ let Slider = Slider_1 = class Slider extends SliderBase {
     /** Called when the user finish interacting with the slider
      * @private
      */
-    _handleUp(e) {
-        if (e.target.hasAttribute("ui5-input")) {
-            return;
-        }
+    _handleUp() {
         if (this._valueOnInteractionStart !== this.value) {
             this.fireDecoratorEvent("change");
         }
         this.handleUpBase();
         this._valueOnInteractionStart = undefined;
     }
-    _onInputFocusOut(e) {
-        const tooltipInput = this.shadowRoot.querySelector("[ui5-input]");
-        this._tooltipVisibility = SliderBase.TOOLTIP_VISIBILITY.HIDDEN;
-        this._updateValueFromInput(e);
-        if (!this._isInputValueValid) {
-            tooltipInput.value = this._lastValidInputValue;
-            this._isInputValueValid = true;
-            this._tooltipInputValueState = "None";
+    _onkeyup(e) {
+        const isActionKey = SliderBase._isActionKey(e);
+        this._onKeyupBase();
+        if (isActionKey && this._valueOnInteractionStart !== this.value) {
+            this.fireDecoratorEvent("change");
         }
-    }
-    _updateInputValue() {
-        const tooltipInput = this.shadowRoot.querySelector("[ui5-input]");
-        if (!tooltipInput) {
-            return;
-        }
-        this._isInputValueValid = parseFloat(tooltipInput.value) >= this.min && parseFloat(tooltipInput.value) <= this.max;
-        if (!this._isInputValueValid) {
-            this._tooltipInputValue = this._lastValidInputValue;
-            this._isInputValueValid = true;
-            this._tooltipInputValueState = "Negative";
-            return;
-        }
-        this._tooltipInputValue = this.value.toString();
-        this._lastValidInputValue = this._tooltipInputValue;
-        this._tooltipInputValueState = "None";
+        this._valueOnInteractionStart = this.value;
     }
     /** Determines if the press is over the handle
      * @private
@@ -274,6 +247,10 @@ let Slider = Slider_1 = class Slider extends SliderBase {
             this.updateStateStorageAndFireInputEvent("value");
         }
     }
+    _onTooltopForwardFocus(e) {
+        const tooltip = e.target;
+        tooltip.followRef?.focus();
+    }
     get inputValue() {
         return this.value.toString();
     }
@@ -285,16 +262,6 @@ let Slider = Slider_1 = class Slider extends SliderBase {
             },
             handle: {
                 [this.directionStart]: `${this._handlePositionFromStart}%`,
-            },
-            label: {
-                "width": `${this._labelWidth}%`,
-            },
-            labelContainer: {
-                "width": `100%`,
-                [this.directionStart]: `-${this._labelWidth / 2}%`,
-            },
-            tooltip: {
-                "visibility": `${this._tooltipVisibility}`,
             },
         };
     }

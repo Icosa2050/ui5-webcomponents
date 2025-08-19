@@ -1,7 +1,11 @@
-commit 27c8bb7ba6e9d153d3da2ad2d976e7ab4cc13714
-Author: Plamen Ivanov <plamen.ivanov01@sap.com>
-Date:   Fri Feb 28 16:25:04 2025 +0100
+commit bc756b9614d1c95dddd36dfa8fa6d590ae80e94a
+Author: Nikola Anachkov <87311182+NakataCode@users.noreply.github.com>
+Date:   Fri Aug 15 18:14:41 2025 +0300
 
-    fix(ui5-shellbar): menu-item-click click event is now properly fired (#10983)
+    chore(ui5-toolbar): migrate wdio tests to cypress (#11861)
     
-    Fixes: #10950
+    * chore(ui5-toolbar): migrate wdio tests to cypress
+    
+    * refactor: optimize tests
+    
+    * refactor: address comments

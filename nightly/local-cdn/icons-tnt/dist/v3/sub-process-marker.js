@@ -1,7 +1,7 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "sub-process-marker";
-const pathData = "M485 512H27c-15 0-27-12-27-27V26C0 11 12 0 27 0h458c15 0 27 11 27 26v459c0 15-12 27-27 27zM53 53v405h406V53H53zm283 231h-53v53c0 15-12 27-27 27s-27-12-27-27v-53h-53c-14 0-26-12-26-26s12-26 26-26h53v-53c0-15 12-27 27-27s27 12 27 27v53h53c14 0 26 12 26 26s-12 26-26 26z";
+const pathData = "M485 511H27q-11 0-19-7.5T0 485V26Q0 15 8 7.5T27 0h458q11 0 19 7.5t8 18.5v459q0 11-8 18.5t-19 7.5zM53 458h406V53H53v405zm283-174h-54v53q0 11-7.5 19t-18.5 8-19-8-8-19v-53h-53q-11 0-18.5-7.5T150 258t7.5-18.5T176 232h53v-53q0-11 8-19t19-8 18.5 8 7.5 19v53h54q11 0 18.5 7.5T362 258t-7.5 18.5T336 284z";
 const ltr = false;
 const accData = null;
 const collection = "tnt-v3";

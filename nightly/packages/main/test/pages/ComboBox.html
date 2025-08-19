@@ -18,8 +18,8 @@
 
 
 
-  <script type="module" crossorigin src="/ui5-webcomponents/nightly/assets/test/pages/ComboBox.html-jdRxUiwE.js"></script>
-  <link rel="modulepreload" crossorigin href="/ui5-webcomponents/nightly/assets/bundle.esm-DclcXRqo.js">
+  <script type="module" crossorigin src="/ui5-webcomponents/nightly/assets/test/pages/ComboBox.html-PwoZcmDC.js"></script>
+  <link rel="modulepreload" crossorigin href="/ui5-webcomponents/nightly/assets/bundle.esm-DNGp8HrT.js">
   <link rel="stylesheet" crossorigin href="/ui5-webcomponents/nightly/assets/ComboBox-LkZexEaJ.css">
 </head>
 
@@ -70,7 +70,7 @@
 			<ui5-cb-item text="Bahrain"></ui5-cb-item>
 			<ui5-cb-item text="Belgium"></ui5-cb-item>
 			<ui5-cb-item text="Bosnia and Herzegovina"></ui5-cb-item>
-			<div slot="valueStateMessage">Custom error value state message with a <a href="#">Link</a>.</div>
+			<div slot="valueStateMessage">Custom error value state message with a <ui5-link href="#">Link 1</ui5-link> and <ui5-link href="#">Link 2</ui5-link></div>
 		</ui5-combobox>
 		<ui5-combobox id="vs-warning-default" class="combobox2auto" value-state="Critical">
 			<ui5-cb-item text="Algeria"></ui5-cb-item>
@@ -80,7 +80,8 @@
 			<ui5-cb-item text="Bahrain"></ui5-cb-item>
 			<ui5-cb-item text="Belgium"></ui5-cb-item>
 		</ui5-combobox>
-		<ui5-combobox id="vs-information-default" class="combobox2auto" value-state="Information"></ui5-combobox>
+		<ui5-combobox id="vs-information-default" class="combobox2auto" value-state="Information">
+		</ui5-combobox>
 		<ui5-combobox id="vs-success-default" class="combobox2auto" value-state="Positive"></ui5-combobox>
 	</div>
 
@@ -174,6 +175,22 @@
 		<br />
 		<span id="selection-change-event-result"></span>
 
+	</div>
+
+		<div class="demo-section">
+		<span>SelectionChange event testing</span>
+
+		<ui5-combobox id="selection-change-cb" show-clear-icon="">
+			<ui5-cb-item text="Argentina"></ui5-cb-item>
+			<ui5-cb-item text="Bulgaria"></ui5-cb-item>
+			<ui5-cb-item text="Canada"></ui5-cb-item>
+			<ui5-cb-item text="Germany"></ui5-cb-item>
+		</ui5-combobox>
+
+		<br>
+
+		Selected item: <span id="selection-change-placeholder"></span><br>
+		SelectionChange call count: <span id="selection-change-count">0</span><br>
 	</div>
 
 	<div class="demo-section">
@@ -309,13 +326,13 @@
 		<ui5-combobox id="dynamic-items">
 			<ui5-cb-item text="Hello World"></ui5-cb-item>
 		</ui5-combobox>
-	
+
 		<ui5-button id="add-items-btn">Start adding items</ui5-button>
-	
+
 		<script>
 			const addItemsBtn = document.getElementById("add-items-btn");
 			const dynamicItemsCb = document.getElementById("dynamic-items");
-	
+
 			addItemsBtn.addEventListener("click", () => {
 				setInterval(() => {
 					const item = document.createElement("ui5-cb-item");
@@ -360,6 +377,21 @@
 			});
 		</script>
 	</div>
+	<div class="demo-section">
+		<span>Open ComboBox on focus</span>
+		<ui5-combobox id="comboFocus" class="combobox2auto" value="Bulgaria" accessible-name-ref="countryLabel">
+			<ui5-cb-item text="Algeria"></ui5-cb-item>
+			<ui5-cb-item text="Argentina"></ui5-cb-item>
+			<ui5-cb-item text="Bulgaria"></ui5-cb-item>
+			<ui5-cb-item text="Canada"></ui5-cb-item>
+			<ui5-cb-item text="Chile"></ui5-cb-item>
+		</ui5-combobox>
+		<script>
+			document.getElementById("comboFocus").addEventListener("focusin", () => {
+				document.getElementById("comboFocus").open = true;
+			});
+		</script>
+	</div>
 
 
 
@@ -375,6 +407,11 @@
 		document.getElementById("change-cb").addEventListener("ui5-change", function (event) {
 			document.getElementById("change-placeholder").innerHTML = event.target.value;
 			document.getElementById("change-count").innerHTML = parseInt(document.getElementById("change-count").innerHTML) + 1;
+		});
+
+		document.getElementById("selection-change-cb").addEventListener("ui5-selection-change", function (event) {
+			document.getElementById("selection-change-placeholder").innerHTML = event.detail.item?.text || "";
+			document.getElementById("selection-change-count").innerHTML = parseInt(document.getElementById("selection-change-count").innerHTML) + 1;
 		});
 
 		document.getElementById("input-cb").addEventListener("ui5-input", function (event) {

@@ -5,6 +5,9 @@ import type { IFormInputElement } from "@ui5/webcomponents-base/dist/features/In
 import type { ColorRGB } from "@ui5/webcomponents-base/dist/util/ColorConversion.js";
 import "@ui5/webcomponents-icons/dist/expand.js";
 import ColorValue from "./colorpicker-utils/ColorValue.js";
+import type Input from "./Input.js";
+import type Slider from "./Slider.js";
+import type { UI5CustomEvent } from "@ui5/webcomponents-base/dist/index.js";
 type ColorCoordinates = {
     x: number;
     y: number;
@@ -119,7 +122,7 @@ declare class ColorPicker extends UI5Element implements IFormInputElement {
     _handleMouseUp(): void;
     _handleMouseOut(e: MouseEvent): void;
     _handleMouseMove(e: MouseEvent): void;
-    _handleAlphaInput(e: CustomEvent): void;
+    _handleAlphaInput(e: UI5CustomEvent<Input, "input"> | UI5CustomEvent<Slider, "input">): void;
     _handleHueInput(e: CustomEvent): void;
     _handleHEXChange(e: CustomEvent | KeyboardEvent): void;
     _togglePickerMode(): void;

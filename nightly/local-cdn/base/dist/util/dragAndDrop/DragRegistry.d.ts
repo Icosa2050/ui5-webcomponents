@@ -2,6 +2,15 @@ import type UI5Element from "../../UI5Element.js";
 import type MovePlacement from "../../types/MovePlacement.js";
 declare const setDraggedElement: (element: HTMLElement | null) => void;
 type SetDraggedElementFunction = typeof setDraggedElement;
+/**
+ * Starts a multiple drag operation by creating a drag ghost element.
+ * The drag ghost will be displayed when dragging multiple items.
+ *
+ * @param {number} count - The number of items being dragged.
+ * @param {DragEvent} e - The drag event that triggered the operation.
+ * @public
+ */
+declare const startMultipleDrag: (count: number, e: DragEvent) => void;
 type DragAndDropSettings = {
     /**
      * Allow cross-browser and file drag and drop.
@@ -28,6 +37,8 @@ declare const DragRegistry: {
     addSelfManagedArea: (area: HTMLElement | ShadowRoot) => (element: HTMLElement | null) => void;
     removeSelfManagedArea: (area: HTMLElement | ShadowRoot) => void;
     getDraggedElement: () => HTMLElement | null;
+    startMultipleDrag: (count: number, e: DragEvent) => void;
 };
 export default DragRegistry;
+export { startMultipleDrag, };
 export type { SetDraggedElementFunction, DragAndDropSettings, MoveEventDetail, };

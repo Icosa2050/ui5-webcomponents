@@ -2,7 +2,7 @@ import { registerIllustration } from "@ui5/webcomponents-base/dist/asset-registr
 import dialogSvg from "./sapIllus-Dialog-BeforeSearch.js";
 import sceneSvg from "./sapIllus-Scene-BeforeSearch.js";
 import spotSvg from "./sapIllus-Spot-BeforeSearch.js";
-import dotSvg from "./sapIllus-Spot-BeforeSearch.js";import {
+import dotSvg from "./sapIllus-Dot-BeforeSearch.js";import {
 	IM_TITLE_BEFORESEARCH,
 	IM_SUBTITLE_BEFORESEARCH,
 } from "../generated/i18n/i18n-defaults.js";

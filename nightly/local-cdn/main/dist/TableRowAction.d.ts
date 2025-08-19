@@ -14,7 +14,6 @@ import TableRowActionBase from "./TableRowActionBase.js";
  * @extends TableRowActionBase
  * @since 2.7.0
  * @public
- * @experimental
  */
 declare class TableRowAction extends TableRowActionBase {
     /**

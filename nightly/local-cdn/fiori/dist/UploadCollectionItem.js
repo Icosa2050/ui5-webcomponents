@@ -140,6 +140,9 @@ let UploadCollectionItem = UploadCollectionItem_1 = class UploadCollectionItem e
     }
     _onkeyup(e) {
         super._onkeyup(e);
+        if (this.getFocusDomRef().matches(":has(:focus-within)")) {
+            return;
+        }
         if (isDelete(e) && !this.disableDeleteButton && !this.hideDeleteButton && !this.disabled) {
             this._onDelete();
         }

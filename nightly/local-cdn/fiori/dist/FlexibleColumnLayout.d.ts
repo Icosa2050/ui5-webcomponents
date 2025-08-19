@@ -207,6 +207,7 @@ declare class FlexibleColumnLayout extends UI5Element {
     _handleResize: () => void;
     _onSeparatorMove: (e: TouchEvent | MouseEvent) => void;
     _onSeparatorMoveEnd: (e: TouchEvent | MouseEvent) => void;
+    onColumnCollapseAnimationEndRef: (e: TransitionEvent) => void;
     static i18nBundle: I18nBundle;
     _prevLayout: `${FCLLayout}` | null;
     _userDefinedColumnLayouts: UserDefinedColumnLayouts;
@@ -223,7 +224,9 @@ declare class FlexibleColumnLayout extends UI5Element {
     syncLayout(): void;
     toggleColumns(): void;
     toggleColumn(column: string): void;
-    columnResizeHandler: (e: Event) => void;
+    expandColumn(columnDOM: HTMLElement, columnWidth: string | number): void;
+    collapseColumn(columnDOM: HTMLElement): void;
+    onColumnCollapseAnimationEnd: (e: Event) => void;
     nextColumnLayout(layout: `${FCLLayout}`): FlexibleColumnLayoutColumnLayout;
     calcVisibleColumns(colLayout: FlexibleColumnLayoutColumnLayout): number;
     fireLayoutChange(separatorUsed: boolean, resized: boolean): void;
@@ -301,6 +304,8 @@ declare class FlexibleColumnLayout extends UI5Element {
     get startSeparatorGripVisibility(): boolean | undefined;
     get endSeparatorGripVisibility(): boolean | undefined;
     get startSeparatorArrowVisibility(): boolean | undefined;
+    get startSeparatorValue(): number;
+    get endSeparatorValue(): number;
     get startArrowDirection(): "forward" | "backward" | undefined;
     get startArrowDOM(): HTMLElement;
     get effectiveSeparatorsInfo(): {
@@ -313,12 +318,15 @@ declare class FlexibleColumnLayout extends UI5Element {
     get startSeparatorDOM(): HTMLElement;
     get endSeparatorDOM(): HTMLElement;
     get startSeparatorTabIndex(): 0 | undefined;
-    get endSeparatorTabIndex(): 0 | -1;
+    get endSeparatorTabIndex(): 0 | undefined;
     get media(): MEDIA;
     get widthDOM(): number;
     get startColumnDOM(): HTMLElement;
     get midColumnDOM(): HTMLElement;
     get endColumnDOM(): HTMLElement;
+    get isStartColumnCollapsing(): boolean;
+    get isMidColumnCollapsing(): boolean;
+    get isEndColumnCollapsing(): boolean;
     get accStartColumnText(): string;
     get accMiddleColumnText(): string;
     get accEndColumnText(): string;

@@ -12,6 +12,7 @@ import type TableColumnPopinDisplay from "./types/TableColumnPopinDisplay.js";
  * @public
  * @slot {Node[]} default - Defines the content of the column header
  * @csspart column - Used to style the native `th` element
+ * @deprecated Deprecated as of version 2.12.0, use `@ui5/webcomponents/dist/Table.js` instead.
  */
 declare class TableColumn extends UI5Element {
     /**

@@ -2,7 +2,8 @@ const isElementHidden = (el) => {
     if (el.nodeName === "SLOT") {
         return false;
     }
-    return (el.offsetWidth <= 0 && el.offsetHeight <= 0) || (el.style && el.style.visibility === "hidden");
+    const computedStyle = window.getComputedStyle(el);
+    return (computedStyle.display !== "contents" && (el.offsetWidth <= 0 && el.offsetHeight <= 0)) || (computedStyle.visibility === "hidden");
 };
 export default isElementHidden;
 //# sourceMappingURL=isElementHidden.js.map

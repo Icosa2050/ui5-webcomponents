@@ -95,6 +95,7 @@ declare class DateRangePicker extends DatePicker implements IFormInputElement {
     get endDateValue(): Date | null;
     get startValue(): string;
     get endValue(): string;
+    get _lastDateRangeForTheCurrentYear(): string;
     /**
      * @override
      */
@@ -116,11 +117,27 @@ declare class DateRangePicker extends DatePicker implements IFormInputElement {
      */
     onResponsivePopoverAfterClose(): void;
     /**
-     * @override
+     * Checks if a value is valid against the current date format of the DatePicker.
+     * @public
+     * @param value A value to be tested against the current date format
      */
     isValid(value: string): boolean;
     /**
-     * @override
+     * Checks if a value is valid against the current date format of the DatePicker.
+     * @public
+     * @param value A value to be tested against the current date format
+     */
+    isValidValue(value: string): boolean;
+    /**
+     * Checks if a value is valid against the current date format of the DatePicker.
+     * @public
+     * @param value A value to be tested against the current date format
+     */
+    isValidDisplayValue(value: string): boolean;
+    /**
+     * Checks if a date is between the minimum and maximum date.
+     * @public
+     * @param value A value to be checked
      */
     isInValidRange(value: string): boolean;
     /**
@@ -128,6 +145,16 @@ declare class DateRangePicker extends DatePicker implements IFormInputElement {
      * @override
      */
     normalizeValue(value: string): string;
+    /**
+     * The parser understands many formats, but we need one format
+     * @override
+     * @protected
+     */
+    normalizeDisplayValue(value: string): string;
+    /**
+     * @override
+     */
+    getValueFromDisplayValue(value: string): string;
     /**
      * @override
      */
@@ -139,6 +166,11 @@ declare class DateRangePicker extends DatePicker implements IFormInputElement {
     get _effectiveDelimiter(): string;
     _splitValueByDelimiter(value: string): string[];
     /**
+     * The parser understands many formats, but we need one format
+     * @protected
+     */
+    normalizeFormattedValue(value: string): string;
+    /**
      * Returns a UTC timestamp, representing the first date in the value string or undefined if the value is empty
      * @private
      */
@@ -148,11 +180,19 @@ declare class DateRangePicker extends DatePicker implements IFormInputElement {
      * @private
      */
     _extractLastTimestamp(value: string): number | undefined;
+    _exctractDisplayTimestamp(value: string): number | undefined;
     /**
      * Builds a string value out of two UTC timestamps - this method is the counterpart to _extractFirstTimestamp/_extractLastTimestamp
      * @private
      */
     _buildValue(firstDateTimestamp: number | undefined, lastDateTimestamp: number | undefined): string;
+    /**
+     * Builds a string value out of two UTC timestamps - this method is the counterpart to _extractFirstTimestamp/_extractLastTimestamp
+     * @private
+     */
+    _buildDisplayValue(firstDateTimestamp: number | undefined, lastDateTimestamp: number | undefined): string;
+    getDisplayValueFromValue(value: string): string;
+    get displayValue(): string;
 }
 export default DateRangePicker;
 export type { DateRangePickerChangeEventDetail, DateRangePickerInputEventDetail, };

@@ -27,7 +27,7 @@ declare class ToggleButton extends Button {
      * @public
      */
     pressed: boolean;
-    _onclick(): void;
+    _onclick(e: MouseEvent): void;
     _onkeyup(e: KeyboardEvent): void;
 }
 export default ToggleButton;

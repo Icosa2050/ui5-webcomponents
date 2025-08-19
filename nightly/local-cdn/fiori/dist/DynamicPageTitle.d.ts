@@ -159,6 +159,7 @@ declare class DynamicPageTitle extends UI5Element {
     get _ariaDescribedbyText(): string;
     get _ariaLabelledBy(): string | undefined;
     get _needsSeparator(): boolean;
+    get forAriaExpanded(): boolean | undefined;
     prepareLayoutActions(): void;
     handleResize(): void;
     onMinContentWidthChange(e: CustomEvent<ToolbarMinWidthChangeEventDetail>): void;

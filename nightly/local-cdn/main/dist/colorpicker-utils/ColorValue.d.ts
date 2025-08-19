@@ -38,10 +38,13 @@ declare class ColorValue {
     set Alpha(value: number);
     isColorValueValid(): boolean;
     validateRGBValue(value: number): void;
+    normalizeRGBValue(value: number): number;
     validateRGBColor(color: ColorRGB): void;
     validateHSLColor(color: ColorHSL): void;
     validateHValue(value: number): void;
+    normalizeHValue(value: number): number;
     validateSLValue(value: number): void;
+    normalizeSLValue(value: number): number;
     validateHEX(value: string): void;
     _isValidRGBValue(value: number): boolean;
     _isValidHValue(value: number): boolean;

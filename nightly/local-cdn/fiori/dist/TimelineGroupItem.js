@@ -68,6 +68,9 @@ let TimelineGroupItem = class TimelineGroupItem extends UI5Element {
         if (!this.items.length) {
             return;
         }
+        this.items.forEach(item => {
+            item.effectiveRole = "treeitem";
+        });
         this._setGroupItemProps();
     }
     _setGroupItemProps() {

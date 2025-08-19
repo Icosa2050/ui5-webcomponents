@@ -9,9 +9,10 @@ import customElement from "@ui5/webcomponents-base/dist/decorators/customElement
 import property from "@ui5/webcomponents-base/dist/decorators/property.js";
 import { renderFinished } from "@ui5/webcomponents-base/dist/Render.js";
 import CalendarDate from "@ui5/webcomponents-localization/dist/dates/CalendarDate.js";
+import UI5Date from "@ui5/webcomponents-localization/dist/dates/UI5Date.js";
 import modifyDateBy from "@ui5/webcomponents-localization/dist/dates/modifyDateBy.js";
 import getTodayUTCTimestamp from "@ui5/webcomponents-localization/dist/dates/getTodayUTCTimestamp.js";
-import { DATERANGE_DESCRIPTION, DATERANGEPICKER_POPOVER_ACCESSIBLE_NAME, } from "./generated/i18n/i18n-defaults.js";
+import { DATERANGE_DESCRIPTION, DATERANGEPICKER_POPOVER_ACCESSIBLE_NAME, DATETIME_COMPONENTS_PLACEHOLDER_PREFIX, } from "./generated/i18n/i18n-defaults.js";
 import DateRangePickerTemplate from "./DateRangePickerTemplate.js";
 // Styles
 import DateRangePickerCss from "./generated/themes/DateRangePicker.css.js";
@@ -95,7 +96,7 @@ let DateRangePicker = DateRangePicker_1 = class DateRangePicker extends DatePick
         return this._extractLastTimestamp(this.value);
     }
     get _tempTimestamp() {
-        return this._tempValue && this.getFormat().parse(this._tempValue, true).getTime() / 1000;
+        return this._tempValue && this.getValueFormat().parse(this._tempValue, true).getTime() / 1000; // valueformat
     }
     /**
      * Required by DatePicker.js
@@ -146,11 +147,21 @@ let DateRangePicker = DateRangePicker_1 = class DateRangePicker extends DatePick
     get endValue() {
         return this._calendarSelectedDates[1] || "";
     }
+    get _lastDateRangeForTheCurrentYear() {
+        const currentYear = UI5Date.getInstance().getFullYear();
+        const lastDayOfTheYear = UI5Date.getInstance(currentYear, 11, 31, 23, 59, 59);
+        const sevenDaysBeforeLastDayOfYear = UI5Date.getInstance(currentYear, 11, 24, 23, 59, 59);
+        return `${this.getFormat().format(sevenDaysBeforeLastDayOfYear)} ${this._effectiveDelimiter} ${this.getFormat().format(lastDayOfTheYear)}`;
+    }
     /**
      * @override
      */
     get _placeholder() {
-        return this.placeholder !== undefined ? this.placeholder : `${this._displayFormat} ${this._effectiveDelimiter} ${this._displayFormat}`;
+        if (this.placeholder) {
+            return this.placeholder;
+        }
+        // translatable placeholder – for example "e.g. 2025-12-27 - 2025-12-31"
+        return `${DateRangePicker_1.i18nBundle.getText(DATETIME_COMPONENTS_PLACEHOLDER_PREFIX)} ${this._lastDateRangeForTheCurrentYear}`;
     }
     /**
      * @override
@@ -168,10 +179,9 @@ let DateRangePicker = DateRangePicker_1 = class DateRangePicker extends DatePick
      * @override
      */
     async _onInputSubmit() {
-        const input = this._getInput();
-        const caretPos = input.getCaretPosition();
+        const caretPos = this._dateTimeInput.getCaretPosition();
         await renderFinished();
-        input.setCaretPosition(caretPos); // Return the caret on the previous position after rendering
+        this._dateTimeInput.setCaretPosition(caretPos); // Return the caret on the previous position after rendering
     }
     /**
      * @override
@@ -181,17 +191,44 @@ let DateRangePicker = DateRangePicker_1 = class DateRangePicker extends DatePick
         super.onResponsivePopoverAfterClose();
     }
     /**
-     * @override
+     * Checks if a value is valid against the current date format of the DatePicker.
+     * @public
+     * @param value A value to be tested against the current date format
      */
     isValid(value) {
-        const parts = this._splitValueByDelimiter(value);
+        let parts = this._splitValueByDelimiter(value).filter(str => str !== "");
+        parts = parts.filter(str => str !== " "); // remove empty strings
         return parts.length <= 2 && parts.every(dateString => super.isValid(dateString)); // must be at most 2 dates and each must be valid
     }
     /**
-     * @override
+     * Checks if a value is valid against the current date format of the DatePicker.
+     * @public
+     * @param value A value to be tested against the current date format
+     */
+    isValidValue(value) {
+        let parts = this._splitValueByDelimiter(value).filter(str => str !== "");
+        parts = parts.filter(str => str !== " "); // remove empty strings
+        return parts.length <= 2 && parts.every(dateString => super.isValidValue(dateString)); // must be at most 2 dates and each must be valid
+    }
+    /**
+     * Checks if a value is valid against the current date format of the DatePicker.
+     * @public
+     * @param value A value to be tested against the current date format
+     */
+    isValidDisplayValue(value) {
+        let parts = this._splitValueByDelimiter(value).filter(str => str !== "");
+        parts = parts.filter(str => str !== " "); // remove empty strings
+        return parts.length <= 2 && parts.every(dateString => super.isValidDisplayValue(dateString)); // must be at most 2 dates and each must be valid
+    }
+    /**
+     * Checks if a date is between the minimum and maximum date.
+     * @public
+     * @param value A value to be checked
      */
     isInValidRange(value) {
-        return this._splitValueByDelimiter(value).every(dateString => super.isInValidRange(dateString));
+        let parts = this._splitValueByDelimiter(value).filter(str => str !== "");
+        parts = parts.filter(str => str !== " "); // remove empty strings
+        return parts.length <= 2 && parts.every(dateString => super.isInValidRange(dateString));
     }
     /**
      * Extract both dates as timestamps, flip if necessary, and build (which will use the desired format so we enforce the format too)
@@ -204,6 +241,34 @@ let DateRangePicker = DateRangePicker_1 = class DateRangePicker extends DatePick
             return this._buildValue(lastDateTimestamp, firstDateTimestamp);
         }
         return this._buildValue(firstDateTimestamp, lastDateTimestamp);
+    }
+    /**
+     * The parser understands many formats, but we need one format
+     * @override
+     * @protected
+     */
+    normalizeDisplayValue(value) {
+        const values = this._splitValueByDelimiter(value);
+        const firstDateTimestamp = this._exctractDisplayTimestamp(values[0]);
+        const lastDateTimestamp = this._exctractDisplayTimestamp(values[1]);
+        if (firstDateTimestamp && lastDateTimestamp && firstDateTimestamp > lastDateTimestamp) { // if both are timestamps (not undefined), flip if necessary
+            return this._buildDisplayValue(lastDateTimestamp, firstDateTimestamp);
+        }
+        return this._buildDisplayValue(firstDateTimestamp, lastDateTimestamp);
+    }
+    /**
+     * @override
+     */
+    getValueFromDisplayValue(value) {
+        const values = this._splitValueByDelimiter(value);
+        let firstDateString = "";
+        let lastDateString = "";
+        firstDateString = this._getValueStringFromTimestamp(this._exctractDisplayTimestamp(values[0]) * 1000);
+        lastDateString = this._getValueStringFromTimestamp(this._exctractDisplayTimestamp(values[1]) * 1000);
+        if (!firstDateString && !lastDateString) {
+            return value;
+        }
+        return `${firstDateString} ${this._effectiveDelimiter} ${lastDateString}`;
     }
     /**
      * @override
@@ -229,8 +294,7 @@ let DateRangePicker = DateRangePicker_1 = class DateRangePicker extends DatePick
         if (!this._endDateTimestamp) { // If empty or only one date -> treat as datepicker entirely
             return super._modifyDateValue(amount, unit, preserveDate);
         }
-        const input = this._getInput();
-        let caretPos = input.getCaretPosition(); // caret position is always number for input of type text;
+        let caretPos = this._dateTimeInput.getCaretPosition(); // caret position is always number for input of type text;
         let newValue;
         if (caretPos <= this.value.indexOf(this._effectiveDelimiter)) { // The user is focusing the first date -> change it and keep the second date
             const startDateModified = modifyDateBy(CalendarDate.fromTimestamp(this._startDateTimestamp * 1000), amount, unit, preserveDate, this._minDate, this._maxDate);
@@ -250,7 +314,7 @@ let DateRangePicker = DateRangePicker_1 = class DateRangePicker extends DatePick
         }
         this._updateValueAndFireEvents(newValue, true, ["change", "value-changed"]);
         await renderFinished();
-        input.setCaretPosition(caretPos); // Return the caret to the previous (or the adjusted, if dates flipped) position after rendering
+        this._dateTimeInput.setCaretPosition(caretPos); // Return the caret to the previous (or the adjusted, if dates flipped) position after rendering
     }
     get _effectiveDelimiter() {
         return this.delimiter || DEFAULT_DELIMITER;
@@ -259,7 +323,7 @@ let DateRangePicker = DateRangePicker_1 = class DateRangePicker extends DatePick
         const valuesArray = [];
         const partsArray = value.split(this._prevDelimiter || this._effectiveDelimiter);
         // if format successfully parse the value, the value contains only single date
-        if (this.getFormat().parse(value)) {
+        if (this.getValueFormat().parse(value)) {
             valuesArray[0] = partsArray.join(this._effectiveDelimiter);
             valuesArray[1] = "";
         }
@@ -270,6 +334,23 @@ let DateRangePicker = DateRangePicker_1 = class DateRangePicker extends DatePick
         return valuesArray;
     }
     /**
+     * The parser understands many formats, but we need one format
+     * @protected
+     */
+    normalizeFormattedValue(value) {
+        if (value === "") {
+            return value;
+        }
+        let firstDateString = "";
+        let lastDateString = "";
+        firstDateString = this._getValueStringFromTimestamp(this._extractFirstTimestamp(value) * 1000);
+        lastDateString = this._getValueStringFromTimestamp(this._extractLastTimestamp(value) * 1000);
+        if (!firstDateString && !lastDateString) {
+            return value;
+        }
+        return `${firstDateString} ${this._effectiveDelimiter} ${lastDateString}`;
+    }
+    /**
      * Returns a UTC timestamp, representing the first date in the value string or undefined if the value is empty
      * @private
      */
@@ -278,7 +359,7 @@ let DateRangePicker = DateRangePicker_1 = class DateRangePicker extends DatePick
             return undefined;
         }
         const dateStrings = this._splitValueByDelimiter(value); // at least one item guaranteed due to the checks above (non-empty and valid)
-        const parsedDate = this.getFormat().parse(dateStrings[0], true);
+        const parsedDate = this.getValueFormat().parse(dateStrings[0], true);
         return parsedDate.getTime() / 1000;
     }
     /**
@@ -289,12 +370,22 @@ let DateRangePicker = DateRangePicker_1 = class DateRangePicker extends DatePick
         if (!value || !this._checkValueValidity(value)) {
             return undefined;
         }
-        const dateStrings = this._splitValueByDelimiter(value);
+        let dateStrings = this._splitValueByDelimiter(value);
+        dateStrings = dateStrings.filter(str => str !== " "); // remove empty strings
         if (dateStrings[1]) {
-            const parsedDate = this.getFormat().parse(dateStrings[1], true);
+            const parsedDate = this.getValueFormat().parse(dateStrings[1], true);
             return parsedDate.getTime() / 1000;
         }
         return undefined;
+    }
+    _exctractDisplayTimestamp(value) {
+        if (!value || !this._checkDisplayValueValidity(value)) {
+            return undefined;
+        }
+        if (value) {
+            const parsedDate = this.getDisplayFormat().parse(value, true);
+            return parsedDate.getTime() / 1000;
+        }
     }
     /**
      * Builds a string value out of two UTC timestamps - this method is the counterpart to _extractFirstTimestamp/_extractLastTimestamp
@@ -303,14 +394,46 @@ let DateRangePicker = DateRangePicker_1 = class DateRangePicker extends DatePick
     _buildValue(firstDateTimestamp, lastDateTimestamp) {
         this._prevDelimiter = this._effectiveDelimiter;
         if (firstDateTimestamp) {
-            const firstDateString = this._getStringFromTimestamp(firstDateTimestamp * 1000);
+            const firstDateString = this._getValueStringFromTimestamp(firstDateTimestamp * 1000);
             if (!lastDateTimestamp) {
                 return firstDateString;
             }
-            const lastDateString = this._getStringFromTimestamp(lastDateTimestamp * 1000);
+            const lastDateString = this._getValueStringFromTimestamp(lastDateTimestamp * 1000);
             return `${firstDateString} ${this._effectiveDelimiter} ${lastDateString}`;
         }
         return "";
+    }
+    /**
+     * Builds a string value out of two UTC timestamps - this method is the counterpart to _extractFirstTimestamp/_extractLastTimestamp
+     * @private
+     */
+    _buildDisplayValue(firstDateTimestamp, lastDateTimestamp) {
+        this._prevDelimiter = this._effectiveDelimiter;
+        if (firstDateTimestamp) {
+            const firstDateString = this._getDisplayStringFromTimestamp(firstDateTimestamp * 1000);
+            if (!lastDateTimestamp) {
+                return firstDateString;
+            }
+            const lastDateString = this._getDisplayStringFromTimestamp(lastDateTimestamp * 1000);
+            return `${firstDateString} ${this._effectiveDelimiter} ${lastDateString}`;
+        }
+        return "";
+    }
+    getDisplayValueFromValue(value) {
+        let firstDateString = "";
+        let lastDateString = "";
+        firstDateString = this._getDisplayStringFromTimestamp(this._extractFirstTimestamp(value) * 1000);
+        lastDateString = this._getDisplayStringFromTimestamp(this._extractLastTimestamp(value) * 1000);
+        if (!firstDateString && !lastDateString) {
+            return value;
+        }
+        return `${firstDateString} ${this._effectiveDelimiter} ${lastDateString}`;
+    }
+    get displayValue() {
+        if (!this.value) {
+            return "";
+        }
+        return this.getDisplayValueFromValue(this.value);
     }
 };
 __decorate([

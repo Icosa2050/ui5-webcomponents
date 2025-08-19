@@ -1,2 +1,2 @@
-"use strict";import{render as n,createContext as l}from"../thirdparty/preact/preact.module.js";import{jsx as p}from"../thirdparty/preact/jsxRuntime.module.js";const r=new WeakMap,d=(e,o)=>{let t=r.get(e);t||(t=l(e),r.set(e,t));const m=e.render();n(p(t.Provider,{value:e,children:m}),o)};export default d;
+"use strict";import{hydrate as p,render as n,createContext as f}from"../thirdparty/preact/preact.module.js";import{jsx as s}from"../thirdparty/preact/jsxRuntime.module.js";const l=new WeakMap,y=(e,r)=>{let t=l.get(e);t||(t=f(e),l.set(e,t));const m=e.render(),o=s(t.Provider,{value:e,children:m});e.__shouldHydrate?(e.shadowRoot?.querySelectorAll("style").forEach(d=>d.remove()),p(o,r),e.__shouldHydrate=!1):n(o,r)};export default y;
 //# sourceMappingURL=JsxRenderer.js.map

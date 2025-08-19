@@ -72,6 +72,7 @@ declare class ProductSwitch extends UI5Element {
     _onkeydown(e: KeyboardEvent): void;
     _handleDown(e: KeyboardEvent): void;
     _handleUp(e: KeyboardEvent): void;
+    getFocusDomRef(): HTMLElement | undefined;
 }
 export default ProductSwitch;
 export type { IProductSwitchItem, };

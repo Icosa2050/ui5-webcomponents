@@ -1,5 +1,7 @@
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
 import type FormItemSpacing from "./types/FormItemSpacing.js";
+import type TitleLevel from "./types/TitleLevel.js";
+import type I18nBundle from "@ui5/webcomponents-base/dist/i18nBundle.js";
 /**
  * Interface for components that can be slotted inside `ui5-form` as items.
  * @public
@@ -14,6 +16,7 @@ interface IFormItem extends UI5Element {
     colsS?: number;
     columnSpan?: number;
     headerText?: string;
+    headerLevel?: `${TitleLevel}`;
 }
 type GroupItemsInfo = {
     groupItem: IFormItem;
@@ -171,6 +174,13 @@ type ItemsInfo = {
  */
 declare class Form extends UI5Element {
     /**
+     * Defines the accessible ARIA name of the component.
+     * @default undefined
+     * @public
+     * @since 2.10.0
+     */
+    accessibleName?: string;
+    /**
      * Defines the number of columns to distribute the form content by breakpoint.
      *
      * Supported values:
@@ -222,6 +232,14 @@ declare class Form extends UI5Element {
      */
     headerText?: string;
     /**
+     * Defines the compoennt heading level,
+     * set by the `headerText`.
+     * @default "H2"
+     * @since 2.10.0
+     * @public
+    */
+    headerLevel: `${TitleLevel}`;
+    /**
      * Defines the vertical spacing between form items.
      *
      * **Note:** If the Form is meant to be switched between "non-edit" and "edit" modes,
@@ -247,6 +265,7 @@ declare class Form extends UI5Element {
      * @public
      */
     items: Array<IFormItem>;
+    static i18nBundle: I18nBundle;
     /**
      * @private
      */
@@ -271,9 +290,12 @@ declare class Form extends UI5Element {
     setFastNavGroup(): void;
     setGroupsColSpan(): void;
     getGroupsColSpan(cols: number, groups: number, index: number, group: IFormItem): number;
+    setItemSpacing(): void;
     get hasGroupItems(): boolean;
     get hasHeader(): boolean;
+    get hasHeaderText(): boolean;
     get hasCustomHeader(): boolean;
+    get effectiveAccessibleName(): string | undefined;
     get effectiveАccessibleNameRef(): string | undefined;
     get effectiveAccessibleRole(): "form" | "region";
     get groupItemsInfo(): Array<GroupItemsInfo>;

@@ -5,6 +5,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 var Input_1;
+/* eslint-disable spaced-comment */
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
 import property from "@ui5/webcomponents-base/dist/decorators/property.js";
 import customElement from "@ui5/webcomponents-base/dist/decorators/customElement.js";
@@ -15,19 +16,21 @@ import ResizeHandler from "@ui5/webcomponents-base/dist/delegate/ResizeHandler.j
 import { getScopedVarName } from "@ui5/webcomponents-base/dist/CustomElementsScope.js";
 // @ts-expect-error
 import encodeXML from "@ui5/webcomponents-base/dist/sap/base/security/encodeXML.js";
-import { isPhone, isAndroid, } from "@ui5/webcomponents-base/dist/Device.js";
+import { isPhone, isAndroid, isMac, } from "@ui5/webcomponents-base/dist/Device.js";
 import ValueState from "@ui5/webcomponents-base/dist/types/ValueState.js";
-import { isUp, isDown, isSpace, isEnter, isBackSpace, isDelete, isEscape, isTabNext, isPageUp, isPageDown, isHome, isEnd, } from "@ui5/webcomponents-base/dist/Keys.js";
+import { isUp, isDown, isSpace, isEnter, isBackSpace, isDelete, isEscape, isTabNext, isPageUp, isPageDown, isHome, isEnd, isCtrlAltF8, } from "@ui5/webcomponents-base/dist/Keys.js";
+import { attachListeners } from "@ui5/webcomponents-base/dist/util/valueStateNavigation.js";
+import arraysAreEqual from "@ui5/webcomponents-base/dist/util/arraysAreEqual.js";
 import i18n from "@ui5/webcomponents-base/dist/decorators/i18n.js";
 import { submitForm } from "@ui5/webcomponents-base/dist/features/InputElementsFormSupport.js";
-import { getAssociatedLabelForTexts, getAllAccessibleNameRefTexts, registerUI5Element, deregisterUI5Element, } from "@ui5/webcomponents-base/dist/util/AccessibilityTextsHelper.js";
+import { getAssociatedLabelForTexts, getAllAccessibleNameRefTexts, registerUI5Element, deregisterUI5Element, getEffectiveAriaDescriptionText, getAllAccessibleDescriptionRefTexts, } from "@ui5/webcomponents-base/dist/util/AccessibilityTextsHelper.js";
 import { getCaretPosition, setCaretPosition } from "@ui5/webcomponents-base/dist/util/Caret.js";
 import getActiveElement from "@ui5/webcomponents-base/dist/util/getActiveElement.js";
 import InputType from "./types/InputType.js";
 // Templates
 import InputTemplate from "./InputTemplate.js";
 import { StartsWith } from "./Filters.js";
-import { VALUE_STATE_SUCCESS, VALUE_STATE_INFORMATION, VALUE_STATE_ERROR, VALUE_STATE_WARNING, VALUE_STATE_TYPE_SUCCESS, VALUE_STATE_TYPE_INFORMATION, VALUE_STATE_TYPE_ERROR, VALUE_STATE_TYPE_WARNING, INPUT_SUGGESTIONS, INPUT_SUGGESTIONS_TITLE, INPUT_SUGGESTIONS_ONE_HIT, INPUT_SUGGESTIONS_MORE_HITS, INPUT_SUGGESTIONS_NO_HIT, INPUT_CLEAR_ICON_ACC_NAME, INPUT_AVALIABLE_VALUES, FORM_TEXTFIELD_REQUIRED, } from "./generated/i18n/i18n-defaults.js";
+import { VALUE_STATE_SUCCESS, VALUE_STATE_INFORMATION, VALUE_STATE_ERROR, VALUE_STATE_WARNING, VALUE_STATE_TYPE_SUCCESS, VALUE_STATE_TYPE_INFORMATION, VALUE_STATE_TYPE_ERROR, VALUE_STATE_TYPE_WARNING, VALUE_STATE_LINK, VALUE_STATE_LINKS, VALUE_STATE_LINK_MAC, VALUE_STATE_LINKS_MAC, INPUT_SUGGESTIONS, INPUT_SUGGESTIONS_TITLE, INPUT_SUGGESTIONS_ONE_HIT, INPUT_SUGGESTIONS_MORE_HITS, INPUT_SUGGESTIONS_NO_HIT, INPUT_CLEAR_ICON_ACC_NAME, INPUT_AVALIABLE_VALUES, INPUT_SUGGESTIONS_OK_BUTTON, FORM_TEXTFIELD_REQUIRED, } from "./generated/i18n/i18n-defaults.js";
 // Styles
 import inputStyles from "./generated/themes/Input.css.js";
 import ResponsivePopoverCommonCss from "./generated/themes/ResponsivePopoverCommon.css.js";
@@ -72,6 +75,7 @@ var INPUT_ACTIONS;
  * - [End] - If focus is in the text input, moves caret after the last character. If focus is in the list, highlights the last item and updates the input accordingly.
  * - [Page Up] - If focus is in the list, moves highlight up by page size (10 items by default). If focus is in the input, does nothing.
  * - [Page Down] - If focus is in the list, moves highlight down by page size (10 items by default). If focus is in the input, does nothing.
+ * - [Ctrl]+[Alt]+[F8] or [Command]+[Option]+[F8] - Focuses the first link in the value state message, if available. Pressing [Tab] moves the focus to the next link in the value state message, or closes the value state message if there are no more links.
  *
  * ### ES6 Module Import
  *
@@ -215,14 +219,20 @@ let Input = Input_1 = class Input extends UI5Element {
          */
         this.focused = false;
         this.valueStateOpen = false;
-        /**
-         * Indicates whether the visual focus is on the value state header
-         * @private
-         */
-        this._isValueStateFocused = false;
         this._inputAccInfo = {};
         this._nativeInputAttributes = {};
         this._inputIconFocused = false;
+        /**
+         * @private
+         */
+        this._linksListenersArray = [];
+        /**
+         * Indicates whether link navigation is being handled.
+         * @default false
+         * @private
+         * @since 2.11.0
+         */
+        this._handleLinkNavigation = false;
         // Indicates if there is selected suggestionItem.
         this.hasSuggestionItemSelected = false;
         // Represents the value before user moves selection from suggestion item to another
@@ -251,6 +261,7 @@ let Input = Input_1 = class Input extends UI5Element {
         this._handleResizeBound = this._handleResize.bind(this);
         this._keepInnerValue = false;
         this._focusedAfterClear = false;
+        this._valueStateLinks = [];
     }
     onEnterDOM() {
         ResizeHandler.register(this, this._handleResizeBound);
@@ -259,6 +270,7 @@ let Input = Input_1 = class Input extends UI5Element {
     onExitDOM() {
         ResizeHandler.deregister(this, this._handleResizeBound);
         deregisterUI5Element(this);
+        this._removeLinksEventListeners();
     }
     _highlightSuggestionItem(item) {
         item.markupText = this.typedInValue ? this.Suggestions?.hightlightInput((item.text || ""), this.typedInValue) : encodeXML(item.text || "");
@@ -336,6 +348,11 @@ let Input = Input_1 = class Input extends UI5Element {
             this.fireDecoratorEvent("type-ahead");
         }
         this._performTextSelection = false;
+        if (!arraysAreEqual(this._valueStateLinks, this.linksInAriaValueStateHiddenText)) {
+            this._removeLinksEventListeners();
+            this._addLinksEventListeners();
+            this._valueStateLinks = this.linksInAriaValueStateHiddenText;
+        }
     }
     _onkeydown(e) {
         this._isKeyNavigation = true;
@@ -375,6 +392,9 @@ let Input = Input_1 = class Input extends UI5Element {
         if (isEscape(e)) {
             return this._handleEscape();
         }
+        if (isCtrlAltF8(e)) {
+            return this._handleCtrlAltF8();
+        }
         if (this.showSuggestions) {
             this._clearPopoverFocusAndSelection();
         }
@@ -413,6 +433,57 @@ let Input = Input_1 = class Input extends UI5Element {
         if (this.Suggestions && (this.previousValue !== this.value)) {
             this.Suggestions.onTab();
         }
+    }
+    _handleCtrlAltF8() {
+        this._handleLinkNavigation = true;
+        const links = this.linksInAriaValueStateHiddenText;
+        if (links.length) {
+            links[0].focus();
+        }
+    }
+    _addLinksEventListeners() {
+        const links = this.linksInAriaValueStateHiddenText;
+        links.forEach((link, index) => {
+            this._linksListenersArray.push((e) => {
+                attachListeners(e, links, index, {
+                    closeValueState: () => {
+                        if (this.Suggestions?.isOpened()) {
+                            this.Suggestions?.close();
+                        }
+                        if (this.valueStateOpen) {
+                            this.closeValueStatePopover();
+                        }
+                    },
+                    focusInput: () => {
+                        this._handleLinkNavigation = false;
+                        this.getInputDOMRef().focus();
+                    },
+                    navigateToItem: () => {
+                        if (this._handleLinkNavigation) {
+                            this._handleLinkNavigation = false;
+                            if (this.Suggestions?.isOpened()) {
+                                this.innerFocusIn();
+                                (this.getInputDOMRef()).focus();
+                                this.Suggestions.onDown(e, this.currentItemIndex);
+                            }
+                        }
+                        else {
+                            this._handleDown(e);
+                        }
+                    },
+                    isPopoverOpen: () => { return (this.Suggestions && this.Suggestions?.isOpened()) || false; },
+                });
+            });
+            link.addEventListener("keydown", this._linksListenersArray[index]);
+        });
+    }
+    _removeLinksEventListeners() {
+        const links = this.linksInAriaValueStateHiddenText;
+        links.forEach((link, index) => {
+            link.removeEventListener("keydown", this._linksListenersArray[index]);
+        });
+        this._linksListenersArray = [];
+        this._handleLinkNavigation = false;
     }
     _handleEnter(e) {
         // if a group item is focused, this is false
@@ -471,6 +542,11 @@ let Input = Input_1 = class Input extends UI5Element {
         const innerInput = this.getInputDOMRefSync();
         const isAutoCompleted = innerInput.selectionEnd - innerInput.selectionStart > 0;
         this.isTyping = false;
+        if (this.value !== this.previousValue && this.value !== this.lastConfirmedValue && !this.open) {
+            this.value = this.lastConfirmedValue ? this.lastConfirmedValue : this.previousValue;
+            this.fireDecoratorEvent(INPUT_EVENTS.INPUT, { inputType: "" });
+            return;
+        }
         if (!isOpen) {
             this.value = this.lastConfirmedValue ? this.lastConfirmedValue : this.previousValue;
             return;
@@ -484,10 +560,7 @@ let Input = Input_1 = class Input extends UI5Element {
         if (isAutoCompleted) {
             this.value = this.typedInValue;
         }
-        if (this._isValueStateFocused) {
-            this._isValueStateFocused = false;
-            this.focused = true;
-        }
+        this.focused = true;
     }
     _onfocusin(e) {
         this.focused = true; // invalidating property
@@ -522,12 +595,14 @@ let Input = Input_1 = class Input extends UI5Element {
         }
         this.lastConfirmedValue = "";
         this.isTyping = false;
+        if ((this.value !== this.previousValue) && this.showClearIcon) {
+            this._clearIconClicked = false;
+        }
     }
     _clearPopoverFocusAndSelection() {
         if (!this.showSuggestions || !this.Suggestions) {
             return;
         }
-        this._isValueStateFocused = false;
         this.hasSuggestionItemSelected = false;
         this.Suggestions?._deselectItems();
         this.Suggestions?._clearItemFocus();
@@ -572,6 +647,7 @@ let Input = Input_1 = class Input extends UI5Element {
             this.value = valueBeforeClear;
             return;
         }
+        this.typedInValue = "";
         if (!this._isPhone) {
             this.fireResetSelectionChange();
             this.focus();
@@ -654,7 +730,6 @@ let Input = Input_1 = class Input extends UI5Element {
         }
         this.fireEventByAction(INPUT_ACTIONS.ACTION_ENTER, e);
         this.hasSuggestionItemSelected = false;
-        this._isValueStateFocused = false;
         if (this.Suggestions) {
             this.Suggestions.updateSelectedItemPosition(-1);
         }
@@ -691,6 +766,7 @@ let Input = Input_1 = class Input extends UI5Element {
     _updateAssociatedLabelsTexts() {
         this._associatedLabelsTexts = getAssociatedLabelForTexts(this);
         this._accessibleLabelsRefTexts = getAllAccessibleNameRefTexts(this);
+        this._associatedDescriptionRefTexts = getAllAccessibleDescriptionRefTexts(this);
     }
     _closePicker() {
         this.open = false;
@@ -739,6 +815,7 @@ let Input = Input_1 = class Input extends UI5Element {
     }
     _handleValueStatePopoverAfterClose() {
         this.valueStateOpen = false;
+        this._handleLinkNavigation = false;
     }
     _getValueStatePopover() {
         return this.shadowRoot.querySelector("[ui5-popover]");
@@ -919,6 +996,7 @@ let Input = Input_1 = class Input extends UI5Element {
     fireResetSelectionChange() {
         if (this._isLatestValueFromSuggestions) {
             this.fireSelectionChange(null, false);
+            this.valueBeforeItemSelection = this.value;
         }
     }
     get _readonly() {
@@ -926,6 +1004,9 @@ let Input = Input_1 = class Input extends UI5Element {
     }
     get _headerTitleText() {
         return Input_1.i18nBundle.getText(INPUT_SUGGESTIONS_TITLE);
+    }
+    get _suggestionsOkButtonText() {
+        return Input_1.i18nBundle.getText(INPUT_SUGGESTIONS_OK_BUTTON);
     }
     get clearIconAccessibleName() {
         return Input_1.i18nBundle.getText(INPUT_CLEAR_ICON_ACC_NAME);
@@ -948,20 +1029,43 @@ let Input = Input_1 = class Input extends UI5Element {
     get valueStateTextId() {
         return this.hasValueState ? `valueStateDesc` : "";
     }
+    get _accInfoAriaDescription() {
+        return (this._inputAccInfo && this._inputAccInfo.ariaDescription) || "";
+    }
+    get _accInfoAriaDescriptionId() {
+        const hasAriaDescription = this._accInfoAriaDescription !== "";
+        return hasAriaDescription ? "descr" : "";
+    }
+    get ariaDescriptionText() {
+        return this._associatedDescriptionRefTexts || getEffectiveAriaDescriptionText(this);
+    }
+    get ariaDescriptionTextId() {
+        return this.ariaDescriptionText ? "accessibleDescription" : "";
+    }
+    get ariaDescribedByIds() {
+        return [
+            this.suggestionsTextId,
+            this.valueStateTextId,
+            this._valueStateLinksShortcutsTextAccId,
+            this._inputAccInfo.ariaDescribedBy,
+            this._accInfoAriaDescriptionId,
+            this.ariaDescriptionTextId,
+        ].filter(Boolean).join(" ");
+    }
     get accInfo() {
         const ariaHasPopupDefault = this.showSuggestions ? "dialog" : undefined;
         const ariaAutoCompleteDefault = this.showSuggestions ? "list" : undefined;
-        const ariaDescribedBy = this._inputAccInfo.ariaDescribedBy ? `${this.suggestionsTextId} ${this.valueStateTextId} ${this._inputAccInfo.ariaDescribedBy}`.trim() : `${this.suggestionsTextId} ${this.valueStateTextId}`.trim();
         return {
             "ariaRoledescription": this._inputAccInfo && (this._inputAccInfo.ariaRoledescription || undefined),
-            "ariaDescribedBy": ariaDescribedBy || undefined,
+            "ariaDescribedBy": this.ariaDescribedByIds || undefined,
             "ariaInvalid": this.valueState === ValueState.Negative ? true : undefined,
             "ariaHasPopup": this._inputAccInfo.ariaHasPopup ? this._inputAccInfo.ariaHasPopup : ariaHasPopupDefault,
             "ariaAutoComplete": this._inputAccInfo.ariaAutoComplete ? this._inputAccInfo.ariaAutoComplete : ariaAutoCompleteDefault,
             "role": this._inputAccInfo && this._inputAccInfo.role,
             "ariaControls": this._inputAccInfo && this._inputAccInfo.ariaControls,
             "ariaExpanded": this._inputAccInfo && this._inputAccInfo.ariaExpanded,
-            "ariaDescription": this._inputAccInfo && this._inputAccInfo.ariaDescription,
+            "ariaDescription": this._accInfoAriaDescription,
+            "accessibleDescription": this.ariaDescriptionText,
             "ariaLabel": (this._inputAccInfo && this._inputAccInfo.ariaLabel) || this._accessibleLabelsRefTexts || this.accessibleName || this._associatedLabelsTexts || undefined,
         };
     }
@@ -980,10 +1084,40 @@ let Input = Input_1 = class Input extends UI5Element {
         if (this.shouldDisplayDefaultValueStateMessage) {
             return this.valueStateText ? `${valueState} ${this.valueStateText}` : valueState;
         }
-        return `${valueState}`.concat(" ", this.valueStateMessage.map(el => el.textContent).join(" "));
+        return this.valueStateMessage.length ? `${valueState} ${this.valueStateMessage.map(el => el.textContent).join(" ")}` : valueState;
     }
     get itemSelectionAnnounce() {
         return this.Suggestions ? this.Suggestions.itemSelectionAnnounce : "";
+    }
+    get linksInAriaValueStateHiddenText() {
+        const links = [];
+        if (this.valueStateMessage) {
+            this.valueStateMessage.forEach(element => {
+                if (element.children.length) {
+                    element.querySelectorAll("ui5-link").forEach(link => {
+                        links.push(link);
+                    });
+                }
+            });
+        }
+        return links;
+    }
+    get valueStateLinksShortcutsTextAcc() {
+        const links = this.linksInAriaValueStateHiddenText;
+        if (!links.length) {
+            return "";
+        }
+        if (isMac()) {
+            return links.length === 1
+                ? Input_1.i18nBundle.getText(VALUE_STATE_LINK_MAC)
+                : Input_1.i18nBundle.getText(VALUE_STATE_LINKS_MAC);
+        }
+        return links.length === 1
+            ? Input_1.i18nBundle.getText(VALUE_STATE_LINK)
+            : Input_1.i18nBundle.getText(VALUE_STATE_LINKS);
+    }
+    get _valueStateLinksShortcutsTextAccId() {
+        return this.linksInAriaValueStateHiddenText.length > 0 ? `hiddenText-value-state-link-shortcut` : "";
     }
     get iconsCount() {
         const slottedIconsCount = this.icon ? this.icon.length : 0;
@@ -1008,18 +1142,16 @@ let Input = Input_1 = class Input extends UI5Element {
         };
     }
     get styles() {
-        const remSizeIxPx = parseInt(getComputedStyle(document.documentElement).fontSize);
+        const remSizeInPx = parseInt(getComputedStyle(document.documentElement).fontSize);
         const stylesObject = {
-            popoverHeader: {
-                "max-width": this._inputWidth ? `${this._inputWidth}px` : "",
-            },
             suggestionPopoverHeader: {
                 "display": this._listWidth === 0 ? "none" : "inline-block",
                 "width": this._listWidth ? `${this._listWidth}px` : "",
+                "max-width": "inherit",
             },
             suggestionsPopover: {
                 "min-width": this._inputWidth ? `${this._inputWidth}px` : "",
-                "max-width": this._inputWidth && (this._inputWidth / remSizeIxPx) > 40 ? `${this._inputWidth}px` : "40rem",
+                "max-width": this._inputWidth && (this._inputWidth / remSizeInPx) > 40 ? `${this._inputWidth}px` : "40rem",
             },
             innerInput: {
                 "padding": "",
@@ -1188,6 +1320,12 @@ __decorate([
     property()
 ], Input.prototype, "accessibleNameRef", void 0);
 __decorate([
+    property()
+], Input.prototype, "accessibleDescription", void 0);
+__decorate([
+    property()
+], Input.prototype, "accessibleDescriptionRef", void 0);
+__decorate([
     property({ type: Boolean })
 ], Input.prototype, "showClearIcon", void 0);
 __decorate([
@@ -1200,11 +1338,11 @@ __decorate([
     property({ type: Boolean })
 ], Input.prototype, "focused", void 0);
 __decorate([
-    property({ type: Boolean })
-], Input.prototype, "valueStateOpen", void 0);
+    property()
+], Input.prototype, "hint", void 0);
 __decorate([
     property({ type: Boolean })
-], Input.prototype, "_isValueStateFocused", void 0);
+], Input.prototype, "valueStateOpen", void 0);
 __decorate([
     property({ type: Object })
 ], Input.prototype, "_inputAccInfo", void 0);
@@ -1227,8 +1365,14 @@ __decorate([
     property({ noAttribute: true })
 ], Input.prototype, "_accessibleLabelsRefTexts", void 0);
 __decorate([
+    property({ noAttribute: true })
+], Input.prototype, "_associatedDescriptionRefTexts", void 0);
+__decorate([
     property({ type: Object })
 ], Input.prototype, "Suggestions", void 0);
+__decorate([
+    property({ type: Array })
+], Input.prototype, "_linksListenersArray", void 0);
 __decorate([
     slot({ type: HTMLElement, "default": true })
 ], Input.prototype, "suggestionItems", void 0);

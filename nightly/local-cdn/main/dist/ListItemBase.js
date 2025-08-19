@@ -91,10 +91,10 @@ let ListItemBase = class ListItemBase extends UI5Element {
         if (this.getFocusDomRef().matches(":has(:focus-within)")) {
             return;
         }
-        if (isSpace(e)) {
+        if (this._isSpace(e)) {
             e.preventDefault();
         }
-        if (isEnter(e)) {
+        if (this._isEnter(e)) {
             this.fireItemPress(e);
         }
     }
@@ -102,7 +102,7 @@ let ListItemBase = class ListItemBase extends UI5Element {
         if (this.getFocusDomRef().matches(":has(:focus-within)")) {
             return;
         }
-        if (isSpace(e)) {
+        if (this._isSpace(e)) {
             this.fireItemPress(e);
         }
     }
@@ -111,6 +111,18 @@ let ListItemBase = class ListItemBase extends UI5Element {
             return;
         }
         this.fireItemPress(e);
+    }
+    /**
+     * Override from subcomponent, if needed
+     */
+    _isSpace(e) {
+        return isSpace(e);
+    }
+    /**
+     * Override from subcomponent, if needed
+     */
+    _isEnter(e) {
+        return isEnter(e);
     }
     fireItemPress(e) {
         if (this.disabled || !this._pressable) {
@@ -176,6 +188,9 @@ let ListItemBase = class ListItemBase extends UI5Element {
             return 0;
         }
         return this.forcedTabIndex ? parseInt(this.forcedTabIndex) : undefined;
+    }
+    get isListItemBase() {
+        return true;
     }
 };
 __decorate([

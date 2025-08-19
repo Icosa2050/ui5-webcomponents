@@ -10,6 +10,7 @@ import type I18nBundle from "@ui5/webcomponents-base/dist/i18nBundle.js";
  * @extends UI5Element
  * @public
  * @csspart cell - Used to style the native `td` element
+ * @deprecated Deprecated as of version 2.12.0, use `@ui5/webcomponents/dist/TableCell.js` instead.
  */
 declare class TableCell extends UI5Element {
     /**

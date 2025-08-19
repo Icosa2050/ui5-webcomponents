@@ -60,39 +60,29 @@ class Suggestions {
     onPageUp(e) {
         e.preventDefault();
         const isItemIndexValid = this.selectedItemIndex - 10 > -1;
-        if (this._hasValueState && !isItemIndexValid) {
-            this._focusValueState();
-            return true;
-        }
         this._moveItemSelection(this.selectedItemIndex, isItemIndexValid ? this.selectedItemIndex -= 10 : this.selectedItemIndex = 0);
         return true;
     }
     onPageDown(e) {
         e.preventDefault();
         const items = this._getItems();
-        const lastItemIndex = items.length - 1;
-        const isItemIndexValid = this.selectedItemIndex + 10 <= lastItemIndex;
-        if (this._hasValueState && !items) {
-            this._focusValueState();
+        if (!items) {
             return true;
         }
+        const lastItemIndex = items.length - 1;
+        const isItemIndexValid = this.selectedItemIndex + 10 <= lastItemIndex;
         this._moveItemSelection(this.selectedItemIndex, isItemIndexValid ? this.selectedItemIndex += 10 : this.selectedItemIndex = lastItemIndex);
         return true;
     }
     onHome(e) {
         e.preventDefault();
-        if (this._hasValueState) {
-            this._focusValueState();
-            return true;
-        }
         this._moveItemSelection(this.selectedItemIndex, this.selectedItemIndex = 0);
         return true;
     }
     onEnd(e) {
         e.preventDefault();
         const lastItemIndex = this._getItems().length - 1;
-        if (this._hasValueState && !lastItemIndex) {
-            this._focusValueState();
+        if (!lastItemIndex) {
             return true;
         }
         this._moveItemSelection(this.selectedItemIndex, this.selectedItemIndex = lastItemIndex);
@@ -203,14 +193,6 @@ class Suggestions {
     _selectNextItem() {
         const itemsCount = this._getItems().length;
         const previousSelectedIdx = this.selectedItemIndex;
-        if (this._hasValueState && previousSelectedIdx === -1 && !this.component._isValueStateFocused) {
-            this._focusValueState();
-            return;
-        }
-        if ((previousSelectedIdx === -1 && !this._hasValueState) || this.component._isValueStateFocused) {
-            this._clearValueStateFocus();
-            this.selectedItemIndex = -1;
-        }
         if (previousSelectedIdx !== -1 && previousSelectedIdx + 1 > itemsCount - 1) {
             return;
         }
@@ -219,22 +201,6 @@ class Suggestions {
     _selectPreviousItem() {
         const items = this._getItems();
         const previousSelectedIdx = this.selectedItemIndex;
-        if (this._hasValueState && previousSelectedIdx === 0 && !this.component._isValueStateFocused) {
-            this.component.hasSuggestionItemSelected = false;
-            this.component._isValueStateFocused = true;
-            this.selectedItemIndex = 0;
-            items[0].focused = false;
-            if (items[0].hasAttribute("ui5-suggestion-item")) {
-                items[0].selected = false;
-            }
-            return;
-        }
-        if (this.component._isValueStateFocused) {
-            this.component.focused = true;
-            this.component._isValueStateFocused = false;
-            this.selectedItemIndex = 0;
-            return;
-        }
         if (previousSelectedIdx === -1 || previousSelectedIdx === null) {
             return;
         }
@@ -260,7 +226,6 @@ class Suggestions {
             return;
         }
         this.component.focused = false;
-        this._clearValueStateFocus();
         const selectedItem = this._getItems()[this.selectedItemIndex];
         this.accInfo = {
             isGroup: isGroupItem,
@@ -373,17 +338,6 @@ class Suggestions {
     }
     get _hasValueState() {
         return this.component.hasValueStateMessage;
-    }
-    _focusValueState() {
-        this.component._isValueStateFocused = true;
-        this.component.focused = false;
-        this.component.hasSuggestionItemSelected = false;
-        this.selectedItemIndex = 0;
-        this.component.value = this.component.typedInValue;
-        this._deselectItems();
-    }
-    _clearValueStateFocus() {
-        this.component._isValueStateFocused = false;
     }
     _clearSelectedSuggestionAndaccInfo() {
         this.accInfo = undefined;

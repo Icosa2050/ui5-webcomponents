@@ -1,5 +1,3 @@
-import ToolbarSeparatorTemplate from "./ToolbarSeparatorTemplate.js";
-import ToolbarPopoverSeparatorTemplate from "./ToolbarPopoverSeparatorTemplate.js";
 import ToolbarItem from "./ToolbarItem.js";
 /**
  * @class
@@ -15,8 +13,6 @@ import ToolbarItem from "./ToolbarItem.js";
  */
 declare class ToolbarSeparator extends ToolbarItem {
     visible: boolean;
-    static get toolbarTemplate(): typeof ToolbarSeparatorTemplate;
-    static get toolbarPopoverTemplate(): typeof ToolbarPopoverSeparatorTemplate;
     get isSeparator(): boolean;
     get isInteractive(): boolean;
 }

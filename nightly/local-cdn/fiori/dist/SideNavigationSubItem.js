@@ -45,6 +45,9 @@ let SideNavigationSubItem = class SideNavigationSubItem extends SideNavigationSe
         if (this.icon) {
             classes.push("ui5-sn-item-has-icon");
         }
+        if (this.effectiveDisabled) {
+            classes.push("ui5-sn-item-disabled");
+        }
         return classes;
     }
 };

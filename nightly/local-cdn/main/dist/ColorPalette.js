@@ -215,6 +215,9 @@ let ColorPalette = ColorPalette_1 = class ColorPalette extends UI5Element {
         }
         this._ensureSingleSelectionOrDeselectAll();
     }
+    getFocusDomRef() {
+        return this._itemNavigation._getCurrentItem();
+    }
     _handleDefaultColorClick(e) {
         e.preventDefault();
         this._onDefaultColorClick();

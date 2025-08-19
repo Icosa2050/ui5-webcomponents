@@ -20,6 +20,7 @@ declare const getClassCopy: (klass: typeof UI5Element, constructorCallback: () =
             _deferredResolve?: import("../types.js").PromiseResolve;
         };
         _doNotSyncAttributes: Set<string>;
+        __shouldHydrate: boolean;
         _state: import("../UI5ElementMetadata.js").State;
         _internals: ElementInternals;
         _individualSlot?: string;

@@ -1,6 +1,12 @@
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
 import type { ITabbable } from "@ui5/webcomponents-base/dist/delegate/ItemNavigation.js";
 import type SideNavigation from "./SideNavigation.js";
+type SideNavigationItemClickEventDetail = {
+    altKey: boolean;
+    ctrlKey: boolean;
+    metaKey: boolean;
+    shiftKey: boolean;
+};
 /**
  * @class
  * Base class for the items that are accepted by the `ui5-side-navigation` component.
@@ -13,7 +19,7 @@ import type SideNavigation from "./SideNavigation.js";
  */
 declare class SideNavigationItemBase extends UI5Element implements ITabbable {
     eventDetails: {
-        click: void;
+        click: SideNavigationItemClickEventDetail;
     };
     /**
      * Defines the text of the item.
@@ -35,7 +41,9 @@ declare class SideNavigationItemBase extends UI5Element implements ITabbable {
     /**
      * Defines the tooltip of the component.
      *
-     * A tooltip attribute should be provided, in order to represent meaning/function, when the component is collapsed(icon only is visualized).
+     * A tooltip attribute should be provided, in order to represent meaning/function,
+     * when the component is collapsed ("icon only" design is visualized) or the item text is truncated.
+     *
      * @default undefined
      * @public
      * @since 2.0.0
@@ -45,11 +53,20 @@ declare class SideNavigationItemBase extends UI5Element implements ITabbable {
     sideNavCollapsed: boolean;
     inPopover: boolean;
     _sideNavigation: SideNavigation;
+    /**
+     * Defines if the item's group is disabled.
+     * @private
+     * @default false
+     * @since 2.10.0
+     */
+    _groupDisabled: boolean;
     onEnterDOM(): void;
     get _tooltip(): string | undefined;
+    get hasSubItems(): boolean;
+    get effectiveDisabled(): boolean;
     get classesArray(): string[];
     get _classes(): string;
-    get effectiveTabIndex(): string | undefined;
+    get effectiveTabIndex(): number | undefined;
     get sideNavigation(): SideNavigation;
     set sideNavigation(sideNavigation: SideNavigation);
     get isFixedItem(): boolean;
@@ -61,4 +78,5 @@ declare class SideNavigationItemBase extends UI5Element implements ITabbable {
 }
 declare const isInstanceOfSideNavigationItemBase: (object: any) => object is SideNavigationItemBase;
 export default SideNavigationItemBase;
+export type { SideNavigationItemClickEventDetail, };
 export { isInstanceOfSideNavigationItemBase };

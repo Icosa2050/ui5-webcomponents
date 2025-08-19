@@ -2,7 +2,9 @@ import type { AccessibilityAttributes, AriaHasPopup, AriaRole } from "@ui5/webco
 import "@ui5/webcomponents-icons/dist/nav-back.js";
 import type I18nBundle from "@ui5/webcomponents-base/dist/i18nBundle.js";
 import ItemNavigation from "@ui5/webcomponents-base/dist/delegate/ItemNavigation.js";
+import MenuItemGroupCheckMode from "./types/MenuItemGroupCheckMode.js";
 import type { ListItemAccessibilityAttributes } from "./ListItem.js";
+import type List from "./List.js";
 import ListItem from "./ListItem.js";
 import type ResponsivePopover from "./ResponsivePopover.js";
 import type PopoverPlacement from "./types/PopoverPlacement.js";
@@ -12,6 +14,9 @@ type MenuBeforeOpenEventDetail = {
 };
 type MenuBeforeCloseEventDetail = {
     escPressed: boolean;
+};
+type MenuNavigateOutOfEndContentEventDetail = {
+    shouldNavigateToNextItem: boolean;
 };
 type MenuItemAccessibilityAttributes = Pick<AccessibilityAttributes, "ariaKeyShortcuts" | "role"> & ListItemAccessibilityAttributes;
 /**
@@ -44,6 +49,8 @@ declare class MenuItem extends ListItem implements IMenuItem {
         "before-close": MenuBeforeCloseEventDetail;
         "close": void;
         "close-menu": void;
+        "check": void;
+        "exit-end-content": MenuNavigateOutOfEndContentEventDetail;
     };
     /**
      * Defines the text of the tree item.
@@ -76,24 +83,24 @@ declare class MenuItem extends ListItem implements IMenuItem {
      */
     icon?: string;
     /**
-     * Defines whether `ui5-menu-item` is in disabled state.
+     * Defines whether menu item is in disabled state.
      *
-     * **Note:** A disabled `ui5-menu-item` is noninteractive.
+     * **Note:** A disabled menu item is noninteractive.
      * @default false
      * @public
      */
     disabled: boolean;
     /**
-     * Defines the delay in milliseconds, after which the loading indicator will be displayed inside the corresponding ui5-menu popover.
+     * Defines the delay in milliseconds, after which the loading indicator will be displayed inside the corresponding menu popover.
      *
-     * **Note:** If set to `true` a `ui5-busy-indicator` component will be displayed into the related one to the current `ui5-menu-item` sub-menu popover.
+     * **Note:** If set to `true` a busy indicator component will be displayed into the related one to the current menu item sub-menu popover.
      * @default false
      * @public
      * @since 1.13.0
      */
     loading: boolean;
     /**
-     * Defines the delay in milliseconds, after which the loading indicator will be displayed inside the corresponding ui5-menu popover.
+     * Defines the delay in milliseconds, after which the loading indicator will be displayed inside the corresponding menu popover.
      * @default 1000
      * @public
      * @since 1.13.0
@@ -114,13 +121,24 @@ declare class MenuItem extends ListItem implements IMenuItem {
      */
     tooltip?: string;
     /**
+     * Defines whether menu item is in checked state.
+     *
+     * **Note:** checked state is only taken into account when menu item is added to menu item group
+     * with `checkMode` other than `None`.
+     *
+     * **Note:** A checked menu item has a checkmark displayed at its end.
+     * @default false
+     * @public
+     * @since 2.12.0
+     */
+    checked: boolean;
+    /**
      * Defines the additional accessibility attributes that will be applied to the component.
      * The following fields are supported:
      *
      * - **ariaKeyShortcuts**: Indicated the availability of a keyboard shortcuts defined for the menu item.
      *
      * - **role**: Defines the role of the menu item. If not set, menu item will have default role="menuitem".
-     *
      * @public
      * @since 2.1.0
      * @default {}
@@ -131,9 +149,15 @@ declare class MenuItem extends ListItem implements IMenuItem {
      */
     _siblingsWithIcon: boolean;
     /**
+     * Defines the component's check mode.
+     * @default "None"
+     * @private
+     */
+    _checkMode: `${MenuItemGroupCheckMode}`;
+    /**
      * Defines the items of this component.
      *
-     * **Note:** The slot can hold `ui5-menu-item` and `ui5-menu-separator` items.
+     * **Note:** The slot can hold menu item and menu separator items.
      *
      * If there are items added to this slot, an arrow will be displayed at the end
      * of the item in order to indicate that there are items added. In that case components added
@@ -154,37 +178,44 @@ declare class MenuItem extends ListItem implements IMenuItem {
      *
      * The priority of what will be displayed at the end of the menu item is as follows:
      * sub-menu arrow (if there are items added in `items` slot) -> components added in `endContent` -> text set to `additionalText`.
+     *
+     * Application developers are responsible for ensuring that interactive elements placed in the `endContent` slot
+     * have the correct accessibility behaviour, including their enabled or disabled states.
+     * The menu does not manage these aspects when the menu item state changes.
      * @public
      * @since 2.0.0
      */
     endContent: Array<HTMLElement>;
     static i18nBundle: I18nBundle;
     _itemNavigation: ItemNavigation;
+    _shiftPressed: boolean;
     constructor();
+    get _list(): List | null;
     get _navigableItems(): Array<HTMLElement>;
-    _navigateToEndContent(isLast?: boolean): void;
+    get _isCheckable(): boolean;
+    _navigateToEndContent(shouldNavigateToPreviousItem: boolean): void;
     get placement(): `${PopoverPlacement}`;
     get isRtl(): boolean;
     get hasSubmenu(): boolean;
     get hasEndContent(): boolean;
     get hasIcon(): boolean;
-    get isSubMenuOpen(): boolean;
-    get ariaLabelledByText(): string;
+    get isSubMenuOpen(): boolean | undefined;
     get menuHeaderTextPhone(): string | undefined;
     get isPhone(): boolean;
     get labelBack(): string;
     get labelClose(): string;
     get acessibleNameText(): string;
-    get isSeparator(): boolean;
     onBeforeRendering(): void;
     focus(focusOptions?: FocusOptions): Promise<void>;
     get _focusable(): boolean;
+    get _role(): "menuitem" | "menuitemcheckbox" | "menuitemradio";
     get _accInfo(): {
         role: AriaRole;
         ariaHaspopup?: `${AriaHasPopup}`;
         ariaKeyShortcuts?: string;
-        ariaHidden?: boolean;
         ariaExpanded?: boolean;
+        ariaHidden?: boolean;
+        ariaChecked?: boolean;
         ariaLevel?: number;
         ariaLabel: string;
         ariaLabelRadioButton: string;
@@ -192,19 +223,40 @@ declare class MenuItem extends ListItem implements IMenuItem {
         posinset?: number;
         setsize?: number;
         ariaSelected?: boolean;
-        ariaChecked?: boolean;
         listItemAriaLabel?: string;
         ariaOwns?: string;
         tooltip?: string;
     };
-    get _popover(): ResponsivePopover;
+    get _popover(): ResponsivePopover | null;
+    get _markChecked(): boolean;
+    /** Returns menu item groups */
+    get _menuItemGroups(): import("./MenuItemGroup.js").default[];
+    /** Returns menu items */
     get _menuItems(): MenuItem[];
+    /** Returns all menu items (including those in groups */
+    get _allMenuItems(): MenuItem[];
+    /** Returns menu items included in the ItemNavigation */
+    get _navigatableMenuItems(): MenuItem[];
+    _setupItemNavigation(): void;
+    _closeOtherSubMenus(item: MenuItem): void;
+    _itemMouseOver(e: MouseEvent): void;
+    _isSpace(e: KeyboardEvent): boolean;
+    _isEnter(e: KeyboardEvent): boolean;
+    _onclick(e: MouseEvent): void;
+    _itemKeyDown(e: KeyboardEvent): void;
+    _itemKeyUp(e: KeyboardEvent): void;
+    _endContentKeyDown(e: KeyboardEvent): void;
+    _navigateOutOfEndContent(e: CustomEvent): void;
     _closeAll(): void;
     _close(): void;
     _beforePopoverOpen(e: CustomEvent): void;
     _afterPopoverOpen(): void;
     _beforePopoverClose(e: CustomEvent): void;
     _afterPopoverClose(): void;
+    get isMenuItem(): boolean;
+    _updateCheckedState(): void;
 }
+declare const isInstanceOfMenuItem: (object: any) => object is MenuItem;
 export default MenuItem;
 export type { MenuBeforeCloseEventDetail, MenuBeforeOpenEventDetail, MenuItemAccessibilityAttributes, };
+export { isInstanceOfMenuItem, };

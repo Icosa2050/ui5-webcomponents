@@ -29,8 +29,14 @@ type KebabToCamel<T extends string> = T extends `${infer H}-${infer J}${infer K}
 type KebabToPascal<T extends string> = Capitalize<KebabToCamel<T>>;
 type GlobalHTMLAttributeNames = "accesskey" | "autocapitalize" | "autofocus" | "autocomplete" | "contenteditable" | "contextmenu" | "class" | "dir" | "draggable" | "enterkeyhint" | "hidden" | "id" | "inputmode" | "lang" | "nonce" | "part" | "exportparts" | "pattern" | "slot" | "spellcheck" | "style" | "tabIndex" | "tabindex" | "title" | "translate" | "ref" | "inert";
 type ElementProps<I> = Partial<Omit<I, keyof HTMLElement>>;
-type Convert<T> = {
-    [Property in keyof T as `on${KebabToPascal<string & Property>}`]: IsAny<T[Property], any, (e: CustomEvent<T[Property]>) => void>;
+type TargetedCustomEvent<D, T> = Omit<CustomEvent<D>, "currentTarget"> & {
+    currentTarget: T;
+};
+type TargetedEventHandler<D, T> = {
+    asMethod(e: TargetedCustomEvent<D, T>): void;
+}["asMethod"];
+type Convert<T, K extends UI5Element> = {
+    [Property in keyof T as `on${KebabToPascal<string & Property>}`]: IsAny<T[Property], any, TargetedEventHandler<T[Property], K>>;
 };
 /**
  * @class
@@ -43,7 +49,7 @@ declare abstract class UI5Element extends HTMLElement {
     eventDetails: NotEqual<this, UI5Element> extends true ? object : {
         [k: string]: any;
     };
-    _jsxEvents: Omit<JSX.DOMAttributes<this>, keyof Convert<this["eventDetails"]> | "onClose" | "onToggle" | "onChange" | "onSelect" | "onInput"> & Convert<this["eventDetails"]>;
+    _jsxEvents: Omit<JSX.DOMAttributes<this>, keyof Convert<this["eventDetails"], this> | "onClose" | "onToggle" | "onChange" | "onSelect" | "onInput"> & Convert<this["eventDetails"], this>;
     _jsxProps: Pick<JSX.AllHTMLAttributes<HTMLElement>, GlobalHTMLAttributeNames> & ElementProps<this> & Partial<this["_jsxEvents"]> & {
         key?: any;
     };
@@ -61,6 +67,7 @@ declare abstract class UI5Element extends HTMLElement {
         _deferredResolve?: PromiseResolve;
     };
     _doNotSyncAttributes: Set<string>;
+    __shouldHydrate: boolean;
     _state: State;
     _internals: ElementInternals;
     _individualSlot?: string;

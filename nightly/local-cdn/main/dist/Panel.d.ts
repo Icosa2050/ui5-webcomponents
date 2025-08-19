@@ -1,6 +1,8 @@
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
 import type I18nBundle from "@ui5/webcomponents-base/dist/i18nBundle.js";
+import type { UI5CustomEvent } from "@ui5/webcomponents-base";
 import type TitleLevel from "./types/TitleLevel.js";
+import type Button from "./Button.js";
 import type PanelAccessibleRole from "./types/PanelAccessibleRole.js";
 /**
  * @class
@@ -149,7 +151,7 @@ declare class Panel extends UI5Element {
     shouldToggle(element: HTMLElement): boolean;
     get shouldNotAnimate(): boolean;
     _headerClick(e: MouseEvent): void;
-    _toggleButtonClick(e: MouseEvent): void;
+    _toggleButtonClick(e: UI5CustomEvent<Button, "click">): void;
     _headerKeyDown(e: KeyboardEvent): void;
     _headerKeyUp(e: KeyboardEvent): void;
     _toggleOpen(): void;

@@ -9,9 +9,7 @@ export default function FileUploaderPopoverTemplate() {
                 "ui5-valuestatemessage--error": this.valueState === ValueState.Negative,
                 "ui5-valuestatemessage--warning": this.valueState === ValueState.Critical,
                 "ui5-valuestatemessage--information": this.valueState === ValueState.Information,
-            }, style: {
-                "width": `${this.ui5Input ? this.ui5Input.offsetWidth : 0}px`,
-            }, children: [this._valueStateMessageInputIcon &&
+            }, style: { width: `${this._formWidth}px` }, children: [this._valueStateMessageInputIcon &&
                     _jsx(Icon, { class: "ui5-input-value-state-message-icon", name: this._valueStateMessageInputIcon }), valueStateMessage.call(this)] }) }));
 }
 function valueStateMessage() {

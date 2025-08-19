@@ -93,6 +93,7 @@ declare class BusyIndicator extends UI5Element {
         top: boolean | "" | undefined;
         bottom: boolean | "" | undefined;
     };
+    get hasContent(): boolean;
     onBeforeRendering(): void;
     _handleKeydown(e: KeyboardEvent): void;
     _preventEvent(e: KeyboardEvent): void;

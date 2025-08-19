@@ -42,8 +42,8 @@ class TableNavigation extends TableExtension {
         if (this._table.rows.length) {
             this._table.rows.forEach(row => items.push(this._getNavigationItemsOfRow(row)));
         }
-        else {
-            items.push(this._getNavigationItemsOfRow(this._table._nodataRow));
+        else if (this._table._noDataRow) {
+            items.push(this._getNavigationItemsOfRow(this._table._noDataRow));
         }
         if (this._table.rows.length > 0 && this._table._getGrowing()?.hasGrowingComponent()) {
             items.push([this._table._getGrowing()?.getFocusDomRef()]);

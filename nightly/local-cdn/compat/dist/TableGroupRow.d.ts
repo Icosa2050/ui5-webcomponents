@@ -17,6 +17,7 @@ import TableMode from "./types/TableMode.js";
  *
  * **Note:** Although this slot accepts HTML Elements, it is strongly recommended that you only use text in order to preserve the intended design.
  * @csspart group-row - Used to style the native `tr` element
+ * @deprecated Deprecated as of version 2.12.0, use `@ui5/webcomponents/dist/Table.js` instead.
  */
 declare class TableGroupRow extends UI5Element implements ITableRow {
     eventDetails: {

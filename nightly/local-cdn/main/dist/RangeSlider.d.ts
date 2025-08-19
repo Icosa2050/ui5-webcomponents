@@ -130,7 +130,6 @@ declare class RangeSlider extends SliderBase implements IFormInputElement {
      * @private
      */
     _onfocusout(e: FocusEvent): void;
-    _onInputFocusOut(e: FocusEvent): void;
     /**
     * Handles keyup logic. If one of the handles came across the other
     * swap the start and end values. Reset the affected value by the finished
@@ -188,8 +187,7 @@ declare class RangeSlider extends SliderBase implements IFormInputElement {
      * @private
      */
     _updateValueOnRangeDrag(event: TouchEvent | MouseEvent): void;
-    _handleUp(e: MouseEvent): void;
-    _updateValueFromInput(e: Event): void;
+    _handleUp(): void;
     /**
      * Determines where the press occured and which values of the Range Slider
      * handles should be updated on further interaction.
@@ -268,9 +266,9 @@ declare class RangeSlider extends SliderBase implements IFormInputElement {
      * @private
      */
     _updateHandlesAndRange(newValue: number): void;
-    _onInputKeydown(e: KeyboardEvent): void;
-    _updateInputValue(): void;
-    _saveInputValues(): void;
+    bringToFrontTooltip(handle: "start" | "end"): void;
+    _onTooltopForwardFocus(e: CustomEvent): void;
+    _onTooltipChange(e: CustomEvent): void;
     _getFormattedValue(value: string): string;
     /**
      * Swaps the start and end values of the handles if one came accros the other:
@@ -312,16 +310,6 @@ declare class RangeSlider extends SliderBase implements IFormInputElement {
         };
         endHandle: {
             [x: string]: string;
-        };
-        label: {
-            width: string;
-        };
-        labelContainer: {
-            [x: string]: string;
-            width: string;
-        };
-        tooltip: {
-            visibility: string;
         };
     };
 }

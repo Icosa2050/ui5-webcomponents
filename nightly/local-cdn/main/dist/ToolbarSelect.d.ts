@@ -1,6 +1,4 @@
 import type ValueState from "@ui5/webcomponents-base/dist/types/ValueState.js";
-import ToolbarSelectTemplate from "./ToolbarSelectTemplate.js";
-import ToolbarPopoverSelectTemplate from "./ToolbarPopoverSelectTemplate.js";
 import ToolbarItem from "./ToolbarItem.js";
 import type { ToolbarItemEventDetail } from "./ToolbarItem.js";
 import type ToolbarSelectOption from "./ToolbarSelectOption.js";
@@ -73,8 +71,6 @@ declare class ToolbarSelect extends ToolbarItem {
      * @public
      */
     accessibleNameRef?: string;
-    static get toolbarTemplate(): typeof ToolbarSelectTemplate;
-    static get toolbarPopoverTemplate(): typeof ToolbarPopoverSelectTemplate;
     onClick(e: Event): void;
     onOpen(e: Event): void;
     onClose(e: Event): void;

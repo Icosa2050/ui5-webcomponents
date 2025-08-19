@@ -127,11 +127,18 @@ declare class Switch extends UI5Element implements IFormInputElement {
      * @since 1.16.0
      */
     name?: string;
+    /**
+     * Defines the form value of the component.
+     * @default ""
+     * @since 2.12.0
+     * @public
+     */
+    value: string;
     static i18nBundle: I18nBundle;
     get formValidityMessage(): string;
     get formValidity(): ValidityStateFlags;
     formElementAnchor(): Promise<HTMLElement | undefined>;
-    get formFormattedValue(): "on" | null;
+    get formFormattedValue(): string | null;
     get sapNextIcon(): "accept" | "less";
     _onclick(): void;
     _onkeydown(e: KeyboardEvent): void;

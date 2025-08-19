@@ -8,4 +8,5 @@ declare const findClosestPositionsByKey: (elements: Array<HTMLElement>, element:
     element: HTMLElement;
     placement: MovePlacement;
 }[];
-export { findClosestPosition, findClosestPositionsByKey, };
+declare const isMovingKey: (key: string) => boolean;
+export { findClosestPosition, findClosestPositionsByKey, isMovingKey, };

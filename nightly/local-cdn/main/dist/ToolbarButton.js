@@ -4,14 +4,13 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+import jsxRenderer from "@ui5/webcomponents-base/dist/renderer/JsxRenderer.js";
 import customElement from "@ui5/webcomponents-base/dist/decorators/customElement.js";
 import property from "@ui5/webcomponents-base/dist/decorators/property.js";
 import event from "@ui5/webcomponents-base/dist/decorators/event-strict.js";
 import ToolbarItem from "./ToolbarItem.js";
 import ToolbarButtonTemplate from "./ToolbarButtonTemplate.js";
-import ToolbarPopoverButtonTemplate from "./ToolbarPopoverButtonTemplate.js";
-import ToolbarButtonPopoverCss from "./generated/themes/ToolbarButtonPopover.css.js";
-import { registerToolbarItem } from "./ToolbarRegistry.js";
+import ToolbarButtonCss from "./generated/themes/ToolbarButton.css.js";
 /**
  * @class
  *
@@ -69,21 +68,23 @@ let ToolbarButton = class ToolbarButton extends ToolbarItem {
             display: this.hidden ? "none" : "inline-block",
         };
     }
-    get containsText() {
-        return true;
-    }
-    static get toolbarTemplate() {
-        return ToolbarButtonTemplate;
-    }
-    static get toolbarPopoverTemplate() {
-        return ToolbarPopoverButtonTemplate;
-    }
     onClick(e) {
         e.stopImmediatePropagation();
         const prevented = !this.fireDecoratorEvent("click", { targetRef: e.target });
         if (!prevented && !this.preventOverflowClosing) {
             this.fireDecoratorEvent("close-overflow");
         }
+    }
+    /**
+     * @override
+     */
+    get classes() {
+        return {
+            root: {
+                ...super.classes.root,
+                "ui5-tb-button": true,
+            },
+        };
     }
 };
 __decorate([
@@ -119,7 +120,9 @@ __decorate([
 ToolbarButton = __decorate([
     customElement({
         tag: "ui5-toolbar-button",
-        styles: ToolbarButtonPopoverCss,
+        template: ToolbarButtonTemplate,
+        renderer: jsxRenderer,
+        styles: [ToolbarButtonCss],
     })
     /**
      * Fired when the component is activated either with a
@@ -135,7 +138,6 @@ ToolbarButton = __decorate([
         cancelable: true,
     })
 ], ToolbarButton);
-registerToolbarItem(ToolbarButton);
 ToolbarButton.define();
 export default ToolbarButton;
 //# sourceMappingURL=ToolbarButton.js.map

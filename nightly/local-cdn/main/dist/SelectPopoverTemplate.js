@@ -7,7 +7,7 @@ import Icon from "./Icon.js";
 import decline from "@ui5/webcomponents-icons/dist/decline.js";
 export default function SelectPopoverTemplate() {
     return (_jsxs(_Fragment, { children: [this.options.length > 0 &&
-                _jsxs(ResponsivePopover, { class: {
+                _jsxs(ResponsivePopover, { id: this.responsivePopoverId, class: {
                         "ui5-select-popover": true,
                         ...this.classes.popover
                     }, part: "popover", style: this.styles.responsivePopover, placement: "Bottom", horizontalAlign: "Start", hideArrow: true, preventInitialFocus: true, onOpen: this._afterOpen, onBeforeOpen: this._beforeOpen, onClose: this._afterClose, onKeyDown: this._onkeydown, children: [this._isPhone &&
@@ -17,7 +17,7 @@ export default function SelectPopoverTemplate() {
                                                 "ui5-select-value-state-dialog-header": true,
                                                 ...this.classes.popoverValueState
                                             }, children: this._isPickerOpen && valueStateMessage.call(this) })] }), !this._isPhone && this.hasValueStateText &&
-                            _jsxs("div", { class: this.classes.popoverValueState, style: this.styles.responsivePopoverHeader, children: [_jsx(Icon, { class: "ui5-input-value-state-message-icon", name: this._valueStateMessageInputIcon }), this._isPickerOpen && valueStateMessage.call(this)] }), _jsx(List, { separators: "None", onMouseDown: this._itemMousedown, onItemClick: this._handleItemPress, children: _jsx("slot", {}) })] }), this.shouldOpenValueStateMessagePopover &&
+                            _jsxs("div", { class: this.classes.popoverValueState, style: this.styles.responsivePopoverHeader, children: [_jsx(Icon, { class: "ui5-input-value-state-message-icon", name: this._valueStateMessageInputIcon }), this._isPickerOpen && valueStateMessage.call(this)] }), _jsx(List, { separators: "None", onMouseDown: this._itemMousedown, onItemClick: this._handleItemPress, accessibleRole: "ListBox", children: _jsx("slot", {}) })] }), this.shouldOpenValueStateMessagePopover &&
                 _jsx(Popover, { part: "popover", class: "ui5-valuestatemessage-popover", preventInitialFocus: true, preventFocusRestore: true, hideArrow: true, placement: "Bottom", horizontalAlign: "Start", children: _jsxs("div", { class: this.classes.popoverValueState, style: this.styles.popoverHeader, children: [_jsx(Icon, { class: "ui5-input-value-state-message-icon", name: this._valueStateMessageInputIcon }), valueStateMessage.call(this)] }) })] }));
 }
 function valueStateMessage() {

@@ -43,6 +43,11 @@ let MultiComboBoxItem = MultiComboBoxItem_1 = class MultiComboBoxItem extends Co
     get _accessibleName() {
         return MultiComboBoxItem_1.i18nBundle.getText(ARIA_LABEL_LIST_ITEM_CHECKBOX);
     }
+    get checkBoxAccInfo() {
+        return {
+            role: "presentation",
+        };
+    }
 };
 __decorate([
     property({ type: Boolean })

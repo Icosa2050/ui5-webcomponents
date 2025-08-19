@@ -1,5 +1,4 @@
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
-import type { TemplateFunction } from "@ui5/webcomponents-base/dist/renderer/executeTemplate.js";
 import type ToolbarItemOverflowBehavior from "./types/ToolbarItemOverflowBehavior.js";
 type IEventOptions = {
     preventClosing: boolean;
@@ -27,16 +26,17 @@ declare class ToolbarItem extends UI5Element {
      */
     preventOverflowClosing: boolean;
     /**
+     * Defines if the toolbar item is overflowed.
+     * @default false
+     * @protected
+     * @since 2.11.0
+     */
+    isOverflowed: boolean;
+    /**
     * Defines if the width of the item should be ignored in calculating the whole width of the toolbar
     * @protected
     */
     get ignoreSpace(): boolean;
-    /**
-     * Returns if the item contains text. Used to position the text properly inside the popover.
-     * Aligned left if the item has text, default aligned otherwise.
-     * @protected
-     */
-    get containsText(): boolean;
     /**
      * Returns if the item is flexible. An item that is returning true for this property will make
      * the toolbar expand to fill the 100% width of its container.
@@ -55,17 +55,13 @@ declare class ToolbarItem extends UI5Element {
      * @protected
      */
     get isSeparator(): boolean;
-    /**
-     * Returns the template for the toolbar item.
-     * @protected
-     */
-    static get toolbarTemplate(): TemplateFunction;
-    /**
-     * Returns the template for the toolbar item popover.
-     * @protected
-     */
-    static get toolbarPopoverTemplate(): TemplateFunction;
     get stableDomRef(): string;
+    get classes(): {
+        root: {
+            "ui5-tb-popover-item": boolean;
+            "ui5-tb-item": boolean;
+        };
+    };
 }
 export type { IEventOptions, ToolbarItemEventDetail, };
 export default ToolbarItem;

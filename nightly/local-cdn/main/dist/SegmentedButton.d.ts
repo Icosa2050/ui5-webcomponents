@@ -68,6 +68,7 @@ declare class SegmentedButton extends UI5Element {
     constructor();
     onBeforeRendering(): void;
     normalizeSelection(): void;
+    getFocusDomRef(): HTMLElement | undefined;
     _selectItem(e: MouseEvent | KeyboardEvent): this | undefined;
     _applySingleSelection(item: ISegmentedButtonItem): void;
     _onclick(e: MouseEvent): void;

@@ -22,6 +22,7 @@ import TableRowTemplate from "./TableRowTemplate.js";
 import { ARIA_LABEL_ROW_SELECTION, LIST_ITEM_NOT_SELECTED, LIST_ITEM_SELECTED, } from "./generated/i18n/i18n-defaults.js";
 // Styles
 import tableRowStyles from "./generated/themes/TableRow.css.js";
+import { patchScopingSuffix } from "./utils/CompatCustomElementsScope.js";
 /**
  * @class
  *
@@ -34,6 +35,7 @@ import tableRowStyles from "./generated/themes/TableRow.css.js";
  * @public
  * @csspart row - Used to style the native `tr` element
  * @csspart popin-row - Used to style the `tr` element when a row pops in
+ * @deprecated Deprecated as of version 2.12.0, use `@ui5/webcomponents/dist/TableRow.js` instead.
  */
 let TableRow = TableRow_1 = class TableRow extends UI5Element {
     constructor() {
@@ -376,6 +378,7 @@ TableRow = TableRow_1 = __decorate([
         bubbles: true,
     })
 ], TableRow);
+patchScopingSuffix(TableRow);
 TableRow.define();
 export default TableRow;
 //# sourceMappingURL=TableRow.js.map

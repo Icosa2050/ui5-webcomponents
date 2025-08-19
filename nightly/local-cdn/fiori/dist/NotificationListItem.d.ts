@@ -63,6 +63,7 @@ declare class NotificationListItem extends NotificationListItemBase {
     eventDetails: NotificationListItemBase["eventDetails"] & {
         _press: NotificationListItemPressEventDetail;
         close: NotificationListItemCloseEventDetail;
+        _close: NotificationListItemCloseEventDetail;
     };
     /**
     * Defines if the `titleText` and `description` should wrap,

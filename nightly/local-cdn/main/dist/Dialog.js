@@ -241,7 +241,6 @@ let Dialog = Dialog_1 = class Dialog extends Popup {
         super.onEnterDOM();
         this._attachScreenResizeHandler();
         this.addEventListener("dragstart", this._dragStartHandler);
-        this.setAttribute("data-sap-ui-fastnavgroup-container", "true");
     }
     onExitDOM() {
         super.onExitDOM();

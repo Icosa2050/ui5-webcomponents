@@ -111,6 +111,15 @@ let IllustratedMessage = IllustratedMessage_1 = class IllustratedMessage extends
         * @since 2.0.0
         */
         this.design = "Auto";
+        /**
+        * Defines whether the illustration is decorative.
+        *
+        * When set to `true`, the attributes `role="presentation"` and `aria-hidden="true"` are applied to the SVG element.
+        * @default false
+        * @public
+        * @since 2.10.0
+        */
+        this.decorative = false;
         this._handleResize = this.handleResize.bind(this);
         // this will store the last known offsetWidth of the IllustratedMessage DOM node for a given media (e.g. "Spot")
         this._lastKnownOffsetWidthForMedia = {};
@@ -213,7 +222,18 @@ let IllustratedMessage = IllustratedMessage_1 = class IllustratedMessage extends
     }
     _setSVGAccAttrs() {
         const svg = this.shadowRoot.querySelector(".ui5-illustrated-message-illustration svg");
-        if (svg) {
+        if (!svg) {
+            return;
+        }
+        if (this.decorative) {
+            svg.setAttribute("role", "presentation");
+            svg.setAttribute("aria-hidden", "true");
+            svg.removeAttribute("aria-label");
+        }
+        else {
+            svg.removeAttribute("role");
+            svg.removeAttribute("aria-hidden");
+            // Set aria-label only when not decorative and text exists
             if (this.ariaLabelText) {
                 svg.setAttribute("aria-label", this.ariaLabelText);
             }
@@ -253,6 +273,15 @@ let IllustratedMessage = IllustratedMessage_1 = class IllustratedMessage extends
                 this.media = IllustratedMessage_1.MEDIA.SPOT;
                 return;
             case IllustrationMessageDesign.Dialog:
+                this.media = IllustratedMessage_1.MEDIA.DIALOG;
+                return;
+            case IllustrationMessageDesign.ExtraSmall:
+                this.media = IllustratedMessage_1.MEDIA.DOT;
+                return;
+            case IllustrationMessageDesign.Small:
+                this.media = IllustratedMessage_1.MEDIA.SPOT;
+                return;
+            case IllustrationMessageDesign.Medium:
                 this.media = IllustratedMessage_1.MEDIA.DIALOG;
                 return;
             default:
@@ -332,6 +361,9 @@ __decorate([
 __decorate([
     property()
 ], IllustratedMessage.prototype, "media", void 0);
+__decorate([
+    property({ type: Boolean })
+], IllustratedMessage.prototype, "decorative", void 0);
 __decorate([
     slot({ type: HTMLElement })
 ], IllustratedMessage.prototype, "title", void 0);

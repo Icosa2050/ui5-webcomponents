@@ -125,6 +125,7 @@ declare class ColorPalette extends UI5Element {
     _onkeyup(e: KeyboardEvent): void;
     _onkeydown(e: KeyboardEvent): void;
     handleSelection(target: ColorPaletteItem): void;
+    getFocusDomRef(): HTMLElement | undefined;
     _handleDefaultColorClick(e: KeyboardEvent): void;
     _onDefaultColorKeyUp(e: KeyboardEvent): void;
     _onDefaultColorKeyDown(e: KeyboardEvent): void;

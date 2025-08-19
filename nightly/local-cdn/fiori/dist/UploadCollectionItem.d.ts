@@ -1,7 +1,9 @@
 import type I18nBundle from "@ui5/webcomponents-base/dist/i18nBundle.js";
 import ValueState from "@ui5/webcomponents-base/dist/types/ValueState.js";
+import type Button from "@ui5/webcomponents/dist/Button.js";
 import type Input from "@ui5/webcomponents/dist/Input.js";
 import ListItem from "@ui5/webcomponents/dist/ListItem.js";
+import type { UI5CustomEvent } from "@ui5/webcomponents-base";
 import UploadState from "./types/UploadState.js";
 import "@ui5/webcomponents-icons/dist/refresh.js";
 import "@ui5/webcomponents-icons/dist/stop.js";
@@ -121,7 +123,7 @@ declare class UploadCollectionItem extends ListItem {
     _onInputKeyDown(e: KeyboardEvent): void;
     _onRename(): void;
     _onRenameKeyup(e: KeyboardEvent): void;
-    _onRenameCancel(e: KeyboardEvent | MouseEvent): Promise<void>;
+    _onRenameCancel(e: KeyboardEvent | UI5CustomEvent<Button, "click">): Promise<void>;
     _onRenameCancelKeyup(e: KeyboardEvent): void;
     _focus(): void;
     _onFileNameClick(): void;

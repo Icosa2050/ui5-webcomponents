@@ -25,23 +25,47 @@ var IllustrationMessageDesign;
     /**
      * Dot <code>Illustration</code> size (XS breakpoint). Suitable for table rows.
      * @public
+     * @deprecated Since 2.10.0, use ExtraSmall instead
      */
     IllustrationMessageDesign["Dot"] = "Dot";
     /**
      * Spot <code>Illustration</code> size (S breakpoint). Suitable for cards (four columns).
      * @public
+     * @deprecated Since 2.10.0, use Small instead
      */
     IllustrationMessageDesign["Spot"] = "Spot";
     /**
      * Dialog `Illustration` size (M breakpoint). Suitable for dialogs.
      * @public
+     * @deprecated Since 2.10.0, use Medium instead
      */
     IllustrationMessageDesign["Dialog"] = "Dialog";
     /**
      * Scene `Illustration` size (L breakpoint). Suitable for a `Page` or a table.
      * @public
+     * @deprecated Since 2.10.0, use Large instead
      */
     IllustrationMessageDesign["Scene"] = "Scene";
+    /**
+     * ExtraSmall <code>Illustration</code> size (XS breakpoint). Suitable for table rows.
+     * @public
+     */
+    IllustrationMessageDesign["ExtraSmall"] = "ExtraSmall";
+    /**
+     * Small <code>Illustration</code> size (S breakpoint). Suitable for cards (four columns).
+     * @public
+     */
+    IllustrationMessageDesign["Small"] = "Small";
+    /**
+     * Medium `Illustration` size (M breakpoint). Suitable for dialogs.
+     * @public
+     */
+    IllustrationMessageDesign["Medium"] = "Medium";
+    /**
+     * Large `Illustration` size (L breakpoint). Suitable for a `Page` or a table.
+     * @public
+     */
+    IllustrationMessageDesign["Large"] = "Large";
 })(IllustrationMessageDesign || (IllustrationMessageDesign = {}));
 export default IllustrationMessageDesign;
 //# sourceMappingURL=IllustrationMessageDesign.js.map

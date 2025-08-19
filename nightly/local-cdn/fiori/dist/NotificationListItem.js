@@ -317,6 +317,7 @@ let NotificationListItem = NotificationListItem_1 = class NotificationListItem e
         }
         if (isDelete(e)) {
             this.fireDecoratorEvent("close", { item: this });
+            this.fireDecoratorEvent("_close", { item: this });
         }
         if (isF10Shift(e)) {
             this._onBtnMenuClick();
@@ -327,6 +328,7 @@ let NotificationListItem = NotificationListItem_1 = class NotificationListItem e
     }
     _onBtnCloseClick() {
         this.fireDecoratorEvent("close", { item: this });
+        this.fireDecoratorEvent("_close", { item: this });
     }
     _onBtnMenuClick() {
         if (this.getMenu()) {
@@ -355,7 +357,6 @@ let NotificationListItem = NotificationListItem_1 = class NotificationListItem e
         // NotificationListItem will never be assigned to a variable of type ListItemBase
         // typescipt complains here, if that is the case, the parameter to the _press event handler could be a ListItemBase item,
         // but this is never the case, all components are used by their class and never assigned to a variable with a type of ListItemBase
-        // @ts-expect-error
         this.fireDecoratorEvent("_press", { item: this });
     }
     onResize() {
@@ -437,7 +438,14 @@ NotificationListItem = NotificationListItem_1 = __decorate([
      * @public
      */
     ,
-    event("close", {
+    event("close")
+    /**
+     * Fired when the `Close` button is pressed.
+     * @param {HTMLElement} item the closed item.
+     * @private
+     */
+    ,
+    event("_close", {
         bubbles: true,
     })
 ], NotificationListItem);

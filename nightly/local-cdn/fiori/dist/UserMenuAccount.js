@@ -53,6 +53,13 @@ class UserMenuAccount extends UI5Element {
          * @public
          */
         this.selected = false;
+        /**
+         * Indicates whether a loading indicator should be shown.
+         * @default false
+         * @public
+         * @since 2.9.0
+         */
+        this.loading = false;
     }
     get _initials() {
         return this.avatarInitials || "undefined";
@@ -76,6 +83,9 @@ __decorate([
 __decorate([
     property({ type: Boolean })
 ], UserMenuAccount.prototype, "selected", void 0);
+__decorate([
+    property({ type: Boolean })
+], UserMenuAccount.prototype, "loading", void 0);
 UserMenuAccount = __decorate([
     customElement({
         tag: "ui5-user-menu-account",

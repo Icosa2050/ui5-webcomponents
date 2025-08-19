@@ -1,7 +1,9 @@
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
 import type I18nBundle from "@ui5/webcomponents-base/dist/i18nBundle.js";
+import type { UI5CustomEvent } from "@ui5/webcomponents-base";
 import type { LinkAccessibilityAttributes } from "./Link.js";
 import ExpandableTextOverflowMode from "./types/ExpandableTextOverflowMode.js";
+import type Button from "./Button.js";
 import type TextEmptyIndicatorMode from "./types/TextEmptyIndicatorMode.js";
 /**
  * @class
@@ -71,6 +73,6 @@ declare class ExpandableText extends UI5Element {
     get _accessibleNameForToggle(): string | undefined;
     _handlePopoverClose(): void;
     _handleToggleClick(): void;
-    _handleCloseButtonClick(e: MouseEvent): void;
+    _handleCloseButtonClick(e: UI5CustomEvent<Button, "click">): void;
 }
 export default ExpandableText;

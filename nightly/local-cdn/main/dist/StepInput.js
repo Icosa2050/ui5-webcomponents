@@ -117,7 +117,6 @@ let StepInput = StepInput_1 = class StepInput extends UI5Element {
         this._incIconDisabled = false;
         this.focused = false;
         this._inputFocused = false;
-        this._previousValue = this.value;
         this._waitTimeout = INITIAL_WAIT_TIMEOUT;
         this._speed = INITIAL_SPEED;
         this._spinStarted = false;
@@ -171,9 +170,6 @@ let StepInput = StepInput_1 = class StepInput extends UI5Element {
     }
     onBeforeRendering() {
         this._setButtonState();
-        if (this._previousValue === undefined) {
-            this._previousValue = this.value;
-        }
     }
     get input() {
         return this.shadowRoot.querySelector("[ui5-input]");
@@ -199,9 +195,6 @@ let StepInput = StepInput_1 = class StepInput extends UI5Element {
     }
     _onInputFocusIn() {
         this._inputFocused = true;
-        if (this.value !== this._previousValue) {
-            this._previousValue = this.value;
-        }
     }
     _onInputFocusOut() {
         this._inputFocused = false;
@@ -326,9 +319,11 @@ let StepInput = StepInput_1 = class StepInput extends UI5Element {
     }
     _onfocusin() {
         this.focused = true;
+        this._previousValue = this.value;
     }
     _onfocusout() {
         this.focused = false;
+        this._previousValue = undefined;
     }
     _onkeydown(e) {
         let preventDefault = true;
@@ -349,6 +344,9 @@ let StepInput = StepInput_1 = class StepInput extends UI5Element {
         }
         else if (isEscape(e)) {
             // return previous value
+            if (this._previousValue === undefined) {
+                this._previousValue = this.value;
+            }
             this.value = this._previousValue;
             this.input.value = this.value.toFixed(this.valuePrecision);
         }

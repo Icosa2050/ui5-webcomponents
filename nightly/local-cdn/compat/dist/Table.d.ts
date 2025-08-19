@@ -108,6 +108,7 @@ declare enum TableFocusTargetElement {
  * @constructor
  * @extends UI5Element
  * @public
+ * @deprecated Deprecated as of version 2.12.0, use `@ui5/webcomponents/dist/Table.js` instead.
  */
 declare class Table extends UI5Element {
     eventDetails: {
@@ -311,6 +312,7 @@ declare class Table extends UI5Element {
     _getAfterForwardElement(): HTMLElement;
     _getBeforeForwardElement(): HTMLElement;
     onRowFocused(e: CustomEvent): void;
+    onRowKeyDown(e: KeyboardEvent): void;
     _onColumnHeaderFocused(): void;
     _onColumnHeaderClick(e: MouseEvent | KeyboardEvent): void;
     _onColumnHeaderKeydown(e: KeyboardEvent): void;

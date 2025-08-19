@@ -6,13 +6,12 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 var TableRowBase_1;
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
+import { customElement, property, i18n } from "@ui5/webcomponents-base/dist/decorators.js";
 import { isEnter, isSpace } from "@ui5/webcomponents-base/dist/Keys.js";
+import { isInstanceOfTable, toggleAttribute } from "./TableUtils.js";
 import jsxRenderer from "@ui5/webcomponents-base/dist/renderer/JsxRenderer.js";
-import customElement from "@ui5/webcomponents-base/dist/decorators/customElement.js";
-import property from "@ui5/webcomponents-base/dist/decorators/property.js";
-import i18n from "@ui5/webcomponents-base/dist/decorators/i18n.js";
 import TableRowBaseCss from "./generated/themes/TableRowBase.css.js";
-import { isInstanceOfTable } from "./TableUtils.js";
+import query from "@ui5/webcomponents-base/dist/decorators/query.js";
 import { TABLE_ROW_SELECTOR, } from "./generated/i18n/i18n-defaults.js";
 /**
  * @class
@@ -28,18 +27,14 @@ let TableRowBase = TableRowBase_1 = class TableRowBase extends UI5Element {
         super(...arguments);
         this._invalidate = 0;
         this._rowActionCount = 0;
+        this._renderNavigated = false;
     }
     onEnterDOM() {
         this.setAttribute("role", "row");
         this.toggleAttribute("ui5-table-row-base", true);
     }
     onBeforeRendering() {
-        if (this._isSelectable) {
-            this.setAttribute("aria-selected", `${this._isSelected}`);
-        }
-        else {
-            this.removeAttribute("aria-selected");
-        }
+        toggleAttribute(this, "aria-selected", this._isSelectable, `${this._isSelected}`);
     }
     getFocusDomRef() {
         return this;
@@ -77,11 +72,8 @@ let TableRowBase = TableRowBase_1 = class TableRowBase extends UI5Element {
     get _isMultiSelect() {
         return !!this._tableSelection?.isMultiSelectable();
     }
-    get _hasRowSelector() {
-        return !!this._tableSelection?.isRowSelectorRequired();
-    }
-    get _selectionCell() {
-        return this.shadowRoot.getElementById("selection-cell");
+    get _hasSelector() {
+        return this._table?._isRowSelectorRequired;
     }
     get _visibleCells() {
         return this.cells.filter(c => !c._popin);
@@ -90,9 +82,7 @@ let TableRowBase = TableRowBase_1 = class TableRowBase extends UI5Element {
         return this.cells.filter(c => c._popin && !c._popinHidden);
     }
     get _stickyCells() {
-        const selectionCell = this.shadowRoot?.querySelector("#selection-cell"), navigatedCell = this.shadowRoot?.querySelector("#navigated-cell");
-        // filter out null/undefined
-        return [selectionCell, ...this.cells, navigatedCell].filter(cell => cell?.hasAttribute("fixed"));
+        return [this._selectionCell, ...this.cells, this._navigatedCell].filter(cell => cell?.hasAttribute("fixed"));
     }
     get _i18nRowSelector() {
         return TableRowBase_1.i18nBundle.getText(TABLE_ROW_SELECTOR);
@@ -104,6 +94,15 @@ __decorate([
 __decorate([
     property({ type: Number, noAttribute: true })
 ], TableRowBase.prototype, "_rowActionCount", void 0);
+__decorate([
+    property({ type: Boolean, noAttribute: true })
+], TableRowBase.prototype, "_renderNavigated", void 0);
+__decorate([
+    query("#selection-cell")
+], TableRowBase.prototype, "_selectionCell", void 0);
+__decorate([
+    query("#navigated-cell")
+], TableRowBase.prototype, "_navigatedCell", void 0);
 __decorate([
     i18n("@ui5/webcomponents")
 ], TableRowBase, "i18nBundle", void 0);

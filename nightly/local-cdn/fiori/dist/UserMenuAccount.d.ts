@@ -42,6 +42,13 @@ declare class UserMenuAccount extends UI5Element {
      * @public
      */
     selected: boolean;
+    /**
+     * Indicates whether a loading indicator should be shown.
+     * @default false
+     * @public
+     * @since 2.9.0
+     */
+    loading: boolean;
     get _initials(): string;
 }
 export default UserMenuAccount;

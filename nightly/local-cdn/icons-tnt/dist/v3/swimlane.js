@@ -1,7 +1,7 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "swimlane";
-const pathData = "M413.5 512h-171c-14 0-25-12-25-26V25c0-14 11-25 25-25h171c15 0 26 11 26 25v461c0 14-11 26-26 26zm-145-461v409h120V51h-120z";
+const pathData = "M268.5 460h120V51h-120v409zm145 51h-171q-11 0-18-7t-7-18V26q0-11 7-18.5t18-7.5h171q11 0 18.5 7.5t7.5 18.5v460q0 11-7.5 18t-18.5 7z";
 const ltr = false;
 const accData = null;
 const collection = "tnt-v3";

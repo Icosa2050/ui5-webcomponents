@@ -13,7 +13,9 @@ let TreeList = class TreeList extends List {
     getItems(includeCollapsed = false) {
         const slottedItems = this.getSlottedNodes("items");
         const flatItems = [];
-        flattenTree(slottedItems, flatItems, includeCollapsed);
+        if (!(slottedItems.length === 1 && slottedItems[0].hasAttribute("ui5-drop-indicator"))) {
+            flattenTree(slottedItems, flatItems, includeCollapsed);
+        }
         return flatItems;
     }
     getItemsForProcessing() {

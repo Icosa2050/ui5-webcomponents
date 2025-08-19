@@ -12,6 +12,7 @@ import i18n from "@ui5/webcomponents-base/dist/decorators/i18n.js";
 import jsxRenderer from "@ui5/webcomponents-base/dist/renderer/JsxRenderer.js";
 import { isTabNext } from "@ui5/webcomponents-base/dist/Keys.js";
 import { isDesktop, } from "@ui5/webcomponents-base/dist/Device.js";
+import willShowContent from "@ui5/webcomponents-base/dist/util/willShowContent.js";
 import BusyIndicatorTextPlacement from "./types/BusyIndicatorTextPlacement.js";
 // Template
 import BusyIndicatorTemplate from "./BusyIndicatorTemplate.js";
@@ -122,6 +123,9 @@ let BusyIndicator = BusyIndicator_1 = class BusyIndicator extends UI5Element {
             top: this.text && this.textPlacement === BusyIndicatorTextPlacement.Top,
             bottom: this.text && this.textPlacement === BusyIndicatorTextPlacement.Bottom,
         };
+    }
+    get hasContent() {
+        return willShowContent(Array.from(this.children));
     }
     onBeforeRendering() {
         if (this.active) {

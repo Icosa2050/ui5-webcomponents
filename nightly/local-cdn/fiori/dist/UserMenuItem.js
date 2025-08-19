@@ -5,7 +5,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 import { customElement, slot } from "@ui5/webcomponents-base/dist/decorators.js";
-import MenuItem from "@ui5/webcomponents/dist/MenuItem.js";
+import MenuItem, { isInstanceOfMenuItem } from "@ui5/webcomponents/dist/MenuItem.js";
 import UserMenuItemTemplate from "./UserMenuItemTemplate.js";
 // Styles
 import userMenuItemCss from "./generated/themes/UserMenuItem.css.js";
@@ -34,7 +34,7 @@ import userMenuItemCss from "./generated/themes/UserMenuItem.css.js";
  */
 let UserMenuItem = class UserMenuItem extends MenuItem {
     get _menuItems() {
-        return this.items.filter(item => !item.isSeparator);
+        return this.items.filter(isInstanceOfMenuItem);
     }
 };
 __decorate([

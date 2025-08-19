@@ -4,9 +4,11 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+var Form_1;
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
 import customElement from "@ui5/webcomponents-base/dist/decorators/customElement.js";
 import property from "@ui5/webcomponents-base/dist/decorators/property.js";
+import i18n from "@ui5/webcomponents-base/dist/decorators/i18n.js";
 import { getScopedVarName } from "@ui5/webcomponents-base/dist/CustomElementsScope.js";
 import slot from "@ui5/webcomponents-base/dist/decorators/slot.js";
 import jsxRenderer from "@ui5/webcomponents-base/dist/renderer/JsxRenderer.js";
@@ -14,6 +16,7 @@ import jsxRenderer from "@ui5/webcomponents-base/dist/renderer/JsxRenderer.js";
 import FormTemplate from "./FormTemplate.js";
 // Styles
 import FormCss from "./generated/themes/Form.css.js";
+import { FORM_ACCESSIBLE_NAME } from "./generated/i18n/i18n-defaults.js";
 const additionalStylesMap = new Map();
 const StepColumn = {
     "S": 1,
@@ -171,7 +174,7 @@ const DEFAULT_FORM_ITEM_LAYOUT_S = "1fr";
  * @since 2.0.0
  * @extends UI5Element
  */
-let Form = class Form extends UI5Element {
+let Form = Form_1 = class Form extends UI5Element {
     constructor() {
         super(...arguments);
         /**
@@ -217,6 +220,14 @@ let Form = class Form extends UI5Element {
          */
         this.emptySpan = "S0 M0 L0 XL0";
         /**
+         * Defines the compoennt heading level,
+         * set by the `headerText`.
+         * @default "H2"
+         * @since 2.10.0
+         * @public
+        */
+        this.headerLevel = "H2";
+        /**
          * Defines the vertical spacing between form items.
          *
          * **Note:** If the Form is meant to be switched between "non-edit" and "edit" modes,
@@ -250,6 +261,8 @@ let Form = class Form extends UI5Element {
         this.setFormItemLayout();
         // Define how many columns a group should take.
         this.setGroupsColSpan();
+        // Set item spacing
+        this.setItemSpacing();
     }
     onAfterRendering() {
         // Create additional CSS for number of columns that are not supported by default.
@@ -389,17 +402,31 @@ let Form = class Form extends UI5Element {
         // 7 cols & 3 groups => 3, 2, 2
         return index === 0 ? MIN_COL_SPAN + (delta - groups) + 1 : MIN_COL_SPAN + 1;
     }
+    setItemSpacing() {
+        this.items.forEach((item) => {
+            item.itemSpacing = this.itemSpacing;
+        });
+    }
     get hasGroupItems() {
         return this.items.some((item) => item.isGroup);
     }
     get hasHeader() {
-        return this.hasCustomHeader || !!this.headerText;
+        return this.hasCustomHeader || this.hasHeaderText;
+    }
+    get hasHeaderText() {
+        return !!this.headerText;
     }
     get hasCustomHeader() {
         return !!this.header.length;
     }
+    get effectiveAccessibleName() {
+        if (this.accessibleName) {
+            return this.accessibleName;
+        }
+        return this.hasHeader ? undefined : Form_1.i18nBundle.getText(FORM_ACCESSIBLE_NAME);
+    }
     get effectiveАccessibleNameRef() {
-        return this.hasCustomHeader ? undefined : `${this._id}-header-text`;
+        return this.hasHeaderText && !this.hasCustomHeader ? `${this._id}-header-text` : undefined;
     }
     get effectiveAccessibleRole() {
         return this.hasGroupItems ? "region" : "form";
@@ -516,6 +543,9 @@ let Form = class Form extends UI5Element {
 };
 __decorate([
     property()
+], Form.prototype, "accessibleName", void 0);
+__decorate([
+    property()
 ], Form.prototype, "layout", void 0);
 __decorate([
     property()
@@ -526,6 +556,9 @@ __decorate([
 __decorate([
     property()
 ], Form.prototype, "headerText", void 0);
+__decorate([
+    property()
+], Form.prototype, "headerLevel", void 0);
 __decorate([
     property()
 ], Form.prototype, "itemSpacing", void 0);
@@ -576,7 +609,10 @@ __decorate([
 __decorate([
     property({ type: Number })
 ], Form.prototype, "emptySpanXl", void 0);
-Form = __decorate([
+__decorate([
+    i18n("@ui5/webcomponents")
+], Form, "i18nBundle", void 0);
+Form = Form_1 = __decorate([
     customElement({
         tag: "ui5-form",
         renderer: jsxRenderer,

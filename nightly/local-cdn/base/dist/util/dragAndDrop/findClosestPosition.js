@@ -55,48 +55,52 @@ const findClosestPosition = (elements, point, layoutOrientation) => {
         placements,
     };
 };
-const findClosestPositionsByKey = (elements, element, e) => {
-    let index = elements.indexOf(element);
-    const positions = [];
-    switch (e.key) {
-        case "ArrowLeft":
-        case "ArrowUp":
-            index--;
-            if (index >= 0) {
-                positions.push({
-                    element: elements[index],
-                    placement: MovePlacement.Before,
-                });
-            }
-            break;
-        case "ArrowRight":
-        case "ArrowDown":
-            index++;
-            if (index < elements.length) {
-                positions.push({
-                    element: elements[index],
-                    placement: MovePlacement.After,
-                });
-            }
-            break;
-        case "Home":
-            elements.forEach(el => {
-                positions.push({
-                    element: el,
-                    placement: MovePlacement.Before,
-                });
-            });
-            break;
-        case "End":
-            elements.reverse().forEach(el => {
-                positions.push({
-                    element: el,
-                    placement: MovePlacement.After,
-                });
-            });
-            break;
+const _moveBackward = (elements, index) => {
+    index--;
+    if (index < 0) {
+        return [];
     }
-    return positions;
+    return [{
+            element: elements[index],
+            placement: MovePlacement.Before,
+        }];
 };
-export { findClosestPosition, findClosestPositionsByKey, };
+const _moveForward = (elements, index) => {
+    index++;
+    if (index >= elements.length) {
+        return [];
+    }
+    return [{
+            element: elements[index],
+            placement: MovePlacement.After,
+        }];
+};
+const keyToPlacement = {
+    ArrowLeft: _moveBackward,
+    ArrowUp: _moveBackward,
+    ArrowRight: _moveForward,
+    ArrowDown: _moveForward,
+    Home: (elements, index) => {
+        return elements.slice(0, index).map(el => ({
+            element: el,
+            placement: MovePlacement.Before,
+        }));
+    },
+    End: (elements, index) => {
+        return elements.slice(index + 1, elements.length).reverse().map(el => ({
+            element: el,
+            placement: MovePlacement.After,
+        }));
+    },
+};
+const findClosestPositionsByKey = (elements, element, e) => {
+    if (isMovingKey(e.key)) {
+        return keyToPlacement[e.key](elements, elements.indexOf(element));
+    }
+    return [];
+};
+const isMovingKey = (key) => {
+    return key in keyToPlacement;
+};
+export { findClosestPosition, findClosestPositionsByKey, isMovingKey, };
 //# sourceMappingURL=findClosestPosition.js.map

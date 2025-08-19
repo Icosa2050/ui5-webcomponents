@@ -25,7 +25,11 @@ function listItemPostContent() {
     }
 }
 function listItemContent() { }
-function imageBegin() { }
+function imageBegin() {
+    if (this.hasImage) {
+        return _jsx("div", { class: "ui5-tree-item-image", children: _jsx("slot", { name: "image" }) });
+    }
+}
 function iconBegin() {
     return this.icon ? _jsx(Icon, { part: "icon", name: this.icon, class: "ui5-li-icon" }) : _jsx(_Fragment, {});
 }

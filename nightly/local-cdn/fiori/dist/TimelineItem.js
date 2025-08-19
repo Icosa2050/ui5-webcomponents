@@ -70,6 +70,10 @@ let TimelineItem = TimelineItem_1 = class TimelineItem extends UI5Element {
          * @private
          */
         this.hidden = false;
+        /**
+         * @private
+         */
+        this.effectiveRole = "listitem";
     }
     onNamePress() {
         this.fireDecoratorEvent("name-click");
@@ -93,6 +97,22 @@ let TimelineItem = TimelineItem_1 = class TimelineItem extends UI5Element {
     }
     get isGroupItem() {
         return false;
+    }
+    get _getAccessibleLabel() {
+        const parts = [];
+        if (this.name) {
+            parts.push(this.name);
+        }
+        if (this.titleText) {
+            parts.push(this.titleText);
+        }
+        if (this.subtitleText) {
+            parts.push(this.subtitleText);
+        }
+        if (this.timelineItemStateText) {
+            parts.push(this.timelineItemStateText);
+        }
+        return parts.join(", ");
     }
 };
 __decorate([
@@ -140,6 +160,9 @@ __decorate([
 __decorate([
     property({ type: Boolean })
 ], TimelineItem.prototype, "hidden", void 0);
+__decorate([
+    property({ noAttribute: true })
+], TimelineItem.prototype, "effectiveRole", void 0);
 __decorate([
     property({ type: Number })
 ], TimelineItem.prototype, "positionInGroup", void 0);

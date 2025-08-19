@@ -13,7 +13,7 @@ import event from "@ui5/webcomponents-base/dist/decorators/event-strict.js";
 import jsxRenderer from "@ui5/webcomponents-base/dist/renderer/JsxRenderer.js";
 import i18n from "@ui5/webcomponents-base/dist/decorators/i18n.js";
 import ValueState from "@ui5/webcomponents-base/dist/types/ValueState.js";
-import { getEffectiveAriaLabelText } from "@ui5/webcomponents-base/dist/util/AccessibilityTextsHelper.js";
+import { getEffectiveAriaLabelText, getAssociatedLabelForTexts } from "@ui5/webcomponents-base/dist/util/AccessibilityTextsHelper.js";
 import { isSpace, isEnter } from "@ui5/webcomponents-base/dist/Keys.js";
 import { VALUE_STATE_ERROR, VALUE_STATE_WARNING, VALUE_STATE_SUCCESS, FORM_CHECKABLE_REQUIRED, } from "./generated/i18n/i18n-defaults.js";
 // Styles
@@ -75,7 +75,7 @@ let CheckBox = CheckBox_1 = class CheckBox extends UI5Element {
         return this.getFocusDomRefAsync();
     }
     get formFormattedValue() {
-        return this.checked ? "on" : null;
+        return this.checked ? this.value : null;
     }
     constructor() {
         super();
@@ -110,6 +110,9 @@ let CheckBox = CheckBox_1 = class CheckBox extends UI5Element {
         this.displayOnly = false;
         /**
          * Defines whether the component is required.
+         *
+         * **Note:** We advise against using the text property of the checkbox when there is a
+         * label associated with it to avoid having two required asterisks.
          * @default false
          * @public
          * @since 1.3.0
@@ -157,6 +160,19 @@ let CheckBox = CheckBox_1 = class CheckBox extends UI5Element {
          * @public
          */
         this.wrappingType = "Normal";
+        /**
+         * Defines the form value of the component that is submitted when the checkbox is checked.
+         *
+         * When a form containing `ui5-checkbox` elements is submitted, only the values of the
+         * **checked** checkboxes are included in the form data sent to the server. Unchecked
+         * checkboxes do not contribute any data to the form submission.
+         *
+         * This property is particularly useful for **checkbox groups**, where multiple checkboxes with the same `name` but different `value` properties can be used to represent a set of related options.
+         *
+         * @default "on"
+         * @public
+         */
+        this.value = "on";
         /**
          * Defines the active state (pressed or not) of the component.
          * @private
@@ -245,7 +261,7 @@ let CheckBox = CheckBox_1 = class CheckBox extends UI5Element {
         };
     }
     get ariaLabelText() {
-        return getEffectiveAriaLabelText(this);
+        return getEffectiveAriaLabelText(this) || getAssociatedLabelForTexts(this);
     }
     get classes() {
         return {
@@ -295,6 +311,16 @@ let CheckBox = CheckBox_1 = class CheckBox extends UI5Element {
     get isDisplayOnly() {
         return this.displayOnly && !this.disabled;
     }
+    get accInfo() {
+        return {
+            "role": this._accInfo ? this._accInfo.role : "checkbox",
+            "ariaChecked": this._accInfo ? this._accInfo.ariaChecked : this.effectiveAriaChecked,
+            "ariaReadonly": this._accInfo ? this._accInfo.ariaReadonly : this.ariaReadonly,
+            "ariaDisabled": this._accInfo ? this._accInfo.ariaDisabled : this.effectiveAriaDisabled,
+            "ariaRequired": this._accInfo ? this._accInfo.ariaRequired : this.required,
+            "tabindex": this._accInfo ? this._accInfo.tabindex : this.effectiveTabIndex,
+        };
+    }
 };
 __decorate([
     property()
@@ -333,8 +359,14 @@ __decorate([
     property()
 ], CheckBox.prototype, "name", void 0);
 __decorate([
+    property()
+], CheckBox.prototype, "value", void 0);
+__decorate([
     property({ type: Boolean })
 ], CheckBox.prototype, "active", void 0);
+__decorate([
+    property({ type: Object })
+], CheckBox.prototype, "_accInfo", void 0);
 __decorate([
     i18n("@ui5/webcomponents")
 ], CheckBox, "i18nBundle", void 0);

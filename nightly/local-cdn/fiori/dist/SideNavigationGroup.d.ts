@@ -28,6 +28,7 @@ declare class SideNavigationGroup extends SideNavigationItemBase {
      * @default false
      */
     expanded: boolean;
+    belowGroup: boolean;
     /**
      * Defines nested items by passing `ui5-side-navigation-item` to the default slot.
      *
@@ -35,6 +36,7 @@ declare class SideNavigationGroup extends SideNavigationItemBase {
      */
     items: Array<SideNavigationItem>;
     static i18nBundle: I18nBundle;
+    onBeforeRendering(): void;
     get overflowItems(): Array<HTMLElement>;
     get selectableItems(): Array<SideNavigationSelectableItemBase>;
     get focusableItems(): Array<SideNavigationItemBase>;
@@ -42,7 +44,7 @@ declare class SideNavigationGroup extends SideNavigationItemBase {
     get _groupId(): string | undefined;
     get _expanded(): boolean | undefined;
     get belowGroupClassName(): "" | "ui5-sn-item-group-below-group";
-    get accDescription(): string;
+    get _arrowTooltip(): string;
     _onkeydown(e: KeyboardEvent): void;
     _onclick(): void;
     _onfocusin(e: FocusEvent): void;

@@ -4,6 +4,7 @@ import type { I18nText } from "@ui5/webcomponents-base/dist/i18nBundle.js";
 import type { ITimelineItem } from "./Timeline.js";
 import type ValueState from "@ui5/webcomponents-base/dist/types/ValueState.js";
 import type TimelineLayout from "./types/TimelineLayout.js";
+type TimelineItemRole = "listitem" | "treeitem";
 /**
  * @class
  *
@@ -98,6 +99,10 @@ declare class TimelineItem extends UI5Element implements ITimelineItem {
      */
     hidden: boolean;
     /**
+     * @private
+     */
+    effectiveRole: `${TimelineItemRole}`;
+    /**
      * Defines the position of the item in a group.
      * @private
      */
@@ -112,5 +117,6 @@ declare class TimelineItem extends UI5Element implements ITimelineItem {
     static typeTextMappings(): Record<string, I18nText>;
     get timelineItemStateText(): string | undefined;
     get isGroupItem(): boolean;
+    get _getAccessibleLabel(): string;
 }
 export default TimelineItem;

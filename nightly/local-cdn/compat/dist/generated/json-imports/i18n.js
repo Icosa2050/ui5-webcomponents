@@ -25,7 +25,7 @@ const importMessageBundle = async (localeId) => {
         case "hi": return (await import(/* webpackChunkName: "ui5-webcomponents-compat-messagebundle-hi" */ "../assets/i18n/messagebundle_hi.json")).default;
         case "hr": return (await import(/* webpackChunkName: "ui5-webcomponents-compat-messagebundle-hr" */ "../assets/i18n/messagebundle_hr.json")).default;
         case "hu": return (await import(/* webpackChunkName: "ui5-webcomponents-compat-messagebundle-hu" */ "../assets/i18n/messagebundle_hu.json")).default;
-        case "in": return (await import(/* webpackChunkName: "ui5-webcomponents-compat-messagebundle-in" */ "../assets/i18n/messagebundle_in.json")).default;
+        case "id": return (await import(/* webpackChunkName: "ui5-webcomponents-compat-messagebundle-id" */ "../assets/i18n/messagebundle_id.json")).default;
         case "it": return (await import(/* webpackChunkName: "ui5-webcomponents-compat-messagebundle-it" */ "../assets/i18n/messagebundle_it.json")).default;
         case "iw": return (await import(/* webpackChunkName: "ui5-webcomponents-compat-messagebundle-iw" */ "../assets/i18n/messagebundle_iw.json")).default;
         case "ja": return (await import(/* webpackChunkName: "ui5-webcomponents-compat-messagebundle-ja" */ "../assets/i18n/messagebundle_ja.json")).default;
@@ -86,7 +86,7 @@ const localeIds = ["ar",
     "hi",
     "hr",
     "hu",
-    "in",
+    "id",
     "it",
     "iw",
     "ja",

@@ -243,9 +243,7 @@ Toast = __decorate([
      * @since 2.0.0
      */
     ,
-    event("close", {
-        bubbles: true,
-    })
+    event("close")
 ], Toast);
 Toast.define();
 export default Toast;

@@ -129,7 +129,7 @@ declare class Popover extends Popup {
      * @public
      */
     footer: Array<HTMLElement>;
-    _opener?: HTMLElement | string;
+    _opener?: HTMLElement | string | null | undefined;
     _openerRect?: DOMRect;
     _preventRepositionAndClose?: boolean;
     _top?: number;
@@ -147,8 +147,8 @@ declare class Popover extends Popup {
      * @default undefined
      * @since 1.2.0
      */
-    set opener(value: HTMLElement | string);
-    get opener(): HTMLElement | string | undefined;
+    set opener(value: HTMLElement | string | null);
+    get opener(): HTMLElement | string | null | undefined;
     openPopup(): Promise<void>;
     isOpenerClicked(e: MouseEvent): boolean;
     /**
@@ -161,7 +161,7 @@ declare class Popover extends Popup {
      * @private
      */
     _removeOpenedPopup(): void;
-    getOpenerHTMLElement(opener: HTMLElement | string | undefined): HTMLElement | null | undefined;
+    getOpenerHTMLElement(opener: HTMLElement | string | null | undefined): HTMLElement | null | undefined;
     shouldCloseDueToOverflow(placement: `${PopoverPlacement}`, openerRect: DOMRect): boolean;
     shouldCloseDueToNoOpener(openerRect: DOMRect): boolean;
     isOpenerOutsideViewport(openerRect: DOMRect): boolean;
@@ -179,7 +179,7 @@ declare class Popover extends Popup {
      * @returns The adjusted top in px.
      */
     _adjustForIOSKeyboard(top: number): number;
-    getPopoverSize(): PopoverSize;
+    getPopoverSize(calcScrollHeight?: boolean): PopoverSize;
     _showOutsideViewport(): void;
     _isUI5AbstractElement(el: HTMLElement): el is UI5Element;
     get arrowDOM(): Element;
@@ -209,7 +209,7 @@ declare class Popover extends Popup {
      * @private
      */
     fallbackPlacement(clientWidth: number, clientHeight: number, targetRect: DOMRect, popoverSize: PopoverSize): PopoverPlacement | undefined;
-    getActualPlacement(targetRect: DOMRect, popoverSize: PopoverSize): `${PopoverPlacement}`;
+    getActualPlacement(targetRect: DOMRect): `${PopoverPlacement}`;
     getVerticalLeft(targetRect: DOMRect, popoverSize: PopoverSize): number;
     getHorizontalTop(targetRect: DOMRect, popoverSize: PopoverSize): number;
     get isModal(): boolean;

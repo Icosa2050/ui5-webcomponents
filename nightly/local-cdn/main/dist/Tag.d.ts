@@ -116,6 +116,6 @@ declare class Tag extends UI5Element {
     get _title(): string | undefined;
     get tagDescription(): string | undefined;
     get _semanticIconName(): "alert" | "sys-help-2" | "sys-enter-2" | "error" | "information" | null;
-    _onclick(): void;
+    _onclick(e: Event): void;
 }
 export default Tag;

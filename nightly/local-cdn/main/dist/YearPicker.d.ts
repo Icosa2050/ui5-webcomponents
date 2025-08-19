@@ -1,6 +1,6 @@
 import type I18nBundle from "@ui5/webcomponents-base/dist/i18nBundle.js";
 import CalendarPart from "./CalendarPart.js";
-import type { ICalendarPicker } from "./Calendar.js";
+import type { CalendarYearRangeT, ICalendarPicker } from "./Calendar.js";
 import CalendarSelectionMode from "./types/CalendarSelectionMode.js";
 type Year = {
     timestamp: string;
@@ -62,15 +62,14 @@ declare class YearPicker extends CalendarPart implements ICalendarPicker {
      * @private
      */
     _secondTimestamp?: number;
+    _currentYearRange?: CalendarYearRangeT;
     _firstYear?: number;
-    _lastYear?: number;
     static i18nBundle: I18nBundle;
     get roleDescription(): string;
     onBeforeRendering(): void;
     _getPageSize(): 8 | 20;
     _getRowSize(): 2 | 4;
     _buildYears(): void;
-    _calculateFirstYear(): void;
     onAfterRendering(): void;
     /**
       * Returns true if year timestamp is inside the selection range.

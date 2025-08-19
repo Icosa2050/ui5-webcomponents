@@ -1,5 +1,5 @@
-import type Table from "./Table.js";
 import TableExtension from "./TableExtension.js";
+import type Table from "./Table.js";
 export default class TableDragAndDrop extends TableExtension {
     _table: Table;
     constructor(table: Table);

@@ -3,6 +3,7 @@ import type { LegacyDateCalendarCustomizing } from "../features/LegacyDateFormat
 declare class OpenUI5Support {
     static isAtLeastVersion116(): boolean;
     static isOpenUI5Detected(): boolean;
+    static initPromise?: Promise<void>;
     static init(): Promise<void>;
     static getConfigurationSettingsObject(): {
         animationMode?: undefined;
@@ -30,5 +31,8 @@ declare class OpenUI5Support {
     static _listenForThemeChange(): void;
     static attachListeners(): void;
     static cssVariablesLoaded(): boolean | undefined;
+    static addOpenedPopup(popup: object): void;
+    static removeOpenedPopup(popup: object): void;
+    static getTopmostPopup(): object;
 }
 export default OpenUI5Support;

@@ -25,7 +25,7 @@ const importMessageBundle = async (localeId) => {
         case "hi": return (await fetch(new URL("../assets/i18n/messagebundle_hi.json", import.meta.url))).json();
         case "hr": return (await fetch(new URL("../assets/i18n/messagebundle_hr.json", import.meta.url))).json();
         case "hu": return (await fetch(new URL("../assets/i18n/messagebundle_hu.json", import.meta.url))).json();
-        case "in": return (await fetch(new URL("../assets/i18n/messagebundle_in.json", import.meta.url))).json();
+        case "id": return (await fetch(new URL("../assets/i18n/messagebundle_id.json", import.meta.url))).json();
         case "it": return (await fetch(new URL("../assets/i18n/messagebundle_it.json", import.meta.url))).json();
         case "iw": return (await fetch(new URL("../assets/i18n/messagebundle_iw.json", import.meta.url))).json();
         case "ja": return (await fetch(new URL("../assets/i18n/messagebundle_ja.json", import.meta.url))).json();
@@ -86,7 +86,7 @@ const localeIds = ["ar",
     "hi",
     "hr",
     "hu",
-    "in",
+    "id",
     "it",
     "iw",
     "ja",

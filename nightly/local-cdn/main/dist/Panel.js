@@ -164,7 +164,7 @@ let Panel = Panel_1 = class Panel extends UI5Element {
         this._toggleOpen();
     }
     _toggleButtonClick(e) {
-        if (e.x === 0 && e.y === 0) {
+        if (e.detail.originalEvent.x === 0 && e.detail.originalEvent.y === 0) {
             e.stopImmediatePropagation();
         }
     }

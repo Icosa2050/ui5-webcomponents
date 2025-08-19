@@ -6,6 +6,11 @@ var AvatarColorScheme;
 (function (AvatarColorScheme) {
     /**
      * @public
+     * @since 2.9.0
+     */
+    AvatarColorScheme["Auto"] = "Auto";
+    /**
+     * @public
      */
     AvatarColorScheme["Accent1"] = "Accent1";
     /**
@@ -48,6 +53,10 @@ var AvatarColorScheme;
      * @public
      */
     AvatarColorScheme["Placeholder"] = "Placeholder";
+    /**
+     * @public
+     */
+    AvatarColorScheme["Transparent"] = "Transparent";
 })(AvatarColorScheme || (AvatarColorScheme = {}));
 export default AvatarColorScheme;
 //# sourceMappingURL=AvatarColorScheme.js.map

@@ -85,7 +85,7 @@ let Breadcrumbs = Breadcrumbs_1 = class Breadcrumbs extends UI5Element {
         // the width of the interactive element that opens the overflow
         this._dropdownArrowLinkWidth = 0;
         this._itemNavigation = new ItemNavigation(this, {
-            navigationMode: NavigationMode.Horizontal,
+            navigationMode: NavigationMode.Auto,
             getItemsCallback: () => this._getFocusableItems(),
         });
         this._onResizeHandler = this._updateOverflow.bind(this);
@@ -133,7 +133,7 @@ let Breadcrumbs = Breadcrumbs_1 = class Breadcrumbs extends UI5Element {
     _initItemNavigation() {
         if (!this._itemNavigation) {
             this._itemNavigation = new ItemNavigation(this, {
-                navigationMode: NavigationMode.Horizontal,
+                navigationMode: NavigationMode.Auto,
                 getItemsCallback: () => this._getFocusableItems(),
             });
         }
@@ -151,6 +151,9 @@ let Breadcrumbs = Breadcrumbs_1 = class Breadcrumbs extends UI5Element {
             items.push(this._labelFocusAdaptor);
         }
         return items;
+    }
+    getFocusDomRef() {
+        return this._itemNavigation._getCurrentItem();
     }
     /**
      * Returns the translatable accessible name for the popover
@@ -378,6 +381,15 @@ let Breadcrumbs = Breadcrumbs_1 = class Breadcrumbs extends UI5Element {
     get _overflowItemsData() {
         return this._getItems()
             .slice(0, this._overflowSize)
+            .filter(item => this._isItemVisible(item))
+            .reverse();
+    }
+    /**
+     * Returns all items that should be displayed in the popover on mobile devices
+     * @private
+     */
+    get _mobilePopoverItems() {
+        return this._getItems()
             .filter(item => this._isItemVisible(item))
             .reverse();
     }

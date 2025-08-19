@@ -82,6 +82,9 @@ let SegmentedButton = SegmentedButton_1 = class SegmentedButton extends UI5Eleme
             default:
         }
     }
+    getFocusDomRef() {
+        return this._itemNavigation._getCurrentItem();
+    }
     _selectItem(e) {
         const target = e.target;
         const isTargetSegmentedButtonItem = target.hasAttribute("ui5-segmented-button-item");

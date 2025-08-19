@@ -6,6 +6,6 @@ export default function TokenTemplate() {
                 _jsx("div", { class: "ui5-token--icon", children: this.closeIcon.length > 0 ?
                         _jsx("slot", { name: "closeIcon", onClick: this._delete })
                         :
-                            _jsx(Icon, { name: decline, mode: "Decorative", accessibleName: this.tokenDeletableText, showTooltip: true, onClick: this._delete }) })] }));
+                            _jsx(Icon, { name: decline, mode: "Decorative", accessibleName: this.tokenDeletableText, showTooltip: true, onClick: this._delete, onMouseDown: this._onmousedown }) })] }));
 }
 //# sourceMappingURL=TokenTemplate.js.map

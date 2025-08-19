@@ -149,7 +149,7 @@ declare class StepInput extends UI5Element implements IFormInputElement {
     _incIconDisabled: boolean;
     focused: boolean;
     _inputFocused: boolean;
-    _previousValue: number;
+    _previousValue: number | undefined;
     _waitTimeout: number;
     _speed: number;
     _btnDown?: boolean;

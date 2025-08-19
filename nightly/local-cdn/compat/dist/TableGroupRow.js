@@ -17,6 +17,7 @@ import TableMode from "./types/TableMode.js";
 import { TABLE_GROUP_ROW_ARIA_LABEL, } from "./generated/i18n/i18n-defaults.js";
 // Styles
 import tableGroupRowStyles from "./generated/themes/TableGroupRow.css.js";
+import { patchScopingSuffix } from "./utils/CompatCustomElementsScope.js";
 /**
  * @class
  *
@@ -32,6 +33,7 @@ import tableGroupRowStyles from "./generated/themes/TableGroupRow.css.js";
  *
  * **Note:** Although this slot accepts HTML Elements, it is strongly recommended that you only use text in order to preserve the intended design.
  * @csspart group-row - Used to style the native `tr` element
+ * @deprecated Deprecated as of version 2.12.0, use `@ui5/webcomponents/dist/Table.js` instead.
  */
 let TableGroupRow = TableGroupRow_1 = class TableGroupRow extends UI5Element {
     constructor() {
@@ -102,6 +104,7 @@ TableGroupRow = TableGroupRow_1 = __decorate([
         bubbles: true,
     })
 ], TableGroupRow);
+patchScopingSuffix(TableGroupRow);
 TableGroupRow.define();
 export default TableGroupRow;
 //# sourceMappingURL=TableGroupRow.js.map

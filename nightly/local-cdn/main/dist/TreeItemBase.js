@@ -93,9 +93,14 @@ let TreeItemBase = TreeItemBase_1 = class TreeItemBase extends ListItem {
          * @since 1.10.0
          */
         this._fixed = false;
+        /**
+         * @private
+         */
+        this._hasImage = false;
     }
     onBeforeRendering() {
         this.showToggleButton = this.requiresToggleButton;
+        this._hasImage = this.hasImage;
     }
     get classes() {
         const allClasses = super.classes;
@@ -117,6 +122,9 @@ let TreeItemBase = TreeItemBase_1 = class TreeItemBase extends ListItem {
     }
     get hasParent() {
         return this.level > 1;
+    }
+    get hasImage() {
+        return !!this.image.length;
     }
     get _toggleIconName() {
         return this.expanded ? "navigation-down-arrow" : "navigation-right-arrow";
@@ -217,6 +225,9 @@ __decorate([
     property({ type: Boolean })
 ], TreeItemBase.prototype, "_fixed", void 0);
 __decorate([
+    property({ type: Boolean })
+], TreeItemBase.prototype, "_hasImage", void 0);
+__decorate([
     slot({
         type: HTMLElement,
         invalidateOnChildChange: {
@@ -226,6 +237,9 @@ __decorate([
         "default": true,
     })
 ], TreeItemBase.prototype, "items", void 0);
+__decorate([
+    slot()
+], TreeItemBase.prototype, "image", void 0);
 __decorate([
     i18n("@ui5/webcomponents")
 ], TreeItemBase, "i18nBundle", void 0);

@@ -2,6 +2,7 @@ import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
 import type FormItem from "./FormItem.js";
 import type { IFormItem } from "./Form.js";
 import type FormItemSpacing from "./types/FormItemSpacing.js";
+import type TitleLevel from "./types/TitleLevel.js";
 /**
  * @class
  *
@@ -36,6 +37,14 @@ declare class FormGroup extends UI5Element implements IFormItem {
      * @public
      */
     headerText?: string;
+    /**
+     * Defines the compoennt heading level,
+     * set by the `headerText`.
+     * @default "H3"
+     * @public
+     * @since 2.10.0
+    */
+    headerLevel: `${TitleLevel}`;
     /**
      * Defines column span of the component,
      * e.g how many columns the group should span to.

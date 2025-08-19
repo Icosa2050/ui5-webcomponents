@@ -82,7 +82,8 @@ let Tab = Tab_1 = class Tab extends UI5Element {
          * Defines if the tab is movable.
          *
          * @default false
-         * @private
+         * @public
+         * @since 2.0.0
          */
         this.movable = false;
         this._isTopLevelTab = false;

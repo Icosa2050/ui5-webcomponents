@@ -1,7 +1,7 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "task-done";
-const pathData = "M240 128c71 0 128 57 128 128 0 70-57 128-128 128s-128-58-128-128c0-71 57-128 128-128z";
+const pathData = "M240 128q27 0 50 10t40.5 27.5T358 206t10 50q0 26-10 49.5t-27.5 41T290 374t-50 10-50-10-40.5-27.5-27.5-41-10-49.5q0-27 10-50t27.5-40.5T190 138t50-10z";
 const ltr = false;
 const accData = null;
 const collection = "tnt-v3";

@@ -9,6 +9,7 @@ import TableSelectionBase from "./TableSelectionBase.js";
 import getActiveElement from "@ui5/webcomponents-base/dist/util/getActiveElement.js";
 import { isSelectionCheckbox, isHeaderSelector, findRowInPath } from "./TableUtils.js";
 import { isUpShift } from "@ui5/webcomponents-base/dist/Keys.js";
+import { TABLE_COLUMNHEADER_SELECTALL_DESCRIPTION, TABLE_COLUMNHEADER_SELECTALL_CHECKED, TABLE_COLUMNHEADER_SELECTALL_NOT_CHECKED, TABLE_COLUMNHEADER_CLEARALL_DESCRIPTION, TABLE_COLUMNHEADER_CLEARALL_DISABLED, } from "./generated/i18n/i18n-defaults.js";
 /**
  * @class
  *
@@ -40,37 +41,57 @@ import { isUpShift } from "@ui5/webcomponents-base/dist/Keys.js";
  */
 let TableSelectionMulti = class TableSelectionMulti extends TableSelectionBase {
     constructor() {
-        super(...arguments);
+        super();
+        /**
+         * Defines the selector of the header row.
+         *
+         * @default "SelectAll"
+         * @public
+         * @since 2.12
+         */
+        this.headerSelector = "SelectAll";
         this._rowsLength = 0;
+        this._onClickCaptureBound = this._onclickCapture.bind(this);
     }
     onTableBeforeRendering() {
         if (this._table && this._table.headerRow[0] && this._rowsLength !== this._table.rows.length) {
             this._rowsLength = this._table.rows.length;
             this._table.headerRow[0]._invalidate++;
         }
+        this._table?.removeEventListener("click", this._onClickCaptureBound);
+    }
+    onTableAfterRendering() {
+        this._table?.addEventListener("click", this._onClickCaptureBound, { capture: true });
     }
     isMultiSelectable() {
         return true;
     }
     isSelected(row) {
         if (row.isHeaderRow()) {
-            return this.areAllRowsSelected();
+            return this.headerSelector === "ClearAll" ? true : this.areAllRowsSelected();
         }
         const rowKey = this.getRowKey(row);
         return this.getSelectedAsSet().has(rowKey);
     }
-    setSelected(row, selected, _fireEvent = false) {
+    setSelected(row, selected, fireEvent = false) {
         if (this._rangeSelection?.isMouse && this._rangeSelection.shiftPressed) {
             return;
         }
         const tableRows = row.isHeaderRow() ? this._table.rows : [row];
         const selectedSet = this.getSelectedAsSet();
-        tableRows.forEach(tableRow => {
+        const selectionChanged = tableRows.reduce((selectedSetChanged, tableRow) => {
             const rowKey = this.getRowKey(tableRow);
+            if (!rowKey) {
+                return selectedSetChanged;
+            }
+            const setSize = selectedSet.size;
             selectedSet[selected ? "add" : "delete"](rowKey);
-        });
-        this.setSelectedAsSet(selectedSet);
-        _fireEvent && this.fireDecoratorEvent("change");
+            return selectedSetChanged || setSize !== selectedSet.size;
+        }, false);
+        if (selectionChanged) {
+            this.setSelectedAsSet(selectedSet);
+            fireEvent && this.fireDecoratorEvent("change");
+        }
     }
     /**
      * Returns an array of the selected rows.
@@ -82,8 +103,6 @@ let TableSelectionMulti = class TableSelectionMulti extends TableSelectionBase {
     }
     /**
      * Determines whether all rows are selected.
-     *
-     * @public
      */
     areAllRowsSelected() {
         if (!this._table || !this._table.rows.length) {
@@ -114,10 +133,25 @@ let TableSelectionMulti = class TableSelectionMulti extends TableSelectionBase {
     setSelectedAsSet(selectedSet) {
         this.selected = [...selectedSet].join(" ");
     }
-    _invalidateTableAndRows() {
-        super._invalidateTableAndRows();
-        const headerRow = this._table?.headerRow[0];
-        headerRow && headerRow._invalidate++;
+    /**
+     * Returns the ARIA description of the selection component displayed in the column header.
+     */
+    getAriaDescriptionForColumnHeader() {
+        if (!this._table || !this._table.rows.length || this.behavior === "RowOnly") {
+            return undefined;
+        }
+        let description = "";
+        const seperator = " . ";
+        const i18nBundle = this._table.constructor.i18nBundle;
+        if (this.headerSelector === "SelectAll") {
+            description = i18nBundle.getText(TABLE_COLUMNHEADER_SELECTALL_DESCRIPTION);
+            description += seperator + i18nBundle.getText(this.areAllRowsSelected() ? TABLE_COLUMNHEADER_SELECTALL_CHECKED : TABLE_COLUMNHEADER_SELECTALL_NOT_CHECKED);
+        }
+        else {
+            description = i18nBundle.getText(TABLE_COLUMNHEADER_CLEARALL_DESCRIPTION);
+            description += this.getSelectedRows().length === 0 ? seperator + i18nBundle.getText(TABLE_COLUMNHEADER_CLEARALL_DISABLED) : "";
+        }
+        return description;
     }
     _onkeydown(e) {
         if (!this._table || !e.shiftKey) {
@@ -130,7 +164,8 @@ let TableSelectionMulti = class TableSelectionMulti extends TableSelectionBase {
         }
         if (!this._rangeSelection) {
             // If no range selection is active, start one
-            this._startRangeSelection(focusedElement);
+            const row = focusedElement;
+            this._startRangeSelection(row, this.isSelected(row));
         }
         else if (e.key === "ArrowUp" || e.key === "ArrowDown") {
             const change = isUpShift(e) ? -1 : 1;
@@ -152,7 +187,7 @@ let TableSelectionMulti = class TableSelectionMulti extends TableSelectionBase {
             this._rangeSelection.shiftPressed = e.shiftKey;
         }
     }
-    _onclick(e) {
+    _onclickCapture(e) {
         if (!this._table) {
             return;
         }
@@ -169,10 +204,13 @@ let TableSelectionMulti = class TableSelectionMulti extends TableSelectionBase {
             const startRow = this._rangeSelection.rows[0];
             const startIndex = this._table.rows.indexOf(startRow);
             const endIndex = this._table.rows.indexOf(row);
+            // Set checkbox to the selection state of the start row (if it is selected)
+            const selectionState = this.isSelected(startRow);
             // When doing a range selection and clicking on an already selected row, the checked status should not change
             // Therefore, we need to manually set the checked attribute again, as clicking it would deselect it and leads to
             // a visual inconsistency.
-            row.shadowRoot?.querySelector("#selection-component")?.toggleAttribute("checked", true);
+            row.shadowRoot?.querySelector("#selection-component")?.toggleAttribute("checked", selectionState);
+            e.stopPropagation();
             if (startIndex === -1 || endIndex === -1 || row.rowKey === startRow.rowKey || row.rowKey === this._rangeSelection.rows[this._rangeSelection.rows.length - 1].rowKey) {
                 return;
             }
@@ -180,7 +218,7 @@ let TableSelectionMulti = class TableSelectionMulti extends TableSelectionBase {
             this._handleRangeSelection(row, change);
         }
         else if (row) {
-            this._startRangeSelection(row, true);
+            this._startRangeSelection(row, !this.isSelected(row), true);
         }
     }
     /**
@@ -188,12 +226,7 @@ let TableSelectionMulti = class TableSelectionMulti extends TableSelectionBase {
      * @param row starting row
      * @private
      */
-    _startRangeSelection(row, isMouse = false) {
-        const selected = this.isSelected(row);
-        if (isMouse && !selected) {
-            // Do not initiate range selection if the row is not selected
-            return;
-        }
+    _startRangeSelection(row, selected, isMouse = false) {
         this._rangeSelection = {
             selected,
             isUp: null,
@@ -252,6 +285,9 @@ let TableSelectionMulti = class TableSelectionMulti extends TableSelectionBase {
 __decorate([
     property()
 ], TableSelectionMulti.prototype, "selected", void 0);
+__decorate([
+    property()
+], TableSelectionMulti.prototype, "headerSelector", void 0);
 TableSelectionMulti = __decorate([
     customElement({ tag: "ui5-table-selection-multi" })
 ], TableSelectionMulti);

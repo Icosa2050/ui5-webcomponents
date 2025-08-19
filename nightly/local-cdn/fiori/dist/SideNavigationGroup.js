@@ -9,11 +9,11 @@ import property from "@ui5/webcomponents-base/dist/decorators/property.js";
 import jsxRender from "@ui5/webcomponents-base/dist/renderer/JsxRenderer.js";
 import slot from "@ui5/webcomponents-base/dist/decorators/slot.js";
 import i18n from "@ui5/webcomponents-base/dist/decorators/i18n.js";
-import { isLeft, isRight, } from "@ui5/webcomponents-base/dist/Keys.js";
+import { isLeft, isRight, isMinus, isPlus, } from "@ui5/webcomponents-base/dist/Keys.js";
 import customElement from "@ui5/webcomponents-base/dist/decorators/customElement.js";
 import SideNavigationItemBase from "./SideNavigationItemBase.js";
 import SideNavigationGroupTemplate from "./SideNavigationGroupTemplate.js";
-import { SIDE_NAVIGATION_GROUP_HEADER_DESC, } from "./generated/i18n/i18n-defaults.js";
+import { SIDE_NAVIGATION_ICON_COLLAPSE, SIDE_NAVIGATION_ICON_EXPAND, } from "./generated/i18n/i18n-defaults.js";
 // Styles
 import SideNavigationGroupCss from "./generated/themes/SideNavigationGroup.css.js";
 /**
@@ -44,6 +44,12 @@ let SideNavigationGroup = SideNavigationGroup_1 = class SideNavigationGroup exte
          * @default false
          */
         this.expanded = false;
+        this.belowGroup = false;
+    }
+    onBeforeRendering() {
+        this.allItems.forEach(item => {
+            item._groupDisabled = this.disabled;
+        });
     }
     get overflowItems() {
         const separator1 = this.shadowRoot.querySelector(".ui5-sn-item-separator:first-child");
@@ -87,20 +93,33 @@ let SideNavigationGroup = SideNavigationGroup_1 = class SideNavigationGroup exte
         return this.expanded;
     }
     get belowGroupClassName() {
-        if (isInstanceOfSideNavigationGroup(this.previousElementSibling)) {
-            return "ui5-sn-item-group-below-group";
-        }
-        return "";
+        return this.belowGroup ? "ui5-sn-item-group-below-group" : "";
     }
-    get accDescription() {
-        return SideNavigationGroup_1.i18nBundle.getText(SIDE_NAVIGATION_GROUP_HEADER_DESC);
+    get _arrowTooltip() {
+        return this.expanded ? SideNavigationGroup_1.i18nBundle.getText(SIDE_NAVIGATION_ICON_COLLAPSE)
+            : SideNavigationGroup_1.i18nBundle.getText(SIDE_NAVIGATION_ICON_EXPAND);
     }
     _onkeydown(e) {
+        if (this.disabled) {
+            return;
+        }
+        const isRTL = this.effectiveDir === "rtl";
         if (isLeft(e)) {
-            this.expanded = false;
+            e.preventDefault();
+            this.expanded = isRTL;
             return;
         }
         if (isRight(e)) {
+            e.preventDefault();
+            this.expanded = !isRTL;
+        }
+        if (isMinus(e)) {
+            e.preventDefault();
+            this.expanded = false;
+            return;
+        }
+        if (isPlus(e)) {
+            e.preventDefault();
             this.expanded = true;
         }
     }
@@ -112,7 +131,9 @@ let SideNavigationGroup = SideNavigationGroup_1 = class SideNavigationGroup exte
         this.sideNavigation?.focusItem(this);
     }
     _toggle() {
-        this.expanded = !this.expanded;
+        if (!this.disabled) {
+            this.expanded = !this.expanded;
+        }
     }
     get isSideNavigationGroup() {
         return true;

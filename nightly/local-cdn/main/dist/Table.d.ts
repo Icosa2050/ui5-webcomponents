@@ -150,12 +150,6 @@ type TableRowActionClickEventDetail = {
  * @extends UI5Element
  * @since 2.0.0
  * @public
- * @experimental This Table web component is available since 2.0 and has been newly implemented to provide better screen reader and keyboard handling support.
- * Currently, it's considered experimental as its API is subject to change.
- * This Table replaces the previous Table web component, that has been part of **@ui5/webcomponents** version 1.x.
- * For compatibility reasons, we moved the previous Table implementation to the **@ui5/webcomponents-compat** package
- * and will be maintained until the new Table is experimental.
- * Keep in mind that you can use either the compat/Table, or the main/Table - you can't use them both as they both define the `ui5-table` tag name.
  */
 declare class Table extends UI5Element {
     eventDetails: {
@@ -185,7 +179,7 @@ declare class Table extends UI5Element {
      *
      * @public
      */
-    nodata: Array<HTMLElement>;
+    noData: Array<HTMLElement>;
     /**
      * Defines the features of the component.
      *
@@ -219,7 +213,6 @@ declare class Table extends UI5Element {
      * Available options are:
      *
      * <code>Scroll</code> - Columns are shown as regular columns and horizontal scrolling is enabled.
-     *
      * <code>Popin</code> - Columns are shown as pop-ins instead of regular columns.
      *
      * @default "Scroll"
@@ -230,6 +223,7 @@ declare class Table extends UI5Element {
      * Defines if the loading indicator should be shown.
      *
      * **Note:** When the component is loading, it is not interactive.
+     *
      * @default false
      * @public
      */
@@ -242,10 +236,6 @@ declare class Table extends UI5Element {
      */
     loadingDelay: number;
     /**
-     * Defines the sticky top offset of the table, if other sticky elements outside of the table exist.
-     */
-    stickyTop: string;
-    /**
      * Defines the maximum number of row actions that is displayed, which determines the width of the row action column.
      *
      * **Note:** It is recommended to use a maximum of 3 row actions, as exceeding this limit may take up too much space on smaller screens.
@@ -255,8 +245,19 @@ declare class Table extends UI5Element {
      * @public
      */
     rowActionCount: number;
+    /**
+     * Defines the sticky top offset of the table, if other sticky elements outside of the table exist.
+     */
+    stickyTop: string;
     _invalidate: number;
     _renderNavigated: boolean;
+    dropIndicatorDOM: DropIndicator;
+    _noDataRow?: TableRow;
+    _endRow: TableRow;
+    _tableElement: HTMLElement;
+    _beforeElement: HTMLElement;
+    _afterElement: HTMLElement;
+    _loadingElement: HTMLElement;
     static i18nBundle: I18nBundle;
     _events: string[];
     _onEventBound: (e: Event) => void;
@@ -265,7 +266,7 @@ declare class Table extends UI5Element {
     _tableDragAndDrop?: TableDragAndDrop;
     _poppedIn: Array<{
         col: TableHeaderCell;
-        width: float;
+        width: number;
     }>;
     _containerWidth: number;
     constructor();
@@ -304,22 +305,16 @@ declare class Table extends UI5Element {
         };
     };
     get _gridTemplateColumns(): string | undefined;
-    get _tableOverflowX(): "auto" | "clip";
-    get _tableOverflowY(): string;
-    get _nodataRow(): TableRow;
-    get _beforeElement(): HTMLElement;
-    get _afterElement(): HTMLElement;
-    get _tableElement(): HTMLElement;
-    get _loadingElement(): HTMLElement;
+    get _isRowSelectorRequired(): boolean | undefined;
+    get _scrollContainer(): HTMLElement;
+    get _stickyElements(): (TableHeaderRow | TableHeaderCell)[];
     get _effectiveNoDataText(): string;
     get _ariaLabel(): string | undefined;
-    get _ariaRowCount(): number | undefined;
+    get _ariaDescription(): string | undefined;
+    get _ariaRowCount(): number;
+    get _ariaColCount(): number;
     get _ariaMultiSelectable(): boolean | undefined;
-    get _stickyElements(): (TableHeaderRow | TableHeaderCell)[];
-    get _scrollContainer(): HTMLElement;
     get isTable(): boolean;
-    get dropIndicatorDOM(): DropIndicator | null;
-    get _hasRowActions(): boolean;
 }
 export default Table;
 export type { ITableFeature, ITableGrowing, TableRowClickEventDetail, TableMoveEventDetail, TableRowActionClickEventDetail, };

@@ -1,7 +1,7 @@
-import type Table from "./Table.js";
-import type TableRowBase from "./TableRowBase.js";
 import TableExtension from "./TableExtension.js";
 import GridWalker from "./GridWalker.js";
+import type TableRowBase from "./TableRowBase.js";
+import type Table from "./Table.js";
 /**
  * Handles the keyboard navigation for the ui5-table.
  *

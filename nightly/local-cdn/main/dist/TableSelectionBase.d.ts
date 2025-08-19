@@ -3,6 +3,7 @@ import type Table from "./Table.js";
 import type TableRowBase from "./TableRowBase.js";
 import type TableRow from "./TableRow.js";
 import type { ITableFeature } from "./Table.js";
+import TableSelectionBehavior from "./types/TableSelectionBehavior.js";
 /**
  * Fired when selection is changed by user interaction.
  *
@@ -25,6 +26,14 @@ declare abstract class TableSelectionBase extends UI5Element implements ITableFe
      * @public
      */
     selected?: string;
+    /**
+     * Defines the selection behavior.
+     *
+     * @default "RowSelector"
+     * @public
+     * @since 2.11
+     */
+    behavior: `${TableSelectionBehavior}`;
     readonly identifier = "TableSelection";
     protected _table?: Table;
     onTableActivate(table: Table): void;
@@ -40,10 +49,17 @@ declare abstract class TableSelectionBase extends UI5Element implements ITableFe
      */
     isRowSelectorRequired(): boolean;
     /**
+     * Returns the ARIA description of the Table as an alternative to aria-multiselectable.
+     */
+    getAriaDescriptionForTable(): string | undefined;
+    /**
+     * Returns the ARIA description of the selection component displayed in the column header.
+     */
+    getAriaDescriptionForColumnHeader(): string | undefined;
+    /**
      * Returns the unique key associated with the table row.
      *
      * @param row The row instance
-     * @public
      */
     getRowKey(row: TableRow): string;
     /**
@@ -57,7 +73,6 @@ declare abstract class TableSelectionBase extends UI5Element implements ITableFe
      * Determines whether the specified table row is currently selected.
      *
      * @param row The row instance
-     * @public
      */
     abstract isSelected(row: TableRowBase): boolean;
     /**
@@ -65,13 +80,11 @@ declare abstract class TableSelectionBase extends UI5Element implements ITableFe
      *
      * @param row The row instance
      * @param selected Whether the row is selected
-     * @public
+     * @param fireEvent Whether the change event should be fired
      */
-    abstract setSelected(row: TableRowBase, selected: boolean, _fireEvent: boolean): void;
+    abstract setSelected(row: TableRowBase, selected: boolean, fireEvent: boolean): void;
     /**
      * Invalidates the table and its rows to re-evaluate the selection.
-     *
-     * @protected
      */
     protected _invalidateTableAndRows(): void;
 }

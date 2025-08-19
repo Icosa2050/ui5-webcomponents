@@ -11,6 +11,7 @@ import jsxRenderer from "@ui5/webcomponents-base/dist/renderer/JsxRenderer.js";
 import TableColumnTemplate from "./TableColumnTemplate.js";
 // Styles
 import tableColumnStyles from "./generated/themes/TableColumn.css.js";
+import { patchScopingSuffix } from "./utils/CompatCustomElementsScope.js";
 /**
  * @class
  *
@@ -23,6 +24,7 @@ import tableColumnStyles from "./generated/themes/TableColumn.css.js";
  * @public
  * @slot {Node[]} default - Defines the content of the column header
  * @csspart column - Used to style the native `th` element
+ * @deprecated Deprecated as of version 2.12.0, use `@ui5/webcomponents/dist/Table.js` instead.
  */
 let TableColumn = class TableColumn extends UI5Element {
     constructor() {
@@ -94,6 +96,7 @@ TableColumn = __decorate([
         template: TableColumnTemplate,
     })
 ], TableColumn);
+patchScopingSuffix(TableColumn);
 TableColumn.define();
 export default TableColumn;
 //# sourceMappingURL=TableColumn.js.map

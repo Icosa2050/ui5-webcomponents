@@ -1,8 +1,8 @@
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
-import type I18nBundle from "@ui5/webcomponents-base/dist/i18nBundle.js";
+import TableGrowingMode from "./types/TableGrowingMode.js";
 import type Table from "./Table.js";
 import type { ITableGrowing } from "./Table.js";
-import TableGrowingMode from "./types/TableGrowingMode.js";
+import type I18nBundle from "@ui5/webcomponents-base/dist/i18nBundle.js";
 /**
  * @class
  *
@@ -23,12 +23,12 @@ import TableGrowingMode from "./types/TableGrowingMode.js";
  *
  * ```html
  * <ui5-table>
- * 	<ui5-table-growing type="Button" growing-text="More" slot="features"></ui5-table-growing>
+ * 	<ui5-table-growing mode="Button" text="More" slot="features"></ui5-table-growing>
  * </ui5-table>
  * ```
  *
  * **Notes**:
- * * When the `ui5-table-growing` component is used with the `Scroll` type and the table is currently not scrollable,
+ * * When the `ui5-table-growing` component is used with the `Scroll` mode and the table is currently not scrollable,
  * the component will render a growing button instead to ensure growing capabilities until the table becomes scrollable.
  *
  * ### ES6 Module Import
@@ -39,7 +39,6 @@ import TableGrowingMode from "./types/TableGrowingMode.js";
  * @extends UI5Element
  * @since 2.0.0
  * @public
- * @experimental This web component is available since 2.0 with an experimental flag and its API and behavior are subject to change.
  */
 declare class TableGrowing extends UI5Element implements ITableGrowing {
     eventDetails: {
@@ -57,26 +56,26 @@ declare class TableGrowing extends UI5Element implements ITableGrowing {
      * @default "Button"
      * @public
      */
-    type: `${TableGrowingMode}`;
+    mode: `${TableGrowingMode}`;
     /**
      * Defines the text that will be displayed inside the growing button.
-     * Has no effect when type is set to `Scroll`.
+     * Has no effect when mode is set to `Scroll`.
      *
-     * **Note:** When not provided and the type is set to Button, a default text is displayed, corresponding to the
+     * **Note:** When not provided and the mode is set to Button, a default text is displayed, corresponding to the
      * current language.
      *
      * @default undefined
      * @public
      */
-    growingText?: string;
+    text?: string;
     /**
-     * Defines the text that will be displayed below the `growingText` inside the growing button.
-     * Has no effect when type is set to Scroll.
+     * Defines the text that will be displayed below the `text` inside the growing button.
+     * Has no effect when mode is set to Scroll.
      *
      * @default undefined
      * @public
      */
-    growingSubText?: string;
+    subtext?: string;
     /**
      * Defines the active state of the growing button.
      * Used for keyboard interaction.
@@ -124,8 +123,8 @@ declare class TableGrowing extends UI5Element implements ITableGrowing {
     _onKeydown(e: KeyboardEvent): void;
     _onKeyup(e: KeyboardEvent): void;
     _onFocusout(): void;
-    get _growingButtonText(): string;
-    get _growingButtonDescription(): string;
-    get _hasGrowingButton(): boolean;
+    get _buttonText(): string;
+    get _buttonDescription(): string;
+    get _hasButton(): boolean;
 }
 export default TableGrowing;

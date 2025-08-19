@@ -31,6 +31,7 @@ declare namespace JSX {
     interface SVGAttributes extends _JSX.SVGAttributes {
     }
     type AriaRole = _JSX.AriaRole;
+    type AriaAttributes = _JSX.AriaAttributes;
     type MouseEventHandler<T extends EventTarget> = _JSX.MouseEventHandler<T>;
     type TargetedMouseEvent<Target extends EventTarget> = _JSX.TargetedMouseEvent<Target>;
     type TargetedInputEvent<Target extends EventTarget> = _JSX.TargetedInputEvent<Target>;

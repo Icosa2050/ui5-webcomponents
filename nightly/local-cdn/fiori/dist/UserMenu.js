@@ -15,7 +15,7 @@ import { isPhone } from "@ui5/webcomponents-base/dist/Device.js";
 import UserMenuTemplate from "./UserMenuTemplate.js";
 import UserMenuCss from "./generated/themes/UserMenu.css.js";
 // Texts
-import { USER_MENU_OTHER_ACCOUNT_BUTTON_TXT, USER_MENU_MANAGE_ACCOUNT_BUTTON_TXT, USER_MENU_SIGN_OUT_BUTTON_TXT, USER_MENU_POPOVER_ACCESSIBLE_NAME, USER_MENU_EDIT_AVATAR_TXT, USER_MENU_ADD_ACCOUNT_TXT, USER_MENU_CLOSE_DIALOG_BUTTON, } from "./generated/i18n/i18n-defaults.js";
+import { USER_MENU_OTHER_ACCOUNT_BUTTON_TXT, USER_MENU_MANAGE_ACCOUNT_BUTTON_TXT, USER_MENU_SIGN_OUT_BUTTON_TXT, USER_MENU_POPOVER_ACCESSIBLE_NAME, USER_MENU_EDIT_AVATAR_TXT, USER_MENU_EDIT_ACCOUNTS_TXT, USER_MENU_CLOSE_DIALOG_BUTTON, USER_MENU_POPOVER_ACCESSIBLE_ACCOUNT_SELECTED_TXT, USER_MENU_CURRENT_INFORMATION_TXT, USER_MENU_ACTIONS_TXT, } from "./generated/i18n/i18n-defaults.js";
 /**
  * @class
  * ### Overview
@@ -59,12 +59,12 @@ let UserMenu = UserMenu_1 = class UserMenu extends UI5Element {
          */
         this.showOtherAccounts = false;
         /**
-         * Defines if the User Menu shows the Add Account option.
+         * Defines if the User Menu shows the Edit Accounts option.
          *
          * @default false
          * @public
          */
-        this.showAddAccount = false;
+        this.showEditAccounts = false;
         /**
          * Defines if the User menu shows edit button.
          *
@@ -82,13 +82,13 @@ let UserMenu = UserMenu_1 = class UserMenu extends UI5Element {
          * @default false
          * @private
          */
-        this._manageAccountMovedToHeader = false;
+        this._isScrolled = false;
     }
     onBeforeRendering() {
         this._selectedAccount = this.accounts.find(account => account.selected) || this.accounts[0];
     }
     onAfterRendering() {
-        if (this._isPhone && this._responsivePopover) {
+        if (this._responsivePopover) {
             const observerOptions = {
                 threshold: [0.15],
             };
@@ -105,22 +105,19 @@ let UserMenu = UserMenu_1 = class UserMenu extends UI5Element {
     get _isPhone() {
         return isPhone();
     }
+    _handleScroll(e) {
+        this._isScrolled = e.detail.scrollTop > 0;
+    }
     _handleIntersection(entries) {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 if (entry.target.id === "selected-account-title") {
                     this._titleMovedToHeader = false;
                 }
-                else if (entry.target.id === "selected-account-manage-btn") {
-                    this._manageAccountMovedToHeader = false;
-                }
                 return;
             }
             if (entry.target.id === "selected-account-title") {
                 this._titleMovedToHeader = true;
-            }
-            else if (entry.target.id === "selected-account-manage-btn") {
-                this._manageAccountMovedToHeader = true;
             }
         }, this);
     }
@@ -133,8 +130,8 @@ let UserMenu = UserMenu_1 = class UserMenu extends UI5Element {
     _handleManageAccountClick() {
         this.fireDecoratorEvent("manage-account-click");
     }
-    _handleAddAccountClick() {
-        this.fireDecoratorEvent("add-account-click");
+    _handleEditAccountsClick() {
+        this.fireDecoratorEvent("edit-accounts-click");
     }
     _handleAccountSwitch(e) {
         const item = e.detail.item;
@@ -157,6 +154,7 @@ let UserMenu = UserMenu_1 = class UserMenu extends UI5Element {
     }
     _handleMenuItemClick(e) {
         const item = e.detail.item; // imrove: improve this ideally without "as" cating
+        item._updateCheckedState();
         if (!item._popover) {
             const eventPrevented = !this.fireDecoratorEvent("item-click", {
                 "item": item,
@@ -190,11 +188,8 @@ let UserMenu = UserMenu_1 = class UserMenu extends UI5Element {
     _closeUserMenu() {
         this.open = false;
     }
-    get _manageAccountVisibleInHeader() {
-        return this.showManageAccount && this._manageAccountMovedToHeader;
-    }
     get _otherAccounts() {
-        return this.accounts.filter(account => account !== this._selectedAccount);
+        return this.accounts;
     }
     get _manageAccountButtonText() {
         return UserMenu_1.i18nBundle.getText(USER_MENU_MANAGE_ACCOUNT_BUTTON_TXT);
@@ -208,8 +203,8 @@ let UserMenu = UserMenu_1 = class UserMenu extends UI5Element {
     get _editAvatarTooltip() {
         return UserMenu_1.i18nBundle.getText(USER_MENU_EDIT_AVATAR_TXT);
     }
-    get _addAccountTooltip() {
-        return UserMenu_1.i18nBundle.getText(USER_MENU_ADD_ACCOUNT_TXT);
+    get _editAccountsTooltip() {
+        return UserMenu_1.i18nBundle.getText(USER_MENU_EDIT_ACCOUNTS_TXT);
     }
     get _closeDialogAriaLabel() {
         return UserMenu_1.i18nBundle.getText(USER_MENU_CLOSE_DIALOG_BUTTON);
@@ -219,6 +214,15 @@ let UserMenu = UserMenu_1 = class UserMenu extends UI5Element {
             return "";
         }
         return `${UserMenu_1.i18nBundle.getText(USER_MENU_POPOVER_ACCESSIBLE_NAME)} ${this._selectedAccount.titleText}`;
+    }
+    get _ariaLabelledByAccountInformationText() {
+        return UserMenu_1.i18nBundle.getText(USER_MENU_CURRENT_INFORMATION_TXT);
+    }
+    get _ariaLabelledByActions() {
+        return UserMenu_1.i18nBundle.getText(USER_MENU_ACTIONS_TXT);
+    }
+    getAccountDescriptionText(account) {
+        return `${account.subtitleText} ${account.description} ${account.selected ? UserMenu_1.i18nBundle.getText(USER_MENU_POPOVER_ACCESSIBLE_ACCOUNT_SELECTED_TXT) : ""}`;
     }
     getAccountByRefId(refId) {
         return this.accounts.find(account => account._id === refId);
@@ -243,7 +247,7 @@ __decorate([
 ], UserMenu.prototype, "showOtherAccounts", void 0);
 __decorate([
     property({ type: Boolean })
-], UserMenu.prototype, "showAddAccount", void 0);
+], UserMenu.prototype, "showEditAccounts", void 0);
 __decorate([
     property({ type: Boolean })
 ], UserMenu.prototype, "showEditButton", void 0);
@@ -267,7 +271,7 @@ __decorate([
 ], UserMenu.prototype, "_titleMovedToHeader", void 0);
 __decorate([
     property({ type: Boolean })
-], UserMenu.prototype, "_manageAccountMovedToHeader", void 0);
+], UserMenu.prototype, "_isScrolled", void 0);
 __decorate([
     query("#user-menu-rp")
 ], UserMenu.prototype, "_responsivePopover", void 0);
@@ -301,11 +305,11 @@ UserMenu = UserMenu_1 = __decorate([
     ,
     event("manage-account-click")
     /**
-     * Fired when the "Add Account" button is selected.
+     * Fired when the "Edit Accounts" button is selected.
      * @public
      */
     ,
-    event("add-account-click")
+    event("edit-accounts-click")
     /**
      * Fired when the account is switched to a different one.
      * @param {UserMenuAccount} prevSelectedAccount The previously selected account.

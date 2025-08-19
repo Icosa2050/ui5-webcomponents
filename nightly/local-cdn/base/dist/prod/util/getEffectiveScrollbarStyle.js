@@ -1,4 +1,5 @@
-"use strict";const r="ui5-content-native-scrollbars",o=typeof document>"u",a=()=>o||document.body.classList.contains(r)?"":`::-webkit-scrollbar:horizontal {
+"use strict";const r="ui5-content-native-scrollbars",o=typeof document>"u",a=()=>o||document.body.classList.contains(r)?"":`
+::-webkit-scrollbar:horizontal {
 	height: var(--sapScrollBar_Dimension);
 }
 
@@ -14,6 +15,7 @@
 ::-webkit-scrollbar-thumb {
 	border-radius: var(--sapElement_BorderCornerRadius);
 	background-color: var(--sapScrollBar_FaceColor);
+	border: 0.125rem solid var(--sapScrollBar_TrackColor);
 }
 
 ::-webkit-scrollbar-thumb:hover {

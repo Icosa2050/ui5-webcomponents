@@ -50,6 +50,10 @@ MenuSeparator = __decorate([
         template: menuSeparatorTemplate,
     })
 ], MenuSeparator);
+const isInstanceOfMenuSeparator = (object) => {
+    return "isSeparator" in object;
+};
 MenuSeparator.define();
 export default MenuSeparator;
+export { isInstanceOfMenuSeparator, };
 //# sourceMappingURL=MenuSeparator.js.map

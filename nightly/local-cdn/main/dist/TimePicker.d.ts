@@ -200,6 +200,7 @@ declare class TimePicker extends UI5Element implements IFormInputElement {
      * @default null
      */
     get dateValue(): Date | null;
+    get _lastAvailableTime(): string;
     /**
      * @protected
      */
@@ -289,21 +290,6 @@ declare class TimePicker extends UI5Element implements IFormInputElement {
     get hasValueStateText(): boolean;
     get hasValueState(): boolean;
     get shouldDisplayValueStateMessageOnDesktop(): boolean;
-    get classes(): {
-        popover: {
-            "ui5-suggestions-popover": boolean;
-            "ui5-popover-with-value-state-header-phone": boolean;
-            "ui5-popover-with-value-state-header": boolean;
-        };
-        popoverValueState: {
-            "ui5-valuestatemessage-header": boolean;
-            "ui5-valuestatemessage-root": boolean;
-            "ui5-valuestatemessage--success": boolean;
-            "ui5-valuestatemessage--error": boolean;
-            "ui5-valuestatemessage--warning": boolean;
-            "ui5-valuestatemessage--information": boolean;
-        };
-    };
     /**
      * @protected
      */

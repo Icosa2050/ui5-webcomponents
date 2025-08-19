@@ -43,8 +43,27 @@ let ToggleButton = class ToggleButton extends Button {
          */
         this.pressed = false;
     }
-    _onclick() {
-        this.pressed = !this.pressed;
+    _onclick(e) {
+        e.stopImmediatePropagation();
+        if (this.nonInteractive) {
+            return;
+        }
+        const { altKey, ctrlKey, metaKey, shiftKey, } = e;
+        const oldValue = this.pressed;
+        this.pressed = !oldValue;
+        const prevented = !this.fireDecoratorEvent("click", {
+            originalEvent: e,
+            altKey,
+            ctrlKey,
+            metaKey,
+            shiftKey,
+        });
+        if (prevented) {
+            e.preventDefault();
+            // value should be restored if click is prevented
+            this.pressed = oldValue;
+            return;
+        }
         if (isSafari()) {
             this.getDomRef().focus();
         }

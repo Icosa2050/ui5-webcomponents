@@ -1,3 +1,4 @@
+import type I18nBundle from "@ui5/webcomponents-base/dist/i18nBundle.js";
 import type SideNavigationItemBase from "./SideNavigationItemBase.js";
 import SideNavigationSelectableItemBase from "./SideNavigationSelectableItemBase.js";
 import type SideNavigationSubItem from "./SideNavigationSubItem.js";
@@ -41,17 +42,23 @@ declare class SideNavigationItem extends SideNavigationSelectableItemBase {
      * @public
      */
     items: Array<SideNavigationSubItem>;
+    static i18nBundle: I18nBundle;
+    onBeforeRendering(): void;
     get overflowItems(): Array<SideNavigationItem>;
+    get hasSubItems(): boolean;
+    get effectiveDisabled(): boolean;
     get selectableItems(): Array<SideNavigationSelectableItemBase>;
     get focusableItems(): Array<SideNavigationItemBase>;
     get allItems(): Array<SideNavigationItemBase>;
-    get effectiveTabIndex(): string | undefined;
+    get effectiveTabIndex(): number | undefined;
     get _ariaHasPopup(): import("@ui5/webcomponents-base/dist/types.js").AriaHasPopup | undefined;
     get _ariaChecked(): boolean | undefined;
     get _groupId(): string | undefined;
     get _expanded(): boolean | undefined;
     get classesArray(): string[];
     get _selected(): boolean;
+    get _arrowTooltip(): string;
+    get _ariaLabel(): string | undefined;
     applyInitialFocusInPopover(): void;
     _onToggleClick(e: CustomEvent): void;
     _onkeydown(e: KeyboardEvent): void;
@@ -61,8 +68,8 @@ declare class SideNavigationItem extends SideNavigationSelectableItemBase {
     _onfocusout(): void;
     _onmouseenter(): void;
     _onmouseleave(): void;
-    get isSideNavigationItem(): boolean;
     _toggle(): void;
+    get isSideNavigationItem(): boolean;
 }
 declare const isInstanceOfSideNavigationItem: (object: any) => object is SideNavigationItem;
 export default SideNavigationItem;

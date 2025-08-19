@@ -9,7 +9,8 @@ export default function MultiInputTemplate() {
     ];
 }
 function preContent() {
-    return (_jsxs(_Fragment, { children: [_jsx("span", { id: "hiddenText-nMore", class: "ui5-hidden-text", children: this._tokensCountText }), _jsx(Tokenizer, { class: "ui5-multi-input-tokenizer", opener: this.morePopoverOpener, popoverMinWidth: this._inputWidth, hidePopoverArrow: true, expanded: this.tokenizerExpanded, onKeyDown: this._onTokenizerKeydown, onTokenDelete: this.tokenDelete, onFocusOut: this._tokenizerFocusOut, children: this.tokens.map(token => _jsx("slot", { name: token._individualSlot })) })] }));
+    return (_jsxs(_Fragment, { children: [_jsx("span", { id: "hiddenText-nMore", class: "ui5-hidden-text", children: this._tokensCountText }), this.showValueHelpIcon &&
+                _jsx("span", { id: "hiddenText-value-help", class: "ui5-hidden-text", children: this._valueHelpText }), _jsx(Tokenizer, { class: "ui5-multi-input-tokenizer", opener: this.morePopoverOpener, popoverMinWidth: this._inputWidth, hidePopoverArrow: true, expanded: this.tokenizerExpanded, onKeyDown: this._onTokenizerKeydown, onTokenDelete: this.tokenDelete, onFocusOut: this._tokenizerFocusOut, children: this.tokens.map(token => _jsx("slot", { name: token._individualSlot })) })] }));
 }
 function postContent() {
     return (_jsx(_Fragment, { children: this.showValueHelpIcon &&

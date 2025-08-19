@@ -248,6 +248,9 @@ let MediaGallery = MediaGallery_1 = class MediaGallery extends UI5Element {
         }
         return items;
     }
+    getFocusDomRef() {
+        return this._itemNavigation._getCurrentItem();
+    }
     _selectItem(item, userInteraction = false) {
         if (item === this._selectedItem) {
             return;

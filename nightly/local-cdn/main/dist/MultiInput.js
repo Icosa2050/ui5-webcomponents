@@ -12,7 +12,7 @@ import customElement from "@ui5/webcomponents-base/dist/decorators/customElement
 import jsxRenderer from "@ui5/webcomponents-base/dist/renderer/JsxRenderer.js";
 import { isShow, isBackSpace, isLeft, isRight, isRightCtrl, isHome, isEnd, isDown, } from "@ui5/webcomponents-base/dist/Keys.js";
 import { getScopedVarName } from "@ui5/webcomponents-base/dist/CustomElementsScope.js";
-import { MULTIINPUT_ROLEDESCRIPTION_TEXT, MULTIINPUT_VALUE_HELP_LABEL } from "./generated/i18n/i18n-defaults.js";
+import { MULTIINPUT_ROLEDESCRIPTION_TEXT, MULTIINPUT_VALUE_HELP_LABEL, MULTIINPUT_VALUE_HELP } from "./generated/i18n/i18n-defaults.js";
 import Input from "./Input.js";
 import MultiInputTemplate from "./MultiInputTemplate.js";
 import styles from "./generated/themes/MultiInput.css.js";
@@ -234,8 +234,14 @@ let MultiInput = MultiInput_1 = class MultiInput extends Input {
     get _tokensCountText() {
         return getTokensCountText(this.tokens.length);
     }
+    get _valueHelpText() {
+        return MultiInput_1.i18nBundle.getText(MULTIINPUT_VALUE_HELP);
+    }
     get _tokensCountTextId() {
         return `hiddenText-nMore`;
+    }
+    get _valueHelpTextId() {
+        return this.showValueHelpIcon ? `hiddenText-value-help` : "";
     }
     /**
      * Returns the placeholder value when there are no tokens.
@@ -248,7 +254,7 @@ let MultiInput = MultiInput_1 = class MultiInput extends Input {
         return this.placeholder;
     }
     get accInfo() {
-        const ariaDescribedBy = `${this._tokensCountTextId} ${this.suggestionsTextId} ${this.valueStateTextId}`.trim();
+        const ariaDescribedBy = `${this._tokensCountTextId} ${this.suggestionsTextId} ${this.valueStateTextId} ${this._valueStateLinksShortcutsTextAccId} ${this._valueHelpTextId}`.trim();
         return {
             ...super.accInfo,
             "ariaRoledescription": this.ariaRoleDescription,

@@ -4,6 +4,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+var Button_1;
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
 import { renderFinished } from "@ui5/webcomponents-base/dist/Render.js";
 import customElement from "@ui5/webcomponents-base/dist/decorators/customElement.js";
@@ -12,10 +13,13 @@ import event from "@ui5/webcomponents-base/dist/decorators/event-strict.js";
 import slot from "@ui5/webcomponents-base/dist/decorators/slot.js";
 import query from "@ui5/webcomponents-base/dist/decorators/query.js";
 import jsxRenderer from "@ui5/webcomponents-base/dist/renderer/JsxRenderer.js";
+import { BUTTON_TOOLTIP_TEXT } from "./generated/i18n/i18n-defaults.js";
 import "./ButtonState.js";
 import ButtonTemplate from "./ButtonTemplate.js";
+import { getEffectiveAriaLabelText, getAssociatedLabelForTexts, getAllAccessibleNameRefTexts, } from "@ui5/webcomponents-base/dist/util/AccessibilityTextsHelper.js";
 // Styles
 import ButtonCss from "./generated/themes/Button.css.js";
+import { i18n } from "@ui5/webcomponents-base/dist/decorators.js";
 /**
  * @class
  *
@@ -47,7 +51,7 @@ import ButtonCss from "./generated/themes/Button.css.js";
  * @public
  * @experimental The Button and ButtonState web components are availabe since 2.0 under an experimental flag and their API and behaviour are subject to change.
  */
-let Button = class Button extends UI5Element {
+let Button = Button_1 = class Button extends UI5Element {
     constructor() {
         super(...arguments);
         /**
@@ -73,6 +77,29 @@ let Button = class Button extends UI5Element {
          * @since 2.6.0
          */
         this.arrowButtonPressed = false;
+        /**
+         * Defines the additional accessibility attributes that will be applied to the component.
+         *
+         * This property allows for fine-tuned control of ARIA attributes for screen reader support.
+         * It accepts an object with the following optional fields:
+         *
+         * - **root**: Accessibility attributes that will be applied to the root element.
+         *   - **hasPopup**: Indicates the availability and type of interactive popup element (such as a menu or dialog).
+         *     Accepts string values: `"dialog"`, `"grid"`, `"listbox"`, `"menu"`, or `"tree"`.
+         *   - **roleDescription**: Defines a human-readable description for the button's role.
+         *     Accepts any string value.
+         *
+         * - **arrowButton**: Accessibility attributes that will be applied to the arrow (split) button element.
+         *   - **hasPopup**: Indicates the type of popup triggered by the arrow button.
+         *     Accepts string values: `"dialog"`, `"grid"`, `"listbox"`, `"menu"`, or `"tree"`.
+         *   - **expanded**: Indicates whether the popup controlled by the arrow button is currently expanded.
+         *     Accepts boolean values: `true` or `false`.
+         *
+         * @public
+         * @since 2.6.0
+         * @default {}
+        */
+        this.accessibilityAttributes = {};
         /**
          * Determines if the button is in icon-only mode.
          * This property is animation related only.
@@ -208,6 +235,23 @@ let Button = class Button extends UI5Element {
         e.stopImmediatePropagation();
         this.fireDecoratorEvent("arrow-button-click");
     }
+    get _computedAccessibilityAttributes() {
+        const labelRefTexts = getAllAccessibleNameRefTexts(this) || getEffectiveAriaLabelText(this) || getAssociatedLabelForTexts(this) || "";
+        const mainTitle = this._hasText ? Button_1.i18nBundle.getText(BUTTON_TOOLTIP_TEXT, this._stateText) : "";
+        const title = `${mainTitle} ${labelRefTexts}`.trim();
+        return {
+            root: {
+                hasPopup: this.accessibilityAttributes?.root?.hasPopup || "false",
+                roleDescription: this.accessibilityAttributes?.root?.roleDescription,
+                title: this.accessibilityAttributes?.root?.title || title,
+            },
+            arrowButton: {
+                hasPopup: this.accessibilityAttributes?.arrowButton?.hasPopup,
+                expanded: this.accessibilityAttributes?.arrowButton?.expanded,
+                title: this.accessibilityAttributes?.arrowButton?.title,
+            },
+        };
+    }
 };
 __decorate([
     property()
@@ -223,6 +267,9 @@ __decorate([
 ], Button.prototype, "arrowButtonPressed", void 0);
 __decorate([
     property({ type: Object })
+], Button.prototype, "accessibilityAttributes", void 0);
+__decorate([
+    property({ type: Object })
 ], Button.prototype, "_currentStateObject", void 0);
 __decorate([
     property({ type: Boolean })
@@ -236,7 +283,10 @@ __decorate([
 __decorate([
     query(".ui5-ai-button-hidden[ui5-split-button]")
 ], Button.prototype, "_hiddenSplitButton", void 0);
-Button = __decorate([
+__decorate([
+    i18n("@ui5/webcomponents")
+], Button, "i18nBundle", void 0);
+Button = Button_1 = __decorate([
     customElement({
         tag: "ui5-ai-button",
         languageAware: true,

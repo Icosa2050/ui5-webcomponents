@@ -6,7 +6,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 import List from "@ui5/webcomponents/dist/List.js";
 import customElement from "@ui5/webcomponents-base/dist/decorators/customElement.js";
-import { isSpace } from "@ui5/webcomponents-base/Keys.js";
+import { isSpace } from "@ui5/webcomponents-base/dist/Keys.js";
 /**
  * @class
  *

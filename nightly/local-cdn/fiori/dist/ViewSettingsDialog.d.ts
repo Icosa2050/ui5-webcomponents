@@ -142,6 +142,7 @@ declare class ViewSettingsDialog extends UI5Element {
     get _selectedFilter(): (VSDItem & {
         filterOptions: Array<VSDItem>;
     }) | undefined;
+    _selectedFiltersLabel(item: FilterItem): string;
     get shouldBuildSort(): boolean;
     get shouldBuildFilter(): boolean;
     get hasPagination(): boolean;

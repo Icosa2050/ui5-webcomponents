@@ -85,6 +85,7 @@ declare class Token extends UI5Element implements IToken {
     _focusin(): void;
     _focusout(): void;
     _delete(): void;
+    _onmousedown(e: MouseEvent): void;
     _keydown(e: KeyboardEvent): void;
     onBeforeRendering(): void;
     get tokenDeletableText(): string;

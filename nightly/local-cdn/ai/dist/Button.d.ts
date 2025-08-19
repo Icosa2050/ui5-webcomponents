@@ -3,6 +3,14 @@ import type SplitButton from "@ui5/webcomponents/dist/SplitButton.js";
 import type ButtonDesign from "@ui5/webcomponents/dist/types/ButtonDesign.js";
 import type ButtonState from "./ButtonState.js";
 import "./ButtonState.js";
+import type I18nBundle from "@ui5/webcomponents-base/dist/i18nBundle.js";
+import type { AccessibilityAttributes } from "@ui5/webcomponents-base/dist/types.js";
+type AIButtonRootAccessibilityAttributes = Pick<AccessibilityAttributes, "hasPopup" | "roleDescription" | "title">;
+type AIButtonArrowButtonAccessibilityAttributes = Pick<AccessibilityAttributes, "hasPopup" | "expanded" | "title">;
+type AIButtonAccessibilityAttributes = {
+    root?: AIButtonRootAccessibilityAttributes;
+    arrowButton?: AIButtonArrowButtonAccessibilityAttributes;
+};
 /**
  * @class
  *
@@ -70,6 +78,29 @@ declare class Button extends UI5Element {
      */
     arrowButtonPressed: boolean;
     /**
+     * Defines the additional accessibility attributes that will be applied to the component.
+     *
+     * This property allows for fine-tuned control of ARIA attributes for screen reader support.
+     * It accepts an object with the following optional fields:
+     *
+     * - **root**: Accessibility attributes that will be applied to the root element.
+     *   - **hasPopup**: Indicates the availability and type of interactive popup element (such as a menu or dialog).
+     *     Accepts string values: `"dialog"`, `"grid"`, `"listbox"`, `"menu"`, or `"tree"`.
+     *   - **roleDescription**: Defines a human-readable description for the button's role.
+     *     Accepts any string value.
+     *
+     * - **arrowButton**: Accessibility attributes that will be applied to the arrow (split) button element.
+     *   - **hasPopup**: Indicates the type of popup triggered by the arrow button.
+     *     Accepts string values: `"dialog"`, `"grid"`, `"listbox"`, `"menu"`, or `"tree"`.
+     *   - **expanded**: Indicates whether the popup controlled by the arrow button is currently expanded.
+     *     Accepts boolean values: `true` or `false`.
+     *
+     * @public
+     * @since 2.6.0
+     * @default {}
+    */
+    accessibilityAttributes: AIButtonAccessibilityAttributes;
+    /**
      * Keeps the current state object of the component.
      * @private
      */
@@ -90,6 +121,7 @@ declare class Button extends UI5Element {
     states: Array<ButtonState>;
     _splitButton?: SplitButton;
     _hiddenSplitButton?: SplitButton;
+    static i18nBundle: I18nBundle;
     get _hideArrowButton(): boolean;
     get _effectiveState(): string;
     get _effectiveStateObject(): ButtonState | undefined;
@@ -124,5 +156,7 @@ declare class Button extends UI5Element {
      * @private
      */
     _onArrowClick(e: CustomEvent): void;
+    get _computedAccessibilityAttributes(): AIButtonAccessibilityAttributes;
 }
 export default Button;
+export type { AIButtonAccessibilityAttributes, };

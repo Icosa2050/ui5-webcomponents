@@ -23,6 +23,7 @@ interface ITimelineItem extends UI5Element, ITabbable {
     lastItem: boolean;
     isNextItemGroup?: boolean;
     firstItemInTimeline?: boolean;
+    effectiveRole?: string;
 }
 /**
  * @class
@@ -118,6 +119,7 @@ declare class Timeline extends UI5Element {
     getIntersectionObserver(): IntersectionObserver;
     onIntersection(entries: Array<IntersectionObserverEntry>): void;
     loadMore(): void;
+    getFocusDomRef(): HTMLElement | undefined;
     _onLoadMoreKeydown(e: KeyboardEvent): void;
     _onLoadMoreKeyup(e: KeyboardEvent): void;
     _onLoadMoreClick(): void;
@@ -125,8 +127,7 @@ declare class Timeline extends UI5Element {
     onBeforeRendering(): void;
     _setLastItem(): void;
     _setIsNextItemGroup(): void;
-    _onkeydown(e: KeyboardEvent): void;
-    _handleNextOrPreviousItem(e: KeyboardEvent, isNext?: boolean): void;
+    _onkeydown(e: KeyboardEvent): Promise<void>;
     _handleDown(): void;
     focusGrowingButton(): void;
     _handleUp(e: KeyboardEvent): void;
@@ -136,6 +137,7 @@ declare class Timeline extends UI5Element {
      * @param item
      */
     focusItem(item: ITimelineItem | ToggleButton): void;
+    get hasGroupItems(): boolean;
     get _navigableItems(): (ToggleButton | ITimelineItem)[];
 }
 export default Timeline;

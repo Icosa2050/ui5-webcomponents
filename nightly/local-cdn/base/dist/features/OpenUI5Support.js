@@ -1,5 +1,5 @@
 import patchPatcher from "./patchPatcher.js";
-import patchPopup from "./patchPopup.js";
+import { patchPopup, addOpenedPopup, removeOpenedPopup, getTopmostPopup, } from "./patchPopup.js";
 import { registerFeature } from "../FeaturesRegistry.js";
 import { setTheme } from "../config/Theme.js";
 class OpenUI5Support {
@@ -21,35 +21,38 @@ class OpenUI5Support {
         if (!OpenUI5Support.isOpenUI5Detected()) {
             return Promise.resolve();
         }
-        return new Promise(resolve => {
-            window.sap.ui.require(["sap/ui/core/Core"], async (Core) => {
-                const callback = () => {
-                    let deps = ["sap/ui/core/Popup", "sap/ui/core/Patcher", "sap/ui/core/LocaleData"];
-                    if (OpenUI5Support.isAtLeastVersion116()) { // for versions since 1.116.0 and onward, use the modular core
-                        deps = [
-                            ...deps,
-                            "sap/base/i18n/Formatting",
-                            "sap/base/i18n/Localization",
-                            "sap/ui/core/ControlBehavior",
-                            "sap/ui/core/Theming",
-                            "sap/ui/core/date/CalendarUtils",
-                        ];
+        if (!OpenUI5Support.initPromise) {
+            OpenUI5Support.initPromise = new Promise(resolve => {
+                window.sap.ui.require(["sap/ui/core/Core"], async (Core) => {
+                    const callback = () => {
+                        let deps = ["sap/ui/core/Popup", "sap/ui/core/Patcher", "sap/ui/core/LocaleData"];
+                        if (OpenUI5Support.isAtLeastVersion116()) { // for versions since 1.116.0 and onward, use the modular core
+                            deps = [
+                                ...deps,
+                                "sap/base/i18n/Formatting",
+                                "sap/base/i18n/Localization",
+                                "sap/ui/core/ControlBehavior",
+                                "sap/ui/core/Theming",
+                                "sap/ui/core/date/CalendarUtils",
+                            ];
+                        }
+                        window.sap.ui.require(deps, (Popup, Patcher) => {
+                            patchPatcher(Patcher);
+                            patchPopup(Popup);
+                            resolve();
+                        });
+                    };
+                    if (OpenUI5Support.isAtLeastVersion116()) {
+                        await Core.ready();
+                        callback();
                     }
-                    window.sap.ui.require(deps, (Popup, Patcher) => {
-                        patchPatcher(Patcher);
-                        patchPopup(Popup);
-                        resolve();
-                    });
-                };
-                if (OpenUI5Support.isAtLeastVersion116()) {
-                    await Core.ready();
-                    callback();
-                }
-                else {
-                    Core.attachInit(callback);
-                }
+                    else {
+                        Core.attachInit(callback);
+                    }
+                });
             });
-        });
+        }
+        return OpenUI5Support.initPromise;
     }
     static getConfigurationSettingsObject() {
         if (!OpenUI5Support.isOpenUI5Detected()) {
@@ -136,6 +139,15 @@ class OpenUI5Support {
             return false;
         }
         return !!link.href.match(/\/css(-|_)variables\.css/);
+    }
+    static addOpenedPopup(popup) {
+        addOpenedPopup(popup);
+    }
+    static removeOpenedPopup(popup) {
+        removeOpenedPopup(popup);
+    }
+    static getTopmostPopup() {
+        return getTopmostPopup();
     }
 }
 registerFeature("OpenUI5Support", OpenUI5Support);

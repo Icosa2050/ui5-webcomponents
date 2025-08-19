@@ -1,4 +1,8 @@
 import { DEFAULT_LOCALE } from "../generated/AssetParameters.js";
+const LOCALE_FALBACK_MAP = {
+    "zh_HK": "zh_TW",
+    "in": "id",
+};
 /**
  * Calculates the next fallback locale for the given locale.
  *
@@ -9,8 +13,8 @@ const nextFallbackLocale = (locale) => {
     if (!locale) {
         return DEFAULT_LOCALE;
     }
-    if (locale === "zh_HK") {
-        return "zh_TW";
+    if (LOCALE_FALBACK_MAP[locale]) {
+        return LOCALE_FALBACK_MAP[locale];
     }
     // if there are multiple segments (separated by underscores), remove the last one
     const p = locale.lastIndexOf("_");

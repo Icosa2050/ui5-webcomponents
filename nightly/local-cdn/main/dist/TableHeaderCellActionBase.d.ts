@@ -1,4 +1,6 @@
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
+import type { UI5CustomEvent } from "@ui5/webcomponents-base";
+import type Button from "./Button.js";
 /**
  * Fired when a header cell action is clicked.
  *
@@ -25,7 +27,7 @@ declare abstract class TableHeaderCellActionBase extends UI5Element {
         tooltip: string;
     };
     onBeforeRendering(): void;
-    _onClick(e: MouseEvent): void;
+    _onClick(e: UI5CustomEvent<Button, "click">): void;
     get _tooltip(): string;
     get _icon(): string;
 }

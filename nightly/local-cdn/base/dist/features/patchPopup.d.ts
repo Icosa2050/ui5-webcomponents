@@ -10,6 +10,9 @@ type OpenUI5Popup = {
         onFocusEvent: (e: FocusEvent) => void;
     };
 };
+declare const addOpenedPopup: (popup: object) => void;
+declare const removeOpenedPopup: (popup: object) => void;
+declare const getTopmostPopup: () => object;
 declare const patchPopup: (Popup: OpenUI5Popup) => void;
-export default patchPopup;
+export { patchPopup, addOpenedPopup, removeOpenedPopup, getTopmostPopup, };
 export type { OpenUI5Popup };

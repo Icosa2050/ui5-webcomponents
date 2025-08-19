@@ -63,6 +63,7 @@ declare class CalendarLegend extends UI5Element {
     static i18nBundle: I18nBundle;
     constructor();
     onAfterRendering(): void;
+    getFocusDomRef(): HTMLElement | undefined;
     _onMouseDown(e: MouseEvent): void;
     _onFocusIn(e: FocusEvent): void;
     _onFocusOut(): void;

@@ -1,6 +1,7 @@
 import TableSelectionBase from "./TableSelectionBase.js";
 import type TableRow from "./TableRow.js";
 import type TableRowBase from "./TableRowBase.js";
+import type TableSelectionMultiHeaderSelector from "./types/TableSelectionMultiHeaderSelector.js";
 /**
  * @class
  *
@@ -38,12 +39,23 @@ declare class TableSelectionMulti extends TableSelectionBase {
      * @public
      */
     selected?: string;
+    /**
+     * Defines the selector of the header row.
+     *
+     * @default "SelectAll"
+     * @public
+     * @since 2.12
+     */
+    headerSelector: `${TableSelectionMultiHeaderSelector}`;
     private _rowsLength;
     private _rangeSelection?;
+    _onClickCaptureBound: (e: MouseEvent) => void;
+    constructor();
     onTableBeforeRendering(): void;
+    onTableAfterRendering(): void;
     isMultiSelectable(): boolean;
     isSelected(row: TableRowBase): boolean;
-    setSelected(row: TableRowBase, selected: boolean, _fireEvent?: boolean): void;
+    setSelected(row: TableRowBase, selected: boolean, fireEvent?: boolean): void;
     /**
      * Returns an array of the selected rows.
      *
@@ -52,8 +64,6 @@ declare class TableSelectionMulti extends TableSelectionBase {
     getSelectedRows(): TableRow[];
     /**
      * Determines whether all rows are selected.
-     *
-     * @public
      */
     areAllRowsSelected(): boolean;
     /**
@@ -69,16 +79,19 @@ declare class TableSelectionMulti extends TableSelectionBase {
      * @public
      */
     setSelectedAsSet(selectedSet: Set<string>): void;
-    _invalidateTableAndRows(): void;
+    /**
+     * Returns the ARIA description of the selection component displayed in the column header.
+     */
+    getAriaDescriptionForColumnHeader(): string | undefined;
     _onkeydown(e: KeyboardEvent): void;
     _onkeyup(e: KeyboardEvent, eventOrigin: HTMLElement): void;
-    _onclick(e: MouseEvent): void;
+    _onclickCapture(e: MouseEvent): void;
     /**
      * Start the range selection and initialises the range selection state
      * @param row starting row
      * @private
      */
-    _startRangeSelection(row: TableRow, isMouse?: boolean): void;
+    _startRangeSelection(row: TableRow, selected: boolean, isMouse?: boolean): void;
     /**
      * Handles the range selection
      * @param targetRow Row that is currently focused

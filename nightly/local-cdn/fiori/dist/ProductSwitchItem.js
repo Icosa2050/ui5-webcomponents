@@ -11,6 +11,7 @@ import { isDesktop } from "@ui5/webcomponents-base/dist/Device.js";
 import property from "@ui5/webcomponents-base/dist/decorators/property.js";
 import event from "@ui5/webcomponents-base/dist/decorators/event-strict.js";
 import customElement from "@ui5/webcomponents-base/dist/decorators/customElement.js";
+import slot from "@ui5/webcomponents-base/dist/decorators/slot.js";
 import ProductSwitchItemTemplate from "./ProductSwitchItemTemplate.js";
 // Styles
 import ProductSwitchItemCss from "./generated/themes/ProductSwitchItem.css.js";
@@ -127,6 +128,9 @@ __decorate([
 __decorate([
     property({ noAttribute: true })
 ], ProductSwitchItem.prototype, "forcedTabIndex", void 0);
+__decorate([
+    slot({ type: HTMLElement })
+], ProductSwitchItem.prototype, "image", void 0);
 ProductSwitchItem = __decorate([
     customElement({
         tag: "ui5-product-switch-item",

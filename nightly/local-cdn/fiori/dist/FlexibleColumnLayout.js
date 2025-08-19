@@ -44,6 +44,10 @@ const COLUMN = {
     MID: 1,
     END: 2,
 };
+const SEPARATOR_DEFAULT_VALUES = {
+    START: 50,
+    END: 75,
+};
 const COLUMN_MIN_WIDTH = 248;
 /**
  * @class
@@ -163,14 +167,18 @@ let FlexibleColumnLayout = FlexibleColumnLayout_1 = class FlexibleColumnLayout e
             tablet: {},
             desktop: {},
         };
-        this.columnResizeHandler = (e) => {
-            e.target.classList.add("ui5-fcl-column--hidden");
+        this.onColumnCollapseAnimationEnd = (e) => {
+            const columnDOM = e.target;
+            columnDOM.classList.add("ui5-fcl-column--hidden");
+            columnDOM.classList.remove("ui5-fcl-column-collapse-animation");
+            columnDOM.removeEventListener("transitionend", this.onColumnCollapseAnimationEndRef);
         };
         this._prevLayout = null;
         this.initialRendering = true;
         this._handleResize = this.handleResize.bind(this);
         this._onSeparatorMove = this.onSeparatorMove.bind(this);
         this._onSeparatorMoveEnd = this.onSeparatorMoveEnd.bind(this);
+        this.onColumnCollapseAnimationEndRef = this.onColumnCollapseAnimationEnd.bind(this);
         const handleTouchStartEvent = (e) => {
             this.onSeparatorPress(e);
         };
@@ -258,17 +266,29 @@ let FlexibleColumnLayout = FlexibleColumnLayout_1 = class FlexibleColumnLayout e
         }
         // hide column: 33% to 0, 25% to 0, etc .
         if (currentlyHidden) {
-            // animate the width
-            columnDOM.style.width = typeof columnWidth === "number" ? `${columnWidth}px` : columnWidth;
-            // hide column with delay to allow the animation runs entirely
-            columnDOM.addEventListener("transitionend", this.columnResizeHandler);
+            this.collapseColumn(columnDOM);
             return;
         }
         // show column: from 0 to 33%, from 0 to 25%, etc.
         if (previouslyHidden) {
-            columnDOM.removeEventListener("transitionend", this.columnResizeHandler);
-            columnDOM.classList.remove("ui5-fcl-column--hidden");
-            columnDOM.style.width = typeof columnWidth === "number" ? `${columnWidth}px` : columnWidth;
+            this.expandColumn(columnDOM, columnWidth);
+        }
+    }
+    expandColumn(columnDOM, columnWidth) {
+        columnDOM.removeEventListener("transitionend", this.onColumnCollapseAnimationEndRef);
+        columnDOM.classList.remove("ui5-fcl-column--hidden");
+        columnDOM.style.width = typeof columnWidth === "number" ? `${columnWidth}px` : columnWidth;
+    }
+    collapseColumn(columnDOM) {
+        const hasAnimation = getAnimationMode() !== AnimationMode.None && !this.initialRendering;
+        columnDOM.style.width = "0px";
+        if (hasAnimation) {
+            // hide column with delay to allow the animation runs entirely
+            columnDOM.classList.add("ui5-fcl-column-collapse-animation");
+            columnDOM.addEventListener("transitionend", this.onColumnCollapseAnimationEndRef);
+        }
+        else {
+            columnDOM.classList.add("ui5-fcl-column--hidden");
         }
     }
     nextColumnLayout(layout) {
@@ -297,7 +317,8 @@ let FlexibleColumnLayout = FlexibleColumnLayout_1 = class FlexibleColumnLayout e
             return;
         }
         const pressedSeparator = e.target.closest(".ui5-fcl-separator");
-        if (pressedSeparator.classList.contains("ui5-fcl-separator-start") && !this.showStartSeparatorGrip) {
+        if ((pressedSeparator.classList.contains("ui5-fcl-separator-start") && !this.showStartSeparatorGrip)
+            || (pressedSeparator.classList.contains("ui5-fcl-separator-end") && !this.showEndSeparatorGrip)) {
             return;
         }
         const isTouch = supportsTouch() && e instanceof TouchEvent, cursorPositionX = this.getPageXValueFromEvent(e);
@@ -760,6 +781,22 @@ let FlexibleColumnLayout = FlexibleColumnLayout_1 = class FlexibleColumnLayout e
     get startSeparatorArrowVisibility() {
         return this.effectiveSeparatorsInfo[0].arrowVisible;
     }
+    get startSeparatorValue() {
+        const startColumnWidth = this.startColumnWidth;
+        if (typeof startColumnWidth === "string" && startColumnWidth.endsWith("%")) {
+            return parseInt(startColumnWidth);
+        }
+        return SEPARATOR_DEFAULT_VALUES.START;
+    }
+    get endSeparatorValue() {
+        const startColumnWidth = this.startColumnWidth;
+        const midColumnWidth = this.midColumnWidth;
+        if (typeof startColumnWidth === "string" && startColumnWidth.endsWith("%")
+            && typeof midColumnWidth === "string" && midColumnWidth.endsWith("%")) {
+            return parseInt(startColumnWidth) + parseInt(midColumnWidth);
+        }
+        return SEPARATOR_DEFAULT_VALUES.END;
+    }
     get startArrowDirection() {
         return this.effectiveSeparatorsInfo[0].arrowDirection;
     }
@@ -787,7 +824,6 @@ let FlexibleColumnLayout = FlexibleColumnLayout_1 = class FlexibleColumnLayout e
         if (this.showEndSeparatorGrip) {
             return 0;
         }
-        return -1;
     }
     get media() {
         if (this._width <= BREAKPOINTS.PHONE) {
@@ -809,6 +845,15 @@ let FlexibleColumnLayout = FlexibleColumnLayout_1 = class FlexibleColumnLayout e
     }
     get endColumnDOM() {
         return this.shadowRoot.querySelector(".ui5-fcl-column--end");
+    }
+    get isStartColumnCollapsing() {
+        return this.startColumnDOM?.classList.contains("ui5-fcl-column-collapse-animation");
+    }
+    get isMidColumnCollapsing() {
+        return this.midColumnDOM?.classList.contains("ui5-fcl-column-collapse-animation");
+    }
+    get isEndColumnCollapsing() {
+        return this.endColumnDOM?.classList.contains("ui5-fcl-column-collapse-animation");
     }
     get accStartColumnText() {
         return this.accessibilityAttributes.startColumn?.name || FlexibleColumnLayout_1.i18nBundle.getText(FCL_START_COLUMN_TXT);

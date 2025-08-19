@@ -24,7 +24,7 @@ import ButtonDesign from "./types/ButtonDesign.js";
 import ButtonType from "./types/ButtonType.js";
 import ButtonBadgeDesign from "./types/ButtonBadgeDesign.js";
 import ButtonTemplate from "./ButtonTemplate.js";
-import { BUTTON_ARIA_TYPE_ACCEPT, BUTTON_ARIA_TYPE_REJECT, BUTTON_ARIA_TYPE_EMPHASIZED } from "./generated/i18n/i18n-defaults.js";
+import { BUTTON_ARIA_TYPE_ACCEPT, BUTTON_ARIA_TYPE_REJECT, BUTTON_ARIA_TYPE_EMPHASIZED, BUTTON_ARIA_TYPE_ATTENTION, BUTTON_BADGE_ONE_ITEM, BUTTON_BADGE_MANY_ITEMS, } from "./generated/i18n/i18n-defaults.js";
 // Styles
 import buttonCss from "./generated/themes/Button.css.js";
 let isGlobalHandlerAttached = false;
@@ -152,6 +152,22 @@ let Button = Button_1 = class Button extends UI5Element {
          */
         this.nonInteractive = false;
         /**
+         * Defines whether the button shows a loading indicator.
+         *
+         * **Note:** If set to `true`, a busy indicator component will be displayed on the related button.
+         * @default false
+         * @public
+         * @since 2.13.0
+         */
+        this.loading = false;
+        /**
+         * Specifies the delay in milliseconds before the loading indicator appears within the associated button.
+         * @default 1000
+         * @public
+         * @since 2.13.0
+         */
+        this.loadingDelay = 1000;
+        /**
          * @private
          */
         this._iconSettings = {};
@@ -166,11 +182,22 @@ let Button = Button_1 = class Button extends UI5Element {
          */
         this._isTouch = false;
         this._cancelAction = false;
+        this._clickHandlerAttached = false;
         this._deactivate = () => {
             if (activeButton) {
                 activeButton._setActiveState(false);
             }
         };
+        this._onclickBound = e => {
+            if (e instanceof CustomEvent) {
+                return;
+            }
+            this._onclick(e);
+        };
+        if (!this._clickHandlerAttached) {
+            this.addEventListener("click", this._onclickBound);
+            this._clickHandlerAttached = true;
+        }
         if (!isGlobalHandlerAttached) {
             document.addEventListener("mouseup", this._deactivate);
             isGlobalHandlerAttached = true;
@@ -186,13 +213,24 @@ let Button = Button_1 = class Button extends UI5Element {
         if (isDesktop()) {
             this.setAttribute("desktop", "");
         }
+        if (!this._clickHandlerAttached) {
+            this.addEventListener("click", this._onclickBound);
+            this._clickHandlerAttached = true;
+        }
+    }
+    onExitDOM() {
+        if (this._clickHandlerAttached) {
+            this.removeEventListener("click", this._onclickBound);
+            this._clickHandlerAttached = false;
+        }
     }
     async onBeforeRendering() {
         this._setBadgeOverlayStyle();
         this.hasIcon = !!this.icon;
         this.hasEndIcon = !!this.endIcon;
         this.iconOnly = this.isIconOnly;
-        this.buttonTitle = this.tooltip || await this.getDefaultTooltip();
+        const defaultTooltip = await this.getDefaultTooltip();
+        this.buttonTitle = this.iconOnly ? this.tooltip ?? defaultTooltip : this.tooltip;
     }
     _setBadgeOverlayStyle() {
         const needsOverflowVisible = this.badge.length && (this.badge[0].design === ButtonBadgeDesign.AttentionDot || this.badge[0].design === ButtonBadgeDesign.OverlayText);
@@ -203,8 +241,25 @@ let Button = Button_1 = class Button extends UI5Element {
             this._internals.states.delete("has-overlay-badge");
         }
     }
-    _onclick() {
+    _onclick(e) {
+        e.stopImmediatePropagation();
         if (this.nonInteractive) {
+            return;
+        }
+        if (this.loading) {
+            e.preventDefault();
+            return;
+        }
+        const { altKey, ctrlKey, metaKey, shiftKey, } = e;
+        const prevented = !this.fireDecoratorEvent("click", {
+            originalEvent: e,
+            altKey,
+            ctrlKey,
+            metaKey,
+            shiftKey,
+        });
+        if (prevented) {
+            e.preventDefault();
             return;
         }
         if (this._isSubmit) {
@@ -225,7 +280,7 @@ let Button = Button_1 = class Button extends UI5Element {
         activeButton = this; // eslint-disable-line
     }
     _ontouchend(e) {
-        if (this.disabled) {
+        if (this.disabled || this.loading) {
             e.preventDefault();
             e.stopPropagation();
         }
@@ -265,7 +320,7 @@ let Button = Button_1 = class Button extends UI5Element {
     }
     _setActiveState(active) {
         const eventPrevented = !this.fireDecoratorEvent("active-state-change");
-        if (eventPrevented) {
+        if (eventPrevented || this.loading) {
             return;
         }
         this.active = active;
@@ -284,6 +339,7 @@ let Button = Button_1 = class Button extends UI5Element {
             "Positive": BUTTON_ARIA_TYPE_ACCEPT,
             "Negative": BUTTON_ARIA_TYPE_REJECT,
             "Emphasized": BUTTON_ARIA_TYPE_EMPHASIZED,
+            "Attention": BUTTON_ARIA_TYPE_ATTENTION,
         };
     }
     getDefaultTooltip() {
@@ -308,17 +364,33 @@ let Button = Button_1 = class Button extends UI5Element {
         }
         return this.nonInteractive ? -1 : Number.parseInt(this.forcedTabIndex);
     }
-    get showIconTooltip() {
-        return getEnableDefaultTooltips() && this.iconOnly && !this.tooltip;
-    }
     get ariaLabelText() {
-        return getEffectiveAriaLabelText(this);
-    }
-    get ariaDescribedbyText() {
-        return this.hasButtonType ? "ui5-button-hiddenText-type" : undefined;
+        const textContent = this.textContent || "";
+        const ariaLabelText = getEffectiveAriaLabelText(this) || "";
+        const typeLabelText = this.hasButtonType ? this.buttonTypeText : "";
+        const internalLabelText = this.effectiveBadgeDescriptionText || "";
+        const labelParts = [textContent, ariaLabelText, typeLabelText, internalLabelText].filter(part => part);
+        return labelParts.join(" ");
     }
     get ariaDescriptionText() {
         return this.accessibleDescription === "" ? undefined : this.accessibleDescription;
+    }
+    get effectiveBadgeDescriptionText() {
+        if (!this.shouldRenderBadge) {
+            return "";
+        }
+        const badgeEffectiveText = this.badge[0].effectiveText;
+        // Use distinct i18n keys for singular and plural badge values to ensure proper localization.
+        // Some languages have different grammatical rules for singular and plural forms,
+        // so separate keys (BUTTON_BADGE_ONE_ITEM and BUTTON_BADGE_MANY_ITEMS) are necessary.
+        switch (badgeEffectiveText) {
+            case "":
+                return badgeEffectiveText;
+            case "1":
+                return Button_1.i18nBundle.getText(BUTTON_BADGE_ONE_ITEM, badgeEffectiveText);
+            default:
+                return Button_1.i18nBundle.getText(BUTTON_BADGE_MANY_ITEMS, badgeEffectiveText);
+        }
     }
     get _isSubmit() {
         return this.type === ButtonType.Submit || this.submits;
@@ -382,6 +454,12 @@ __decorate([
     property({ type: Boolean })
 ], Button.prototype, "nonInteractive", void 0);
 __decorate([
+    property({ type: Boolean })
+], Button.prototype, "loading", void 0);
+__decorate([
+    property({ type: Number })
+], Button.prototype, "loadingDelay", void 0);
+__decorate([
     property({ noAttribute: true })
 ], Button.prototype, "buttonTitle", void 0);
 __decorate([
@@ -414,6 +492,24 @@ Button = Button_1 = __decorate([
         template: ButtonTemplate,
         styles: buttonCss,
         shadowRootOptions: { delegatesFocus: true },
+    })
+    /**
+     * Fired when the component is activated either with a mouse/tap or by using the Enter or Space key.
+     *
+     * **Note:** The event will not be fired if the `disabled` property is set to `true`.
+     *
+     * @since 2.10.0
+     * @public
+     * @param {Event} originalEvent Returns original event that comes from user's **click** interaction
+     * @param {boolean} altKey Returns whether the "ALT" key was pressed when the event was triggered.
+     * @param {boolean} ctrlKey Returns whether the "CTRL" key was pressed when the event was triggered.
+     * @param {boolean} metaKey Returns whether the "META" key was pressed when the event was triggered.
+     * @param {boolean} shiftKey Returns whether the "SHIFT" key was pressed when the event was triggered.
+     */
+    ,
+    event("click", {
+        bubbles: true,
+        cancelable: true,
     })
     /**
      * Fired whenever the active state of the component changes.

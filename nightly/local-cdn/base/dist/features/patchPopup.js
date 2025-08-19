@@ -1,3 +1,19 @@
+// OpenUI5's Control.js subset
+import getSharedResource from "../getSharedResource.js";
+// contains all OpenUI5 and Web Component popups that are currently opened
+const AllOpenedPopupsRegistry = getSharedResource("AllOpenedPopupsRegistry", { openedRegistry: [] });
+const addOpenedPopup = (popup) => {
+    AllOpenedPopupsRegistry.openedRegistry.push(popup);
+};
+const removeOpenedPopup = (popup) => {
+    const index = AllOpenedPopupsRegistry.openedRegistry.indexOf(popup);
+    if (index > -1) {
+        AllOpenedPopupsRegistry.openedRegistry.splice(index, 1);
+    }
+};
+const getTopmostPopup = () => {
+    return AllOpenedPopupsRegistry.openedRegistry[AllOpenedPopupsRegistry.openedRegistry.length - 1];
+};
 const openNativePopover = (domRef) => {
     domRef.setAttribute("popover", "manual");
     domRef.showPopover();
@@ -32,6 +48,7 @@ const patchOpen = (Popup) => {
                 }
             }
         }
+        addOpenedPopup(this);
     };
 };
 const patchClosed = (Popup) => {
@@ -43,14 +60,15 @@ const patchClosed = (Popup) => {
         if (domRef) {
             closeNativePopover(domRef); // unset the popover attribute and close the native popover, but only if still in DOM
         }
+        removeOpenedPopup(this);
     };
 };
 const patchFocusEvent = (Popup) => {
     const origFocusEvent = Popup.prototype.onFocusEvent;
     Popup.prototype.onFocusEvent = function onFocusEvent(e) {
-        const isTypeFocus = e.type === "focus" || e.type === "activate";
-        const target = e.target;
-        if (!isTypeFocus || !target.closest("[ui5-popover],[ui5-responsive-popover],[ui5-dialog]")) {
+        // If the popup is the topmost one, we call the original focus event handler from the OpenUI5 Popup,
+        // otherwise the focus event is handled by the Web Component Popup.
+        if (this === getTopmostPopup()) {
             origFocusEvent.call(this, e);
         }
     };
@@ -66,5 +84,5 @@ const patchPopup = (Popup) => {
     createGlobalStyles(); // Ensures correct popover positioning by OpenUI5 (otherwise 0,0 is the center of the screen)
     patchFocusEvent(Popup); // Popup.prototype.onFocusEvent
 };
-export default patchPopup;
+export { patchPopup, addOpenedPopup, removeOpenedPopup, getTopmostPopup, };
 //# sourceMappingURL=patchPopup.js.map

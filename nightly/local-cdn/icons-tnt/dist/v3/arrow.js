@@ -1,7 +1,7 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "arrow";
-const pathData = "M72 507c-16 0-33-6-45-18-25-25-25-65 0-90L401 25c13-13 29-19 45-19s32 6 44 19c25 25 25 65 0 90L117 489c-13 12-29 18-45 18zm374-107c-36 0-64-28-64-63V134H179c-35 0-64-29-64-64s29-63 64-63h267c34 0 63 28 63 63v267c0 35-29 63-63 63z";
+const pathData = "M446 400q-27 0-45.5-18.5T382 337V223L117 489q-19 18-45 18-12 0-24-4.5T27 489Q8 470 8 444t19-45l265-265H179q-26 0-45-19t-19-45 19-44.5T179 7h274q20 3 35 16t20 33q0 4 1 9v272q0 26-18.5 44.5T446 400z";
 const ltr = false;
 const accData = null;
 const collection = "tnt-v3";

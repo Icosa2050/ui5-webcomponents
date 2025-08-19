@@ -8,7 +8,7 @@ export default function ResponsivePopoverTemplate() {
     if (!this._isPhone) {
         return PopoverTemplate.call(this);
     }
-    return (_jsxs(Dialog, { "root-element": true, accessibleName: this.accessibleName, accessibleNameRef: this.accessibleNameRef, accessibleRole: this.accessibleRole, stretch: true, preventInitialFocus: this.preventInitialFocus, initialFocus: this.initialFocus, onBeforeOpen: this._beforeDialogOpen, onOpen: this._afterDialogOpen, onBeforeClose: this._beforeDialogClose, onClose: this._afterDialogClose, exportparts: "content, header, footer", open: this.open, children: [!this._hideHeader && _jsx(_Fragment, { children: this.header.length ?
+    return (_jsxs(Dialog, { "root-element": true, accessibleName: this.accessibleName, accessibleNameRef: this.accessibleNameRef, accessibleDescription: this.accessibleDescription, accessibleDescriptionRef: this.accessibleDescriptionRef, accessibleRole: this.accessibleRole, stretch: true, preventInitialFocus: this.preventInitialFocus, preventFocusRestore: this.preventFocusRestore, initialFocus: this.initialFocus, onBeforeOpen: this._beforeDialogOpen, onOpen: this._afterDialogOpen, onBeforeClose: this._beforeDialogClose, onClose: this._afterDialogClose, exportparts: "content, header, footer", open: this.open, children: [!this._hideHeader && _jsx(_Fragment, { children: this.header.length ?
                     _jsx("slot", { slot: "header", name: "header" })
                     :
                         _jsxs("div", { class: this.classes.header, slot: "header", children: [this.headerText &&

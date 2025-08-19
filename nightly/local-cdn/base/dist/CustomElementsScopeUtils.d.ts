@@ -18,7 +18,7 @@ declare const setCustomElementsScopingSuffix: (suffix: string) => void;
  * @public
  * @returns {String|undefined}
  */
-declare const getCustomElementsScopingSuffix: () => string;
+declare const getCustomElementsScopingSuffix: () => string | undefined;
 /**
  * Sets the rules, governing which custom element tags to scope and which not, f.e.
  * setCustomElementsScopingRules({include: [/^ui5-/]}, exclude: [/^ui5-mylib-/, /^ui5-carousel$/]);

@@ -11,9 +11,10 @@ import event from "@ui5/webcomponents-base/dist/decorators/event-strict.js";
 import jsxRender from "@ui5/webcomponents-base/dist/renderer/JsxRenderer.js";
 import ResizeHandler from "@ui5/webcomponents-base/dist/delegate/ResizeHandler.js";
 import { isPhone, supportsTouch } from "@ui5/webcomponents-base/dist/Device.js";
-import { isEscape, isHome, isEnd, isUp, isDown, isRight, isLeft, isUpCtrl, isDownCtrl, isRightCtrl, isLeftCtrl, isPlus, isMinus, isPageUp, isPageDown, isF2, isEnter, } from "@ui5/webcomponents-base/dist/Keys.js";
+import { isEscape, isHome, isEnd, isUp, isDown, isRight, isLeft, isUpCtrl, isDownCtrl, isRightCtrl, isLeftCtrl, isPlus, isMinus, isPageUp, isPageDown, isF2, } from "@ui5/webcomponents-base/dist/Keys.js";
 // Styles
 import sliderBaseStyles from "./generated/themes/SliderBase.css.js";
+import { getAssociatedLabelForTexts } from "@ui5/webcomponents-base/dist/util/AccessibilityTextsHelper.js";
 /**
  * Fired when the value changes and the user has finished interacting with the slider.
  * @public
@@ -100,7 +101,7 @@ class SliderBase extends UI5Element {
         /**
          * @private
          */
-        this._tooltipVisibility = "hidden";
+        this._tooltipsOpen = false;
         this._labelsOverlapping = false;
         this._hiddenTickmarks = false;
         this._isInputValueValid = false;
@@ -122,7 +123,6 @@ class SliderBase extends UI5Element {
     _handleUp(e) { } // eslint-disable-line
     _onmousedown(e) { } // eslint-disable-line
     _handleActionKeyPress(e) { } // eslint-disable-line
-    _updateInputValue() { }
     static get ACTION_KEYS() {
         return [
             isLeft,
@@ -184,9 +184,7 @@ class SliderBase extends UI5Element {
      * @private
      */
     _onmouseover() {
-        if (this.showTooltip) {
-            this._tooltipVisibility = SliderBase_1.TOOLTIP_VISIBILITY.VISIBLE;
-        }
+        this._tooltipsOpen = this.showTooltip;
     }
     /**
      * Hides the tooltip(s) if the `showTooltip` property is set to true
@@ -194,49 +192,35 @@ class SliderBase extends UI5Element {
      */
     _onmouseout() {
         if (this.showTooltip && !this.shadowRoot.activeElement) {
-            this._tooltipVisibility = SliderBase_1.TOOLTIP_VISIBILITY.HIDDEN;
+            this._tooltipsOpen = false;
         }
     }
     _onkeydown(e) {
         const target = e.target;
         if (isF2(e) && target.classList.contains("ui5-slider-handle")) {
-            target.parentNode.querySelector(".ui5-slider-handle-container ui5-input").focus();
+            target.parentNode.querySelector("[ui5-slider-tooltip]").focus();
         }
         if (this.disabled || this._effectiveStep === 0 || target.hasAttribute("ui5-slider-handle")) {
             return;
         }
-        if (SliderBase_1._isActionKey(e) && target && !target.hasAttribute("ui5-input")) {
+        if (SliderBase_1._isActionKey(e) && target && !target.hasAttribute("ui5-slider-tooltip")) {
             e.preventDefault();
             this._isUserInteraction = true;
             this._handleActionKeyPress(e);
         }
     }
-    _onInputKeydown(e) {
-        const target = e.target;
-        if (isF2(e) && target.hasAttribute("ui5-input")) {
-            target.parentNode.parentNode.querySelector(".ui5-slider-handle").focus();
-        }
-        if (isEnter(e)) {
-            this._updateInputValue();
-            this._updateValueFromInput(e);
-        }
+    _onTooltipChange(e) {
+        const value = e.detail.value;
+        this._updateValueFromInput(value);
     }
-    _onInputChange() {
-        if (this._valueOnInteractionStart !== this.value) {
-            this.fireDecoratorEvent("change");
-        }
-    }
-    _onInputInput() {
-        this.fireDecoratorEvent("input");
-    }
-    _updateValueFromInput(e) {
-        const input = e.target;
-        const value = parseFloat(input.value);
+    _updateValueFromInput(fieldValue) {
+        const value = parseFloat(fieldValue);
         this._isInputValueValid = value >= this._effectiveMin && value <= this._effectiveMax;
         if (!this._isInputValueValid) {
             return;
         }
         this.value = value;
+        this.fireDecoratorEvent("change");
     }
     _onKeyupBase() {
         if (this.disabled) {
@@ -289,18 +273,22 @@ class SliderBase extends UI5Element {
         // In such case the labels must correspond to the tickmarks, only the first and the last one should exist.
         if (spaceBetweenTickmarks < SliderBase_1.MIN_SPACE_BETWEEN_TICKMARKS) {
             this._hiddenTickmarks = true;
-            this._labelsOverlapping = true;
         }
         else {
             this._hiddenTickmarks = false;
         }
         if (this.labelInterval <= 0 || this._hiddenTickmarks) {
+            this._labelsOverlapping = true;
             return;
         }
         // Check if there are any overlapping labels.
         // If so - only the first and the last one should be visible
-        const labelItems = this.shadowRoot.querySelectorAll(".ui5-slider-labels li");
-        this._labelsOverlapping = [...labelItems].some(label => label.scrollWidth > label.clientWidth);
+        const remInPx = parseFloat(getComputedStyle(document.documentElement).fontSize); // calculate 1 rem in pixels
+        const childWidthPx = 2 * remInPx; // as specified label must be 2 rems so calculate one child width in pixels
+        const labelItemsParent = this.shadowRoot.querySelector(".ui5-slider-labels");
+        const labelItemsSumWidth = this._labels.length * childWidthPx; // all labels width
+        const labelItemsParentWidth = labelItemsParent.clientWidth; // label parent width
+        this._labelsOverlapping = labelItemsParentWidth < labelItemsSumWidth;
     }
     /**
      * Called when the user starts interacting with the slider.
@@ -604,11 +592,22 @@ class SliderBase extends UI5Element {
     get _tabIndex() {
         return this.disabled ? -1 : 0;
     }
+    get _ariaKeyshortcuts() {
+        return this.editableTooltip ? "F2" : undefined;
+    }
     get _ariaDescribedByHandleText() {
         return this.editableTooltip ? "ui5-slider-InputDesc" : undefined;
     }
-    get _ariaLabelledByHandleText() {
-        return this.accessibleName ? "ui5-slider-accName ui5-slider-sliderDesc" : "ui5-slider-sliderDesc";
+    get _ariaLabel() {
+        const associatedLabelText = getAssociatedLabelForTexts(this);
+        const hasAccessibleName = !!this.accessibleName;
+        let labelText = hasAccessibleName
+            ? `${this.accessibleName} ${this._ariaLabelledByText}`
+            : this._ariaLabelledByText;
+        if (!hasAccessibleName && associatedLabelText) {
+            labelText = `${associatedLabelText} ${labelText}`;
+        }
+        return labelText;
     }
     get _ariaDescribedByInputText() {
         return "";
@@ -651,8 +650,8 @@ __decorate([
     property({ type: Number })
 ], SliderBase.prototype, "value", void 0);
 __decorate([
-    property()
-], SliderBase.prototype, "_tooltipVisibility", void 0);
+    property({ type: Boolean })
+], SliderBase.prototype, "_tooltipsOpen", void 0);
 __decorate([
     property({ type: Boolean })
 ], SliderBase.prototype, "_labelsOverlapping", void 0);

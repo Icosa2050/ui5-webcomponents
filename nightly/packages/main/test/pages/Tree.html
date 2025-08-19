@@ -19,7 +19,7 @@
 
 
 
-  <script type="module" crossorigin src="/ui5-webcomponents/nightly/assets/bundle.esm-DclcXRqo.js"></script>
+  <script type="module" crossorigin src="/ui5-webcomponents/nightly/assets/bundle.esm-DNGp8HrT.js"></script>
   <link rel="stylesheet" crossorigin href="/ui5-webcomponents/nightly/assets/Tree-CgWbrEXB.css">
 </head>
 
@@ -223,6 +223,23 @@
 		<ui5-tree-item text="Item 1"></ui5-tree-item>
 		<ui5-tree-item text="Item 2"></ui5-tree-item>
 		<ui5-tree-item text="Item 3"></ui5-tree-item>
+	</ui5-tree>
+
+	<br><br>
+
+	<h2>API: image slot</h2>
+	<ui5-label id="description">Tree items with image slot used</ui5-label>
+	<ui5-tree accessible-description-ref="description">
+		<ui5-tree-item text="Icon inside image slot">
+			<ui5-icon slot="image" name="bell"> </ui5-icon>
+		</ui5-tree-item>
+		<ui5-tree-item text="Avatar inside image slot">
+			<ui5-avatar slot="image" size="XS" initials="BL"> </ui5-avatar>
+		</ui5-tree-item>
+		<ui5-tree-item text="Avatar and Icon inside image slot">
+			<ui5-avatar slot="image" size="XS" initials="BL"> </ui5-avatar>
+			<ui5-icon slot="image" name="bell"> </ui5-icon>
+		</ui5-tree-item>
 	</ui5-tree>
 
 	<script>

@@ -107,6 +107,7 @@ declare class Breadcrumbs extends UI5Element {
      * @private
      */
     _getFocusableItems(): ITabbable[];
+    getFocusDomRef(): HTMLElement | undefined;
     /**
      * Returns the translatable accessible name for the popover
      * @private
@@ -157,6 +158,11 @@ declare class Breadcrumbs extends UI5Element {
      * Getter for the list of abstract breadcrumb items to be rendered as list-items inside the overflow
      */
     get _overflowItemsData(): BreadcrumbsItem[];
+    /**
+     * Returns all items that should be displayed in the popover on mobile devices
+     * @private
+     */
+    get _mobilePopoverItems(): BreadcrumbsItem[];
     /**
      * Getter for the list of abstract breadcrumb items to be rendered as links outside the overflow
      */

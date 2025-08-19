@@ -24,6 +24,7 @@ import { AVATAR_GROUP_DISPLAYED_HIDDEN_LABEL, AVATAR_GROUP_SHOW_COMPLETE_LIST_LA
 import AvatarGroupCss from "./generated/themes/AvatarGroup.css.js";
 // Template
 import AvatarGroupTemplate from "./AvatarGroupTemplate.js";
+import { getEffectiveAriaLabelText } from "@ui5/webcomponents-base/dist/util/AccessibilityTextsHelper.js";
 const OVERFLOW_BTN_CLASS = "ui5-avatar-group-overflow-btn";
 const AVATAR_GROUP_OVERFLOW_BTN_SELECTOR = `.${OVERFLOW_BTN_CLASS}`;
 // based on RTL/LTR a margin-left/right is set respectfully
@@ -154,12 +155,16 @@ let AvatarGroup = AvatarGroup_1 = class AvatarGroup extends UI5Element {
      * @public
      */
     get colorScheme() {
-        return this.items.map(avatar => avatar.еffectiveBackgroundColor);
+        return this.items.map(avatar => avatar.effectiveBackgroundColor);
     }
     get _customOverflowButton() {
         return this.overflowButton.length ? this.overflowButton[0] : undefined;
     }
     get _ariaLabelText() {
+        if (this.accessibleName || this.accessibleNameRef) {
+            return getEffectiveAriaLabelText(this);
+        }
+        // Fallback to existing default behavior
         const hiddenItemsCount = this.hiddenItems.length;
         const typeLabelKey = this._isGroup ? AVATAR_GROUP_ARIA_LABEL_GROUP : AVATAR_GROUP_ARIA_LABEL_INDIVIDUAL;
         // avatar type label
@@ -312,7 +317,7 @@ let AvatarGroup = AvatarGroup_1 = class AvatarGroup extends UI5Element {
         this.items.forEach((avatar, index) => {
             const colorIndex = this._getNextBackgroundColor();
             avatar.interactive = !this._isGroup;
-            if (!avatar.getAttribute("_color-scheme")) {
+            if (avatar.getAttribute("_color-scheme") === AvatarColorScheme.Auto) {
                 // AvatarGroup respects colors set to ui5-avatar
                 avatar.setAttribute("_color-scheme", AvatarColorScheme[`Accent${colorIndex}`]);
             }
@@ -321,10 +326,16 @@ let AvatarGroup = AvatarGroup_1 = class AvatarGroup extends UI5Element {
                 // based on RTL the browser automatically sets left or right margin to avatars
                 avatar.style.marginInlineEnd = offsets[avatar.effectiveSize][this.type];
             }
+            else {
+                avatar.style.marginInlineEnd = "";
+            }
         });
     }
     _onfocusin(e) {
         this._itemNavigation.setCurrentItem(e.target);
+    }
+    getFocusDomRef() {
+        return this._itemNavigation._getCurrentItem();
     }
     /**
      * Returns the total width to item excluding the item width
@@ -406,6 +417,12 @@ __decorate([
 __decorate([
     property({ noAttribute: true })
 ], AvatarGroup.prototype, "_overflowButtonText", void 0);
+__decorate([
+    property()
+], AvatarGroup.prototype, "accessibleName", void 0);
+__decorate([
+    property()
+], AvatarGroup.prototype, "accessibleNameRef", void 0);
 __decorate([
     slot({ type: HTMLElement, "default": true })
 ], AvatarGroup.prototype, "items", void 0);

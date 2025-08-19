@@ -2,7 +2,7 @@ import { registerIllustration } from "@ui5/webcomponents-base/dist/asset-registr
 import dialogSvg from "./sapIllus-Dialog-NoEntries.js";
 import sceneSvg from "./sapIllus-Scene-NoEntries.js";
 import spotSvg from "./sapIllus-Spot-NoEntries.js";
-import dotSvg from "./sapIllus-Spot-NoEntries.js";import {
+import dotSvg from "./sapIllus-Dot-NoEntries.js";import {
 	IM_TITLE_NOENTRIES,
 	IM_SUBTITLE_NOENTRIES,
 } from "../generated/i18n/i18n-defaults.js";

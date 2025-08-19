@@ -88,6 +88,13 @@ let Switch = Switch_1 = class Switch extends UI5Element {
          * @since 1.16.0
          */
         this.required = false;
+        /**
+         * Defines the form value of the component.
+         * @default ""
+         * @since 2.12.0
+         * @public
+         */
+        this.value = "";
     }
     get formValidityMessage() {
         return Switch_1.i18nBundle.getText(FORM_CHECKABLE_REQUIRED);
@@ -99,7 +106,10 @@ let Switch = Switch_1 = class Switch extends UI5Element {
         return this.getFocusDomRefAsync();
     }
     get formFormattedValue() {
-        return this.checked ? "on" : null;
+        if (this.checked) {
+            return this.value || "on";
+        }
+        return null;
     }
     get sapNextIcon() {
         return this.checked ? "accept" : "less";
@@ -193,6 +203,9 @@ __decorate([
     property()
 ], Switch.prototype, "name", void 0);
 __decorate([
+    property()
+], Switch.prototype, "value", void 0);
+__decorate([
     i18n("@ui5/webcomponents")
 ], Switch, "i18nBundle", void 0);
 Switch = Switch_1 = __decorate([
@@ -203,7 +216,6 @@ Switch = Switch_1 = __decorate([
         styles: switchCss,
         renderer: jsxRenderer,
         template: SwitchTemplate,
-        shadowRootOptions: { delegatesFocus: true },
     })
     /**
      * Fired when the component checked state changes.

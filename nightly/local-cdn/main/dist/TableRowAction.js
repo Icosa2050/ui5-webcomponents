@@ -22,7 +22,6 @@ import TableRowActionBase from "./TableRowActionBase.js";
  * @extends TableRowActionBase
  * @since 2.7.0
  * @public
- * @experimental
  */
 let TableRowAction = class TableRowAction extends TableRowActionBase {
     constructor() {

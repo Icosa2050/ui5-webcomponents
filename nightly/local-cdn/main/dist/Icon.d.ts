@@ -135,7 +135,7 @@ declare class Icon extends UI5Element implements IIcon {
     showTooltip: boolean;
     /**
      * Defines the mode of the component.
-     * @default "Image"
+     * @default "Decorative"
      * @public
      * @since 2.0.0
      */
