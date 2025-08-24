@@ -10,7 +10,7 @@ import jsxRender from "@ui5/webcomponents-base/dist/renderer/JsxRenderer.js";
 import property from "@ui5/webcomponents-base/dist/decorators/property.js";
 import slot from "@ui5/webcomponents-base/dist/decorators/slot.js";
 import i18n from "@ui5/webcomponents-base/dist/decorators/i18n.js";
-import { isLeft, isRight, isSpace, isEnter, isMinus, isPlus, } from "@ui5/webcomponents-base/dist/Keys.js";
+import { isLeft, isRight, isSpace, isEnter, isEnterShift, isEnterCtrl, isEnterAlt, isMinus, isPlus, } from "@ui5/webcomponents-base/dist/Keys.js";
 import SideNavigationSelectableItemBase from "./SideNavigationSelectableItemBase.js";
 import { SIDE_NAVIGATION_ICON_COLLAPSE, SIDE_NAVIGATION_ICON_EXPAND, SIDE_NAVIGATION_OVERFLOW_ITEM_LABEL, } from "./generated/i18n/i18n-defaults.js";
 // Templates
@@ -192,11 +192,13 @@ let SideNavigationItem = SideNavigationItem_1 = class SideNavigationItem extends
             this.expanded = true;
             return;
         }
+        // "Space" + modifier is often reserved by the operating system or window manager
         if (this.unselectable && isSpace(e)) {
             this._toggle();
             return;
         }
-        if (this.unselectable && isEnter(e)) {
+        // "Enter" + "Meta" is missing since it is often reserved by the operating system or window manager
+        if (this.unselectable && (isEnter(e) || isEnterShift(e) || isEnterCtrl(e) || isEnterAlt(e))) {
             this._toggle();
         }
         super._onkeydown(e);

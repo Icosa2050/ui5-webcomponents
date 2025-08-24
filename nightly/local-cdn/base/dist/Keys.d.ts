@@ -1,4 +1,6 @@
 declare const isEnter: (event: KeyboardEvent) => boolean;
+declare const isEnterCtrl: (event: KeyboardEvent) => boolean;
+declare const isEnterAlt: (event: KeyboardEvent) => boolean;
 declare const isEnterShift: (event: KeyboardEvent) => boolean;
 declare const isCtrl: (event: KeyboardEvent) => boolean;
 declare const isSpace: (event: KeyboardEvent) => boolean;
@@ -62,4 +64,4 @@ declare const isKeyA: (event: KeyboardEvent) => boolean;
 declare const isKeyP: (event: KeyboardEvent) => boolean;
 declare const isNumber: (event: KeyboardEvent) => boolean;
 declare const isColon: (event: KeyboardEvent) => boolean;
-export { isEnter, isEnterShift, isCtrl, isSpace, isSpaceShift, isSpaceCtrl, isLeft, isRight, isUp, isDown, isLeftCtrl, isRightCtrl, isUpCtrl, isDownCtrl, isUpShift, isDownShift, isUpAlt, isDownAlt, isLeftShift, isRightShift, isLeftShiftCtrl, isRightShiftCtrl, isUpShiftCtrl, isDownShiftCtrl, isHome, isEnd, isPlus, isMinus, isHomeCtrl, isEndCtrl, isHomeShift, isEndShift, isEscape, isTabNext, isTabPrevious, isBackSpace, isDelete, isShow, isF2, isF4, isF4Shift, isF10Shift, isF6Previous, isF6Next, isF7, isPageUp, isPageDown, isPageUpShift, isPageUpAlt, isPageDownShift, isPageDownAlt, isPageUpShiftCtrl, isPageDownShiftCtrl, isShift, isCtrlA, isCtrlV, isKeyA, isKeyP, isDeleteShift, isInsertShift, isInsertCtrl, isNumber, isColon, isCtrlAltF8, };
+export { isEnter, isEnterCtrl, isEnterAlt, isEnterShift, isCtrl, isSpace, isSpaceShift, isSpaceCtrl, isLeft, isRight, isUp, isDown, isLeftCtrl, isRightCtrl, isUpCtrl, isDownCtrl, isUpShift, isDownShift, isUpAlt, isDownAlt, isLeftShift, isRightShift, isLeftShiftCtrl, isRightShiftCtrl, isUpShiftCtrl, isDownShiftCtrl, isHome, isEnd, isPlus, isMinus, isHomeCtrl, isEndCtrl, isHomeShift, isEndShift, isEscape, isTabNext, isTabPrevious, isBackSpace, isDelete, isShow, isF2, isF4, isF4Shift, isF10Shift, isF6Previous, isF6Next, isF7, isPageUp, isPageDown, isPageUpShift, isPageUpAlt, isPageDownShift, isPageDownAlt, isPageUpShiftCtrl, isPageDownShiftCtrl, isShift, isCtrlA, isCtrlV, isKeyA, isKeyP, isDeleteShift, isInsertShift, isInsertCtrl, isNumber, isColon, isCtrlAltF8, };

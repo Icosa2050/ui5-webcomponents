@@ -170,8 +170,6 @@ declare class SideNavigation extends UI5Element {
     _selectItem(item: SideNavigationSelectableItemBase): void;
     get _overflowItem(): SideNavigationItem | null;
     get isOverflow(): boolean;
-    _onkeydownOverflow(e: KeyboardEvent): void;
-    _onkeyupOverflow(e: KeyboardEvent): void;
     captureRef(ref: HTMLElement & {
         associatedItem?: UI5Element;
     } | null): void;

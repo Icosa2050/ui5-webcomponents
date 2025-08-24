@@ -13,7 +13,7 @@ import slot from "@ui5/webcomponents-base/dist/decorators/slot.js";
 import jsxRenderer from "@ui5/webcomponents-base/dist/renderer/JsxRenderer.js";
 import { isSpace, isUp, isDown, isEnter, isEscape, isHome, isEnd, isShow, isTabNext, isTabPrevious, } from "@ui5/webcomponents-base/dist/Keys.js";
 import announce from "@ui5/webcomponents-base/dist/util/InvisibleMessage.js";
-import { getEffectiveAriaLabelText, getAssociatedLabelForTexts } from "@ui5/webcomponents-base/dist/util/AccessibilityTextsHelper.js";
+import { getEffectiveAriaLabelText, getAssociatedLabelForTexts, registerUI5Element, deregisterUI5Element, getAllAccessibleDescriptionRefTexts, getEffectiveAriaDescriptionText, } from "@ui5/webcomponents-base/dist/util/AccessibilityTextsHelper.js";
 import ValueState from "@ui5/webcomponents-base/dist/types/ValueState.js";
 import "@ui5/webcomponents-icons/dist/error.js";
 import "@ui5/webcomponents-icons/dist/alert.js";
@@ -171,6 +171,12 @@ let Select = Select_1 = class Select extends UI5Element {
             return selectedOption.hasAttribute("value") ? selectedOption.getAttribute("value") : selectedOption.textContent;
         }
         return "";
+    }
+    onEnterDOM() {
+        registerUI5Element(this, this._updateAssociatedLabelsTexts.bind(this));
+    }
+    onExitDOM() {
+        deregisterUI5Element(this);
     }
     onBeforeRendering() {
         this._applySelection();
@@ -469,13 +475,23 @@ let Select = Select_1 = class Select extends UI5Element {
     }
     _changeSelectedItem(oldIndex, newIndex) {
         const options = this.options;
+        // Normalize: first navigation with Up when nothing selected -> last item
+        if (oldIndex === -1 && newIndex < 0 && options.length) {
+            newIndex = options.length - 1;
+        }
+        // Abort on invalid target
+        if (newIndex < 0 || newIndex >= options.length) {
+            return;
+        }
         const previousOption = options[oldIndex];
         const nextOption = options[newIndex];
         if (previousOption === nextOption) {
             return;
         }
-        previousOption.selected = false;
-        previousOption.focused = false;
+        if (previousOption) {
+            previousOption.selected = false;
+            previousOption.focused = false;
+        }
         nextOption.selected = true;
         nextOption.focused = true;
         if (this._valueStorage !== undefined) {
@@ -683,6 +699,19 @@ let Select = Select_1 = class Select extends UI5Element {
     get selectedOptionIcon() {
         return this.selectedOption && this.selectedOption.icon;
     }
+    get ariaDescriptionText() {
+        return this._associatedDescriptionRefTexts || getEffectiveAriaDescriptionText(this);
+    }
+    get ariaDescriptionTextId() {
+        return this.ariaDescriptionText ? "accessibleDescription" : "";
+    }
+    get ariaDescribedByIds() {
+        const ids = [this.valueStateTextId, this.ariaDescriptionTextId].filter(Boolean);
+        return ids.length ? ids.join(" ") : undefined;
+    }
+    _updateAssociatedLabelsTexts() {
+        this._associatedDescriptionRefTexts = getAllAccessibleDescriptionRefTexts(this);
+    }
     _getPopover() {
         return this.shadowRoot.querySelector("[ui5-popover]");
     }
@@ -713,7 +742,16 @@ __decorate([
 ], Select.prototype, "accessibleNameRef", void 0);
 __decorate([
     property()
+], Select.prototype, "accessibleDescription", void 0);
+__decorate([
+    property()
+], Select.prototype, "accessibleDescriptionRef", void 0);
+__decorate([
+    property()
 ], Select.prototype, "tooltip", void 0);
+__decorate([
+    property({ type: String, noAttribute: true })
+], Select.prototype, "_associatedDescriptionRefTexts", void 0);
 __decorate([
     property({ type: Boolean, noAttribute: true })
 ], Select.prototype, "_iconPressed", void 0);

@@ -33,18 +33,58 @@ const _fillRegistry = (bundleData) => {
         });
     });
 };
-// set
+/**
+ * Registers a SVG icon with the given name and associated icon data.
+ *
+ * This method is used to add an icon to the registry, making it available for use
+ * in the application.
+ *
+ * @public
+ * @param { string } name - The name of the icon to register.
+ * @param { IconData } iconData - The data associated with the icon: `collection`, `pathData`, `packageName`
+ * `customTemplate`, `viewBox`, `ltr`, `accData`.
+ *
+ * <b>Note:</b> Properties `pathData` and `customTemplate` are mutually exclusive.
+ * If both are set, `customTemplate` will be used.
+ */
 const registerIcon = (name, iconData) => {
     const key = `${iconData.collection}/${name}`;
-    registry.set(key, {
+    const data = {
+        collection: iconData.collection,
+        packageName: iconData.packageName,
         pathData: iconData.pathData,
+        viewBox: iconData.viewBox,
         ltr: iconData.ltr,
         accData: iconData.accData,
-        packageName: iconData.packageName,
         customTemplate: iconData.customTemplate,
-        viewBox: iconData.viewBox,
+    };
+    registry.set(key, data);
+};
+/**
+ * Registers a SVG icon in the registry with the given name and icon data.
+ *
+ * <b>Note:</b> This method is unsafe as it allows the SVG content to be passed as a string
+ * through the `customTemplateAsString` property of the `iconData`.
+ * Ensure that the SVG content is properly validated.
+ * Improperly sanitized SVG strings can lead to security vulnerabilities such as XSS (Cross-Site Scripting).
+ *
+ * @public
+ * @param { string } name - The name of the icon to register.
+ * @param { UnsafeIconData } iconData - The data for the icon: `collection`, `customTemplateAsString`, `packageName`
+ * `viewBox`, `ltr` and `accData`.
+ * @since 2.14.0
+ */
+const unsafeRegisterIcon = (name, iconData) => {
+    const key = `${iconData.collection}/${name}`;
+    const data = {
         collection: iconData.collection,
-    });
+        customTemplateAsString: iconData.customTemplateAsString,
+        packageName: iconData.packageName,
+        viewBox: iconData.viewBox,
+        ltr: iconData.ltr,
+        accData: iconData.accData,
+    };
+    registry.set(key, data);
 };
 /**
  * Processes the full icon name and splits it into - "name", "collection".
@@ -120,8 +160,11 @@ const getIconAccessibleName = async (name) => {
         iconData = await getIconData(name);
     }
     if (iconData && iconData !== ICON_NOT_FOUND && iconData.accData) {
-        const i18nBundle = await getI18nBundle(iconData.packageName);
-        return i18nBundle.getText(iconData.accData);
+        if (iconData.packageName) {
+            const i18nBundle = await getI18nBundle(iconData.packageName);
+            return i18nBundle.getText(iconData.accData);
+        }
+        return iconData.accData?.defaultText || "";
     }
 };
 // test page usage only
@@ -132,5 +175,5 @@ const _getRegisteredNames = async () => {
     await getIconData("business-suite/3d");
     return Array.from(registry.keys());
 };
-export { registerIconLoader, getIconData, getIconDataSync, getIconAccessibleName, registerIcon, _getRegisteredNames, };
+export { registerIconLoader, getIconData, getIconDataSync, getIconAccessibleName, registerIcon, unsafeRegisterIcon, _getRegisteredNames, };
 //# sourceMappingURL=Icons.js.map

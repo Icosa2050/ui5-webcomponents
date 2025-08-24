@@ -21,6 +21,6 @@ const localeIds = ["en",
     "en_US_saprigi",
     "en_US_saptrc",];
 localeIds.forEach(localeId => {
-    registerI18nLoader("@ui5/webcomponents-base", localeId, importAndCheck);
+    registerI18nLoader("@" + "u" + "i" + "5" + "/" + "w" + "e" + "b" + "c" + "o" + "m" + "p" + "o" + "n" + "e" + "n" + "t" + "s" + "-" + "b" + "a" + "s" + "e", localeId, importAndCheck);
 });
 //# sourceMappingURL=i18n-node.js.map

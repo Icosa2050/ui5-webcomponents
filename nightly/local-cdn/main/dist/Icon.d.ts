@@ -159,7 +159,8 @@ declare class Icon extends UI5Element implements IIcon {
     ltr?: boolean;
     packageName?: string;
     viewBox?: string;
-    customSvg?: object;
+    customTemplate?: object;
+    customTemplateAsString?: string;
     _onkeydown(e: KeyboardEvent): void;
     _onkeyup(e: KeyboardEvent): void;
     /**

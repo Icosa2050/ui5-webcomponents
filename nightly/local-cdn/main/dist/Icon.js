@@ -186,13 +186,17 @@ let Icon = class Icon extends UI5Element {
             return console.warn(`Required icon is not registered. You can either import the icon as a module in order to use it e.g. "@ui5/webcomponents-icons/dist/${name.replace("sap-icon://", "")}.js", or setup a JSON build step and import "@ui5/webcomponents-icons/dist/AllIcons.js".`);
         }
         this.viewBox = iconData.viewBox || "0 0 512 512";
-        if (iconData.customTemplate) {
-            iconData.pathData = [];
-            this.customSvg = executeTemplate(iconData.customTemplate, this);
+        if ("customTemplate" in iconData && iconData.customTemplate) {
+            this.customTemplate = executeTemplate(iconData.customTemplate, this);
+        }
+        if ("customTemplateAsString" in iconData) {
+            this.customTemplateAsString = iconData.customTemplateAsString;
         }
         // in case a new valid name is set, show the icon
         this.invalid = false;
-        this.pathData = Array.isArray(iconData.pathData) ? iconData.pathData : [iconData.pathData];
+        if ("pathData" in iconData && iconData.pathData) {
+            this.pathData = Array.isArray(iconData.pathData) ? iconData.pathData : [iconData.pathData];
+        }
         this.accData = iconData.accData;
         this.ltr = iconData.ltr;
         this.packageName = iconData.packageName;
@@ -200,8 +204,13 @@ let Icon = class Icon extends UI5Element {
             this.effectiveAccessibleName = this.accessibleName;
         }
         else if (this.accData) {
-            const i18nBundle = await getI18nBundle(this.packageName);
-            this.effectiveAccessibleName = i18nBundle.getText(this.accData) || undefined;
+            if (this.packageName) {
+                const i18nBundle = await getI18nBundle(this.packageName);
+                this.effectiveAccessibleName = i18nBundle.getText(this.accData) || undefined;
+            }
+            else {
+                this.effectiveAccessibleName = this.accData?.defaultText || undefined;
+            }
         }
         else {
             this.effectiveAccessibleName = undefined;

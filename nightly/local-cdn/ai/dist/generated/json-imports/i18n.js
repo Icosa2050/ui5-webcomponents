@@ -115,6 +115,6 @@ const localeIds = ["ar",
     "zh_CN",
     "zh_TW",];
 localeIds.forEach(localeId => {
-    registerI18nLoader("@ui5/webcomponents-ai", localeId, importAndCheck);
+    registerI18nLoader("@" + "u" + "i" + "5" + "/" + "w" + "e" + "b" + "c" + "o" + "m" + "p" + "o" + "n" + "e" + "n" + "t" + "s" + "-" + "a" + "i", localeId, importAndCheck);
 });
 //# sourceMappingURL=i18n.js.map

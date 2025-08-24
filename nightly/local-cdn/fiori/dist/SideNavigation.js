@@ -16,7 +16,6 @@ import property from "@ui5/webcomponents-base/dist/decorators/property.js";
 import slot from "@ui5/webcomponents-base/dist/decorators/slot.js";
 import ItemNavigation from "@ui5/webcomponents-base/dist/delegate/ItemNavigation.js";
 import { isPhone, isTablet, isCombi, } from "@ui5/webcomponents-base/dist/Device.js";
-import { isSpace, isEnter, } from "@ui5/webcomponents-base/dist/Keys.js";
 import NavigationMode from "@ui5/webcomponents-base/dist/types/NavigationMode.js";
 import { isInstanceOfSideNavigationSelectableItemBase } from "./SideNavigationSelectableItemBase.js";
 import { isInstanceOfSideNavigationItemBase } from "./SideNavigationItemBase.js";
@@ -477,19 +476,6 @@ let SideNavigation = SideNavigation_1 = class SideNavigation extends UI5Element 
     }
     get isOverflow() {
         return this._isOverflow;
-    }
-    _onkeydownOverflow(e) {
-        if (isSpace(e)) {
-            e.preventDefault();
-        }
-        if (isEnter(e)) {
-            this._handleOverflowClick();
-        }
-    }
-    _onkeyupOverflow(e) {
-        if (isSpace(e)) {
-            this._handleOverflowClick();
-        }
     }
     captureRef(ref) {
         if (ref) {

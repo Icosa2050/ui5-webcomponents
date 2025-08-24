@@ -5,13 +5,14 @@ import ResponsivePopover from "./ResponsivePopover.js";
 import Popover from "./Popover.js";
 import Icon from "./Icon.js";
 import decline from "@ui5/webcomponents-icons/dist/decline.js";
+import Title from "./Title.js";
 export default function SelectPopoverTemplate() {
     return (_jsxs(_Fragment, { children: [this.options.length > 0 &&
                 _jsxs(ResponsivePopover, { id: this.responsivePopoverId, class: {
                         "ui5-select-popover": true,
                         ...this.classes.popover
                     }, part: "popover", style: this.styles.responsivePopover, placement: "Bottom", horizontalAlign: "Start", hideArrow: true, preventInitialFocus: true, onOpen: this._afterOpen, onBeforeOpen: this._beforeOpen, onClose: this._afterClose, onKeyDown: this._onkeydown, children: [this._isPhone &&
-                            _jsxs("div", { slot: "header", class: "ui5-responsive-popover-header", children: [_jsxs("div", { class: "row", children: [_jsx("span", { children: this._headerTitleText }), _jsx(Button, { class: "ui5-responsive-popover-close-btn", icon: decline, design: "Transparent", onClick: this._toggleRespPopover })] }), this.hasValueStateText &&
+                            _jsxs("div", { slot: "header", class: "ui5-responsive-popover-header", children: [_jsxs("div", { class: "row", children: [_jsx(Title, { children: this._headerTitleText }), _jsx(Button, { class: "ui5-responsive-popover-close-btn", icon: decline, design: "Transparent", onClick: this._toggleRespPopover })] }), this.hasValueStateText &&
                                         _jsx("div", { class: {
                                                 "row": true,
                                                 "ui5-select-value-state-dialog-header": true,

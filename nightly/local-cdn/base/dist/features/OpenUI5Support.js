@@ -138,7 +138,8 @@ class OpenUI5Support {
         if (!link) {
             return false;
         }
-        return !!link.href.match(/\/css(-|_)variables\.css/);
+        // The file name is "css_variables.css" until 1.127 and "library.css" from 1.127 onwards
+        return !!link.href.match(/\/css(-|_)variables\.css/) || !!link.href.match(/\/library\.css/);
     }
     static addOpenedPopup(popup) {
         addOpenedPopup(popup);

@@ -9,7 +9,7 @@ import jsxRenderer from "@ui5/webcomponents-base/dist/renderer/JsxRenderer.js";
 import property from "@ui5/webcomponents-base/dist/decorators/property.js";
 import MenuItem from "@ui5/webcomponents/dist/MenuItem.js";
 import NavigationMenu from "./NavigationMenu.js";
-import { isSpace, isEnter } from "@ui5/webcomponents-base/dist/Keys.js";
+import { isSpace, isEnter, isEnterShift, isEnterCtrl, isEnterAlt, } from "@ui5/webcomponents-base/dist/Keys.js";
 // Templates
 import NavigationMenuItemTemplate from "./NavigationMenuItemTemplate.js";
 // Styles
@@ -104,12 +104,14 @@ let NavigationMenuItem = class NavigationMenuItem extends MenuItem {
         if (isSpace(e)) {
             e.preventDefault();
         }
-        if (isEnter(e)) {
+        // "Enter" + "Meta" is missing since it is often reserved by the operating system or window manager
+        if (isEnter(e) || isEnterShift(e) || isEnterCtrl(e) || isEnterAlt(e)) {
             this._activate(e);
         }
         return Promise.resolve();
     }
     _onkeyup(e) {
+        // "Space" + modifier is often reserved by the operating system or window manager
         if (isSpace(e)) {
             this._activate(e);
             if (this.href && !e.defaultPrevented) {

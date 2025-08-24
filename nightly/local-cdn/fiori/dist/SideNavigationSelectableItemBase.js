@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 import customElement from "@ui5/webcomponents-base/dist/decorators/customElement.js";
 import property from "@ui5/webcomponents-base/dist/decorators/property.js";
 import event from "@ui5/webcomponents-base/dist/decorators/event-strict.js";
-import { isSpace, isEnter, isLeft, isRight, } from "@ui5/webcomponents-base/dist/Keys.js";
+import { isSpace, isEnter, isEnterShift, isEnterCtrl, isEnterAlt, isLeft, isRight, } from "@ui5/webcomponents-base/dist/Keys.js";
 import SideNavigationItemBase from "./SideNavigationItemBase.js";
 /**
  * Fired when the component is activated either with a click/tap or by using the [Enter] or [Space] keys.
@@ -146,7 +146,8 @@ let SideNavigationSelectableItemBase = class SideNavigationSelectableItemBase ex
         if (isSpace(e) || isRight(e) || isLeft(e)) {
             e.preventDefault();
         }
-        if (isEnter(e)) {
+        // "Enter" + "Meta" is missing since it is often reserved by the operating system or window manager
+        if (isEnter(e) || isEnterShift(e) || isEnterCtrl(e) || isEnterAlt(e)) {
             this._activate(e);
         }
         if ((isRTL ? isLeft(e) : isRight(e)) && this.sideNavCollapsed && this.hasSubItems) {
@@ -157,6 +158,7 @@ let SideNavigationSelectableItemBase = class SideNavigationSelectableItemBase ex
         }
     }
     _onkeyup(e) {
+        // "Space" + modifier is often reserved by the operating system or window manager
         if (isSpace(e)) {
             this._activate(e);
             if (this.href && !e.defaultPrevented) {
