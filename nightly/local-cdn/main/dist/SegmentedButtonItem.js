@@ -12,7 +12,7 @@ import i18n from "@ui5/webcomponents-base/dist/decorators/i18n.js";
 import { getEnableDefaultTooltips } from "@ui5/webcomponents-base/dist/config/Tooltips.js";
 import { isDesktop } from "@ui5/webcomponents-base/dist/Device.js";
 import { isSpaceShift } from "@ui5/webcomponents-base/dist/Keys.js";
-import { getEffectiveAriaLabelText } from "@ui5/webcomponents-base/dist/util/AccessibilityTextsHelper.js";
+import { getEffectiveAriaLabelText, getAssociatedLabelForTexts, getEffectiveAriaDescriptionText, } from "@ui5/webcomponents-base/dist/util/AccessibilityTextsHelper.js";
 import willShowContent from "@ui5/webcomponents-base/dist/util/willShowContent.js";
 import slot from "@ui5/webcomponents-base/dist/decorators/slot.js";
 import jsxRenderer from "@ui5/webcomponents-base/dist/renderer/JsxRenderer.js";
@@ -82,6 +82,10 @@ let SegmentedButtonItem = SegmentedButtonItem_1 = class SegmentedButtonItem exte
          * @private
          */
         this.sizeOfSet = 0;
+        /**
+         * @private
+         */
+        this.hidden = false;
     }
     _onclick(e) {
         if (this.disabled) {
@@ -114,10 +118,20 @@ let SegmentedButtonItem = SegmentedButtonItem_1 = class SegmentedButtonItem exte
         return this.forcedTabIndex;
     }
     get ariaLabelText() {
-        return getEffectiveAriaLabelText(this);
+        return getEffectiveAriaLabelText(this) || getAssociatedLabelForTexts(this) || undefined;
+    }
+    get ariaDescriptionText() {
+        return getEffectiveAriaDescriptionText(this) || undefined;
     }
     get showIconTooltip() {
         return getEnableDefaultTooltips() && this.iconOnly && !this.tooltip;
+    }
+    get slotTextContent() {
+        return this.text
+            .filter(node => node.nodeType === Node.TEXT_NODE)
+            .map(node => node.textContent?.trim() || "")
+            .filter(Boolean)
+            .join(" ");
     }
 };
 __decorate([
@@ -137,6 +151,12 @@ __decorate([
 ], SegmentedButtonItem.prototype, "accessibleNameRef", void 0);
 __decorate([
     property()
+], SegmentedButtonItem.prototype, "accessibleDescription", void 0);
+__decorate([
+    property()
+], SegmentedButtonItem.prototype, "accessibleDescriptionRef", void 0);
+__decorate([
+    property()
 ], SegmentedButtonItem.prototype, "icon", void 0);
 __decorate([
     property({ type: Boolean })
@@ -153,6 +173,9 @@ __decorate([
 __decorate([
     property({ type: Number })
 ], SegmentedButtonItem.prototype, "sizeOfSet", void 0);
+__decorate([
+    property({ type: Boolean })
+], SegmentedButtonItem.prototype, "hidden", void 0);
 __decorate([
     slot({ type: Node, "default": true })
 ], SegmentedButtonItem.prototype, "text", void 0);

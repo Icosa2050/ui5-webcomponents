@@ -43,7 +43,7 @@ let TreeItemCustom = class TreeItemCustom extends TreeItemBase {
          */
         this.hideSelectionElement = false;
     }
-    async _onkeydown(e) {
+    _onkeydown(e) {
         if (isDown(e) && this.content?.some(el => el.contains(e.target))) {
             e.stopPropagation();
             return;
@@ -53,7 +53,7 @@ let TreeItemCustom = class TreeItemCustom extends TreeItemBase {
         if (!isTab && !isFocused && !isF2(e)) {
             return;
         }
-        await super._onkeydown(e);
+        super._onkeydown(e);
     }
     _onkeyup(e) {
         const isTab = isTabNext(e) || isTabPrevious(e);

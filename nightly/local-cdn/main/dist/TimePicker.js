@@ -18,14 +18,15 @@ import willShowContent from "@ui5/webcomponents-base/dist/util/willShowContent.j
 import { submitForm } from "@ui5/webcomponents-base/dist/features/InputElementsFormSupport.js";
 import getLocale from "@ui5/webcomponents-base/dist/locale/getLocale.js";
 import ValueState from "@ui5/webcomponents-base/dist/types/ValueState.js";
-import { getEffectiveAriaLabelText } from "@ui5/webcomponents-base/dist/util/AccessibilityTextsHelper.js";
+import { getEffectiveAriaLabelText, getAssociatedLabelForTexts, getAllAccessibleNameRefTexts, getEffectiveAriaDescriptionText, getAllAccessibleDescriptionRefTexts, } from "@ui5/webcomponents-base/dist/util/AccessibilityTextsHelper.js";
 import "@ui5/webcomponents-localization/dist/features/calendar/Gregorian.js"; // default calendar for bundling
 import DateFormat from "@ui5/webcomponents-localization/dist/DateFormat.js";
+import IconMode from "./types/IconMode.js";
 import getCachedLocaleDataInstance from "@ui5/webcomponents-localization/dist/getCachedLocaleDataInstance.js";
 import { isShow, isEnter, isPageUp, isPageDown, isPageUpShift, isPageDownShift, isPageUpShiftCtrl, isPageDownShiftCtrl, isTabNext, isTabPrevious, isF6Next, isF6Previous, } from "@ui5/webcomponents-base/dist/Keys.js";
 import UI5Date from "@ui5/webcomponents-localization/dist/dates/UI5Date.js";
 import TimePickerTemplate from "./TimePickerTemplate.js";
-import { TIMEPICKER_SUBMIT_BUTTON, TIMEPICKER_CANCEL_BUTTON, TIMEPICKER_INPUT_DESCRIPTION, TIMEPICKER_POPOVER_ACCESSIBLE_NAME, DATETIME_COMPONENTS_PLACEHOLDER_PREFIX, FORM_TEXTFIELD_REQUIRED, VALUE_STATE_ERROR, VALUE_STATE_INFORMATION, VALUE_STATE_SUCCESS, VALUE_STATE_WARNING, } from "./generated/i18n/i18n-defaults.js";
+import { TIMEPICKER_SUBMIT_BUTTON, TIMEPICKER_CANCEL_BUTTON, TIMEPICKER_INPUT_DESCRIPTION, TIMEPICKER_POPOVER_ACCESSIBLE_NAME, DATETIME_COMPONENTS_PLACEHOLDER_PREFIX, VALUE_STATE_ERROR, VALUE_STATE_INFORMATION, VALUE_STATE_SUCCESS, VALUE_STATE_WARNING, TIMEPICKER_VALUE_MISSING, TIMEPICKER_PATTERN_MISSMATCH, TIMEPICKER_OPEN_ICON_TITLE_OPENED, TIMEPICKER_OPEN_ICON_TITLE, INPUT_SUGGESTIONS_TITLE, } from "./generated/i18n/i18n-defaults.js";
 // Styles
 import TimePickerCss from "./generated/themes/TimePicker.css.js";
 import TimePickerPopoverCss from "./generated/themes/TimePickerPopover.css.js";
@@ -92,6 +93,7 @@ import ValueStateMessageCss from "./generated/themes/ValueStateMessage.css.js";
  * @extends UI5Element
  * @public
  * @since 1.0.0-rc.6
+ * @csspart input - Used to style the input element. This part is forwarded to the underlying ui5-input element.
  */
 let TimePicker = TimePicker_1 = class TimePicker extends UI5Element {
     constructor() {
@@ -139,10 +141,22 @@ let TimePicker = TimePicker_1 = class TimePicker extends UI5Element {
         this._isInputsPopoverOpen = false;
     }
     get formValidityMessage() {
-        return TimePicker_1.i18nBundle.getText(FORM_TEXTFIELD_REQUIRED);
+        const validity = this.formValidity;
+        if (validity.valueMissing) {
+            // @ts-ignore oFormatOptions is a private API of DateFormat
+            return TimePicker_1.i18nBundle.getText(TIMEPICKER_VALUE_MISSING, this.getFormat().oFormatOptions.pattern);
+        }
+        if (validity.patternMismatch) {
+            // @ts-ignore oFormatOptions is a private API of DateFormat
+            return TimePicker_1.i18nBundle.getText(TIMEPICKER_PATTERN_MISSMATCH, this.getFormat().oFormatOptions.pattern);
+        }
+        return "";
     }
     get formValidity() {
-        return { valueMissing: this.required && !this.value };
+        return {
+            valueMissing: this.required && !this.value,
+            patternMismatch: !this.isValid(this.value),
+        };
     }
     async formElementAnchor() {
         return (await this.getFocusDomRefAsync())?.getFocusDomRefAsync();
@@ -156,19 +170,23 @@ let TimePicker = TimePicker_1 = class TimePicker extends UI5Element {
         }
         this.tempValue = this.value && this.isValid(this.value) ? this.value : this.getFormat().format(UI5Date.getInstance());
     }
-    get dateAriaDescription() {
+    get roleDescription() {
         return TimePicker_1.i18nBundle.getText(TIMEPICKER_INPUT_DESCRIPTION);
     }
     get pickerAccessibleName() {
-        return TimePicker_1.i18nBundle.getText(TIMEPICKER_POPOVER_ACCESSIBLE_NAME);
+        return TimePicker_1.i18nBundle.getText(TIMEPICKER_POPOVER_ACCESSIBLE_NAME, this.ariaLabelText);
     }
     get accInfo() {
         return {
-            "ariaRoledescription": this.dateAriaDescription,
-            "ariaHasPopup": "dialog",
+            "ariaRoledescription": this.roleDescription,
+            "ariaHasPopup": "grid",
             "ariaRequired": this.required,
-            "ariaLabel": getEffectiveAriaLabelText(this),
+            "ariaLabel": this.ariaLabelText || undefined,
+            "ariaDescription": getAllAccessibleDescriptionRefTexts(this) || getEffectiveAriaDescriptionText(this) || undefined,
         };
+    }
+    get ariaLabelText() {
+        return getAllAccessibleNameRefTexts(this) || getEffectiveAriaLabelText(this) || getAssociatedLabelForTexts(this) || "";
     }
     /**
      * Currently selected time represented as JavaScript Date instance
@@ -221,8 +239,21 @@ let TimePicker = TimePicker_1 = class TimePicker extends UI5Element {
     get shouldDisplayValueStateMessageInResponsivePopover() {
         return this.hasValueStateText && !this._inputsPopover?.open;
     }
+    /**
+     * Defines whether the value help icon is hidden
+     * @private
+     */
+    get _iconMode() {
+        return isDesktop() ? IconMode.Decorative : IconMode.Interactive;
+    }
     onTimeSelectionChange(e) {
         this.tempValue = e.detail.value; // every time the user changes the time selection -> update tempValue
+    }
+    get openIconTitle() {
+        if (this.open) {
+            return TimePicker_1.i18nBundle.getText(TIMEPICKER_OPEN_ICON_TITLE_OPENED);
+        }
+        return TimePicker_1.i18nBundle.getText(TIMEPICKER_OPEN_ICON_TITLE);
     }
     _togglePicker() {
         this.open = !this.open;
@@ -521,6 +552,19 @@ let TimePicker = TimePicker_1 = class TimePicker extends UI5Element {
     get shouldDisplayValueStateMessageOnDesktop() {
         return this.valueStateMessage.length > 0 && !this.open && !this._isMobileDevice;
     }
+    get _headerTitleText() {
+        return this.ariaLabelText || TimePicker_1.i18nBundle.getText(INPUT_SUGGESTIONS_TITLE);
+    }
+    get showHeader() {
+        return isPhone();
+    }
+    /**
+     * Defines whether the dialog on mobile should have header
+     * @private
+     */
+    get _shouldHideHeader() {
+        return !this.showHeader && !this.hasValueStateText;
+    }
     /**
      * @protected
      */
@@ -561,6 +605,12 @@ __decorate([
 __decorate([
     property()
 ], TimePicker.prototype, "accessibleNameRef", void 0);
+__decorate([
+    property()
+], TimePicker.prototype, "accessibleDescription", void 0);
+__decorate([
+    property()
+], TimePicker.prototype, "accessibleDescriptionRef", void 0);
 __decorate([
     property({ type: Boolean, noAttribute: true })
 ], TimePicker.prototype, "_isInputsPopoverOpen", void 0);

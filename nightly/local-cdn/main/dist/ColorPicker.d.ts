@@ -139,6 +139,8 @@ declare class ColorPicker extends UI5Element implements IFormInputElement {
     _setValue(color: string): void;
     _updateColorGrid(): void;
     _isColorValueEqual(value: ColorRGB): boolean;
+    get colorPickerLabel(): string;
+    get sliderGroupLabel(): string;
     get hueSliderLabel(): string;
     get alphaSliderLabel(): string;
     get hexInputLabel(): string;

@@ -23,8 +23,9 @@ import toLowercaseEnumValue from "@ui5/webcomponents-base/dist/util/toLowercaseE
 import ButtonDesign from "./types/ButtonDesign.js";
 import ButtonType from "./types/ButtonType.js";
 import ButtonBadgeDesign from "./types/ButtonBadgeDesign.js";
+import ButtonAccessibleRole from "./types/ButtonAccessibleRole.js";
 import ButtonTemplate from "./ButtonTemplate.js";
-import { BUTTON_ARIA_TYPE_ACCEPT, BUTTON_ARIA_TYPE_REJECT, BUTTON_ARIA_TYPE_EMPHASIZED, BUTTON_ARIA_TYPE_ATTENTION, BUTTON_BADGE_ONE_ITEM, BUTTON_BADGE_MANY_ITEMS, } from "./generated/i18n/i18n-defaults.js";
+import { BUTTON_ARIA_TYPE_ACCEPT, BUTTON_ARIA_TYPE_REJECT, BUTTON_ARIA_TYPE_EMPHASIZED, BUTTON_ARIA_TYPE_ATTENTION, BUTTON_BADGE_ONE_ITEM, BUTTON_BADGE_MANY_ITEMS, BUTTON_ROLE_DESCRIPTION, LINK_ROLE_DESCRIPTION, } from "./generated/i18n/i18n-defaults.js";
 // Styles
 import buttonCss from "./generated/themes/Button.css.js";
 let isGlobalHandlerAttached = false;
@@ -98,6 +99,11 @@ let Button = Button_1 = class Button extends UI5Element {
          *
          * - **hasPopup**: Indicates the availability and type of interactive popup element, such as menu or dialog, that can be triggered by the button.
          * Accepts the following string values: `dialog`, `grid`, `listbox`, `menu` or `tree`.
+         *
+         * - **ariaLabel**: Defines the accessible ARIA name of the component.
+         * Accepts any string value.
+         *
+         *  - **ariaKeyShortcuts**: Defines keyboard shortcuts that activate or give focus to the button.
          *
          * - **controls**: Identifies the element (or elements) whose contents or presence are controlled by the button element.
          * Accepts a lowercase string value.
@@ -223,6 +229,9 @@ let Button = Button_1 = class Button extends UI5Element {
             this.removeEventListener("click", this._onclickBound);
             this._clickHandlerAttached = false;
         }
+        if (activeButton === this) {
+            activeButton = null;
+        }
     }
     async onBeforeRendering() {
         this._setBadgeOverlayStyle();
@@ -325,9 +334,6 @@ let Button = Button_1 = class Button extends UI5Element {
         }
         this.active = active;
     }
-    get _hasPopup() {
-        return this.accessibilityAttributes.hasPopup;
-    }
     get hasButtonType() {
         return this.design !== ButtonDesign.Default && this.design !== ButtonDesign.Transparent;
     }
@@ -365,15 +371,46 @@ let Button = Button_1 = class Button extends UI5Element {
         return this.nonInteractive ? -1 : Number.parseInt(this.forcedTabIndex);
     }
     get ariaLabelText() {
+        const effectiveAriaLabelText = getEffectiveAriaLabelText(this) || "";
         const textContent = this.textContent || "";
-        const ariaLabelText = getEffectiveAriaLabelText(this) || "";
-        const typeLabelText = this.hasButtonType ? this.buttonTypeText : "";
         const internalLabelText = this.effectiveBadgeDescriptionText || "";
-        const labelParts = [textContent, ariaLabelText, typeLabelText, internalLabelText].filter(part => part);
+        // Use either the effective aria label text (if accessibleName is provided) or the button's text content
+        const mainLabelText = effectiveAriaLabelText || textContent;
+        const labelParts = [mainLabelText, internalLabelText].filter(part => part);
         return labelParts.join(" ");
     }
     get ariaDescriptionText() {
-        return this.accessibleDescription === "" ? undefined : this.accessibleDescription;
+        const accessibleDescription = this.accessibleDescription === "" ? undefined : this.accessibleDescription;
+        const typeLabelText = this.hasButtonType ? this.buttonTypeText : "";
+        const descriptionParts = [accessibleDescription, typeLabelText].filter(part => part);
+        return descriptionParts.length > 0 ? descriptionParts.join(" ") : undefined;
+    }
+    get _computedAccessibilityAttributes() {
+        return {
+            expanded: this.accessibilityAttributes.expanded,
+            hasPopup: this.accessibilityAttributes.hasPopup,
+            controls: this.accessibilityAttributes.controls,
+            ariaKeyShortcuts: this.accessibilityAttributes.ariaKeyShortcuts,
+            ariaLabel: this.accessibilityAttributes.ariaLabel || this.ariaLabelText,
+        };
+    }
+    get accessibilityInfo() {
+        return {
+            description: this.ariaDescriptionText,
+            role: this.effectiveAccRole,
+            disabled: this.disabled,
+            children: this.text,
+            type: this.effectiveAccRoleTranslation,
+        };
+    }
+    get effectiveAccRoleTranslation() {
+        if (this.accessibleRole === ButtonAccessibleRole.Button) {
+            return Button_1.i18nBundle.getText(BUTTON_ROLE_DESCRIPTION);
+        }
+        if (this.accessibleRole === ButtonAccessibleRole.Link) {
+            return Button_1.i18nBundle.getText(LINK_ROLE_DESCRIPTION);
+        }
+        return "";
     }
     get effectiveBadgeDescriptionText() {
         if (!this.shouldRenderBadge) {

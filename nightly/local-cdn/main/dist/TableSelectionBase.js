@@ -35,6 +35,7 @@ class TableSelectionBase extends UI5Element {
          */
         this.behavior = "RowSelector";
         this.identifier = "TableSelection";
+        this._rowsLength = 0;
     }
     onTableActivate(table) {
         this._table = table;
@@ -49,6 +50,12 @@ class TableSelectionBase extends UI5Element {
             this._table = this.parentElement;
         }
         this._invalidateTableAndRows();
+    }
+    onTableBeforeRendering() {
+        if (this._table && this._table.headerRow[0] && this._rowsLength !== this._table.rows.length) {
+            this._rowsLength = this._table.rows.length;
+            this._table.headerRow[0]._invalidate++;
+        }
     }
     // this will be removed when the legacy selection component is removed
     isSelectable() {

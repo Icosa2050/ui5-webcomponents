@@ -17,7 +17,7 @@ import { getRGBColor, getAlpha, } from "@ui5/webcomponents-base/dist/util/ColorC
 import "@ui5/webcomponents-icons/dist/expand.js";
 import ColorValue from "./colorpicker-utils/ColorValue.js";
 import ColorPickerTemplate from "./ColorPickerTemplate.js";
-import { COLORPICKER_ALPHA_SLIDER, COLORPICKER_HUE_SLIDER, COLORPICKER_HEX, COLORPICKER_RED, COLORPICKER_GREEN, COLORPICKER_BLUE, COLORPICKER_ALPHA, COLORPICKER_SATURATION, COLORPICKER_LIGHT, COLORPICKER_HUE, COLORPICKER_TOGGLE_MODE_TOOLTIP, } from "./generated/i18n/i18n-defaults.js";
+import { COLORPICKER_LABEL, COLORPICKER_SLIDER_GROUP, COLORPICKER_ALPHA_SLIDER, COLORPICKER_HUE_SLIDER, COLORPICKER_HEX, COLORPICKER_RED, COLORPICKER_GREEN, COLORPICKER_BLUE, COLORPICKER_ALPHA, COLORPICKER_SATURATION, COLORPICKER_LIGHT, COLORPICKER_HUE, COLORPICKER_TOGGLE_MODE_TOOLTIP, } from "./generated/i18n/i18n-defaults.js";
 // Styles
 import ColorPickerCss from "./generated/themes/ColorPicker.css.js";
 const PICKER_POINTER_WIDTH = 6.5;
@@ -198,6 +198,9 @@ let ColorPicker = ColorPicker_1 = class ColorPicker extends UI5Element {
     _handleHEXChange(e) {
         const input = e.target;
         let inputValueLowerCase = input.value.toLowerCase();
+        if (inputValueLowerCase.startsWith("#")) {
+            inputValueLowerCase = inputValueLowerCase.slice(1);
+        }
         // Shorthand Syntax
         if (inputValueLowerCase.length === 3) {
             inputValueLowerCase = `${inputValueLowerCase[0]}${inputValueLowerCase[0]}${inputValueLowerCase[1]}${inputValueLowerCase[1]}${inputValueLowerCase[2]}${inputValueLowerCase[2]}`;
@@ -372,6 +375,12 @@ let ColorPicker = ColorPicker_1 = class ColorPicker extends UI5Element {
         return this._colorValue.R === value.r
             && this._colorValue.G === value.g
             && this._colorValue.B === value.b;
+    }
+    get colorPickerLabel() {
+        return ColorPicker_1.i18nBundle.getText(COLORPICKER_LABEL);
+    }
+    get sliderGroupLabel() {
+        return ColorPicker_1.i18nBundle.getText(COLORPICKER_SLIDER_GROUP);
     }
     get hueSliderLabel() {
         return ColorPicker_1.i18nBundle.getText(COLORPICKER_HUE_SLIDER);

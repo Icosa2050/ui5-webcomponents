@@ -28,6 +28,9 @@ declare abstract class TableHeaderCellActionBase extends UI5Element {
     };
     onBeforeRendering(): void;
     _onClick(e: UI5CustomEvent<Button, "click">): void;
+    get accessibilityInfo(): {
+        description: string;
+    };
     get _tooltip(): string;
     get _icon(): string;
 }

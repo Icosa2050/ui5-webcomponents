@@ -49,6 +49,8 @@ declare class DateRangePicker extends DatePicker implements IFormInputElement {
     */
     _tempValue?: string;
     private _prevDelimiter;
+    get formValidityMessage(): string;
+    get formValidity(): ValidityStateFlags;
     get formFormattedValue(): string | FormData;
     constructor();
     /**
@@ -103,7 +105,7 @@ declare class DateRangePicker extends DatePicker implements IFormInputElement {
     /**
      * @override
      */
-    get dateAriaDescription(): string;
+    get roleDescription(): string;
     /**
      * @override
      */
@@ -140,6 +142,8 @@ declare class DateRangePicker extends DatePicker implements IFormInputElement {
      * @param value A value to be checked
      */
     isInValidRange(value: string): boolean;
+    isValidMin(value: string): boolean;
+    isValidMax(value: string): boolean;
     /**
      * Extract both dates as timestamps, flip if necessary, and build (which will use the desired format so we enforce the format too)
      * @override

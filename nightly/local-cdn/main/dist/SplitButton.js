@@ -131,6 +131,7 @@ let SplitButton = SplitButton_1 = class SplitButton extends UI5Element {
          *     Accepts any string value.
          *   - **title**: Specifies a tooltip or description for screen readers.
          *     Accepts any string value.
+         * 	- **ariaKeyShortcuts**: Defines keyboard shortcuts that activate or give focus to the button.
          *
          * - **arrowButton**: Attributes applied specifically to the arrow (split) button.
          *   - **hasPopup**: Indicates the presence and type of popup triggered by the arrow button.
@@ -200,8 +201,13 @@ let SplitButton = SplitButton_1 = class SplitButton extends UI5Element {
             e.preventDefault();
             e.stopPropagation();
             this._textButtonActive = false;
-            if (!this._shiftOrEscapePressedDuringSpace && target !== this.arrowButton) { // Do not fire click if Arrow button is focused by mouse and Space is pressed afterwards
-                this._fireClick();
+            if (!this._shiftOrEscapePressedDuringSpace) { // Do not fire click if Arrow button is focused by mouse and Space is pressed afterwards
+                if (target !== this.arrowButton) {
+                    this._fireClick();
+                }
+                else {
+                    this._fireArrowClick();
+                }
             }
             this._shiftOrEscapePressedDuringSpace = false;
             return;
@@ -280,13 +286,13 @@ let SplitButton = SplitButton_1 = class SplitButton extends UI5Element {
     _handleDefaultAction(e) {
         e.preventDefault();
         const target = e.target;
-        if (this.arrowButton && target === this.arrowButton) {
-            this._activeArrowButton = true;
-            this._fireArrowClick();
-            return;
-        }
-        this._textButtonActive = true;
         if (isEnter(e)) {
+            if (this.arrowButton && target === this.arrowButton) {
+                this._activeArrowButton = true;
+                this._fireArrowClick();
+                return;
+            }
+            this._textButtonActive = true;
             this._fireClick(e);
             return;
         }
@@ -297,7 +303,7 @@ let SplitButton = SplitButton_1 = class SplitButton extends UI5Element {
     get effectiveActiveArrowButton() {
         return this.activeArrowButton || this._activeArrowButton;
     }
-    get textButtonAccText() {
+    get buttonTextContent() {
         return this.textContent;
     }
     get isTextButton() {
@@ -315,6 +321,7 @@ let SplitButton = SplitButton_1 = class SplitButton extends UI5Element {
                 hasPopup: this.accessibilityAttributes?.root?.hasPopup,
                 roleDescription: this.accessibilityAttributes?.root?.roleDescription || (this._hideArrowButton ? undefined : SplitButton_1.i18nBundle.getText(SPLIT_BUTTON_DESCRIPTION)),
                 title: this.accessibilityAttributes?.root?.title,
+                ariaKeyShortcuts: this.accessibilityAttributes?.root?.ariaKeyShortcuts,
             },
             arrowButton: {
                 hasPopup: this.accessibilityAttributes?.arrowButton?.hasPopup || "menu",

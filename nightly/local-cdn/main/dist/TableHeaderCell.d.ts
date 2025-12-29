@@ -98,8 +98,13 @@ declare class TableHeaderCell extends TableCellBase {
      */
     action: Array<TableHeaderCellActionBase>;
     _popin: boolean;
-    protected ariaRole: string;
+    _defaultSlot: HTMLSlotElement;
+    _actionSlot: HTMLSlotElement;
+    ariaRole: string;
     _popinWidth: number;
     onBeforeRendering(): void;
+    get accessibilityInfo(): {
+        children: HTMLSlotElement[];
+    };
 }
 export default TableHeaderCell;

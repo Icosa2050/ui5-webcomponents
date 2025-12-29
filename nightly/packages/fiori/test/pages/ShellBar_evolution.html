@@ -14,8 +14,8 @@
 
 
 
-  <script type="module" crossorigin src="/ui5-webcomponents/nightly/assets/bundle.esm-DXrGE0SW.js"></script>
-  <link rel="stylesheet" crossorigin href="/ui5-webcomponents/nightly/assets/ShellBar-BRTo017q.css">
+  <script type="module" crossorigin src="/webcomponents/nightly/assets/bundle.esm-Dgrk7nrX.js"></script>
+  <link rel="stylesheet" crossorigin href="/webcomponents/nightly/assets/ShellBar-BRTo017q.css">
 </head>
 
 <body class="shellbar1auto">
@@ -139,7 +139,7 @@
 
 		<ui5-toggle-button  slot="content" text="PR9" data-hide-order="9">PR9</ui5-toggle-button>
 
-		<ui5-shellbar-search slot="searchField">
+		<ui5-shellbar-search slot="searchField" scope-value="apps">
 			<ui5-search-item text="List Item" icon="history" ></ui5-search-item>
 			<ui5-search-item text="List Item" icon="history" ></ui5-search-item>
 			<ui5-search-item text="List Item" icon="history" ></ui5-search-item>
@@ -148,9 +148,9 @@
 			<ui5-search-item text="List Item" icon="globe" ></ui5-search-item>
 			<ui5-search-item text="List Item" icon="globe" ></ui5-search-item>
 
-			<ui5-search-scope text="All" slot="scopes"></ui5-search-scope>
-			<ui5-search-scope text="Apps" selected slot="scopes"></ui5-search-scope>
-			<ui5-search-scope text="Products" slot="scopes"></ui5-search-scope>
+			<ui5-search-scope text="All" value="all" slot="scopes"></ui5-search-scope>
+			<ui5-search-scope text="Apps" value="apps" slot="scopes"></ui5-search-scope>
+			<ui5-search-scope text="Products" value="products" slot="scopes"></ui5-search-scope>
 		</ui5-shellbar-search>
 
 		<ui5-avatar slot="profile" icon="customer"></ui5-avatar>

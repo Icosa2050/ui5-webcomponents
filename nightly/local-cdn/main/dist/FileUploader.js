@@ -12,11 +12,11 @@ import event from "@ui5/webcomponents-base/dist/decorators/event-strict.js";
 import slot from "@ui5/webcomponents-base/dist/decorators/slot.js";
 import query from "@ui5/webcomponents-base/dist/decorators/query.js";
 import ValueState from "@ui5/webcomponents-base/dist/types/ValueState.js";
-import { getEffectiveAriaLabelText, getAssociatedLabelForTexts, getAllAccessibleNameRefTexts, } from "@ui5/webcomponents-base/dist/util/AccessibilityTextsHelper.js";
+import { getEffectiveAriaLabelText, getAssociatedLabelForTexts, getAllAccessibleNameRefTexts, getEffectiveAriaDescriptionText, getAllAccessibleDescriptionRefTexts, } from "@ui5/webcomponents-base/dist/util/AccessibilityTextsHelper.js";
 import jsxRenderer from "@ui5/webcomponents-base/dist/renderer/JsxRenderer.js";
 import i18n from "@ui5/webcomponents-base/dist/decorators/i18n.js";
 import { isUpAlt, isDownAlt, isEnter, isDelete, isF4, isSpace, isRight, isLeft, } from "@ui5/webcomponents-base/dist/Keys.js";
-import { FILEUPLOADER_INPUT_TOOLTIP, FILEUPLOADER_VALUE_HELP_TOOLTIP, FILEUPLOADER_CLEAR_ICON_TOOLTIP, VALUE_STATE_SUCCESS, VALUE_STATE_INFORMATION, VALUE_STATE_ERROR, VALUE_STATE_WARNING, FILEUPLOADER_DEFAULT_PLACEHOLDER, FILEUPLOADER_DEFAULT_MULTIPLE_PLACEHOLDER, FILEUPLOADER_ROLE_DESCRIPTION, } from "./generated/i18n/i18n-defaults.js";
+import { FILEUPLOADER_INPUT_TOOLTIP, FILEUPLOADER_VALUE_HELP_TOOLTIP, FILEUPLOADER_CLEAR_ICON_TOOLTIP, VALUE_STATE_SUCCESS, VALUE_STATE_INFORMATION, VALUE_STATE_ERROR, VALUE_STATE_WARNING, FILEUPLOADER_DEFAULT_PLACEHOLDER, FILEUPLOADER_DEFAULT_MULTIPLE_PLACEHOLDER, FILEUPLOADER_ROLE_DESCRIPTION, FILEUPLOAER_VALUE_MISSING, } from "./generated/i18n/i18n-defaults.js";
 // Template
 import FileUploaderTemplate from "./FileUploaderTemplate.js";
 // Styles
@@ -100,6 +100,18 @@ let FileUploader = FileUploader_1 = class FileUploader extends UI5Element {
         this.focused = false;
         this._selectedFilesNames = [];
         this._tokenizerOpen = false;
+    }
+    get formValidityMessage() {
+        const validity = this.formValidity;
+        if (validity.valueMissing) {
+            return FileUploader_1.i18nBundle.getText(FILEUPLOAER_VALUE_MISSING);
+        }
+        return "";
+    }
+    get formValidity() {
+        return {
+            valueMissing: this.required && (!this.files || this.files.length === 0),
+        };
     }
     async formElementAnchor() {
         return this.getFocusDomRefAsync();
@@ -196,7 +208,7 @@ let FileUploader = FileUploader_1 = class FileUploader extends UI5Element {
         }
         this.focused = false;
         if (this._tokenizer) {
-            this._tokenizer.expanded = this._tokenizerOpen;
+            this._tokenizer.expanded = this._tokenizer.open;
         }
     }
     get _tokenizerExpanded() {
@@ -231,16 +243,13 @@ let FileUploader = FileUploader_1 = class FileUploader extends UI5Element {
         e.stopPropagation();
         this._clearFileSelection();
     }
-    _onFormSubmit(e) {
-        e.preventDefault();
-    }
     _openFileBrowser() {
         this._input.click();
     }
     _clearFileSelection() {
         this._selectedFilesNames = [];
         this.value = "";
-        this._form?.reset();
+        this._input.files = new DataTransfer().files;
         this.fireDecoratorEvent("change", {
             files: this.files,
         });
@@ -254,7 +263,7 @@ let FileUploader = FileUploader_1 = class FileUploader extends UI5Element {
         if (this._input) {
             return this._input.files;
         }
-        return FileUploader_1._emptyFilesList;
+        return null;
     }
     onAfterRendering() {
         if (!this.value) {
@@ -341,17 +350,6 @@ let FileUploader = FileUploader_1 = class FileUploader extends UI5Element {
             this._messagePopover.open = false;
         }
     }
-    /**
-     * in case when the component is not placed in the DOM, return empty FileList, like native input would do
-     * @private
-     */
-    static get _emptyFilesList() {
-        if (!this.emptyInput) {
-            this.emptyInput = document.createElement("input");
-            this.emptyInput.type = "file";
-        }
-        return this.emptyInput.files;
-    }
     get accInfo() {
         return {
             "ariaRoledescription": FileUploader_1.i18nBundle.getText(FILEUPLOADER_ROLE_DESCRIPTION),
@@ -359,6 +357,7 @@ let FileUploader = FileUploader_1 = class FileUploader extends UI5Element {
             "ariaInvalid": this.valueState === ValueState.Negative || undefined,
             "ariaHasPopup": "dialog",
             "ariaLabel": getAllAccessibleNameRefTexts(this) || getEffectiveAriaLabelText(this) || getAssociatedLabelForTexts(this) || undefined,
+            "ariaDescription": getAllAccessibleDescriptionRefTexts(this) || getEffectiveAriaDescriptionText(this) || undefined,
         };
     }
     get inputTitle() {
@@ -393,7 +392,7 @@ let FileUploader = FileUploader_1 = class FileUploader extends UI5Element {
         return !this.valueStateMessage.length && this.hasValueState;
     }
     get shouldOpenValueStateMessagePopover() {
-        return this.focused && this.hasValueState && !this.hideInput && !this._tokenizerOpen;
+        return this.focused && this.hasValueState && !this.hideInput && !this._tokenizer?.open;
     }
     /**
      * This method is relevant for sap_horizon theme only
@@ -444,6 +443,12 @@ __decorate([
 __decorate([
     property()
 ], FileUploader.prototype, "accessibleNameRef", void 0);
+__decorate([
+    property()
+], FileUploader.prototype, "accessibleDescription", void 0);
+__decorate([
+    property()
+], FileUploader.prototype, "accessibleDescriptionRef", void 0);
 __decorate([
     property({ type: Boolean })
 ], FileUploader.prototype, "focused", void 0);

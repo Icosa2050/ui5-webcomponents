@@ -96,7 +96,7 @@ let ColorPalettePopover = ColorPalettePopover_1 = class ColorPalettePopover exte
             colorPalette.recentColorsElements[0].focus();
         }
         else if (colorPalette.showDefaultColor) {
-            colorPalette.colorPaletteNavigationElements[0].focus();
+            colorPalette._defaultColorButton?.focus();
         }
         // since height is dynamically determined by padding-block-start
         colorPalette.allColorsInPalette.forEach((item) => {

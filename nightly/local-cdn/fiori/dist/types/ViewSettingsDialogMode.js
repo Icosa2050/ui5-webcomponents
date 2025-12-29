@@ -1,5 +1,5 @@
 /**
- * Different types of Bar.
+ * Different types of ViewSettings.
  * @public
  */
 var ViewSettingsDialogMode;
@@ -16,6 +16,12 @@ var ViewSettingsDialogMode;
      * @public
      */
     ViewSettingsDialogMode["Filter"] = "Filter";
+    /**
+     * Group type
+     * @since 2.13.0
+     * @public
+     */
+    ViewSettingsDialogMode["Group"] = "Group";
 })(ViewSettingsDialogMode || (ViewSettingsDialogMode = {}));
 export default ViewSettingsDialogMode;
 //# sourceMappingURL=ViewSettingsDialogMode.js.map

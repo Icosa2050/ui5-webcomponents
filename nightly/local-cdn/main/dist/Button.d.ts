@@ -5,7 +5,7 @@ import type I18nBundle from "@ui5/webcomponents-base/dist/i18nBundle.js";
 import type { I18nText } from "@ui5/webcomponents-base/dist/i18nBundle.js";
 import ButtonDesign from "./types/ButtonDesign.js";
 import ButtonType from "./types/ButtonType.js";
-import type ButtonAccessibleRole from "./types/ButtonAccessibleRole.js";
+import ButtonAccessibleRole from "./types/ButtonAccessibleRole.js";
 import type ButtonBadge from "./ButtonBadge.js";
 /**
  * Interface for components that may be used as a button inside numerous higher-order components
@@ -14,7 +14,7 @@ import type ButtonBadge from "./ButtonBadge.js";
 interface IButton extends HTMLElement, ITabbable {
     nonInteractive: boolean;
 }
-type ButtonAccessibilityAttributes = Pick<AccessibilityAttributes, "expanded" | "hasPopup" | "controls">;
+type ButtonAccessibilityAttributes = Pick<AccessibilityAttributes, "expanded" | "hasPopup" | "controls" | "ariaKeyShortcuts" | "ariaLabel">;
 type ButtonClickEventDetail = {
     originalEvent: MouseEvent;
     altKey: boolean;
@@ -140,6 +140,11 @@ declare class Button extends UI5Element implements IButton {
      *
      * - **hasPopup**: Indicates the availability and type of interactive popup element, such as menu or dialog, that can be triggered by the button.
      * Accepts the following string values: `dialog`, `grid`, `listbox`, `menu` or `tree`.
+     *
+     * - **ariaLabel**: Defines the accessible ARIA name of the component.
+     * Accepts any string value.
+     *
+     *  - **ariaKeyShortcuts**: Defines keyboard shortcuts that activate or give focus to the button.
      *
      * - **controls**: Identifies the element (or elements) whose contents or presence are controlled by the button element.
      * Accepts a lowercase string value.
@@ -267,7 +272,6 @@ declare class Button extends UI5Element implements IButton {
     _onkeyup(e: KeyboardEvent): void;
     _onfocusout(): void;
     _setActiveState(active: boolean): void;
-    get _hasPopup(): import("@ui5/webcomponents-base/dist/types.js").AriaHasPopup | undefined;
     get hasButtonType(): boolean;
     get isIconOnly(): boolean;
     static typeTextMappings(): Record<string, I18nText>;
@@ -277,6 +281,15 @@ declare class Button extends UI5Element implements IButton {
     get tabIndexValue(): number | undefined;
     get ariaLabelText(): string;
     get ariaDescriptionText(): string | undefined;
+    get _computedAccessibilityAttributes(): ButtonAccessibilityAttributes;
+    get accessibilityInfo(): {
+        description: string | undefined;
+        role: import("@ui5/webcomponents-base/dist/thirdparty/preact/jsx.js").JSXInternal.AriaRole;
+        disabled: boolean;
+        children: Node[];
+        type: string;
+    };
+    get effectiveAccRoleTranslation(): string;
     get effectiveBadgeDescriptionText(): string;
     get _isSubmit(): boolean;
     get _isReset(): boolean;

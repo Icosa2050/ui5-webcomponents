@@ -12,7 +12,7 @@ import CalendarDate from "@ui5/webcomponents-localization/dist/dates/CalendarDat
 import UI5Date from "@ui5/webcomponents-localization/dist/dates/UI5Date.js";
 import modifyDateBy from "@ui5/webcomponents-localization/dist/dates/modifyDateBy.js";
 import getTodayUTCTimestamp from "@ui5/webcomponents-localization/dist/dates/getTodayUTCTimestamp.js";
-import { DATERANGE_DESCRIPTION, DATERANGEPICKER_POPOVER_ACCESSIBLE_NAME, DATETIME_COMPONENTS_PLACEHOLDER_PREFIX, } from "./generated/i18n/i18n-defaults.js";
+import { DATERANGE_DESCRIPTION, DATERANGEPICKER_POPOVER_ACCESSIBLE_NAME, DATETIME_COMPONENTS_PLACEHOLDER_PREFIX, DATERANGE_VALUE_MISSING, DATERANGE_PATTERN_MISMATCH, DATERANGE_UNDERFLOW, DATERANGE_OVERFLOW, } from "./generated/i18n/i18n-defaults.js";
 import DateRangePickerTemplate from "./DateRangePickerTemplate.js";
 // Styles
 import DateRangePickerCss from "./generated/themes/DateRangePicker.css.js";
@@ -51,6 +51,32 @@ const DEFAULT_DELIMITER = "-";
  * @public
  */
 let DateRangePicker = DateRangePicker_1 = class DateRangePicker extends DatePicker {
+    get formValidityMessage() {
+        const validity = this.formValidity;
+        if (validity.valueMissing) {
+            // @ts-ignore oFormatOptions is a private API of DateFormat
+            return DateRangePicker_1.i18nBundle.getText(DATERANGE_VALUE_MISSING, this.getFormat().oFormatOptions.pattern);
+        }
+        if (validity.patternMismatch) {
+            // @ts-ignore oFormatOptions is a private API of DateFormat
+            return DateRangePicker_1.i18nBundle.getText(DATERANGE_PATTERN_MISMATCH, this.getFormat().oFormatOptions.pattern);
+        }
+        if (validity.rangeUnderflow) {
+            return DateRangePicker_1.i18nBundle.getText(DATERANGE_UNDERFLOW, this.minDate);
+        }
+        if (validity.rangeOverflow) {
+            return DateRangePicker_1.i18nBundle.getText(DATERANGE_OVERFLOW, this.maxDate);
+        }
+        return "";
+    }
+    get formValidity() {
+        return {
+            valueMissing: this.required && !this.value,
+            patternMismatch: !!this.value && !this.isValidValue(this.value),
+            rangeUnderflow: !!this.value && !this.isValidMin(this.value),
+            rangeOverflow: !!this.value && !this.isValidMax(this.value),
+        };
+    }
     get formFormattedValue() {
         const values = this._splitValueByDelimiter(this.value || "").filter(Boolean);
         if (values.length && this.name) {
@@ -166,14 +192,14 @@ let DateRangePicker = DateRangePicker_1 = class DateRangePicker extends DatePick
     /**
      * @override
      */
-    get dateAriaDescription() {
+    get roleDescription() {
         return DateRangePicker_1.i18nBundle.getText(DATERANGE_DESCRIPTION);
     }
     /**
      * @override
      */
     get pickerAccessibleName() {
-        return DateRangePicker_1.i18nBundle.getText(DATERANGEPICKER_POPOVER_ACCESSIBLE_NAME);
+        return DateRangePicker_1.i18nBundle.getText(DATERANGEPICKER_POPOVER_ACCESSIBLE_NAME, this.ariaLabelText);
     }
     /**
      * @override
@@ -196,8 +222,7 @@ let DateRangePicker = DateRangePicker_1 = class DateRangePicker extends DatePick
      * @param value A value to be tested against the current date format
      */
     isValid(value) {
-        let parts = this._splitValueByDelimiter(value).filter(str => str !== "");
-        parts = parts.filter(str => str !== " "); // remove empty strings
+        const parts = this._splitValueByDelimiter(value).filter(str => str.trim() !== "");
         return parts.length <= 2 && parts.every(dateString => super.isValid(dateString)); // must be at most 2 dates and each must be valid
     }
     /**
@@ -206,8 +231,7 @@ let DateRangePicker = DateRangePicker_1 = class DateRangePicker extends DatePick
      * @param value A value to be tested against the current date format
      */
     isValidValue(value) {
-        let parts = this._splitValueByDelimiter(value).filter(str => str !== "");
-        parts = parts.filter(str => str !== " "); // remove empty strings
+        const parts = this._splitValueByDelimiter(value).filter(str => str.trim() !== "");
         return parts.length <= 2 && parts.every(dateString => super.isValidValue(dateString)); // must be at most 2 dates and each must be valid
     }
     /**
@@ -216,8 +240,7 @@ let DateRangePicker = DateRangePicker_1 = class DateRangePicker extends DatePick
      * @param value A value to be tested against the current date format
      */
     isValidDisplayValue(value) {
-        let parts = this._splitValueByDelimiter(value).filter(str => str !== "");
-        parts = parts.filter(str => str !== " "); // remove empty strings
+        const parts = this._splitValueByDelimiter(value).filter(str => str.trim() !== "");
         return parts.length <= 2 && parts.every(dateString => super.isValidDisplayValue(dateString)); // must be at most 2 dates and each must be valid
     }
     /**
@@ -226,9 +249,16 @@ let DateRangePicker = DateRangePicker_1 = class DateRangePicker extends DatePick
      * @param value A value to be checked
      */
     isInValidRange(value) {
-        let parts = this._splitValueByDelimiter(value).filter(str => str !== "");
-        parts = parts.filter(str => str !== " "); // remove empty strings
+        const parts = this._splitValueByDelimiter(value).filter(str => str.trim() !== "");
         return parts.length <= 2 && parts.every(dateString => super.isInValidRange(dateString));
+    }
+    isValidMin(value) {
+        const parts = this._splitValueByDelimiter(value).filter(str => str.trim() !== "");
+        return parts.length <= 2 && parts.every(dateString => super.isValidMin(dateString));
+    }
+    isValidMax(value) {
+        const parts = this._splitValueByDelimiter(value).filter(str => str.trim() !== "");
+        return parts.length <= 2 && parts.every(dateString => super.isValidMax(dateString));
     }
     /**
      * Extract both dates as timestamps, flip if necessary, and build (which will use the desired format so we enforce the format too)
@@ -251,6 +281,9 @@ let DateRangePicker = DateRangePicker_1 = class DateRangePicker extends DatePick
         const values = this._splitValueByDelimiter(value);
         const firstDateTimestamp = this._exctractDisplayTimestamp(values[0]);
         const lastDateTimestamp = this._exctractDisplayTimestamp(values[1]);
+        if (!firstDateTimestamp || !lastDateTimestamp) {
+            return value;
+        }
         if (firstDateTimestamp && lastDateTimestamp && firstDateTimestamp > lastDateTimestamp) { // if both are timestamps (not undefined), flip if necessary
             return this._buildDisplayValue(lastDateTimestamp, firstDateTimestamp);
         }
@@ -265,7 +298,7 @@ let DateRangePicker = DateRangePicker_1 = class DateRangePicker extends DatePick
         let lastDateString = "";
         firstDateString = this._getValueStringFromTimestamp(this._exctractDisplayTimestamp(values[0]) * 1000);
         lastDateString = this._getValueStringFromTimestamp(this._exctractDisplayTimestamp(values[1]) * 1000);
-        if (!firstDateString && !lastDateString) {
+        if (!firstDateString || !lastDateString) {
             return value;
         }
         return `${firstDateString} ${this._effectiveDelimiter} ${lastDateString}`;
@@ -420,11 +453,14 @@ let DateRangePicker = DateRangePicker_1 = class DateRangePicker extends DatePick
         return "";
     }
     getDisplayValueFromValue(value) {
+        if (this.isLiveUpdate) {
+            return value;
+        }
         let firstDateString = "";
         let lastDateString = "";
         firstDateString = this._getDisplayStringFromTimestamp(this._extractFirstTimestamp(value) * 1000);
         lastDateString = this._getDisplayStringFromTimestamp(this._extractLastTimestamp(value) * 1000);
-        if (!firstDateString && !lastDateString) {
+        if (!firstDateString || !lastDateString) {
             return value;
         }
         return `${firstDateString} ${this._effectiveDelimiter} ${lastDateString}`;

@@ -62,6 +62,20 @@ declare class SegmentedButtonItem extends UI5Element implements IButton, ISegmen
      */
     accessibleNameRef?: string;
     /**
+     * Defines the accessible description of the component.
+     * @default undefined
+     * @public
+     * @since 2.15.0
+     */
+    accessibleDescription?: string;
+    /**
+     * Defines the IDs of the HTML Elements that describe the component.
+     * @default undefined
+     * @public
+     * @since 2.15.0
+     */
+    accessibleDescriptionRef?: string;
+    /**
      * Defines the icon, displayed as graphical element within the component.
      * The SAP-icons font provides numerous options.
      *
@@ -91,13 +105,17 @@ declare class SegmentedButtonItem extends UI5Element implements IButton, ISegmen
      * @default 0
      * @private
      */
-    posInSet: number;
+    posInSet?: number | undefined;
     /**
      * Defines how many items are inside of the SegmentedButton.
      * @default 0
      * @private
      */
-    sizeOfSet: number;
+    sizeOfSet?: number | undefined;
+    /**
+     * @private
+     */
+    hidden: boolean;
     /**
      * Defines the text of the component.
      *
@@ -114,6 +132,8 @@ declare class SegmentedButtonItem extends UI5Element implements IButton, ISegmen
     _onkeyup(e: KeyboardEvent): void;
     get tabIndexValue(): string | undefined;
     get ariaLabelText(): string | undefined;
+    get ariaDescriptionText(): string | undefined;
     get showIconTooltip(): boolean;
+    get slotTextContent(): string;
 }
 export default SegmentedButtonItem;

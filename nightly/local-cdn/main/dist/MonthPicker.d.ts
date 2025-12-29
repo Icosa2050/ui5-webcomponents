@@ -67,7 +67,6 @@ declare class MonthPicker extends CalendarPart implements ICalendarPicker {
     static i18nBundle: I18nBundle;
     get roleDescription(): string;
     onBeforeRendering(): void;
-    onAfterRendering(): void;
     get rowSize(): 2 | 3;
     _buildMonths(): void;
     _getDisplayedSecondaryMonthText(timestamp: number): {
@@ -99,6 +98,12 @@ declare class MonthPicker extends CalendarPart implements ICalendarPicker {
      * @private
      */
     _onmouseover(e: MouseEvent): void;
+    /**
+     * Sets the focus reference to the month that was clicked with mousedown.
+     * @param e
+     * @private
+     */
+    _onmousedown(e: MouseEvent): void;
     /**
      * Modifies timestamp by a given amount of months and,
      * if necessary, loads the prev/next page.

@@ -13,12 +13,16 @@ import customElement from "@ui5/webcomponents-base/dist/decorators/customElement
  *
  * ### Overview
  *
+ * The `ui5-filter-item` component defines the filtering criteria for data in `ui5-view-settings-dialog`.
+ * It represents a single filter category that contains multiple filter options that users can select.
+ *
  * ### Usage
  *
- * For the `ui5-filter-item`
+ * The `ui5-filter-item` is used within the `ui5-view-settings-dialog` to provide filtering options.
+ *
  * ### ES6 Module Import
  *
- * `import @ui5/webcomponents-fiori/dist/FilterItem.js";`
+ * `import "@ui5/webcomponents-fiori/dist/FilterItem.js";`
  * @constructor
  * @extends UI5Element
  * @abstract

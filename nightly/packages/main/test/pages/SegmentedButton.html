@@ -12,8 +12,8 @@
 
 	<script>// delete Document.prototype.adoptedStyleSheets;</script>
 
-  <script type="module" crossorigin src="/ui5-webcomponents/nightly/assets/bundle.esm-Z_EAX1F5.js"></script>
-  <link rel="stylesheet" crossorigin href="/ui5-webcomponents/nightly/assets/SegmentedButton-Dy5wVW1q.css">
+  <script type="module" crossorigin src="/webcomponents/nightly/assets/bundle.esm-CSfv0fSI.js"></script>
+  <link rel="stylesheet" crossorigin href="/webcomponents/nightly/assets/SegmentedButton-Dy5wVW1q.css">
 </head>
 
 <body>
@@ -147,6 +147,59 @@
 						</ui5-segmented-button>
 					</div>
 				</section>
+
+				<section>
+					<h1>SegmentedButton with itemsFitContent property</h1>
+
+					<ui5-segmented-button items-fit-content  selection-mode="Multiple">
+						<ui5-segmented-button-item icon="employee" selected></ui5-segmented-button-item>
+						<ui5-segmented-button-item selected>Word</ui5-segmented-button-item>
+						<ui5-segmented-button-item selected>Word Word</ui5-segmented-button-item>
+						<ui5-segmented-button-item selected>selected SegmentedButtonItem With Bigger Text</ui5-segmented-button-item>
+						<ui5-segmented-button-item selected>Item</ui5-segmented-button-item>
+						<ui5-segmented-button-item selected>selected SegmentedButtonItem</ui5-segmented-button-item>
+						<ui5-segmented-button-item selected>A</ui5-segmented-button-item>
+					</ui5-segmented-button>
+				</section>
+
+				<section>
+					<h1>SegmentedButton with itemsFitContent property - LONG TEXT</h1>
+
+					<ui5-segmented-button items-fit-content  selection-mode="Multiple">
+						<ui5-segmented-button-item selected>Word</ui5-segmented-button-item>
+						<ui5-segmented-button-item selected>selected SegmentedButtonItem With Bigger Text selected SegmentedButtonItem With Bigger Text selected SegmentedButtonItem With Bigger Text</ui5-segmented-button-item>
+						<ui5-segmented-button-item selected>Item</ui5-segmented-button-item>
+						<ui5-segmented-button-item selected>selected SegmentedButtonItem</ui5-segmented-button-item>
+						<ui5-segmented-button-item selected>A</ui5-segmented-button-item>
+					</ui5-segmented-button>
+				</section>
+
+				<section>
+					<h1>SegmentedButton with itemsFitContent property with set width</h1>
+
+					<ui5-segmented-button items-fit-content  selection-mode="Multiple" class="segmentedbutton2auto">
+						<ui5-segmented-button-item icon="employee" selected></ui5-segmented-button-item>
+						<ui5-segmented-button-item selected>Word</ui5-segmented-button-item>
+						<ui5-segmented-button-item selected>selected SegmentedButtonItem With Bigger Text</ui5-segmented-button-item>
+						<ui5-segmented-button-item selected>Item</ui5-segmented-button-item>
+						<ui5-segmented-button-item selected>selected SegmentedButtonItem</ui5-segmented-button-item>
+						<ui5-segmented-button-item selected>A</ui5-segmented-button-item>
+					</ui5-segmented-button>
+				</section>
+
+				<section>
+					<h1>SegmentedButton with itemsFitContent property with set width (truncation)</h1>
+
+					<ui5-segmented-button items-fit-content  selection-mode="Multiple" class="segmentedbutton1auto">
+						<ui5-segmented-button-item selected>Word</ui5-segmented-button-item>
+						<ui5-segmented-button-item selected>selected SegmentedButtonItem With Bigger Text</ui5-segmented-button-item>
+						<ui5-segmented-button-item selected>Item</ui5-segmented-button-item>
+						<ui5-segmented-button-item selected>selected SegmentedButtonItem</ui5-segmented-button-item>
+						<ui5-segmented-button-item selected>A</ui5-segmented-button-item>
+					</ui5-segmented-button>
+				</section>
+
+
 			</div>
 		</div>
 	</section>

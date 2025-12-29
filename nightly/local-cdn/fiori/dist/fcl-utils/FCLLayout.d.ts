@@ -1,6 +1,6 @@
 import type { MEDIA } from "../FlexibleColumnLayout.js";
 import type FCLLayout from "../types/FCLLayout.js";
-type LayoutConfiguration = {
+type DefaultLayoutConfiguration = {
     [device in MEDIA]: {
         [layoutName in FCLLayout]: {
             layout: Array<string>;
@@ -13,12 +13,12 @@ type LayoutConfiguration = {
         };
     };
 };
-declare const getLayoutsByMedia: () => LayoutConfiguration;
+declare const getDefaultLayoutsByMedia: () => DefaultLayoutConfiguration;
 declare const getNextLayoutByArrowPress: () => {
     ThreeColumnsMidExpanded: string;
     ThreeColumnsEndExpanded: string;
     ThreeColumnsStartHiddenMidExpanded: string;
     ThreeColumnsStartHiddenEndExpanded: string;
 };
-export { getLayoutsByMedia, getNextLayoutByArrowPress, };
-export type { LayoutConfiguration, FCLLayout, };
+export { getDefaultLayoutsByMedia, getNextLayoutByArrowPress, };
+export type { FCLLayout, };

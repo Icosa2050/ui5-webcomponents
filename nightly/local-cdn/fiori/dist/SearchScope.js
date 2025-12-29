@@ -27,8 +27,8 @@ __decorate([
     property()
 ], SearchScope.prototype, "text", void 0);
 __decorate([
-    property({ type: Boolean })
-], SearchScope.prototype, "selected", void 0);
+    property()
+], SearchScope.prototype, "value", void 0);
 SearchScope = __decorate([
     customElement("ui5-search-scope")
 ], SearchScope);

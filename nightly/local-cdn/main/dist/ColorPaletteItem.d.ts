@@ -57,11 +57,6 @@ declare class ColorPaletteItem extends UI5Element implements IColorPaletteItem {
     constructor();
     onBeforeRendering(): void;
     get colorLabel(): string;
-    get styles(): {
-        root: {
-            "background-color": string;
-        };
-    };
     get classes(): {
         root: {
             "ui5-cp-item": boolean;

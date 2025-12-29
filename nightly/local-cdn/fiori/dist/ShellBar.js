@@ -38,7 +38,7 @@ import ShellBarTemplate from "./ShellBarTemplate.js";
 // Styles
 import shellBarStyles from "./generated/themes/ShellBar.css.js";
 import ShellBarPopoverCss from "./generated/themes/ShellBarPopover.css.js";
-import { SHELLBAR_LABEL, SHELLBAR_LOGO, SHELLBAR_NOTIFICATIONS, SHELLBAR_NOTIFICATIONS_NO_COUNT, SHELLBAR_CANCEL, SHELLBAR_PROFILE, SHELLBAR_PRODUCTS, SHELLBAR_SEARCH, SHELLBAR_SEARCH_FIELD, SHELLBAR_OVERFLOW, SHELLBAR_LOGO_AREA, SHELLBAR_ADDITIONAL_CONTEXT, SHELLBAR_SEARCHFIELD_DESCRIPTION, SHELLBAR_SEARCH_BTN_OPEN, SHELLBAR_PRODUCT_SWITCH_BTN, } from "./generated/i18n/i18n-defaults.js";
+import { SHELLBAR_LABEL, SHELLBAR_LOGO, SHELLBAR_NOTIFICATIONS, SHELLBAR_NOTIFICATIONS_NO_COUNT, SHELLBAR_CANCEL, SHELLBAR_PROFILE, SHELLBAR_PRODUCTS, SHELLBAR_SEARCH, SHELLBAR_SEARCH_FIELD, SHELLBAR_OVERFLOW, SHELLBAR_LOGO_AREA, SHELLBAR_ADDITIONAL_CONTEXT, SHELLBAR_SEARCHFIELD_DESCRIPTION, SHELLBAR_SEARCH_BTN_OPEN, SHELLBAR_PRODUCT_SWITCH_BTN, SHELLBAR_IMAGE_BTN, } from "./generated/i18n/i18n-defaults.js";
 const RESIZE_THROTTLE_RATE = 200; // ms
 // actions always visible in lean mode, order is important
 const PREDEFINED_PLACE_ACTIONS = ["feedback", "sys-help"];
@@ -236,9 +236,14 @@ let ShellBar = ShellBar_1 = class ShellBar extends UI5Element {
             this._detachSearchFieldListeners(e.target);
             return;
         }
-        if (!isPhone() && !this.search?.value) {
-            this.setSearchState(!this.showSearchField);
+        // Decide when to toggle the search field:
+        // - On mobile, the search opens on its own (we don’t interfere).
+        // - If there’s already a value, onSearch is responsible for triggering the search (we don’t interfere)
+        // - If the field is closed, we must open it regardless.
+        if (isPhone() || (this.search?.value && this.showSearchField)) {
+            return;
         }
+        this.setSearchState(!this.showSearchField);
     }
     _updateSearchFieldState() {
         const spacerWidth = this.shadowRoot.querySelector(".ui5-shellbar-spacer") ? this.shadowRoot.querySelector(".ui5-shellbar-spacer").getBoundingClientRect().width : 0;
@@ -605,14 +610,26 @@ let ShellBar = ShellBar_1 = class ShellBar extends UI5Element {
         });
     }
     _handleCancelButtonPress() {
+        const cancelButtonRef = this.shadowRoot.querySelector(".ui5-shellbar-cancel-button");
+        const clearDefaultPrevented = !this.fireDecoratorEvent("search-field-clear", {
+            targetRef: cancelButtonRef,
+        });
         this.showFullWidthSearch = false;
         this.setSearchState(false);
+        if (!clearDefaultPrevented) {
+            this._clearSearchFieldValue();
+        }
     }
     _handleProductSwitchPress(e) {
         const buttonRef = this.shadowRoot.querySelector(".ui5-shellbar-button-product-switch"), target = e.target;
         this._defaultItemPressPrevented = !this.fireDecoratorEvent("product-switch-click", {
             targetRef: buttonRef.classList.contains("ui5-shellbar-hidden-button") ? target : buttonRef,
         });
+    }
+    _clearSearchFieldValue() {
+        if (this.search) {
+            this.search.value = "";
+        }
     }
     /**
      * Returns the `logo` DOM ref.
@@ -721,7 +738,7 @@ let ShellBar = ShellBar_1 = class ShellBar extends UI5Element {
                 const bIndex = PREDEFINED_PLACE_ACTIONS.indexOf(b.icon || "");
                 return aIndex - bIndex;
             }).map((item) => {
-                item._getRealDomRef = () => this.getDomRef().querySelector(`*[data-ui5-stable=${item.stableDomRef}]`);
+                item._getRealDomRef = () => this.shadowRoot.querySelector(`*[data-ui5-stable=${item.stableDomRef}]`);
                 // check if included for lean mode
                 const show = !!item.icon || false;
                 return {
@@ -939,9 +956,6 @@ let ShellBar = ShellBar_1 = class ShellBar extends UI5Element {
     get showMenuButton() {
         return this.primaryTitle || this.showLogoInMenuButton;
     }
-    get popoverHorizontalAlign() {
-        return this.effectiveDir === "rtl" ? "Start" : "End";
-    }
     get hasAssistant() {
         return !!this.assistant.length;
     }
@@ -961,7 +975,7 @@ let ShellBar = ShellBar_1 = class ShellBar extends UI5Element {
         return this.menuItems.length > 0;
     }
     get imageBtnText() {
-        return getEffectiveAriaLabelText(this);
+        return getEffectiveAriaLabelText(this) || ShellBar_1.i18nBundle.getText(SHELLBAR_IMAGE_BTN);
     }
     get _shellbarText() {
         return ShellBar_1.i18nBundle.getText(SHELLBAR_LABEL);
@@ -1337,6 +1351,20 @@ ShellBar = ShellBar_1 = __decorate([
      */
     ,
     event("search-field-toggle", {
+        bubbles: true,
+    })
+    /**
+     * Fired, when the search cancel button is activated.
+     *
+     * **Note:** You can prevent the default behavior (clearing the search field value) by calling `event.preventDefault()`. The search will still be closed.
+     * **Note:** The `search-field-clear` event is in an experimental state and is a subject to change.
+     * @param {HTMLElement} targetRef dom ref of the cancel button element
+     * @since 2.14.0
+     * @public
+     */
+    ,
+    event("search-field-clear", {
+        cancelable: true,
         bubbles: true,
     })
     /**

@@ -10,10 +10,9 @@ import customElement from "@ui5/webcomponents-base/dist/decorators/customElement
 import event from "@ui5/webcomponents-base/dist/decorators/event-strict.js";
 import property from "@ui5/webcomponents-base/dist/decorators/property.js";
 import slot from "@ui5/webcomponents-base/dist/decorators/slot.js";
+import query from "@ui5/webcomponents-base/dist/decorators/query.js";
 import i18n from "@ui5/webcomponents-base/dist/decorators/i18n.js";
-import getEffectiveScrollbarStyle from "@ui5/webcomponents-base/dist/util/getEffectiveScrollbarStyle.js";
 import jsxRenderer from "@ui5/webcomponents-base/dist/renderer/JsxRenderer.js";
-import ResizeHandler from "@ui5/webcomponents-base/dist/delegate/ResizeHandler.js";
 import SideContentPosition from "./types/SideContentPosition.js";
 import SideContentVisibility from "./types/SideContentVisibility.js";
 import SideContentFallDown from "./types/SideContentFallDown.js";
@@ -101,7 +100,7 @@ MINIMUM_WIDTH_BREAKPOINT = 960; // Minimum width of the control where main and s
  */
 let DynamicSideContent = DynamicSideContent_1 = class DynamicSideContent extends UI5Element {
     constructor() {
-        super();
+        super(...arguments);
         /**
          * Defines the visibility of the main content.
          * @default false
@@ -165,59 +164,117 @@ let DynamicSideContent = DynamicSideContent_1 = class DynamicSideContent extends
         /**
          * @private
          */
-        this._mcSpan = "0";
-        /**
-         * @private
-         */
-        this._scSpan = "0";
-        /**
-         * @private
-         */
         this._toggled = false;
-        this._handleResizeBound = this.handleResize.bind(this);
-    }
-    onAfterRendering() {
-        this._resizeContents();
+        /**
+         * @private
+         */
+        this._isSideContentBelowMainContent = false;
     }
     onEnterDOM() {
-        ResizeHandler.register(this, this._handleResizeBound);
+        this._resizeObserver = new ResizeObserver(entries => {
+            entries.forEach(entry => {
+                const width = entry.contentRect.width;
+                let breakpoint;
+                if (width <= S_M_BREAKPOINT) {
+                    breakpoint = "S";
+                }
+                else if (width <= M_L_BREAKPOINT) {
+                    breakpoint = "M";
+                }
+                else if (width <= L_XL_BREAKPOINT) {
+                    breakpoint = "L";
+                }
+                else {
+                    breakpoint = "XL";
+                }
+                this._isSideContentBelowMainContent = this.isSideContentBelowMainContent;
+                if (breakpoint !== this._currentBreakpoint) {
+                    this.fireDecoratorEvent("layout-change", {
+                        currentBreakpoint: breakpoint,
+                        previousBreakpoint: this._currentBreakpoint,
+                        mainContentVisible: this._getMainContentVisibility(),
+                        sideContentVisible: this._getSideContentVisibility(),
+                    });
+                    this._currentBreakpoint = breakpoint;
+                }
+            });
+        });
+        this._resizeObserver.observe(this);
     }
     onExitDOM() {
-        ResizeHandler.deregister(this, this._handleResizeBound);
+        this._resizeObserver?.disconnect();
     }
     /**
      * Toggles visibility of main and side contents on S screen size (mobile device).
      * @public
      */
     toggleContents() {
-        if (this.breakpoint === this.sizeS && this.sideContentVisibility !== SideContentVisibility.AlwaysShow) {
+        if (this._isToggleEnabled) {
             this._toggled = !this._toggled;
         }
     }
+    /**
+     * Gets main content visibility by checking CSS display property
+     * @private
+     */
+    _getMainContentVisibility() {
+        if (!this._mainContent) {
+            return false;
+        }
+        const computedStyle = getComputedStyle(this._mainContent);
+        return computedStyle.display !== "none";
+    }
+    /**
+     * Gets side content visibility by checking CSS display property
+     * @private
+     */
+    _getSideContentVisibility() {
+        if (!this._sideContent) {
+            return false;
+        }
+        const computedStyle = getComputedStyle(this._sideContent);
+        return computedStyle.display !== "none";
+    }
     get classes() {
-        const gridPrefix = "ui5-dsc-span", mcSpan = this._toggled ? this._scSpan : this._mcSpan, scSpan = this._toggled ? this._mcSpan : this._scSpan;
         return {
             main: {
                 "ui5-dsc-main": true,
-                [`${gridPrefix}-${mcSpan}`]: true,
             },
             side: {
                 "ui5-dsc-side": true,
-                [`${gridPrefix}-${scSpan}`]: true,
+            },
+            root: {
+                "ui5-dsc-root": true,
+                "ui5-dsc-toggled": this._toggled,
             },
         };
     }
+    get isSideContentBelowMainContent() {
+        if (this.sideContentVisibility === SideContentVisibility.NeverShow) {
+            return false;
+        }
+        // Cases when side content falls below main content
+        const fallOnMinimumWidth = this.sideContentFallDown === SideContentFallDown.OnMinimumWidth && this._currentBreakpoint === this.sizeM && this.containerWidth <= MINIMUM_WIDTH_BREAKPOINT;
+        const fallBelowM = this.sideContentFallDown === SideContentFallDown.BelowM && (this._currentBreakpoint === this.sizeM || this._currentBreakpoint === this.sizeS);
+        const fallBelowL = this.sideContentFallDown === SideContentFallDown.BelowL && (this._currentBreakpoint === this.sizeM || this._currentBreakpoint === this.sizeS);
+        const fallBelowXL = this.sideContentFallDown === SideContentFallDown.BelowXL
+            && (this._currentBreakpoint === this.sizeL || this._currentBreakpoint === this.sizeM || this._currentBreakpoint === this.sizeS)
+            && this._currentBreakpoint !== this.sizeXL;
+        const fallWhenAlwaysShow = this.sideContentVisibility === SideContentVisibility.AlwaysShow && (this._currentBreakpoint === this.sizeS
+            || (this._currentBreakpoint === this.sizeM && this.containerWidth <= MINIMUM_WIDTH_BREAKPOINT));
+        return fallOnMinimumWidth || fallBelowM || fallBelowL || fallBelowXL || fallWhenAlwaysShow;
+    }
     get styles() {
-        const isToggled = this.breakpoint === this.sizeS && this._toggled, mcSpan = isToggled ? this._scSpan : this._mcSpan, scSpan = isToggled ? this._mcSpan : this._scSpan, contentHeight = this.breakpoint === this.sizeS && this.sideContentVisibility !== SideContentVisibility.AlwaysShow ? "100%" : "auto";
+        this._isSideContentBelowMainContent = this.isSideContentBelowMainContent;
         return {
             root: {
-                "flex-wrap": this._mcSpan === "12" ? "wrap" : "nowrap",
+                "flex-wrap": "nowrap",
             },
             main: {
-                "height": mcSpan === this.span12 ? contentHeight : "100%",
+                "height": this._isSideContentBelowMainContent ? "auto" : "100%",
             },
             side: {
-                "height": scSpan === this.span12 ? contentHeight : "100%",
+                "height": this._isSideContentBelowMainContent ? "auto" : "100%",
             },
         };
     }
@@ -243,134 +300,50 @@ let DynamicSideContent = DynamicSideContent_1 = class DynamicSideContent extends
     get sizeXL() {
         return "XL";
     }
-    get span0() {
-        return "0";
-    }
-    get span3() {
-        return "3";
-    }
-    get span4() {
-        return "4";
-    }
-    get span6() {
-        return "6";
-    }
-    get span8() {
-        return "8";
-    }
-    get span9() {
-        return "9";
-    }
-    get span12() {
-        return "12";
-    }
-    get spanFixed() {
-        return "fixed";
-    }
     get containerWidth() {
-        return this.parentElement.getBoundingClientRect().width;
+        return this.clientWidth;
     }
     get breakpoint() {
-        let size;
-        if (this.containerWidth <= S_M_BREAKPOINT) {
-            size = this.sizeS;
+        const width = this.containerWidth;
+        if (width <= S_M_BREAKPOINT) {
+            return this.sizeS;
         }
-        else if (this.containerWidth > S_M_BREAKPOINT && this.containerWidth <= M_L_BREAKPOINT) {
-            size = this.sizeM;
+        if (width <= M_L_BREAKPOINT) {
+            return this.sizeM;
         }
-        else if (this.containerWidth > M_L_BREAKPOINT && this.containerWidth <= L_XL_BREAKPOINT) {
-            size = this.sizeL;
+        if (width <= L_XL_BREAKPOINT) {
+            return this.sizeL;
         }
-        else {
-            size = this.sizeXL;
-        }
-        return size;
+        return this.sizeXL;
     }
     get _isSideContentFirst() {
         return this.sideContentPosition === SideContentPosition.Start;
     }
-    handleResize() {
-        this._resizeContents();
-    }
-    _resizeContents() {
-        let mainSize, sideSize, sideVisible = false;
-        // initial set contents sizes
-        switch (this.breakpoint) {
-            case this.sizeS:
-                mainSize = this.span12;
-                sideSize = this.span12;
-                break;
-            case this.sizeM:
-                if (this.sideContentFallDown === SideContentFallDown.BelowXL
-                    || this.sideContentFallDown === SideContentFallDown.BelowL
-                    || (this.containerWidth <= MINIMUM_WIDTH_BREAKPOINT && this.sideContentFallDown === SideContentFallDown.OnMinimumWidth)) {
-                    mainSize = this.span12;
-                    sideSize = this.span12;
-                }
-                else {
-                    mainSize = this.equalSplit ? this.span6 : this.spanFixed;
-                    sideSize = this.equalSplit ? this.span6 : this.spanFixed;
-                }
-                sideVisible = this.sideContentVisibility === SideContentVisibility.ShowAboveS
-                    || this.sideContentVisibility === SideContentVisibility.AlwaysShow;
-                break;
-            case this.sizeL:
-                if (this.sideContentFallDown === SideContentFallDown.BelowXL) {
-                    mainSize = this.span12;
-                    sideSize = this.span12;
-                }
-                else {
-                    mainSize = this.equalSplit ? this.span6 : this.span8;
-                    sideSize = this.equalSplit ? this.span6 : this.span4;
-                }
-                sideVisible = this.sideContentVisibility === SideContentVisibility.ShowAboveS
-                    || this.sideContentVisibility === SideContentVisibility.ShowAboveM
-                    || this.sideContentVisibility === SideContentVisibility.AlwaysShow;
-                break;
-            case this.sizeXL:
-                mainSize = this.equalSplit ? this.span6 : this.span9;
-                sideSize = this.equalSplit ? this.span6 : this.span3;
-                sideVisible = this.sideContentVisibility !== SideContentVisibility.NeverShow;
+    /**
+     * Returns true when the toggleContents functionality should be enabled.
+     * Toggle is available when side content would normally be hidden in the current breakpoint
+     * but can be shown via the toggle mechanism.
+     * @private
+     */
+    get _isToggleEnabled() {
+        // Never allow toggle when NeverShow is set or content is explicitly hidden
+        if (this.sideContentVisibility === SideContentVisibility.NeverShow
+            || this.hideMainContent
+            || this.hideSideContent) {
+            return false;
         }
-        if (this.sideContentVisibility === SideContentVisibility.AlwaysShow) {
-            sideVisible = true;
+        const currentBreakpoint = this.breakpoint;
+        // S breakpoint: toggle available unless AlwaysShow
+        if (currentBreakpoint === this.sizeS) {
+            return this.sideContentVisibility !== SideContentVisibility.AlwaysShow;
         }
-        // modify sizes of the contents depending on hideMainContent and hideSideContent properties
-        if (this.hideSideContent) {
-            mainSize = this.hideMainContent ? this.span0 : this.span12;
-            sideSize = this.span0;
-            sideVisible = false;
-        }
-        if (this.hideMainContent) {
-            mainSize = this.span0;
-            sideSize = this.hideSideContent ? this.span0 : this.span12;
-            sideVisible = true;
-        }
-        // set final sizes of the contents
-        if (!sideVisible) {
-            mainSize = this.span12;
-            sideSize = this.span0;
-        }
-        // fire "layout-change" event
-        if (this._currentBreakpoint !== this.breakpoint) {
-            const eventParams = {
-                currentBreakpoint: this.breakpoint,
-                previousBreakpoint: this._currentBreakpoint,
-                mainContentVisible: mainSize !== this.span0,
-                sideContentVisible: sideSize !== this.span0,
-            };
-            this.fireDecoratorEvent("layout-change", eventParams);
-            this._currentBreakpoint = this.breakpoint;
-        }
-        // update contents sizes
-        this._setSpanSizes(mainSize, sideSize);
-    }
-    _setSpanSizes(mainSize, sideSize) {
-        this._mcSpan = mainSize;
-        this._scSpan = sideSize;
-        if (this.breakpoint !== this.sizeS) {
-            this._toggled = false;
-        }
+        // For other breakpoints, check if side content would be hidden based on visibility setting
+        const breakpointHierarchy = {
+            [this.sizeM]: [SideContentVisibility.ShowAboveM, SideContentVisibility.ShowAboveL],
+            [this.sizeL]: [SideContentVisibility.ShowAboveL],
+        };
+        const hiddenVisibilities = breakpointHierarchy[currentBreakpoint];
+        return hiddenVisibilities?.includes(this.sideContentVisibility) ?? false;
     }
 };
 __decorate([
@@ -395,20 +368,23 @@ __decorate([
     property({ type: Object })
 ], DynamicSideContent.prototype, "accessibilityAttributes", void 0);
 __decorate([
-    property({ noAttribute: true })
-], DynamicSideContent.prototype, "_mcSpan", void 0);
-__decorate([
-    property({ noAttribute: true })
-], DynamicSideContent.prototype, "_scSpan", void 0);
-__decorate([
     property({ type: Boolean, noAttribute: true })
 ], DynamicSideContent.prototype, "_toggled", void 0);
 __decorate([
     property({ noAttribute: true })
 ], DynamicSideContent.prototype, "_currentBreakpoint", void 0);
 __decorate([
+    property({ type: Boolean, noAttribute: true })
+], DynamicSideContent.prototype, "_isSideContentBelowMainContent", void 0);
+__decorate([
     slot()
 ], DynamicSideContent.prototype, "sideContent", void 0);
+__decorate([
+    query(".ui5-dsc-main")
+], DynamicSideContent.prototype, "_mainContent", void 0);
+__decorate([
+    query(".ui5-dsc-side")
+], DynamicSideContent.prototype, "_sideContent", void 0);
 __decorate([
     i18n("@ui5/webcomponents-fiori")
 ], DynamicSideContent, "i18nBundle", void 0);
@@ -416,7 +392,7 @@ DynamicSideContent = DynamicSideContent_1 = __decorate([
     customElement({
         tag: "ui5-dynamic-side-content",
         renderer: jsxRenderer,
-        styles: [DynamicSideContentCss, getEffectiveScrollbarStyle()],
+        styles: [DynamicSideContentCss],
         template: DynamicSideContentTemplate,
     })
     /**

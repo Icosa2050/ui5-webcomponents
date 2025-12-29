@@ -4,7 +4,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-import { isTabNext, isTabPrevious, isF2 } from "@ui5/webcomponents-base/dist/Keys.js";
+import { isTabNext, isTabPrevious, isF2, isF7, isUp, isDown, } from "@ui5/webcomponents-base/dist/Keys.js";
 import jsxRenderer from "@ui5/webcomponents-base/dist/renderer/JsxRenderer.js";
 import customElement from "@ui5/webcomponents-base/dist/decorators/customElement.js";
 import property from "@ui5/webcomponents-base/dist/decorators/property.js";
@@ -41,21 +41,25 @@ let ListItemCustom = class ListItemCustom extends ListItem {
          */
         this.movable = false;
     }
-    async _onkeydown(e) {
-        const isTab = isTabNext(e) || isTabPrevious(e);
+    _onkeydown(e) {
         const isFocused = this.matches(":focus");
-        if (!isTab && !isFocused && !isF2(e)) {
-            return;
+        const shouldHandle = isFocused
+            || isTabNext(e) || isTabPrevious(e)
+            || isF2(e) || isF7(e)
+            || isUp(e) || isDown(e);
+        if (shouldHandle) {
+            super._onkeydown(e);
         }
-        await super._onkeydown(e);
     }
     _onkeyup(e) {
-        const isTab = isTabNext(e) || isTabPrevious(e);
         const isFocused = this.matches(":focus");
-        if (!isTab && !isFocused && !isF2(e)) {
-            return;
+        const shouldHandle = isFocused
+            || isTabNext(e) || isTabPrevious(e)
+            || isF2(e) || isF7(e)
+            || isUp(e) || isDown(e);
+        if (shouldHandle) {
+            super._onkeyup(e);
         }
-        super._onkeyup(e);
     }
     get classes() {
         const result = super.classes;

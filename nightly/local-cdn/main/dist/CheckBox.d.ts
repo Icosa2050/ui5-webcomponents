@@ -229,6 +229,15 @@ declare class CheckBox extends UI5Element implements IFormInputElement {
     get tabbable(): boolean;
     get isCompletelyChecked(): boolean;
     get isDisplayOnly(): boolean;
+    get accessibilityInfo(): {
+        role: import("@ui5/webcomponents-base/dist/thirdparty/preact/jsx.js").JSXInternal.AriaRole | undefined;
+        type: string;
+        description: string;
+        label: string | undefined;
+        disabled: boolean;
+        readonly: boolean;
+        required: boolean | undefined;
+    };
     get accInfo(): {
         role: import("@ui5/webcomponents-base/dist/thirdparty/preact/jsx.js").JSXInternal.AriaRole | undefined;
         ariaChecked: import("@ui5/webcomponents-base/dist/thirdparty/preact/jsx.js").JSXInternal.Signalish<import("@ui5/webcomponents-base/dist/thirdparty/preact/jsx.js").Booleanish | "mixed" | undefined>;

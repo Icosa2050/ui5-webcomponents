@@ -35,7 +35,7 @@ import CalendarTemplate from "./CalendarTemplate.js";
 // Styles
 import calendarCSS from "./generated/themes/Calendar.css.js";
 import CalendarHeaderCss from "./generated/themes/CalendarHeader.css.js";
-import { CALENDAR_HEADER_NEXT_BUTTON, CALENDAR_HEADER_PREVIOUS_BUTTON } from "./generated/i18n/i18n-defaults.js";
+import { CALENDAR_HEADER_MONTH_BUTTON, CALENDAR_HEADER_MONTH_BUTTON_SHORTCUT, CALENDAR_HEADER_YEAR_BUTTON, CALENDAR_HEADER_YEAR_BUTTON_SHORTCUT, CALENDAR_HEADER_YEAR_RANGE_BUTTON, CALENDAR_HEADER_YEAR_RANGE_BUTTON_SHORTCUT, CALENDAR_HEADER_MONTH_NEXT_BUTTON_TITLE, CALENDAR_HEADER_MONTH_NEXT_BUTTON_SHORTCUT, CALENDAR_HEADER_MONTH_PREVIOUS_BUTTON_TITLE, CALENDAR_HEADER_MONTH_PREVIOUS_BUTTON_SHORTCUT, CALENDAR_HEADER_YEAR_NEXT_BUTTON_TITLE, CALENDAR_HEADER_YEAR_PREVIOUS_BUTTON_TITLE, CALENDAR_HEADER_YEAR_RANGE_NEXT_BUTTON_TITLE, CALENDAR_HEADER_YEAR_RANGE_PREVIOUS_BUTTON_TITLE, } from "./generated/i18n/i18n-defaults.js";
 /**
  * @class
  *
@@ -270,6 +270,17 @@ let Calendar = Calendar_1 = class Calendar extends CalendarPart {
         const date = this.getFormat().parse(dateString);
         return !!date;
     }
+    get _disabledDates() {
+        const validDisabledDateRanges = this.disabledDates.filter(dateRange => {
+            const startValue = dateRange.startValue;
+            const endValue = dateRange.endValue;
+            return (startValue && this._isValidCalendarDate(startValue)) || (endValue && this._isValidCalendarDate(endValue));
+        });
+        return validDisabledDateRanges.map(dateRange => ({
+            startValue: dateRange.startValue,
+            endValue: dateRange.endValue,
+        }));
+    }
     get _specialCalendarDates() {
         const hasSelectedType = this._specialDates.some(date => date.type === this._selectedItemType);
         const validSpecialDates = this._specialDates.filter(date => {
@@ -305,17 +316,16 @@ let Calendar = Calendar_1 = class Calendar extends CalendarPart {
         if (defaultTypes.includes(this._selectedItemType)) {
             this._selectedItemType = "None"; // In order to avoid filtering of default types
         }
-        this._currentPickerDOM._autoFocus = false;
     }
     /**
      * Makes sure that _currentPicker is always set to a value, allowed by _pickersMode
      */
     _normalizeCurrentPicker() {
         if (this._currentPicker === "day" && this._pickersMode !== CalendarPickersMode.DAY_MONTH_YEAR) {
-            this._currentPicker = "month";
+            this.switchToMonthPicker(true);
         }
         if (this._currentPicker === "month" && this._pickersMode === CalendarPickersMode.YEAR) {
-            this._currentPicker = "year";
+            this.switchToYearPicker(true);
         }
     }
     onBeforeRendering() {
@@ -336,11 +346,8 @@ let Calendar = Calendar_1 = class Calendar extends CalendarPart {
         this._headerMonthButtonText = localeData.getMonthsStandAlone("wide", this.primaryCalendarType)[this._calendarDate.getMonth()];
         this._headerYearButtonText = String(yearFormat.format(this._localDate, true));
         const currentYearRange = this._currentYearRange;
-        const rangeStart = new CalendarDateComponent(this._calendarDate, this._primaryCalendarType);
-        const rangeEnd = new CalendarDateComponent(this._calendarDate, this._primaryCalendarType);
-        rangeStart.setYear(currentYearRange.startYear);
-        rangeEnd.setYear(currentYearRange.endYear);
-        this._headerYearRangeButtonText = `${yearFormat.format(rangeStart.toLocalJSDate())} - ${yearFormat.format(rangeEnd.toLocalJSDate())}`;
+        const { rangeStartText, rangeEndText } = this._formatYearRangeText(currentYearRange);
+        this._headerYearRangeButtonText = `${rangeStartText} - ${rangeEndText}`;
         this._secondaryCalendarType && this._setSecondaryCalendarTypeButtonText();
     }
     onInvalidation(changeInfo) {
@@ -351,66 +358,80 @@ let Calendar = Calendar_1 = class Calendar extends CalendarPart {
     /**
      * The user clicked the "month" button in the header
      */
-    onHeaderShowMonthPress() {
-        this.showMonth();
+    onHeaderMonthButtonPress() {
+        this.switchToMonthPicker();
         this.fireDecoratorEvent("show-month-view");
     }
-    showMonth() {
-        this._currentPickerDOM._autoFocus = false;
+    async switchToDayPicker(suppressFocus = false) {
+        this._currentPicker = "day";
+        if (!suppressFocus) {
+            await renderFinished();
+            this._currentPickerDOM.focus();
+        }
+    }
+    async switchToMonthPicker(suppressFocus = false) {
         this._currentPicker = "month";
+        if (!suppressFocus) {
+            await renderFinished();
+            this._currentPickerDOM.focus();
+        }
     }
     /**
      * The user clicked the "year" button in the header
      */
-    onHeaderShowYearPress() {
-        this.showYear();
+    onHeaderYearButtonPress() {
+        this.switchToYearPicker();
         this.fireDecoratorEvent("show-year-view");
     }
-    showYear() {
-        this._currentPickerDOM._autoFocus = false;
+    async switchToYearPicker(suppressFocus = false) {
         this._currentPicker = "year";
+        if (!suppressFocus) {
+            await renderFinished();
+            this._currentPickerDOM.focus();
+        }
     }
     /**
      * The user clicked the "year range" button in the YearPicker header
      */
-    onHeaderShowYearRangePress() {
-        this.showYearRange();
+    onHeaderYearRangeButtonPress() {
+        this.switchToYearRangePicker();
         this.fireDecoratorEvent("show-year-range-view");
     }
-    showYearRange() {
-        this._currentPickerDOM._autoFocus = false;
+    async switchToYearRangePicker(suppressFocus = false) {
         this._currentPicker = "yearrange";
+        if (!suppressFocus) {
+            await renderFinished();
+            this._currentPickerDOM.focus();
+        }
     }
     get _currentPickerDOM() {
         // Calendar's shadowRoot and all the pickers are always present - the "!" is safe to be used.
         return this.shadowRoot.querySelector(`[ui5-${this._currentPicker}picker]`);
     }
     /**
+     * Returns the focusable element inside the Calendar (the current picker)
+     * @override
+     */
+    getFocusDomRef() {
+        return this._currentPickerDOM;
+    }
+    /**
      * The year clicked the "Previous" button in the header
      */
     onHeaderPreviousPress() {
         this._currentPickerDOM._showPreviousPage();
-        if (this.calendarLegend) {
-            this._currentPickerDOM._autoFocus = true;
-        }
     }
     /**
      * The year clicked the "Next" button in the header
      */
     onHeaderNextPress() {
         this._currentPickerDOM._showNextPage();
-        if (this.calendarLegend) {
-            this._currentPickerDOM._autoFocus = true;
-        }
     }
     _setSecondaryCalendarTypeButtonText() {
         const yearFormatSecType = DateFormat.getDateInstance({ format: "y", calendarType: this._secondaryCalendarType });
         this._headerYearButtonTextSecType = String(yearFormatSecType.format(this._localDate, true));
         const currentYearRange = this._currentYearRange;
-        const rangeStart = new CalendarDateComponent(this._calendarDate, this._primaryCalendarType);
-        const rangeEnd = new CalendarDateComponent(this._calendarDate, this._primaryCalendarType);
-        rangeStart.setYear(currentYearRange.startYear);
-        rangeEnd.setYear(currentYearRange.endYear);
+        const { rangeStart, rangeEnd } = this._createYearRangeDates(currentYearRange);
         const rangeStartSecType = transformDateToSecondaryType(this.primaryCalendarType, this._secondaryCalendarType, rangeStart.valueOf() / 1000, true)
             .firstDate;
         const rangeEndSecType = transformDateToSecondaryType(this.primaryCalendarType, this._secondaryCalendarType, rangeEnd.valueOf() / 1000, true)
@@ -506,48 +527,47 @@ let Calendar = Calendar_1 = class Calendar extends CalendarPart {
     onSelectedMonthChange(e) {
         this.timestamp = e.detail.timestamp;
         if (this._pickersMode === CalendarPickersMode.DAY_MONTH_YEAR) {
-            this._currentPicker = "day";
+            this.switchToDayPicker();
         }
         else {
             this._fireEventAndUpdateSelectedDates(e.detail.dates);
         }
-        this._currentPickerDOM._autoFocus = true;
     }
     onSelectedYearChange(e) {
         this.timestamp = e.detail.timestamp;
         if (this._pickersMode === CalendarPickersMode.DAY_MONTH_YEAR) {
-            this._currentPicker = "day";
+            this.switchToDayPicker();
         }
         else if (this._pickersMode === CalendarPickersMode.MONTH_YEAR) {
-            this._currentPicker = "month";
+            this.switchToMonthPicker();
         }
         else {
             this._fireEventAndUpdateSelectedDates(e.detail.dates);
         }
-        this._currentPickerDOM._autoFocus = true;
     }
     onSelectedYearRangeChange(e) {
         this.timestamp = e.detail.timestamp;
-        this._currentPicker = "year";
-        this._currentPickerDOM._autoFocus = true;
+        this.switchToYearPicker();
     }
-    onNavigate(e) {
+    async onNavigate(e) {
         this.timestamp = e.detail.timestamp;
+        await renderFinished();
+        this._currentPickerDOM.focus();
     }
     _onkeydown(e) {
         if (isF4(e) && this._currentPicker !== "month") {
-            this._currentPicker = "month";
+            this.switchToMonthPicker();
             this.fireDecoratorEvent("show-month-view");
         }
         if (!isF4Shift(e)) {
             return;
         }
         if (this._currentPicker !== "year") {
-            this._currentPicker = "year";
+            this.switchToYearPicker();
             this.fireDecoratorEvent("show-year-view");
         }
         else {
-            this._currentPicker = "yearrange";
+            this.switchToYearRangePicker();
             this.fireDecoratorEvent("show-year-range-view");
         }
     }
@@ -570,16 +590,71 @@ let Calendar = Calendar_1 = class Calendar extends CalendarPart {
         };
     }
     get accInfo() {
+        const currentYearRange = this._currentYearRange;
+        const { rangeStartText, rangeEndText } = this._formatYearRangeText(currentYearRange);
+        const headerMonthButtonText = this.hasSecondaryCalendarType
+            ? `${this._headerMonthButtonText}, ${this.secondMonthButtonText}` : `${this._headerMonthButtonText}`;
+        // Get base labels
+        const monthLabel = Calendar_1.i18nBundle?.getText(CALENDAR_HEADER_MONTH_BUTTON, headerMonthButtonText);
+        const yearLabel = Calendar_1.i18nBundle?.getText(CALENDAR_HEADER_YEAR_BUTTON, this._headerYearButtonText);
+        const yearRangeLabel = Calendar_1.i18nBundle?.getText(CALENDAR_HEADER_YEAR_RANGE_BUTTON, rangeStartText, rangeEndText);
+        let nextBtnLabel = Calendar_1.i18nBundle?.getText(CALENDAR_HEADER_MONTH_NEXT_BUTTON_TITLE);
+        let prevBtnLabel = Calendar_1.i18nBundle?.getText(CALENDAR_HEADER_MONTH_PREVIOUS_BUTTON_TITLE);
+        if (this._currentPicker === "month") {
+            nextBtnLabel = Calendar_1.i18nBundle?.getText(CALENDAR_HEADER_YEAR_NEXT_BUTTON_TITLE);
+            prevBtnLabel = Calendar_1.i18nBundle?.getText(CALENDAR_HEADER_YEAR_PREVIOUS_BUTTON_TITLE);
+        }
+        else if (this._currentPicker === "year" || this._currentPicker === "yearrange") {
+            nextBtnLabel = Calendar_1.i18nBundle?.getText(CALENDAR_HEADER_YEAR_RANGE_NEXT_BUTTON_TITLE);
+            prevBtnLabel = Calendar_1.i18nBundle?.getText(CALENDAR_HEADER_YEAR_RANGE_PREVIOUS_BUTTON_TITLE);
+        }
+        // Get shortcuts
+        const monthShortcut = Calendar_1.i18nBundle?.getText(CALENDAR_HEADER_MONTH_BUTTON_SHORTCUT);
+        const yearShortcut = Calendar_1.i18nBundle?.getText(CALENDAR_HEADER_YEAR_BUTTON_SHORTCUT);
+        const yearRangeShortcut = Calendar_1.i18nBundle?.getText(CALENDAR_HEADER_YEAR_RANGE_BUTTON_SHORTCUT);
+        const nextBtnShortcut = Calendar_1.i18nBundle?.getText(CALENDAR_HEADER_MONTH_NEXT_BUTTON_SHORTCUT);
+        const prevBtnShortcut = Calendar_1.i18nBundle?.getText(CALENDAR_HEADER_MONTH_PREVIOUS_BUTTON_SHORTCUT);
         return {
-            ariaLabelMonthButton: this.hasSecondaryCalendarType
-                ? `${this._headerMonthButtonText}, ${this.secondMonthButtonText}` : `${this._headerMonthButtonText}`,
+            ariaLabelMonthButton: monthLabel,
+            ariaLabelYearButton: yearLabel,
+            ariaLabelYearRangeButton: yearRangeLabel,
+            ariaLabelNextButton: nextBtnLabel,
+            ariaLabelPrevButton: prevBtnLabel,
+            // Keyboard shortcuts for aria-keyshortcuts
+            keyShortcutMonthButton: monthShortcut,
+            keyShortcutYearButton: yearShortcut,
+            keyShortcutYearRangeButton: yearRangeShortcut,
+            keyShortcutNextButton: nextBtnShortcut,
+            keyShortcutPrevButton: prevBtnShortcut,
+            // Tooltips combining label and shortcut
+            tooltipMonthButton: `${monthLabel} (${monthShortcut})`,
+            tooltipYearButton: `${yearLabel} (${yearShortcut})`,
+            tooltipYearRangeButton: `${yearRangeLabel} (${yearRangeShortcut})`,
+            tooltipNextButton: `${nextBtnLabel} (${nextBtnShortcut})`,
+            tooltipPrevButton: `${prevBtnLabel} (${prevBtnShortcut})`,
         };
     }
-    get headerPreviousButtonText() {
-        return Calendar_1.i18nBundle?.getText(CALENDAR_HEADER_PREVIOUS_BUTTON);
+    /**
+     * Helper method to create CalendarDateComponent instances for year range
+     * @private
+     */
+    _createYearRangeDates(yearRange, calendarType = this._primaryCalendarType) {
+        const rangeStart = new CalendarDateComponent(this._calendarDate, calendarType);
+        const rangeEnd = new CalendarDateComponent(this._calendarDate, calendarType);
+        rangeStart.setYear(yearRange.startYear);
+        rangeEnd.setYear(yearRange.endYear);
+        return { rangeStart, rangeEnd };
     }
-    get headerNextButtonText() {
-        return Calendar_1.i18nBundle?.getText(CALENDAR_HEADER_NEXT_BUTTON);
+    /**
+     * Helper method to format year range text
+     * @private
+     */
+    _formatYearRangeText(yearRange) {
+        const yearFormat = DateFormat.getDateInstance({ format: "y", calendarType: this.primaryCalendarType });
+        const { rangeStart, rangeEnd } = this._createYearRangeDates(yearRange, this.primaryCalendarType);
+        const rangeStartText = yearFormat.format(rangeStart.toLocalJSDate());
+        const rangeEndText = yearFormat.format(rangeEnd.toLocalJSDate());
+        return { rangeStartText, rangeEndText };
     }
     get secondMonthButtonText() {
         const secondMonthButtonText = this.secondaryCalendarTypeButtonText?.monthButtonText;
@@ -590,14 +665,14 @@ let Calendar = Calendar_1 = class Calendar extends CalendarPart {
             e.preventDefault();
         }
         if (isEnter(e)) {
-            this.showMonth();
+            this.switchToMonthPicker();
             this.fireDecoratorEvent("show-month-view");
         }
     }
     onMonthButtonKeyUp(e) {
         if (isSpace(e)) {
             e.preventDefault();
-            this.showMonth();
+            this.switchToMonthPicker();
             this.fireDecoratorEvent("show-month-view");
         }
     }
@@ -606,13 +681,13 @@ let Calendar = Calendar_1 = class Calendar extends CalendarPart {
             e.preventDefault();
         }
         if (isEnter(e)) {
-            this.showYear();
+            this.switchToYearPicker();
             this.fireDecoratorEvent("show-year-view");
         }
     }
     onYearButtonKeyUp(e) {
         if (isSpace(e)) {
-            this.showYear();
+            this.switchToYearPicker();
             this.fireDecoratorEvent("show-year-view");
         }
     }
@@ -621,31 +696,32 @@ let Calendar = Calendar_1 = class Calendar extends CalendarPart {
             e.preventDefault();
         }
         if (isEnter(e)) {
-            this.showYearRange();
+            this.switchToYearRangePicker();
             this.fireDecoratorEvent("show-year-range-view");
         }
     }
     onYearRangeButtonKeyUp(e) {
         if (isSpace(e)) {
-            this.showYearRange();
+            this.switchToYearRangePicker();
             this.fireDecoratorEvent("show-year-range-view");
         }
     }
-    onPrevButtonClick(e) {
-        if (this._previousButtonDisabled) {
+    _handleNavigationButtonKeyDown(e, isDisabled, action) {
+        if (isDisabled) {
             e.preventDefault();
             return;
         }
-        this.onHeaderPreviousPress();
+        if (e.button !== 0) {
+            return;
+        }
+        action();
         e.preventDefault();
     }
+    onPrevButtonClick(e) {
+        this._handleNavigationButtonKeyDown(e, this._previousButtonDisabled, () => this.onHeaderPreviousPress());
+    }
     onNextButtonClick(e) {
-        if (this._nextButtonDisabled) {
-            e.preventDefault();
-            return;
-        }
-        this.onHeaderNextPress();
-        e.preventDefault();
+        this._handleNavigationButtonKeyDown(e, this._nextButtonDisabled, () => this.onHeaderNextPress());
     }
     /**
      * Returns an array of UTC timestamps, representing the selected dates.
@@ -707,6 +783,9 @@ __decorate([
 __decorate([
     slot({ type: HTMLElement, invalidateOnChildChange: true })
 ], Calendar.prototype, "specialDates", void 0);
+__decorate([
+    slot({ type: HTMLElement, invalidateOnChildChange: true })
+], Calendar.prototype, "disabledDates", void 0);
 __decorate([
     property()
 ], Calendar.prototype, "_selectedItemType", void 0);

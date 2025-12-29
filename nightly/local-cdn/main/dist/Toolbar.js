@@ -166,8 +166,11 @@ let Toolbar = Toolbar_1 = class Toolbar extends UI5Element {
         ResizeHandler.deregister(this, this._onResize);
     }
     onInvalidation(changeInfo) {
-        if (changeInfo.reason === "childchange" && changeInfo.child === this.itemsToOverflow[0]) {
-            this.onToolbarItemChange();
+        if (changeInfo.reason === "childchange") {
+            const currentItemsWidth = this.items.reduce((total, item) => total + this.getItemWidth(item), 0);
+            if (currentItemsWidth !== this.itemsWidth) {
+                this.onToolbarItemChange();
+            }
         }
     }
     onBeforeRendering() {
@@ -344,7 +347,7 @@ let Toolbar = Toolbar_1 = class Toolbar extends UI5Element {
         // Measure rendered width for spacers with width, and for normal items
         const renderedItem = this.shadowRoot.querySelector(`#${item.slot}`);
         let itemWidth = 0;
-        if (renderedItem && renderedItem.offsetWidth) {
+        if (renderedItem && !renderedItem.classList.contains("ui5-tb-popover-item") && renderedItem.offsetWidth && item._isRendering === false) {
             const ItemCSSStyleSet = getComputedStyle(renderedItem);
             itemWidth = renderedItem.offsetWidth + parsePxValue(ItemCSSStyleSet, "margin-inline-end")
                 + parsePxValue(ItemCSSStyleSet, "margin-inline-start");

@@ -148,7 +148,9 @@ let SideNavigationSelectableItemBase = class SideNavigationSelectableItemBase ex
         }
         // "Enter" + "Meta" is missing since it is often reserved by the operating system or window manager
         if (isEnter(e) || isEnterShift(e) || isEnterCtrl(e) || isEnterAlt(e)) {
-            this._activate(e);
+            if (!this.unselectable) {
+                this._activate(e);
+            }
         }
         if ((isRTL ? isLeft(e) : isRight(e)) && this.sideNavCollapsed && this.hasSubItems) {
             this._activate(e);

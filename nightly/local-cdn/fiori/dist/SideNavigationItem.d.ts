@@ -55,6 +55,7 @@ declare class SideNavigationItem extends SideNavigationSelectableItemBase {
     get _ariaChecked(): boolean | undefined;
     get _groupId(): string | undefined;
     get _expanded(): boolean | undefined;
+    get _describedBy(): string | undefined;
     get classesArray(): string[];
     get _selected(): boolean;
     get _arrowTooltip(): string;

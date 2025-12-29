@@ -93,7 +93,7 @@ let TimelineItem = TimelineItem_1 = class TimelineItem extends UI5Element {
         };
     }
     get timelineItemStateText() {
-        return this.state !== "None" ? TimelineItem_1.i18nBundle.getText(TimelineItem_1.typeTextMappings()[this.state]) : undefined;
+        return this.state !== "None" ? TimelineItem_1.i18nBundleFiori.getText(TimelineItem_1.typeTextMappings()[this.state]) : undefined;
     }
     get isGroupItem() {
         return false;
@@ -167,8 +167,8 @@ __decorate([
     property({ type: Number })
 ], TimelineItem.prototype, "positionInGroup", void 0);
 __decorate([
-    i18n("@ui5/webcomponents")
-], TimelineItem, "i18nBundle", void 0);
+    i18n("@ui5/webcomponents-fiori")
+], TimelineItem, "i18nBundleFiori", void 0);
 TimelineItem = TimelineItem_1 = __decorate([
     customElement({
         tag: "ui5-timeline-item",

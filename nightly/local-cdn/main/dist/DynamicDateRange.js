@@ -13,6 +13,7 @@ import query from "@ui5/webcomponents-base/dist/decorators/query.js";
 import event from "@ui5/webcomponents-base/dist/decorators/event-strict.js";
 import i18n from "@ui5/webcomponents-base/dist/decorators/i18n.js";
 import { isDesktop } from "@ui5/webcomponents-base/dist/Device.js";
+import { renderFinished } from "@ui5/webcomponents-base/dist/Render.js";
 import { isF4, isShow } from "@ui5/webcomponents-base/dist/Keys.js";
 import DynamicDateRangeTemplate from "./DynamicDateRangeTemplate.js";
 import IconMode from "./types/IconMode.js";
@@ -47,6 +48,9 @@ import ResponsivePopoverCommonCss from "./generated/themes/ResponsivePopoverComm
  * - "TOMORROW" - Represents the next date. An example value is `{ operator: "TOMORROW"}`. Import: `import "@ui5/webcomponents/dist/dynamic-date-range-options/Tomorrow.js";`
  * - "DATE" - Represents a single date. An example value is `{ operator: "DATE", values: [new Date()]}`. Import: `import "@ui5/webcomponents/dist/dynamic-date-range-options/SingleDate.js";`
  * - "DATERANGE" - Represents a range of dates. An example value is `{ operator: "DATERANGE", values: [new Date(), new Date()]}`. Import: `import "@ui5/webcomponents/dist/dynamic-date-range-options/DateRange.js";`
+ * - "DATETIMERANGE" - Represents a range of dates with times. An example value is `{ operator: "DATETIMERANGE", values: [new Date(), new Date()]}`. Import: `import "@ui5/webcomponents/dist/dynamic-date-range-options/DateTimeRange.js";`
+ * - "FROMDATETIME" - Represents a range from date and time. An example value is `{ operator: "FROMDATETIME", values: [new Date()]}`. Import: `import "@ui5/webcomponents/dist/dynamic-date-range-options/FromDateTime.js";`
+ * - "TODATETIME" - Represents a range to date and time. An example value is `{ operator: "TODATETIME", values: [new Date()]}`. Import: `import "@ui5/webcomponents/dist/dynamic-date-range-options/ToDateTime.js";`
  * - "LASTDAYS" - Represents Last X Days from today. An example value is `{ operator: "LASTDAYS", values: [2]}`. Import: `import "@ui5/webcomponents/dist/dynamic-date-range-options/LastOptions.js";`
  * - "LASTWEEKS" - Represents Last X Weeks from today. An example value is `{ operator: "LASTWEEKS", values: [3]}`. Import: `import "@ui5/webcomponents/dist/dynamic-date-range-options/LastOptions.js";`
  * - "LASTMONTHS" - Represents Last X Months from today. An example value is `{ operator: "LASTMONTHS", values: [6]}`. Import: `import "@ui5/webcomponents/dist/dynamic-date-range-options/LastOptions.js";`
@@ -89,6 +93,13 @@ let DynamicDateRange = DynamicDateRange_1 = class DynamicDateRange extends UI5El
         this.optionsObjects = this._createNormalizedOptions();
         this._focusSelectedItem();
     }
+    async onAfterRendering() {
+        await renderFinished().then(() => {
+            setTimeout(() => {
+                this._focusLastSelectedItem();
+            }, 0);
+        });
+    }
     /**
      * Creates and normalizes options from the options string
      */
@@ -125,6 +136,21 @@ let DynamicDateRange = DynamicDateRange_1 = class DynamicDateRange extends UI5El
             this._list?.focusItem(listItem);
         }
     }
+    _focusLastSelectedItem() {
+        if (!this._lastSelectedOption) {
+            return;
+        }
+        // Ensure the list exists and has items
+        if (!this._list || !this._list.items.length) {
+            return;
+        }
+        // Find the index of the last selected option in the options array
+        const optionIndex = this.optionsObjects.findIndex(option => option.operator === this._lastSelectedOption?.operator);
+        if (optionIndex >= 0 && optionIndex < this._list.items.length) {
+            const listItem = this._list.items[optionIndex];
+            this._list.focusItem(listItem);
+        }
+    }
     /**
      * Defines whether the value help icon is hidden
      * @private
@@ -137,7 +163,7 @@ let DynamicDateRange = DynamicDateRange_1 = class DynamicDateRange extends UI5El
     }
     _togglePicker() {
         if (this.open) {
-            this.open = false;
+            this._close();
         }
         else {
             this.open = true;
@@ -145,6 +171,7 @@ let DynamicDateRange = DynamicDateRange_1 = class DynamicDateRange extends UI5El
     }
     _selectOption(e) {
         this._currentOption = this.optionsObjects.find(option => option.text === e.detail.item.textContent);
+        this._lastSelectedOption = this._currentOption;
         if (!this._currentOption?.template) {
             this.currentValue = this._currentOption?.parse(this._currentOption.text);
             this._submitValue();
@@ -221,14 +248,16 @@ let DynamicDateRange = DynamicDateRange_1 = class DynamicDateRange extends UI5El
         else {
             this.value = undefined;
         }
+        this._currentOption?.resetState?.();
         this._currentOption = undefined;
         this.open = false;
     }
     _close() {
+        this._currentOption?.resetState?.();
         this._currentOption = undefined;
         this.open = false;
     }
-    onPopoverOpen() {
+    onPopoverBeforeOpen() {
         if (this.currentValue !== this.value) {
             this.currentValue = this.value;
         }
@@ -256,7 +285,11 @@ let DynamicDateRange = DynamicDateRange_1 = class DynamicDateRange extends UI5El
         return DynamicDateRange_1.i18nBundle.getText(DYNAMIC_DATE_RANGE_EMPTY_SELECTED_TEXT);
     }
     handleSelectionChange(e) {
-        this.currentValue = this._currentOption?.handleSelectionChange && this._currentOption?.handleSelectionChange(e);
+        const value = this._currentOption?.handleSelectionChange?.(e, this.currentValue);
+        this.currentValue = JSON.parse(JSON.stringify(value)); // deep clone
+        if (this.currentValue) {
+            this.currentValue.values = value?.values;
+        }
         // Update _currentOption if the operator changed
         if (this.currentValue && this.currentValue.operator !== this._currentOption?.operator) {
             this._currentOption = this.getOption(this.currentValue.operator);
@@ -332,6 +365,7 @@ DynamicDateRange = DynamicDateRange_1 = __decorate([
     customElement({
         tag: "ui5-dynamic-date-range",
         languageAware: true,
+        cldr: true,
         template: DynamicDateRangeTemplate,
         renderer: jsxRenderer,
         styles: [

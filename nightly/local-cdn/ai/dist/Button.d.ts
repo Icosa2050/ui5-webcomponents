@@ -5,7 +5,7 @@ import type ButtonState from "./ButtonState.js";
 import "./ButtonState.js";
 import type I18nBundle from "@ui5/webcomponents-base/dist/i18nBundle.js";
 import type { AccessibilityAttributes } from "@ui5/webcomponents-base/dist/types.js";
-type AIButtonRootAccessibilityAttributes = Pick<AccessibilityAttributes, "hasPopup" | "roleDescription" | "title">;
+type AIButtonRootAccessibilityAttributes = Pick<AccessibilityAttributes, "hasPopup" | "roleDescription" | "title" | "ariaKeyShortcuts">;
 type AIButtonArrowButtonAccessibilityAttributes = Pick<AccessibilityAttributes, "hasPopup" | "expanded" | "title">;
 type AIButtonAccessibilityAttributes = {
     root?: AIButtonRootAccessibilityAttributes;
@@ -88,6 +88,9 @@ declare class Button extends UI5Element {
      *     Accepts string values: `"dialog"`, `"grid"`, `"listbox"`, `"menu"`, or `"tree"`.
      *   - **roleDescription**: Defines a human-readable description for the button's role.
      *     Accepts any string value.
+     *   - **title**: Specifies a tooltip or description for screen readers.
+     *     Accepts any string value.
+     *  - **ariaKeyShortcuts**: Defines keyboard shortcuts that activate or focus the button.
      *
      * - **arrowButton**: Accessibility attributes that will be applied to the arrow (split) button element.
      *   - **hasPopup**: Indicates the type of popup triggered by the arrow button.
@@ -121,7 +124,7 @@ declare class Button extends UI5Element {
     states: Array<ButtonState>;
     _splitButton?: SplitButton;
     _hiddenSplitButton?: SplitButton;
-    static i18nBundle: I18nBundle;
+    static i18nBundleAi: I18nBundle;
     get _hideArrowButton(): boolean;
     get _effectiveState(): string;
     get _effectiveStateObject(): ButtonState | undefined;

@@ -270,6 +270,7 @@ declare class Wizard extends UI5Element {
      */
     changeSelectionByStepAction(stepInHeader: WizardTab): Promise<void>;
     getContentHeight(): number;
+    getFocusDomRef(): HTMLElement | undefined;
     getStepAriaLabelText(step: WizardStep, ariaLabel: string): string;
     get stepsDOM(): HTMLElement[];
     get progressNavigatorListDOM(): Element;

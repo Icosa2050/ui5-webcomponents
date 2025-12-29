@@ -61,12 +61,41 @@ let ToolbarButton = class ToolbarButton extends ToolbarItem {
          * @public
          */
         this.accessibilityAttributes = {};
+        /**
+         * Defines whether the button text should only be displayed in the overflow popover.
+         *
+         * When set to `true`, the button appears as icon-only in the main toolbar,
+         * but shows both icon and text when moved to the overflow popover.
+         *
+         * **Note:** This property only takes effect when the `text` property is also set.
+         *
+         * @default false
+         * @public
+         * @since 2.17.0
+         */
+        this.showOverflowText = false;
     }
     get styles() {
         return {
             width: this.width,
             display: this.hidden ? "none" : "inline-block",
         };
+    }
+    /**
+     * Returns the effective text to display based on overflow state and showOverflowText property.
+     *
+     * When showOverflowText is true:
+     * - Normal state: returns empty string (icon-only)
+     * - Overflow state: returns text
+     *
+     * When showOverflowText is false:
+     * - Returns text in both states (normal behavior)
+     */
+    get effectiveText() {
+        if (this.showOverflowText) {
+            return this.isOverflowed ? this.text : "";
+        }
+        return this.text;
     }
     onClick(e) {
         e.stopImmediatePropagation();
@@ -114,6 +143,9 @@ __decorate([
 __decorate([
     property()
 ], ToolbarButton.prototype, "text", void 0);
+__decorate([
+    property({ type: Boolean })
+], ToolbarButton.prototype, "showOverflowText", void 0);
 __decorate([
     property()
 ], ToolbarButton.prototype, "width", void 0);

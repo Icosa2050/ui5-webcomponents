@@ -48,6 +48,13 @@ let UploadCollection = UploadCollection_1 = class UploadCollection extends UI5El
          */
         this.selectionMode = "None";
         /**
+         * Defines the header level of the 'No data' text.
+         * @default "H2"
+         * @public
+         * @since 2.16.0
+         */
+        this.noDataHeaderLevel = "H2";
+        /**
          * By default there will be drag and drop overlay shown over the `ui5-upload-collection` when files
          * are dragged. If you don't intend to use drag and drop, set this property.
          *
@@ -118,20 +125,6 @@ let UploadCollection = UploadCollection_1 = class UploadCollection extends UI5El
     _onSelectionChange(e) {
         this.fireDecoratorEvent("selection-change", { selectedItems: e.detail.selectedItems });
     }
-    get classes() {
-        return {
-            content: {
-                "ui5-uc-content": true,
-                "ui5-uc-content-no-data": this.items.length === 0,
-            },
-        };
-    }
-    get _root() {
-        return this.shadowRoot.querySelector(".ui5-uc-root");
-    }
-    get _dndOverlay() {
-        return this._root?.querySelector(".uc-dnd-overlay");
-    }
     get _showDndOverlay() {
         return this._dndOverlayMode !== UploadCollectionDnDOverlayMode.None;
     }
@@ -163,6 +156,9 @@ __decorate([
 __decorate([
     property()
 ], UploadCollection.prototype, "noDataText", void 0);
+__decorate([
+    property()
+], UploadCollection.prototype, "noDataHeaderLevel", void 0);
 __decorate([
     property({ type: Boolean })
 ], UploadCollection.prototype, "hideDragOverlay", void 0);

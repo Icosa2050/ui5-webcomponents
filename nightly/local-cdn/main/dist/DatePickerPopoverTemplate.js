@@ -15,7 +15,8 @@ export default function DatePickerPopoverTemplate(hooks) {
     const header = hooks?.header || defaultHeader;
     const content = hooks?.content || defaultContent;
     const footer = hooks?.footer || defaultFooter;
-    return (_jsxs(ResponsivePopover, { id: `${this._id}-responsive-popover`, class: "ui5-date-picker-popover", opener: this, open: this.open, allowTargetOverlap: true, placement: "Bottom", horizontalAlign: "Start", accessibleName: this.pickerAccessibleName, hideArrow: true, _hideHeader: this._shouldHideHeader, onKeyDown: this._onkeydown, onClose: this.onResponsivePopoverAfterClose, onOpen: this.onResponsivePopoverAfterOpen, onBeforeOpen: this.onResponsivePopoverBeforeOpen, children: [this.showHeader && header.call(this), valueStateTextHeader.call(this), content.call(this), this.showFooter && footer.call(this)] }));
+    const initialFocus = hooks?.initialFocus;
+    return (_jsxs(ResponsivePopover, { id: `${this._id}-responsive-popover`, class: "ui5-date-picker-popover", opener: this, open: this.open, allowTargetOverlap: true, placement: "Bottom", horizontalAlign: "Start", accessibleName: this.pickerAccessibleName, hideArrow: true, _hideHeader: this._shouldHideHeader, initialFocus: initialFocus, onKeyDown: this._onkeydown, onClose: this.onResponsivePopoverAfterClose, onOpen: this.onResponsivePopoverAfterOpen, onBeforeOpen: this.onResponsivePopoverBeforeOpen, children: [this.showHeader && header.call(this), valueStateTextHeader.call(this), content.call(this), this.showFooter && footer.call(this)] }));
 }
 function defaultHeader() {
     return (_jsx("div", { slot: "header", class: "ui5-responsive-popover-header", children: _jsxs("div", { class: "row", children: [_jsx("span", { children: this._headerTitleText }), _jsx(Button, { class: "ui5-responsive-popover-close-btn", icon: decline, design: "Transparent", onClick: this._togglePicker })] }) }));

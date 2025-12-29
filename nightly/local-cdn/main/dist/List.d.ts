@@ -9,6 +9,7 @@ import ListSelectionMode from "./types/ListSelectionMode.js";
 import ListGrowingMode from "./types/ListGrowingMode.js";
 import ListAccessibleRole from "./types/ListAccessibleRole.js";
 import type ListItemBase from "./ListItemBase.js";
+import type ListItem from "./ListItem.js";
 import type { ListItemBasePressEventDetail } from "./ListItemBase.js";
 import type DropIndicator from "./DropIndicator.js";
 import type { SelectionRequestEventDetail } from "./ListItem.js";
@@ -40,6 +41,7 @@ type ListMoveEventDetail = MoveEventDetail;
 type ListAccessibilityAttributes = {
     growingButton?: {
         name?: string;
+        description?: string;
     };
 };
 /**
@@ -196,11 +198,14 @@ declare class List extends UI5Element {
     *
     * The accessibilityAttributes object has the following field:
     *
-    *  - **growingButton**: `growingButton.name`.
+    *  - **growingButton**: `growingButton.name`, `growingButton.description`.
     *
     * The accessibility attributes support the following values:
     *
     * - **name**: Defines the accessible ARIA name of the growing button.
+    * Accepts any string.
+    *
+    * - **description**: Defines the accessible ARIA description of the growing button.
     * Accepts any string.
     *
     * **Note:** The `accessibilityAttributes` property is in an experimental state and is a subject to change.
@@ -281,16 +286,17 @@ declare class List extends UI5Element {
     static i18nBundle: I18nBundle;
     _previouslyFocusedItem: ListItemBase | null;
     _forwardingFocus: boolean;
-    listEndObserved: boolean;
-    _handleResizeCallback: ResizeObserverCallback;
-    initialIntersection: boolean;
     _selectionRequested?: boolean;
     _groupCount: number;
     _groupItemCount: number;
-    growingIntersectionObserver?: IntersectionObserver | null;
+    _endIntersectionObserver?: IntersectionObserver | null;
+    _startIntersectionObserver?: IntersectionObserver | null;
     _itemNavigation: ItemNavigation;
     _beforeElement?: HTMLElement | null;
     _afterElement?: HTMLElement | null;
+    _startMarkerOutOfView: boolean;
+    _lastFocusedElementIndex?: number;
+    handleResizeCallback: ResizeObserverCallback;
     onItemFocusedBound: (e: CustomEvent) => void;
     onForwardAfterBound: (e: CustomEvent) => void;
     onForwardBeforeBound: (e: CustomEvent) => void;
@@ -316,6 +322,7 @@ declare class List extends UI5Element {
     get headerID(): string;
     get modeLabelID(): string;
     get listEndDOM(): Element | null;
+    get listStartDOM(): Element | null;
     get dropIndicatorDOM(): DropIndicator | null;
     get hasData(): boolean;
     get showBusyIndicatorOverlay(): boolean;
@@ -328,7 +335,7 @@ declare class List extends UI5Element {
     get ariaDescriptionText(): string;
     get growingButtonAriaLabel(): string | undefined;
     get growingButtonAriaLabelledBy(): string | undefined;
-    get scrollContainer(): HTMLElement | null;
+    get growingButtonAriaDescribedBy(): string | undefined;
     hasGrowingComponent(): boolean;
     _getDescriptionForGroups(): string;
     get ariaLabelModeText(): string;
@@ -341,7 +348,10 @@ declare class List extends UI5Element {
     prepareListItems(): void;
     observeListEnd(): Promise<void>;
     unobserveListEnd(): void;
-    onInteresection(entries: Array<IntersectionObserverEntry>): void;
+    observeListStart(): Promise<void>;
+    unobserveListStart(): void;
+    onEndIntersection(entries: Array<IntersectionObserverEntry>): void;
+    onStartIntersection(entries: Array<IntersectionObserverEntry>): void;
     onSelectionRequested(e: CustomEvent<SelectionRequestEventDetail>): void;
     handleSingle(item: ListItemBase): boolean;
     handleSingleStart(item: ListItemBase): boolean;
@@ -356,6 +366,8 @@ declare class List extends UI5Element {
     getItemsForProcessing(): Array<ListItemBase>;
     _revertSelection(previouslySelectedItems: Array<ListItemBase>): void;
     _onkeydown(e: KeyboardEvent): void;
+    _handleF7(e: KeyboardEvent): void;
+    _getClosestListItem(element: HTMLElement): ListItem | null;
     _moveItem(item: ListItemBase, e: KeyboardEvent): void;
     _onLoadMoreKeydown(e: KeyboardEvent): void;
     _onLoadMoreKeyup(e: KeyboardEvent): void;
@@ -369,7 +381,8 @@ declare class List extends UI5Element {
     _handleTabNext(e: KeyboardEvent): void;
     _handleHome(): void;
     _handleEnd(): void;
-    _handleDown(): void;
+    _handleDown(e: KeyboardEvent): void;
+    _navigateToAdjacentItem(listItem: ListItem, offset: -1 | 1): boolean;
     _onfocusin(e: FocusEvent): void;
     _ondragenter(e: DragEvent): void;
     _ondragleave(e: DragEvent): void;
@@ -387,7 +400,7 @@ declare class List extends UI5Element {
     focusBeforeElement(): void;
     focusAfterElement(): void;
     focusGrowingButton(): void;
-    _shouldFocusGrowingButton(): void;
+    _shouldFocusGrowingButton(): boolean;
     getGrowingButton(): HTMLElement;
     /**
      * Focuses the first list item and sets its tabindex to "0" via the ItemNavigation
@@ -410,7 +423,8 @@ declare class List extends UI5Element {
     getFirstItem(filter: (item: ListItemBase) => boolean): ListItemBase | null;
     getAfterElement(): HTMLElement;
     getBeforeElement(): HTMLElement;
-    getIntersectionObserver(): IntersectionObserver;
+    getEndIntersectionObserver(): IntersectionObserver;
+    getStartIntersectionObserver(): IntersectionObserver;
 }
 export default List;
 export type { ListItemClickEventDetail, ListItemFocusEventDetail, ListItemDeleteEventDetail, ListItemCloseEventDetail, ListItemToggleEventDetail, ListSelectionChangeEventDetail, ListMoveEventDetail, ListAccessibilityAttributes, };

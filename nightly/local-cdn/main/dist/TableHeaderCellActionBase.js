@@ -9,6 +9,7 @@ import { customElement, eventStrict } from "@ui5/webcomponents-base/dist/decorat
 import jsxRenderer from "@ui5/webcomponents-base/dist/renderer/JsxRenderer.js";
 import TableHeaderCellActionBaseTemplate from "./TableHeaderCellActionBaseTemplate.js";
 import TableHeaderCellActionBaseStyles from "./generated/themes/TableHeaderCellActionBase.css.js";
+import getActiveElement from "@ui5/webcomponents-base/dist/util/getActiveElement.js";
 /**
  * Fired when a header cell action is clicked.
  *
@@ -25,6 +26,11 @@ let TableHeaderCellActionBase = class TableHeaderCellActionBase extends UI5Eleme
         const action = this.parentElement?.hasAttribute("ui5-table-header-cell") ? this : this.getRootNode().host._headerCell.action[0];
         action.fireDecoratorEvent("click", { targetRef: e.target });
         e.stopPropagation();
+    }
+    get accessibilityInfo() {
+        return {
+            description: getActiveElement()?.hasAttribute("ui5-table-cell-base") ? this._tooltip : "",
+        };
     }
     get _tooltip() {
         return this.getRenderInfo().tooltip;

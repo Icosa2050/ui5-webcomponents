@@ -13,7 +13,7 @@ import slot from "@ui5/webcomponents-base/dist/decorators/slot.js";
 import jsxRenderer from "@ui5/webcomponents-base/dist/renderer/JsxRenderer.js";
 import slideDown from "@ui5/webcomponents-base/dist/animations/slideDown.js";
 import slideUp from "@ui5/webcomponents-base/dist/animations/slideUp.js";
-import { isSpace, isEnter } from "@ui5/webcomponents-base/dist/Keys.js";
+import { isSpace, isEnter, isEscape } from "@ui5/webcomponents-base/dist/Keys.js";
 import AnimationMode from "@ui5/webcomponents-base/dist/types/AnimationMode.js";
 import { getAnimationMode } from "@ui5/webcomponents-base/dist/config/AnimationMode.js";
 import i18n from "@ui5/webcomponents-base/dist/decorators/i18n.js";
@@ -139,6 +139,7 @@ let Panel = Panel_1 = class Panel extends UI5Element {
         this._hasHeader = false;
         this._contentExpanded = false;
         this._animationRunning = false;
+        this._pendingToggle = false;
     }
     onBeforeRendering() {
         // If the animation is running, it will set the content expanded state at the end
@@ -173,10 +174,16 @@ let Panel = Panel_1 = class Panel extends UI5Element {
             return;
         }
         if (isEnter(e)) {
-            e.preventDefault();
+            this._toggleOpen();
         }
         if (isSpace(e)) {
             e.preventDefault();
+            this._pendingToggle = true;
+        }
+        // Cancel toggle if Escape is pressed
+        if (isEscape(e) && this._pendingToggle) {
+            e.preventDefault();
+            this._pendingToggle = false;
         }
     }
     _headerKeyUp(e) {
@@ -184,10 +191,14 @@ let Panel = Panel_1 = class Panel extends UI5Element {
             return;
         }
         if (isEnter(e)) {
-            this._toggleOpen();
+            e.preventDefault();
         }
         if (isSpace(e)) {
-            this._toggleOpen();
+            // Only toggle if space was pressed and escape wasn't pressed to cancel
+            if (this._pendingToggle) {
+                this._toggleOpen();
+            }
+            this._pendingToggle = false;
         }
     }
     _toggleOpen() {
@@ -310,6 +321,9 @@ __decorate([
 __decorate([
     property({ type: Boolean, noAttribute: true })
 ], Panel.prototype, "_animationRunning", void 0);
+__decorate([
+    property({ type: Boolean, noAttribute: true })
+], Panel.prototype, "_pendingToggle", void 0);
 __decorate([
     slot()
 ], Panel.prototype, "header", void 0);

@@ -100,6 +100,11 @@ declare class DateTimePicker extends DatePicker implements IFormInputElement {
      * @private
      */
     _previewValues: PreviewValues;
+    /**
+     * Stores the last valid value to preserve time when entering invalid values
+     * @private
+     */
+    _lastValidValue: string;
     _clocks: TimeSelectionClocks;
     _handleResizeBound: ResizeObserverCallback;
     constructor();
@@ -117,6 +122,8 @@ declare class DateTimePicker extends DatePicker implements IFormInputElement {
      * @private
      */
     _togglePicker(): void;
+    get formValidityMessage(): string;
+    get formValidity(): ValidityStateFlags;
     get _formatPattern(): string;
     get _calendarTimestamp(): number;
     get _calendarSelectedDates(): string[];
@@ -133,7 +140,7 @@ declare class DateTimePicker extends DatePicker implements IFormInputElement {
     /**
      * @override
      */
-    get dateAriaDescription(): string;
+    get roleDescription(): string;
     /**
      * @override
      */
@@ -175,6 +182,10 @@ declare class DateTimePicker extends DatePicker implements IFormInputElement {
      * @override
      */
     _modifyDateValue(amount: number, unit: string, preserveDate: boolean): void;
+    /**
+     * @override
+     */
+    _updateValueAndFireEvents(value: string, normalizeValue: boolean, events: Array<"change" | "value-changed" | "input">, updateValue?: boolean): void;
     /**
      * Checks if the provided value is valid and within valid range.
      * @override

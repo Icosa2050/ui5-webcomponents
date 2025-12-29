@@ -11,10 +11,10 @@ import type InputSuggestions from "./features/InputSuggestions.js";
 import InputType from "./types/InputType.js";
 import type Popover from "./Popover.js";
 import type { IIcon } from "./Icon.js";
-import type PopoverHorizontalAlign from "./types/PopoverHorizontalAlign.js";
 import type { ListItemClickEventDetail, ListSelectionChangeEventDetail } from "./List.js";
 import type ResponsivePopover from "./ResponsivePopover.js";
 import type InputKeyHint from "./types/InputKeyHint.js";
+import type InputComposition from "./features/InputComposition.js";
 /**
  * Interface for components that represent a suggestion item, usable in `ui5-input`
  * @public
@@ -311,6 +311,12 @@ declare class Input extends UI5Element implements SuggestionComponent, IFormInpu
      */
     _linksListenersArray: Array<(args: any) => void>;
     /**
+     * Indicates whether IME composition is currently active
+     * @default false
+     * @private
+     */
+    _isComposing: boolean;
+    /**
      * Defines the suggestion items.
      *
      * **Note:** The suggestions would be displayed only if the `showSuggestions`
@@ -363,7 +369,9 @@ declare class Input extends UI5Element implements SuggestionComponent, IFormInpu
     _isLatestValueFromSuggestions: boolean;
     _isChangeTriggeredBySuggestion: boolean;
     _valueStateLinks: Array<HTMLElement>;
+    _composition?: InputComposition;
     static i18nBundle: I18nBundle;
+    static composition: typeof InputComposition;
     /**
      * Indicates whether link navigation is being handled.
      * @default false
@@ -371,7 +379,7 @@ declare class Input extends UI5Element implements SuggestionComponent, IFormInpu
      * @since 2.11.0
      */
     _handleLinkNavigation: boolean;
-    get formValidityMessage(): string;
+    get formValidityMessage(): string | undefined;
     get _effectiveShowSuggestions(): boolean;
     get formValidity(): ValidityStateFlags;
     formElementAnchor(): Promise<HTMLElement | undefined>;
@@ -424,6 +432,8 @@ declare class Input extends UI5Element implements SuggestionComponent, IFormInpu
     _handleResize(): void;
     _updateAssociatedLabelsTexts(): void;
     _closePicker(): void;
+    _confirmMobileValue(): void;
+    _cancelMobileValue(): void;
     _afterOpenPicker(): void;
     _afterClosePicker(): void;
     _handlePickerAfterOpen(): void;
@@ -433,6 +443,12 @@ declare class Input extends UI5Element implements SuggestionComponent, IFormInpu
     _handleValueStatePopoverAfterClose(): void;
     _getValueStatePopover(): Popover;
     enableSuggestions(): void;
+    /**
+     * Enables IME composition handling.
+     * Dynamically loads the InputComposition feature and sets up event listeners.
+     * @private
+     */
+    _enableComposition(): void;
     acceptSuggestion(item: IInputSuggestionItemSelectable, keyboardUsed: boolean): void;
     /**
      * Updates the input value on item select.
@@ -479,6 +495,7 @@ declare class Input extends UI5Element implements SuggestionComponent, IFormInpu
     get _readonly(): boolean;
     get _headerTitleText(): string;
     get _suggestionsOkButtonText(): string;
+    get _suggestionsCancelButtonText(): string;
     get clearIconAccessibleName(): string;
     get _popupLabel(): string;
     get inputType(): `${InputType}`;
@@ -550,7 +567,6 @@ declare class Input extends UI5Element implements SuggestionComponent, IFormInpu
      * This method is relevant for sap_horizon theme only
      */
     get _valueStateInputIcon(): string;
-    get _valueStatePopoverHorizontalAlign(): `${PopoverHorizontalAlign}`;
     /**
      * This method is relevant for sap_horizon theme only
      */

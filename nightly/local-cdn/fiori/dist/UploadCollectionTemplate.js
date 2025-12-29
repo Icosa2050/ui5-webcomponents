@@ -14,7 +14,7 @@ export default function UploadCollectionTemplate() {
                             _jsx(ListItemCustom, { class: {
                                     "uc-no-files": true,
                                     "uc-no-files-dnd-overlay": this._showDndOverlay,
-                                }, type: "Inactive", children: _jsxs(IllustratedMessage, { name: "Tent", children: [_jsx(Title, { slot: "title", wrappingType: "None", level: "H2", children: this._noDataText }), _jsx("span", { slot: "subtitle", children: this._noDataDescription })] }) })] }), this._showDndOverlay &&
+                                }, type: "Inactive", children: _jsxs(IllustratedMessage, { name: "Tent", children: [_jsx(Title, { slot: "title", wrappingType: "None", level: this.noDataHeaderLevel, children: this._noDataText }), _jsx("span", { slot: "subtitle", children: this._noDataDescription })] }) })] }), this._showDndOverlay &&
                     _jsxs("div", { class: {
                             "uc-dnd-overlay": true,
                             "uc-drag-overlay": this._dndOverlayMode === UploadCollectionDnDOverlayMode.Drag,

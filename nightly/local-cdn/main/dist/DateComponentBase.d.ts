@@ -36,7 +36,7 @@ declare class DateComponentBase extends UI5Element {
     /**
      * Determines the format, displayed in the input field.
      * @default undefined
-     * @deprecated
+     * @deprecated Use displayFormat and valueFormat instead
      * @public
      */
     formatPattern?: string;
@@ -96,6 +96,7 @@ declare class DateComponentBase extends UI5Element {
     get _isPattern(): boolean;
     get _isValueFormatPattern(): boolean;
     get _isDisplayFormatPattern(): boolean;
+    get initialFocusId(): string;
     get hasSecondaryCalendarType(): boolean;
     _getMinMaxCalendarDateFromString(date: string): CalendarDate | undefined;
     _getCalendarDateFromString(value: string): CalendarDate | undefined;

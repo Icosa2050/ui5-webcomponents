@@ -165,8 +165,8 @@ let TreeItemBase = TreeItemBase_1 = class TreeItemBase extends ListItem {
         e.stopPropagation();
         this.fireDecoratorEvent("toggle", { item: this });
     }
-    async _onkeydown(e) {
-        await super._onkeydown(e);
+    _onkeydown(e) {
+        super._onkeydown(e);
         if (!this._fixed && this.showToggleButton && isRight(e)) {
             if (!this.expanded) {
                 this.fireDecoratorEvent("toggle", { item: this });

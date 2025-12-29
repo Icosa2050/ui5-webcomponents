@@ -4,7 +4,6 @@ import type { ResizeObserverCallback } from "@ui5/webcomponents-base/dist/delega
 import type I18nBundle from "@ui5/webcomponents-base/dist/i18nBundle.js";
 import type { IFormInputElement } from "@ui5/webcomponents-base/dist/features/InputElementsFormSupport.js";
 import type Popover from "./Popover.js";
-import type PopoverHorizontalAlign from "./types/PopoverHorizontalAlign.js";
 type TokenizedText = Array<string>;
 type IndexedTokenizedText = Array<{
     text: string;
@@ -158,6 +157,20 @@ declare class TextArea extends UI5Element implements IFormInputElement {
      */
     accessibleNameRef?: string;
     /**
+     * Defines the accessible description of the component.
+     * @default undefined
+     * @public
+     * @since 2.16.0
+     */
+    accessibleDescription?: string;
+    /**
+     * Receives id(or many ids) of the elements that describe the textarea.
+     * @default undefined
+     * @public
+     * @since 2.16.0
+     */
+    accessibleDescriptionRef?: string;
+    /**
      * @private
      */
     focused: boolean;
@@ -197,7 +210,7 @@ declare class TextArea extends UI5Element implements IFormInputElement {
     previousValue: string;
     valueStatePopover?: Popover;
     static i18nBundle: I18nBundle;
-    get formValidityMessage(): string;
+    get formValidityMessage(): string | undefined;
     get formValidity(): ValidityStateFlags;
     formElementAnchor(): Promise<HTMLElement | undefined>;
     get formFormattedValue(): FormData | string | null;
@@ -237,7 +250,6 @@ declare class TextArea extends UI5Element implements IFormInputElement {
     get classes(): {
         root: {
             "ui5-textarea-root": boolean;
-            "ui5-content-custom-scrollbars": boolean;
         };
         valueStateMsg: {
             "ui5-valuestatemessage-header": boolean;
@@ -248,6 +260,8 @@ declare class TextArea extends UI5Element implements IFormInputElement {
     };
     get tabIndex(): 0 | -1;
     get ariaLabelText(): string | undefined;
+    get ariaDescriptionText(): string | undefined;
+    get ariaDescriptionTextId(): "" | "accessibleDescription";
     get ariaDescribedBy(): string | undefined;
     get ariaValueStateHiddenText(): string | undefined;
     get valueStateDefaultText(): string;
@@ -256,7 +270,6 @@ declare class TextArea extends UI5Element implements IFormInputElement {
     get displayValueStateMessagePopover(): boolean;
     get hasCustomValueState(): boolean;
     get hasValueState(): boolean;
-    get _valueStatePopoverHorizontalAlign(): `${PopoverHorizontalAlign}`;
     get valueStateTextMappings(): {
         Positive: string;
         Information: string;
@@ -271,4 +284,5 @@ declare class TextArea extends UI5Element implements IFormInputElement {
     };
 }
 export default TextArea;
+export { TextArea as BaseTextArea };
 export type { TextAreaInputEventDetail };

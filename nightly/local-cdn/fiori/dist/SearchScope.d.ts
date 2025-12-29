@@ -19,11 +19,12 @@ declare class SearchScope extends UI5Element implements ISearchScope {
      */
     text: string;
     /**
-     * Indicates whether the item is selected
-     * @default false
+     * Defines the value of the `ui5-search-scope`.
+     * Used for selection in Search scopes.
+     * @default undefined
      * @public
      */
-    selected: boolean;
+    value?: string;
     get stableDomRef(): string;
 }
 export default SearchScope;

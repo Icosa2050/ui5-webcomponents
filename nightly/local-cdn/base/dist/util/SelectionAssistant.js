@@ -1,4 +1,3 @@
-import getEffectiveScrollbarStyle from "../util/getEffectiveScrollbarStyle.js";
 const copyAndApplyStyles = (element, copiedElement) => {
     const computedStyles = getComputedStyle(element);
     for (let i = 0; i < computedStyles.length; i++) {
@@ -24,17 +23,10 @@ const setInputSpecificStyles = (element) => {
     element.style.overflowX = "auto";
     element.style.overflowY = "hidden";
 };
-const applyScrollStylings = () => {
-    const sheet = new CSSStyleSheet();
-    const styles = getEffectiveScrollbarStyle();
-    sheet.replaceSync(styles);
-    document.adoptedStyleSheets = [...document.adoptedStyleSheets, sheet];
-};
 const createCopy = () => {
     const copiedElement = document.createElement("div");
     copiedElement.id = "ui5-selection-mirror";
     copiedElement.contentEditable = "true";
-    applyScrollStylings();
     document.body.appendChild(copiedElement);
 };
 const applyScrollPosition = (element, copiedElement) => {

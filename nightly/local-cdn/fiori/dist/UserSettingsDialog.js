@@ -75,6 +75,7 @@ let UserSettingsDialog = UserSettingsDialog_1 = class UserSettingsDialog extends
         const searchValue = this._searchValue.toLowerCase();
         this._filteredItems = [];
         this._filteredFixedItems = [];
+        const siblingsWithIcon = this.items.some(item => !!item.icon);
         this.items.forEach(item => {
             if (item.text.toLowerCase().includes(searchValue)) {
                 this._filteredItems.push(item);
@@ -82,6 +83,7 @@ let UserSettingsDialog = UserSettingsDialog_1 = class UserSettingsDialog extends
             if (item.selected) {
                 this._selectedSetting = item;
             }
+            item._siblingsWithIcon = siblingsWithIcon;
         });
         this.fixedItems.forEach(item => {
             if (item.text.toLowerCase().includes(searchValue)) {

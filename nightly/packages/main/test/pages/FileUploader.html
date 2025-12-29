@@ -10,8 +10,8 @@
 	<script>
 		// delete Document.prototype.adoptedStyleSheets
 	</script>
-  <script type="module" crossorigin src="/ui5-webcomponents/nightly/assets/bundle.esm-Z_EAX1F5.js"></script>
-  <link rel="stylesheet" crossorigin href="/ui5-webcomponents/nightly/assets/FileUploader-OJunYaB0.css">
+  <script type="module" crossorigin src="/webcomponents/nightly/assets/bundle.esm-CSfv0fSI.js"></script>
+  <link rel="stylesheet" crossorigin href="/webcomponents/nightly/assets/FileUploader-B6R_3sW6.css">
 </head>
 <body class="fileuploader1auto">
 
@@ -102,5 +102,42 @@
 			<ui5-label for="infoInput">Choose files:</ui5-label>
 			<ui5-file-uploader id="infoInput" placeholder="Upload your files here" style="width: 350px;" multiple value-state="Information"></ui5-file-uploader>
 		</div>
+		<div>
+			<ui5-title>Form validation</ui5-title>
+			<form id="formValidation">
+				<ui5-message-strip id="formValidationMessage" hidden></ui5-message-strip>
+				<ui5-label for="formFileUploader">Choose files:</ui5-label>
+				<ui5-file-uploader id="formFileUploader" placeholder="Upload your files here" style="width: 350px;" required></ui5-file-uploader>
+				<br><br>
+				<ui5-button id="btnCheckFormValidity">Check Validity</ui5-button>
+			</form>
+		</div>
+		<script>
+			const btnCheckFormValidity = document.getElementById('btnCheckFormValidity');
+			const formValidationMessage = document.getElementById('formValidationMessage');
+			const formFileUploader = document.getElementById('formFileUploader');
+
+			btnCheckFormValidity.addEventListener('click', function() {
+				checkFormValidity('formFileUploader');
+			});
+
+			formFileUploader.addEventListener('ui5-change', function() {
+				setTimeout(() => {
+					checkFormValidity('formFileUploader', true);
+				}, 0);
+			});
+
+			function checkFormValidity(elementId, delayed = false) {
+				const element = document.getElementById(elementId);
+				const isValid = element.checkValidity();
+
+				element.reportValidity();
+
+				// Show result
+				formValidationMessage.hidden = false;
+				formValidationMessage.innerText = `checkValidity(): ${isValid} ${delayed ? '( Delayed check )' : ''}`;
+				formValidationMessage.design = isValid ? "Positive" : "Negative";
+			}
+		</script>
 </body>
 </html>

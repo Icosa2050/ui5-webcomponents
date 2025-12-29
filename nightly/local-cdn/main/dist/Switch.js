@@ -10,7 +10,7 @@ import customElement from "@ui5/webcomponents-base/dist/decorators/customElement
 import property from "@ui5/webcomponents-base/dist/decorators/property.js";
 import event from "@ui5/webcomponents-base/dist/decorators/event-strict.js";
 import jsxRenderer from "@ui5/webcomponents-base/dist/renderer/JsxRenderer.js";
-import { isSpace, isEnter } from "@ui5/webcomponents-base/dist/Keys.js";
+import { isSpace, isEnter, isShift, isEscape, } from "@ui5/webcomponents-base/dist/Keys.js";
 import i18n from "@ui5/webcomponents-base/dist/decorators/i18n.js";
 import { getEffectiveAriaLabelText } from "@ui5/webcomponents-base/dist/util/AccessibilityTextsHelper.js";
 import "@ui5/webcomponents-icons/dist/accept.js";
@@ -95,6 +95,7 @@ let Switch = Switch_1 = class Switch extends UI5Element {
          * @public
          */
         this.value = "";
+        this._cancelAction = false;
     }
     get formValidityMessage() {
         return Switch_1.i18nBundle.getText(FORM_CHECKABLE_REQUIRED);
@@ -118,6 +119,7 @@ let Switch = Switch_1 = class Switch extends UI5Element {
         this.toggle();
     }
     _onkeydown(e) {
+        this._cancelAction = isShift(e) || isEscape(e);
         if (isSpace(e)) {
             e.preventDefault();
         }
@@ -126,7 +128,7 @@ let Switch = Switch_1 = class Switch extends UI5Element {
         }
     }
     _onkeyup(e) {
-        if (isSpace(e)) {
+        if (isSpace(e) && !this._cancelAction) {
             this._onclick();
         }
     }
@@ -205,6 +207,9 @@ __decorate([
 __decorate([
     property()
 ], Switch.prototype, "value", void 0);
+__decorate([
+    property({ type: Boolean, noAttribute: true })
+], Switch.prototype, "_cancelAction", void 0);
 __decorate([
     i18n("@ui5/webcomponents")
 ], Switch, "i18nBundle", void 0);

@@ -147,7 +147,7 @@ declare abstract class ListItem extends ListItemBase {
     onBeforeRendering(): void;
     onEnterDOM(): void;
     onExitDOM(): void;
-    _onkeydown(e: KeyboardEvent): Promise<void>;
+    _onkeydown(e: KeyboardEvent): void;
     _onkeyup(e: KeyboardEvent): void;
     _onmousedown(): void;
     _onmouseup(): void;
@@ -156,7 +156,6 @@ declare abstract class ListItem extends ListItemBase {
     _onfocusout(e: FocusEvent): void;
     _ondragstart(e: DragEvent): void;
     _ondragend(e: DragEvent): void;
-    _isTargetSelfFocusDomRef(e: KeyboardEvent): boolean;
     /**
      * Called when selection components in Single (ui5-radio-button)
      * and Multi (ui5-checkbox) selection modes are used.
@@ -187,6 +186,12 @@ declare abstract class ListItem extends ListItemBase {
     get _hasHighlightColor(): boolean;
     get hasConfigurableMode(): boolean;
     get _listItem(): HTMLLIElement | null;
+    _handleF2(): Promise<void>;
+    _getFocusableElements(): HTMLElement[];
+    _getFocusedElementIndex(): number;
+    _hasFocusableElements(): boolean;
+    _isFocusOnInternalElement(): boolean;
+    _focusInternalElement(targetIndex: number): number | undefined;
 }
 export default ListItem;
 export type { IAccessibleListItem, SelectionRequestEventDetail, ListItemAccessibilityAttributes, };

@@ -13,12 +13,11 @@ import event from "@ui5/webcomponents-base/dist/decorators/event-strict.js";
 import customElement from "@ui5/webcomponents-base/dist/decorators/customElement.js";
 import jsxRenderer from "@ui5/webcomponents-base/dist/renderer/JsxRenderer.js";
 import ResizeHandler from "@ui5/webcomponents-base/dist/delegate/ResizeHandler.js";
-import { getEffectiveAriaLabelText, getAssociatedLabelForTexts } from "@ui5/webcomponents-base/dist/util/AccessibilityTextsHelper.js";
-import getEffectiveScrollbarStyle from "@ui5/webcomponents-base/dist/util/getEffectiveScrollbarStyle.js";
+import { getEffectiveAriaLabelText, getAssociatedLabelForTexts, getEffectiveAriaDescriptionText, } from "@ui5/webcomponents-base/dist/util/AccessibilityTextsHelper.js";
 import i18n from "@ui5/webcomponents-base/dist/decorators/i18n.js";
 import { isEscape } from "@ui5/webcomponents-base/dist/Keys.js";
 import TextAreaTemplate from "./TextAreaTemplate.js";
-import { VALUE_STATE_SUCCESS, VALUE_STATE_INFORMATION, VALUE_STATE_ERROR, VALUE_STATE_WARNING, VALUE_STATE_TYPE_SUCCESS, VALUE_STATE_TYPE_INFORMATION, VALUE_STATE_TYPE_ERROR, VALUE_STATE_TYPE_WARNING, TEXTAREA_CHARACTERS_LEFT, TEXTAREA_CHARACTERS_EXCEEDED, FORM_TEXTFIELD_REQUIRED, } from "./generated/i18n/i18n-defaults.js";
+import { VALUE_STATE_SUCCESS, VALUE_STATE_INFORMATION, VALUE_STATE_ERROR, VALUE_STATE_WARNING, VALUE_STATE_TYPE_SUCCESS, VALUE_STATE_TYPE_INFORMATION, VALUE_STATE_TYPE_ERROR, VALUE_STATE_TYPE_WARNING, TEXTAREA_CHARACTERS_LEFT, TEXTAREA_CHARACTERS_EXCEEDED, FORM_TEXTFIELD_REQUIRED, TEXTAREA_EXCEEDS_MAXLENGTH, } from "./generated/i18n/i18n-defaults.js";
 // Styles
 import textareaStyles from "./generated/themes/TextArea.css.js";
 import valueStateMessageStyles from "./generated/themes/ValueStateMessage.css.js";
@@ -42,10 +41,18 @@ import valueStateMessageStyles from "./generated/themes/ValueStateMessage.css.js
  */
 let TextArea = TextArea_1 = class TextArea extends UI5Element {
     get formValidityMessage() {
-        return TextArea_1.i18nBundle.getText(FORM_TEXTFIELD_REQUIRED);
+        if (this.formValidity.valueMissing) {
+            return TextArea_1.i18nBundle.getText(FORM_TEXTFIELD_REQUIRED);
+        }
+        if (this.formValidity.tooLong) {
+            return TextArea_1.i18nBundle.getText(TEXTAREA_EXCEEDS_MAXLENGTH, this.value.length - (this.maxlength ?? 0));
+        }
     }
     get formValidity() {
-        return { valueMissing: this.required && !this.value };
+        return {
+            valueMissing: this.required && !this.value,
+            tooLong: this.showExceededText && (this.value.length > (this.maxlength ?? 0)),
+        };
     }
     async formElementAnchor() {
         return this.getFocusDomRefAsync();
@@ -306,7 +313,6 @@ let TextArea = TextArea_1 = class TextArea extends UI5Element {
         return {
             root: {
                 "ui5-textarea-root": true,
-                "ui5-content-custom-scrollbars": !!getEffectiveScrollbarStyle(),
             },
             valueStateMsg: {
                 "ui5-valuestatemessage-header": true,
@@ -329,8 +335,18 @@ let TextArea = TextArea_1 = class TextArea extends UI5Element {
         }
         return effectiveAriaLabelText;
     }
+    get ariaDescriptionText() {
+        return getEffectiveAriaDescriptionText(this);
+    }
+    get ariaDescriptionTextId() {
+        return this.ariaDescriptionText ? "accessibleDescription" : "";
+    }
     get ariaDescribedBy() {
-        return this.hasValueState ? `${this._id}-valueStateDesc` : undefined;
+        const ids = [
+            this.hasValueState ? `${this._id}-valueStateDesc` : "",
+            this.ariaDescriptionTextId,
+        ].filter(Boolean).join(" ");
+        return ids || undefined;
     }
     get ariaValueStateHiddenText() {
         if (!this.hasValueState) {
@@ -364,9 +380,6 @@ let TextArea = TextArea_1 = class TextArea extends UI5Element {
     }
     get hasValueState() {
         return this.valueState === ValueState.Negative || this.valueState === ValueState.Critical || this.valueState === ValueState.Information;
-    }
-    get _valueStatePopoverHorizontalAlign() {
-        return this.effectiveDir !== "rtl" ? "Start" : "End";
     }
     get valueStateTextMappings() {
         return {
@@ -428,6 +441,12 @@ __decorate([
     property()
 ], TextArea.prototype, "accessibleNameRef", void 0);
 __decorate([
+    property()
+], TextArea.prototype, "accessibleDescription", void 0);
+__decorate([
+    property()
+], TextArea.prototype, "accessibleDescriptionRef", void 0);
+__decorate([
     property({ type: Boolean })
 ], TextArea.prototype, "focused", void 0);
 __decorate([
@@ -456,7 +475,6 @@ TextArea = TextArea_1 = __decorate([
         styles: [
             textareaStyles,
             valueStateMessageStyles,
-            getEffectiveScrollbarStyle(),
         ],
         renderer: jsxRenderer,
         template: TextAreaTemplate,
@@ -512,4 +530,5 @@ TextArea = TextArea_1 = __decorate([
 ], TextArea);
 TextArea.define();
 export default TextArea;
+export { TextArea as BaseTextArea };
 //# sourceMappingURL=TextArea.js.map

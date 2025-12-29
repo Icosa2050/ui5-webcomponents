@@ -77,7 +77,6 @@ declare class YearRangePicker extends CalendarPart implements ICalendarPicker {
       * @private
       */
     _isInsideSelectionRange(timestamp: number): boolean;
-    onAfterRendering(): void;
     _onkeydown(e: KeyboardEvent): void;
     _onkeyup(e: KeyboardEvent): void;
     _onHomeOrEnd(homePressed: boolean): void;

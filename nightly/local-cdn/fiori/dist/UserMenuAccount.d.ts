@@ -36,6 +36,13 @@ declare class UserMenuAccount extends UI5Element {
      */
     description: string;
     /**
+     * Defines additional information for the user.
+     *
+     * @default ""
+     * @public
+     */
+    additionalInfo: string;
+    /**
      * Defines if the user is selected.
      *
      * @default false

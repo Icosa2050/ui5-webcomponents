@@ -6,6 +6,7 @@ import type List from "./List.js";
 import type ResponsivePopover from "./ResponsivePopover.js";
 import type MenuItem from "./MenuItem.js";
 import type PopoverHorizontalAlign from "./types/PopoverHorizontalAlign.js";
+import type PopoverPlacement from "./types/PopoverPlacement.js";
 import type { ListItemClickEventDetail } from "./List.js";
 /**
  * Interface for components that may be slotted inside a `ui5-menu`.
@@ -95,6 +96,13 @@ declare class Menu extends UI5Element {
      */
     open: boolean;
     /**
+     * Determines on which side the component is placed at.
+     * @default "Bottom"
+     * @public
+     * @since 2.16.0
+     */
+    placement: `${PopoverPlacement}`;
+    /**
      * Determines the horizontal alignment of the menu relative to its opener control.
      * @default "Start"
      * @public
@@ -145,7 +153,7 @@ declare class Menu extends UI5Element {
     get _allMenuItems(): MenuItem[];
     /** Returns menu items included in the ItemNavigation */
     get _navigatableMenuItems(): MenuItem[];
-    get acessibleNameText(): string;
+    get accessibleNameText(): string;
     onBeforeRendering(): void;
     getFocusDomRef(): HTMLElement | undefined;
     _setupItemNavigation(): void;

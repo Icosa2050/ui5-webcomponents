@@ -4,7 +4,6 @@ import ItemNavigation from "@ui5/webcomponents-base/dist/delegate/ItemNavigation
 import type I18nBundle from "@ui5/webcomponents-base/dist/i18nBundle.js";
 import "@ui5/webcomponents-icons/dist/slim-arrow-up.js";
 import "@ui5/webcomponents-icons/dist/slim-arrow-down.js";
-import type { SetDraggedElementFunction } from "@ui5/webcomponents-base/dist/util/dragAndDrop/DragRegistry.js";
 import MovePlacement from "@ui5/webcomponents-base/dist/types/MovePlacement.js";
 import type Button from "./Button.js";
 import type DropIndicator from "./DropIndicator.js";
@@ -179,6 +178,7 @@ declare class TabContainer extends UI5Element {
     _endOverflowText: string;
     _popoverItemsFlat: Array<ITab>;
     _width?: number;
+    _dragging: boolean;
     /**
      * Defines the tabs.
      *
@@ -205,7 +205,6 @@ declare class TabContainer extends UI5Element {
     responsivePopover?: ResponsivePopover;
     _hasScheduledPopoverOpen: boolean;
     _handleResizeBound: () => void;
-    _setDraggedElement?: SetDraggedElementFunction;
     static registerTabStyles(styles: string): void;
     static i18nBundle: I18nBundle;
     constructor();
@@ -263,7 +262,7 @@ declare class TabContainer extends UI5Element {
     _setItemsForStrip(): void;
     _getRootTab(tab: Tab | undefined): Tab | undefined;
     _updateEndOverflow(itemsDomRefs: Array<TabInStrip | TabSeparatorInStrip>): void;
-    _updateStartAndEndOverflow(itemsDomRefs: Array<TabInStrip | TabSeparatorInStrip>): void;
+    _updateStartAndEndOverflow(itemsDomRefs: Array<TabInStrip | TabSeparatorInStrip>, firstVisibleIndex?: number): void;
     _hasStartOverflow(containerWidth: number, itemsDomRefs: Array<TabInStrip | TabSeparatorInStrip>, selectedItemIndexAndWidth: {
         width: number;
         index: number;

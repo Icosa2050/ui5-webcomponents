@@ -10,6 +10,7 @@ import property from "@ui5/webcomponents-base/dist/decorators/property.js";
 import slot from "@ui5/webcomponents-base/dist/decorators/slot.js";
 import jsxRenderer from "@ui5/webcomponents-base/dist/renderer/JsxRenderer.js";
 import ResizeHandler from "@ui5/webcomponents-base/dist/delegate/ResizeHandler.js";
+import { getEffectiveAriaLabelText } from "@ui5/webcomponents-base/dist/util/AccessibilityTextsHelper.js";
 // Template
 import BarTemplate from "./BarTemplate.js";
 // Styles
@@ -54,9 +55,15 @@ import BarCss from "./generated/themes/Bar.css.js";
 let Bar = class Bar extends UI5Element {
     get accInfo() {
         return {
-            "label": this.design,
+            "label": this.ariaLabelText,
             "role": this.effectiveRole,
         };
+    }
+    get ariaLabelText() {
+        if (this.accessibleName || this.accessibleNameRef) {
+            return getEffectiveAriaLabelText(this);
+        }
+        return this.design;
     }
     constructor() {
         super();
@@ -113,6 +120,12 @@ __decorate([
 __decorate([
     property()
 ], Bar.prototype, "accessibleRole", void 0);
+__decorate([
+    property()
+], Bar.prototype, "accessibleName", void 0);
+__decorate([
+    property()
+], Bar.prototype, "accessibleNameRef", void 0);
 __decorate([
     slot({ type: HTMLElement })
 ], Bar.prototype, "startContent", void 0);

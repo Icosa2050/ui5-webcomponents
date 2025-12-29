@@ -1,4 +1,4 @@
-import { registerIllustration } from "@ui5/webcomponents-base/dist/asset-registries/Illustrations.js";
+import { unsafeRegisterIllustration } from "@ui5/webcomponents-base/dist/asset-registries/Illustrations.js";
 import dialogSvg from "./sapIllus-Dialog-FilterTable.js";
 import sceneSvg from "./sapIllus-Scene-FilterTable.js";
 import spotSvg from "./sapIllus-Spot-FilterTable.js";
@@ -13,7 +13,7 @@ const collection = "V4";
 const title = IM_TITLE_FILTERTABLE;
 const subtitle = IM_SUBTITLE_FILTERTABLE;
 
-registerIllustration(name, {
+unsafeRegisterIllustration(name, {
 	dialogSvg,
 	sceneSvg,
 	spotSvg,

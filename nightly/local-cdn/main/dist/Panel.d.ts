@@ -139,6 +139,7 @@ declare class Panel extends UI5Element {
     _hasHeader: boolean;
     _contentExpanded: boolean;
     _animationRunning: boolean;
+    _pendingToggle: boolean;
     /**
      * Defines the component header area.
      *

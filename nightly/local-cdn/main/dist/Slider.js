@@ -8,7 +8,7 @@ var Slider_1;
 import customElement from "@ui5/webcomponents-base/dist/decorators/customElement.js";
 import property from "@ui5/webcomponents-base/dist/decorators/property.js";
 import i18n from "@ui5/webcomponents-base/dist/decorators/i18n.js";
-import { isEscape } from "@ui5/webcomponents-base/dist/Keys.js";
+import { isEscape, isF2 } from "@ui5/webcomponents-base/dist/Keys.js";
 import SliderBase from "./SliderBase.js";
 // Template
 import SliderTemplate from "./SliderTemplate.js";
@@ -82,10 +82,10 @@ let Slider = Slider_1 = class Slider extends SliderBase {
          * @public
          */
         this.value = 0;
+        this.tooltipValueState = "None";
+        this.tooltipValue = "";
         this._progressPercentage = 0;
         this._handlePositionFromStart = 0;
-        this._tooltipInputValue = this.value.toString();
-        this._tooltipInputValueState = "None";
         this._stateStorage.value = undefined;
         this._lastValidInputValue = this.min.toString();
     }
@@ -107,6 +107,10 @@ let Slider = Slider_1 = class Slider extends SliderBase {
         this.notResized = true;
         this.syncUIAndState();
         this._updateHandleAndProgress(this.value);
+    }
+    onAfterRendering() {
+        super.onAfterRendering();
+        this.tooltip?.repositionTooltip();
     }
     syncUIAndState() {
         // Validate step and update the stored state for the step property.
@@ -182,6 +186,39 @@ let Slider = Slider_1 = class Slider extends SliderBase {
             this._tooltipsOpen = false;
         }
     }
+    _onTooltipChange(e) {
+        const value = parseFloat(e.detail.value);
+        const isInvalid = value < this._effectiveMin || value > this._effectiveMax;
+        if (isInvalid) {
+            this.tooltipValueState = "Negative";
+            this.tooltipValue = `${value}`;
+            return;
+        }
+        this.value = value;
+        this.fireDecoratorEvent("change");
+    }
+    _onTooltipFocusChange() {
+        const value = parseFloat(this.tooltipValue);
+        const isInvalid = value < this._effectiveMin || value > this._effectiveMax;
+        if (isInvalid) {
+            this.tooltipValueState = "None";
+            this.tooltipValue = this.value.toString();
+        }
+    }
+    _onTooltipKeydown(e) {
+        if (isF2(e)) {
+            e.preventDefault();
+            this._sliderHandle.focus();
+        }
+    }
+    _onTooltipOpen() {
+        const ctor = this.constructor;
+        const stepPrecision = ctor._getDecimalPrecisionOfNumber(this._effectiveStep);
+        this.tooltipValue = this.value.toFixed(stepPrecision);
+    }
+    _onTooltipInput(e) {
+        this.tooltipValue = e.detail.value;
+    }
     /**
      * Called when the user moves the slider
      * @private
@@ -197,6 +234,7 @@ let Slider = Slider_1 = class Slider extends SliderBase {
         const newValue = ctor.getValueFromInteraction(e, this._effectiveStep, this._effectiveMin, this._effectiveMax, this.getBoundingClientRect(), this.directionStart);
         this._updateHandleAndProgress(newValue);
         this.value = newValue;
+        this.tooltipValue = newValue.toString();
         this.updateStateStorageAndFireInputEvent("value");
     }
     /** Called when the user finish interacting with the slider
@@ -244,6 +282,7 @@ let Slider = Slider_1 = class Slider extends SliderBase {
         if (newValue !== currentValue) {
             this._updateHandleAndProgress(newValue);
             this.value = newValue;
+            this.tooltipValue = this.value.toString();
             this.updateStateStorageAndFireInputEvent("value");
         }
     }
@@ -253,6 +292,9 @@ let Slider = Slider_1 = class Slider extends SliderBase {
     }
     get inputValue() {
         return this.value.toString();
+    }
+    get tooltip() {
+        return this.getDomRef()?.querySelector("[ui5-slider-tooltip]");
     }
     get styles() {
         return {
@@ -267,11 +309,6 @@ let Slider = Slider_1 = class Slider extends SliderBase {
     }
     get _sliderHandle() {
         return this.shadowRoot.querySelector(".ui5-slider-handle");
-    }
-    get tooltipValue() {
-        const ctor = this.constructor;
-        const stepPrecision = ctor._getDecimalPrecisionOfNumber(this._effectiveStep);
-        return this.value.toFixed(stepPrecision);
     }
     get _ariaDisabled() {
         return this.disabled || undefined;
@@ -300,6 +337,12 @@ let Slider = Slider_1 = class Slider extends SliderBase {
 __decorate([
     property({ type: Number })
 ], Slider.prototype, "value", void 0);
+__decorate([
+    property()
+], Slider.prototype, "tooltipValueState", void 0);
+__decorate([
+    property()
+], Slider.prototype, "tooltipValue", void 0);
 __decorate([
     i18n("@ui5/webcomponents")
 ], Slider, "i18nBundle", void 0);

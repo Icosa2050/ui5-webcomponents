@@ -3,6 +3,7 @@ import type { IFormInputElement } from "@ui5/webcomponents-base/dist/features/In
 import type I18nBundle from "@ui5/webcomponents-base/dist/i18nBundle.js";
 import ValueState from "@ui5/webcomponents-base/dist/types/ValueState.js";
 import "@ui5/webcomponents-localization/dist/features/calendar/Gregorian.js";
+import IconMode from "./types/IconMode.js";
 import type Popover from "./Popover.js";
 import type DateTimeInput from "./DateTimeInput.js";
 import type { InputAccInfo } from "./Input.js";
@@ -76,6 +77,7 @@ type TimePickerInputEventDetail = TimePickerChangeInputEventDetail;
  * @extends UI5Element
  * @public
  * @since 1.0.0-rc.6
+ * @csspart input - Used to style the input element. This part is forwarded to the underlying ui5-input element.
  */
 declare class TimePicker extends UI5Element implements IFormInputElement {
     eventDetails: {
@@ -169,6 +171,20 @@ declare class TimePicker extends UI5Element implements IFormInputElement {
      * @since 2.1.0
      */
     accessibleNameRef?: string;
+    /**
+     * Defines the accessible description of the component.
+     * @default undefined
+     * @public
+     * @since 2.14.0
+     */
+    accessibleDescription?: string;
+    /**
+     * Receives id(or many ids) of the elements that describe the input.
+     * @default undefined
+     * @public
+     * @since 2.14.0
+     */
+    accessibleDescriptionRef?: string;
     _isInputsPopoverOpen: boolean;
     /**
      * Defines the value state message that will be displayed as pop up under the `ui5-time-picker`.
@@ -191,9 +207,10 @@ declare class TimePicker extends UI5Element implements IFormInputElement {
     formElementAnchor(): Promise<HTMLElement | undefined>;
     get formFormattedValue(): FormData | string | null;
     onBeforeRendering(): void;
-    get dateAriaDescription(): string;
+    get roleDescription(): string;
     get pickerAccessibleName(): string;
     get accInfo(): InputAccInfo;
+    get ariaLabelText(): string;
     /**
      * Currently selected time represented as JavaScript Date instance
      * @public
@@ -215,7 +232,13 @@ declare class TimePicker extends UI5Element implements IFormInputElement {
     get _isPhone(): boolean;
     get _isMobileDevice(): boolean;
     get shouldDisplayValueStateMessageInResponsivePopover(): boolean;
+    /**
+     * Defines whether the value help icon is hidden
+     * @private
+     */
+    get _iconMode(): IconMode.Decorative | IconMode.Interactive;
     onTimeSelectionChange(e: CustomEvent<TimeSelectionChangeEventDetail>): void;
+    get openIconTitle(): string;
     _togglePicker(): void;
     submitPickers(): void;
     onResponsivePopoverAfterClose(): void;
@@ -290,6 +313,13 @@ declare class TimePicker extends UI5Element implements IFormInputElement {
     get hasValueStateText(): boolean;
     get hasValueState(): boolean;
     get shouldDisplayValueStateMessageOnDesktop(): boolean;
+    get _headerTitleText(): string;
+    get showHeader(): boolean;
+    /**
+     * Defines whether the dialog on mobile should have header
+     * @private
+     */
+    get _shouldHideHeader(): boolean;
     /**
      * @protected
      */

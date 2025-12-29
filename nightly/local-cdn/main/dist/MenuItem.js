@@ -128,9 +128,6 @@ let MenuItem = MenuItem_1 = class MenuItem extends ListItem {
             this._itemNavigation._focusCurrentItem();
         }
     }
-    get placement() {
-        return this.isRtl ? "Start" : "End";
-    }
     get isRtl() {
         return this.effectiveDir === "rtl";
     }
@@ -158,7 +155,7 @@ let MenuItem = MenuItem_1 = class MenuItem extends ListItem {
     get labelClose() {
         return MenuItem_1.i18nBundle.getText(MENU_CLOSE_BUTTON_ARIA_LABEL);
     }
-    get acessibleNameText() {
+    get accessibleNameText() {
         return MenuItem_1.i18nBundle.getText(MENU_POPOVER_ACCESSIBLE_NAME);
     }
     onBeforeRendering() {
@@ -218,7 +215,8 @@ let MenuItem = MenuItem_1 = class MenuItem extends ListItem {
     /** Returns all menu items (including those in groups */
     get _allMenuItems() {
         const items = [];
-        this.items.forEach(item => {
+        const slottedItems = this.getSlottedNodes("items");
+        slottedItems.forEach(item => {
             if (isInstanceOfMenuItemGroup(item)) {
                 items.push(...item._menuItems);
             }

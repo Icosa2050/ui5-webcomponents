@@ -1,5 +1,5 @@
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
-import type { AccessibilityAttributes } from "@ui5/webcomponents-base/dist/types.js";
+import type { AccessibilityAttributes, AriaRole } from "@ui5/webcomponents-base/dist/types.js";
 import type I18nBundle from "@ui5/webcomponents-base/dist/i18nBundle.js";
 import type { ITabbable } from "@ui5/webcomponents-base/dist/delegate/ItemNavigation.js";
 import type { ResizeObserverCallback } from "@ui5/webcomponents-base/dist/delegate/ResizeHandler.js";
@@ -219,6 +219,12 @@ declare class Avatar extends UI5Element implements ITabbable, IAvatarGroupItem {
     _detachImageEventHandlers(): void;
     _onImageLoad(e: Event): void;
     _onImageError(e: Event): void;
+    get accessibilityInfo(): {
+        role: AriaRole;
+        type: string;
+        description: string;
+        disabled: boolean;
+    };
 }
 export default Avatar;
 export type { AvatarAccessibilityAttributes, };

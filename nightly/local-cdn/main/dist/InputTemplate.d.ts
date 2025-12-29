@@ -5,5 +5,6 @@ export default function InputTemplate(this: Input, hooks?: {
     preContent: TemplateHook;
     postContent: TemplateHook;
     suggestionsList?: TemplateHook;
+    mobileHeader?: TemplateHook;
 }): import("@ui5/webcomponents-base/jsx-runtime").JSX.Element;
 export {};

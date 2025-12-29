@@ -10,6 +10,7 @@ import customElement from "@ui5/webcomponents-base/dist/decorators/customElement
 import Search from "./Search.js";
 import { isPhone } from "@ui5/webcomponents-base/dist/Device.js";
 import ShellBarSearchTemplate from "./ShellBarSearchTemplate.js";
+import ShellBarSearchCss from "./generated/themes/ShellBarSearch.css.js";
 import { SEARCH_FIELD_SEARCH_ICON, SHELLBAR_SEARCH_EXPANDED, SHELLBAR_SEARCH_COLLAPSED, } from "./generated/i18n/i18n-defaults.js";
 /**
  * @class
@@ -85,6 +86,10 @@ ShellBarSearch = ShellBarSearch_1 = __decorate([
     customElement({
         tag: "ui5-shellbar-search",
         template: ShellBarSearchTemplate,
+        styles: [
+            Search.styles,
+            ShellBarSearchCss,
+        ],
     })
 ], ShellBarSearch);
 ShellBarSearch.define();

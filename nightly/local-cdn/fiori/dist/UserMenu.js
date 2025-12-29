@@ -11,6 +11,7 @@ import jsxRenderer from "@ui5/webcomponents-base/dist/renderer/JsxRenderer.js";
 import query from "@ui5/webcomponents-base/dist/decorators/query.js";
 import DOMReferenceConverter from "@ui5/webcomponents-base/dist/converters/DOMReference.js";
 import i18n from "@ui5/webcomponents-base/dist/decorators/i18n.js";
+import { isInstanceOfMenuItem } from "@ui5/webcomponents/dist/MenuItem.js";
 import { isPhone } from "@ui5/webcomponents-base/dist/Device.js";
 import UserMenuTemplate from "./UserMenuTemplate.js";
 import UserMenuCss from "./generated/themes/UserMenu.css.js";
@@ -86,6 +87,10 @@ let UserMenu = UserMenu_1 = class UserMenu extends UI5Element {
     }
     onBeforeRendering() {
         this._selectedAccount = this.accounts.find(account => account.selected) || this.accounts[0];
+        const siblingsWithIcon = this._menuItems.some(menuItem => !!menuItem.icon);
+        this._menuItems.forEach(item => {
+            item._siblingsWithIcon = siblingsWithIcon;
+        });
     }
     onAfterRendering() {
         if (this._responsivePopover) {
@@ -231,6 +236,9 @@ let UserMenu = UserMenu_1 = class UserMenu extends UI5Element {
         if (ref) {
             ref.associatedAccount = this;
         }
+    }
+    get _menuItems() {
+        return this.menuItems.filter(isInstanceOfMenuItem);
     }
 };
 __decorate([

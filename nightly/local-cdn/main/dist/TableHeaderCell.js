@@ -10,6 +10,7 @@ import TableCellBase from "./TableCellBase.js";
 import TableHeaderCellTemplate from "./TableHeaderCellTemplate.js";
 import TableHeaderCellStyles from "./generated/themes/TableHeaderCell.css.js";
 import SortOrder from "@ui5/webcomponents-base/dist/types/SortOrder.js";
+import query from "@ui5/webcomponents-base/dist/decorators/query.js";
 /**
  * @class
  *
@@ -74,6 +75,11 @@ let TableHeaderCell = class TableHeaderCell extends TableCellBase {
         }
         toggleAttribute(this, "aria-sort", this.sortIndicator !== SortOrder.None, this.sortIndicator.toLowerCase());
     }
+    get accessibilityInfo() {
+        return {
+            children: [this._defaultSlot, this._actionSlot],
+        };
+    }
 };
 __decorate([
     property()
@@ -99,6 +105,12 @@ __decorate([
 __decorate([
     property({ type: Boolean, noAttribute: true })
 ], TableHeaderCell.prototype, "_popin", void 0);
+__decorate([
+    query("slot:not([name])")
+], TableHeaderCell.prototype, "_defaultSlot", void 0);
+__decorate([
+    query("slot[name=action]")
+], TableHeaderCell.prototype, "_actionSlot", void 0);
 TableHeaderCell = __decorate([
     customElement({
         tag: "ui5-table-header-cell",

@@ -19,7 +19,7 @@ import type TableHeaderCell from "./TableHeaderCell.js";
  * @since 2.0.0
  * @public
  */
-declare class TableHeaderRow extends TableRowBase {
+declare class TableHeaderRow extends TableRowBase<TableHeaderCell> {
     /**
      * Defines the cells of the component.
      *

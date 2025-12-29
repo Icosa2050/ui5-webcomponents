@@ -1,5 +1,5 @@
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
-import ValueState from "@ui5/webcomponents-base/dist/types/ValueState.js";
+import type ValueState from "@ui5/webcomponents-base/dist/types/ValueState.js";
 import type Input from "./Input.js";
 import type I18nBundle from "@ui5/webcomponents-base/dist/i18nBundle.js";
 import type { Interval } from "@ui5/webcomponents-base/dist/types.js";
@@ -17,10 +17,13 @@ type SliderTooltipChangeEventDetails = {
 declare class SliderTooltip extends UI5Element {
     eventDetails: {
         "change": SliderTooltipChangeEventDetails;
-        "forward-focus": void;
+        "focus-change": void;
+        "open": void;
+        "input": {
+            value?: string;
+        };
     };
-    value?: string;
-    inputValue?: string;
+    value: string;
     open: boolean;
     min: number;
     max: number;
@@ -30,18 +33,19 @@ declare class SliderTooltip extends UI5Element {
     _repoisitionInterval?: Interval;
     _repositionTooltipBound: () => void;
     static i18nBundle: I18nBundle;
+    _open: boolean;
     constructor();
     onBeforeRendering(): void;
     onAfterRendering(): void;
     repositionTooltip(): void;
-    isValueValid(value: string): boolean;
     attachGlobalScrollHandler(): void;
     detachGlobalScrollHandler(): void;
-    _keydown(e: KeyboardEvent): void;
     _onInputFocusin(): void;
+    _onInputKeydown(e: KeyboardEvent): void;
+    _onInputInput(): void;
     _onInputFocusOut(e: FocusEvent): void;
-    get inputRef(): Input;
     get _ariaLabelledByInputText(): string;
+    get inputRef(): Input | null | undefined;
 }
 export type { SliderTooltipChangeEventDetails, };
 export default SliderTooltip;

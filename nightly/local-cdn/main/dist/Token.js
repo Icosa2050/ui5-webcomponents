@@ -118,10 +118,6 @@ let Token = Token_1 = class Token extends UI5Element {
             this._handleSelect();
         }
     }
-    onBeforeRendering() {
-        this.toBeDeleted = false;
-        // this.fireMyEvent("select");
-    }
     get tokenDeletableText() {
         return Token_1.i18nBundle.getText(TOKEN_ARIA_REMOVE);
     }

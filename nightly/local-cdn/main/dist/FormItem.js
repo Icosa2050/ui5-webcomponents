@@ -46,6 +46,10 @@ let FormItem = class FormItem extends UI5Element {
          * @private
          */
         this.itemSpacing = "Normal";
+        /**
+         * @private
+         */
+        this.accessibleMode = "Display";
     }
     get isGroup() {
         return false;
@@ -67,6 +71,9 @@ __decorate([
 __decorate([
     property()
 ], FormItem.prototype, "itemSpacing", void 0);
+__decorate([
+    property()
+], FormItem.prototype, "accessibleMode", void 0);
 FormItem = __decorate([
     customElement({
         tag: "ui5-form-item",

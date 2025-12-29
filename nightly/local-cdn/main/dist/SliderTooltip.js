@@ -7,13 +7,12 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var SliderTooltip_1;
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
 import { customElement, i18n, property } from "@ui5/webcomponents-base/dist/decorators.js";
-import ValueState from "@ui5/webcomponents-base/dist/types/ValueState.js";
 import SliderTooltipTemplate from "./SliderTooltipTemplate.js";
 import jsxRenderer from "@ui5/webcomponents-base/dist/renderer/JsxRenderer.js";
 import SliderTooltipCss from "./generated/themes/SliderTooltip.css.js";
 import event from "@ui5/webcomponents-base/dist/decorators/event-strict.js";
-import { isEnter, isF2, isTabNext } from "@ui5/webcomponents-base/dist/Keys.js";
 import { SLIDER_TOOLTIP_INPUT_LABEL, } from "./generated/i18n/i18n-defaults.js";
+import { isEnter } from "@ui5/webcomponents-base/dist/Keys.js";
 /**
  * @class
  *
@@ -25,17 +24,28 @@ import { SLIDER_TOOLTIP_INPUT_LABEL, } from "./generated/i18n/i18n-defaults.js";
 let SliderTooltip = SliderTooltip_1 = class SliderTooltip extends UI5Element {
     constructor() {
         super();
+        this.value = "";
         this.open = false;
         this.min = 0;
         this.max = 100;
         this.editable = false;
         this.valueState = "None";
+        this._open = false;
         this._repositionTooltipBound = this.repositionTooltip.bind(this);
     }
-    onBeforeRendering() { }
+    onBeforeRendering() {
+        if (this.open !== this._open) {
+            this.fireDecoratorEvent("open");
+        }
+        this._open = this.open;
+    }
     onAfterRendering() {
         if (!this.hasAttribute("popover")) {
             this.setAttribute("popover", "manual");
+        }
+        // Workaround to skip DOM state
+        if (this.inputRef && this.inputRef.value !== this.value) {
+            this.inputRef.value = this.value;
         }
         if (this.isConnected) {
             if (this.open) {
@@ -64,34 +74,11 @@ let SliderTooltip = SliderTooltip_1 = class SliderTooltip extends UI5Element {
         // enable RTL support
         this.style.right = "auto";
     }
-    isValueValid(value) {
-        return parseFloat(value) >= this.min && parseFloat(value) <= this.max;
-    }
     attachGlobalScrollHandler() {
         document.addEventListener("scroll", this._repositionTooltipBound, { capture: true });
     }
     detachGlobalScrollHandler() {
         document.removeEventListener("scroll", this._repositionTooltipBound, { capture: true });
-    }
-    _keydown(e) {
-        if (isF2(e) || isTabNext(e)) {
-            e.preventDefault();
-            if (!this.isValueValid(this.inputRef.value)) {
-                const value = this.value;
-                this.inputRef.value = value || "";
-            }
-            this.valueState = ValueState.None;
-            this.fireDecoratorEvent("change", { value: this.inputRef.value });
-            this.fireDecoratorEvent("forward-focus");
-        }
-        if (isEnter(e)) {
-            if (!this.isValueValid(this.inputRef.value)) {
-                this.valueState = ValueState.Negative;
-                return;
-            }
-            this.valueState = ValueState.None;
-            this.fireDecoratorEvent("change", { value: this.inputRef.value });
-        }
     }
     _onInputFocusin() {
         requestAnimationFrame(() => {
@@ -99,29 +86,32 @@ let SliderTooltip = SliderTooltip_1 = class SliderTooltip extends UI5Element {
             this.showPopover();
         });
     }
-    _onInputFocusOut(e) {
-        if (!this.isValueValid(this.inputRef.value)) {
-            const value = this.value;
-            this.inputRef.value = value || "";
+    _onInputKeydown(e) {
+        if (isEnter(e)) {
+            this.fireDecoratorEvent("change", { value: e.target.value });
         }
+    }
+    _onInputInput() {
+        this.fireDecoratorEvent("input", { value: this.inputRef?.value });
+    }
+    _onInputFocusOut(e) {
         const relatedTarget = e.relatedTarget;
         if (!this.parentElement?.contains(relatedTarget)) {
             this.hidePopover();
         }
-    }
-    get inputRef() {
-        return this.shadowRoot?.querySelector("ui5-input");
+        this.fireDecoratorEvent("change", { value: e.target.value });
+        this.fireDecoratorEvent("focus-change");
     }
     get _ariaLabelledByInputText() {
         return SliderTooltip_1.i18nBundle.getText(SLIDER_TOOLTIP_INPUT_LABEL);
+    }
+    get inputRef() {
+        return this.shadowRoot?.querySelector("[ui5-input]");
     }
 };
 __decorate([
     property()
 ], SliderTooltip.prototype, "value", void 0);
-__decorate([
-    property()
-], SliderTooltip.prototype, "inputValue", void 0);
 __decorate([
     property({ type: Boolean })
 ], SliderTooltip.prototype, "open", void 0);
@@ -149,9 +139,27 @@ SliderTooltip = SliderTooltip_1 = __decorate([
         renderer: jsxRenderer,
         template: SliderTooltipTemplate,
         styles: SliderTooltipCss,
-    }),
-    event("change"),
-    event("forward-focus")
+    })
+    /**
+     * Fired when the value is confirmed by user interaction (Enter key or focusout)
+     */
+    ,
+    event("change")
+    /**
+     * Fired when the value is changed by user interaction
+     */
+    ,
+    event("input")
+    /**
+     * Fired when the tooltip is opened or closed
+     */
+    ,
+    event("open")
+    /**
+     * Fired when the tooltip focus changes
+     */
+    ,
+    event("focus-change")
 ], SliderTooltip);
 SliderTooltip.define();
 export default SliderTooltip;

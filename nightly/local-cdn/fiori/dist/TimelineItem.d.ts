@@ -107,7 +107,7 @@ declare class TimelineItem extends UI5Element implements ITimelineItem {
      * @private
      */
     positionInGroup?: number;
-    static i18nBundle: I18nBundle;
+    static i18nBundleFiori: I18nBundle;
     constructor();
     onNamePress(): void;
     /**

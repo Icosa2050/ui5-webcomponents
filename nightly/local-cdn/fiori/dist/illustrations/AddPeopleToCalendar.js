@@ -1,4 +1,4 @@
-import { registerIllustration } from "@ui5/webcomponents-base/dist/asset-registries/Illustrations.js";
+import { unsafeRegisterIllustration } from "@ui5/webcomponents-base/dist/asset-registries/Illustrations.js";
 import dialogSvg from "./sapIllus-Dialog-AddPeopleToCalendar.js";
 import sceneSvg from "./sapIllus-Scene-AddPeopleToCalendar.js";
 import spotSvg from "./sapIllus-Spot-AddPeopleToCalendar.js";
@@ -13,7 +13,7 @@ const collection = "V4";
 const title = IM_TITLE_ADDPEOPLE;
 const subtitle = IM_SUBTITLE_ADDPEOPLE;
 
-registerIllustration(name, {
+unsafeRegisterIllustration(name, {
 	dialogSvg,
 	sceneSvg,
 	spotSvg,

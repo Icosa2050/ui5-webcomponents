@@ -162,6 +162,7 @@ declare class UserMenu extends UI5Element {
     captureRef(ref: HTMLElement & {
         associatedAccount?: UI5Element;
     } | null): void;
+    get _menuItems(): UserMenuItem[];
 }
 export default UserMenu;
 export type { UserMenuItemClickEventDetail, UserMenuOtherAccountClickEventDetail, };

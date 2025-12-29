@@ -9,7 +9,6 @@ import customElement from "@ui5/webcomponents-base/dist/decorators/customElement
 import property from "@ui5/webcomponents-base/dist/decorators/property.js";
 import slot from "@ui5/webcomponents-base/dist/decorators/slot.js";
 import jsxRenderer from "@ui5/webcomponents-base/dist/renderer/JsxRenderer.js";
-import getEffectiveScrollbarStyle from "@ui5/webcomponents-base/dist/util/getEffectiveScrollbarStyle.js";
 import { isPhone, isTablet, isCombi, } from "@ui5/webcomponents-base/dist/Device.js";
 import NavigationLayoutMode from "./types/NavigationLayoutMode.js";
 // Template
@@ -60,6 +59,10 @@ let NavigationLayout = class NavigationLayout extends UI5Element {
         /**
          * @private
          */
+        this.hasSideNavigation = false;
+        /**
+         * @private
+         */
         this.isPhone = isPhone();
         /**
          * @private
@@ -80,6 +83,7 @@ let NavigationLayout = class NavigationLayout extends UI5Element {
             return;
         }
         const sideNavigation = this.sideContent[0];
+        this.hasSideNavigation = !!sideNavigation;
         if (sideNavigation) {
             sideNavigation.collapsed = this.isSideCollapsed();
         }
@@ -101,6 +105,9 @@ __decorate([
 ], NavigationLayout.prototype, "sideCollapsed", void 0);
 __decorate([
     property({ type: Boolean })
+], NavigationLayout.prototype, "hasSideNavigation", void 0);
+__decorate([
+    property({ type: Boolean })
 ], NavigationLayout.prototype, "isPhone", void 0);
 __decorate([
     property({ type: Boolean })
@@ -120,7 +127,6 @@ NavigationLayout = __decorate([
         languageAware: true,
         renderer: jsxRenderer,
         styles: [
-            getEffectiveScrollbarStyle(),
             NavigationLayoutCss,
         ],
         template: NavigationLayoutTemplate,

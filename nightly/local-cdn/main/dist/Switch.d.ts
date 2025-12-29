@@ -134,6 +134,7 @@ declare class Switch extends UI5Element implements IFormInputElement {
      * @public
      */
     value: string;
+    _cancelAction: boolean;
     static i18nBundle: I18nBundle;
     get formValidityMessage(): string;
     get formValidity(): ValidityStateFlags;

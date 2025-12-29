@@ -36,9 +36,11 @@ declare abstract class TableSelectionBase extends UI5Element implements ITableFe
     behavior: `${TableSelectionBehavior}`;
     readonly identifier = "TableSelection";
     protected _table?: Table;
+    private _rowsLength;
     onTableActivate(table: Table): void;
     onExitDOM(): void;
     onBeforeRendering(): void;
+    onTableBeforeRendering(): void;
     isSelectable(): boolean;
     /**
      * Determines if the component allows multiple selection.

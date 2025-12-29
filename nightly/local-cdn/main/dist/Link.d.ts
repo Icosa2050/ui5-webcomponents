@@ -200,6 +200,13 @@ declare class Link extends UI5Element implements ITabbable {
      * @public
      */
     endIcon?: string;
+    /**
+     * Defines the text of the component.
+     *
+     * **Note:** Although this slot accepts HTML Elements, it is strongly recommended that you only use text in order to preserve the intended design.
+     * @public
+     */
+    text: Array<Node>;
     _rel: string | undefined;
     forcedTabIndex?: string;
     _dummyAnchor: HTMLAnchorElement;

@@ -22,12 +22,13 @@ export type AriaAutoComplete = "list" | "none" | "inline" | "both" | undefined;
 export type AriaLandmarkRole = "none" | "banner" | "main" | "region" | "navigation" | "search" | "complementary" | "form" | "contentinfo";
 export type AccessibilityInfo = {
     role?: AriaRole;
-    type?: LowercaseString<string>;
+    type?: string;
     description?: string;
+    label?: string;
     disabled?: boolean;
     readonly?: boolean;
     required?: boolean;
-    children?: Array<HTMLElement>;
+    children?: Array<Node>;
 };
 export type AccessibilityAttributes = {
     ariaSetsize?: number;

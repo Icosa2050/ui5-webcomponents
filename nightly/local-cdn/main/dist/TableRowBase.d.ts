@@ -11,11 +11,12 @@ import type Table from "./Table.js";
  * @since 2.0.0
  * @public
  */
-declare abstract class TableRowBase extends UI5Element {
-    cells: Array<TableCellBase>;
+declare abstract class TableRowBase<TCell extends TableCellBase = TableCellBase> extends UI5Element {
+    cells: Array<TCell>;
     _invalidate: number;
     _rowActionCount: number;
     _renderNavigated: boolean;
+    _alternate: boolean;
     _selectionCell?: HTMLElement;
     _navigatedCell?: HTMLElement;
     static i18nBundle: I18nBundle;
@@ -32,8 +33,8 @@ declare abstract class TableRowBase extends UI5Element {
     get _isSelectable(): boolean | undefined;
     get _isMultiSelect(): boolean;
     get _hasSelector(): boolean | undefined;
-    get _visibleCells(): TableCellBase[];
-    get _popinCells(): TableCellBase[];
+    get _visibleCells(): TCell[];
+    get _popinCells(): TCell[];
     get _stickyCells(): (HTMLElement | undefined)[];
     get _i18nRowSelector(): string;
 }

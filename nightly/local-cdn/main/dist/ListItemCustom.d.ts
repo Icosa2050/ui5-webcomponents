@@ -35,7 +35,7 @@ declare class ListItemCustom extends ListItem {
      * @since 1.0.0-rc.15
      */
     accessibleName?: string;
-    _onkeydown(e: KeyboardEvent): Promise<void>;
+    _onkeydown(e: KeyboardEvent): void;
     _onkeyup(e: KeyboardEvent): void;
     get classes(): ClassMap;
 }

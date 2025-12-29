@@ -7,7 +7,6 @@ import type { IButton } from "@ui5/webcomponents/dist/Button.js";
 import type I18nBundle from "@ui5/webcomponents-base/dist/i18nBundle.js";
 import type { ClassMap, AccessibilityAttributes, AriaRole, UI5CustomEvent } from "@ui5/webcomponents-base";
 import type ListItemBase from "@ui5/webcomponents/dist/ListItemBase.js";
-import type PopoverHorizontalAlign from "@ui5/webcomponents/dist/types/PopoverHorizontalAlign.js";
 import type ShellBarItem from "./ShellBarItem.js";
 import type { ShellBarItemAccessibilityAttributes } from "./ShellBarItem.js";
 import type ShellBarBranding from "./ShellBarBranding.js";
@@ -51,6 +50,9 @@ type ShellBarSearchButtonEventDetail = {
 };
 type ShellBarSearchFieldToggleEventDetail = {
     expanded: boolean;
+};
+type ShellBarSearchFieldClearEventDetail = {
+    targetRef: HTMLElement;
 };
 interface IShellBarSearchField extends HTMLElement {
     focused: boolean;
@@ -122,6 +124,7 @@ declare class ShellBar extends UI5Element {
         "menu-item-click": ShellBarMenuItemClickEventDetail;
         "search-button-click": ShellBarSearchButtonEventDetail;
         "search-field-toggle": ShellBarSearchFieldToggleEventDetail;
+        "search-field-clear": ShellBarSearchFieldClearEventDetail;
         "content-item-visibility-change": ShellBarContentItemVisibilityChangeEventDetail;
     };
     /**
@@ -313,7 +316,7 @@ declare class ShellBar extends UI5Element {
      * @public
      * @since 2.7.0
      */
-    content: Array<UI5Element>;
+    content: Array<HTMLElement>;
     static i18nBundle: I18nBundle;
     overflowPopover?: Popover | null;
     menuPopover?: Popover | null;
@@ -389,6 +392,7 @@ declare class ShellBar extends UI5Element {
     _handleProfilePress(): void;
     _handleCancelButtonPress(): void;
     _handleProductSwitchPress(e: UI5CustomEvent<Button, "click">): void;
+    _clearSearchFieldValue(): void;
     /**
      * Returns the `logo` DOM ref.
      * @public
@@ -445,7 +449,7 @@ declare class ShellBar extends UI5Element {
     _getMenuPopover(): Popover;
     isIconHidden(name: string): boolean;
     get hasMatchingContent(): boolean;
-    get contentItemsSorted(): UI5Element[];
+    get contentItemsSorted(): HTMLElement[];
     get contentItemsWrappersSorted(): HTMLElement[];
     get autoSearchField(): boolean;
     get startContentInfoSorted(): IShellBarContentItem[];
@@ -462,14 +466,13 @@ declare class ShellBar extends UI5Element {
     get showLogoInMenuButton(): boolean;
     get showTitleInMenuButton(): boolean | "" | undefined;
     get showMenuButton(): string | boolean;
-    get popoverHorizontalAlign(): `${PopoverHorizontalAlign}`;
     get hasAssistant(): boolean;
     get hasBranding(): boolean;
     get hasSearchField(): boolean;
     get hasMidContent(): boolean;
     get hasProfile(): boolean;
     get hasMenuItems(): boolean;
-    get imageBtnText(): string | undefined;
+    get imageBtnText(): string;
     get _shellbarText(): string;
     get _logoText(): string;
     get _notificationsText(): string;
@@ -479,9 +482,9 @@ declare class ShellBar extends UI5Element {
     get _searchFieldDescription(): string;
     get _contentItemsRole(): "group" | undefined;
     get _enableContentAreaAccessibility(): boolean;
-    get contentItems(): UI5Element[];
-    get startContent(): UI5Element[];
-    get endContent(): UI5Element[];
+    get contentItems(): HTMLElement[];
+    get startContent(): HTMLElement[];
+    get endContent(): HTMLElement[];
     get _rightChildRole(): "toolbar" | undefined;
     get _searchFieldText(): string;
     get _searchBtnOpen(): string;
@@ -549,4 +552,4 @@ interface IShellBarSelfCollapsibleSearch extends UI5Element {
     open: boolean;
 }
 export default ShellBar;
-export type { ShellBarContentItemVisibilityChangeEventDetail, ShellBarNotificationsClickEventDetail, ShellBarProfileClickEventDetail, ShellBarProductSwitchClickEventDetail, ShellBarLogoClickEventDetail, ShellBarMenuItemClickEventDetail, ShellBarAccessibilityAttributes, ShellBarSearchButtonEventDetail, ShellBarSearchFieldToggleEventDetail, IShellBarSelfCollapsibleSearch, IShellBarSearchField, };
+export type { ShellBarContentItemVisibilityChangeEventDetail, ShellBarNotificationsClickEventDetail, ShellBarProfileClickEventDetail, ShellBarProductSwitchClickEventDetail, ShellBarLogoClickEventDetail, ShellBarMenuItemClickEventDetail, ShellBarAccessibilityAttributes, ShellBarSearchButtonEventDetail, ShellBarSearchFieldToggleEventDetail, ShellBarSearchFieldClearEventDetail, IShellBarSelfCollapsibleSearch, IShellBarSearchField, };

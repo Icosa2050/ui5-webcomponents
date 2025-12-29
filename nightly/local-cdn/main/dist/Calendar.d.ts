@@ -1,8 +1,10 @@
 import type UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
 import type { ChangeInfo } from "@ui5/webcomponents-base/dist/UI5Element.js";
+import CalendarDateComponent from "@ui5/webcomponents-localization/dist/dates/CalendarDate.js";
 import type I18nBundle from "@ui5/webcomponents-base/dist/i18nBundle.js";
 import "@ui5/webcomponents-icons/dist/slim-arrow-left.js";
 import "@ui5/webcomponents-icons/dist/slim-arrow-right.js";
+import CalendarDateRange from "./CalendarDateRange.js";
 import "./SpecialCalendarDate.js";
 import CalendarPart from "./CalendarPart.js";
 import type { DayPickerChangeEventDetail } from "./DayPicker.js";
@@ -16,12 +18,11 @@ import type SpecialCalendarDate from "./SpecialCalendarDate.js";
 import type CalendarLegendItemType from "./types/CalendarLegendItemType.js";
 import "@ui5/webcomponents-localization/dist/features/calendar/Gregorian.js";
 import type { YearRangePickerChangeEventDetail } from "./YearRangePicker.js";
-interface ICalendarPicker {
+interface ICalendarPicker extends HTMLElement {
     _showPreviousPage: () => void;
     _showNextPage: () => void;
     _hasPreviousPage: () => boolean;
     _hasNextPage: () => boolean;
-    _autoFocus?: boolean;
     _currentYearRange?: CalendarYearRangeT;
 }
 /**
@@ -48,6 +49,10 @@ type SpecialCalendarDateT = {
 type CalendarYearRangeT = {
     startYear: number;
     endYear: number;
+};
+type DisabledDateRangeT = {
+    startValue?: string;
+    endValue?: string;
 };
 /**
  * @class
@@ -225,6 +230,14 @@ declare class Calendar extends CalendarPart {
      */
     specialDates: Array<SpecialCalendarDate>;
     /**
+     * Defines the disabled date ranges that cannot be selected in the calendar.
+     * Use `ui5-date-range` elements to specify ranges of disabled dates.
+     * Each range can define a start date, an end date, or both.
+     * @public
+     * @since 2.16.0
+     */
+    disabledDates: Array<CalendarDateRange>;
+    /**
      * Defines the selected item type of the calendar legend item (if such exists).
      * @private
      */
@@ -240,6 +253,10 @@ declare class Calendar extends CalendarPart {
      */
     _setSelectedDates(selectedDates: Array<number>): void;
     _isValidCalendarDate(dateString: string): boolean;
+    get _disabledDates(): {
+        startValue: string;
+        endValue: string;
+    }[];
     get _specialCalendarDates(): SpecialCalendarDateT[];
     _onCalendarLegendSelectionChange(e: CustomEvent<CalendarLegendItemSelectionChangeEventDetail>): void;
     /**
@@ -252,19 +269,25 @@ declare class Calendar extends CalendarPart {
     /**
      * The user clicked the "month" button in the header
      */
-    onHeaderShowMonthPress(): void;
-    showMonth(): void;
+    onHeaderMonthButtonPress(): void;
+    switchToDayPicker(suppressFocus?: boolean): Promise<void>;
+    switchToMonthPicker(suppressFocus?: boolean): Promise<void>;
     /**
      * The user clicked the "year" button in the header
      */
-    onHeaderShowYearPress(): void;
-    showYear(): void;
+    onHeaderYearButtonPress(): void;
+    switchToYearPicker(suppressFocus?: boolean): Promise<void>;
     /**
      * The user clicked the "year range" button in the YearPicker header
      */
-    onHeaderShowYearRangePress(): void;
-    showYearRange(): void;
+    onHeaderYearRangeButtonPress(): void;
+    switchToYearRangePicker(suppressFocus?: boolean): Promise<void>;
     get _currentPickerDOM(): ICalendarPicker;
+    /**
+     * Returns the focusable element inside the Calendar (the current picker)
+     * @override
+     */
+    getFocusDomRef(): HTMLElement | undefined;
     /**
      * The year clicked the "Previous" button in the header
      */
@@ -304,7 +327,7 @@ declare class Calendar extends CalendarPart {
     onSelectedMonthChange(e: CustomEvent<MonthPickerChangeEventDetail>): void;
     onSelectedYearChange(e: CustomEvent<YearPickerChangeEventDetail>): void;
     onSelectedYearRangeChange(e: CustomEvent<YearRangePickerChangeEventDetail>): void;
-    onNavigate(e: CustomEvent): void;
+    onNavigate(e: CustomEvent): Promise<void>;
     _onkeydown(e: KeyboardEvent): void;
     _onLegendFocusOut(): void;
     get _specialDates(): SpecialCalendarDate[];
@@ -320,9 +343,37 @@ declare class Calendar extends CalendarPart {
     };
     get accInfo(): {
         ariaLabelMonthButton: string;
+        ariaLabelYearButton: string;
+        ariaLabelYearRangeButton: string;
+        ariaLabelNextButton: string;
+        ariaLabelPrevButton: string;
+        keyShortcutMonthButton: string;
+        keyShortcutYearButton: string;
+        keyShortcutYearRangeButton: string;
+        keyShortcutNextButton: string;
+        keyShortcutPrevButton: string;
+        tooltipMonthButton: string;
+        tooltipYearButton: string;
+        tooltipYearRangeButton: string;
+        tooltipNextButton: string;
+        tooltipPrevButton: string;
     };
-    get headerPreviousButtonText(): string;
-    get headerNextButtonText(): string;
+    /**
+     * Helper method to create CalendarDateComponent instances for year range
+     * @private
+     */
+    _createYearRangeDates(yearRange: CalendarYearRangeT, calendarType?: string): {
+        rangeStart: CalendarDateComponent;
+        rangeEnd: CalendarDateComponent;
+    };
+    /**
+     * Helper method to format year range text
+     * @private
+     */
+    _formatYearRangeText(yearRange: CalendarYearRangeT): {
+        rangeStartText: string;
+        rangeEndText: string;
+    };
     get secondMonthButtonText(): string;
     onMonthButtonKeyDown(e: KeyboardEvent): void;
     onMonthButtonKeyUp(e: KeyboardEvent): void;
@@ -330,6 +381,7 @@ declare class Calendar extends CalendarPart {
     onYearButtonKeyUp(e: KeyboardEvent): void;
     onYearRangeButtonKeyDown(e: KeyboardEvent): void;
     onYearRangeButtonKeyUp(e: KeyboardEvent): void;
+    _handleNavigationButtonKeyDown(e: MouseEvent, isDisabled: boolean, action: () => void): void;
     onPrevButtonClick(e: MouseEvent): void;
     onNextButtonClick(e: MouseEvent): void;
     /**
@@ -347,4 +399,4 @@ declare class Calendar extends CalendarPart {
     set selectedDates(selectedDates: Array<number>);
 }
 export default Calendar;
-export type { ICalendarPicker, CalendarYearRangeT, ICalendarSelectedDates, CalendarSelectionChangeEventDetail, SpecialCalendarDateT, };
+export type { ICalendarPicker, CalendarYearRangeT, ICalendarSelectedDates, CalendarSelectionChangeEventDetail, SpecialCalendarDateT, DisabledDateRangeT, };

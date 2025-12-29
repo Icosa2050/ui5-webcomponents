@@ -9,7 +9,7 @@ import property from "@ui5/webcomponents-base/dist/decorators/property.js";
 import jsxRender from "@ui5/webcomponents-base/dist/renderer/JsxRenderer.js";
 import slot from "@ui5/webcomponents-base/dist/decorators/slot.js";
 import i18n from "@ui5/webcomponents-base/dist/decorators/i18n.js";
-import { isLeft, isRight, isMinus, isPlus, } from "@ui5/webcomponents-base/dist/Keys.js";
+import { isSpace, isLeft, isRight, isMinus, isPlus, } from "@ui5/webcomponents-base/dist/Keys.js";
 import customElement from "@ui5/webcomponents-base/dist/decorators/customElement.js";
 import SideNavigationItemBase from "./SideNavigationItemBase.js";
 import SideNavigationGroupTemplate from "./SideNavigationGroupTemplate.js";
@@ -102,6 +102,9 @@ let SideNavigationGroup = SideNavigationGroup_1 = class SideNavigationGroup exte
     _onkeydown(e) {
         if (this.disabled) {
             return;
+        }
+        if (isSpace(e)) {
+            e.preventDefault();
         }
         const isRTL = this.effectiveDir === "rtl";
         if (isLeft(e)) {

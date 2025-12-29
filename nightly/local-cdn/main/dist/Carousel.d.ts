@@ -8,7 +8,7 @@ import CarouselArrowsPlacement from "./types/CarouselArrowsPlacement.js";
 import CarouselPageIndicatorType from "./types/CarouselPageIndicatorType.js";
 import type BackgroundDesign from "./types/BackgroundDesign.js";
 import type BorderDesign from "./types/BorderDesign.js";
-import type Button from "./Button.js";
+import type Icon from "./Icon.js";
 type CarouselNavigateEventDetail = {
     selectedIndex: number;
 };
@@ -20,7 +20,7 @@ type ItemsInfo = {
     tabIndex: number;
     posinset: number;
     setsize: number;
-    selected: boolean;
+    visible: boolean;
     _individualSlot?: string;
 };
 /**
@@ -46,6 +46,12 @@ type ItemsInfo = {
  *
  * - The items you want to display need to be visible at the same time.
  * - The items you want to display are uniform and very similar.
+ *
+ * ### Hidden Items
+ *
+ * Carousel items can be conditionally hidden by adding the `hidden` attribute to any child element.
+ * Hidden items are automatically excluded from carousel navigation and will not be displayed or counted in pagination.
+ * This allows for dynamic showing or hiding of carousel items without affecting the overall carousel behavior.
  *
  * ### Keyboard Handling
  *
@@ -162,7 +168,7 @@ declare class Carousel extends UI5Element {
      * @default 0
      * @private
      */
-    _selectedIndex: number;
+    _focusedItemIndex: number;
     /**
      * Defines the position of arrows.
      *
@@ -190,13 +196,34 @@ declare class Carousel extends UI5Element {
      * @since 1.0.0-rc.15
      */
     _visibleNavigationArrows: boolean;
+    /**
+     * Internal trigger flag that forces component re-rendering when content items change.
+     * @private
+     * @since 2.16.0
+     */
+    _visibleItemsCount: number;
+    /**
+     * Defines the current slide index, which contains the visible item in the viewport.
+     * @private
+     * @since 2.16.0-r.c1
+     */
+    _currentSlideIndex: number;
     _scrollEnablement: ScrollEnablement;
     _onResizeBound: ResizeObserverCallback;
     _resizing: boolean;
     _lastFocusedElements: Array<HTMLElement>;
     _orderOfLastFocusedPages: Array<number>;
+    _lastInnerFocusedElement?: HTMLElement;
+    _pageStep: number;
+    _visibleItemsIndexes: Array<number>;
+    _itemIndicator: number;
+    _contentItemsObserver: MutationObserver;
+    _observableContent: Array<HTMLElement>;
     /**
      * Defines the content of the component.
+     *
+     * **Note:** Items with the `hidden` attribute will be automatically excluded from carousel navigation and page calculations.
+     * They will not be displayed or accessible via keyboard navigation. See [sample](./#carousel-with-hidden-items).
      * @public
      */
     content: Array<HTMLElement>;
@@ -210,16 +237,29 @@ declare class Carousel extends UI5Element {
     validateSelectedIndex(): void;
     _onResize(): void;
     _updateScrolling(e: ScrollEnablementEventListenerParam): void;
-    _onkeydown(e: KeyboardEvent): Promise<void>;
+    _onkeydown(e: KeyboardEvent): void;
     _onfocusin(e: FocusEvent): void;
     _onmouseout(): void;
     _onmouseover(): void;
-    _handleF7Key(e: KeyboardEvent): void;
+    _ontouchstart(e: TouchEvent): void;
+    _onmousedown(e: MouseEvent): void;
+    _handleF7Key(e: KeyboardEvent): Promise<void>;
+    _observeContentItems(): void;
+    get hasMatchingContent(): boolean;
+    _handleHome(e: KeyboardEvent): void;
+    _handleEnd(e: KeyboardEvent): void;
+    _handlePageUp(e: KeyboardEvent): void;
+    _handlePageDown(e: KeyboardEvent): void;
     get _backgroundDesign(): string;
     get _getLastFocusedActivePageIndex(): number;
     navigateLeft(): void;
     navigateRight(): void;
-    _navButtonClick(e: UI5CustomEvent<Button, "click">): void;
+    navigateArrowRight(): void;
+    navigateArrowLeft(): void;
+    _calculateItemSlideIndex(currentSlideIndex: number, itemStep: number): number;
+    _moveToItem(slideIndex: number): void;
+    focusItem(): void;
+    _navButtonClick(e: UI5CustomEvent<Icon, "click">): void;
     /**
      * Changes the currently displayed page.
      * @param itemIndex The index of the target page
@@ -227,6 +267,14 @@ declare class Carousel extends UI5Element {
      * @public
      */
     navigateTo(itemIndex: number): void;
+    skipToItem(focusIndex: number, offset: number): Promise<void>;
+    /**
+     * The indices of the currently visible items of the component.
+     * @public
+     * @since 1.0.0-rc.15
+     * @default []
+     */
+    get visibleItemsIndices(): Array<number>;
     /**
      * Assuming that all items have the same width
      * @private
@@ -234,6 +282,7 @@ declare class Carousel extends UI5Element {
     get items(): Array<ItemsInfo>;
     get effectiveItemsPerPage(): number;
     isItemInViewport(index: number): boolean;
+    _updateVisibleItems(index: number): void;
     isIndexInRange(index: number): boolean;
     /**
      * @private
@@ -273,18 +322,19 @@ declare class Carousel extends UI5Element {
     get _isRTL(): boolean;
     get selectedIndexToShow(): number;
     get ofText(): string;
-    get ariaActiveDescendant(): string | undefined;
     get ariaLabelTxt(): string | undefined;
     get nextPageText(): string;
     get previousPageText(): string;
     get _roleDescription(): string;
+    get _ariaListLabel(): string;
     /**
-     * The indices of the currently visible items of the component.
-     * @public
-     * @since 1.0.0-rc.15
-     * @default []
+     * Returns only visible (non-hidden) content items.
+     * Items with the 'hidden' attribute are automatically excluded from carousel navigation.
+     * @private
+     * @returns {Array<HTMLElement>}
      */
-    get visibleItemsIndices(): Array<number>;
+    get _visibleItems(): HTMLElement[];
+    carouselItemDomRef(idx: number): Array<HTMLElement>;
 }
 export default Carousel;
 export type { CarouselNavigateEventDetail, };

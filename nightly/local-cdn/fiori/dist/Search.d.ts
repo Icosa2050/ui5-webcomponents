@@ -127,15 +127,15 @@ declare class Search extends SearchField {
      */
     _valueBeforeOpen: string;
     /**
-     * True if the first matching item is matched by starts with per term, rather than by starts with.
-     * @private
-     */
-    _matchedPerTerm: boolean;
-    /**
      * Holds the currently proposed item which will be selected if the user presses Enter.
      * @private
      */
     _proposedItem?: ISearchSuggestionItem;
+    /**
+     * This property is used during rendering to indicate that the user has started typing in the input
+     * @private
+     */
+    _isTyping: boolean;
     static i18nBundle: I18nBundle;
     constructor();
     onBeforeRendering(): void;
@@ -144,12 +144,12 @@ declare class Search extends SearchField {
     _shouldPerformSelectionOnMobile(inputType: string): boolean;
     _handleTypeAhead(item: ISearchSuggestionItem): void;
     _startsWithMatchingItems(str: string): Array<ISearchSuggestionItem>;
-    _startsWithPerTermMatchingItems(str: string): Array<ISearchSuggestionItem>;
     _isGroupItem(item: HTMLElement): item is SearchItemGroup;
+    _isShowMoreItem(item: ISearchSuggestionItem): boolean;
     _deselectItems(): void;
+    _selectMatchingItem(item: ISearchSuggestionItem): void;
     _handleDown(e: KeyboardEvent): void;
     _handleArrowDown(): void;
-    _handleRight(e: KeyboardEvent): void;
     _handleInnerClick(): void;
     _handleSearchIconPress(): void;
     _handleEnter(): void;
@@ -157,12 +157,12 @@ declare class Search extends SearchField {
     _handleSearchEvent(): void;
     _handleEscape(): void;
     _handleInput(e: InputEvent): void;
+    _handleClear(): void;
     _popoupHasAnyContent(): boolean;
     _onFooterButtonKeyDown(e: KeyboardEvent): void;
     _onItemKeydown(e: KeyboardEvent): void;
     _onItemClick(e: CustomEvent): void;
     _onkeydown(e: KeyboardEvent): void;
-    _onfocusout(): void;
     _onFocusOutSearch(e: FocusEvent): void;
     _handleBeforeClose(e: CustomEvent<PopupBeforeCloseEventDetail>): void;
     _handleCancel(): void;

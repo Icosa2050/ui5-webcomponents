@@ -21,7 +21,7 @@ import type { ListSelectionChangeEventDetail } from "./List.js";
 import ToggleButton from "./ToggleButton.js";
 import type ComboBoxFilter from "./types/ComboBoxFilter.js";
 import type { InputEventDetail } from "./Input.js";
-import type PopoverHorizontalAlign from "./types/PopoverHorizontalAlign.js";
+import type InputComposition from "./features/InputComposition.js";
 /**
  * Interface for components that may be slotted inside a `ui5-multi-combobox` as items
  * @public
@@ -246,6 +246,12 @@ declare class MultiComboBox extends UI5Element implements IFormInputElement {
      */
     _linksListenersArray: Array<(args: any) => void>;
     /**
+     * Indicates whether IME composition is currently active
+     * @default false
+     * @private
+     */
+    _isComposing: boolean;
+    /**
      * Defines the component items.
      * @public
      */
@@ -288,7 +294,10 @@ declare class MultiComboBox extends UI5Element implements IFormInputElement {
     _itemsBeforeOpen: Array<MultiComboboxItemWithSelection>;
     selectedItems: Array<IMultiComboBoxItem>;
     _valueStateLinks: Array<HTMLElement>;
+    _composition?: InputComposition;
+    _suppressNextLiveChange: boolean;
     static i18nBundle: I18nBundle;
+    static composition: typeof InputComposition;
     get formValidityMessage(): string;
     get formValidity(): ValidityStateFlags;
     formElementAnchor(): Promise<HTMLElement | undefined>;
@@ -318,7 +327,7 @@ declare class MultiComboBox extends UI5Element implements IFormInputElement {
     _tokenizerFocusIn(): void;
     _onkeydown(e: KeyboardEvent): void;
     _selectItems(matchingItems: IMultiComboBoxItem[]): void;
-    _handlePaste(e: ClipboardEvent): void;
+    _handlePaste(e: ClipboardEvent): Promise<void>;
     _handleTokenCreationUponPaste(pastedText: string, e: KeyboardEvent | ClipboardEvent): void;
     _handleInsertPaste(e: KeyboardEvent): Promise<void>;
     _handleShow(e: KeyboardEvent): void;
@@ -389,6 +398,12 @@ declare class MultiComboBox extends UI5Element implements IFormInputElement {
     get _tokenizer(): Tokenizer;
     inputFocusIn(e: FocusEvent): void;
     inputFocusOut(e: FocusEvent): void;
+    /**
+     * Enables IME composition handling.
+     * Dynamically loads the InputComposition feature and sets up event listeners.
+     * @private
+     */
+    _enableComposition(): void;
     get editable(): boolean;
     get _isFocusInside(): boolean;
     get selectedItemsListMode(): "None" | "Multiple";
@@ -419,8 +434,8 @@ declare class MultiComboBox extends UI5Element implements IFormInputElement {
     get _iconAccessibleNameText(): string;
     get _showSelectedButtonAccessibleNameText(): string;
     get _dialogOkButton(): string;
+    get _dialogCancelButton(): string;
     get _tokenizerExpanded(): boolean;
-    get _valueStatePopoverHorizontalAlign(): `${PopoverHorizontalAlign}`;
     get iconsCount(): number;
     get clearIconAccessibleName(): string;
     get selectAllCheckboxLabel(): string;

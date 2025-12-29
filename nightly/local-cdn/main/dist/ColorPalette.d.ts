@@ -109,6 +109,8 @@ declare class ColorPalette extends UI5Element {
     _recentColors: Array<string>;
     _currentlySelected?: ColorPaletteItem;
     _shouldFocusRecentColors: boolean;
+    _defaultColorButton: Button;
+    _moreColorsButton: Button;
     static i18nBundle: I18nBundle;
     constructor();
     onBeforeRendering(): void;
@@ -122,6 +124,7 @@ declare class ColorPalette extends UI5Element {
      */
     _ensureSingleSelectionOrDeselectAll(): void;
     _onclick(e: MouseEvent): void;
+    _onmousedown(e: MouseEvent): void;
     _onkeyup(e: KeyboardEvent): void;
     _onkeydown(e: KeyboardEvent): void;
     handleSelection(target: ColorPaletteItem): void;
@@ -130,11 +133,112 @@ declare class ColorPalette extends UI5Element {
     _onDefaultColorKeyUp(e: KeyboardEvent): void;
     _onDefaultColorKeyDown(e: KeyboardEvent): void;
     _onMoreColorsKeyDown(e: KeyboardEvent): void;
-    _isUpOrDownNavigatableColorPaletteItem(e: KeyboardEvent): boolean | undefined;
     _onColorContainerKeyDown(e: KeyboardEvent): void;
     _onRecentColorsContainerKeyDown(e: KeyboardEvent): void;
+    /**
+     * Checks if the keyboard event is up/down navigation on a displayed color palette item
+     * @private
+     */
+    _isUpOrDownNavigatableColorPaletteItem(e: KeyboardEvent): boolean;
+    _isPrevious(e: KeyboardEvent): boolean;
+    _isNext(e: KeyboardEvent): boolean;
+    _isFirstSwatch(target: ColorPaletteItem, swatches: Array<IColorPaletteItem>): boolean;
+    _isLastSwatch(target: ColorPaletteItem, swatches: Array<IColorPaletteItem>): boolean;
+    /**
+     * Checks if the target swatch is the first swatch in its row.
+     * @private
+     */
+    _isFirstSwatchInRow(target: ColorPaletteItem): boolean;
+    /**
+     * Checks if the target swatch is the last swatch in its row.
+     * @private
+     */
+    _isLastSwatchInRow(target: ColorPaletteItem): boolean;
+    /**
+     * Checks if the given color swatch is the last swatch of the last full row.
+     *
+     * Example 1: 12 colors with rowSize 5
+     * Row 1: [0, 1, 2, 3, 4]  ← Complete row
+     * Row 2: [5, 6, 7, 8, 9]  ← Complete row (last complete row)
+     * Row 3: [10, 11]         ← Incomplete row
+     *
+     * @param target The color swatch to check.
+     * @returns True if the swatch is the last of the last full row, false otherwise.
+     */
+    _isLastSwatchOfLastFullRow(target: ColorPaletteItem): boolean;
+    _isSwatchInLastRow(target: ColorPaletteItem): boolean;
+    /**
+     * Checks if HOME/END navigation should be prevented in embedded mode.
+     * In embedded mode, HOME/END keys are blocked as they only work in popup mode per design.
+     * @private
+     * @param e The keyboard event to check
+     * @returns True if the event should be prevented, false otherwise
+     */
+    _shouldPreventHomeEnd(e: KeyboardEvent): boolean;
+    /**
+     * Helper to check if all displayed colors fit in a single row
+     * @private
+     */
+    _isSingleRow(): boolean;
+    /**
+     * Helper to focus the first available element from a list of candidates.
+     *
+     * This method implements a fallback chain pattern for keyboard navigation in the color palette.
+     * It attempts to execute focus actions in priority order, stopping at the first successful one.
+     *
+     * For example when navigating left from the default color button, try these options in order:
+     * this._focusFirstAvailable(
+     *   () => this._focusLastRecentColor(),    // 1st choice: focus last recent color if available
+     *   () => this._focusMoreColors(),         // 2nd choice: focus "More Colors" button if available
+     *   () => this._focusLastDisplayedColor()  // 3rd choice: focus last color in the main palette
+     * );
+     *
+     * @private
+     * @param candidates - Functions that attempt to focus an element. Each function should return true if focus was successful, false otherwise.
+     * @returns True if any candidate successfully focused an element, false if all failed.
+     */
+    _focusFirstAvailable(...candidates: Array<() => boolean>): boolean;
+    /**
+     * Helper to focus default color button if available
+     * @private
+     */
+    _focusDefaultColor(): boolean;
+    /**
+     * Helper to focus more colors button if available
+     * @private
+     */
+    _focusMoreColors(): boolean;
+    /**
+     * Helper to focus first displayed color if available
+     * @private
+     */
+    _focusFirstDisplayedColor(): boolean;
+    /**
+     * Helper to focus last displayed color if available
+     * @private
+     */
+    _focusLastDisplayedColor(): boolean;
+    /**
+     * Helper to focus last swatch of last full row if available
+     * @private
+     */
+    _focusLastSwatchOfLastFullRow(): boolean;
+    /**
+     * Returns the index of the last swatch in the last complete row.
+     * @private
+     */
+    _getLastCompleteRowEndIndex(total: number, rowSize: number): number;
+    /**
+     * Helper to focus first recent color if available
+     * @private
+     */
+    _focusFirstRecentColor(): boolean;
+    /**
+     * Helper to focus last recent color if available
+     * @private
+     */
+    _focusLastRecentColor(): boolean;
     focusColorElement(element: ColorPaletteNavigationItem, itemNavigation: ItemNavigation): void;
-    get firstFocusableElement(): ColorPaletteNavigationItem;
     onColorPickerChange(e: Event): void;
     _chooseCustomColor(): void;
     _addRecentColor(color: string): void;
@@ -153,7 +257,7 @@ declare class ColorPalette extends UI5Element {
      * Returns the selected color.
      */
     get selectedColor(): string | undefined;
-    get displayedColors(): IColorPaletteItem[];
+    get displayedColors(): Array<IColorPaletteItem>;
     get colorContainerLabel(): string;
     get colorPaletteMoreColorsText(): string;
     get colorPaletteDefaultColorText(): string;
@@ -161,7 +265,6 @@ declare class ColorPalette extends UI5Element {
     get hasRecentColors(): string | false;
     get recentColors(): string[];
     get recentColorsElements(): Array<ColorPaletteItem>;
-    get colorPaletteNavigationElements(): ColorPaletteNavigationItem[];
     get classes(): {
         colorPaletteRoot: {
             "ui5-cp-root": boolean;

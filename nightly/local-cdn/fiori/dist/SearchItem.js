@@ -14,7 +14,11 @@ import SearchItemCss from "./generated/themes/SearchItem.css.js";
 import generateHighlightedMarkup from "@ui5/webcomponents-base/dist/util/generateHighlightedMarkup.js";
 import jsxRenderer from "@ui5/webcomponents-base/dist/renderer/JsxRenderer.js";
 import event from "@ui5/webcomponents-base/dist/decorators/event-strict.js";
-import { SEARCH_ITEM_DELETE_BUTTON } from "./generated/i18n/i18n-defaults.js";
+import { SEARCH_ITEM_DELETE_BUTTON_TOOLTIP, } from "./generated/i18n/i18n-defaults.js";
+import getActiveElement from "@ui5/webcomponents-base/dist/util/getActiveElement.js";
+import { getFirstFocusableElement } from "@ui5/webcomponents-base/dist/util/FocusableElements.js";
+import { getTabbableElements } from "@ui5/webcomponents-base/dist/util/TabbableElements.js";
+import { isSpace, isEnter, isF2, isTabNext, isTabPrevious, } from "@ui5/webcomponents-base/dist/Keys.js";
 import { i18n } from "@ui5/webcomponents-base/dist/decorators.js";
 // @ts-expect-error
 import encodeXML from "@ui5/webcomponents-base/dist/sap/base/security/encodeXML.js";
@@ -60,8 +64,91 @@ let SearchItem = SearchItem_1 = class SearchItem extends ListItemBase {
     _onfocusout() {
         this.selected = false;
     }
+    async _onkeydown(e) {
+        // Handle manual tab navigation between action items
+        if (isTabNext(e) || isTabPrevious(e)) {
+            const handled = this._handleTabNavigation(e);
+            if (handled) {
+                e.preventDefault();
+                e.stopPropagation();
+                return;
+            }
+        }
+        // Call super for other key handling
+        super._onkeydown(e);
+        // Handle space/enter when focus is within action items
+        if (this.getFocusDomRef().matches(":has(:focus-within)")) {
+            if (isSpace(e) || isEnter(e)) {
+                e.preventDefault();
+                return;
+            }
+        }
+        // Handle F2 for focus navigation
+        if (isF2(e)) {
+            e.stopImmediatePropagation();
+            const activeElement = getActiveElement();
+            const focusDomRef = this.getFocusDomRef();
+            if (!focusDomRef) {
+                return;
+            }
+            if (activeElement === focusDomRef) {
+                const firstFocusable = await getFirstFocusableElement(focusDomRef);
+                firstFocusable?.focus();
+            }
+            else {
+                focusDomRef.focus();
+            }
+        }
+    }
+    /**
+     * Handles manual tab navigation between action items and delete button with focus looping
+     */
+    _handleTabNavigation(e) {
+        const focusDomRef = this.getFocusDomRef();
+        if (!focusDomRef) {
+            return false;
+        }
+        const tabbableElements = getTabbableElements(focusDomRef);
+        if (tabbableElements.length === 0) {
+            return false;
+        }
+        const activeElement = getActiveElement();
+        const currentIndex = tabbableElements.indexOf(activeElement);
+        if (currentIndex === -1) {
+            return false;
+        }
+        let nextElement = null;
+        if (isTabNext(e)) {
+            if (currentIndex < tabbableElements.length - 1) {
+                nextElement = tabbableElements[currentIndex + 1];
+            }
+            else {
+                // Loop to first element when at the last element
+                nextElement = tabbableElements[0];
+            }
+        }
+        else if (isTabPrevious(e)) {
+            if (currentIndex > 0) {
+                nextElement = tabbableElements[currentIndex - 1];
+            }
+            else {
+                // Loop to last element when at the first element
+                nextElement = tabbableElements[tabbableElements.length - 1];
+            }
+        }
+        if (nextElement) {
+            nextElement.focus();
+            return true;
+        }
+        return false;
+    }
     _onDeleteButtonClick() {
         this.fireDecoratorEvent("delete");
+    }
+    _onDeleteButtonKeyDown(e) {
+        if (isSpace(e) || isEnter(e)) {
+            this.fireDecoratorEvent("delete");
+        }
     }
     onBeforeRendering() {
         super.onBeforeRendering();
@@ -69,7 +156,10 @@ let SearchItem = SearchItem_1 = class SearchItem extends ListItemBase {
         this._markupText = this.highlightText ? generateHighlightedMarkup((this.text || ""), this.highlightText) : encodeXML(this.text || "");
     }
     get _deleteButtonTooltip() {
-        return SearchItem_1.i18nBundle.getText(SEARCH_ITEM_DELETE_BUTTON);
+        return SearchItem_1.i18nBundle.getText(SEARCH_ITEM_DELETE_BUTTON_TOOLTIP);
+    }
+    get hasActions() {
+        return !!this.actions.length;
     }
 };
 __decorate([
@@ -96,6 +186,9 @@ __decorate([
 __decorate([
     slot()
 ], SearchItem.prototype, "image", void 0);
+__decorate([
+    slot()
+], SearchItem.prototype, "actions", void 0);
 __decorate([
     i18n("@ui5/webcomponents-fiori")
 ], SearchItem, "i18nBundle", void 0);

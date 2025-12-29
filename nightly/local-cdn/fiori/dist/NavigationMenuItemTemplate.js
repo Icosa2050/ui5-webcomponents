@@ -10,7 +10,7 @@ const predefinedHooks = {
 };
 export default function NavigationMenuItemTemplate(hooks) {
     const currentHooks = { ...predefinedHooks, ...hooks, };
-    return _jsx(_Fragment, { children: this._href ? (_jsx("a", { role: "treeitem", class: "ui5-navmenu-item-link", href: this.href, target: this.target, children: MenuItemTemplate.call(this, currentHooks) })) : MenuItemTemplate.call(this, currentHooks) });
+    return _jsx(_Fragment, { children: this._href ? (_jsx("a", { role: "menuitem", class: "ui5-navmenu-item-link", href: this.href, target: this.target, children: MenuItemTemplate.call(this, currentHooks) })) : MenuItemTemplate.call(this, currentHooks) });
 }
 function listItemContent() {
     return _jsx(_Fragment, { children: this.text });

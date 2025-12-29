@@ -12,6 +12,7 @@ import i18n from "@ui5/webcomponents-base/dist/decorators/i18n.js";
 import { getScopedVarName } from "@ui5/webcomponents-base/dist/CustomElementsScope.js";
 import slot from "@ui5/webcomponents-base/dist/decorators/slot.js";
 import jsxRenderer from "@ui5/webcomponents-base/dist/renderer/JsxRenderer.js";
+import { getEffectiveAriaLabelText } from "@ui5/webcomponents-base/dist/util/AccessibilityTextsHelper.js";
 // Template
 import FormTemplate from "./FormTemplate.js";
 // Styles
@@ -178,6 +179,21 @@ let Form = Form_1 = class Form extends UI5Element {
     constructor() {
         super(...arguments);
         /**
+         * Defines the accessibility mode of the component in "edit" and "display" use-cases.
+         *
+         * Based on the mode, the component renders different HTML elements and ARIA attributes,
+         * which are appropriate for the use-case.
+         *
+         * **Usage:**
+         * - Set this property to "Display", when the form consists of non-editable (e.g. texts) form items.
+         * - Set this property to "Edit", when the form consists of editable (e.g. input fields) form items.
+         *
+         * @default "Display"
+         * @since 2.16.0
+         * @public
+         */
+        this.accessibleMode = "Display";
+        /**
          * Defines the number of columns to distribute the form content by breakpoint.
          *
          * Supported values:
@@ -230,9 +246,9 @@ let Form = Form_1 = class Form extends UI5Element {
         /**
          * Defines the vertical spacing between form items.
          *
-         * **Note:** If the Form is meant to be switched between "non-edit" and "edit" modes,
-         * we recommend using "Large" item spacing in "non-edit" mode, and "Normal" - for "edit" mode,
-         * to avoid "jumping" effect, caused by the hight difference between texts in "non-edit" mode and the input fields in "edit" mode.
+         * **Note:** If the Form is meant to be switched between "display"("non-edit") and "edit" modes,
+         * we recommend using "Large" item spacing in "display"("non-edit") mode, and "Normal" - for "edit" mode,
+         * to avoid "jumping" effect, caused by the hight difference between texts in "display"("non-edit") mode and the input fields in "edit" mode.
          *
          * @default "Normal"
          * @public
@@ -262,7 +278,7 @@ let Form = Form_1 = class Form extends UI5Element {
         // Define how many columns a group should take.
         this.setGroupsColSpan();
         // Set item spacing
-        this.setItemSpacing();
+        this.setItemsState();
     }
     onAfterRendering() {
         // Create additional CSS for number of columns that are not supported by default.
@@ -402,9 +418,10 @@ let Form = Form_1 = class Form extends UI5Element {
         // 7 cols & 3 groups => 3, 2, 2
         return index === 0 ? MIN_COL_SPAN + (delta - groups) + 1 : MIN_COL_SPAN + 1;
     }
-    setItemSpacing() {
+    setItemsState() {
         this.items.forEach((item) => {
             item.itemSpacing = this.itemSpacing;
+            item.accessibleMode = this.accessibleMode;
         });
     }
     get hasGroupItems() {
@@ -420,19 +437,22 @@ let Form = Form_1 = class Form extends UI5Element {
         return !!this.header.length;
     }
     get effectiveAccessibleName() {
-        if (this.accessibleName) {
-            return this.accessibleName;
+        if (this.accessibleName || this.accessibleNameRef) {
+            return getEffectiveAriaLabelText(this);
         }
         return this.hasHeader ? undefined : Form_1.i18nBundle.getText(FORM_ACCESSIBLE_NAME);
     }
     get effectiveАccessibleNameRef() {
+        if (this.accessibleName || this.accessibleNameRef) {
+            return;
+        }
         return this.hasHeaderText && !this.hasCustomHeader ? `${this._id}-header-text` : undefined;
     }
     get effectiveAccessibleRole() {
         return this.hasGroupItems ? "region" : "form";
     }
     get groupItemsInfo() {
-        return this.items.map((groupItem) => {
+        return this.items.map((groupItem, index) => {
             const items = this.getItemsInfo(Array.from(groupItem.children));
             breakpoints.forEach(breakpoint => {
                 const cols = ((groupItem[`cols${breakpoint}`]) || 1);
@@ -451,10 +471,15 @@ let Form = Form_1 = class Form extends UI5Element {
                     currentItem++;
                 }
             });
+            const accessibleNameRef = groupItem.effectiveAccessibleNameRef;
             return {
                 groupItem,
-                accessibleNameRef: groupItem.headerText ? `${groupItem._id}-group-header-text` : undefined,
+                accessibleName: this.accessibleMode === "Edit" ? groupItem.getEffectiveAccessibleName(index) : undefined,
+                accessibleNameInner: this.accessibleMode === "Edit" ? undefined : groupItem.getEffectiveAccessibleName(index),
+                accessibleNameRef: this.accessibleMode === "Edit" ? accessibleNameRef : undefined,
+                accessibleNameRefInner: this.accessibleMode === "Edit" ? undefined : accessibleNameRef,
                 items: this.getItemsInfo(Array.from(groupItem.children)),
+                role: this.accessibleMode === "Edit" ? "form" : undefined,
             };
         });
     }
@@ -544,6 +569,12 @@ let Form = Form_1 = class Form extends UI5Element {
 __decorate([
     property()
 ], Form.prototype, "accessibleName", void 0);
+__decorate([
+    property()
+], Form.prototype, "accessibleNameRef", void 0);
+__decorate([
+    property()
+], Form.prototype, "accessibleMode", void 0);
 __decorate([
     property()
 ], Form.prototype, "layout", void 0);

@@ -10,9 +10,9 @@ import slot from "@ui5/webcomponents-base/dist/decorators/slot.js";
 import event from "@ui5/webcomponents-base/dist/decorators/event-strict.js";
 import customElement from "@ui5/webcomponents-base/dist/decorators/customElement.js";
 import jsxRenderer from "@ui5/webcomponents-base/dist/renderer/JsxRenderer.js";
-import { isShow, isBackSpace, isLeft, isRight, isRightCtrl, isHome, isEnd, isDown, } from "@ui5/webcomponents-base/dist/Keys.js";
+import { isShow, isBackSpace, isLeft, isRight, isRightCtrl, isHome, isEnd, isDown, isEnter, } from "@ui5/webcomponents-base/dist/Keys.js";
 import { getScopedVarName } from "@ui5/webcomponents-base/dist/CustomElementsScope.js";
-import { MULTIINPUT_ROLEDESCRIPTION_TEXT, MULTIINPUT_VALUE_HELP_LABEL, MULTIINPUT_VALUE_HELP } from "./generated/i18n/i18n-defaults.js";
+import { MULTIINPUT_ROLEDESCRIPTION_TEXT, MULTIINPUT_VALUE_HELP_LABEL, MULTIINPUT_VALUE_HELP, FORM_MIXED_TEXTFIELD_REQUIRED, MULTIINPUT_FILTER_BUTTON_LABEL, } from "./generated/i18n/i18n-defaults.js";
 import Input from "./Input.js";
 import MultiInputTemplate from "./MultiInputTemplate.js";
 import styles from "./generated/themes/MultiInput.css.js";
@@ -38,6 +38,9 @@ import { getTokensCountText } from "./Tokenizer.js";
  * @public
  */
 let MultiInput = MultiInput_1 = class MultiInput extends Input {
+    get formValidityMessage() {
+        return MultiInput_1.i18nBundle.getText(FORM_MIXED_TEXTFIELD_REQUIRED);
+    }
     get formValidity() {
         const tokens = (this.tokens || []);
         return { valueMissing: this.required && !this.value && !tokens.length };
@@ -69,6 +72,18 @@ let MultiInput = MultiInput_1 = class MultiInput extends Input {
          * @private
          */
         this.tokenizerAvailable = false;
+        /**
+         * Indicates whether to show tokens in suggestions popover
+         * @default false
+         * @private
+         */
+        this._showTokensInSuggestions = false;
+        /**
+         * Tracks whether user has explicitly toggled the show tokens state
+         * @default false
+         * @private
+         */
+        this._userToggledShowTokens = false;
         // Prevent suggestions' opening.
         this._skipOpenSuggestions = false;
         this._valueHelpIconPressed = false;
@@ -101,7 +116,6 @@ let MultiInput = MultiInput_1 = class MultiInput extends Input {
     _tokenizerFocusOut(e) {
         if (!this.contains(e.relatedTarget) && !this.shadowRoot.contains(e.relatedTarget)) {
             this.tokenizer._tokens.forEach(token => { token.selected = false; });
-            this.tokenizer.scrollToStart();
         }
     }
     valueHelpMouseUp() {
@@ -110,20 +124,26 @@ let MultiInput = MultiInput_1 = class MultiInput extends Input {
         }, 0);
     }
     innerFocusIn() {
+        this.tokenizer._scrollToEndOnExpand = true;
         this.tokenizer.expanded = true;
         this.focused = true;
-        this.tokenizer.scrollToEnd();
         this.tokens.forEach(token => {
             token.selected = false;
         });
     }
+    _showMoreItemsPress() {
+        this.tokenizer._scrollToEndOnExpand = true;
+    }
     _onkeydown(e) {
-        super._onkeydown(e);
+        !this._isComposing && super._onkeydown(e);
         const target = e.target;
         const isHomeInBeginning = isHome(e) && target.selectionStart === 0;
         if (isHomeInBeginning) {
             this._skipOpenSuggestions = true; // Prevent input focus when navigating through the tokens
             return this._focusFirstToken(e);
+        }
+        if (isEnter(e) && !!this._internals.form) {
+            e.preventDefault();
         }
         if (isLeft(e)) {
             this._skipOpenSuggestions = true;
@@ -211,16 +231,24 @@ let MultiInput = MultiInput_1 = class MultiInput extends Input {
         if (this.tokenizer) {
             this.tokenizer.readonly = this.readonly;
         }
+        // Reset toggle state if there are tokens and dialog is about to open
+        if (this.tokens.length > 0 && !this._userToggledShowTokens) {
+            this._showTokensInSuggestions = true;
+        }
+    }
+    /**
+     * Override the _handlePickerAfterOpen method to reset toggle state when dialog opens with tokens
+     */
+    _handlePickerAfterOpen() {
+        if (this.tokens.length > 0) {
+            this._showTokensInSuggestions = true;
+            this._userToggledShowTokens = false;
+        }
+        super._handlePickerAfterOpen();
     }
     onAfterRendering() {
         super.onAfterRendering();
         this.tokenizer.preventInitialFocus = true;
-        if (this.tokenizer.expanded) {
-            this.tokenizer.scrollToEnd();
-        }
-        else {
-            this.tokenizer.scrollToStart();
-        }
     }
     get iconsCount() {
         return super.iconsCount + (this.showValueHelpIcon ? 1 : 0);
@@ -236,6 +264,9 @@ let MultiInput = MultiInput_1 = class MultiInput extends Input {
     }
     get _valueHelpText() {
         return MultiInput_1.i18nBundle.getText(MULTIINPUT_VALUE_HELP);
+    }
+    get _filterButtonAccessibleName() {
+        return MultiInput_1.i18nBundle.getText(MULTIINPUT_FILTER_BUTTON_LABEL);
     }
     get _tokensCountTextId() {
         return `hiddenText-nMore`;
@@ -276,6 +307,22 @@ let MultiInput = MultiInput_1 = class MultiInput extends Input {
     get shouldDisplayOnlyValueStateMessage() {
         return this.hasValueStateMessage && !this.readonly && !this.open && this.focused && !this.tokenizer.open;
     }
+    /**
+     * Computes the effective state for showing tokens in suggestions.
+     * Defaults to true when tokens exist, but respects explicit user toggle.
+     */
+    get _effectiveShowTokensInSuggestions() {
+        // If no tokens exist, always false
+        if (this.tokens.length === 0) {
+            return false;
+        }
+        // If user has never interacted with the toggle, default to true when tokens exist
+        if (!this._userToggledShowTokens) {
+            return true;
+        }
+        // If user has interacted, respect their choice
+        return this._showTokensInSuggestions;
+    }
 };
 __decorate([
     property({ type: Boolean })
@@ -286,6 +333,12 @@ __decorate([
 __decorate([
     property()
 ], MultiInput.prototype, "name", void 0);
+__decorate([
+    property({ type: Boolean })
+], MultiInput.prototype, "_showTokensInSuggestions", void 0);
+__decorate([
+    property({ type: Boolean })
+], MultiInput.prototype, "_userToggledShowTokens", void 0);
 __decorate([
     slot({ type: HTMLElement, individualSlots: true })
 ], MultiInput.prototype, "tokens", void 0);

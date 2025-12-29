@@ -111,6 +111,10 @@ let SearchField = SearchField_1 = class SearchField extends UI5Element {
     }
     _handleScopeChange(e) {
         const item = e.detail.selectedOption;
+        // Set the scopeValue property if the selected scope has a value defined
+        if (item.value) {
+            this.scopeValue = item.value;
+        }
         this.fireDecoratorEvent("scope-change", {
             scope: item.scopeOption,
         });
@@ -158,6 +162,9 @@ __decorate([
 __decorate([
     property()
 ], SearchField.prototype, "accessibleDescription", void 0);
+__decorate([
+    property()
+], SearchField.prototype, "scopeValue", void 0);
 __decorate([
     slot({ type: HTMLElement, individualSlots: true, invalidateOnChildChange: true })
 ], SearchField.prototype, "scopes", void 0);

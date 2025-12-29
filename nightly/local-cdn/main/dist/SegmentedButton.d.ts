@@ -46,12 +46,44 @@ declare class SegmentedButton extends UI5Element {
      */
     accessibleName?: string;
     /**
+     * Defines the IDs of the HTML Elements that label the component.
+     * @default undefined
+     * @public
+     * @since 2.15.0
+     */
+    accessibleNameRef?: string;
+    /**
+     * Defines the accessible description of the component.
+     * @default undefined
+     * @public
+     * @since 2.15.0
+     */
+    accessibleDescription?: string;
+    /**
+     * Defines the IDs of the HTML Elements that describe the component.
+     * @default undefined
+     * @public
+     * @since 2.15.0
+     */
+    accessibleDescriptionRef?: string;
+    /**
      * Defines the component selection mode.
      * @default "Single"
      * @public
      * @since 1.14.0
      */
     selectionMode: `${SegmentedButtonSelectionMode}`;
+    /**
+     * Determines whether the segmented button items should be sized to fit their content.
+     *
+     * If set to `true`, each item will be sized to fit its content, with any extra space distributed after the last item.
+     * If set to `false` (the default), all items will be equally sized to fill the available space.
+     *
+     * @default false
+     * @public
+     * @since 2.16.0
+    */
+    itemsFitContent: boolean;
     /**
      * Defines the items of `ui5-segmented-button`.
      *
@@ -65,6 +97,7 @@ declare class SegmentedButton extends UI5Element {
     _itemNavigation: ItemNavigation;
     hasPreviouslyFocusedItem: boolean;
     _selectedItem?: ISegmentedButtonItem;
+    _actionCanceled: boolean;
     constructor();
     onBeforeRendering(): void;
     normalizeSelection(): void;
@@ -84,8 +117,9 @@ declare class SegmentedButton extends UI5Element {
      */
     get selectedItems(): Array<ISegmentedButtonItem>;
     get navigatableItems(): SegmentedButtonItem[];
-    get ariaDescribedBy(): string;
-    get ariaDescription(): string;
+    get ariaLabelText(): string | undefined;
+    get ariaDescriptionText(): string;
+    get ariaRoleDescription(): string;
 }
 export default SegmentedButton;
 export type { SegmentedButtonSelectionChangeEventDetail, ISegmentedButtonItem, };

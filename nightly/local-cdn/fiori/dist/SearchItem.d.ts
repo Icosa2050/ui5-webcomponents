@@ -68,12 +68,31 @@ declare class SearchItem extends ListItemBase {
      * @since 2.12.0
      */
     image: Array<HTMLElement>;
+    /**
+     * Defines the actionable elements.
+     * This slot allows placing additional interactive elements (such as buttons, icons, or tags)
+     * next to the delete button, providing flexible customization for various user actions.
+     *
+     * **Note:** While the slot is flexible, for consistency with design guidelines,
+     * it's recommended to use `ui5-button` with `Transparent` design or `ui5-icon` elements.
+     *
+     * @public
+     * @since 2.16.0
+     */
+    actions: Array<HTMLElement>;
     _markupText: string;
     static i18nBundle: I18nBundle;
     _onfocusin(e: FocusEvent): void;
     _onfocusout(): void;
+    _onkeydown(e: KeyboardEvent): Promise<void>;
+    /**
+     * Handles manual tab navigation between action items and delete button with focus looping
+     */
+    _handleTabNavigation(e: KeyboardEvent): boolean;
     _onDeleteButtonClick(): void;
+    _onDeleteButtonKeyDown(e: KeyboardEvent): void;
     onBeforeRendering(): void;
     get _deleteButtonTooltip(): string;
+    get hasActions(): boolean;
 }
 export default SearchItem;

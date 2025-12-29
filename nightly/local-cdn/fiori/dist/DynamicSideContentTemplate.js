@@ -1,6 +1,6 @@
 import { Fragment as _Fragment, jsxs as _jsxs, jsx as _jsx } from "@ui5/webcomponents-base/jsx-runtime";
 export default function DynamicSideContentTemplate() {
-    return (_jsx("div", { class: "ui5-dsc-root", style: this.styles.root, children: this._isSideContentFirst ?
+    return (_jsx("div", { class: this.classes.root, style: this.styles.root, children: this._isSideContentFirst ?
             _jsxs(_Fragment, { children: [sideContent.call(this), mainContent.call(this)] })
             :
                 _jsxs(_Fragment, { children: [mainContent.call(this), sideContent.call(this)] }) }));

@@ -11,7 +11,7 @@
  */
 // main package assets (transitively base, theming and icons)
 import "@ui5/webcomponents/dist/Assets-node.js";
-// own fiori package assets
+// own ai package assets
 import "./generated/json-imports/Themes-node.js";
 import "./generated/json-imports/i18n-node.js";
 //# sourceMappingURL=Assets-node.js.map

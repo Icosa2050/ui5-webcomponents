@@ -1,4 +1,4 @@
-import { registerIllustration } from "@ui5/webcomponents-base/dist/asset-registries/Illustrations.js";
+import { unsafeRegisterIllustration } from "@ui5/webcomponents-base/dist/asset-registries/Illustrations.js";
 import dialogSvg from "./sapIllus-Dialog-SortingColumns.js";
 import sceneSvg from "./sapIllus-Scene-SortingColumns.js";
 import spotSvg from "./sapIllus-Spot-SortingColumns.js";
@@ -13,7 +13,7 @@ const collection = "V4";
 const title = IM_TITLE_SORTCOLUMN;
 const subtitle = IM_SUBTITLE_SORTCOLUMN;
 
-registerIllustration(name, {
+unsafeRegisterIllustration(name, {
 	dialogSvg,
 	sceneSvg,
 	spotSvg,

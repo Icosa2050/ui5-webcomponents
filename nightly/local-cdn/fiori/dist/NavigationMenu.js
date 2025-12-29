@@ -7,6 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var NavigationMenu_1;
 import customElement from "@ui5/webcomponents-base/dist/decorators/customElement.js";
 import slot from "@ui5/webcomponents-base/dist/decorators/slot.js";
+import i18n from "@ui5/webcomponents-base/dist/decorators/i18n.js";
 import jsxRenderer from "@ui5/webcomponents-base/dist/renderer/JsxRenderer.js";
 import { isDesktop, } from "@ui5/webcomponents-base/dist/Device.js";
 import Menu from "@ui5/webcomponents/dist/Menu.js";
@@ -45,12 +46,15 @@ let NavigationMenu = NavigationMenu_1 = class NavigationMenu extends Menu {
         }
     }
     get accSideNavigationPopoverHiddenText() {
-        return NavigationMenu_1.i18nBundle.getText(NAVIGATION_MENU_POPOVER_HIDDEN_TEXT);
+        return NavigationMenu_1.i18nBundleFiori.getText(NAVIGATION_MENU_POPOVER_HIDDEN_TEXT);
     }
 };
 __decorate([
     slot({ "default": true, type: HTMLElement, invalidateOnChildChange: true })
 ], NavigationMenu.prototype, "items", void 0);
+__decorate([
+    i18n("@ui5/webcomponents-fiori")
+], NavigationMenu, "i18nBundleFiori", void 0);
 NavigationMenu = NavigationMenu_1 = __decorate([
     customElement({
         tag: "ui5-navigation-menu",

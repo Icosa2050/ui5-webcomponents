@@ -123,6 +123,8 @@ declare class DynamicPage extends UI5Element {
     headerActions?: DynamicPageHeaderActions;
     constructor();
     onBeforeRendering(): void;
+    get endAreaHeight(): number;
+    get topAreaHeight(): number;
     get dynamicPageTitle(): DynamicPageTitle | null;
     get dynamicPageHeader(): DynamicPageHeader | null;
     get footerWrapper(): Element | null | undefined;
@@ -150,7 +152,13 @@ declare class DynamicPage extends UI5Element {
     onPinClick(): Promise<void>;
     onToggleTitle(): Promise<void>;
     _toggleHeader(): Promise<void>;
-    onExpandHoverIn(): Promise<void>;
-    onExpandHoverOut(): Promise<void>;
+    onExpandHoverIn(): void;
+    onExpandHoverOut(): void;
+    onContentFocusIn(e: FocusEvent): void;
+    onContentFocusOut(): void;
+    setScrollPadding(padding: {
+        start: number;
+        end: number;
+    }): void;
 }
 export default DynamicPage;

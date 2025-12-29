@@ -146,7 +146,7 @@ let RatingIndicator = RatingIndicator_1 = class RatingIndicator extends UI5Eleme
         const targetValue = target.getAttribute("data-ui5-value");
         if (targetValue !== null) {
             this.value = parseInt(targetValue);
-            if (this.value === 1 && this._liveValue === 1) {
+            if (this.value === this._liveValue) {
                 this.value = 0;
             }
             if (this._liveValue !== this.value) {

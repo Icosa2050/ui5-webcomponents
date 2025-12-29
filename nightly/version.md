@@ -1,5 +1,5 @@
-commit c1c74f2bd283434a0610b3b9bf9ab0bc9eb682b7
+commit 7bd25a1267953fe0b38ff07839c30563892aaf97
 Author: ui5-webcomponents-bot <ui5-webcomponents-bot@sap.com>
-Date:   Fri Aug 22 14:00:02 2025 +0000
+Date:   Thu Dec 25 08:06:22 2025 +0000
 
-    chore(release): publish v2.14.0-rc.3 [ci skip]
+    chore(release): publish v2.18.0-rc.2 [ci skip]

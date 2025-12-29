@@ -42,6 +42,10 @@ class ToolbarItem extends UI5Element {
          * @since 2.11.0
          */
         this.isOverflowed = false;
+        this._isRendering = true;
+    }
+    onAfterRendering() {
+        this._isRendering = false;
     }
     /**
     * Defines if the width of the item should be ignored in calculating the whole width of the toolbar

@@ -8,7 +8,7 @@ import type { SelectChangeEventDetail } from "@ui5/webcomponents/dist/Select.js"
  */
 interface ISearchScope extends UI5Element {
     text?: string;
-    selected: boolean;
+    value?: string;
     stableDomRef: string;
 }
 type SearchFieldScopeSelectionChangeDetails = {
@@ -81,6 +81,18 @@ declare class SearchField extends UI5Element {
      * @default undefined
      */
     accessibleDescription?: string;
+    /**
+     * Defines the value of the component:
+     *
+     * Applications are responsible for setting the correct scope value.
+     *
+     * **Note:** If the given value does not match any existing scopes,
+     * no scope will be selected and the SearchField scope component will be displayed as empty.
+     * @public
+     * @default ""
+     * @since 2.18.0
+     */
+    scopeValue?: string;
     /**
      * Defines the component scope options.
      * @public

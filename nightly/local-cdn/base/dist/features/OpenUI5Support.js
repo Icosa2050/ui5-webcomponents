@@ -25,7 +25,7 @@ class OpenUI5Support {
             OpenUI5Support.initPromise = new Promise(resolve => {
                 window.sap.ui.require(["sap/ui/core/Core"], async (Core) => {
                     const callback = () => {
-                        let deps = ["sap/ui/core/Popup", "sap/ui/core/Patcher", "sap/ui/core/LocaleData"];
+                        let deps = ["sap/ui/core/Popup", "sap/m/Dialog", "sap/ui/core/Patcher", "sap/ui/core/LocaleData"];
                         if (OpenUI5Support.isAtLeastVersion116()) { // for versions since 1.116.0 and onward, use the modular core
                             deps = [
                                 ...deps,
@@ -36,9 +36,9 @@ class OpenUI5Support {
                                 "sap/ui/core/date/CalendarUtils",
                             ];
                         }
-                        window.sap.ui.require(deps, (Popup, Patcher) => {
+                        window.sap.ui.require(deps, (Popup, Dialog, Patcher) => {
                             patchPatcher(Patcher);
-                            patchPopup(Popup);
+                            patchPopup(Popup, Dialog);
                             resolve();
                         });
                     };
@@ -86,9 +86,9 @@ class OpenUI5Support {
             animationMode: config.getAnimationMode(),
             language: config.getLanguage(),
             theme: config.getTheme(),
-            themeRoot: config.getThemeRoot(),
+            themeRoot: typeof config.getThemeRoot === "function" ? config.getThemeRoot() : undefined,
             rtl: config.getRTL(),
-            timezone: config.getTimezone(),
+            timezone: typeof config.getTimezone === "function" ? config.getTimezone() : undefined,
             calendarType: config.getCalendarType(),
             formatSettings: {
                 firstDayOfWeek: LocaleData ? LocaleData.getInstance(config.getLocale()).getFirstDayOfWeek() : undefined,
@@ -141,8 +141,8 @@ class OpenUI5Support {
         // The file name is "css_variables.css" until 1.127 and "library.css" from 1.127 onwards
         return !!link.href.match(/\/css(-|_)variables\.css/) || !!link.href.match(/\/library\.css/);
     }
-    static addOpenedPopup(popup) {
-        addOpenedPopup(popup);
+    static addOpenedPopup(popupInfo) {
+        addOpenedPopup(popupInfo);
     }
     static removeOpenedPopup(popup) {
         removeOpenedPopup(popup);

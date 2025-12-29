@@ -188,11 +188,6 @@ let YearRangePicker = YearRangePicker_1 = class YearRangePicker extends Calendar
         }
         return isBetweenInclusive(timestamp, this.selectedDates[0], this.selectedDates[1]);
     }
-    onAfterRendering() {
-        if (!this._hidden) {
-            this.focus();
-        }
-    }
     _onkeydown(e) {
         let preventDefault = true;
         const pageSize = this._getPageSize();

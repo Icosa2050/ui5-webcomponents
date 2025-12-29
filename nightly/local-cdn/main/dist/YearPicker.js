@@ -140,11 +140,6 @@ let YearPicker = YearPicker_1 = class YearPicker extends CalendarPart {
         }
         this._yearsInterval = intervals;
     }
-    onAfterRendering() {
-        if (!this._hidden) {
-            this.focus();
-        }
-    }
     /**
       * Returns true if year timestamp is inside the selection range.
       * @private

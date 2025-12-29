@@ -9,6 +9,7 @@ import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
 import customElement from "@ui5/webcomponents-base/dist/decorators/customElement.js";
 import event from "@ui5/webcomponents-base/dist/decorators/event-strict.js";
 import property from "@ui5/webcomponents-base/dist/decorators/property.js";
+import slot from "@ui5/webcomponents-base/dist/decorators/slot.js";
 import jsxRenderer from "@ui5/webcomponents-base/dist/renderer/JsxRenderer.js";
 import { isSpace, isEnter } from "@ui5/webcomponents-base/dist/Keys.js";
 import { getEffectiveAriaLabelText } from "@ui5/webcomponents-base/dist/util/AccessibilityTextsHelper.js";
@@ -255,6 +256,9 @@ __decorate([
 __decorate([
     property()
 ], Link.prototype, "endIcon", void 0);
+__decorate([
+    slot({ type: Node, "default": true })
+], Link.prototype, "text", void 0);
 __decorate([
     property({ noAttribute: true })
 ], Link.prototype, "_rel", void 0);

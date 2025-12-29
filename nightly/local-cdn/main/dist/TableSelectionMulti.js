@@ -7,9 +7,9 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 import { customElement, property } from "@ui5/webcomponents-base/dist/decorators.js";
 import TableSelectionBase from "./TableSelectionBase.js";
 import getActiveElement from "@ui5/webcomponents-base/dist/util/getActiveElement.js";
-import { isSelectionCheckbox, isHeaderSelector, findRowInPath } from "./TableUtils.js";
+import { isSelectionCell, isHeaderSelectionCell, findRowInPath } from "./TableUtils.js";
 import { isUpShift } from "@ui5/webcomponents-base/dist/Keys.js";
-import { TABLE_COLUMNHEADER_SELECTALL_DESCRIPTION, TABLE_COLUMNHEADER_SELECTALL_CHECKED, TABLE_COLUMNHEADER_SELECTALL_NOT_CHECKED, TABLE_COLUMNHEADER_CLEARALL_DESCRIPTION, TABLE_COLUMNHEADER_CLEARALL_DISABLED, } from "./generated/i18n/i18n-defaults.js";
+import { TABLE_COLUMNHEADER_SELECTALL_DESCRIPTION, TABLE_COLUMNHEADER_SELECTALL_CHECKED, TABLE_COLUMNHEADER_SELECTALL_NOT_CHECKED, TABLE_COLUMNHEADER_CLEARALL_DESCRIPTION, TABLE_ACC_STATE_DISABLED, } from "./generated/i18n/i18n-defaults.js";
 /**
  * @class
  *
@@ -50,14 +50,10 @@ let TableSelectionMulti = class TableSelectionMulti extends TableSelectionBase {
          * @since 2.12
          */
         this.headerSelector = "SelectAll";
-        this._rowsLength = 0;
         this._onClickCaptureBound = this._onclickCapture.bind(this);
     }
     onTableBeforeRendering() {
-        if (this._table && this._table.headerRow[0] && this._rowsLength !== this._table.rows.length) {
-            this._rowsLength = this._table.rows.length;
-            this._table.headerRow[0]._invalidate++;
-        }
+        super.onTableBeforeRendering();
         this._table?.removeEventListener("click", this._onClickCaptureBound);
     }
     onTableAfterRendering() {
@@ -141,7 +137,7 @@ let TableSelectionMulti = class TableSelectionMulti extends TableSelectionBase {
             return undefined;
         }
         let description = "";
-        const seperator = " . ";
+        const seperator = " ";
         const i18nBundle = this._table.constructor.i18nBundle;
         if (this.headerSelector === "SelectAll") {
             description = i18nBundle.getText(TABLE_COLUMNHEADER_SELECTALL_DESCRIPTION);
@@ -149,7 +145,7 @@ let TableSelectionMulti = class TableSelectionMulti extends TableSelectionBase {
         }
         else {
             description = i18nBundle.getText(TABLE_COLUMNHEADER_CLEARALL_DESCRIPTION);
-            description += this.getSelectedRows().length === 0 ? seperator + i18nBundle.getText(TABLE_COLUMNHEADER_CLEARALL_DISABLED) : "";
+            description += this.getSelectedRows().length === 0 ? seperator + i18nBundle.getText(TABLE_ACC_STATE_DISABLED) : "";
         }
         return description;
     }
@@ -158,7 +154,7 @@ let TableSelectionMulti = class TableSelectionMulti extends TableSelectionBase {
             return;
         }
         const focusedElement = getActiveElement(); // Assumption: The focused element is always the "next" row after navigation.
-        if (!(focusedElement?.hasAttribute("ui5-table-row") || this._rangeSelection?.isMouse || focusedElement?.hasAttribute("ui5-growing-row"))) {
+        if (!(focusedElement?.hasAttribute("ui5-table-row") || this._rangeSelection?.isMouse)) {
             this._stopRangeSelection();
             return;
         }
@@ -191,11 +187,11 @@ let TableSelectionMulti = class TableSelectionMulti extends TableSelectionBase {
         if (!this._table) {
             return;
         }
-        if (isHeaderSelector(e)) {
+        if (isHeaderSelectionCell(e)) {
             this._stopRangeSelection();
             return;
         }
-        if (!isSelectionCheckbox(e)) {
+        if (!isSelectionCell(e)) {
             this._stopRangeSelection();
             return;
         }

@@ -4,7 +4,7 @@ import type { UI5CustomEvent } from "@ui5/webcomponents-base";
 import type I18nBundle from "@ui5/webcomponents-base/dist/i18nBundle.js";
 import type ButtonDesign from "./types/ButtonDesign.js";
 import type Button from "./Button.js";
-type SplitButtonRootAccAttributes = Pick<AccessibilityAttributes, "hasPopup" | "roleDescription" | "title">;
+type SplitButtonRootAccAttributes = Pick<AccessibilityAttributes, "hasPopup" | "roleDescription" | "title" | "ariaKeyShortcuts">;
 type SplitButtonArrowButtonAccAtributes = Pick<AccessibilityAttributes, "hasPopup" | "expanded" | "title">;
 type SplitButtonAccessibilityAttributes = {
     root?: SplitButtonRootAccAttributes;
@@ -153,6 +153,7 @@ declare class SplitButton extends UI5Element {
      *     Accepts any string value.
      *   - **title**: Specifies a tooltip or description for screen readers.
      *     Accepts any string value.
+     * 	- **ariaKeyShortcuts**: Defines keyboard shortcuts that activate or give focus to the button.
      *
      * - **arrowButton**: Attributes applied specifically to the arrow (split) button.
      *   - **hasPopup**: Indicates the presence and type of popup triggered by the arrow button.
@@ -213,7 +214,7 @@ declare class SplitButton extends UI5Element {
      */
     _handleDefaultAction(e: KeyboardEvent): void;
     get effectiveActiveArrowButton(): boolean;
-    get textButtonAccText(): string | null;
+    get buttonTextContent(): string | null;
     get isTextButton(): boolean;
     get textButton(): Button | null | undefined;
     get arrowButton(): Button | null | undefined;

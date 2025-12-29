@@ -18,7 +18,7 @@ import { isEnter, isSpace } from "@ui5/webcomponents-base/dist/Keys.js";
 import { isDesktop } from "@ui5/webcomponents-base/dist/Device.js";
 // Template
 import AvatarTemplate from "./AvatarTemplate.js";
-import { AVATAR_TOOLTIP } from "./generated/i18n/i18n-defaults.js";
+import { AVATAR_TOOLTIP, AVATAR_TYPE_BUTTON, AVATAR_TYPE_IMAGE, } from "./generated/i18n/i18n-defaults.js";
 // Styles
 import AvatarCss from "./generated/themes/Avatar.css.js";
 import AvatarSize from "./types/AvatarSize.js";
@@ -320,6 +320,14 @@ let Avatar = Avatar_1 = class Avatar extends UI5Element {
             return;
         }
         this._imageLoadError = true;
+    }
+    get accessibilityInfo() {
+        return {
+            role: this._role,
+            type: this.interactive ? Avatar_1.i18nBundle.getText(AVATAR_TYPE_BUTTON) : Avatar_1.i18nBundle.getText(AVATAR_TYPE_IMAGE),
+            description: this.accessibleNameText,
+            disabled: this.disabled,
+        };
     }
 };
 __decorate([

@@ -71,6 +71,12 @@ let ResponsivePopover = ResponsivePopover_1 = class ResponsivePopover extends Po
             return super._show();
         }
     }
+    handleOpenOnEnterDOM() {
+        if (this.open && !isPhone()) {
+            this.showPopover();
+            this.openPopup();
+        }
+    }
     _dialogCloseButtonClick() {
         this.closePopup();
     }

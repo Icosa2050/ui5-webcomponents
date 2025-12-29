@@ -7,7 +7,6 @@ import type { ListItemAccessibilityAttributes } from "./ListItem.js";
 import type List from "./List.js";
 import ListItem from "./ListItem.js";
 import type ResponsivePopover from "./ResponsivePopover.js";
-import type PopoverPlacement from "./types/PopoverPlacement.js";
 import type { IMenuItem } from "./Menu.js";
 type MenuBeforeOpenEventDetail = {
     item?: MenuItem;
@@ -194,7 +193,6 @@ declare class MenuItem extends ListItem implements IMenuItem {
     get _navigableItems(): Array<HTMLElement>;
     get _isCheckable(): boolean;
     _navigateToEndContent(shouldNavigateToPreviousItem: boolean): void;
-    get placement(): `${PopoverPlacement}`;
     get isRtl(): boolean;
     get hasSubmenu(): boolean;
     get hasEndContent(): boolean;
@@ -204,7 +202,7 @@ declare class MenuItem extends ListItem implements IMenuItem {
     get isPhone(): boolean;
     get labelBack(): string;
     get labelClose(): string;
-    get acessibleNameText(): string;
+    get accessibleNameText(): string;
     onBeforeRendering(): void;
     focus(focusOptions?: FocusOptions): Promise<void>;
     get _focusable(): boolean;

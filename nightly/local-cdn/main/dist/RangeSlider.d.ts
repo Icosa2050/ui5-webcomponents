@@ -1,5 +1,6 @@
 import type I18nBundle from "@ui5/webcomponents-base/dist/i18nBundle.js";
 import type { IFormInputElement } from "@ui5/webcomponents-base/dist/features/InputElementsFormSupport.js";
+import ValueState from "@ui5/webcomponents-base/dist/types/ValueState.js";
 import SliderBase from "./SliderBase.js";
 type AriaHandlesText = {
     startHandleText?: string;
@@ -68,7 +69,8 @@ declare class RangeSlider extends SliderBase implements IFormInputElement {
      * @formProperty
      * @public
      */
-    startValue: number;
+    set startValue(value: number);
+    get startValue(): number;
     /**
      * Defines end point of a selection - position of a second handle on the slider.
      * @default 100
@@ -76,10 +78,17 @@ declare class RangeSlider extends SliderBase implements IFormInputElement {
      * @formProperty
      * @public
      */
-    endValue: number;
+    set endValue(value: number);
+    get endValue(): number;
+    tooltipStartValue: string;
+    tooltipEndValue: string;
+    tooltipStartValueState: `${ValueState}`;
+    tooltipEndValueState: `${ValueState}`;
     rangePressed: boolean;
     _isStartValueValid: boolean;
     _isEndValueValid: boolean;
+    _startValue: number;
+    _endValue: number;
     _startValueInitial?: number;
     _endValueInitial?: number;
     _valueAffected?: AffectedValue;
@@ -99,8 +108,6 @@ declare class RangeSlider extends SliderBase implements IFormInputElement {
     static i18nBundle: I18nBundle;
     get formFormattedValue(): FormData;
     constructor();
-    get tooltipStartValue(): string;
-    get tooltipEndValue(): string;
     get _ariaDisabled(): true | undefined;
     get _ariaLabelledByText(): string;
     get _ariaHandlesText(): AriaHandlesText;
@@ -116,6 +123,7 @@ declare class RangeSlider extends SliderBase implements IFormInputElement {
      *
      */
     onBeforeRendering(): void;
+    onAfterRendering(): void;
     syncUIAndState(): void;
     _onfocusin(): void;
     /**
@@ -269,6 +277,10 @@ declare class RangeSlider extends SliderBase implements IFormInputElement {
     bringToFrontTooltip(handle: "start" | "end"): void;
     _onTooltopForwardFocus(e: CustomEvent): void;
     _onTooltipChange(e: CustomEvent): void;
+    _onTooltipFocusChange(e: CustomEvent): void;
+    _onTooltipOpen(): void;
+    _onTooltipInput(e: CustomEvent): void;
+    _onTooltipKeydown(e: KeyboardEvent): void;
     _getFormattedValue(value: string): string;
     /**
      * Swaps the start and end values of the handles if one came accros the other:

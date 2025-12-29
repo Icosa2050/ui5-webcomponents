@@ -7,23 +7,31 @@ import type { ListItemClickEventDetail, ListSelectionChangeEventDetail } from "@
 import ViewSettingsDialogMode from "./types/ViewSettingsDialogMode.js";
 import "@ui5/webcomponents-icons/dist/sort.js";
 import "@ui5/webcomponents-icons/dist/filter.js";
+import "@ui5/webcomponents-icons/dist/group-2.js";
 import "@ui5/webcomponents-icons/dist/nav-back.js";
 import type SortItem from "./SortItem.js";
 import type FilterItem from "./FilterItem.js";
+import type GroupItem from "./GroupItem.js";
 type VSDFilter = Record<string, Array<string>>;
 type VSDFilters = Array<VSDFilter>;
 type VSDSettings = {
     sortOrder: string;
     sortBy: string;
     filters: VSDFilters;
+    groupOrder: string;
+    groupBy: string;
 };
 type ViewSettingsDialogConfirmEventDetail = VSDSettings & {
     sortByItem: SortItem;
     sortDescending: boolean;
+    groupByItem: GroupItem;
+    groupDescending: boolean;
 };
 type ViewSettingsDialogCancelEventDetail = VSDSettings & {
     sortByItem: SortItem;
     sortDescending: boolean;
+    groupByItem: GroupItem;
+    groupDescending: boolean;
 };
 type VSDItem = {
     text?: string;
@@ -36,6 +44,10 @@ type VSDInternalSettings = {
     }>;
     filters: Array<VSDItem & {
         filterOptions: Array<VSDItem>;
+    }>;
+    groupOrder: Array<VSDItem>;
+    groupBy: Array<VSDItem & {
+        index: number;
     }>;
 };
 /**
@@ -64,6 +76,7 @@ type VSDInternalSettings = {
  * @extends UI5Element
  * @since 1.0.0-rc.16
  * @public
+ * @csspart header - Used to style the header.
  */
 declare class ViewSettingsDialog extends UI5Element {
     eventDetails: {
@@ -79,6 +92,13 @@ declare class ViewSettingsDialog extends UI5Element {
      * @public
      */
     sortDescending: boolean;
+    /**
+     * Defines the initial group order.
+     * @default false
+     * @since 2.13.0
+     * @public
+     */
+    groupDescending: boolean;
     /**
      * Indicates if the dialog is open.
      * @public
@@ -132,9 +152,19 @@ declare class ViewSettingsDialog extends UI5Element {
      * @public
      */
     filterItems: Array<FilterItem>;
+    /**
+     * Defines the list of items against which the user could group data.
+     *
+     * **Note:** If you want to use this slot, you need to import used item: `import "@ui5/webcomponents-fiori/dist/GroupItem.js";`
+     * @public
+     */
+    groupItems: Array<GroupItem>;
+    _list: List;
     _dialog?: Dialog;
     _sortOrder?: List;
     _sortBy?: List;
+    _groupOrder?: List;
+    _groupBy?: List;
     static i18nBundle: I18nBundle;
     onBeforeRendering(): void;
     onInvalidation(changeInfo: ChangeInfo): void;
@@ -145,6 +175,7 @@ declare class ViewSettingsDialog extends UI5Element {
     _selectedFiltersLabel(item: FilterItem): string;
     get shouldBuildSort(): boolean;
     get shouldBuildFilter(): boolean;
+    get shouldBuildGroup(): boolean;
     get hasPagination(): boolean;
     get _filterByTitle(): string;
     get _dialogTitle(): string;
@@ -154,10 +185,13 @@ declare class ViewSettingsDialog extends UI5Element {
     get _ascendingLabel(): string;
     get _descendingLabel(): string;
     get _sortOrderLabel(): string;
+    get _groupOrderLabel(): string;
     get _filterByLabel(): string;
     get _sortByLabel(): string;
+    get _groupByLabel(): string;
     get _sortButtonTooltip(): string;
     get _filterButtonTooltip(): string;
+    get _groupButtonTooltip(): string;
     get _resetButtonAction(): string;
     get _isPhone(): boolean;
     get _sortAscending(): boolean;
@@ -166,7 +200,7 @@ declare class ViewSettingsDialog extends UI5Element {
      * Determines disabled state of the `Reset` button.
      */
     get _disableResetButton(): boolean | undefined;
-    get _sortSetttingsAreInitial(): boolean;
+    get _settingsAreInitial(): boolean;
     get _filteresAreInitial(): boolean;
     /**
      * Returns the current settings (current state of all lists).
@@ -177,17 +211,24 @@ declare class ViewSettingsDialog extends UI5Element {
         selected: boolean;
         index: number;
     }[];
+    get initGroupByItems(): {
+        text: string | undefined;
+        selected: boolean;
+        index: number;
+    }[];
     get initSortOrderItems(): {
+        text: string;
+        selected: boolean;
+    }[];
+    get initGroupOrderItems(): {
         text: string;
         selected: boolean;
     }[];
     get expandContent(): boolean;
     get isModeSort(): boolean;
     get isModeFilter(): boolean;
+    get isModeGroup(): boolean;
     get showBackButton(): boolean;
-    get _sortOrderListDomRef(): List;
-    get _sortByList(): List;
-    get _dialogDomRef(): Dialog;
     /**
      * Shows the dialog.
      */
@@ -220,6 +261,10 @@ declare class ViewSettingsDialog extends UI5Element {
         sortDescending: boolean;
         sortBy: string;
         sortByItem: SortItem;
+        groupOrder: string;
+        groupDescending: boolean;
+        groupBy: string;
+        groupByItem: GroupItem;
         filters: VSDFilters;
         filterItems: FilterItem[];
     };
@@ -246,6 +291,14 @@ declare class ViewSettingsDialog extends UI5Element {
      * Stores `Sort By` list as recently used control and its selected item in current state.
      */
     _onSortByChange(e: CustomEvent<ListSelectionChangeEventDetail>): void;
+    /**
+     * Stores `Group Order` list as recently used control and its selected item in current state.
+     */
+    _onGroupOrderChange(e: CustomEvent<ListSelectionChangeEventDetail>): void;
+    /**
+     * Stores `Group By` list as recently used control and its selected item in current state.
+     */
+    _onGroupByChange(e: CustomEvent<ListSelectionChangeEventDetail>): void;
     /**
      * Sets a JavaScript object, as settings to the `ui5-view-settings-dialog`.
      * This method can be used after the dialog is initially open, as the dialog needs

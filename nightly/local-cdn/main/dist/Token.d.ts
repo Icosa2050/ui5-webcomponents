@@ -87,7 +87,6 @@ declare class Token extends UI5Element implements IToken {
     _delete(): void;
     _onmousedown(e: MouseEvent): void;
     _keydown(e: KeyboardEvent): void;
-    onBeforeRendering(): void;
     get tokenDeletableText(): string;
     get textDom(): Element | null | undefined;
     get isTruncatable(): boolean;

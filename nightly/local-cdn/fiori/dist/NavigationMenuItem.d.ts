@@ -1,3 +1,4 @@
+import type I18nBundle from "@ui5/webcomponents-base/dist/i18nBundle.js";
 import type { ClassMap } from "@ui5/webcomponents-base/dist/types.js";
 import MenuItem from "@ui5/webcomponents/dist/MenuItem.js";
 import type SideNavigationItemDesign from "./types/SideNavigationItemDesign.js";
@@ -53,6 +54,7 @@ declare class NavigationMenuItem extends MenuItem {
      */
     target?: string;
     design: `${SideNavigationItemDesign}`;
+    static i18nBundleFiori: I18nBundle;
     associatedItem?: SideNavigationSelectableItemBase;
     get isExternalLink(): boolean | "" | undefined;
     get _href(): string | undefined;
@@ -79,6 +81,6 @@ declare class NavigationMenuItem extends MenuItem {
     _activate(e: MouseEvent | KeyboardEvent): void;
     _onkeydown(e: KeyboardEvent): Promise<void>;
     _onkeyup(e: KeyboardEvent): void;
-    get acessibleNameText(): string;
+    get accessibleNameText(): string;
 }
 export default NavigationMenuItem;

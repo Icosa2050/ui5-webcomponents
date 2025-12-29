@@ -47,6 +47,13 @@ class UserMenuAccount extends UI5Element {
          */
         this.description = "";
         /**
+         * Defines additional information for the user.
+         *
+         * @default ""
+         * @public
+         */
+        this.additionalInfo = "";
+        /**
          * Defines if the user is selected.
          *
          * @default false
@@ -80,6 +87,9 @@ __decorate([
 __decorate([
     property({ type: String })
 ], UserMenuAccount.prototype, "description", void 0);
+__decorate([
+    property({ type: String })
+], UserMenuAccount.prototype, "additionalInfo", void 0);
 __decorate([
     property({ type: Boolean })
 ], UserMenuAccount.prototype, "selected", void 0);

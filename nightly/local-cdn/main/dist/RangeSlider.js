@@ -8,7 +8,8 @@ var RangeSlider_1;
 import customElement from "@ui5/webcomponents-base/dist/decorators/customElement.js";
 import property from "@ui5/webcomponents-base/dist/decorators/property.js";
 import i18n from "@ui5/webcomponents-base/dist/decorators/i18n.js";
-import { isEscape, isEnter, isHome, isEnd, } from "@ui5/webcomponents-base/dist/Keys.js";
+import ValueState from "@ui5/webcomponents-base/dist/types/ValueState.js";
+import { isEscape, isEnter, isHome, isEnd, isF2, } from "@ui5/webcomponents-base/dist/Keys.js";
 import SliderBase from "./SliderBase.js";
 import RangeSliderTemplate from "./RangeSliderTemplate.js";
 // Texts
@@ -70,6 +71,34 @@ import rangeSliderStyles from "./generated/themes/RangeSlider.css.js";
  * @csspart handle - Used to style the handles of the `ui5-range-slider`.
  */
 let RangeSlider = RangeSlider_1 = class RangeSlider extends SliderBase {
+    /**
+     * Defines start point of a selection - position of a first handle on the slider.
+     * @default 0
+     * @formEvents change input
+     * @formProperty
+     * @public
+     */
+    set startValue(value) {
+        this._startValue = value;
+        this.tooltipStartValue = value.toString();
+    }
+    get startValue() {
+        return this._startValue;
+    }
+    /**
+     * Defines end point of a selection - position of a second handle on the slider.
+     * @default 100
+     * @formEvents change input
+     * @formProperty
+     * @public
+     */
+    set endValue(value) {
+        this._endValue = value;
+        this.tooltipEndValue = value.toString();
+    }
+    get endValue() {
+        return this._endValue;
+    }
     get formFormattedValue() {
         const formData = new FormData();
         if (!this.name) {
@@ -81,25 +110,15 @@ let RangeSlider = RangeSlider_1 = class RangeSlider extends SliderBase {
     }
     constructor() {
         super();
-        /**
-         * Defines start point of a selection - position of a first handle on the slider.
-         * @default 0
-         * @formEvents change input
-         * @formProperty
-         * @public
-         */
-        this.startValue = 0;
-        /**
-         * Defines end point of a selection - position of a second handle on the slider.
-         * @default 100
-         * @formEvents change input
-         * @formProperty
-         * @public
-         */
-        this.endValue = 100;
+        this.tooltipStartValue = "";
+        this.tooltipEndValue = "";
+        this.tooltipStartValueState = "None";
+        this.tooltipEndValueState = "None";
         this.rangePressed = false;
         this._isStartValueValid = false;
         this._isEndValueValid = false;
+        this._startValue = 0;
+        this._endValue = 100;
         this._isPressInCurrentRange = false;
         this._handeIsPressed = false;
         this._reversedValues = false;
@@ -108,16 +127,6 @@ let RangeSlider = RangeSlider_1 = class RangeSlider extends SliderBase {
         this._stateStorage.endValue = undefined;
         this._lastValidStartValue = this.min.toString();
         this._lastValidEndValue = this.max.toString();
-    }
-    get tooltipStartValue() {
-        const ctor = this.constructor;
-        const stepPrecision = ctor._getDecimalPrecisionOfNumber(this._effectiveStep);
-        return this.startValue.toFixed(stepPrecision);
-    }
-    get tooltipEndValue() {
-        const ctor = this.constructor;
-        const stepPrecision = ctor._getDecimalPrecisionOfNumber(this._effectiveStep);
-        return this.endValue.toFixed(stepPrecision);
     }
     get _ariaDisabled() {
         return this.disabled || undefined;
@@ -166,6 +175,12 @@ let RangeSlider = RangeSlider_1 = class RangeSlider extends SliderBase {
         this.syncUIAndState();
         this._updateHandlesAndRange(0);
         this.update(this._valueAffected, this.startValue, this.endValue);
+    }
+    onAfterRendering() {
+        super.onAfterRendering();
+        [...this.getDomRef().querySelectorAll("[ui5-slider-tooltip]")].forEach(tooltip => {
+            tooltip.repositionTooltip();
+        });
     }
     syncUIAndState() {
         // Validate step and update the stored state for the step property.
@@ -283,6 +298,8 @@ let RangeSlider = RangeSlider_1 = class RangeSlider extends SliderBase {
             const newEndValue = ctor.clipValue(newValueOffset + this.endValue, min, max);
             this.update(affectedValue, newStartValue, newEndValue);
         }
+        this.tooltipStartValue = this.startValue.toString();
+        this.tooltipEndValue = this.endValue.toString();
     }
     /**
      * Determines affected value (start/end) depending on the currently
@@ -405,6 +422,8 @@ let RangeSlider = RangeSlider_1 = class RangeSlider extends SliderBase {
         }
         // Updates UI and state when dragging of the whole selected range
         this._updateValueOnRangeDrag(e);
+        this.tooltipStartValue = this.startValue.toString();
+        this.tooltipEndValue = this.endValue.toString();
     }
     /**
      * Updates UI and state when dragging a single Range Slider handle
@@ -636,7 +655,11 @@ let RangeSlider = RangeSlider_1 = class RangeSlider extends SliderBase {
             : "[data-sap-ui-end-value]";
         const tooltip = this.shadowRoot.querySelector(tooltipSelector);
         if (tooltip?.hidePopover && tooltip?.showPopover) {
-            requestAnimationFrame(() => {
+            const frame = requestAnimationFrame(() => {
+                if (tooltip.getDomRef()?.offsetParent === null) {
+                    cancelAnimationFrame(frame);
+                    return;
+                }
                 tooltip.hidePopover();
                 tooltip.showPopover();
             });
@@ -650,6 +673,18 @@ let RangeSlider = RangeSlider_1 = class RangeSlider extends SliderBase {
         const tooltip = e.target;
         const isStart = tooltip.hasAttribute("data-sap-ui-start-value");
         const inputValue = parseFloat(e.detail.value);
+        const isInvalid = inputValue > this._effectiveMax || inputValue < this._effectiveMin;
+        if (isInvalid) {
+            if (isStart) {
+                this.tooltipStartValueState = ValueState.Negative;
+                this.tooltipStartValue = e.detail.value;
+            }
+            else {
+                this.tooltipEndValueState = ValueState.Negative;
+                this.tooltipEndValue = e.detail.value;
+            }
+            return;
+        }
         const clampedValue = Math.min(this.max, Math.max(this.min, inputValue));
         if (isStart) {
             this.startValue = clampedValue;
@@ -676,6 +711,44 @@ let RangeSlider = RangeSlider_1 = class RangeSlider extends SliderBase {
         this.bringToFrontTooltip(isStart ? "start" : "end");
         this.update("value", this.startValue, this.endValue);
         this.fireDecoratorEvent("change");
+    }
+    _onTooltipFocusChange(e) {
+        const tooltip = e.target;
+        const isStart = tooltip.hasAttribute("data-sap-ui-start-value");
+        const value = isStart ? this.tooltipStartValue : this.tooltipEndValue;
+        const isInvalid = parseFloat(value) > this._effectiveMax || parseFloat(value) < this._effectiveMin;
+        if (isInvalid) {
+            if (isStart) {
+                this.tooltipStartValueState = ValueState.None;
+                this.tooltipStartValue = this.startValue.toString();
+            }
+            else {
+                this.tooltipEndValueState = ValueState.None;
+                this.tooltipEndValue = this.endValue.toString();
+            }
+        }
+    }
+    _onTooltipOpen() {
+        const ctor = this.constructor;
+        const stepPrecision = ctor._getDecimalPrecisionOfNumber(this._effectiveStep);
+        this.tooltipStartValue = this.startValue.toFixed(stepPrecision);
+        this.tooltipEndValue = this.endValue.toFixed(stepPrecision);
+    }
+    _onTooltipInput(e) {
+        const tooltip = e.target;
+        const isStart = tooltip.hasAttribute("data-sap-ui-start-value");
+        if (isStart) {
+            this.tooltipStartValue = e.detail.value;
+        }
+        else {
+            this.tooltipEndValue = e.detail.value;
+        }
+    }
+    _onTooltipKeydown(e) {
+        if (isF2(e)) {
+            e.preventDefault();
+            e.target.followRef?.focus();
+        }
     }
     _getFormattedValue(value) {
         const valueNumber = parseFloat(value);
@@ -782,10 +855,22 @@ let RangeSlider = RangeSlider_1 = class RangeSlider extends SliderBase {
 };
 __decorate([
     property({ type: Number })
-], RangeSlider.prototype, "startValue", void 0);
+], RangeSlider.prototype, "startValue", null);
 __decorate([
     property({ type: Number })
-], RangeSlider.prototype, "endValue", void 0);
+], RangeSlider.prototype, "endValue", null);
+__decorate([
+    property()
+], RangeSlider.prototype, "tooltipStartValue", void 0);
+__decorate([
+    property()
+], RangeSlider.prototype, "tooltipEndValue", void 0);
+__decorate([
+    property()
+], RangeSlider.prototype, "tooltipStartValueState", void 0);
+__decorate([
+    property()
+], RangeSlider.prototype, "tooltipEndValueState", void 0);
 __decorate([
     property({ type: Boolean })
 ], RangeSlider.prototype, "rangePressed", void 0);

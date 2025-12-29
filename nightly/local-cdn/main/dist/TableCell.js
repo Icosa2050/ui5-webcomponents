@@ -5,6 +5,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 import customElement from "@ui5/webcomponents-base/dist/decorators/customElement.js";
+import query from "@ui5/webcomponents-base/dist/decorators/query.js";
 import TableCellTemplate from "./TableCellTemplate.js";
 import TableCellStyles from "./generated/themes/TableCell.css.js";
 import TableCellBase from "./TableCellBase.js";
@@ -36,7 +37,7 @@ let TableCell = class TableCell extends TableCellBase {
             this.style.justifyContent = `var(--horizontal-align-${this._individualSlot})`;
         }
     }
-    injectHeaderNodes(ref) {
+    _injectHeaderNodes(ref) {
         if (ref && !ref.hasChildNodes()) {
             ref.replaceChildren(...this._popinHeaderNodes);
         }
@@ -51,7 +52,7 @@ let TableCell = class TableCell extends TableCellBase {
         const nodes = [];
         const headerCell = this._headerCell;
         if (headerCell.popinText) {
-            nodes.push(headerCell.popinText);
+            nodes.push(document.createTextNode(headerCell.popinText));
         }
         else {
             nodes.push(...this._headerCell.content.map(node => node.cloneNode(true)));
@@ -65,6 +66,12 @@ let TableCell = class TableCell extends TableCellBase {
         return TableCellBase.i18nBundle.getText(LABEL_COLON);
     }
 };
+__decorate([
+    query("#popin-header")
+], TableCell.prototype, "_popinHeader", void 0);
+__decorate([
+    query("#popin-content")
+], TableCell.prototype, "_popinContent", void 0);
 TableCell = __decorate([
     customElement({
         tag: "ui5-table-cell",

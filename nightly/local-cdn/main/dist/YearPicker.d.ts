@@ -70,7 +70,6 @@ declare class YearPicker extends CalendarPart implements ICalendarPicker {
     _getPageSize(): 8 | 20;
     _getRowSize(): 2 | 4;
     _buildYears(): void;
-    onAfterRendering(): void;
     /**
       * Returns true if year timestamp is inside the selection range.
       * @private

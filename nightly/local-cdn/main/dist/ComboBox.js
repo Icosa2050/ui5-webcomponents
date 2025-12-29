@@ -29,7 +29,7 @@ import { isBackSpace, isDelete, isShow, isUp, isDown, isEnter, isEscape, isTabNe
 import { attachListeners } from "@ui5/webcomponents-base/dist/util/valueStateNavigation.js";
 import arraysAreEqual from "@ui5/webcomponents-base/dist/util/arraysAreEqual.js";
 import * as Filters from "./Filters.js";
-import { VALUE_STATE_SUCCESS, VALUE_STATE_ERROR, VALUE_STATE_WARNING, VALUE_STATE_INFORMATION, VALUE_STATE_TYPE_SUCCESS, VALUE_STATE_TYPE_INFORMATION, VALUE_STATE_TYPE_ERROR, VALUE_STATE_TYPE_WARNING, VALUE_STATE_LINK, VALUE_STATE_LINKS, VALUE_STATE_LINK_MAC, VALUE_STATE_LINKS_MAC, INPUT_SUGGESTIONS_TITLE, COMBOBOX_AVAILABLE_OPTIONS, COMBOBOX_DIALOG_OK_BUTTON, SELECT_OPTIONS, LIST_ITEM_POSITION, LIST_ITEM_GROUP_HEADER, INPUT_CLEAR_ICON_ACC_NAME, FORM_TEXTFIELD_REQUIRED, } from "./generated/i18n/i18n-defaults.js";
+import { VALUE_STATE_SUCCESS, VALUE_STATE_ERROR, VALUE_STATE_WARNING, VALUE_STATE_INFORMATION, VALUE_STATE_TYPE_SUCCESS, VALUE_STATE_TYPE_INFORMATION, VALUE_STATE_TYPE_ERROR, VALUE_STATE_TYPE_WARNING, VALUE_STATE_LINK, VALUE_STATE_LINKS, VALUE_STATE_LINK_MAC, VALUE_STATE_LINKS_MAC, INPUT_SUGGESTIONS_TITLE, COMBOBOX_AVAILABLE_OPTIONS, COMBOBOX_DIALOG_OK_BUTTON, COMBOBOX_DIALOG_CANCEL_BUTTON, SELECT_OPTIONS, LIST_ITEM_POSITION, LIST_ITEM_GROUP_HEADER, INPUT_CLEAR_ICON_ACC_NAME, FORM_TEXTFIELD_REQUIRED, } from "./generated/i18n/i18n-defaults.js";
 // Templates
 import ComboBoxTemplate from "./ComboBoxTemplate.js";
 // Styles
@@ -43,7 +43,6 @@ import "./ComboBoxItem.js";
 import "./ComboBoxItemGroup.js";
 // eslint-disable-next-line
 import { isInstanceOfComboBoxItemGroup } from "./ComboBoxItemGroup.js";
-import PopoverHorizontalAlign from "./types/PopoverHorizontalAlign.js";
 const SKIP_ITEMS_SIZE = 10;
 var ValueStateIconMapping;
 (function (ValueStateIconMapping) {
@@ -210,6 +209,12 @@ let ComboBox = ComboBox_1 = class ComboBox extends UI5Element {
          * @private
          */
         this._linksListenersArray = [];
+        /**
+         * Indicates whether IME composition is currently active
+         * @default false
+         * @private
+         */
+        this._isComposing = false;
         this._initialRendering = true;
         this._itemFocused = false;
         // used only for Safari fix (check onAfterRendering)
@@ -264,8 +269,12 @@ let ComboBox = ComboBox_1 = class ComboBox extends UI5Element {
             this._valueStateLinks = this.linksInAriaValueStateHiddenText;
         }
     }
+    onEnterDOM() {
+        this._enableComposition();
+    }
     onExitDOM() {
         this._removeLinksEventListeners();
+        this._composition?.removeEventListeners();
     }
     _focusin(e) {
         this.focused = true;
@@ -404,7 +413,7 @@ let ComboBox = ComboBox_1 = class ComboBox extends UI5Element {
         this.filterValue = value;
         this._clearFocus();
         // autocomplete
-        if (shouldAutocomplete && !isAndroid()) {
+        if (shouldAutocomplete && !this._isComposing && !isAndroid()) {
             this._handleTypeAhead(value, value);
         }
         this.fireDecoratorEvent("input");
@@ -601,7 +610,12 @@ let ComboBox = ComboBox_1 = class ComboBox extends UI5Element {
         }
         if (isEscape(e)) {
             this.focused = true;
-            this.value = !this.open ? this._lastValue : this.value;
+            const shouldResetValueAndStopPropagation = !this.open && this.value !== this._lastValue;
+            if (shouldResetValueAndStopPropagation) {
+                this.value = this._lastValue;
+                // stop propagation to prevent closing the popup when using the combobox inside it
+                e.stopPropagation();
+            }
         }
         if ((isTabNext(e) || isTabPrevious(e)) && this.open) {
             this._closeRespPopover();
@@ -789,6 +803,11 @@ let ComboBox = ComboBox_1 = class ComboBox extends UI5Element {
             });
             return item;
         });
+        const noUserInteraction = !this.focused && !this._isKeyNavigation && !this._selectionPerformed && !this._iconPressed;
+        // Skip firing "selection-change" event if this is initial rendering or if there has been no user interaction yet
+        if (this._initialRendering || noUserInteraction) {
+            return;
+        }
         // Fire selection-change event only when selection actually changes
         if (previouslySelectedItem !== itemToBeSelected) {
             if (itemToBeSelected) {
@@ -853,7 +872,7 @@ let ComboBox = ComboBox_1 = class ComboBox extends UI5Element {
             announce(`${groupHeaderText} ${currentItem.headerText}`, InvisibleMessageMode.Polite);
         }
         else {
-            announce(`${currentItemAdditionalText} ${itemPositionText}`.trim(), InvisibleMessageMode.Polite);
+            announce(`${currentItemAdditionalText} ${this.open ? itemPositionText : ""}`.trim(), InvisibleMessageMode.Polite);
         }
     }
     _clear() {
@@ -903,6 +922,34 @@ let ComboBox = ComboBox_1 = class ComboBox extends UI5Element {
             announce(valueStateText, InvisibleMessageMode.Polite);
         }
     }
+    /**
+     * Enables IME composition handling.
+     * Dynamically loads the InputComposition feature and sets up event listeners.
+     * @private
+     */
+    _enableComposition() {
+        if (this._composition) {
+            return;
+        }
+        const setup = (InputCompositionClass) => {
+            this._composition = new InputCompositionClass({
+                getInputEl: () => this.inner,
+                updateCompositionState: (isComposing) => {
+                    this._isComposing = isComposing;
+                },
+            });
+            this._composition.addEventListeners();
+        };
+        if (ComboBox_1.composition) {
+            setup(ComboBox_1.composition);
+        }
+        else {
+            import("./features/InputComposition.js").then(CompositionModule => {
+                ComboBox_1.composition = CompositionModule.default;
+                setup(CompositionModule.default);
+            });
+        }
+    }
     get _headerTitleText() {
         return ComboBox_1.i18nBundle.getText(INPUT_SUGGESTIONS_TITLE);
     }
@@ -914,6 +961,9 @@ let ComboBox = ComboBox_1 = class ComboBox extends UI5Element {
     }
     get _dialogOkButtonText() {
         return ComboBox_1.i18nBundle.getText(COMBOBOX_DIALOG_OK_BUTTON);
+    }
+    get _dialogCancelButtonText() {
+        return ComboBox_1.i18nBundle.getText(COMBOBOX_DIALOG_CANCEL_BUTTON);
     }
     get inner() {
         return (isPhone() && this.open)
@@ -976,9 +1026,6 @@ let ComboBox = ComboBox_1 = class ComboBox extends UI5Element {
     }
     get shouldDisplayDefaultValueStateMessage() {
         return !this.valueStateMessage.length && this.hasValueStateText;
-    }
-    get _valueStatePopoverHorizontalAlign() {
-        return this.effectiveDir !== "rtl" ? PopoverHorizontalAlign.Start : PopoverHorizontalAlign.End;
     }
     /**
      * This method is relevant for sap_horizon theme only
@@ -1139,6 +1186,9 @@ __decorate([
 __decorate([
     property({ type: Array })
 ], ComboBox.prototype, "_linksListenersArray", void 0);
+__decorate([
+    property({ type: Boolean, noAttribute: true })
+], ComboBox.prototype, "_isComposing", void 0);
 __decorate([
     slot({
         type: HTMLElement,

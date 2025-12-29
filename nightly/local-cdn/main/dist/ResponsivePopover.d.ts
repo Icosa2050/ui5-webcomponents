@@ -48,6 +48,7 @@ declare class ResponsivePopover extends Popover {
     constructor();
     openPopup(): Promise<void>;
     _show(): Promise<void>;
+    handleOpenOnEnterDOM(): void;
     _dialogCloseButtonClick(): void;
     /**
      * Closes the popover/dialog.

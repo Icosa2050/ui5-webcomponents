@@ -10,9 +10,9 @@ import jsxRender from "@ui5/webcomponents-base/dist/renderer/JsxRenderer.js";
 import property from "@ui5/webcomponents-base/dist/decorators/property.js";
 import slot from "@ui5/webcomponents-base/dist/decorators/slot.js";
 import i18n from "@ui5/webcomponents-base/dist/decorators/i18n.js";
-import { isLeft, isRight, isSpace, isEnter, isEnterShift, isEnterCtrl, isEnterAlt, isMinus, isPlus, } from "@ui5/webcomponents-base/dist/Keys.js";
+import { isLeft, isRight, isMinus, isPlus, isEnter, } from "@ui5/webcomponents-base/dist/Keys.js";
 import SideNavigationSelectableItemBase from "./SideNavigationSelectableItemBase.js";
-import { SIDE_NAVIGATION_ICON_COLLAPSE, SIDE_NAVIGATION_ICON_EXPAND, SIDE_NAVIGATION_OVERFLOW_ITEM_LABEL, } from "./generated/i18n/i18n-defaults.js";
+import { SIDE_NAVIGATION_ICON_COLLAPSE, SIDE_NAVIGATION_ICON_EXPAND, SIDE_NAVIGATION_OVERFLOW_ITEM_LABEL, SIDE_NAVIGATION_PARENT_ITEM_SELECTABLE_DESCRIPTION, } from "./generated/i18n/i18n-defaults.js";
 // Templates
 import SideNavigationItemTemplate from "./SideNavigationItemTemplate.js";
 // Styles
@@ -105,6 +105,9 @@ let SideNavigationItem = SideNavigationItem_1 = class SideNavigationItem extends
         if (this.accessibilityAttributes?.hasPopup) {
             return this.accessibilityAttributes.hasPopup;
         }
+        if (this.isOverflow) {
+            return "menu";
+        }
         return undefined;
     }
     get _ariaChecked() {
@@ -124,6 +127,11 @@ let SideNavigationItem = SideNavigationItem_1 = class SideNavigationItem extends
             return undefined;
         }
         return this.expanded;
+    }
+    get _describedBy() {
+        if (!this.effectiveDisabled && this.items.length && !this.unselectable) {
+            return SideNavigationItem_1.i18nBundle.getText(SIDE_NAVIGATION_PARENT_ITEM_SELECTABLE_DESCRIPTION, this.text ?? "");
+        }
     }
     get classesArray() {
         const classes = super.classesArray;
@@ -192,14 +200,10 @@ let SideNavigationItem = SideNavigationItem_1 = class SideNavigationItem extends
             this.expanded = true;
             return;
         }
-        // "Space" + modifier is often reserved by the operating system or window manager
-        if (this.unselectable && isSpace(e)) {
-            this._toggle();
-            return;
-        }
-        // "Enter" + "Meta" is missing since it is often reserved by the operating system or window manager
-        if (this.unselectable && (isEnter(e) || isEnterShift(e) || isEnterCtrl(e) || isEnterAlt(e))) {
-            this._toggle();
+        if (isEnter(e)) {
+            if (!this.inPopover && this.unselectable && !this.isExternalLink) {
+                e.preventDefault();
+            }
         }
         super._onkeydown(e);
     }

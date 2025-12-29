@@ -2,6 +2,8 @@ import type I18nBundle from "@ui5/webcomponents-base/dist/i18nBundle.js";
 import type { IFormInputElement } from "@ui5/webcomponents-base/dist/features/InputElementsFormSupport.js";
 import type ValueState from "@ui5/webcomponents-base/dist/types/ValueState.js";
 import SliderBase from "./SliderBase.js";
+import type SliderTooltip from "./SliderTooltip.js";
+import type { SliderTooltipChangeEventDetails } from "./SliderTooltip.js";
 /**
  * @class
  *
@@ -65,13 +67,13 @@ declare class Slider extends SliderBase implements IFormInputElement {
      * @public
      */
     value: number;
+    tooltipValueState: `${ValueState}`;
+    tooltipValue: string;
     _valueInitial?: number;
     _valueOnInteractionStart?: number;
     _progressPercentage: number;
     _handlePositionFromStart: number;
     _lastValidInputValue: string;
-    _tooltipInputValue: string;
-    _tooltipInputValueState: `${ValueState}`;
     get formFormattedValue(): string;
     static i18nBundle: I18nBundle;
     constructor();
@@ -87,6 +89,7 @@ declare class Slider extends SliderBase implements IFormInputElement {
      *
      */
     onBeforeRendering(): void;
+    onAfterRendering(): void;
     syncUIAndState(): void;
     /**
      * Called when the user starts interacting with the slider
@@ -95,6 +98,11 @@ declare class Slider extends SliderBase implements IFormInputElement {
     _onmousedown(e: TouchEvent | MouseEvent): void;
     _onfocusin(): void;
     _onfocusout(e: FocusEvent): void;
+    _onTooltipChange(e: CustomEvent<SliderTooltipChangeEventDetails>): void;
+    _onTooltipFocusChange(): void;
+    _onTooltipKeydown(e: KeyboardEvent): void;
+    _onTooltipOpen(): void;
+    _onTooltipInput(e: CustomEvent): void;
     /**
      * Called when the user moves the slider
      * @private
@@ -116,6 +124,7 @@ declare class Slider extends SliderBase implements IFormInputElement {
     _handleActionKeyPress(e: KeyboardEvent): void;
     _onTooltopForwardFocus(e: CustomEvent): void;
     get inputValue(): string;
+    get tooltip(): SliderTooltip | null | undefined;
     get styles(): {
         progress: {
             transform: string;
@@ -125,8 +134,7 @@ declare class Slider extends SliderBase implements IFormInputElement {
             [x: string]: string;
         };
     };
-    get _sliderHandle(): Element;
-    get tooltipValue(): string;
+    get _sliderHandle(): HTMLElement;
     get _ariaDisabled(): true | undefined;
     get _ariaLabelledByText(): string;
     get _ariaDescribedByInputText(): string;

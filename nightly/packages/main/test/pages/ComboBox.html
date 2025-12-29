@@ -18,9 +18,9 @@
 
 
 
-  <script type="module" crossorigin src="/ui5-webcomponents/nightly/assets/test/pages/ComboBox.html-Br-3UFFI.js"></script>
-  <link rel="modulepreload" crossorigin href="/ui5-webcomponents/nightly/assets/bundle.esm-Z_EAX1F5.js">
-  <link rel="stylesheet" crossorigin href="/ui5-webcomponents/nightly/assets/ComboBox-LkZexEaJ.css">
+  <script type="module" crossorigin src="/webcomponents/nightly/assets/test/pages/ComboBox.html-BdCXdRqq.js"></script>
+  <link rel="modulepreload" crossorigin href="/webcomponents/nightly/assets/bundle.esm-CSfv0fSI.js">
+  <link rel="stylesheet" crossorigin href="/webcomponents/nightly/assets/ComboBox-LkZexEaJ.css">
 </head>
 
 <body class="combobox1auto">
@@ -309,6 +309,43 @@
 		</ui5-combobox>
 	</div>
 
+	<section>
+		<h3>ComboBox Composition</h3>
+
+		<div class="demo-section">
+			<span>ComboBox - Korean suggestions</span>
+
+			<ui5-combobox class="combobox" id="korean-suggestions-cb">
+				<ui5-cb-item text="안녕하세요"></ui5-cb-item>
+				<ui5-cb-item text="고맙습니다"></ui5-cb-item>
+				<ui5-cb-item text="사랑"></ui5-cb-item>
+				<ui5-cb-item text="한국"></ui5-cb-item>
+			</ui5-combobox>
+		</div>
+
+		<div class="demo-section">
+			<span>ComboBox - Japanese suggestions</span>
+
+			<ui5-combobox class="combobox" id="japanese-suggestions-cb">
+				<ui5-cb-item text="こんにちは"></ui5-cb-item>
+				<ui5-cb-item text="ありがとう"></ui5-cb-item>
+				<ui5-cb-item text="日本"></ui5-cb-item>
+				<ui5-cb-item text="東京"></ui5-cb-item>
+			</ui5-combobox>
+		</div>
+
+		<div class="demo-section">
+			<span>ComboBox - Chinese suggestions</span>
+
+			<ui5-combobox class="combobox" id="chinese-suggestions-cb">
+				<ui5-cb-item text="你好"></ui5-cb-item>
+				<ui5-cb-item text="謝謝"></ui5-cb-item>
+				<ui5-cb-item text="北京"></ui5-cb-item>
+				<ui5-cb-item text="上海"></ui5-cb-item>
+			</ui5-combobox>
+		</div>
+	</section>
+
 	<div class="demo-section">
 		<ui5-combobox id="value-state-error-text" value-state="Negative">
 			<ui5-cb-item text="Algeria"></ui5-cb-item>
@@ -375,6 +412,48 @@
 
 				inputCountEl.innerText = parseInt(inputCountEl.innerText) + 1;
 			});
+		</script>
+	</div>
+	<div class="demo-section">
+		<ui5-title>Form validation</ui5-title>
+		<form id="formValidation">
+			<ui5-message-strip id="formValidationMessage" hidden></ui5-message-strip>
+			<ui5-combobox id="comboInAForm" class="combobox2auto" required>
+				<ui5-cb-item text="Algeria"></ui5-cb-item>
+				<ui5-cb-item text="Argentina"></ui5-cb-item>
+				<ui5-cb-item text="Bulgaria"></ui5-cb-item>
+				<ui5-cb-item text="Canada"></ui5-cb-item>
+				<ui5-cb-item text="Chile"></ui5-cb-item>
+			</ui5-combobox>
+			<br><br>
+			<ui5-button id="btnCheckFormValidity">Check Validity</ui5-button>
+		</form>
+		<script>
+			const btnCheckFormValidity = document.getElementById('btnCheckFormValidity');
+			const formValidationMessage = document.getElementById('formValidationMessage');
+			const comboInAForm = document.getElementById('comboInAForm');
+
+			btnCheckFormValidity.addEventListener('click', function () {
+				checkFormValidity('comboInAForm');
+			});
+
+			comboInAForm.addEventListener('ui5-change', function () {
+				setTimeout(() => {
+					checkFormValidity('comboInAForm', true);
+				}, 0);
+			});
+
+			function checkFormValidity(elementId, delayed = false) {
+				const element = document.getElementById(elementId);
+				const isValid = element.checkValidity();
+
+				element.reportValidity();
+
+				// Show result
+				formValidationMessage.hidden = false;
+				formValidationMessage.innerText = `checkValidity(): ${isValid} ${delayed ? '( Delayed check )' : ''}`;
+				formValidationMessage.design = isValid ? "Positive" : "Negative";
+			}
 		</script>
 	</div>
 	<div class="demo-section">

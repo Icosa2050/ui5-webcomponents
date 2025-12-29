@@ -2,6 +2,7 @@ import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
 import type { ResizeObserverCallback } from "@ui5/webcomponents-base/dist/delegate/ResizeHandler.js";
 import ItemNavigation from "@ui5/webcomponents-base/dist/delegate/ItemNavigation.js";
 import ScrollEnablement from "@ui5/webcomponents-base/dist/delegate/ScrollEnablement.js";
+import type { IFormInputElement } from "@ui5/webcomponents-base/dist/features/InputElementsFormSupport.js";
 import type I18nBundle from "@ui5/webcomponents-base/dist/i18nBundle.js";
 import type { UI5CustomEvent } from "@ui5/webcomponents-base";
 import type ResponsivePopover from "./ResponsivePopover.js";
@@ -63,7 +64,7 @@ declare enum ClipboardDataOperation {
  * @since 2.0.0
  * @experimental This component is availabe since 2.0 under an experimental flag and its API and behaviour are subject to change.
  */
-declare class Tokenizer extends UI5Element {
+declare class Tokenizer extends UI5Element implements IFormInputElement {
     eventDetails: {
         "token-delete": TokenizerTokenDeleteEventDetail;
         "selection-change": TokenizerSelectionChangeEventDetail;
@@ -88,6 +89,16 @@ declare class Tokenizer extends UI5Element {
      * @public
      */
     multiLine: boolean;
+    /**
+     * Determines the name by which the component will be identified upon submission in an HTML form.
+     *
+     * **Note:** This property is only applicable within the context of an HTML Form element.
+     * **Note:** When the component is used inside a form element,
+     * the value is sent as the first element in the form data, even if it's empty.
+     * @default undefined
+     * @public
+     */
+    name?: string;
     /**
      * Defines whether "Clear All" button is present. Ensure `multiLine` is enabled, otherwise `showClearAll` will have no effect.
      *
@@ -148,7 +159,7 @@ declare class Tokenizer extends UI5Element {
     popoverMinWidth?: number;
     /**
      * Prevents tokens to be part of the tab chain.
-     * **Note:** Used inside MultiInput and MultiComboBox components.
+     * **Note:** Used inside MultiInput, MultiComboBox and FileUploader components.
      * @default false
      * @private
      */
@@ -185,7 +196,15 @@ declare class Tokenizer extends UI5Element {
     _previousToken: Token | null;
     _focusedElementBeforeOpen?: HTMLElement | null;
     _deletedDialogItems: Token[];
+    _lastFocusedToken: Token | null;
+    _isFocusSetInternally: boolean;
+    /**
+     * Scroll to end when tokenizer is expanded
+     * @private
+     */
+    _scrollToEndOnExpand: boolean;
     _handleResize(): void;
+    get formFormattedValue(): FormData | null;
     constructor();
     handleClearAll(): void;
     onBeforeRendering(): void;
@@ -196,6 +215,12 @@ declare class Tokenizer extends UI5Element {
     onTokenSelect(e: CustomEvent): void;
     _getVisibleTokens(): Token[];
     onAfterRendering(): void;
+    /**
+     * Scrolls the container to the end to ensure very long tokens are visible at their end.
+     * Otherwise, tokens may appear visually cut off.
+     * @protected
+     */
+    _scrollToEndIfNeeded(): void;
     _delete(e: CustomEvent<TokenDeleteEventDetail>): void;
     _tokenClickDelete(e: CustomEvent<TokenDeleteEventDetail>, token: Token): void;
     _handleCurrentItemAfterDeletion(nextToken: Token): void;
@@ -223,7 +248,14 @@ declare class Tokenizer extends UI5Element {
     _handleArrowShift(focusedToken: Token, tokens: Array<Token>, backwards: boolean): void;
     _click(e: MouseEvent): void;
     _onfocusin(e: FocusEvent): void;
+    _addTokenToNavigation(token: Token): void;
     _onfocusout(e: FocusEvent): void;
+    /**
+     * Determines the DOM element to focus when the Tokenizer receives focus.
+     * If the last-focused token is not overflown, focus is restored to it.
+     * Otherwise, the focus defaults to the first visible token.
+     */
+    getFocusDomRef(): HTMLElement | undefined;
     _toggleTokenSelection(tokens: Array<Token>): void;
     _handleTokenSelection(e: KeyboardEvent | MouseEvent, deselectAll?: boolean): void;
     get hasTokens(): boolean;
@@ -243,7 +275,8 @@ declare class Tokenizer extends UI5Element {
     scrollToEnd(): void;
     /**
      * Scrolls token to the visible area of the container.
-     * Adds 4 pixels to the scroll position to ensure padding and border visibility on both ends
+     * Adds 5 pixels to the scroll position to ensure padding and border visibility on both ends
+     * For the last token, if its width is more than the needed space, scroll to the end without offset
      * @protected
      */
     _scrollToToken(token: IToken): void;

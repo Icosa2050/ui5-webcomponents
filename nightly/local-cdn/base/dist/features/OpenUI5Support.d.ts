@@ -1,3 +1,4 @@
+import type { PopupInfo } from "./patchPopup.js";
 import type { CLDRData } from "../asset-registries/LocaleData.js";
 import type { LegacyDateCalendarCustomizing } from "../features/LegacyDateFormats.js";
 declare class OpenUI5Support {
@@ -18,9 +19,9 @@ declare class OpenUI5Support {
         animationMode: string;
         language: string;
         theme: string;
-        themeRoot: string;
+        themeRoot: string | undefined;
         rtl: string;
-        timezone: string;
+        timezone: string | undefined;
         calendarType: string;
         formatSettings: {
             firstDayOfWeek: number | undefined;
@@ -31,8 +32,8 @@ declare class OpenUI5Support {
     static _listenForThemeChange(): void;
     static attachListeners(): void;
     static cssVariablesLoaded(): boolean | undefined;
-    static addOpenedPopup(popup: object): void;
+    static addOpenedPopup(popupInfo: PopupInfo): void;
     static removeOpenedPopup(popup: object): void;
-    static getTopmostPopup(): object;
+    static getTopmostPopup(): object | null;
 }
 export default OpenUI5Support;

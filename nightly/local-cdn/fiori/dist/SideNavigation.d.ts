@@ -35,9 +35,11 @@ type SideNavigationSelectionChangeEventDetail = {
  * The items can consist of text only or an icon with text. The use or non-use of icons must be consistent for all items on one level.
  * You must not combine entries with and without icons on the same level. We strongly recommend that you do not use icons on the second level.
  *
- * The `ui5-side-navigation` component is intended for use within an `ui5-navigation-layout` component.
- * While it can function independently, it is recommended to use it with
- * the `ui5-navigation-layout` for optimal user experience.
+ * The `ui5-side-navigation` component is designed to be used within a `ui5-navigation-layout` component to ensure an optimal user experience.
+ *
+ * Using it standalone may not match the intended design and functionality.
+ * For example, the side navigation may not exhibit the correct behavior on phones and tablets.
+ * Padding of the `ui5-shellbar` will not match the padding of the side navigation.
  *
  * ### Keyboard Handling
  *
@@ -67,6 +69,12 @@ declare class SideNavigation extends UI5Element {
     };
     /**
      * Defines whether the `ui5-side-navigation` is expanded or collapsed.
+     *
+     * **Note:** The collapsed mode is not supported on phones.
+     * The `ui5-side-navigation` component is intended to be used within a `ui5-navigation-layout`
+     * component to ensure proper responsive behavior. If you choose not to use the
+     * `ui5-navigation-layout`, you will need to implement the appropriate responsive patterns yourself,
+     * particularly for phones where the collapsed mode should not be used.
      *
      * @public
      * @default false

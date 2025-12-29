@@ -43,6 +43,10 @@ declare class NavigationLayout extends UI5Element {
     /**
      * @private
      */
+    hasSideNavigation: boolean;
+    /**
+     * @private
+     */
     isPhone: boolean;
     /**
      * @private

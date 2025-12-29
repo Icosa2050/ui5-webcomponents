@@ -7,7 +7,7 @@ import isElementTabbable from "./isElementTabbable.js";
  * @returns { Array<HTMLElement> } the tabbable elements
  */
 const getTabbableElements = (el) => {
-    return getTabbables([...el.children]);
+    return getTabbables(el.tagName === "SLOT" ? [el] : [...el.children]);
 };
 /**
  * Returns the last tabbable element within the provided HTMLElement.
@@ -37,7 +37,7 @@ const getTabbables = (nodes, tabbables) => {
             tabbableElements.push(currentElement);
         }
         if (currentElement.tagName === "SLOT") {
-            getTabbables(currentElement.assignedNodes(), tabbableElements);
+            getTabbables(currentElement.assignedElements(), tabbableElements);
         }
         else {
             const children = currentElement.shadowRoot ? currentElement.shadowRoot.children : currentElement.children;

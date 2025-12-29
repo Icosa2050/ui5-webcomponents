@@ -131,6 +131,20 @@ declare class FileUploader extends UI5Element implements IFormInputElement {
      */
     accessibleNameRef?: string;
     /**
+     * Defines the accessible description of the component.
+     * @default undefined
+     * @public
+     * @since 2.14.0
+     */
+    accessibleDescription?: string;
+    /**
+     * Receives id(or many ids) of the elements that describe the input.
+     * @default undefined
+     * @public
+     * @since 2.14.0
+     */
+    accessibleDescriptionRef?: string;
+    /**
      * @private
      */
     focused: boolean;
@@ -161,8 +175,9 @@ declare class FileUploader extends UI5Element implements IFormInputElement {
     _messagePopover: Popover;
     _selectedFilesNames: Array<string>;
     _tokenizerOpen: boolean;
-    static emptyInput: HTMLInputElement;
     static i18nBundle: I18nBundle;
+    get formValidityMessage(): string;
+    get formValidity(): ValidityStateFlags;
     formElementAnchor(): Promise<HTMLElement | undefined>;
     /**
      * @override
@@ -184,7 +199,6 @@ declare class FileUploader extends UI5Element implements IFormInputElement {
     _onTokenizerClick(e: MouseEvent): void;
     _onTokenizerMouseDown(e: MouseEvent): void;
     _onClearIconClick(e: CustomEvent): void;
-    _onFormSubmit(e: SubmitEvent): void;
     _openFileBrowser(): void;
     _clearFileSelection(): void;
     /**
@@ -208,11 +222,6 @@ declare class FileUploader extends UI5Element implements IFormInputElement {
     toggleValueStatePopover(open: boolean): void;
     openValueStatePopover(): void;
     closeValueStatePopover(): void;
-    /**
-     * in case when the component is not placed in the DOM, return empty FileList, like native input would do
-     * @private
-     */
-    static get _emptyFilesList(): FileList | null;
     get accInfo(): InputAccInfo;
     get inputTitle(): string;
     get valueHelpTitle(): string;

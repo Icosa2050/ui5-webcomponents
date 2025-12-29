@@ -47,7 +47,6 @@ declare class TableSelectionMulti extends TableSelectionBase {
      * @since 2.12
      */
     headerSelector: `${TableSelectionMultiHeaderSelector}`;
-    private _rowsLength;
     private _rangeSelection?;
     _onClickCaptureBound: (e: MouseEvent) => void;
     constructor();

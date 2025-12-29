@@ -21,19 +21,40 @@ import property from "@ui5/webcomponents-base/dist/decorators/property.js";
  * @since 1.17.0
  */
 let ToolbarSelectOption = class ToolbarSelectOption extends UI5Element {
-    constructor() {
-        super(...arguments);
-        /**
-         * Defines the selected state of the component.
-         * @default false
-         * @public
-         */
-        this.selected = false;
+    /**
+     * Defines the selected state of the component.
+     * @default false
+     * @public
+     */
+    set selected(value) {
+        if (value) {
+            this.setAttribute("selected", "");
+            this._clearSiblingsAndSync();
+        }
+        else {
+            this.removeAttribute("selected");
+        }
+    }
+    get selected() {
+        return this.hasAttribute("selected");
+    }
+    _clearSiblingsAndSync() {
+        const parent = this.parentElement;
+        if (parent) {
+            parent.options?.forEach(option => {
+                if (option !== this) {
+                    option.removeAttribute("selected");
+                }
+            });
+            if (parent.select) {
+                parent.select.value = this.textContent || "";
+            }
+        }
     }
 };
 __decorate([
     property({ type: Boolean })
-], ToolbarSelectOption.prototype, "selected", void 0);
+], ToolbarSelectOption.prototype, "selected", null);
 __decorate([
     slot({ type: Node, "default": true, invalidateOnChildChange: true })
 ], ToolbarSelectOption.prototype, "text", void 0);

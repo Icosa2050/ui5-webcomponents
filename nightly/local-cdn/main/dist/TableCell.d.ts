@@ -17,10 +17,12 @@ import TableCellBase from "./TableCellBase.js";
  * @public
  */
 declare class TableCell extends TableCellBase {
+    _popinHeader?: HTMLElement;
+    _popinContent?: HTMLElement;
     onBeforeRendering(): void;
-    injectHeaderNodes(ref: HTMLElement | null): void;
+    _injectHeaderNodes(ref: HTMLElement | null): void;
     get _headerCell(): import("./TableHeaderCell.js").default;
-    get _popinHeaderNodes(): (string | Node)[];
+    get _popinHeaderNodes(): Node[];
     get _i18nPopinColon(): string;
 }
 export default TableCell;

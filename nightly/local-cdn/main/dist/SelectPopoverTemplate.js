@@ -11,7 +11,7 @@ export default function SelectPopoverTemplate() {
                 _jsxs(ResponsivePopover, { id: this.responsivePopoverId, class: {
                         "ui5-select-popover": true,
                         ...this.classes.popover
-                    }, part: "popover", style: this.styles.responsivePopover, placement: "Bottom", horizontalAlign: "Start", hideArrow: true, preventInitialFocus: true, onOpen: this._afterOpen, onBeforeOpen: this._beforeOpen, onClose: this._afterClose, onKeyDown: this._onkeydown, children: [this._isPhone &&
+                    }, part: "popover", style: this.styles.responsivePopover, placement: "Bottom", horizontalAlign: "Start", hideArrow: true, preventInitialFocus: true, onOpen: this._afterOpen, onBeforeOpen: this._beforeOpen, onClose: this._afterClose, onKeyDown: this._onkeydown, accessibleName: this._isPhone ? this._headerTitleText : undefined, children: [this._isPhone &&
                             _jsxs("div", { slot: "header", class: "ui5-responsive-popover-header", children: [_jsxs("div", { class: "row", children: [_jsx(Title, { children: this._headerTitleText }), _jsx(Button, { class: "ui5-responsive-popover-close-btn", icon: decline, design: "Transparent", onClick: this._toggleRespPopover })] }), this.hasValueStateText &&
                                         _jsx("div", { class: {
                                                 "row": true,

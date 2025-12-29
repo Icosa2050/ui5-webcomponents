@@ -154,28 +154,24 @@ declare class DynamicSideContent extends UI5Element {
     /**
      * @private
      */
-    _mcSpan: string;
-    /**
-     * @private
-     */
-    _scSpan: string;
-    /**
-     * @private
-     */
     _toggled: boolean;
     /**
      * @private
      */
     _currentBreakpoint?: string;
     /**
+     * @private
+     */
+    _isSideContentBelowMainContent: boolean;
+    /**
      * Defines the side content.
      * @public
      */
     sideContent: Array<HTMLElement>;
-    constructor();
-    _handleResizeBound: () => void;
+    _mainContent: HTMLElement;
+    _sideContent: HTMLElement;
+    _resizeObserver?: ResizeObserver;
     static i18nBundle: I18nBundle;
-    onAfterRendering(): void;
     onEnterDOM(): void;
     onExitDOM(): void;
     /**
@@ -183,16 +179,29 @@ declare class DynamicSideContent extends UI5Element {
      * @public
      */
     toggleContents(): void;
+    /**
+     * Gets main content visibility by checking CSS display property
+     * @private
+     */
+    _getMainContentVisibility(): boolean;
+    /**
+     * Gets side content visibility by checking CSS display property
+     * @private
+     */
+    _getSideContentVisibility(): boolean;
     get classes(): {
         main: {
-            [x: string]: boolean;
             "ui5-dsc-main": boolean;
         };
         side: {
-            [x: string]: boolean;
             "ui5-dsc-side": boolean;
         };
+        root: {
+            "ui5-dsc-root": boolean;
+            "ui5-dsc-toggled": boolean;
+        };
     };
+    get isSideContentBelowMainContent(): boolean;
     get styles(): {
         root: {
             "flex-wrap": string;
@@ -209,20 +218,16 @@ declare class DynamicSideContent extends UI5Element {
     get sizeM(): string;
     get sizeL(): string;
     get sizeXL(): string;
-    get span0(): string;
-    get span3(): string;
-    get span4(): string;
-    get span6(): string;
-    get span8(): string;
-    get span9(): string;
-    get span12(): string;
-    get spanFixed(): string;
     get containerWidth(): number;
     get breakpoint(): string;
     get _isSideContentFirst(): boolean;
-    handleResize(): void;
-    _resizeContents(): void;
-    _setSpanSizes(mainSize: string, sideSize: string): void;
+    /**
+     * Returns true when the toggleContents functionality should be enabled.
+     * Toggle is available when side content would normally be hidden in the current breakpoint
+     * but can be shown via the toggle mechanism.
+     * @private
+     */
+    get _isToggleEnabled(): boolean;
 }
 export default DynamicSideContent;
 export type { DynamicSideContentLayoutChangeEventDetail, DynamicSideContentAccessibilityAttributes, };

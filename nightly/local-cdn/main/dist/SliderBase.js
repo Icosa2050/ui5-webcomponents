@@ -104,7 +104,6 @@ class SliderBase extends UI5Element {
         this._tooltipsOpen = false;
         this._labelsOverlapping = false;
         this._hiddenTickmarks = false;
-        this._isInputValueValid = false;
         this.notResized = false;
         this._isUserInteraction = false;
         this._isInnerElementFocusing = false;
@@ -112,6 +111,11 @@ class SliderBase extends UI5Element {
         this._resizeHandler = this._handleResize.bind(this);
         this._moveHandler = this._handleMove.bind(this);
         this._upHandler = this._handleUp.bind(this);
+        this._windowMouseoutHandler = (e) => {
+            if (e.relatedTarget === document.documentElement) {
+                this.handleUpBase();
+            }
+        };
         this._stateStorage = {
             step: undefined,
             min: undefined,
@@ -209,19 +213,6 @@ class SliderBase extends UI5Element {
             this._handleActionKeyPress(e);
         }
     }
-    _onTooltipChange(e) {
-        const value = e.detail.value;
-        this._updateValueFromInput(value);
-    }
-    _updateValueFromInput(fieldValue) {
-        const value = parseFloat(fieldValue);
-        this._isInputValueValid = value >= this._effectiveMin && value <= this._effectiveMax;
-        if (!this._isInputValueValid) {
-            return;
-        }
-        this.value = value;
-        this.fireDecoratorEvent("change");
-    }
     _onKeyupBase() {
         if (this.disabled) {
             return;
@@ -307,6 +298,7 @@ class SliderBase extends UI5Element {
         this._isUserInteraction = true;
         window.addEventListener("mouseup", this._upHandler);
         window.addEventListener("touchend", this._upHandler);
+        window.addEventListener("mouseout", this._windowMouseoutHandler);
         // Only allow one type of move event to be listened to (the first one registered after the down event)
         if (supportsTouch() && e instanceof TouchEvent) {
             window.addEventListener("touchmove", this._moveHandler);
@@ -337,6 +329,7 @@ class SliderBase extends UI5Element {
     handleUpBase() {
         window.removeEventListener("mouseup", this._upHandler);
         window.removeEventListener("touchend", this._upHandler);
+        window.removeEventListener("mouseout", this._windowMouseoutHandler);
         // Only one of the following was attached, but it's ok to remove both as there is no error
         window.removeEventListener("mousemove", this._moveHandler);
         window.removeEventListener("touchmove", this._moveHandler);
@@ -658,9 +651,6 @@ __decorate([
 __decorate([
     property({ type: Boolean })
 ], SliderBase.prototype, "_hiddenTickmarks", void 0);
-__decorate([
-    property({ type: Boolean })
-], SliderBase.prototype, "_isInputValueValid", void 0);
 SliderBase = SliderBase_1 = __decorate([
     event("change", {
         bubbles: true,

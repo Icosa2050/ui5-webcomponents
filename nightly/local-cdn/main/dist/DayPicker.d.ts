@@ -3,7 +3,7 @@ import type I18nBundle from "@ui5/webcomponents-base/dist/i18nBundle.js";
 import CalendarDate from "@ui5/webcomponents-localization/dist/dates/CalendarDate.js";
 import CalendarSelectionMode from "./types/CalendarSelectionMode.js";
 import CalendarPart from "./CalendarPart.js";
-import type { ICalendarPicker, SpecialCalendarDateT } from "./Calendar.js";
+import type { DisabledDateRangeT, ICalendarPicker, SpecialCalendarDateT } from "./Calendar.js";
 type DayName = {
     name: string;
     classes: string;
@@ -97,6 +97,12 @@ declare class DayPicker extends CalendarPart implements ICalendarPicker {
      * @private
      */
     specialCalendarDates: Array<SpecialCalendarDateT>;
+    /**
+     * Array of disabled date ranges that cannot be selected.
+     * Each range can have a start and/or end date value.
+     * @private
+     */
+    disabledDates: Array<DisabledDateRangeT>;
     _focusableDay: HTMLElement;
     _autoFocus?: boolean;
     static i18nBundle: I18nBundle;
@@ -131,6 +137,8 @@ declare class DayPicker extends CalendarPart implements ICalendarPicker {
      * @private
      */
     _isDaySelected(timestamp: number): boolean;
+    _isRangeEndDate(timestamp: number): boolean;
+    _isRangeStartDate(timestamp: number): boolean;
     /**
      * Tells if the day is inside a selection range (light blue).
      * @param timestamp
@@ -223,6 +231,24 @@ declare class DayPicker extends CalendarPart implements ICalendarPicker {
     get _specialCalendarDates(): SpecialCalendarDateT[];
     get shouldHideWeekNumbers(): boolean;
     _isWeekend(oDate: CalendarDate): boolean;
+    /**
+     * Checks if a given date is enabled (selectable).
+     * A date is considered disabled if:
+     * - It falls outside the min/max date range defined by the component
+     * - It matches a single disabled date
+     * - It falls within a disabled date range (exclusive of start and end dates)
+     * @param date - The date to check
+     * @returns `true` if the date is enabled (selectable), `false` if disabled
+     * @private
+     */
+    _isDateEnabled(date: CalendarDate): boolean;
+    /**
+     * Converts a date value string to a timestamp.
+     * @param dateValue - Date string to convert
+     * @returns timestamp in seconds, or 0 if invalid
+     * @private
+     */
+    _getTimestampFromDateValue(dateValue?: string): number;
     _isDayPressed(target: HTMLElement): boolean;
     _isDefaultCalendarLegendType(type: string): boolean;
     _getSecondaryDay(tempDate: CalendarDate): CalendarDate;
