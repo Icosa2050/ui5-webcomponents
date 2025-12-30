@@ -1165,21 +1165,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "dist/converters/DOMReference.js",
-      "declarations": [],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "default",
-          "declaration": {
-            "name": "DOMReferenceConverter",
-            "module": "dist/converters/DOMReference.js"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "dist/decorators/bound.js",
       "declarations": [],
       "exports": [
@@ -1309,6 +1294,21 @@
           "declaration": {
             "name": "slot",
             "module": "dist/decorators/slot.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "dist/converters/DOMReference.js",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "name": "DOMReferenceConverter",
+            "module": "dist/converters/DOMReference.js"
           }
         }
       ]
