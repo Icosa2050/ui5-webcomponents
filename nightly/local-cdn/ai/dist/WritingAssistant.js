@@ -92,6 +92,7 @@ let WritingAssistant = WritingAssistant_1 = class WritingAssistant extends UI5El
          * @public
          */
         this.totalVersions = 0;
+        this.focused = false;
     }
     static async onDefine() {
         WritingAssistant_1.i18nBundleAi = await getI18nBundle("@ui5/webcomponents-ai");
@@ -152,6 +153,9 @@ __decorate([
 __decorate([
     property({ type: Number })
 ], WritingAssistant.prototype, "totalVersions", void 0);
+__decorate([
+    property({ type: Boolean })
+], WritingAssistant.prototype, "focused", void 0);
 __decorate([
     i18n("@ui5/webcomponents-ai")
 ], WritingAssistant, "i18nBundleAi", void 0);

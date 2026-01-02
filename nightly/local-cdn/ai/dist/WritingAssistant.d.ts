@@ -74,6 +74,7 @@ declare class WritingAssistant extends UI5Element {
      * @public
      */
     totalVersions: number;
+    focused: boolean;
     static i18nBundleAi: I18nBundle;
     static onDefine(): Promise<void>;
     /**

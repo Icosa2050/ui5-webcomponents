@@ -35,6 +35,8 @@ declare class TextArea extends BaseTextArea {
         "stop-generation": void;
     };
     private _keydownHandler?;
+    private _menuFocusinHandler?;
+    private _menuFocusoutHandler?;
     /**
      * Defines whether the `ui5-ai-textarea` is currently in a loading(processing) state.
      *
@@ -67,6 +69,7 @@ declare class TextArea extends BaseTextArea {
      * @public
      */
     totalVersions: number;
+    focused: boolean;
     menu: Array<HTMLElement>;
     static i18nBundle: I18nBundle;
     static onDefine(): Promise<void>;
@@ -96,6 +99,8 @@ declare class TextArea extends BaseTextArea {
      * @private
      */
     onAfterRendering(): void;
+    _onfocusin(): void;
+    _onfocusout(e: FocusEvent): void;
     /**
      * Handles the generate click event from the AI toolbar.
      * Opens the AI menu and sets the opener element.

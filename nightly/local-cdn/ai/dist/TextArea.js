@@ -80,6 +80,7 @@ let TextArea = TextArea_1 = class TextArea extends BaseTextArea {
          * @public
          */
         this.totalVersions = 0;
+        this.focused = false;
         /**
          * Handles the generate click event from the AI toolbar.
          * Opens the AI menu and sets the opener element.
@@ -96,7 +97,8 @@ let TextArea = TextArea_1 = class TextArea extends BaseTextArea {
             }
             const menu = menuNodes[0];
             if (menu && typeof menu.open !== "undefined") {
-                menu.opener = e.detail.clickTarget;
+                menu.opener = e.detail.clickTarget.shadowRoot?.querySelector("ui5-button");
+                menu.horizontalAlign = "End";
                 menu.open = true;
             }
         };
@@ -171,11 +173,47 @@ let TextArea = TextArea_1 = class TextArea extends BaseTextArea {
      */
     onAfterRendering() {
         super.onAfterRendering();
-        // Add keydown event listener to the textarea
         const textarea = this.shadowRoot?.querySelector("textarea");
         if (textarea && !this._keydownHandler) {
             this._keydownHandler = this._handleKeydown.bind(this);
             textarea.addEventListener("keydown", this._keydownHandler);
+        }
+        const menuNodes = this.getSlottedNodes("menu");
+        if (menuNodes.length > 0) {
+            const menu = menuNodes[0];
+            if (!this._menuFocusinHandler) {
+                this._menuFocusinHandler = () => {
+                    this.focused = true;
+                };
+                menu.addEventListener("focusin", this._menuFocusinHandler);
+            }
+            if (!this._menuFocusoutHandler) {
+                this._menuFocusoutHandler = (evt) => {
+                    const e = evt;
+                    const relatedTarget = e.relatedTarget;
+                    const focusMovingWithinComponent = relatedTarget && this.shadowRoot?.contains(relatedTarget);
+                    const focusStayingInMenu = relatedTarget && menu.contains(relatedTarget);
+                    if (!focusMovingWithinComponent && !focusStayingInMenu) {
+                        this.focused = false;
+                    }
+                };
+                menu.addEventListener("focusout", this._menuFocusoutHandler);
+            }
+        }
+    }
+    _onfocusin() {
+        super._onfocusin();
+        this.focused = true;
+    }
+    _onfocusout(e) {
+        super._onfocusout(e);
+        const relatedTarget = e.relatedTarget;
+        const focusMovingWithinShadowDOM = relatedTarget && this.shadowRoot?.contains(relatedTarget);
+        const menuNodes = this.getSlottedNodes("menu");
+        const focusMovingToMenu = menuNodes.length > 0 && relatedTarget && (menuNodes[0].contains(relatedTarget)
+            || relatedTarget === menuNodes[0]);
+        if (!focusMovingWithinShadowDOM && !focusMovingToMenu) {
+            this.focused = false;
         }
     }
     get _ariaLabel() {
@@ -194,6 +232,9 @@ __decorate([
 __decorate([
     property({ type: Number })
 ], TextArea.prototype, "totalVersions", void 0);
+__decorate([
+    property({ type: Boolean })
+], TextArea.prototype, "focused", void 0);
 __decorate([
     slot({ type: HTMLElement })
 ], TextArea.prototype, "menu", void 0);
