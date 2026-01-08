@@ -11752,6 +11752,17 @@
             },
             {
               "kind": "field",
+              "name": "stickyHeader",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Indicates whether the List header is sticky or not.\nIf stickyHeader is set to true, then whenever you scroll the content or\nthe application, the header of the list will be always visible.",
+              "privacy": "public",
+              "_ui5since": "2.19.0"
+            },
+            {
+              "kind": "field",
               "name": "accessibleName",
               "type": {
                 "text": "string | undefined"
@@ -12190,6 +12201,15 @@
               "fieldName": "loadingDelay",
               "type": {
                 "text": "number"
+              }
+            },
+            {
+              "description": "Indicates whether the List header is sticky or not.\nIf stickyHeader is set to true, then whenever you scroll the content or\nthe application, the header of the list will be always visible.",
+              "name": "sticky-header",
+              "default": "false",
+              "fieldName": "stickyHeader",
+              "type": {
+                "text": "boolean"
               }
             },
             {
@@ -18491,6 +18511,9 @@
               "description": "Defines start point of a selection - position of a first handle on the slider.",
               "default": "0",
               "privacy": "public",
+              "type": {
+                "text": "number"
+              },
               "_ui5formProperty": true,
               "_ui5formEvents": "change,input"
             },
@@ -18500,6 +18523,9 @@
               "description": "Defines end point of a selection - position of a second handle on the slider.",
               "default": "100",
               "privacy": "public",
+              "type": {
+                "text": "number"
+              },
               "_ui5formProperty": true,
               "_ui5formEvents": "change,input"
             },

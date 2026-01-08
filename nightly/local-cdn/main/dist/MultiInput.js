@@ -11,6 +11,7 @@ import event from "@ui5/webcomponents-base/dist/decorators/event-strict.js";
 import customElement from "@ui5/webcomponents-base/dist/decorators/customElement.js";
 import jsxRenderer from "@ui5/webcomponents-base/dist/renderer/JsxRenderer.js";
 import { isShow, isBackSpace, isLeft, isRight, isRightCtrl, isHome, isEnd, isDown, isEnter, } from "@ui5/webcomponents-base/dist/Keys.js";
+import { isPhone } from "@ui5/webcomponents-base/dist/Device.js";
 import { getScopedVarName } from "@ui5/webcomponents-base/dist/CustomElementsScope.js";
 import { MULTIINPUT_ROLEDESCRIPTION_TEXT, MULTIINPUT_VALUE_HELP_LABEL, MULTIINPUT_VALUE_HELP, FORM_MIXED_TEXTFIELD_REQUIRED, MULTIINPUT_FILTER_BUTTON_LABEL, } from "./generated/i18n/i18n-defaults.js";
 import Input from "./Input.js";
@@ -124,8 +125,6 @@ let MultiInput = MultiInput_1 = class MultiInput extends Input {
         }, 0);
     }
     innerFocusIn() {
-        this.tokenizer._scrollToEndOnExpand = true;
-        this.tokenizer.expanded = true;
         this.focused = true;
         this.tokens.forEach(token => {
             token.selected = false;
@@ -231,18 +230,21 @@ let MultiInput = MultiInput_1 = class MultiInput extends Input {
         if (this.tokenizer) {
             this.tokenizer.readonly = this.readonly;
         }
-        // Reset toggle state if there are tokens and dialog is about to open
-        if (this.tokens.length > 0 && !this._userToggledShowTokens) {
-            this._showTokensInSuggestions = true;
-        }
     }
     /**
-     * Override the _handlePickerAfterOpen method to reset toggle state when dialog opens with tokens
+     * Override the _handlePickerAfterOpen method to handle token display based on device type
      */
     _handlePickerAfterOpen() {
         if (this.tokens.length > 0) {
-            this._showTokensInSuggestions = true;
+            // On mobile: show tokens by default (for filter dialog feature)
+            // On desktop: keep showing suggestions (default behavior)
+            if (isPhone()) {
+                this._showTokensInSuggestions = true;
+            }
             this._userToggledShowTokens = false;
+            // Expand tokenizer to show all tokens and prevent cut-off
+            this.tokenizer._scrollToEndOnExpand = true;
+            this.tokenizer.expanded = true;
         }
         super._handlePickerAfterOpen();
     }
@@ -309,18 +311,14 @@ let MultiInput = MultiInput_1 = class MultiInput extends Input {
     }
     /**
      * Computes the effective state for showing tokens in suggestions.
-     * Defaults to true when tokens exist, but respects explicit user toggle.
+     * Returns false (show suggestions) by default, true only when explicitly set.
      */
     get _effectiveShowTokensInSuggestions() {
-        // If no tokens exist, always false
+        // If no tokens exist, always show suggestions
         if (this.tokens.length === 0) {
             return false;
         }
-        // If user has never interacted with the toggle, default to true when tokens exist
-        if (!this._userToggledShowTokens) {
-            return true;
-        }
-        // If user has interacted, respect their choice
+        // Return the current state (will be true on mobile after picker opens, false otherwise)
         return this._showTokensInSuggestions;
     }
 };

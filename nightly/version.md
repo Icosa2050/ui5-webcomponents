@@ -1,5 +1,5 @@
-commit ec00439e88961cfaf412f51ef4972fc904473f98
-Author: ui5-webcomponents-bot <ui5-webcomponents-bot@sap.com>
-Date:   Thu Jan 1 08:06:47 2026 +0000
+commit c1d415432bd43f60c18ee3190ddba804a8a24d9a
+Author: ilhan orhan <ilhan.orhan007@gmail.com>
+Date:   Wed Jan 7 17:23:48 2026 +0200
 
-    chore(release): publish v2.18.0-rc.3 [ci skip]
+    docs: enhance ai/Input item-click event detail type (#12864)

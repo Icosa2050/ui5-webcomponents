@@ -2143,6 +2143,11 @@
           "values": []
         },
         {
+          "name": "sticky-header",
+          "description": "Indicates whether the List header is sticky or not.\nIf stickyHeader is set to true, then whenever you scroll the content or\nthe application, the header of the list will be always visible.",
+          "values": []
+        },
+        {
           "name": "accessible-name",
           "description": "Defines the accessible name of the component.",
           "values": []

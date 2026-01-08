@@ -151,6 +151,8 @@ declare class ColorPicker extends UI5Element implements IFormInputElement {
     get saturationInputLabel(): string;
     get lightInputLabel(): string;
     get alphaInputLabel(): string;
+    get percentageLabel(): string;
+    get colorFieldsAnnouncementText(): string;
     get toggleModeTooltip(): string;
     get inputsDisabled(): true | undefined;
     get hexInputErrorState(): `${ValueState}`;

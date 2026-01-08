@@ -33,6 +33,7 @@ import PromptInputCss from "./generated/themes/PromptInput.css.js";
  * @public
  * @extends UI5Element
  * @experimental The **@ui5/webcomponents-ai** package is under development and considered experimental - components' APIs are subject to change.
+ * Furthermore, the package supports **Horizon** themes only.
  */
 let PromptInput = PromptInput_1 = class PromptInput extends UI5Element {
     constructor() {

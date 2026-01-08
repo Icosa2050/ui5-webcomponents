@@ -105,7 +105,7 @@ declare class MultiInput extends Input implements IFormInputElement {
     _onfocusin(e: FocusEvent): void;
     onBeforeRendering(): void;
     /**
-     * Override the _handlePickerAfterOpen method to reset toggle state when dialog opens with tokens
+     * Override the _handlePickerAfterOpen method to handle token display based on device type
      */
     _handlePickerAfterOpen(): void;
     onAfterRendering(): void;
@@ -141,7 +141,7 @@ declare class MultiInput extends Input implements IFormInputElement {
     get shouldDisplayOnlyValueStateMessage(): boolean;
     /**
      * Computes the effective state for showing tokens in suggestions.
-     * Defaults to true when tokens exist, but respects explicit user toggle.
+     * Returns false (show suggestions) by default, true only when explicitly set.
      */
     get _effectiveShowTokensInSuggestions(): boolean;
 }

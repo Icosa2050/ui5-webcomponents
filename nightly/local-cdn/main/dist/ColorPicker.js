@@ -17,7 +17,9 @@ import { getRGBColor, getAlpha, } from "@ui5/webcomponents-base/dist/util/ColorC
 import "@ui5/webcomponents-icons/dist/expand.js";
 import ColorValue from "./colorpicker-utils/ColorValue.js";
 import ColorPickerTemplate from "./ColorPickerTemplate.js";
-import { COLORPICKER_LABEL, COLORPICKER_SLIDER_GROUP, COLORPICKER_ALPHA_SLIDER, COLORPICKER_HUE_SLIDER, COLORPICKER_HEX, COLORPICKER_RED, COLORPICKER_GREEN, COLORPICKER_BLUE, COLORPICKER_ALPHA, COLORPICKER_SATURATION, COLORPICKER_LIGHT, COLORPICKER_HUE, COLORPICKER_TOGGLE_MODE_TOOLTIP, } from "./generated/i18n/i18n-defaults.js";
+import announce from "@ui5/webcomponents-base/dist/util/InvisibleMessage.js";
+import InvisibleMessageMode from "@ui5/webcomponents-base/dist/types/InvisibleMessageMode.js";
+import { COLORPICKER_LABEL, COLORPICKER_SLIDER_GROUP, COLORPICKER_ALPHA_SLIDER, COLORPICKER_HUE_SLIDER, COLORPICKER_HEX, COLORPICKER_RED, COLORPICKER_GREEN, COLORPICKER_BLUE, COLORPICKER_ALPHA, COLORPICKER_SATURATION, COLORPICKER_LIGHT, COLORPICKER_HUE, COLORPICKER_TOGGLE_MODE_TOOLTIP, COLORPICKER_PERCENTAGE, COLORPICKER_COLOR_MODE_CHANGED, } from "./generated/i18n/i18n-defaults.js";
 // Styles
 import ColorPickerCss from "./generated/themes/ColorPicker.css.js";
 const PICKER_POINTER_WIDTH = 6.5;
@@ -222,6 +224,8 @@ let ColorPicker = ColorPicker_1 = class ColorPicker extends UI5Element {
     }
     _togglePickerMode() {
         this._displayHSL = !this._displayHSL;
+        // Announce a message to screen readers
+        announce(this.colorFieldsAnnouncementText, InvisibleMessageMode.Polite);
     }
     _handleColorInputChange(e) {
         const target = e.target;
@@ -411,6 +415,26 @@ let ColorPicker = ColorPicker_1 = class ColorPicker extends UI5Element {
     }
     get alphaInputLabel() {
         return ColorPicker_1.i18nBundle.getText(COLORPICKER_ALPHA);
+    }
+    get percentageLabel() {
+        return ColorPicker_1.i18nBundle.getText(COLORPICKER_PERCENTAGE);
+    }
+    get colorFieldsAnnouncementText() {
+        const mode = this._displayHSL ? "HSL" : "RGB";
+        let text = "";
+        if (mode === "RGB") {
+            text = `${this.redInputLabel} ${this._colorValue.R}, `
+                + `${this.greenInputLabel} ${this._colorValue.G}, `
+                + `${this.blueInputLabel} ${this._colorValue.B}, `
+                + `${this.alphaInputLabel} ${this._colorValue.Alpha}`;
+        }
+        else {
+            text = `${this.hueInputLabel} ${this._colorValue.H}, `
+                + `${this.saturationInputLabel} ${this._colorValue.S} ${this.percentageLabel}, `
+                + `${this.lightInputLabel} ${this._colorValue.L} ${this.percentageLabel}, `
+                + `${this.alphaInputLabel} ${this._colorValue.Alpha}`;
+        }
+        return ColorPicker_1.i18nBundle.getText(COLORPICKER_COLOR_MODE_CHANGED, mode, text);
     }
     get toggleModeTooltip() {
         return ColorPicker_1.i18nBundle.getText(COLORPICKER_TOGGLE_MODE_TOOLTIP);

@@ -5,7 +5,7 @@ import Button from "@ui5/webcomponents/dist/Button.js";
 import decline from "@ui5/webcomponents-icons/dist/decline.js";
 import ButtonDesign from "@ui5/webcomponents/dist/types/ButtonDesign.js";
 import TagDesign from "@ui5/webcomponents/dist/types/TagDesign.js";
-export default function SearchFieldTemplate() {
+export default function SearchItemTemplate() {
     return (_jsx("li", { part: "native-li", class: "ui5-li-root ui5-li--focusable", "aria-selected": this.selected, role: "option", "data-sap-focus-ref": true, draggable: this.movable, tabindex: this._effectiveTabIndex, onFocusIn: this._onfocusin, onFocusOut: this._onfocusout, onKeyUp: this._onkeyup, onKeyDown: this._onkeydown, onClick: this._onclick, children: _jsx("div", { part: "content", class: "ui5-search-item-content", children: _jsxs("div", { class: "ui5-search-item-begin-content", children: [this.image.length > 0 && !this.icon &&
                         _jsx("slot", { name: "image" }), this.icon &&
                         _jsx(Icon, { class: "ui5-search-item-icon", name: this.icon }), this.scopeName &&

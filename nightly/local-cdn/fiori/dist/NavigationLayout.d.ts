@@ -15,10 +15,10 @@ import type SideNavigation from "./SideNavigation.js";
  *
  * ### Responsive Behavior
  *
- * On desktop and tablet devices, the side navigation is visible
+ * On larger screens (screen width of 600px or more), the side navigation is visible
  * by default and can be expanded or collapsed using the `mode` property.
- * On phone devices, the side navigation is hidden by default and can
- * be displayed using the `mode` property.
+ * On small screens (screen width of 599px or less), the side navigation is hidden by
+ * default and can be displayed using the `mode` property.
  *
  * ### ES6 Module Import
  *
@@ -44,14 +44,6 @@ declare class NavigationLayout extends UI5Element {
      * @private
      */
     hasSideNavigation: boolean;
-    /**
-     * @private
-     */
-    isPhone: boolean;
-    /**
-     * @private
-     */
-    isTablet: boolean;
     /**
      * Gets whether the side navigation is collapsed.
      * @public

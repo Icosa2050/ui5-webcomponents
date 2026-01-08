@@ -20,6 +20,7 @@ import type { UI5CustomEvent } from "@ui5/webcomponents-base/dist/index.js";
  * @public
  * @extends UI5Element
  * @experimental The **@ui5/webcomponents-ai** package is under development and considered experimental - components' APIs are subject to change.
+ * Furthermore, the package supports **Horizon** themes only.
  */
 declare class PromptInput extends UI5Element {
     eventDetails: {

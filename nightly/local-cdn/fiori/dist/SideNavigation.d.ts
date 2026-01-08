@@ -38,8 +38,8 @@ type SideNavigationSelectionChangeEventDetail = {
  * The `ui5-side-navigation` component is designed to be used within a `ui5-navigation-layout` component to ensure an optimal user experience.
  *
  * Using it standalone may not match the intended design and functionality.
- * For example, the side navigation may not exhibit the correct behavior on phones and tablets.
- * Padding of the `ui5-shellbar` will not match the padding of the side navigation.
+ * For example, the side navigation may not exhibit the correct behavior on smaller screens.
+ * Additionally, the padding of the `ui5-shellbar` will not match the padding of the side navigation.
  *
  * ### Keyboard Handling
  *
@@ -70,11 +70,12 @@ declare class SideNavigation extends UI5Element {
     /**
      * Defines whether the `ui5-side-navigation` is expanded or collapsed.
      *
-     * **Note:** The collapsed mode is not supported on phones.
+     * **Note:** On small screens (screen width of 599px or less) the collapsed mode is not supported, and in
+     * expanded mode the side navigation will take the whole width of the screen.
      * The `ui5-side-navigation` component is intended to be used within a `ui5-navigation-layout`
      * component to ensure proper responsive behavior. If you choose not to use the
      * `ui5-navigation-layout`, you will need to implement the appropriate responsive patterns yourself,
-     * particularly for phones where the collapsed mode should not be used.
+     * particularly for smaller screens where the collapsed mode should not be used.
      *
      * @public
      * @default false
@@ -116,18 +117,9 @@ declare class SideNavigation extends UI5Element {
     _popoverContents: SideNavigationPopoverContents;
     inPopover: boolean;
     _menuPopoverItems: Array<SideNavigationItem>;
-    /**
-     * Defines if the component is rendered on a mobile device.
-     * @private
-     */
-    isPhone: boolean;
     _isOverflow: boolean;
     _flexibleItemNavigation: ItemNavigation;
     _fixedItemNavigation: ItemNavigation;
-    /**
-     * @private
-     */
-    isTouchDevice: boolean;
     static i18nBundle: I18nBundle;
     constructor();
     _handleResizeBound: () => void;

@@ -4,6 +4,7 @@ import type { MenuItemClickEventDetail } from "@ui5/webcomponents/dist/Menu.js";
 type InputVersionChangeEventDetail = {
     backwards: boolean;
 };
+type InputItemClickEventDetail = MenuItemClickEventDetail;
 /**
  * @class
  *
@@ -35,6 +36,7 @@ type InputVersionChangeEventDetail = {
  * @extends BaseInput
  * @since 2.16.0
  * @experimental The **@ui5/webcomponents-ai** package is under active development and considered experimental. Component APIs are subject to change.
+ * Furthermore, the package supports **Horizon** themes only.
  * @public
  */
 declare class Input extends BaseInput {
@@ -42,7 +44,7 @@ declare class Input extends BaseInput {
         "version-change": InputVersionChangeEventDetail;
         "stop-generation": void;
         "button-click": void;
-        "item-click": MenuItemClickEventDetail;
+        "item-click": InputItemClickEventDetail;
     };
     /**
      * Indicates the index of the currently displayed version.
@@ -122,7 +124,7 @@ declare class Input extends BaseInput {
      * @private
      */
     _handleNextButtonClick(): void;
-    _onMenuIconClick(e: CustomEvent<MenuItemClickEventDetail>): void;
+    _onMenuIconClick(e: CustomEvent<InputItemClickEventDetail>): void;
     /**
      * Handles keydown events for keyboard shortcuts.
      * @private
@@ -139,5 +141,5 @@ declare class Input extends BaseInput {
     get previousButtonAccessibleName(): string;
     get menu(): Menu;
 }
-export type { InputVersionChangeEventDetail, MenuItemClickEventDetail as InputItemClickEventDetail };
+export type { InputVersionChangeEventDetail, InputItemClickEventDetail, };
 export default Input;

@@ -142,6 +142,15 @@ let List = List_1 = class List extends UI5Element {
          */
         this.loadingDelay = 1000;
         /**
+         * Indicates whether the List header is sticky or not.
+         * If stickyHeader is set to true, then whenever you scroll the content or
+         * the application, the header of the list will be always visible.
+         * @default false
+         * @public
+         * @since 2.19.0
+         */
+        this.stickyHeader = false;
+        /**
         * Defines additional accessibility attributes on different areas of the component.
         *
         * The accessibilityAttributes object has the following field:
@@ -1029,6 +1038,9 @@ __decorate([
 __decorate([
     property({ type: Number })
 ], List.prototype, "loadingDelay", void 0);
+__decorate([
+    property({ type: Boolean })
+], List.prototype, "stickyHeader", void 0);
 __decorate([
     property()
 ], List.prototype, "accessibleName", void 0);

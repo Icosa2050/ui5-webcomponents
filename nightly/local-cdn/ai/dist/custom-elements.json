@@ -383,7 +383,14 @@
             {
               "name": "item-click",
               "type": {
-                "text": "CustomEvent"
+                "text": "CustomEvent<InputItemClickEventDetail>",
+                "references": [
+                  {
+                    "name": "InputItemClickEventDetail",
+                    "package": "@ui5/webcomponents-ai",
+                    "module": "dist/Input.js"
+                  }
+                ]
               },
               "description": "Fired when an item from the AI actions menu is clicked."
             },

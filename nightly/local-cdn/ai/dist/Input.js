@@ -51,6 +51,7 @@ import { INPUT_VERSIONING_NEXT_BUTTON_TOOLTIP, INPUT_VERSIONING_PREVIOUS_BUTTON_
  * @extends BaseInput
  * @since 2.16.0
  * @experimental The **@ui5/webcomponents-ai** package is under active development and considered experimental. Component APIs are subject to change.
+ * Furthermore, the package supports **Horizon** themes only.
  * @public
  */
 let Input = Input_1 = class Input extends BaseInput {
@@ -264,6 +265,8 @@ Input = Input_1 = __decorate([
         cancelable: true,
     })
     /** Fired when an item from the AI actions menu is clicked.
+     * @param { HTMLElement } item The currently clicked menu item.
+     * @param { string } text The text of the currently clicked menu item.
      * @public
      */
     ,

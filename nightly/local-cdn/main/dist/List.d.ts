@@ -187,6 +187,15 @@ declare class List extends UI5Element {
      */
     loadingDelay: number;
     /**
+     * Indicates whether the List header is sticky or not.
+     * If stickyHeader is set to true, then whenever you scroll the content or
+     * the application, the header of the list will be always visible.
+     * @default false
+     * @public
+     * @since 2.19.0
+     */
+    stickyHeader: boolean;
+    /**
      * Defines the accessible name of the component.
      * @default undefined
      * @public
