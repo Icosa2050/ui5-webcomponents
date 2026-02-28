@@ -1,5 +1,5 @@
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
-import type { ChangeInfo } from "@ui5/webcomponents-base/dist/UI5Element.js";
+import type { ChangeInfo, DefaultSlot } from "@ui5/webcomponents-base/dist/UI5Element.js";
 import ItemNavigation from "@ui5/webcomponents-base/dist/delegate/ItemNavigation.js";
 import type { ITabbable } from "@ui5/webcomponents-base/dist/delegate/ItemNavigation.js";
 import type { AccessibilityAttributes } from "@ui5/webcomponents-base/dist/types.js";
@@ -9,6 +9,7 @@ import BreadcrumbsDesign from "./types/BreadcrumbsDesign.js";
 import "./BreadcrumbsItem.js";
 import type BreadcrumbsItem from "./BreadcrumbsItem.js";
 import type BreadcrumbsSeparator from "./types/BreadcrumbsSeparator.js";
+import type { IOverflowToolbarItem } from "./ToolbarItem.js";
 import type Link from "./Link.js";
 import type { LinkClickEventDetail } from "./Link.js";
 import type Label from "./Label.js";
@@ -51,10 +52,11 @@ type FocusAdaptor = ITabbable & {
  * - [End] - Navigates to the last item.
  * @constructor
  * @extends UI5Element
+ * @implements {IOverflowToolbarItem}
  * @public
  * @since 1.0.0-rc.15
  */
-declare class Breadcrumbs extends UI5Element {
+declare class Breadcrumbs extends UI5Element implements IOverflowToolbarItem {
     eventDetails: {
         "item-click": BreadcrumbsItemClickEventDetail;
     };
@@ -86,7 +88,7 @@ declare class Breadcrumbs extends UI5Element {
      * **Note:** Use the `ui5-breadcrumbs-item` component to define the desired items.
      * @public
      */
-    items: Array<BreadcrumbsItem>;
+    items: DefaultSlot<BreadcrumbsItem>;
     _itemNavigation: ItemNavigation;
     _onResizeHandler: ResizeObserverCallback;
     _breadcrumbItemWidths: WeakMap<BreadcrumbsItem, number>;
@@ -181,6 +183,7 @@ declare class Breadcrumbs extends UI5Element {
     get _accessibleNameText(): string;
     get _dropdownArrowAccessibleNameText(): string;
     get _cancelButtonText(): string;
+    get hasOverflow(): boolean;
 }
 export default Breadcrumbs;
 export type { BreadcrumbsItemClickEventDetail, };

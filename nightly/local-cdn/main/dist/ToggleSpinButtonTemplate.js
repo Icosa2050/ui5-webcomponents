@@ -2,7 +2,6 @@ import { Fragment as _Fragment, jsx as _jsx } from "@ui5/webcomponents-base/jsx-
 import buttonTemplate from "./ButtonTemplate.js";
 export default function ToggleSpinButtonTemplate() {
     return (_jsx(_Fragment, { children: buttonTemplate.call(this, {
-            ariaPressed: this.pressed,
             ariaValueMax: this.valueMax,
             ariaValueMin: this.valueMin,
             ariaValueNow: this.valueNow,

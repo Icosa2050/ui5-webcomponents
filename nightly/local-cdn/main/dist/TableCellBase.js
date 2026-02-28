@@ -5,7 +5,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
-import { customElement, slot, property, i18n, } from "@ui5/webcomponents-base/dist/decorators.js";
+import { customElement, slotStrict as slot, property, i18n, } from "@ui5/webcomponents-base/dist/decorators.js";
 import jsxRenderer from "@ui5/webcomponents-base/dist/renderer/JsxRenderer.js";
 import TableCellBaseStyles from "./generated/themes/TableCellBase.css.js";
 /**

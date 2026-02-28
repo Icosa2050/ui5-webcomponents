@@ -8,12 +8,11 @@ var ColorPalettePopover_1;
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
 import customElement from "@ui5/webcomponents-base/dist/decorators/customElement.js";
 import property from "@ui5/webcomponents-base/dist/decorators/property.js";
-import slot from "@ui5/webcomponents-base/dist/decorators/slot.js";
+import slot from "@ui5/webcomponents-base/dist/decorators/slot-strict.js";
 import event from "@ui5/webcomponents-base/dist/decorators/event-strict.js";
 import jsxRenderer from "@ui5/webcomponents-base/dist/renderer/JsxRenderer.js";
 import i18n from "@ui5/webcomponents-base/dist/decorators/i18n.js";
 import DOMReferenceConverter from "@ui5/webcomponents-base/dist/converters/DOMReference.js";
-import { getScopedVarName } from "@ui5/webcomponents-base/dist/CustomElementsScopeUtils.js";
 import ColorPalettePopoverTemplate from "./ColorPalettePopoverTemplate.js";
 // Styles
 import ColorPalettePopoverCss from "./generated/themes/ColorPalettePopover.css.js";
@@ -73,6 +72,13 @@ let ColorPalettePopover = ColorPalettePopover_1 = class ColorPalettePopover exte
          * @since 1.21.0
          */
         this.open = false;
+        /**
+         * Determines on which side the component is placed at.
+         * @default "Bottom"
+         * @public
+         * @since 2.19.0
+         */
+        this.placement = "Bottom";
     }
     get responsivePopover() {
         return this.shadowRoot.querySelector("[ui5-responsive-popover]");
@@ -101,7 +107,7 @@ let ColorPalettePopover = ColorPalettePopover_1 = class ColorPalettePopover exte
         // since height is dynamically determined by padding-block-start
         colorPalette.allColorsInPalette.forEach((item) => {
             const itemHeight = item.offsetHeight + 4; // adding 4px for the offsets on top and bottom
-            item.style.setProperty(getScopedVarName("--_ui5_color_palette_item_height"), `${itemHeight}px`);
+            item.style.setProperty("--_ui5_color_palette_item_height", `${itemHeight}px`);
         });
     }
     onSelectedColor(e) {
@@ -145,11 +151,20 @@ __decorate([
     property()
 ], ColorPalettePopover.prototype, "defaultColor", void 0);
 __decorate([
+    property()
+], ColorPalettePopover.prototype, "accessibleName", void 0);
+__decorate([
+    property()
+], ColorPalettePopover.prototype, "accessibleNameRef", void 0);
+__decorate([
     property({ type: Boolean })
 ], ColorPalettePopover.prototype, "open", void 0);
 __decorate([
     property({ converter: DOMReferenceConverter })
 ], ColorPalettePopover.prototype, "opener", void 0);
+__decorate([
+    property()
+], ColorPalettePopover.prototype, "placement", void 0);
 __decorate([
     slot({ "default": true, type: HTMLElement, individualSlots: true })
 ], ColorPalettePopover.prototype, "colors", void 0);

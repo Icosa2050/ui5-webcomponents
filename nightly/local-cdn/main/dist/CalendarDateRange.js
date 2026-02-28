@@ -49,8 +49,5 @@ CalendarDateRange = __decorate([
     customElement("ui5-date-range")
 ], CalendarDateRange);
 CalendarDateRange.define();
-// type t = typeof CalendarDateRange.prototype._jsxProps;
-// let a: t;
-// a.value =
 export default CalendarDateRange;
 //# sourceMappingURL=CalendarDateRange.js.map

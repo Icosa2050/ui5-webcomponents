@@ -1,6 +1,7 @@
 import type { DynamicDateRangeValue, IDynamicDateRangeOption } from "../DynamicDateRange.js";
 /**
  * @class
+ * @implements {IDynamicDateRangeOption}
  * @constructor
  * @public
  * @since 2.11.0

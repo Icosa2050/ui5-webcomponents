@@ -1,4 +1,5 @@
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
+import type { Slot, DefaultSlot } from "@ui5/webcomponents-base/dist/UI5Element.js";
 /**
  * @class
  *
@@ -60,13 +61,13 @@ declare class ShellBarBranding extends UI5Element {
      * **Note:** Although this slot accepts HTML Elements, it is strongly recommended that you only use text in order to preserve the intended design.
      * @public
      */
-    content: Array<HTMLElement>;
+    content: DefaultSlot<HTMLElement>;
     /**
      * Defines the logo of the `ui5-shellbar`.
      * For example, you can use `ui5-avatar` or `img` elements as logo.
      * @public
      */
-    logo: Array<HTMLElement>;
+    logo: Slot<HTMLElement>;
     get parsedRef(): string | undefined;
     get _role(): "button" | "link";
     get accessibleNameText(): string | undefined;

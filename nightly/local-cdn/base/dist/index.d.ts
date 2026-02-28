@@ -16,6 +16,7 @@ import customElement from "./decorators/customElement.js";
 import event from "./decorators/event.js";
 import property from "./decorators/property.js";
 import slot from "./decorators/slot.js";
+import slotStrict from "./decorators/slot-strict.js";
 import ItemNavigation from "./delegate/ItemNavigation.js";
 import ResizeHandler from "./delegate/ResizeHandler.js";
 import ScrollEnablement from "./delegate/ScrollEnablement.js";
@@ -38,7 +39,7 @@ import { renderDeferred, renderImmediately, cancelRender, renderFinished } from 
 import { addCustomCSS, attachThemeLoaded, detachThemeLoaded } from "./Theming.js";
 import UI5Element from "./UI5Element.js";
 export default UI5Element;
-export { startMultipleDrag, scroll, slideDown, slideUp, getAnimationMode, setAnimationMode, getCalendarType, getFirstDayOfWeek, getLegacyDateCalendarCustomizing, setDefaultIconCollection, getDefaultIconCollection, getEffectiveIconCollection, RegisteredIconCollection, getLanguage, setLanguage, getDefaultLanguage, setFetchDefaultLanguage, getFetchDefaultLanguage, getNoConflict, setNoConflict, getTheme, setTheme, getDefaultTheme, customElement, event, property, slot, ItemNavigation, ResizeHandler, ScrollEnablement, applyDirection, attachDirectionChange, detachDirectionChange, getEffectiveDir, attachLanguageChange, detachLanguageChange, URLListValidator, sanitizeHTML, registerI18nLoader, registerLocaleDataLoader, registerThemePropertiesLoader, registerIconLoader, attachBoot, setCustomElementsScopingSuffix, getCustomElementsScopingSuffix, setCustomElementsScopingRules, getCustomElementsScopingRules, getEffectiveScopingSuffixForTag, supportsTouch, isSafari, isChrome, isFirefox, isPhone, isTablet, isDesktop, isCombi, isIOS, isAndroid, EventProvider, I18nBundle, getI18nBundle, registerCustomI18nBundleGetter, MediaRange, renderDeferred, renderImmediately, cancelRender, renderFinished, addCustomCSS, attachThemeLoaded, detachThemeLoaded, UI5Element, };
+export { startMultipleDrag, scroll, slideDown, slideUp, getAnimationMode, setAnimationMode, getCalendarType, getFirstDayOfWeek, getLegacyDateCalendarCustomizing, setDefaultIconCollection, getDefaultIconCollection, getEffectiveIconCollection, RegisteredIconCollection, getLanguage, setLanguage, getDefaultLanguage, setFetchDefaultLanguage, getFetchDefaultLanguage, getNoConflict, setNoConflict, getTheme, setTheme, getDefaultTheme, customElement, event, property, slot, slotStrict, ItemNavigation, ResizeHandler, ScrollEnablement, applyDirection, attachDirectionChange, detachDirectionChange, getEffectiveDir, attachLanguageChange, detachLanguageChange, URLListValidator, sanitizeHTML, registerI18nLoader, registerLocaleDataLoader, registerThemePropertiesLoader, registerIconLoader, attachBoot, setCustomElementsScopingSuffix, getCustomElementsScopingSuffix, setCustomElementsScopingRules, getCustomElementsScopingRules, getEffectiveScopingSuffixForTag, supportsTouch, isSafari, isChrome, isFirefox, isPhone, isTablet, isDesktop, isCombi, isIOS, isAndroid, EventProvider, I18nBundle, getI18nBundle, registerCustomI18nBundleGetter, MediaRange, renderDeferred, renderImmediately, cancelRender, renderFinished, addCustomCSS, attachThemeLoaded, detachThemeLoaded, UI5Element, };
 type TargetedCustomEvent<D, T> = Omit<CustomEvent<D>, "currentTarget"> & {
     currentTarget: T;
 };

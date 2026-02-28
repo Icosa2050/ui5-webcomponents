@@ -34,8 +34,8 @@ let ToolbarLabel = class ToolbarLabel extends ToolbarItem {
         this.text = "";
     }
     /**
-     * @override
      * ToolbarLabel is not interactive.
+     * @override
      */
     get isInteractive() {
         return false;

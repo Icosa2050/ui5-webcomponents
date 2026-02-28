@@ -13,6 +13,7 @@ declare class TableCustomAnnouncement extends TableExtension {
     _table: Table;
     _tableAttributes: string[];
     constructor(table: Table);
+    private get i18nBundle();
     _onfocusin(e: FocusEvent, eventOrigin: HTMLElement): void;
     _onfocusout(e: FocusEvent, eventOrigin: HTMLElement): void;
     _handleTableElementFocusin(element: HTMLElement): void;

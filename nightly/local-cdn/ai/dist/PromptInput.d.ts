@@ -4,6 +4,7 @@ import type ValueState from "@ui5/webcomponents-base/dist/types/ValueState.js";
 import type { IInputSuggestionItem } from "@ui5/webcomponents/dist/Input.js";
 import type Input from "@ui5/webcomponents/dist/Input.js";
 import type { UI5CustomEvent } from "@ui5/webcomponents-base/dist/index.js";
+import type { Slot, DefaultSlot } from "@ui5/webcomponents-base/dist/UI5Element.js";
 /**
  * @class
  * ### Overview
@@ -123,7 +124,7 @@ declare class PromptInput extends UI5Element {
      *
      * @public
      */
-    suggestionItems: Array<IInputSuggestionItem>;
+    suggestionItems: DefaultSlot<IInputSuggestionItem>;
     /**
      * Defines the value state message that will be displayed as pop up under the component.
      * The value state message slot should contain only one root element.
@@ -136,7 +137,7 @@ declare class PromptInput extends UI5Element {
      * @since 2.0.0
      * @public
      */
-    valueStateMessage: Array<HTMLElement>;
+    valueStateMessage: Slot<HTMLElement>;
     static i18nBundle: I18nBundle;
     _onkeydown(e: KeyboardEvent): void;
     _onInnerInput(e: UI5CustomEvent<Input, "input">): void;

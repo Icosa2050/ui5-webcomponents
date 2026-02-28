@@ -3,6 +3,7 @@ import { DYNAMIC_DATE_RANGE_TOMORROW_TEXT, } from "../generated/i18n/i18n-defaul
 import DynamicDateRange from "../DynamicDateRange.js";
 /**
  * @class
+ * @implements {IDynamicDateRangeOption}
  * @constructor
  * @public
  * @since 2.11.0

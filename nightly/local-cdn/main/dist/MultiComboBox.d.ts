@@ -1,4 +1,5 @@
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
+import type { Slot, DefaultSlot } from "@ui5/webcomponents-base/dist/UI5Element.js";
 import type { ClassMap, Timeout } from "@ui5/webcomponents-base/dist/types.js";
 import type { ResizeObserverCallback } from "@ui5/webcomponents-base/dist/delegate/ResizeHandler.js";
 import ValueState from "@ui5/webcomponents-base/dist/types/ValueState.js";
@@ -43,6 +44,9 @@ type MultiComboBoxSelectionChangeEventDetail = {
 type MultiComboboxItemWithSelection = {
     ref: IMultiComboBoxItem;
     selected: boolean;
+};
+type MultiComboBoxValueStateChangeEventDetail = {
+    valueState: `${ValueState}`;
 };
 /**
  * @class
@@ -94,6 +98,7 @@ declare class MultiComboBox extends UI5Element implements IFormInputElement {
         open: void;
         close: void;
         "selection-change": MultiComboBoxSelectionChangeEventDetail;
+        "value-state-change": MultiComboBoxValueStateChangeEventDetail;
     };
     /**
      * Defines the value of the component.
@@ -166,6 +171,12 @@ declare class MultiComboBox extends UI5Element implements IFormInputElement {
      * @since 1.0.0-rc.5
      */
     required: boolean;
+    /**
+     * Indicates whether a loading indicator should be shown in the picker.
+     * @default false
+     * @public
+     */
+    loading: boolean;
     /**
      * Defines the filter type of the component.
      * @default "StartsWithPerTerm"
@@ -255,13 +266,13 @@ declare class MultiComboBox extends UI5Element implements IFormInputElement {
      * Defines the component items.
      * @public
      */
-    items: Array<IMultiComboBoxItem>;
+    items: DefaultSlot<IMultiComboBoxItem>;
     /**
     * Defines the icon to be displayed in the component.
     * @public
     * @since 1.0.0-rc.9
     */
-    icon: Array<IIcon>;
+    icon: Slot<IIcon>;
     /**
      * Defines the value state message that will be displayed as pop up under the component.
      * The value state message slot should contain only one root element.
@@ -273,7 +284,7 @@ declare class MultiComboBox extends UI5Element implements IFormInputElement {
      * @since 1.0.0-rc.9
      * @public
      */
-    valueStateMessage: Array<HTMLElement>;
+    valueStateMessage: Slot<HTMLElement>;
     selectedValues: Array<IMultiComboBoxItem>;
     _inputLastValue: string;
     _deleting: boolean;
@@ -316,6 +327,7 @@ declare class MultiComboBox extends UI5Element implements IFormInputElement {
     get _showAllItemsButtonPressed(): boolean;
     get _inputDom(): HTMLInputElement;
     _inputLiveChange(e: InputEvent): void;
+    _updateValueState(newValueState: `${ValueState}`): void;
     _tokenDelete(e: CustomEvent<TokenizerTokenDeleteEventDetail>): void;
     get _getPlaceholder(): string;
     get _shouldFocusLastToken(): boolean;
@@ -457,4 +469,4 @@ declare class MultiComboBox extends UI5Element implements IFormInputElement {
     };
 }
 export default MultiComboBox;
-export type { IMultiComboBoxItem, MultiComboBoxSelectionChangeEventDetail, };
+export type { IMultiComboBoxItem, MultiComboBoxSelectionChangeEventDetail, MultiComboBoxValueStateChangeEventDetail, };

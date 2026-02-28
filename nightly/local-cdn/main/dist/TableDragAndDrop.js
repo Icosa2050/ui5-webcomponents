@@ -10,7 +10,7 @@ export default class TableDragAndDrop extends TableExtension {
         this._table = table;
     }
     _ondragstart(e) {
-        DragRegistry.setDraggedElement(e.target);
+        DragRegistry.setDraggedElement(e.target, e);
     }
     _ondragend() {
         DragRegistry.clearDraggedElement();

@@ -25,5 +25,7 @@ declare class UserSettingsAppearanceViewItem extends ListItemCustom {
      * @public
      */
     colorScheme: string;
+    get isUserSettingsAppearanceViewItem(): boolean;
 }
+export declare const isInstanceOfUserSettingsAppearanceViewItem: (object: any) => object is UserSettingsAppearanceViewItem;
 export default UserSettingsAppearanceViewItem;

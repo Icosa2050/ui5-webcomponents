@@ -1,4 +1,5 @@
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
+import type { DefaultSlot, Slot } from "@ui5/webcomponents-base/dist/UI5Element.js";
 import ItemNavigation from "@ui5/webcomponents-base/dist/delegate/ItemNavigation.js";
 import type { ITabbable } from "@ui5/webcomponents-base/dist/delegate/ItemNavigation.js";
 import type { UI5CustomEvent } from "@ui5/webcomponents-base";
@@ -90,6 +91,10 @@ declare class AvatarGroup extends UI5Element {
         "click": AvatarGroupClickEventDetail;
         "overflow": void;
     };
+    slotDetails: {
+        overflowButton: IButton;
+        items: IAvatarGroupItem;
+    };
     /**
      * Defines the mode of the `AvatarGroup`.
      * @default "Group"
@@ -137,7 +142,7 @@ declare class AvatarGroup extends UI5Element {
      * as the built-in overflow action has "Circle" shape.
      * @public
      */
-    items: Array<IAvatarGroupItem>;
+    items: DefaultSlot<IAvatarGroupItem>;
     /**
      * Defines the overflow button of the component.
      *
@@ -147,12 +152,17 @@ declare class AvatarGroup extends UI5Element {
      * @public
      * @since 1.0.0-rc.13
      */
-    overflowButton: Array<IButton>;
+    overflowButton: Slot<IButton>;
     static i18nBundle: I18nBundle;
     _onResizeHandler: () => void;
     _colorIndex: number;
     _hiddenItems: number;
     _itemNavigation: ItemNavigation;
+    /**
+     * Returns the actual avatar items, handling transitive slotting.
+     * @private
+     */
+    get _slottedItems(): IAvatarGroupItem[];
     constructor();
     /**
      * Returns an array containing the `ui5-avatar` instances that are currently not displayed due to lack of space.

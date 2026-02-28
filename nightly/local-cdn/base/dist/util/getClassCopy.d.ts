@@ -32,6 +32,7 @@ declare const getClassCopy: (klass: typeof UI5Element, constructorCallback: () =
         readonly _id: string;
         render(): object;
         connectedCallback(): Promise<void>;
+        readonly definePromise: Promise<void>;
         disconnectedCallback(): void;
         onBeforeRendering(): void;
         onAfterRendering(): void;
@@ -433,7 +434,7 @@ declare const getClassCopy: (klass: typeof UI5Element, constructorCallback: () =
     fetchI18nBundles(): Promise<import("../i18nBundle.js").default[]>;
     fetchCLDR(): Promise<void>;
     asyncFinished: boolean;
-    definePromise: Promise<void> | undefined;
+    _definePromise: Promise<void> | undefined;
     i18nBundleStorage: Record<string, import("../i18nBundle.js").default>;
     readonly i18nBundles: Record<string, import("../i18nBundle.js").default>;
     define(): typeof UI5Element;

@@ -1,5 +1,6 @@
 import TableRowBase from "./TableRowBase.js";
 import type TableHeaderCell from "./TableHeaderCell.js";
+import type { DefaultSlot } from "@ui5/webcomponents-base/dist/UI5Element.js";
 /**
  * @class
  *
@@ -27,7 +28,7 @@ declare class TableHeaderRow extends TableRowBase<TableHeaderCell> {
      *
      * @public
      */
-    cells: Array<TableHeaderCell>;
+    cells: DefaultSlot<TableHeaderCell>;
     /**
      * Sticks the `ui5-table-header-row` to the top of a table.
      *

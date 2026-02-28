@@ -1,4 +1,5 @@
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
+import type { DefaultSlot } from "@ui5/webcomponents-base/dist/UI5Element.js";
 import type TimelineLayout from "./types/TimelineLayout.js";
 import type { ITimelineItem } from "./Timeline.js";
 /**
@@ -37,7 +38,7 @@ declare class TimelineGroupItem extends UI5Element implements ITimelineItem {
      * Determines the content of the `ui5-timeline-group-item`.
      * @public
      */
-    items: Array<ITimelineItem>;
+    items: DefaultSlot<ITimelineItem>;
     /**
      * Defines the items orientation.
      * @default "Vertical"

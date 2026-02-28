@@ -1,4 +1,5 @@
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
+import type { Slot } from "@ui5/webcomponents-base/dist/UI5Element.js";
 import type I18nBundle from "@ui5/webcomponents-base/dist/i18nBundle.js";
 import type { IIcon } from "./Icon.js";
 import type { IToken } from "./MultiInput.js";
@@ -79,7 +80,7 @@ declare class Token extends UI5Element implements IToken {
      * @public
      * @since 1.0.0-rc.9
      */
-    closeIcon: Array<IIcon>;
+    closeIcon: Slot<IIcon>;
     static i18nBundle: I18nBundle;
     _handleSelect(): void;
     _focusin(): void;

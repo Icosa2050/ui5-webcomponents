@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var DatePicker_1;
 import customElement from "@ui5/webcomponents-base/dist/decorators/customElement.js";
 import property from "@ui5/webcomponents-base/dist/decorators/property.js";
-import slot from "@ui5/webcomponents-base/dist/decorators/slot.js";
+import slot from "@ui5/webcomponents-base/dist/decorators/slot-strict.js";
 import query from "@ui5/webcomponents-base/dist/decorators/query.js";
 import event from "@ui5/webcomponents-base/dist/decorators/event-strict.js";
 import i18n from "@ui5/webcomponents-base/dist/decorators/i18n.js";
@@ -20,11 +20,11 @@ import ValueState from "@ui5/webcomponents-base/dist/types/ValueState.js";
 import { getEffectiveAriaLabelText, getAssociatedLabelForTexts, getAllAccessibleNameRefTexts, getEffectiveAriaDescriptionText, getAllAccessibleDescriptionRefTexts, } from "@ui5/webcomponents-base/dist/util/AccessibilityTextsHelper.js";
 import { submitForm } from "@ui5/webcomponents-base/dist/features/InputElementsFormSupport.js";
 import willShowContent from "@ui5/webcomponents-base/dist/util/willShowContent.js";
-import { isPageUp, isPageDown, isPageUpShift, isPageDownShift, isPageUpShiftCtrl, isPageDownShiftCtrl, isShow, isF4, isEnter, isTabNext, isTabPrevious, isF6Next, isF6Previous, } from "@ui5/webcomponents-base/dist/Keys.js";
+import { isPageUp, isPageDown, isPageUpShift, isPageDownShift, isPageUpShiftCtrl, isPageDownShiftCtrl, isShow, isF4, isTabNext, isTabPrevious, isF6Next, isF6Previous, } from "@ui5/webcomponents-base/dist/Keys.js";
 import { isPhone, isDesktop } from "@ui5/webcomponents-base/dist/Device.js";
 import CalendarPickersMode from "./types/CalendarPickersMode.js";
 import "@ui5/webcomponents-icons/dist/appointment-2.js";
-import { DATEPICKER_OPEN_ICON_TITLE, DATEPICKER_OPEN_ICON_TITLE_OPENED, DATEPICKER_DATE_DESCRIPTION, DATETIME_COMPONENTS_PLACEHOLDER_PREFIX, INPUT_SUGGESTIONS_TITLE, DATEPICKER_POPOVER_ACCESSIBLE_NAME, VALUE_STATE_ERROR, VALUE_STATE_INFORMATION, VALUE_STATE_SUCCESS, VALUE_STATE_WARNING, DATEPICKER_VALUE_MISSING, DATEPICKER_PATTERN_MISSMATCH, DATEPICKER_RANGE_UNDERFLOW, DATEPICKER_RANGE_OVERFLOW, } from "./generated/i18n/i18n-defaults.js";
+import { DATEPICKER_OPEN_ICON_TITLE, DATEPICKER_OPEN_ICON_TITLE_OPENED, DATEPICKER_DATE_DESCRIPTION, DATETIME_COMPONENTS_PLACEHOLDER_PREFIX, INPUT_SUGGESTIONS_TITLE, DATEPICKER_POPOVER_ACCESSIBLE_NAME, VALUE_STATE_ERROR, VALUE_STATE_INFORMATION, VALUE_STATE_SUCCESS, VALUE_STATE_WARNING, DATEPICKER_VALUE_MISSING, DATEPICKER_PATTERN_MISSMATCH, DATEPICKER_RANGE_UNDERFLOW, DATEPICKER_RANGE_OVERFLOW, TIMEPICKER_CANCEL_BUTTON, } from "./generated/i18n/i18n-defaults.js";
 import DateComponentBase from "./DateComponentBase.js";
 import InputType from "./types/InputType.js";
 import IconMode from "./types/IconMode.js";
@@ -64,8 +64,8 @@ import ValueStateMessageCss from "./generated/themes/ValueStateMessage.css.js";
  * Supported format options are pattern-based on Unicode LDML Date Format notation.
  * For more information, see [UTS #35: Unicode Locale Data Markup Language](https://unicode.org/reports/tr35/tr35-dates.html#Date_Field_Symbol_Table).
  *
- * For example, if the `format-pattern` is "yyyy-MM-dd",
- * a valid value string is "2015-07-30" and the same is displayed in the input.
+ * For example, if the valueFormat is "yyyy-MM-dd", the displayFormat is "MMM d, y", and the used locale is English, a valid value string is "2015-07-30", which leads to an output of "Jul 30, 2015".
+ * If no placeholder is set to the DatePicker, the used displayFormat is displayed as a placeholder. If another placeholder is needed, it must be set.
  *
  * ### Keyboard Handling
  * The `ui5-date-picker` provides advanced keyboard handling.
@@ -170,6 +170,13 @@ let DatePicker = DatePicker_1 = class DatePicker extends DateComponentBase {
          * @since 2.0.0
          */
         this.open = false;
+        /**
+         * Defines whether the clear icon of the input will be shown.
+         * @default false
+         * @public
+         * @since 2.20.0
+         */
+        this.showClearIcon = false;
         this._calendarCurrentPicker = "day";
     }
     get formValidityMessage() {
@@ -286,12 +293,7 @@ let DatePicker = DatePicker_1 = class DatePicker extends DateComponentBase {
         if (this.open) {
             return;
         }
-        if (isEnter(e)) {
-            if (this._internals.form) {
-                submitForm(this);
-            }
-        }
-        else if (isPageUpShiftCtrl(e)) {
+        if (isPageUpShiftCtrl(e)) {
             e.preventDefault();
             this._modifyDateValue(1, "year");
         }
@@ -383,7 +385,11 @@ let DatePicker = DatePicker_1 = class DatePicker extends DateComponentBase {
      * The ui5-input "submit" event handler - fire change event when the user presses enter
      * @protected
      */
-    _onInputSubmit() { }
+    _onInputRequestSubmit() {
+        if (this._internals.form) {
+            submitForm(this);
+        }
+    }
     /**
      * The ui5-input "change" event handler - fire change event when the user focuses out of the input
      * @protected
@@ -625,6 +631,9 @@ let DatePicker = DatePicker_1 = class DatePicker extends DateComponentBase {
     get pickerAccessibleName() {
         return DatePicker_1.i18nBundle.getText(DATEPICKER_POPOVER_ACCESSIBLE_NAME, this.ariaLabelText);
     }
+    get btnCancelLabel() {
+        return DatePicker_1.i18nBundle.getText(TIMEPICKER_CANCEL_BUTTON);
+    }
     /**
      * Defines whether the dialog on mobile should have header
      * @private
@@ -711,14 +720,31 @@ let DatePicker = DatePicker_1 = class DatePicker extends DateComponentBase {
     }
     /**
      * Currently selected date represented as a Local JavaScript Date instance.
+     * Note: this getter can only be reliably used after the component is fully defined. Use dateValueAsync which resolves only when this condition is met.
      * @public
      * @default null
+     * @deprecated Use dateValueAsync instead
      */
     get dateValue() {
         return this.liveValue ? this.getValueFormat().parse(this.liveValue) : this.getValueFormat().parse(this.value);
     }
+    /**
+     * Promise that resolves to the currently selected date represented as a Local JavaScript Date instance.
+     * @public
+     * @default Promise
+     */
+    get dateValueAsync() {
+        return this.definePromise.then(() => {
+            return this.dateValue;
+        });
+    }
     get dateValueUTC() {
         return this.liveValue ? this.getValueFormat().parse(this.liveValue, true) : this.getValueFormat().parse(this.value);
+    }
+    get dateValueUTCAsync() {
+        return this.definePromise.then(() => {
+            return this.dateValueUTC;
+        });
     }
     get styles() {
         return {
@@ -771,13 +797,16 @@ __decorate([
     property()
 ], DatePicker.prototype, "accessibleDescriptionRef", void 0);
 __decorate([
+    property({ type: Boolean })
+], DatePicker.prototype, "showClearIcon", void 0);
+__decorate([
     property({ type: Object })
 ], DatePicker.prototype, "_respPopoverConfig", void 0);
 __decorate([
     property()
 ], DatePicker.prototype, "_calendarCurrentPicker", void 0);
 __decorate([
-    slot({ type: HTMLElement })
+    slot()
 ], DatePicker.prototype, "valueStateMessage", void 0);
 __decorate([
     query("[ui5-datetime-input]")

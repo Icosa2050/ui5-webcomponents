@@ -6,6 +6,7 @@ import { DEFAULT_THEME, SUPPORTED_THEMES } from "../generated/AssetParameters.js
 import { boot, isBooted } from "../Boot.js";
 import { attachConfigurationReset } from "./ConfigurationReset.js";
 let curTheme;
+let curBaseTheme;
 attachConfigurationReset(() => {
     curTheme = undefined;
 });
@@ -76,5 +77,21 @@ const isLegacyThemeFamilyAsync = async () => {
     return isLegacyThemeFamily();
 };
 const isKnownTheme = (theme) => SUPPORTED_THEMES.includes(theme);
-export { getTheme, setTheme, isTheme, isLegacyThemeFamily, isLegacyThemeFamilyAsync, getDefaultTheme, };
+/**
+ * Returns the base theme of external theme.
+ * @private
+ * @returns {string | undefined} the base theme name
+ */
+const getBaseTheme = () => {
+    return curBaseTheme;
+};
+/**
+ * Sets the base theme of the current external theme.
+ * @param { string | undefined } theme the name of the new base theme
+ * @private
+ */
+const setBaseTheme = (theme) => {
+    curBaseTheme = theme;
+};
+export { getTheme, setTheme, isTheme, isLegacyThemeFamily, isLegacyThemeFamilyAsync, getDefaultTheme, getBaseTheme, setBaseTheme, };
 //# sourceMappingURL=Theme.js.map

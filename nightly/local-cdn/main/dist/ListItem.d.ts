@@ -9,6 +9,7 @@ import ListItemBase from "./ListItemBase.js";
 import type { IButton } from "./Button.js";
 import type ListItemAccessibleRole from "./types/ListItemAccessibleRole.js";
 import "@ui5/webcomponents-icons/dist/slim-arrow-right.js";
+import type { Slot } from "@ui5/webcomponents-base/dist/UI5Element.js";
 interface IAccessibleListItem {
     accessibleName?: string;
     accessibleNameRef?: string;
@@ -137,7 +138,7 @@ declare abstract class ListItem extends ListItemBase {
      * @since 1.9.0
      * @public
     */
-    deleteButton: Array<IButton>;
+    deleteButton: Slot<IButton>;
     deactivateByKey: (e: KeyboardEvent) => void;
     deactivate: () => void;
     accessibleName?: string;

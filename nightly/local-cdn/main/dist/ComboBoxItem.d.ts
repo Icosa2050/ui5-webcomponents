@@ -29,6 +29,28 @@ declare class ComboBoxItem extends ListItemBase implements IComboBoxItem {
      */
     _isVisible: boolean;
     /**
+     * Defines the value of the `ui5-cb-item`.
+     *
+     * Use this property to associate a unique identifier or machine-readable value with the item,
+     * separate from the display text. This enables:
+     * - Selecting items programmatically via `selectedValue` on the ComboBox
+     * - Submitting machine-readable values in forms
+     * - Distinguishing between items with identical display text
+     *
+     * **Example:**
+     * ```html
+     * <ui5-combobox selected-value="DE">
+     *   <ui5-cb-item text="Germany" value="DE"></ui5-cb-item>
+     *   <ui5-cb-item text="France" value="FR"></ui5-cb-item>
+     * </ui5-combobox>
+     * ```
+     *
+     * @default undefined
+     * @public
+     * @since 2.20.0
+     */
+    value?: string;
+    /**
      * Indicates whether the item is focssed
      * @protected
      */
@@ -36,6 +58,7 @@ declare class ComboBoxItem extends ListItemBase implements IComboBoxItem {
     /**
      * Indicates whether the item is selected
      * @protected
+     * @deprecated use value property of the item and selectedValue property of the ComboBox instead
      */
     selected: boolean;
     /**

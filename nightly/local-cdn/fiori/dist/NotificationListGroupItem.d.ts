@@ -1,6 +1,7 @@
 import type NotificationListGrowingMode from "@ui5/webcomponents/dist/types/NotificationListGrowingMode.js";
 import NotificationListItemBase from "./NotificationListItemBase.js";
 import type NotificationListItem from "./NotificationListItem.js";
+import type { DefaultSlot } from "@ui5/webcomponents-base/dist/UI5Element.js";
 type NotificationListGroupItemToggleEventDetail = {
     item: NotificationListGroupItem;
 };
@@ -62,7 +63,7 @@ declare class NotificationListGroupItem extends NotificationListItemBase {
      * usually `ui5-li-notification` items.
      * @public
      */
-    items: Array<NotificationListItem>;
+    items: DefaultSlot<NotificationListItem>;
     onBeforeRendering(): void;
     /**
      * Clears child items loading state to show a single loading over the entire group,

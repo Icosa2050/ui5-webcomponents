@@ -7,6 +7,7 @@ import type Menu from "@ui5/webcomponents/dist/Menu.js";
 import ValueState from "@ui5/webcomponents-base/dist/types/ValueState.js";
 import NotificationListItemImportance from "./types/NotificationListItemImportance.js";
 import NotificationListItemBase from "./NotificationListItemBase.js";
+import type { Slot, DefaultSlot } from "@ui5/webcomponents-base/dist/UI5Element.js";
 import IconDesign from "@ui5/webcomponents/dist/types/IconDesign.js";
 type NotificationListItemCloseEventDetail = {
     item: HTMLElement;
@@ -115,7 +116,7 @@ declare class NotificationListItem extends NotificationListItemBase {
     * you can set its `size` property to `XS` to get the required size - `<ui5-avatar size="XS"></ui5-avatar>`.
     * @public
     */
-    avatar: Array<HTMLElement>;
+    avatar: Slot<HTMLElement>;
     /**
     * Defines the menu, displayed in the `ui5-li-notification`.
     *
@@ -124,12 +125,12 @@ declare class NotificationListItem extends NotificationListItemBase {
     * **Note:** Should be used instead `u5-notification-action`, which is deprecated as of version 2.0.
     * @public
     */
-    menu: Array<HTMLElement>;
+    menu: Slot<HTMLElement>;
     /**
     * Defines the elements, displayed in the footer of the of the component.
     * @public
     */
-    footnotes: Array<HTMLElement>;
+    footnotes: Slot<HTMLElement>;
     /**
     * Defines the content of the `ui5-li-notification`,
     * usually a description of the notification.
@@ -137,7 +138,7 @@ declare class NotificationListItem extends NotificationListItemBase {
     * **Note:** Although this slot accepts HTML Elements, it is strongly recommended that you only use text in order to preserve the intended design.
     * @public
     */
-    description: Array<Node>;
+    description: DefaultSlot<Node>;
     titleTextDOM?: HTMLElement;
     menuButtonDOM?: HTMLElement;
     descriptionDOM?: HTMLElement;

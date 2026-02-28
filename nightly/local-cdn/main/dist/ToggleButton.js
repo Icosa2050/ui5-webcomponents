@@ -6,7 +6,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 import customElement from "@ui5/webcomponents-base/dist/decorators/customElement.js";
 import property from "@ui5/webcomponents-base/dist/decorators/property.js";
-import { isSpaceShift } from "@ui5/webcomponents-base/dist/Keys.js";
 import { isSafari } from "@ui5/webcomponents-base/dist/Device.js";
 import Button from "./Button.js";
 import ToggleButtonTemplate from "./ToggleButtonTemplate.js";
@@ -67,13 +66,6 @@ let ToggleButton = class ToggleButton extends Button {
         if (isSafari()) {
             this.getDomRef().focus();
         }
-    }
-    _onkeyup(e) {
-        if (isSpaceShift(e)) {
-            e.preventDefault();
-            return;
-        }
-        super._onkeyup(e);
     }
 };
 __decorate([

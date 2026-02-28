@@ -1,4 +1,5 @@
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
+import type { Slot, DefaultSlot } from "@ui5/webcomponents-base/dist/UI5Element.js";
 import type Title from "@ui5/webcomponents/dist/Title.js";
 import type Button from "@ui5/webcomponents/dist/Button.js";
 import type { ListItemClickEventDetail } from "@ui5/webcomponents/dist/List.js";
@@ -28,7 +29,6 @@ type UserMenuOtherAccountClickEventDetail = {
  *
  * @constructor
  * @extends UI5Element
- * @experimental
  * @public
  * @since 2.5.0
  */
@@ -91,7 +91,7 @@ declare class UserMenu extends UI5Element {
      * Defines the menu items.
      * @public
      */
-    menuItems: Array<UserMenuItem>;
+    menuItems: DefaultSlot<UserMenuItem>;
     /**
      * Defines the user accounts.
      *
@@ -99,7 +99,15 @@ declare class UserMenu extends UI5Element {
      * there is an item with `selected` property set to `true`.
      * @public
      */
-    accounts: Array<UserMenuAccount>;
+    accounts: Slot<UserMenuAccount>;
+    /**
+     * Defines custom footer content.
+     *
+     * **Note:** When provided, replaces the default "Sign Out" button. Use an empty element to hide the footer completely.
+     * @public
+     * @since 2.20.0
+     */
+    footer: Slot<HTMLElement>;
     static i18nBundle: I18nBundle;
     /**
      * @default false
@@ -147,7 +155,7 @@ declare class UserMenu extends UI5Element {
     _handlePopoverAfterClose(): void;
     _openItemSubMenu(item: UserMenuItem): void;
     _closeUserMenu(): void;
-    get _otherAccounts(): UserMenuAccount[];
+    get _otherAccounts(): Slot<UserMenuAccount>;
     get _manageAccountButtonText(): string;
     get _otherAccountsButtonText(): string;
     get _signOutButtonText(): string;
@@ -157,6 +165,8 @@ declare class UserMenu extends UI5Element {
     get accessibleNameText(): string;
     get _ariaLabelledByAccountInformationText(): string;
     get _ariaLabelledByActions(): string;
+    get _hasCustomFooter(): boolean;
+    get _showDefaultFooter(): boolean;
     getAccountDescriptionText(account: UserMenuAccount): string;
     getAccountByRefId(refId: string): UserMenuAccount;
     captureRef(ref: HTMLElement & {

@@ -47,6 +47,12 @@
       "references": []
     },
     {
+      "name": "ui5-dynamic-page-header-actions",
+      "description": "### Overview\n\nThe `DynamicPageHeaderActions` component is part of the `DynamicPage`\nfamily and is holding the action buttons behind the `DynamicPageTitle` and the `DynamicPageHeader`.\n\nThe \"pin\" action is used to attach the header to a certain state (expanded/collapsed).\nThe expand/collapse action is used to switch between the two states of `DynamicPageHeader`.\n\n\n---\n\n\n",
+      "attributes": [],
+      "references": []
+    },
+    {
       "name": "ui5-dynamic-page-title",
       "description": "### Overview\n\nTitle of the `DynamicPage`.\n\nThe `DynamicPageTitle` component is part of the `DynamicPage`\nfamily and is used to serve as title of the `DynamicPage`.\n\n### Usage\n\nThe `DynamicPageTitle` can hold any component and displays the most important\ninformation regarding the object that will always remain visible while scrolling.\n\n**Note:** The `actions` slot accepts any UI5 web component, but it's\nrecommended to use `ui5-toolbar`.\n\nThe user can switch between the expanded/collapsed states of the\n`DynamicPage` by clicking on the `DynamicPageTitle`\nor by using the expand/collapse visual indicators, positioned at the bottom of the\n`DynamicPageTitle` and the `DynamicPageHeader` inside `ui5-dynamic-page-header-actions`.\n\n### Responsive Behavior\n\nThe responsive behavior of the `DynamicPageTitle` depends on the behavior of the\ncontent that is displayed.\n\n\n---\n\n\n\n\n### **Slots:**\n - **heading** - Defines the content of the Heading of the Dynamic Page.\n\nThe font size of the title within the `heading` slot can be adjusted to the recommended values using the following CSS variables:\n\n**Expanded:** `var(--sapObjectHeader_Title_FontSize)`\n\n**Collapsed:** `var(--sapObjectHeader_Title_SnappedFontSize)`\n- **snappedHeading** - Defines the heading that is shown only when the header is snapped.\n- **snappedTitleOnMobile** - Defines the content of the snapped title on mobile devices.\n\nThis slot is displayed only when the `DynamicPageTitle` is in the snapped state on mobile devices.\nIt should be used to provide a simplified, single-line title that takes up less space on smaller screens.\n\n**Note:**\n- The content set in this slot **overrides** all other content set in the `DynamicPageTitle` slots when displayed.\n- The slot is intended for a single `ui5-title` component.\n- **actionsBar** - Defines the bar with actions in the Dynamic page title.\n- **navigationBar** - Defines the bar with navigation actions in the Dynamic page title.\n- **default** - Defines the content of the Dynamic page title.\n- **subheading** - Defines the content of the title that is shown only when the header is not snapped.\n- **snappedSubheading** - Defines the content of the title that is shown only when the header is snapped.\n- **breadcrumbs** - Defines the content of the breadcrumbs inside Dynamic Page Title.",
       "attributes": [],
@@ -141,7 +147,7 @@
     },
     {
       "name": "ui5-flexible-column-layout",
-      "description": "### Overview\n\nThe `FlexibleColumnLayout` implements the list-detail-detail paradigm by displaying up to three pages in separate columns.\nThere are several possible layouts that can be changed either with the component API, or by dragging the column separators.\n\n### Usage\n\nUse this component for applications that need to display several logical levels of related information side by side (e.g. list of items, item, sub-item, etc.).\nThe Component is flexible in a sense that the application can focus the user's attention on one particular column.\n\n### Responsive Behavior\n\nThe `FlexibleColumnLayout` automatically displays the maximum possible number of columns based on `layout` property and the window size.\nThe component would display 1 column for window size smaller than 599px, up to two columns between 599px and 1023px,\nand 3 columns for sizes bigger than 1023px.\n\n**Note:** When the component displays more than one column, the minimal width of each column is 248px. Consequently, when the user drags a column separator to resize the columns, the minimal allowed width of any resized column is 248px.\n\n### Keyboard Handling\n\n#### Basic Navigation\n\nWhen a column separator is focused,  the following keyboard\nshortcuts allow the user to resize the columns and change the layout:\n\n- [Shift] + [Left] or [Shift] + [Right] - Moves the separator to the left or right, which resizes the columns accordingly.\n- [Left] or [Right] - Moves the separator to the left or right with a bigger step, which resizes the columns accordingly.\n- [Home] - Moves the separator to the start position.\n- [End] - Moves the separator to the end position.\n- This component provides a build in fast navigation group which can be used via [F6] / [Shift] + [F6] / [Ctrl] + [Alt/Option] / [Down] or [Ctrl] + [Alt/Option] + [Up].\nIn order to use this functionality, you need to import the following module:\n`import \"@ui5/webcomponents-base/dist/features/F6Navigation.js\"`\n\n#### Fast Navigation\nThis component provides a build in fast navigation group which can be used via [F6] / [Shift] + [F6] / [Ctrl] + [Alt/Option] / [Down] or [Ctrl] + [Alt/Option] + [Up].\nIn order to use this functionality, you need to import the following module:\n`import \"@ui5/webcomponents-base/dist/features/F6Navigation.js\"`\n\n### ES6 Module Import\n\n`import \"@ui5/webcomponents-fiori/dist/FlexibleColumnLayout.js\";`\n\n\n---\n\n\n\n\n### **Events:**\n - **layout-change** - Fired when the layout changes via user interaction by dragging the separators\nor by changing the component size due to resizing.\n- **layout-configuration-change** - Fired when the `layoutsConfiguration` changes via user interaction by dragging the separators.\n\n### **Slots:**\n - **startColumn** - Defines the content in the start column.\n- **midColumn** - Defines the content in the middle column.\n- **endColumn** - Defines the content in the end column.",
+      "description": "### Overview\n\nThe `FlexibleColumnLayout` implements the list-detail-detail paradigm by displaying up to three pages in separate columns.\nThere are several possible layouts that can be changed either with the component API, or by dragging the column separators.\n\n### Usage\n\nUse this component for applications that need to display several logical levels of related information side by side (e.g. list of items, item, sub-item, etc.).\nThe Component is flexible in a sense that the application can focus the user's attention on one particular column.\n\n### Responsive Behavior\n\nThe `FlexibleColumnLayout` automatically displays the maximum possible number of columns based on `layout` property and the window size.\nThe component would display 1 column for window size smaller than 599px, up to two columns between 599px and 1023px,\nand 3 columns for sizes bigger than 1023px.\n\n**Note:** When the component displays more than one column, the minimal width of each column is 248px. Consequently, when the user drags a column separator to resize the columns, the minimal allowed width of any resized column is 248px.\n\n### Keyboard Handling\n\n#### Basic Navigation\n\nWhen a column separator is focused,  the following keyboard\nshortcuts allow the user to resize the columns and change the layout:\n\n- [Shift] + [Left] or [Shift] + [Right] - Moves the separator to the left or right, which resizes the columns accordingly.\n- [Left] or [Right] - Moves the separator to the left or right with a bigger step, which resizes the columns accordingly.\n- [Home] - Moves the separator to the start position.\n- [End] - Moves the separator to the end position.\n- This component provides a build in fast navigation group which can be used via [F6] / [Shift] + [F6] / [Ctrl] + [Alt/Option] / [Down] or [Ctrl] + [Alt/Option] + [Up].\nIn order to use this functionality, you need to import the following module:\n`import \"@ui5/webcomponents-base/dist/features/F6Navigation.js\"`\n\n#### Fast Navigation\nThis component provides a build in fast navigation group which can be used via [F6] / [Shift] + [F6] / [Ctrl] + [Alt/Option] / [Down] or [Ctrl] + [Alt/Option] + [Up].\nIn order to use this functionality, you need to import the following module:\n`import \"@ui5/webcomponents-base/dist/features/F6Navigation.js\"`\n\n### ES6 Module Import\n\n`import \"@ui5/webcomponents-fiori/dist/FlexibleColumnLayout.js\";`\n\n\n---\n\n\n\n\n### **Events:**\n - **layout-change** - Fired when the layout changes via user interaction by dragging the separators\nor by changing the component size due to resizing.\n- **layout-configuration-change** - Fired when the `layoutsConfiguration` changes via user interaction by dragging the separators.\n\n**Note:** The `layout-configuration-change` event is in an experimental state and is a subject to change.\n\n### **Slots:**\n - **startColumn** - Defines the content in the start column.\n- **midColumn** - Defines the content in the middle column.\n- **endColumn** - Defines the content in the end column.",
       "attributes": [
         {
           "name": "layout",
@@ -328,7 +334,7 @@
     },
     {
       "name": "ui5-navigation-layout",
-      "description": "### Overview\n\nThe `ui5-navigation-layout` is a container component that can be used to\ncreate a layout with a header, a side navigation and a content area.\n\n### Usage\n\nUse the `ui5-navigation-layout` to create whole screen of an application with vertical navigation.\n\n### Responsive Behavior\n\nOn larger screens (screen width of 600px or more), the side navigation is visible\nby default and can be expanded or collapsed using the `mode` property.\nOn small screens (screen width of 599px or less), the side navigation is hidden by\ndefault and can be displayed using the `mode` property.\n\n### ES6 Module Import\n\n`import \"@ui5/webcomponents-fiori/dist/NavigationLayout.js\";`\n\n\n---\n\n\n\n\n### **Methods:**\n - **isSideCollapsed(): _boolean_** - Gets whether the side navigation is collapsed.\n\n### **Slots:**\n - **header** - Defines the header.\n- **sideContent** - Defines the side content.\n- **default** - Defines the content.",
+      "description": "### Overview\n\nThe `ui5-navigation-layout` is a container component that can be used to\ncreate a layout with a header, a side navigation and a content area.\n\n### Usage\n\nUse the `ui5-navigation-layout` to create whole screen of an application with vertical navigation.\n\n### Responsive Behavior\n\nOn larger screens with a width of 600px or more, excluding mobile phone devices, the side navigation is visible\nby default and can be expanded or collapsed using the `mode` property.\nOn mobile phone devices and screens with a width of 599px or less, the side navigation is hidden by\ndefault and can be displayed using the `mode` property.\n\n### ES6 Module Import\n\n`import \"@ui5/webcomponents-fiori/dist/NavigationLayout.js\";`\n\n\n---\n\n\n\n\n### **Methods:**\n - **isSideCollapsed(): _boolean_** - Gets whether the side navigation is collapsed.\n\n### **Slots:**\n - **header** - Defines the header.\n- **sideContent** - Defines the side content.\n- **default** - Defines the content.",
       "attributes": [
         {
           "name": "mode",
@@ -338,6 +344,29 @@
             { "name": "Collapsed" },
             { "name": "Expanded" }
           ]
+        }
+      ],
+      "references": []
+    },
+    {
+      "name": "ui5-navigation-menu",
+      "description": "### Overview\n\n`ui5-navigation-menu` component represents a hierarchical menu structure, inherits all the functionality of `ui5-menu`.\n\n### Usage\n\n`ui5-navigation-menu` contains `ui5-navigation-menu-item` components.\nAn arbitrary hierarchy structure can be represented by recursively nesting navigation menu items.\n\n### ES6 Module Import\n\n`import \"@ui5/webcomponents-fiori/dist/NavigationMenu.js\";`\n\n\n---\n\n\n\n\n### **Slots:**\n - **default** - Defines the items of this component.\n\n**Note:** Use `ui5-navigation-menu-item` for the intended design.",
+      "attributes": [],
+      "references": []
+    },
+    {
+      "name": "ui5-navigation-menu-item",
+      "description": "### Overview\n\n`ui5-navigation-menu-item` is the item to use inside a `ui5-navigation-menu`.\nAn arbitrary hierarchy structure can be represented by recursively nesting navigation menu items.\n\n### Usage\n\n`ui5-navigation-menu-item` represents a node in a `ui5-navigation-menu`. The navigation menu itself is rendered as a list,\nand each `ui5-navigation-menu-item` is represented by a list item in that list. Therefore, you should only use\n`ui5-navigation-menu-item` directly in your apps. The `ui5-li` list item is internal for the list, and not intended for public use.\n\n### ES6 Module Import\n\n`import \"@ui5/webcomponents-fiori/dist/NavigationMenuItem.js\";`\n\n\n---\n\n\n",
+      "attributes": [
+        {
+          "name": "href",
+          "description": "Defines the link target URI. Supports standard hyperlink behavior.\nIf a JavaScript action should be triggered,\nthis should not be set, but instead an event handler\nfor the `click` event should be registered.",
+          "values": []
+        },
+        {
+          "name": "target",
+          "description": "Defines the component target.\n\n**Notes:**\n\n- `_self`\n- `_top`\n- `_blank`\n- `_parent`\n- `_search`\n\n**This property must only be used when the `href` property is set.**",
+          "values": []
         }
       ],
       "references": []
@@ -369,6 +398,18 @@
           "values": [{ "name": "Button" }, { "name": "None" }]
         }
       ],
+      "references": []
+    },
+    {
+      "name": "ui5-notification-group-list",
+      "description": "Internal `ui5-li-notification-group-list` component,\nthat is used to support keyboard navigation of the notification group internal list.\n\n\n---\n\n\n",
+      "attributes": [],
+      "references": []
+    },
+    {
+      "name": "ui5-notification-list-internal",
+      "description": "Internal `ui5-li-notification-list-list` component,\nthat is used to support keyboard navigation of the notification list internal list.\n\n\n---\n\n\n",
+      "attributes": [],
       "references": []
     },
     {
@@ -490,6 +531,53 @@
         {
           "name": "open",
           "description": "Indicates whether the items picker is open.",
+          "values": []
+        },
+        {
+          "name": "field-loading",
+          "description": "Indicates whether a loading indicator should be shown in the input field.",
+          "values": []
+        },
+        {
+          "name": "show-clear-icon",
+          "description": "Defines whether the clear icon of the search will be shown.",
+          "values": []
+        },
+        {
+          "name": "value",
+          "description": "Defines the value of the component.\n\n**Note:** The property is updated upon typing.",
+          "values": []
+        },
+        {
+          "name": "placeholder",
+          "description": "Defines a short hint intended to aid the user with data entry when the\ncomponent has no value.",
+          "values": []
+        },
+        {
+          "name": "accessible-name",
+          "description": "Defines the accessible ARIA name of the component.",
+          "values": []
+        },
+        {
+          "name": "accessible-description",
+          "description": "Defines the accessible ARIA description of the field.",
+          "values": []
+        },
+        {
+          "name": "scope-value",
+          "description": "Defines the value of the component:\n\nApplications are responsible for setting the correct scope value.\n\n**Note:** If the given value does not match any existing scopes,\nno scope will be selected and the SearchField scope component will be displayed as empty.",
+          "values": []
+        }
+      ],
+      "references": []
+    },
+    {
+      "name": "ui5-search-field",
+      "description": "### Overview\n\nA `ui5-search-field` is an input field, used for user search.\n\nThe `ui5-search-field` consists of several elements parts:\n- Scope - displays a select in the beggining of the component, used for filtering results by their scope.\n- Input field - for user input value\n- Clear button - gives the possibility for deleting the entered value\n- Search button - a primary button for performing search, when the user has entered a search term\n\n### ES6 Module Import\n\n`import \"@ui5/webcomponents-fiori/dist/SearchField.js\";`\n\n\n---\n\n\n\n\n### **Events:**\n - **input** - Fired when typing in input or clear icon is pressed.\n- **scope-change** - Fired when the scope has changed.\n- **search** - Fired when the user has triggered search with Enter key or Search Button press.\n\n### **Slots:**\n - **scopes** - Defines the component scope options.\n- **filterButton** - Defines the filter button slot, used to display an additional filtering button.\nThis slot is intended for passing a `ui5-button` with a filter icon to provide extended filtering options.\n\n**Note:** Scope button and Filter button are mutually exclusive.",
+      "attributes": [
+        {
+          "name": "field-loading",
+          "description": "Indicates whether a loading indicator should be shown in the input field.",
           "values": []
         },
         {
@@ -621,28 +709,8 @@
     },
     {
       "name": "ui5-shellbar",
-      "description": "### Overview\n\nThe `ui5-shellbar` is meant to serve as an application header\nand includes numerous built-in features, such as: logo, profile image/icon, title, search field, notifications and so on.\n\n### Stable DOM Refs\n\nYou can use the following stable DOM refs for the `ui5-shellbar`:\n\n- logo\n- notifications\n- overflow\n- profile\n- product-switch\n\n### Keyboard Handling\n\n#### Fast Navigation\nThis component provides a build in fast navigation group which can be used via [F6] / [Shift] + [F6] / [Ctrl] + [Alt/Option] / [Down] or [Ctrl] + [Alt/Option] + [Up].\nIn order to use this functionality, you need to import the following module:\n`import \"@ui5/webcomponents-base/dist/features/F6Navigation.js\"`\n\n### ES6 Module Import\n`import \"@ui5/webcomponents-fiori/dist/ShellBar.js\";`\n\n\n---\n\n\n\n\n### **Events:**\n - **notifications-click** - Fired, when the notification icon is activated.\n- **profile-click** - Fired, when the profile slot is present.\n- **product-switch-click** - Fired, when the product switch icon is activated.\n\n**Note:** You can prevent closing of overflow popover by calling `event.preventDefault()`.\n- **logo-click** - Fired, when the logo is activated.\n- **menu-item-click** - Fired, when a menu item is activated\n\n**Note:** You can prevent closing of overflow popover by calling `event.preventDefault()`.\n- **search-button-click** - Fired, when the search button is activated.\n\n**Note:** You can prevent expanding/collapsing of the search field by calling `event.preventDefault()`.\n- **search-field-toggle** - Fired, when the search field is expanded or collapsed.\n- **search-field-clear** - Fired, when the search cancel button is activated.\n\n**Note:** You can prevent the default behavior (clearing the search field value) by calling `event.preventDefault()`. The search will still be closed.\n**Note:** The `search-field-clear` event is in an experimental state and is a subject to change.\n- **content-item-visibility-change** - Fired, when an item from the content slot is hidden or shown.\n**Note:** The `content-item-visibility-change` event is in an experimental state and is a subject to change.\n\n### **Methods:**\n - **closeOverflow(): _void_** - Closes the overflow area.\nUseful to manually close the overflow after having suppressed automatic closing with preventDefault() of ShellbarItem's press event\n- **getSearchButtonDomRef(): _Promise<HTMLElement | null>_** - Returns the `search` icon DOM ref.\n\n### **Slots:**\n - **assistant** - Defines the assistant slot.\n- **branding** - Defines the branding slot.\nThe `ui5-shellbar-branding` component is intended to be placed inside this slot.\nContent placed here takes precedence over the `primaryTitle` property and the `logo` content slot.\n\n**Note:** The `branding` slot is in an experimental state and is a subject to change.\n- **default** - Defines the `ui5-shellbar` additional items.\n\n**Note:**\nYou can use the `<ui5-shellbar-item></ui5-shellbar-item>`.\n- **profile** - You can pass `ui5-avatar` to set the profile image/icon.\nIf no profile slot is set - profile will be excluded from actions.\n\n**Note:** We recommend not using the `size` attribute of `ui5-avatar` because\nit should have specific size by design in the context of `ui5-shellbar` profile.\n- **logo** - Defines the logo of the `ui5-shellbar`.\nFor example, you can use `ui5-avatar` or `img` elements as logo.\n- **menuItems** - Defines the items displayed in menu after a click on a start button.\n\n**Note:** You can use the  `<ui5-li></ui5-li>` and its ancestors.\n- **searchField** - Defines the `ui5-input`, that will be used as a search field.\n- **startButton** - Defines a `ui5-button` in the bar that will be placed in the beginning.\nWe encourage this slot to be used for a menu button.\nIt gets overstyled to match ShellBar's styling.\n- **content** - Define the items displayed in the content area.\n\nUse the `data-hide-order` attribute with numeric value to specify the order of the items to be hidden when the space is not enough.\nLower values will be hidden first.\n\n**Note:** The `content` slot is in an experimental state and is a subject to change.\n\n### **CSS Parts:**\n - **root** - Used to style the outermost wrapper of the `ui5-shellbar`",
+      "description": "### Overview\n\nThe `ui5-shellbar` is meant to serve as an application header\nand includes numerous built-in features, such as: logo, profile image/icon, title, search field, notifications and so on.\n\n### Stable DOM Refs\n\nYou can use the following stable DOM refs for the `ui5-shellbar`:\n\n- logo\n- notifications\n- overflow\n- profile\n- product-switch\n\n### Keyboard Handling\n\n#### Fast Navigation\nThis component provides a build in fast navigation group which can be used via [F6] / [Shift] + [F6] / [Ctrl] + [Alt/Option] / [Down] or [Ctrl] + [Alt/Option] + [Up].\nIn order to use this functionality, you need to import the following module:\n`import \"@ui5/webcomponents-base/dist/features/F6Navigation.js\"`\n\n### ES6 Module Import\n`import \"@ui5/webcomponents-fiori/dist/ShellBar.js\";`\n\n\n---\n\n\n\n\n### **Events:**\n - **notifications-click** - Fired, when the notification icon is activated.\n- **profile-click** - Fired, when the profile slot is present.\n- **product-switch-click** - Fired, when the product switch icon is activated.\n\n**Note:** You can prevent closing of overflow popover by calling `event.preventDefault()`.\n- **logo-click** - Fired, when the logo is activated.\n- **menu-item-click** - Fired, when a menu item is activated\n\n**Note:** You can prevent closing of overflow popover by calling `event.preventDefault()`.\n- **search-button-click** - Fired, when the search button is activated.\n\n**Note:** You can prevent expanding/collapsing of the search field by calling `event.preventDefault()`.\n- **search-field-toggle** - Fired, when the search field is expanded or collapsed.\n- **search-field-clear** - Fired, when the search cancel button is activated.\n\n**Note:** You can prevent the default behavior (clearing the search field value) by calling `event.preventDefault()`. The search will still be closed.\n**Note:** The `search-field-clear` event is in an experimental state and is a subject to change.\n- **content-item-visibility-change** - Fired, when an item from the content slot is hidden or shown.\n**Note:** The `content-item-visibility-change` event is in an experimental state and is a subject to change.\n\n### **Methods:**\n - **closeOverflow(): _void_** - Closes the overflow popover.\n- **getSearchButtonDomRef(): _Promise<HTMLElement | null>_** - Returns the search button DOM reference.\n\n### **Slots:**\n - **startButton** - Defines a `ui5-button` in the bar that will be placed in the beginning.\nWe encourage this slot to be used for a menu button.\nIt gets overstyled to match ShellBar's styling.\n- **branding** - Defines the branding slot.\nThe `ui5-shellbar-branding` component is intended to be placed inside this slot.\nContent placed here takes precedence over the `primaryTitle` property and the `logo` content slot.\n\n**Note:** The `branding` slot is in an experimental state and is a subject to change.\n- **content** - Define the items displayed in the content area.\n\nUse the `data-hide-order` attribute with numeric value to specify the order of the items to be hidden when the space is not enough.\nLower values will be hidden first.\n\n**Note:** The `content` slot is in an experimental state and is a subject to change.\n- **searchField** - Defines the `ui5-input`, that will be used as a search field.\n- **assistant** - Defines the assistant slot.\n- **default** - Defines the `ui5-shellbar` additional items.\n\n**Note:**\nYou can use the `<ui5-shellbar-item></ui5-shellbar-item>`.\n- **profile** - You can pass `ui5-avatar` to set the profile image/icon.\nIf no profile slot is set - profile will be excluded from actions.\n\n**Note:** We recommend not using the `size` attribute of `ui5-avatar` because\nit should have specific size by design in the context of `ui5-shellbar` profile.\n- **logo** - Defines the logo of the `ui5-shellbar`.\nFor example, you can use `ui5-avatar` or `img` elements as logo.\n- **menuItems** - Defines the items displayed in menu after a click on a start button.\n\n**Note:** You can use the  `<ui5-li></ui5-li>` and its ancestors.\n\n### **CSS Parts:**\n - **root** - Used to style the outermost wrapper of the `ui5-shellbar`",
       "attributes": [
-        {
-          "name": "hide-search-button",
-          "description": "Defines the visibility state of the search button.\n\n**Note:** The `hideSearchButton` property is in an experimental state and is a subject to change.",
-          "values": []
-        },
-        {
-          "name": "disable-search-collapse",
-          "description": "Disables the automatic search field expansion/collapse when the available space is not enough.\n\n**Note:** The `disableSearchCollapse` property is in an experimental state and is a subject to change.",
-          "values": []
-        },
-        {
-          "name": "primary-title",
-          "description": "Defines the `primaryTitle`.\n\n**Note:** The `primaryTitle` would be hidden on S screen size (less than approx. 700px).",
-          "values": []
-        },
-        {
-          "name": "secondary-title",
-          "description": "Defines the `secondaryTitle`.\n\n**Note:** The `secondaryTitle` would be hidden on S and M screen sizes (less than approx. 1300px).",
-          "values": []
-        },
         {
           "name": "notifications-count",
           "description": "Defines the `notificationsCount`,\ndisplayed in the notification icon top-right corner.",
@@ -667,6 +735,26 @@
           "name": "accessibility-attributes",
           "description": "Defines additional accessibility attributes on different areas of the component.\n\nThe accessibilityAttributes object has the following fields,\nwhere each field is an object supporting one or more accessibility attributes:\n\n- **logo** - `logo.role` and `logo.name`.\n- **notifications** - `notifications.expanded` and `notifications.hasPopup`.\n- **profile** - `profile.expanded`, `profile.hasPopup` and `profile.name`.\n- **product** - `product.expanded` and `product.hasPopup`.\n- **search** - `search.hasPopup`.\n- **overflow** - `overflow.expanded` and `overflow.hasPopup`.\n- **branding** - `branding.name`.\n\nThe accessibility attributes support the following values:\n\n- **role**: Defines the accessible ARIA role of the logo area.\nAccepts the following string values: `button` or `link`.\n\n- **expanded**: Indicates whether the button, or another grouping element it controls,\nis currently expanded or collapsed.\nAccepts the following string values: `true` or `false`.\n\n- **hasPopup**: Indicates the availability and type of interactive popup element,\nsuch as menu or dialog, that can be triggered by the button.\n\nAccepts the following string values: `dialog`, `grid`, `listbox`, `menu` or `tree`.\n- **name**: Defines the accessible ARIA name of the area.\nAccepts any string.",
           "values": [{ "name": "ShellBarAccessibilityAttributes" }]
+        },
+        {
+          "name": "hide-search-button",
+          "description": "Defines the visibility state of the search button.\n\n**Note:** The `hideSearchButton` property is in an experimental state and is a subject to change.",
+          "values": []
+        },
+        {
+          "name": "disable-search-collapse",
+          "description": "Disables the automatic search field expansion/collapse when the available space is not enough.\n\n**Note:** The `disableSearchCollapse` property is in an experimental state and is a subject to change.",
+          "values": []
+        },
+        {
+          "name": "primary-title",
+          "description": "Defines the `primaryTitle`.\n\n**Note:** The `primaryTitle` would be hidden on S screen size (less than approx. 700px).",
+          "values": []
+        },
+        {
+          "name": "secondary-title",
+          "description": "Defines the `secondaryTitle`.\n\n**Note:** The `secondaryTitle` would be hidden on S and M screen sizes (less than approx. 1300px).",
+          "values": []
         },
         {
           "name": "logo-dom-ref",
@@ -720,26 +808,26 @@
     },
     {
       "name": "ui5-shellbar-item",
-      "description": "The `ui5-shellbar-item` represents a custom item, that\nmight be added to the `ui5-shellbar`.\n\n### ES6 Module Import\n`import \"@ui5/webcomponents-fiori/dist/ShellBarItem.js\";`\n\n\n---\n\n\n\n\n### **Events:**\n - **click** - Fired, when the item is pressed.",
+      "description": "The `ui5-shellbar-item` represents a custom item for `ui5-shellbar`.\n\n### ES6 Module Import\n`import \"@ui5/webcomponents-fiori/dist/ShellBarItem.js\";`\n\n\n---\n\n\n\n\n### **Events:**\n - **click** - Fired when the item is clicked.",
       "attributes": [
         {
           "name": "icon",
-          "description": "Defines the name of the item's icon.",
+          "description": "Defines the item's icon.",
           "values": []
         },
         {
           "name": "text",
-          "description": "Defines the item text.\n\n**Note:** The text is only displayed inside the overflow popover list view.",
+          "description": "Defines the item text.",
           "values": []
         },
         {
           "name": "count",
-          "description": "Defines the count displayed in the top-right corner.",
+          "description": "Defines the count displayed in badge.",
           "values": []
         },
         {
           "name": "accessibility-attributes",
-          "description": "Defines additional accessibility attributes on Shellbar Items.\n\nThe accessibility attributes support the following values:\n\n- **expanded**: Indicates whether the button, or another grouping element it controls,\nis currently expanded or collapsed.\nAccepts the following string values: `true` or `false`.\n\n- **hasPopup**: Indicates the availability and type of interactive popup element,\nsuch as menu or dialog, that can be triggered by the button.\n\n- **controls**: Identifies the element (or elements) whose contents\nor presence are controlled by the component.\nAccepts a lowercase string value, referencing the ID of the element it controls.",
+          "description": "Defines accessibility attributes.",
           "values": [{ "name": "ShellBarItemAccessibilityAttributes" }]
         }
       ],
@@ -747,60 +835,15 @@
     },
     {
       "name": "ui5-shellbar-search",
-      "description": "Search field for the ShellBar component.\n\n\n---\n\n\n\n\n### **Events:**\n - **open** - Fired when the popup is opened.\n- **close** - Fired when the popup is closed.\n- **input** - Fired when typing in input or clear icon is pressed.\n- **scope-change** - Fired when the scope has changed.\n- **search** - Fired when the user has triggered search with Enter key or Search Button press.\n\n### **Slots:**\n - **default** - Defines the Search suggestion items.\n- **action** - Defines the popup footer action button.\n- **illustration** - Defines the illustrated message to be shown in the popup.\n- **messageArea** - Defines the illustrated message to be shown in the popup.\n- **scopes** - Defines the component scope options.\n- **filterButton** - Defines the filter button slot, used to display an additional filtering button.\nThis slot is intended for passing a `ui5-button` with a filter icon to provide extended filtering options.\n\n**Note:** Scope button and Filter button are mutually exclusive.",
+      "description": "Search field for the ShellBar component.\n\n\n---\n\n\n",
       "attributes": [
         {
           "name": "auto-open",
           "description": "Indicates whether the suggestions popover should be opened on focus.",
           "values": []
-        },
-        {
-          "name": "loading",
-          "description": "Indicates whether a loading indicator should be shown in the popup.",
-          "values": []
-        },
-        {
-          "name": "no-typeahead",
-          "description": "Defines whether the value will be autcompleted to match an item.",
-          "values": []
-        },
-        {
-          "name": "open",
-          "description": "Indicates whether the items picker is open.",
-          "values": []
-        },
-        {
-          "name": "show-clear-icon",
-          "description": "Defines whether the clear icon of the search will be shown.",
-          "values": []
-        },
-        {
-          "name": "value",
-          "description": "Defines the value of the component.\n\n**Note:** The property is updated upon typing.",
-          "values": []
-        },
-        {
-          "name": "placeholder",
-          "description": "Defines a short hint intended to aid the user with data entry when the\ncomponent has no value.",
-          "values": []
-        },
-        {
-          "name": "accessible-name",
-          "description": "Defines the accessible ARIA name of the component.",
-          "values": []
-        },
-        {
-          "name": "accessible-description",
-          "description": "Defines the accessible ARIA description of the field.",
-          "values": []
-        },
-        {
-          "name": "scope-value",
-          "description": "Defines the value of the component:\n\nApplications are responsible for setting the correct scope value.\n\n**Note:** If the given value does not match any existing scopes,\nno scope will be selected and the SearchField scope component will be displayed as empty.",
-          "values": []
         }
       ],
-      "references": []
+      "references": [null]
     },
     {
       "name": "ui5-shellbar-spacer",
@@ -810,7 +853,7 @@
     },
     {
       "name": "ui5-side-navigation",
-      "description": "### Overview\n\nThe `SideNavigation` is used as a standard menu in applications.\nIt consists of three containers: header (top-aligned), main navigation section (top-aligned) and the secondary section (bottom-aligned).\n\n - The header is meant for displaying user related information - profile data, avatar, etc.\n - The main navigation section is related to the user’s current work context\n - The secondary section is mostly used to link additional information that may be of interest (legal information, developer communities, external help, contact information and so on).\n\n### Usage\n\nUse the available `ui5-side-navigation-group`, `ui5-side-navigation-item`\nand `ui5-side-navigation-sub-item` components to build your menu.\nThe items can consist of text only or an icon with text. The use or non-use of icons must be consistent for all items on one level.\nYou must not combine entries with and without icons on the same level. We strongly recommend that you do not use icons on the second level.\n\nThe `ui5-side-navigation` component is designed to be used within a `ui5-navigation-layout` component to ensure an optimal user experience.\n\nUsing it standalone may not match the intended design and functionality.\nFor example, the side navigation may not exhibit the correct behavior on smaller screens.\nAdditionally, the padding of the `ui5-shellbar` will not match the padding of the side navigation.\n\n### Keyboard Handling\n\n### Fast Navigation\nThis component provides a build in fast navigation group which can be used via [F6] / [Shift] + [F6] / [Ctrl] + [Alt/Option] / [Down] or [Ctrl] + [Alt/Option] + [Up].\nIn order to use this functionality, you need to import the following module:\n`import \"@ui5/webcomponents-base/dist/features/F6Navigation.js\"`\n\n\n### ES6 Module Import\n\n`import \"@ui5/webcomponents-fiori/dist/SideNavigation.js\"`\n\n`import \"@ui5/webcomponents-fiori/dist/SideNavigationGroup.js\";` (for `ui5-side-navigation-group`)\n\n`import \"@ui5/webcomponents-fiori/dist/SideNavigationItem.js\";` (for `ui5-side-navigation-item`)\n\n`import \"@ui5/webcomponents-fiori/dist/SideNavigationSubItem.js\";` (for `ui5-side-navigation-sub-item`)\n\n\n---\n\n\n\n\n### **Events:**\n - **selection-change** - Fired when the selection has changed via user interaction\n\n### **Slots:**\n - **default** - Defines the main items of the component.\n- **fixedItems** - Defines the fixed items at the bottom of the component.\n\n**Note:** In order to achieve the best user experience, it is recommended that you keep the fixed items \"flat\" (do not pass sub-items)\n- **header** - Defines the header of the `ui5-side-navigation`.\n\n**Note:** The header is displayed when the component is expanded - the property `collapsed` is false;",
+      "description": "### Overview\n\nThe `SideNavigation` is used as a standard menu in applications.\nIt consists of three containers: header (top-aligned), main navigation section (top-aligned) and the secondary section (bottom-aligned).\n\n - The header is meant for displaying user related information - profile data, avatar, etc.\n - The main navigation section is related to the user's current work context.\n - The secondary section is mostly used to link additional information that may be of interest (legal information, developer communities, external help, contact information and so on).\n\n### Usage\n\nUse the available `ui5-side-navigation-group`, `ui5-side-navigation-item`\nand `ui5-side-navigation-sub-item` components to build your menu.\nThe items can consist of text only or an icon with text. The use or non-use of icons must be consistent for all items on one level.\nYou must not combine entries with and without icons on the same level. We strongly recommend that you do not use icons on the second level.\n\nThe `ui5-side-navigation` component is designed to be used within a `ui5-navigation-layout` component to ensure an optimal user experience.\n\nUsing it standalone may not match the intended design and functionality.\nFor example, the side navigation may not exhibit the correct behavior on smaller screens.\nAdditionally, the padding of the `ui5-shellbar` will not match the padding of the side navigation.\n\n### Keyboard Handling\n\n### Fast Navigation\nThis component provides a build in fast navigation group which can be used via [F6] / [Shift] + [F6] / [Ctrl] + [Alt/Option] / [Down] or [Ctrl] + [Alt/Option] + [Up].\nIn order to use this functionality, you need to import the following module:\n`import \"@ui5/webcomponents-base/dist/features/F6Navigation.js\"`\n\n\n### ES6 Module Import\n\n`import \"@ui5/webcomponents-fiori/dist/SideNavigation.js\"`\n\n`import \"@ui5/webcomponents-fiori/dist/SideNavigationGroup.js\";` (for `ui5-side-navigation-group`)\n\n`import \"@ui5/webcomponents-fiori/dist/SideNavigationItem.js\";` (for `ui5-side-navigation-item`)\n\n`import \"@ui5/webcomponents-fiori/dist/SideNavigationSubItem.js\";` (for `ui5-side-navigation-sub-item`)\n\n\n---\n\n\n\n\n### **Events:**\n - **selection-change** - Fired when the selection has changed via user interaction.\n- **item-click** - Fired when an item is clicked.\n\n### **Slots:**\n - **default** - Defines the main items of the component.\n- **fixedItems** - Defines the fixed items at the bottom of the component.\n\n**Note:** In order to achieve the best user experience, it is recommended that you keep the fixed items \"flat\" (do not pass sub-items)\n- **header** - Defines the header of the `ui5-side-navigation`.\n\n**Note:** The header is displayed when the component is expanded - the property `collapsed` is false;",
       "attributes": [
         {
           "name": "collapsed",
@@ -863,7 +906,7 @@
         },
         {
           "name": "icon",
-          "description": "Defines the icon of the item.\n\nThe SAP-icons font provides numerous options.\n\nSee all the available icons in the [Icon Explorer](https://sdk.openui5.org/test-resources/sap/m/demokit/iconExplorer/webapp/index.html).",
+          "description": "Defines the icon of the item.\n\n**Note:** Icons on second-level (child) navigation items are not recommended according to the design specification.\n\nThe SAP-icons font provides numerous options.\n\nSee all the available icons in the [Icon Explorer](https://sdk.openui5.org/test-resources/sap/m/demokit/iconExplorer/webapp/index.html).",
           "values": []
         },
         {
@@ -942,7 +985,7 @@
       "attributes": [
         {
           "name": "icon",
-          "description": "Defines the icon of the item.\n\nThe SAP-icons font provides numerous options.\n\nSee all the available icons in the [Icon Explorer](https://sdk.openui5.org/test-resources/sap/m/demokit/iconExplorer/webapp/index.html).",
+          "description": "Defines the icon of the item.\n\n**Note:** Icons on second-level (child) navigation items are not recommended according to the design specification.\n\nThe SAP-icons font provides numerous options.\n\nSee all the available icons in the [Icon Explorer](https://sdk.openui5.org/test-resources/sap/m/demokit/iconExplorer/webapp/index.html).",
           "values": []
         },
         {
@@ -999,7 +1042,7 @@
       "attributes": [
         {
           "name": "icon",
-          "description": "Defines the icon of the item.\n\nThe SAP-icons font provides numerous options.\n\nSee all the available icons in the [Icon Explorer](https://sdk.openui5.org/test-resources/sap/m/demokit/iconExplorer/webapp/index.html).",
+          "description": "Defines the icon of the item.\n\n**Note:** Icons on second-level (child) navigation items are not recommended according to the design specification.\n\nThe SAP-icons font provides numerous options.\n\nSee all the available icons in the [Icon Explorer](https://sdk.openui5.org/test-resources/sap/m/demokit/iconExplorer/webapp/index.html).",
           "values": []
         },
         {
@@ -1273,7 +1316,7 @@
     },
     {
       "name": "ui5-user-menu",
-      "description": "### Overview\n\nThe `ui5-user-menu` is an SAP Fiori specific web component that is used in `ui5-shellbar`\nand allows the user to easily see information and settings for the current user and all other logged in accounts.\n\n### ES6 Module Import\n`import \"@ui5/webcomponents-fiori/dist/UserMenu.js\";`\n\n`import \"@ui5/webcomponents-fiori/dist/UserMenuItem.js\";` (for `ui5-user-menu-item`)\n\n\n---\n\n\n\n\n### **Events:**\n - **avatar-click** - Fired when the account avatar is selected.\n- **manage-account-click** - Fired when the \"Manage Account\" button is selected.\n- **edit-accounts-click** - Fired when the \"Edit Accounts\" button is selected.\n- **change-account** - Fired when the account is switched to a different one.\n- **item-click** - Fired when a menu item is selected.\n- **open** - Fired when a user menu is open.\n- **close** - Fired when a user menu is close.\n- **sign-out-click** - Fired when the \"Sign Out\" button is selected.\n\n### **Slots:**\n - **default** - Defines the menu items.\n- **accounts** - Defines the user accounts.\n\n**Note:** If one item is used, it will be shown as the selected one. If more than one item is used, the first one will be shown as selected unless\nthere is an item with `selected` property set to `true`.",
+      "description": "### Overview\n\nThe `ui5-user-menu` is an SAP Fiori specific web component that is used in `ui5-shellbar`\nand allows the user to easily see information and settings for the current user and all other logged in accounts.\n\n### ES6 Module Import\n`import \"@ui5/webcomponents-fiori/dist/UserMenu.js\";`\n\n`import \"@ui5/webcomponents-fiori/dist/UserMenuItem.js\";` (for `ui5-user-menu-item`)\n\n\n---\n\n\n\n\n### **Events:**\n - **avatar-click** - Fired when the account avatar is selected.\n- **manage-account-click** - Fired when the \"Manage Account\" button is selected.\n- **edit-accounts-click** - Fired when the \"Edit Accounts\" button is selected.\n- **change-account** - Fired when the account is switched to a different one.\n- **item-click** - Fired when a menu item is selected.\n- **open** - Fired when a user menu is open.\n- **close** - Fired when a user menu is close.\n- **sign-out-click** - Fired when the \"Sign Out\" button is selected.\n\n### **Slots:**\n - **default** - Defines the menu items.\n- **accounts** - Defines the user accounts.\n\n**Note:** If one item is used, it will be shown as the selected one. If more than one item is used, the first one will be shown as selected unless\nthere is an item with `selected` property set to `true`.\n- **footer** - Defines custom footer content.\n\n**Note:** When provided, replaces the default \"Sign Out\" button. Use an empty element to hide the footer completely.",
       "attributes": [
         {
           "name": "open",
@@ -1321,6 +1364,25 @@
           "name": "avatar-initials",
           "description": "Defines the avatar initials of the user.",
           "values": []
+        },
+        {
+          "name": "avatar-color-scheme",
+          "description": "Defines the background color of the desired image.\nIf `avatarColorScheme` is set to `Auto`, the avatar will be displayed with the `Accent6` color.",
+          "values": [
+            { "name": "Auto" },
+            { "name": "Transparent" },
+            { "name": "Accent1" },
+            { "name": "Accent2" },
+            { "name": "Accent3" },
+            { "name": "Accent4" },
+            { "name": "Accent5" },
+            { "name": "Accent6" },
+            { "name": "Accent7" },
+            { "name": "Accent8" },
+            { "name": "Accent9" },
+            { "name": "Accent10" },
+            { "name": "Placeholder" }
+          ]
         },
         {
           "name": "title-text",
@@ -1610,6 +1672,12 @@
           "values": []
         }
       ],
+      "references": []
+    },
+    {
+      "name": "ui5-wizard-tab",
+      "description": "### Overview\nPrivate component, used internally by the `ui5-wizard`\nto represent a \"step\" in the navigation header of the `ui5-wizard`.\n\n### Usage\n\n### ES6 Module Import\n\n`import \"@ui5/webcomponents/dist/WizardTab.js\";` (imported with <ui5-wizard>)\n\n\n---\n\n\n",
+      "attributes": [],
       "references": []
     }
   ]

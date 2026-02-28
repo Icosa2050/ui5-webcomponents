@@ -16,5 +16,6 @@ declare class F6Navigation {
     destroy(): void;
     get _ui5RuntimeIndex(): number;
     static init(): void;
+    static destroy(): void;
 }
 export default F6Navigation;

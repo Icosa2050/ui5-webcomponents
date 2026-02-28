@@ -6,7 +6,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 var UserMenu_1;
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
-import { customElement, slot, eventStrict as event, property, } from "@ui5/webcomponents-base/dist/decorators.js";
+import { customElement, slotStrict as slot, eventStrict as event, property, } from "@ui5/webcomponents-base/dist/decorators.js";
 import jsxRenderer from "@ui5/webcomponents-base/dist/renderer/JsxRenderer.js";
 import query from "@ui5/webcomponents-base/dist/decorators/query.js";
 import DOMReferenceConverter from "@ui5/webcomponents-base/dist/converters/DOMReference.js";
@@ -31,7 +31,6 @@ import { USER_MENU_OTHER_ACCOUNT_BUTTON_TXT, USER_MENU_MANAGE_ACCOUNT_BUTTON_TXT
  *
  * @constructor
  * @extends UI5Element
- * @experimental
  * @public
  * @since 2.5.0
  */
@@ -226,6 +225,12 @@ let UserMenu = UserMenu_1 = class UserMenu extends UI5Element {
     get _ariaLabelledByActions() {
         return UserMenu_1.i18nBundle.getText(USER_MENU_ACTIONS_TXT);
     }
+    get _hasCustomFooter() {
+        return this.footer.length > 0 && this.footer[0]?.innerHTML.trim() !== "";
+    }
+    get _showDefaultFooter() {
+        return this.footer.length === 0;
+    }
     getAccountDescriptionText(account) {
         return `${account.subtitleText} ${account.description} ${account.selected ? UserMenu_1.i18nBundle.getText(USER_MENU_POPOVER_ACCESSIBLE_ACCOUNT_SELECTED_TXT) : ""}`;
     }
@@ -274,6 +279,9 @@ __decorate([
         },
     })
 ], UserMenu.prototype, "accounts", void 0);
+__decorate([
+    slot()
+], UserMenu.prototype, "footer", void 0);
 __decorate([
     property({ type: Boolean })
 ], UserMenu.prototype, "_titleMovedToHeader", void 0);

@@ -11,7 +11,7 @@
 
 	<script>// delete Document.prototype.adoptedStyleSheets;</script>
 
-  <script type="module" crossorigin src="/webcomponents/nightly/assets/bundle.esm-CdugXn8h.js"></script>
+  <script type="module" crossorigin src="/webcomponents/nightly/assets/bundle.esm-BxejsCLe.js"></script>
   <link rel="stylesheet" crossorigin href="/webcomponents/nightly/assets/Input-Z3WjmG2q.css">
 </head>
 
@@ -549,6 +549,22 @@
 
 	<ui5-label id="description">Input with just accessible description</ui5-label>
 	<ui5-input accessible-description="Accessible description works"></ui5-input>
+
+	<br>
+	<br>
+	<ui5-title>Input with built-in filtering (Contains)</ui5-title>
+	<ui5-input filter="Contains" show-suggestions>
+		<ui5-suggestion-item-group header-text="Metals">
+			<ui5-suggestion-item text="Gold"></ui5-suggestion-item>
+			<ui5-suggestion-item text="Silver"></ui5-suggestion-item>
+			<ui5-suggestion-item text="Iron"></ui5-suggestion-item>
+		</ui5-suggestion-item-group>
+		<ui5-suggestion-item-group header-text="Fruits">
+			<ui5-suggestion-item text="Apple"></ui5-suggestion-item>
+			<ui5-suggestion-item text="Banana"></ui5-suggestion-item>
+			<ui5-suggestion-item text="Orange"></ui5-suggestion-item>
+		</ui5-suggestion-item-group>
+	</ui5-input>
 
 	<br>
 	<br>

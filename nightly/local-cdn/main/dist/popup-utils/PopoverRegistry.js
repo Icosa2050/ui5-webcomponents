@@ -1,4 +1,3 @@
-import { isClickInRect } from "@ui5/webcomponents-base/dist/util/PopupUtils.js";
 import getActiveElement from "@ui5/webcomponents-base/dist/util/getActiveElement.js";
 import getParentElement from "@ui5/webcomponents-base/dist/util/getParentElement.js";
 import { instanceOfPopover } from "../Popover.js";
@@ -64,14 +63,17 @@ const clickHandler = (event) => {
         return;
     }
     // loop all open popovers
-    for (let i = (openedPopups.length - 1); i !== -1; i--) {
+    for (let i = openedPopups.length - 1; i !== -1; i--) {
         const popup = openedPopups[i].instance;
+        if (!instanceOfPopover(popup)) {
+            return;
+        }
         // if popup is modal, opener is clicked, popup is dialog skip closing
         if (popup.isModal || popup.isOpenerClicked(event)) {
             return;
         }
-        if (isClickInRect(event, popup.getBoundingClientRect())) {
-            break;
+        if (popup.isClicked(event)) {
+            return;
         }
         popup.closePopup();
     }

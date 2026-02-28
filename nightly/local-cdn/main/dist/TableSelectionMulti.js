@@ -9,7 +9,7 @@ import TableSelectionBase from "./TableSelectionBase.js";
 import getActiveElement from "@ui5/webcomponents-base/dist/util/getActiveElement.js";
 import { isSelectionCell, isHeaderSelectionCell, findRowInPath } from "./TableUtils.js";
 import { isUpShift } from "@ui5/webcomponents-base/dist/Keys.js";
-import { TABLE_COLUMNHEADER_SELECTALL_DESCRIPTION, TABLE_COLUMNHEADER_SELECTALL_CHECKED, TABLE_COLUMNHEADER_SELECTALL_NOT_CHECKED, TABLE_COLUMNHEADER_CLEARALL_DESCRIPTION, TABLE_ACC_STATE_DISABLED, } from "./generated/i18n/i18n-defaults.js";
+import { TABLE_COLUMNHEADER_SELECTALL_DESCRIPTION, TABLE_COLUMNHEADER_CLEARALL_DESCRIPTION, CHECKBOX_CHECKED, CHECKBOX_NOT_CHECKED, ACC_STATE_DISABLED, } from "./generated/i18n/i18n-defaults.js";
 /**
  * @class
  *
@@ -141,11 +141,11 @@ let TableSelectionMulti = class TableSelectionMulti extends TableSelectionBase {
         const i18nBundle = this._table.constructor.i18nBundle;
         if (this.headerSelector === "SelectAll") {
             description = i18nBundle.getText(TABLE_COLUMNHEADER_SELECTALL_DESCRIPTION);
-            description += seperator + i18nBundle.getText(this.areAllRowsSelected() ? TABLE_COLUMNHEADER_SELECTALL_CHECKED : TABLE_COLUMNHEADER_SELECTALL_NOT_CHECKED);
+            description += seperator + i18nBundle.getText(this.areAllRowsSelected() ? CHECKBOX_CHECKED : CHECKBOX_NOT_CHECKED);
         }
         else {
             description = i18nBundle.getText(TABLE_COLUMNHEADER_CLEARALL_DESCRIPTION);
-            description += this.getSelectedRows().length === 0 ? seperator + i18nBundle.getText(TABLE_ACC_STATE_DISABLED) : "";
+            description += this.getSelectedRows().length === 0 ? seperator + i18nBundle.getText(ACC_STATE_DISABLED) : "";
         }
         return description;
     }

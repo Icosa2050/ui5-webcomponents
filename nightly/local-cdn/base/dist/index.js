@@ -18,6 +18,7 @@ import customElement from "./decorators/customElement.js";
 import event from "./decorators/event.js";
 import property from "./decorators/property.js";
 import slot from "./decorators/slot.js";
+import slotStrict from "./decorators/slot-strict.js";
 // delegate/
 import ItemNavigation from "./delegate/ItemNavigation.js";
 import ResizeHandler from "./delegate/ResizeHandler.js";
@@ -61,7 +62,7 @@ scroll, slideDown, slideUp,
 // config/
 getAnimationMode, setAnimationMode, getCalendarType, getFirstDayOfWeek, getLegacyDateCalendarCustomizing, setDefaultIconCollection, getDefaultIconCollection, getEffectiveIconCollection, RegisteredIconCollection, getLanguage, setLanguage, getDefaultLanguage, setFetchDefaultLanguage, getFetchDefaultLanguage, getNoConflict, setNoConflict, getTheme, setTheme, getDefaultTheme, 
 // decorators/
-customElement, event, property, slot, 
+customElement, event, property, slot, slotStrict, 
 // delegate/
 ItemNavigation, ResizeHandler, ScrollEnablement, 
 // locale/

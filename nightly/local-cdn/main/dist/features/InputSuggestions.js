@@ -65,7 +65,7 @@ class Suggestions {
     }
     onPageDown(e) {
         e.preventDefault();
-        const items = this._getItems();
+        const items = this.visibleItems;
         if (!items) {
             return true;
         }
@@ -199,7 +199,7 @@ class Suggestions {
         this._moveItemSelection(previousSelectedIdx, ++this.selectedItemIndex);
     }
     _selectPreviousItem() {
-        const items = this._getItems();
+        const items = this.visibleItems;
         const previousSelectedIdx = this.selectedItemIndex;
         if (previousSelectedIdx === -1 || previousSelectedIdx === null) {
             return;
@@ -216,17 +216,20 @@ class Suggestions {
         }
         this._moveItemSelection(previousSelectedIdx, --this.selectedItemIndex);
     }
+    get visibleItems() {
+        return this._getItems().filter(item => !item.hidden);
+    }
     _moveItemSelection(previousIdx, nextIdx) {
-        const items = this._getItems();
+        const items = this.visibleItems;
         const currentItem = items[nextIdx];
         const previousItem = items[previousIdx];
         const nonGroupItems = this._getNonGroupItems();
-        const isGroupItem = currentItem.hasAttribute("ui5-suggestion-item-group");
+        const isGroupItem = currentItem?.hasAttribute("ui5-suggestion-item-group");
         if (!currentItem) {
             return;
         }
         this.component.focused = false;
-        const selectedItem = this._getItems()[this.selectedItemIndex];
+        const selectedItem = this.visibleItems[this.selectedItemIndex];
         this.accInfo = {
             isGroup: isGroupItem,
             currentPos: items.indexOf(currentItem) + 1,
@@ -331,7 +334,7 @@ class Suggestions {
             return `${Suggestions.i18nBundle.getText(LIST_ITEM_GROUP_HEADER)} ${this.accInfo.itemText}`;
         }
         const itemPositionText = Suggestions.i18nBundle.getText(LIST_ITEM_POSITION, this.accInfo.currentPos || 0, this.accInfo.listSize || 0);
-        return `${this.accInfo.additionalText} ${itemPositionText}`;
+        return `${this.accInfo.additionalText} ${itemPositionText}`.trim();
     }
     hightlightInput(text, input) {
         return generateHighlightedMarkup(text, input);

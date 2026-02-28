@@ -1,4 +1,5 @@
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
+import type { DefaultSlot } from "@ui5/webcomponents-base/dist/UI5Element.js";
 import type I18nBundle from "@ui5/webcomponents-base/dist/i18nBundle.js";
 import "@ui5/webcomponents-icons/dist/slim-arrow-right.js";
 import type { Timeout } from "@ui5/webcomponents-base/dist/types.js";
@@ -137,14 +138,15 @@ declare class Menu extends UI5Element {
      * **Note:** Use `ui5-menu-item` and `ui5-menu-separator` for their intended design.
      * @public
      */
-    items: Array<IMenuItem>;
+    items: DefaultSlot<IMenuItem>;
     static i18nBundle: I18nBundle;
     _timeout?: Timeout;
     get isRtl(): boolean;
-    get labelClose(): string;
+    get labelCancel(): string;
     get isPhone(): boolean;
     get _popover(): ResponsivePopover;
     get _list(): List | null;
+    get _opener(): HTMLElement | null | undefined;
     /** Returns menu item groups */
     get _menuItemGroups(): import("./MenuItemGroup.js").default[];
     /** Returns menu items */
@@ -158,7 +160,7 @@ declare class Menu extends UI5Element {
     getFocusDomRef(): HTMLElement | undefined;
     _setupItemNavigation(): void;
     _close(): void;
-    _openItemSubMenu(item: MenuItem): void;
+    _openItemSubMenu(item: MenuItem, openedByMouse?: boolean): void;
     _itemMouseOver(e: MouseEvent): void;
     focus(focusOptions?: FocusOptions): Promise<void>;
     _closeOtherSubMenus(item: MenuItem): void;

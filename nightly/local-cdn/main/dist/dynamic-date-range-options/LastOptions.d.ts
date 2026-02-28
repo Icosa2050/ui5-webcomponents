@@ -3,6 +3,7 @@ import type { JsxTemplate } from "@ui5/webcomponents-base/dist/index.js";
 import type { I18nText } from "@ui5/webcomponents-base/dist/i18nBundle.js";
 /**
  * @class
+ * @implements {IDynamicDateRangeOption}
  * @constructor
  * @public
  * @since 2.14.0

@@ -4,7 +4,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-import { customElement, slot } from "@ui5/webcomponents-base/dist/decorators.js";
+import { customElement, slotStrict as slot } from "@ui5/webcomponents-base/dist/decorators.js";
 import MenuItem, { isInstanceOfMenuItem } from "@ui5/webcomponents/dist/MenuItem.js";
 import UserMenuItemTemplate from "./UserMenuItemTemplate.js";
 // Styles
@@ -28,7 +28,6 @@ import userMenuItemCss from "./generated/themes/UserMenuItem.css.js";
  * `import "@ui5/webcomponents-fiori/dist/UserMenuItem.js";`
  * @constructor
  * @extends MenuItem
- * @experimental
  * @public
  * @since 2.5.0
  */

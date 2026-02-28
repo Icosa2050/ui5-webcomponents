@@ -1,4 +1,5 @@
 import ListItemStandard from "./ListItemStandard.js";
+import type { DefaultSlot, Slot } from "@ui5/webcomponents-base/dist/UI5Element.js";
 /**
  * @class
  * The `ui5-li-suggestion-item` represents the suggestion item in the `ui5-input`
@@ -16,12 +17,12 @@ declare class SuggestionListItem extends ListItemStandard {
      * @since 1.0.0-rc.8
      * @public
      */
-    richDescription: Array<HTMLElement>;
+    richDescription: Slot<HTMLElement>;
     /**
      * Defines the title text of the suggestion item.
      * @public
      */
-    titleText: Array<Node>;
+    titleText: DefaultSlot<Node>;
     onBeforeRendering(): void;
     get effectiveTitle(): string;
     get hasDescription(): string | true | undefined;

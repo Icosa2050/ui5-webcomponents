@@ -1,6 +1,7 @@
 import type I18nBundle from "@ui5/webcomponents-base/dist/i18nBundle.js";
 import Menu from "@ui5/webcomponents/dist/Menu.js";
 import type NavigationMenuItem from "./NavigationMenuItem.js";
+import type { DefaultSlot } from "@ui5/webcomponents-base/dist/UI5Element.js";
 /**
  * @class
  *
@@ -28,7 +29,7 @@ declare class NavigationMenu extends Menu {
      * **Note:** Use `ui5-navigation-menu-item` for the intended design.
      * @public
      */
-    items: Array<NavigationMenuItem>;
+    items: DefaultSlot<NavigationMenuItem>;
     static i18nBundleFiori: I18nBundle;
     _itemMouseOver(e: MouseEvent): void;
     get accSideNavigationPopoverHiddenText(): string;

@@ -1,4 +1,5 @@
 import ListItemGroup from "@ui5/webcomponents/dist/ListItemGroup.js";
+import WrappingType from "@ui5/webcomponents/dist/types/WrappingType.js";
 /**
  * @class
  * The `ui5-search-item-group` is type of suggestion item,
@@ -11,5 +12,6 @@ import ListItemGroup from "@ui5/webcomponents/dist/ListItemGroup.js";
  */
 declare class SearchItemGroup extends ListItemGroup {
     get isGroupItem(): boolean;
+    getGroupHeaderWrapping(): WrappingType;
 }
 export default SearchItemGroup;

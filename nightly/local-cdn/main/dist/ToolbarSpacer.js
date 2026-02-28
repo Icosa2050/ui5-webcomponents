@@ -6,7 +6,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 import property from "@ui5/webcomponents-base/dist/decorators/property.js";
 import customElement from "@ui5/webcomponents-base/dist/decorators/customElement.js";
-import ToolbarCss from "./generated/themes/Toolbar.css.js";
 import ToolbarItem from "./ToolbarItem.js";
 /**
  * @class
@@ -40,7 +39,6 @@ __decorate([
 ToolbarSpacer = __decorate([
     customElement({
         tag: "ui5-toolbar-spacer",
-        styles: ToolbarCss,
     })
 ], ToolbarSpacer);
 ToolbarSpacer.define();

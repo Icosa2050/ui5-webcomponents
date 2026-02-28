@@ -1,4 +1,5 @@
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
+import type { Slot, DefaultSlot } from "@ui5/webcomponents-base/dist/UI5Element.js";
 import type { IFormItem } from "./Form.js";
 import type FormItemSpacing from "./types/FormItemSpacing.js";
 import type FormAccessibleMode from "./types/FormAccessibleMode.js";
@@ -45,13 +46,13 @@ declare class FormItem extends UI5Element implements IFormItem {
      * Defines the label of the component.
      * @public
      */
-    labelContent: Array<HTMLElement>;
+    labelContent: Slot<HTMLElement>;
     /**
      * Defines the content of the component,
      * associated to `labelContent`.
      * @public
      */
-    content: Array<HTMLElement>;
+    content: DefaultSlot<HTMLElement>;
     /**
      * @private
      */

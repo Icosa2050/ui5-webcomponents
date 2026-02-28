@@ -8,7 +8,7 @@ var Calendar_1;
 import customElement from "@ui5/webcomponents-base/dist/decorators/customElement.js";
 import event from "@ui5/webcomponents-base/dist/decorators/event-strict.js";
 import property from "@ui5/webcomponents-base/dist/decorators/property.js";
-import slot from "@ui5/webcomponents-base/dist/decorators/slot.js";
+import slot from "@ui5/webcomponents-base/dist/decorators/slot-strict.js";
 import i18n from "@ui5/webcomponents-base/dist/decorators/i18n.js";
 import transformDateToSecondaryType from "@ui5/webcomponents-localization/dist/dates/transformDateToSecondaryType.js";
 import convertMonthNumbersToMonthNames from "@ui5/webcomponents-localization/dist/dates/convertMonthNumbersToMonthNames.js";
@@ -331,7 +331,7 @@ let Calendar = Calendar_1 = class Calendar extends CalendarPart {
     onBeforeRendering() {
         this._normalizeCurrentPicker();
         if (!this._valueIsProcessed) {
-            if (this._selectedDatesTimestamps) {
+            if (this._selectedDatesTimestamps.length) {
                 this.timestamp = this._selectedDatesTimestamps[0];
             }
             this._valueIsProcessed = true;

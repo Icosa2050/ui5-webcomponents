@@ -235,6 +235,12 @@ let RatingIndicator = RatingIndicator_1 = class RatingIndicator extends UI5Eleme
     get ariaReadonly() {
         return this.readonly ? "true" : undefined;
     }
+    get effectiveIconSelected() {
+        return this.iconSelected || "favorite";
+    }
+    get effectiveIconUnselected() {
+        return this.iconUnselected || "unfavorite";
+    }
 };
 __decorate([
     property({ type: Number })
@@ -263,6 +269,12 @@ __decorate([
 __decorate([
     property()
 ], RatingIndicator.prototype, "tooltip", void 0);
+__decorate([
+    property()
+], RatingIndicator.prototype, "iconSelected", void 0);
+__decorate([
+    property()
+], RatingIndicator.prototype, "iconUnselected", void 0);
 __decorate([
     property({ type: Array })
 ], RatingIndicator.prototype, "_stars", void 0);

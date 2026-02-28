@@ -67,6 +67,14 @@ declare class Slider extends SliderBase implements IFormInputElement {
      * @public
      */
     value: number;
+    /**
+     * Defines the size of the slider's selection intervals (e.g. min = 0, max = 10, step = 5 would result in possible selection of the values 0, 5, 10).
+     *
+     * **Note:** If set to 0 the slider handle movement is disabled.
+     * @default 1
+     * @public
+     */
+    step: number;
     tooltipValueState: `${ValueState}`;
     tooltipValue: string;
     _valueInitial?: number;
@@ -78,19 +86,12 @@ declare class Slider extends SliderBase implements IFormInputElement {
     static i18nBundle: I18nBundle;
     constructor();
     /**
-     *
-     * Check if the previously saved state is outdated. That would mean
-     * either it is the initial rendering or that a property has been changed
-     * programmatically - because the previous state is always updated in
-     * the interaction handlers.
-     *
-     * Normalize current properties, update the previously stored state.
-     * Update the visual UI representation of the Slider.
-     *
+     * The value is visually clamped to min/max but the property is not modified.
+     * @private
      */
     onBeforeRendering(): void;
     onAfterRendering(): void;
-    syncUIAndState(): void;
+    _handleResize(): void;
     /**
      * Called when the user starts interacting with the slider
      * @private
@@ -125,20 +126,12 @@ declare class Slider extends SliderBase implements IFormInputElement {
     _onTooltopForwardFocus(e: CustomEvent): void;
     get inputValue(): string;
     get tooltip(): SliderTooltip | null | undefined;
-    get styles(): {
-        progress: {
-            transform: string;
-            "transform-origin": string;
-        };
-        handle: {
-            [x: string]: string;
-        };
-    };
     get _sliderHandle(): HTMLElement;
     get _ariaDisabled(): true | undefined;
     get _ariaLabelledByText(): string;
     get _ariaDescribedByInputText(): string;
     get _ariaLabelledByInputText(): string;
-    get tickmarksObject(): boolean[];
+    get tickmarksObject(): never[];
+    _onkeydown(e: KeyboardEvent): void;
 }
 export default Slider;

@@ -7,6 +7,7 @@ import type ListItemBase from "@ui5/webcomponents/dist/ListItemBase.js";
  * that is used to support keyboard navigation of the notification group internal list.
  *
  * @private
+ * @extends List
  */
 declare class NotificationListGroupList extends List {
     getEnabledItems(): never[];

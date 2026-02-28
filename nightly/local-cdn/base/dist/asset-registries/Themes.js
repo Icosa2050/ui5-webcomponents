@@ -4,11 +4,11 @@ import { fireThemeRegistered } from "../theming/ThemeRegistered.js";
 const themeStyles = new Map();
 const loaders = new Map();
 const customLoaders = new Map();
-const registeredPackages = new Set();
+const registeredPackages = new Map();
 const registeredThemes = new Set();
-const registerThemePropertiesLoader = (packageName, themeName, loader) => {
+const registerThemePropertiesLoader = (packageName, themeName, loader, cssVariablesTarget = "root") => {
     loaders.set(`${packageName}/${themeName}`, loader);
-    registeredPackages.add(packageName);
+    registeredPackages.set(packageName, { cssVariablesTarget });
     registeredThemes.add(themeName);
     fireThemeRegistered(themeName);
 };

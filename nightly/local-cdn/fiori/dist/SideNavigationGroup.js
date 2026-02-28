@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var SideNavigationGroup_1;
 import property from "@ui5/webcomponents-base/dist/decorators/property.js";
 import jsxRender from "@ui5/webcomponents-base/dist/renderer/JsxRenderer.js";
-import slot from "@ui5/webcomponents-base/dist/decorators/slot.js";
+import slot from "@ui5/webcomponents-base/dist/decorators/slot-strict.js";
 import i18n from "@ui5/webcomponents-base/dist/decorators/i18n.js";
 import { isSpace, isLeft, isRight, isMinus, isPlus, } from "@ui5/webcomponents-base/dist/Keys.js";
 import customElement from "@ui5/webcomponents-base/dist/decorators/customElement.js";
@@ -16,6 +16,7 @@ import SideNavigationGroupTemplate from "./SideNavigationGroupTemplate.js";
 import { SIDE_NAVIGATION_ICON_COLLAPSE, SIDE_NAVIGATION_ICON_EXPAND, } from "./generated/i18n/i18n-defaults.js";
 // Styles
 import SideNavigationGroupCss from "./generated/themes/SideNavigationGroup.css.js";
+import createInstanceChecker from "@ui5/webcomponents-base/dist/util/createInstanceChecker.js";
 /**
  * @class
  *
@@ -160,9 +161,6 @@ SideNavigationGroup = SideNavigationGroup_1 = __decorate([
     })
 ], SideNavigationGroup);
 SideNavigationGroup.define();
-const isInstanceOfSideNavigationGroup = (object) => {
-    return "isSideNavigationGroup" in object;
-};
+export const isInstanceOfSideNavigationGroup = createInstanceChecker("isSideNavigationGroup");
 export default SideNavigationGroup;
-export { isInstanceOfSideNavigationGroup };
 //# sourceMappingURL=SideNavigationGroup.js.map

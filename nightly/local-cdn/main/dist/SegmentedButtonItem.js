@@ -14,7 +14,7 @@ import { isDesktop } from "@ui5/webcomponents-base/dist/Device.js";
 import { isSpaceShift } from "@ui5/webcomponents-base/dist/Keys.js";
 import { getEffectiveAriaLabelText, getAssociatedLabelForTexts, getEffectiveAriaDescriptionText, } from "@ui5/webcomponents-base/dist/util/AccessibilityTextsHelper.js";
 import willShowContent from "@ui5/webcomponents-base/dist/util/willShowContent.js";
-import slot from "@ui5/webcomponents-base/dist/decorators/slot.js";
+import slot from "@ui5/webcomponents-base/dist/decorators/slot-strict.js";
 import jsxRenderer from "@ui5/webcomponents-base/dist/renderer/JsxRenderer.js";
 import { SEGMENTEDBUTTONITEM_ARIA_DESCRIPTION } from "./generated/i18n/i18n-defaults.js";
 import SegmentedButtonItemTemplate from "./SegmentedButtonItemTemplate.js";
@@ -91,6 +91,7 @@ let SegmentedButtonItem = SegmentedButtonItem_1 = class SegmentedButtonItem exte
         if (this.disabled) {
             e.preventDefault();
             e.stopPropagation();
+            return;
         }
         this.selected = !this.selected;
     }

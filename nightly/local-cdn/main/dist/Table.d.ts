@@ -1,4 +1,5 @@
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
+import type { Slot, DefaultSlot } from "@ui5/webcomponents-base/dist/UI5Element.js";
 import TableNavigation from "./TableNavigation.js";
 import TableOverflowMode from "./types/TableOverflowMode.js";
 import TableDragAndDrop from "./TableDragAndDrop.js";
@@ -147,7 +148,7 @@ type TableRowActionClickEventDetail = {
  * This can only be achieved through a custom accessibility announcement.
  * To support this, UI5 Web Components expose its own accessibility metadata via the `accessibilityInfo` property.
  * The `ui5-table` uses this information to create the required custom announcements dynamically.
- * If you include custom web components inside table cells that are not part of the standard UI5 Web Components set, their accessibility information can be provided using the `data-ui5-table-acc-text` attribute.
+ * If you include custom web components inside table cells that are not part of the standard UI5 Web Components set, their accessibility information can be provided using the `data-ui5-acc-text` attribute.
  *
  * ### ES6 Module Import
  *
@@ -176,7 +177,7 @@ declare class Table extends UI5Element {
      *
      * @public
      */
-    rows: Array<TableRow>;
+    rows: DefaultSlot<TableRow>;
     /**
      * Defines the header row of the component.
      *
@@ -184,19 +185,19 @@ declare class Table extends UI5Element {
      *
      * @public
      */
-    headerRow: Array<TableHeaderRow>;
+    headerRow: Slot<TableHeaderRow>;
     /**
      * Defines the custom visualization if there is no data available.
      *
      * @public
      */
-    noData: Array<HTMLElement>;
+    noData: Slot<HTMLElement>;
     /**
      * Defines the features of the component.
      *
      * @public
      */
-    features: Array<ITableFeature>;
+    features: Slot<ITableFeature>;
     /**
      * Defines the accessible ARIA name of the component.
      *

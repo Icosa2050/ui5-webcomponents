@@ -1,4 +1,5 @@
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
+import type { Slot, DefaultSlot } from "@ui5/webcomponents-base/dist/UI5Element.js";
 import ValueState from "@ui5/webcomponents-base/dist/types/ValueState.js";
 import type I18nBundle from "@ui5/webcomponents-base/dist/i18nBundle.js";
 import type { IFormInputElement } from "@ui5/webcomponents-base/dist/features/InputElementsFormSupport.js";
@@ -157,7 +158,7 @@ declare class FileUploader extends UI5Element implements IFormInputElement {
      * Not setting `hideInput` may negatively impact the screen reader users.
      * @public
      */
-    content: Array<HTMLElement>;
+    content: DefaultSlot<HTMLElement>;
     /**
      * Defines the value state message that will be displayed as pop up under the component.
      *
@@ -168,7 +169,7 @@ declare class FileUploader extends UI5Element implements IFormInputElement {
      * @since 1.0.0-rc.9
      * @public
      */
-    valueStateMessage: Array<HTMLElement>;
+    valueStateMessage: Slot<HTMLElement>;
     _form: HTMLFormElement;
     _input: HTMLInputElement;
     _tokenizer: Tokenizer;

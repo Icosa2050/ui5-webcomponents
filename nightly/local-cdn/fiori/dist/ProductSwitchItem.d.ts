@@ -1,4 +1,5 @@
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
+import type { Slot } from "@ui5/webcomponents-base/dist/UI5Element.js";
 import type { IProductSwitchItem } from "./ProductSwitch.js";
 /**
  * @class
@@ -100,7 +101,7 @@ declare class ProductSwitchItem extends UI5Element implements IProductSwitchItem
      * @public
      * @since 2.14.0
      */
-    image: Array<HTMLElement>;
+    image: Slot<HTMLElement>;
     _deactivate: () => void;
     constructor();
     onEnterDOM(): void;

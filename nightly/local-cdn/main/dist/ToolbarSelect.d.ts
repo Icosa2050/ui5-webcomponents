@@ -4,6 +4,7 @@ import ToolbarItem from "./ToolbarItem.js";
 import type { ToolbarItemEventDetail } from "./ToolbarItem.js";
 import type ToolbarSelectOption from "./ToolbarSelectOption.js";
 import type { SelectChangeEventDetail } from "./Select.js";
+import type { DefaultSlot, Slot } from "@ui5/webcomponents-base/dist/UI5Element.js";
 type ToolbarSelectChangeEventDetail = ToolbarItemEventDetail & SelectChangeEventDetail;
 /**
  * @class
@@ -45,14 +46,14 @@ declare class ToolbarSelect extends ToolbarItem {
      * **Note:** Use the `ui5-toolbar-select-option` component to define the desired options.
      * @public
      */
-    options: Array<ToolbarSelectOption>;
+    options: DefaultSlot<ToolbarSelectOption>;
     /**
      * Defines the HTML element that will be displayed in the component input part,
      * representing the selected option.
      * @public
      * @since 2.15.0
     */
-    label: Array<HTMLElement>;
+    label: Slot<HTMLElement>;
     /**
      * Defines the value state of the component.
      * @default "None"

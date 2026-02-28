@@ -15,9 +15,11 @@ const setFormValue = (element) => {
     element._internals.setFormValue(element.formFormattedValue);
 };
 const setFormValidity = async (element) => {
-    if (!element._internals?.form) {
+    if (!element.isUI5Element || !element._internals?.form) {
         return;
     }
+    element._internals.setValidity({ customError: true }, " "); // treat the form as invalid until CLDR and message bundles are loaded
+    await element.definePromise;
     if (element.formValidity && Object.keys(element.formValidity).some(key => key)) {
         const focusRef = await element.formElementAnchor?.();
         element._internals.setValidity(element.formValidity, element.formValidityMessage, focusRef);
@@ -26,7 +28,9 @@ const setFormValidity = async (element) => {
         element._internals.setValidity({});
     }
 };
-const submitForm = (element) => {
+const submitForm = async (element) => {
+    const elements = [...(element._internals?.form?.elements ?? [])];
+    await Promise.all(elements.map(el => { return isInputElement(el) ? setFormValidity(el) : Promise.resolve(); }));
     element._internals?.form?.requestSubmit();
 };
 const resetForm = (element) => {

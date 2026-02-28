@@ -9,7 +9,7 @@ import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
 import customElement from "@ui5/webcomponents-base/dist/decorators/customElement.js";
 import property from "@ui5/webcomponents-base/dist/decorators/property.js";
 import event from "@ui5/webcomponents-base/dist/decorators/event-strict.js";
-import slot from "@ui5/webcomponents-base/dist/decorators/slot.js";
+import slot from "@ui5/webcomponents-base/dist/decorators/slot-strict.js";
 import jsxRenderer from "@ui5/webcomponents-base/dist/renderer/JsxRenderer.js";
 import { renderFinished } from "@ui5/webcomponents-base/dist/Render.js";
 import { isLeft, isRight, isDown, isUp, isF7, isHome, isEnd, isPageDown, isPageUp, } from "@ui5/webcomponents-base/dist/Keys.js";
@@ -380,21 +380,29 @@ let Carousel = Carousel_1 = class Carousel extends UI5Element {
         const observableContentSet = new WeakSet(this._observableContent);
         return this.content.every(item => observableContentSet.has(item));
     }
-    _handleHome(e) {
+    async _handleHome(e) {
         e.preventDefault();
         this.navigateTo(0);
+        await renderFinished();
+        this.focusItem();
     }
-    _handleEnd(e) {
+    async _handleEnd(e) {
         e.preventDefault();
         this.navigateTo(this.items.length - 1);
+        await renderFinished();
+        this.focusItem();
     }
-    _handlePageUp(e) {
+    async _handlePageUp(e) {
         e.preventDefault();
         this.navigateTo(this._focusedItemIndex + this._pageStep < this.items.length ? this._focusedItemIndex + this._pageStep : this.items.length - 1);
+        await renderFinished();
+        this.focusItem();
     }
-    _handlePageDown(e) {
+    async _handlePageDown(e) {
         e.preventDefault();
         this.navigateTo(this._focusedItemIndex - this._pageStep > 0 ? this._focusedItemIndex - this._pageStep : 0);
+        await renderFinished();
+        this.focusItem();
     }
     get _backgroundDesign() {
         return this.backgroundDesign.toLowerCase();
@@ -408,7 +416,7 @@ let Carousel = Carousel_1 = class Carousel extends UI5Element {
         }
         return this._focusedItemIndex;
     }
-    navigateLeft() {
+    async navigateLeft() {
         this._resizing = false;
         const previousSelectedIndex = this._focusedItemIndex;
         if (this._focusedItemIndex - 1 < 0) {
@@ -426,10 +434,12 @@ let Carousel = Carousel_1 = class Carousel extends UI5Element {
         }
         if (previousSelectedIndex !== this._focusedItemIndex) {
             this.skipToItem(this._focusedItemIndex, -1);
+            await renderFinished();
+            this.focusItem();
             this.fireDecoratorEvent("navigate", { selectedIndex: this._focusedItemIndex });
         }
     }
-    navigateRight() {
+    async navigateRight() {
         this._resizing = false;
         const previousSelectedIndex = this._focusedItemIndex;
         if (this._focusedItemIndex + 1 > this.items.length - 1) {
@@ -450,27 +460,33 @@ let Carousel = Carousel_1 = class Carousel extends UI5Element {
         }
         if (previousSelectedIndex !== this._focusedItemIndex) {
             this.skipToItem(this._focusedItemIndex, 1);
+            await renderFinished();
+            this.focusItem();
             this.fireDecoratorEvent("navigate", { selectedIndex: this._focusedItemIndex });
         }
     }
     navigateArrowRight() {
         if (this._focusedItemIndex === this._visibleItemsIndexes[0]) {
             this.navigateTo(this._focusedItemIndex + 1);
+            this.focusItem();
             this._moveToItem(this._currentSlideIndex + 1);
         }
         else {
             this._moveToItem(this._currentSlideIndex + 1);
             this.navigateTo(this._focusedItemIndex);
+            this.focusItem();
         }
     }
     navigateArrowLeft() {
         if (this._focusedItemIndex > 0 && this._focusedItemIndex === this._visibleItemsIndexes[this._visibleItemsIndexes.length - 1]) {
             this.navigateTo(this._focusedItemIndex - 1);
+            this.focusItem();
             this._moveToItem(this._currentSlideIndex - 1);
         }
         else {
             this._moveToItem(this._currentSlideIndex === 0 ? this.pagesCount - 1 : this._currentSlideIndex - 1);
             this.navigateTo(this._focusedItemIndex === 0 ? this.items.length - 1 : this._focusedItemIndex);
+            this.focusItem();
         }
     }
     _calculateItemSlideIndex(currentSlideIndex, itemStep) {
@@ -539,7 +555,7 @@ let Carousel = Carousel_1 = class Carousel extends UI5Element {
     }
     /**
      * Changes the currently displayed page.
-     * @param itemIndex The index of the target page
+     * @param itemIndex The index of the target item
      * @since 1.0.0-rc.15
      * @public
      */
@@ -554,12 +570,12 @@ let Carousel = Carousel_1 = class Carousel extends UI5Element {
         this._currentSlideIndex = itemIndex - this._itemIndicator;
         if (this.isItemInViewport(itemIndex)) {
             this._currentSlideIndex = this._visibleItemsIndexes[0];
-            this.focusItem();
-            return;
         }
-        this.skipToItem(this._focusedItemIndex, 1);
+        else {
+            this.skipToItem(this._focusedItemIndex, 1);
+        }
     }
-    async skipToItem(focusIndex, offset) {
+    skipToItem(focusIndex, offset) {
         if (!this.isItemInViewport(focusIndex)) {
             let slideIndex = this._calculateItemSlideIndex(this._currentSlideIndex, offset);
             if (focusIndex === 0) {
@@ -567,8 +583,6 @@ let Carousel = Carousel_1 = class Carousel extends UI5Element {
             }
             this._moveToItem(slideIndex);
         }
-        await renderFinished();
-        this.focusItem();
     }
     /**
      * The indices of the currently visible items of the component.
@@ -750,8 +764,8 @@ let Carousel = Carousel_1 = class Carousel extends UI5Element {
     /**
      * Returns only visible (non-hidden) content items.
      * Items with the 'hidden' attribute are automatically excluded from carousel navigation.
+     * @default []
      * @private
-     * @returns {Array<HTMLElement>}
      */
     get _visibleItems() {
         return this.content.filter(x => !x.hasAttribute("hidden"));

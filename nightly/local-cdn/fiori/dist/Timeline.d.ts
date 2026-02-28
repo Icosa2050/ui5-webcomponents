@@ -1,4 +1,5 @@
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
+import type { DefaultSlot } from "@ui5/webcomponents-base/dist/UI5Element.js";
 import type I18nBundle from "@ui5/webcomponents-base/dist/i18nBundle.js";
 import type { ITabbable } from "@ui5/webcomponents-base/dist/delegate/ItemNavigation.js";
 import type ToggleButton from "@ui5/webcomponents/dist/ToggleButton.js";
@@ -98,7 +99,7 @@ declare class Timeline extends UI5Element {
      * Determines the content of the `ui5-timeline`.
      * @public
      */
-    items: Array<ITimelineItem>;
+    items: DefaultSlot<ITimelineItem>;
     timelineEndMarker: HTMLElement;
     growingButton: HTMLElement;
     static i18nBundle: I18nBundle;
@@ -111,6 +112,7 @@ declare class Timeline extends UI5Element {
     get showBusyIndicatorOverlay(): boolean;
     get growsOnScroll(): boolean;
     get growingButtonIcon(): "process" | "drill-down";
+    get growingButtonText(): string;
     get growsWithButton(): boolean;
     onAfterRendering(): void;
     onExitDOM(): void;

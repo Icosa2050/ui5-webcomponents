@@ -460,7 +460,7 @@
               "description": "Specifies the content of the component.",
               "_ui5propertyName": "content",
               "_ui5type": {
-                "text": "Array<HTMLElement> | undefined"
+                "text": "Array<HTMLElement>"
               },
               "_ui5privacy": "public"
             }

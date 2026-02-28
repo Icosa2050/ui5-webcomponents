@@ -9,11 +9,10 @@ var Input_1;
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
 import property from "@ui5/webcomponents-base/dist/decorators/property.js";
 import customElement from "@ui5/webcomponents-base/dist/decorators/customElement.js";
-import slot from "@ui5/webcomponents-base/dist/decorators/slot.js";
+import slot from "@ui5/webcomponents-base/dist/decorators/slot-strict.js";
 import event from "@ui5/webcomponents-base/dist/decorators/event-strict.js";
 import jsxRenderer from "@ui5/webcomponents-base/dist/renderer/JsxRenderer.js";
 import ResizeHandler from "@ui5/webcomponents-base/dist/delegate/ResizeHandler.js";
-import { getScopedVarName } from "@ui5/webcomponents-base/dist/CustomElementsScope.js";
 // @ts-expect-error
 import encodeXML from "@ui5/webcomponents-base/dist/sap/base/security/encodeXML.js";
 import { isPhone, isAndroid, isMac, } from "@ui5/webcomponents-base/dist/Device.js";
@@ -29,13 +28,14 @@ import getActiveElement from "@ui5/webcomponents-base/dist/util/getActiveElement
 import InputType from "./types/InputType.js";
 // Templates
 import InputTemplate from "./InputTemplate.js";
-import { StartsWith } from "./Filters.js";
+import * as Filters from "./Filters.js";
 import { VALUE_STATE_SUCCESS, VALUE_STATE_INFORMATION, VALUE_STATE_ERROR, VALUE_STATE_WARNING, VALUE_STATE_TYPE_SUCCESS, VALUE_STATE_TYPE_INFORMATION, VALUE_STATE_TYPE_ERROR, VALUE_STATE_TYPE_WARNING, VALUE_STATE_LINK, VALUE_STATE_LINKS, VALUE_STATE_LINK_MAC, VALUE_STATE_LINKS_MAC, INPUT_SUGGESTIONS, INPUT_SUGGESTIONS_TITLE, INPUT_SUGGESTIONS_ONE_HIT, INPUT_SUGGESTIONS_MORE_HITS, INPUT_SUGGESTIONS_NO_HIT, INPUT_CLEAR_ICON_ACC_NAME, INPUT_AVALIABLE_VALUES, INPUT_SUGGESTIONS_OK_BUTTON, INPUT_SUGGESTIONS_CANCEL_BUTTON, } from "./generated/i18n/i18n-defaults.js";
 // Styles
 import inputStyles from "./generated/themes/Input.css.js";
 import ResponsivePopoverCommonCss from "./generated/themes/ResponsivePopoverCommon.css.js";
 import ValueStateMessageCss from "./generated/themes/ValueStateMessage.css.js";
 import SuggestionsCss from "./generated/themes/Suggestions.css.js";
+import InputSuggestionsFilter from "./types/InputSuggestionsFilter.js";
 // all sementic events
 var INPUT_EVENTS;
 (function (INPUT_EVENTS) {
@@ -175,14 +175,6 @@ let Input = Input_1 = class Input extends UI5Element {
          */
         this.value = "";
         /**
-         * Defines the inner stored value of the component.
-         *
-         * **Note:** The property is updated upon typing. In some special cases the old value is kept (e.g. deleting the value after the dot in a float)
-         * @default ""
-         * @private
-         */
-        this._innerValue = "";
-        /**
          * Defines the value state of the component.
          * @default "None"
          * @public
@@ -211,6 +203,13 @@ let Input = Input_1 = class Input extends UI5Element {
          * @since 2.0.0
          */
         this.open = false;
+        /**
+         * Defines the filter type of the component.
+         * @default "None"
+         * @public
+         * @since 2.19.0
+         */
+        this.filter = InputSuggestionsFilter.None;
         /**
          * Defines whether the clear icon is visible.
          * @default false
@@ -269,7 +268,6 @@ let Input = Input_1 = class Input extends UI5Element {
         this._isChangeTriggeredBySuggestion = false;
         this._indexOfSelectedItem = -1;
         this._handleResizeBound = this._handleResize.bind(this);
-        this._keepInnerValue = false;
         this._focusedAfterClear = false;
         this._valueStateLinks = [];
     }
@@ -291,9 +289,6 @@ let Input = Input_1 = class Input extends UI5Element {
         return item.hasAttribute("ui5-suggestion-item-group");
     }
     onBeforeRendering() {
-        if (!this._keepInnerValue) {
-            this._innerValue = this.value === null ? "" : this.value;
-        }
         if (this.showSuggestions) {
             this.enableSuggestions();
             this._flattenItems.forEach(item => {
@@ -308,7 +303,7 @@ let Input = Input_1 = class Input extends UI5Element {
             });
         }
         this._effectiveShowClearIcon = (this.showClearIcon && !!this.value && !this.readonly && !this.disabled);
-        this.style.setProperty(getScopedVarName("--_ui5-input-icons-count"), `${this.iconsCount}`);
+        this.style.setProperty("--_ui5-input-icons-count", `${this.iconsCount}`);
         const hasItems = !!this._flattenItems.length;
         const hasValue = !!this.value;
         const isFocused = this.shadowRoot.querySelector("input") === getActiveElement();
@@ -330,6 +325,9 @@ let Input = Input_1 = class Input extends UI5Element {
         const innerInput = this.getInputDOMRefSync();
         if (!innerInput || !value) {
             return;
+        }
+        if (this.filter !== InputSuggestionsFilter.None) {
+            this._filterItems(this.typedInValue);
         }
         const autoCompletedChars = innerInput.selectionEnd - innerInput.selectionStart;
         // Typehead causes issues on Android devices, so we disable it for now
@@ -354,11 +352,18 @@ let Input = Input_1 = class Input extends UI5Element {
         if (this._performTextSelection) {
             // this is required to syncronize lit-html input's value and user's input
             // lit-html does not sync its stored value for the value property when the user is typing
-            if (innerInput.value !== this._innerValue) {
-                innerInput.value = this._innerValue;
-            }
+            // if (innerInput.value !== this._innerValue) {
+            // 	innerInput.value = this._innerValue;
+            // }
             if (this.typedInValue.length && this.value.length) {
-                innerInput.setSelectionRange(this.typedInValue.length, this.value.length);
+                // "Contains" filtering requires custom selection range handling.
+                // Example: "e" → "Belgium" (item does not start with typed value, so select all).
+                if (this.filter === InputSuggestionsFilter.Contains) {
+                    this._adjustContainsSelectionRange();
+                }
+                else {
+                    innerInput.setSelectionRange(this.typedInValue.length, this.value.length);
+                }
             }
             this.fireDecoratorEvent("type-ahead");
         }
@@ -367,6 +372,21 @@ let Input = Input_1 = class Input extends UI5Element {
             this._removeLinksEventListeners();
             this._addLinksEventListeners();
             this._valueStateLinks = this.linksInAriaValueStateHiddenText;
+        }
+    }
+    _adjustContainsSelectionRange() {
+        const innerInput = this.getInputDOMRefSync();
+        const visibleItems = this.Suggestions?._getItems().filter(item => !item.hidden);
+        const currentItem = visibleItems?.find(item => { return item.selected || item.focused; });
+        const groupItems = this._flattenItems.filter(item => this._isGroupItem(item));
+        if (currentItem && !groupItems.includes(currentItem)) {
+            const doesItemStartWithTypedValue = currentItem?.text?.toLowerCase().startsWith(this.typedInValue.toLowerCase());
+            if (doesItemStartWithTypedValue) {
+                innerInput.setSelectionRange(this.typedInValue.length, this.value.length);
+            }
+            else {
+                innerInput.setSelectionRange(0, this.value.length);
+            }
         }
     }
     _onkeydown(e) {
@@ -386,10 +406,11 @@ let Input = Input_1 = class Input extends UI5Element {
         }
         if (isEnter(e)) {
             const isValueUnchanged = this.previousValue === this.getInputDOMRefSync().value;
-            const shouldSubmit = this._internals.form && this._internals.form.querySelectorAll("[ui5-input]").length === 1;
             this._enterKeyDown = true;
-            if (isValueUnchanged && shouldSubmit) {
+            if (isValueUnchanged) {
+                this.fireDecoratorEvent("_request-submit");
                 submitForm(this);
+                return;
             }
             return this._handleEnter(e);
         }
@@ -426,8 +447,9 @@ let Input = Input_1 = class Input extends UI5Element {
     }
     get currentItemIndex() {
         const allItems = this.Suggestions?._getItems();
-        const currentItem = allItems.find(item => { return item.selected || item.focused; });
-        const indexOfCurrentItem = currentItem ? allItems.indexOf(currentItem) : -1;
+        const visibleItems = allItems.filter(item => !item.hidden);
+        const currentItem = visibleItems.find(item => { return item.selected || item.focused; });
+        const indexOfCurrentItem = currentItem ? visibleItems.indexOf(currentItem) : -1;
         return indexOfCurrentItem;
     }
     _handleUp(e) {
@@ -597,7 +619,6 @@ let Input = Input_1 = class Input extends UI5Element {
         if (this.Suggestions?._getPicker()?.contains(toBeFocused) || this.contains(toBeFocused) || this.getSlottedNodes("valueStateMessage").some(el => el.contains(toBeFocused))) {
             return;
         }
-        this._keepInnerValue = false;
         this.focused = false; // invalidating property
         this._isChangeTriggeredBySuggestion = false;
         if (this.showClearIcon && !this._effectiveShowClearIcon) {
@@ -630,7 +651,6 @@ let Input = Input_1 = class Input extends UI5Element {
         }
     }
     _handleChange() {
-        const shouldSubmit = this._internals.form && this._internals.form.querySelectorAll("[ui5-input]").length === 1;
         if (this._clearIconClicked) {
             this._clearIconClicked = false;
             return;
@@ -650,7 +670,8 @@ let Input = Input_1 = class Input extends UI5Element {
             }
             else {
                 fireChange();
-                if (this._enterKeyDown && shouldSubmit) {
+                if (this._enterKeyDown) {
+                    this.fireDecoratorEvent("_request-submit");
                     submitForm(this);
                 }
             }
@@ -693,8 +714,6 @@ let Input = Input_1 = class Input extends UI5Element {
     }
     _input(e, eventType) {
         const inputDomRef = this.getInputDOMRefSync();
-        const emptyValueFiredOnNumberInput = this.value && this.isTypeNumber && !inputDomRef.value;
-        this._keepInnerValue = false;
         const allowedEventTypes = [
             "deleteWordBackward",
             "deleteWordForward",
@@ -711,35 +730,6 @@ let Input = Input_1 = class Input extends UI5Element {
             "historyUndo",
         ];
         this._shouldAutocomplete = !allowedEventTypes.includes(eventType) && !this.noTypeahead;
-        if (e instanceof InputEvent) {
-            // ---- Special cases of numeric Input ----
-            // ---------------- Start -----------------
-            // When the last character after the delimiter is removed.
-            // In such cases, we want to skip the re-rendering of the
-            // component as this leads to cursor repositioning and causes user experience issues.
-            // There are few scenarios:
-            // Example: type "123.4" and press BACKSPACE - the native input is firing event with the whole part as value (123).
-            // Pressing BACKSPACE again will remove the delimiter and the native input will fire event with the whole part as value again (123).
-            // Example: type "123.456", select/mark "456" and press BACKSPACE - the native input is firing event with the whole part as value (123).
-            // Example: type "123.456", select/mark "123.456" and press BACKSPACE - the native input is firing event with empty value.
-            const delimiterCase = this.isTypeNumber
-                && (e.inputType === "deleteContentForward" || e.inputType === "deleteContentBackward")
-                && !e.target.value.includes(".")
-                && this.value.includes(".");
-            // Handle special numeric notation with "e", example "12.5e12"
-            const eNotationCase = emptyValueFiredOnNumberInput && e.data === "e";
-            // Handle special numeric notation with "-", example "-3"
-            // When pressing BACKSPACE, the native input fires event with empty value
-            const minusRemovalCase = emptyValueFiredOnNumberInput
-                && this.value.startsWith("-")
-                && this.value.length === 2
-                && (e.inputType === "deleteContentForward" || e.inputType === "deleteContentBackward");
-            if (delimiterCase || eNotationCase || minusRemovalCase) {
-                this.value = e.target.value;
-                this._keepInnerValue = true;
-            }
-            // ----------------- End ------------------
-        }
         if (e.target === inputDomRef) {
             this.focused = true;
             // stop the native event, as the semantic "input" would be fired.
@@ -750,10 +740,13 @@ let Input = Input_1 = class Input extends UI5Element {
         if (this.Suggestions) {
             this.Suggestions.updateSelectedItemPosition(-1);
         }
+        if (this.filter && e.target.value === "") {
+            this.open = false;
+        }
         this.isTyping = true;
     }
     _startsWithMatchingItems(str) {
-        return StartsWith(str, this._selectableItems, "text");
+        return Filters.StartsWith(str, this._selectableItems, "text");
     }
     _getFirstMatchingItem(current) {
         if (!this._flattenItems.length) {
@@ -770,9 +763,50 @@ let Input = Input_1 = class Input extends UI5Element {
     _selectMatchingItem(item) {
         item.selected = true;
     }
+    _filterItems(value) {
+        let matchingItems = [];
+        const groupItems = this._flattenItems.filter(item => this._isGroupItem(item));
+        this._resetItemVisibility();
+        if (groupItems.length) {
+            matchingItems = this._filterGroups(this.filter, groupItems);
+        }
+        else {
+            matchingItems = (Filters[this.filter])(value, this._selectableItems, "text");
+        }
+        this._selectableItems.forEach(item => {
+            item.hidden = !matchingItems.includes(item);
+        });
+        if (matchingItems.length === 0) {
+            this.open = false;
+        }
+    }
+    _filterGroups(filterType, groupItems) {
+        const filteredGroupItems = [];
+        groupItems.forEach(groupItem => {
+            const currentGroupItems = (Filters[filterType])(this.typedInValue, groupItem.items ?? [], "text");
+            filteredGroupItems.push(...currentGroupItems);
+            if (currentGroupItems.length === 0) {
+                groupItem.hidden = true;
+            }
+            else {
+                groupItem.hidden = false;
+            }
+        });
+        return filteredGroupItems;
+    }
+    _resetItemVisibility() {
+        this._flattenItems.forEach(item => {
+            if (this._isGroupItem(item)) {
+                item.items?.forEach(i => {
+                    i.hidden = false;
+                });
+                return;
+            }
+            item.hidden = false;
+        });
+    }
     _handleTypeAhead(item) {
         const value = item.text ? item.text : "";
-        this._innerValue = value;
         this.value = value;
         this._performTextSelection = true;
         this._shouldAutocomplete = false;
@@ -806,7 +840,6 @@ let Input = Input_1 = class Input extends UI5Element {
         this._handlePickerAfterOpen();
     }
     _afterClosePicker() {
-        this.announceSelectedItem();
         // close device's keyboard and prevent further typing
         if (isPhone()) {
             this.blur();
@@ -824,6 +857,10 @@ let Input = Input_1 = class Input extends UI5Element {
         this.isTyping = false;
         if (this.hasSuggestionItemSelected) {
             this.focus();
+        }
+        const invisibleText = this.shadowRoot.querySelector(`#selectionText`);
+        if (invisibleText) {
+            invisibleText.textContent = "";
         }
         this._handlePickerAfterClose();
     }
@@ -1359,9 +1396,6 @@ __decorate([
     property()
 ], Input.prototype, "value", void 0);
 __decorate([
-    property({ noAttribute: true })
-], Input.prototype, "_innerValue", void 0);
-__decorate([
     property()
 ], Input.prototype, "valueState", void 0);
 __decorate([
@@ -1391,6 +1425,9 @@ __decorate([
 __decorate([
     property({ type: Boolean })
 ], Input.prototype, "open", void 0);
+__decorate([
+    property()
+], Input.prototype, "filter", void 0);
 __decorate([
     property({ type: Boolean })
 ], Input.prototype, "_effectiveShowClearIcon", void 0);
@@ -1471,6 +1508,9 @@ Input = Input_1 = __decorate([
      */
     ,
     event("change", {
+        bubbles: true,
+    }),
+    event("_request-submit", {
         bubbles: true,
     })
     /**

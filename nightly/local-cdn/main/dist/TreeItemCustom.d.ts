@@ -1,4 +1,5 @@
 import TreeItemBase from "./TreeItemBase.js";
+import type { Slot } from "@ui5/webcomponents-base/dist/UI5Element.js";
 /**
  * @class
  * The `ui5-tree-item-custom` represents a node in a tree structure, shown as a `ui5-list`.
@@ -29,7 +30,7 @@ declare class TreeItemCustom extends TreeItemBase {
      * Defines the content of the `ui5-tree-item`.
      * @public
      */
-    content: Array<HTMLElement>;
+    content: Slot<HTMLElement>;
     _onkeydown(e: KeyboardEvent): void;
     _onkeyup(e: KeyboardEvent): void;
     /**

@@ -8,13 +8,14 @@ var MenuItemGroup_1;
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
 import customElement from "@ui5/webcomponents-base/dist/decorators/customElement.js";
 import property from "@ui5/webcomponents-base/dist/decorators/property.js";
-import slot from "@ui5/webcomponents-base/dist/decorators/slot.js";
+import slot from "@ui5/webcomponents-base/dist/decorators/slot-strict.js";
 import i18n from "@ui5/webcomponents-base/dist/decorators/i18n.js";
 import jsxRenderer from "@ui5/webcomponents-base/dist/renderer/JsxRenderer.js";
 import { isInstanceOfMenuItem } from "./MenuItem.js";
 import MenuItemGroupTemplate from "./MenuItemGroupTemplate.js";
 import MenuItemGroupCheckMode from "./types/MenuItemGroupCheckMode.js";
 import { MENU_ITEM_GROUP_NONE_ACCESSIBLE_NAME, MENU_ITEM_GROUP_SINGLE_ACCESSIBLE_NAME, MENU_ITEM_GROUP_MULTI_ACCESSIBLE_NAME, } from "./generated/i18n/i18n-defaults.js";
+import createInstanceChecker from "@ui5/webcomponents-base/dist/util/createInstanceChecker.js";
 /**
  * @class
  *
@@ -136,10 +137,7 @@ MenuItemGroup = MenuItemGroup_1 = __decorate([
         template: MenuItemGroupTemplate,
     })
 ], MenuItemGroup);
-const isInstanceOfMenuItemGroup = (object) => {
-    return "isGroup" in object;
-};
 MenuItemGroup.define();
 export default MenuItemGroup;
-export { isInstanceOfMenuItemGroup, };
+export const isInstanceOfMenuItemGroup = createInstanceChecker("isGroup");
 //# sourceMappingURL=MenuItemGroup.js.map

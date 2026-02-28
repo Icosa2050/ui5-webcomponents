@@ -8,11 +8,12 @@ var ColorPalette_1;
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
 import customElement from "@ui5/webcomponents-base/dist/decorators/customElement.js";
 import property from "@ui5/webcomponents-base/dist/decorators/property.js";
-import slot from "@ui5/webcomponents-base/dist/decorators/slot.js";
+import slot from "@ui5/webcomponents-base/dist/decorators/slot-strict.js";
 import query from "@ui5/webcomponents-base/dist/decorators/query.js";
 import event from "@ui5/webcomponents-base/dist/decorators/event-strict.js";
 import jsxRenderer from "@ui5/webcomponents-base/dist/renderer/JsxRenderer.js";
 import i18n from "@ui5/webcomponents-base/dist/decorators/i18n.js";
+import { getEffectiveAriaLabelText } from "@ui5/webcomponents-base/dist/util/AccessibilityTextsHelper.js";
 import ItemNavigation from "@ui5/webcomponents-base/dist/delegate/ItemNavigation.js";
 import ItemNavigationBehavior from "@ui5/webcomponents-base/dist/types/ItemNavigationBehavior.js";
 import { isPhone } from "@ui5/webcomponents-base/dist/Device.js";
@@ -640,7 +641,10 @@ let ColorPalette = ColorPalette_1 = class ColorPalette extends UI5Element {
         return colors.filter(item => item.value).slice(0, 15);
     }
     get colorContainerLabel() {
-        return ColorPalette_1.i18nBundle.getText(COLORPALETTE_CONTAINER_LABEL);
+        const effectiveLabel = getEffectiveAriaLabelText(this);
+        return effectiveLabel
+            ? `${ColorPalette_1.i18nBundle.getText(COLORPALETTE_CONTAINER_LABEL)} ${effectiveLabel}`
+            : ColorPalette_1.i18nBundle.getText(COLORPALETTE_CONTAINER_LABEL);
     }
     get colorPaletteMoreColorsText() {
         return ColorPalette_1.i18nBundle.getText(COLOR_PALETTE_MORE_COLORS_TEXT);
@@ -692,6 +696,12 @@ __decorate([
 __decorate([
     property()
 ], ColorPalette.prototype, "defaultColor", void 0);
+__decorate([
+    property()
+], ColorPalette.prototype, "accessibleName", void 0);
+__decorate([
+    property()
+], ColorPalette.prototype, "accessibleNameRef", void 0);
 __decorate([
     property()
 ], ColorPalette.prototype, "_selectedColor", void 0);

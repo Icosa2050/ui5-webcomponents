@@ -1,5 +1,5 @@
 import type UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
-import type { ChangeInfo } from "@ui5/webcomponents-base/dist/UI5Element.js";
+import type { ChangeInfo, DefaultSlot, Slot } from "@ui5/webcomponents-base/dist/UI5Element.js";
 import CalendarDateComponent from "@ui5/webcomponents-localization/dist/dates/CalendarDate.js";
 import type I18nBundle from "@ui5/webcomponents-base/dist/i18nBundle.js";
 import "@ui5/webcomponents-icons/dist/slim-arrow-left.js";
@@ -215,20 +215,20 @@ declare class Calendar extends CalendarPart {
      * @public
      * @since 1.23.0
      */
-    calendarLegend: Array<CalendarLegend>;
+    calendarLegend: Slot<CalendarLegend>;
     /**
      * Defines the selected date or dates (depending on the `selectionMode` property)
      * for this calendar as instances of `ui5-date` or `ui5-date-range`.
      * Use `ui5-date` for single or multiple selection, and `ui5-date-range` for range selection.
      * @public
      */
-    dates: Array<ICalendarSelectedDates>;
+    dates: DefaultSlot<ICalendarSelectedDates>;
     /**
      * Defines the special dates, visually emphasized in the calendar.
      * @public
      * @since 1.23.0
      */
-    specialDates: Array<SpecialCalendarDate>;
+    specialDates: Slot<SpecialCalendarDate>;
     /**
      * Defines the disabled date ranges that cannot be selected in the calendar.
      * Use `ui5-date-range` elements to specify ranges of disabled dates.
@@ -236,7 +236,7 @@ declare class Calendar extends CalendarPart {
      * @public
      * @since 2.16.0
      */
-    disabledDates: Array<CalendarDateRange>;
+    disabledDates: Slot<CalendarDateRange>;
     /**
      * Defines the selected item type of the calendar legend item (if such exists).
      * @private

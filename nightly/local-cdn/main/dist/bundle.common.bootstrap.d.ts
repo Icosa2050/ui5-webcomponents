@@ -1,4 +1,3 @@
-import "@ui5/webcomponents-base/dist/features/OpenUI5Support.js";
 import "./Assets.js";
 import "@ui5/webcomponents-icons/dist/Assets.js";
 import "@ui5/webcomponents-icons/dist/AllIcons.js";
@@ -49,6 +48,8 @@ declare const testAssets: {
     getLocaleData: (lang: string) => Promise<import("@ui5/webcomponents-localization/dist/LocaleData.js").default>;
     applyDirection: () => Promise<void>;
     attachDirectionChange: (listener: () => void) => void;
+    attachLanguageChange: (listener: (lang: string) => Promise<void | Array<void>>) => void;
+    detachLanguageChange: (listener: (lang: string) => Promise<void | Array<void>>) => void;
     ResizeHandler: typeof ResizeHandler;
     addCustomCSS: (tag: string, css: string) => Promise<void>;
     attachThemeLoaded: (listener: (theme: string) => void) => void;

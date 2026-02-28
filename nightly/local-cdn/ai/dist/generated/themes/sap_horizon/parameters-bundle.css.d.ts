@@ -1,2 +1,2 @@
-declare const _default: "";
+declare const _default: ":host {}";
 export default _default;

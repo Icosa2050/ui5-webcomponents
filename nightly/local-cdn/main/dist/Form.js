@@ -9,7 +9,6 @@ import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
 import customElement from "@ui5/webcomponents-base/dist/decorators/customElement.js";
 import property from "@ui5/webcomponents-base/dist/decorators/property.js";
 import i18n from "@ui5/webcomponents-base/dist/decorators/i18n.js";
-import { getScopedVarName } from "@ui5/webcomponents-base/dist/CustomElementsScope.js";
 import slot from "@ui5/webcomponents-base/dist/decorators/slot.js";
 import jsxRenderer from "@ui5/webcomponents-base/dist/renderer/JsxRenderer.js";
 import { getEffectiveAriaLabelText } from "@ui5/webcomponents-base/dist/util/AccessibilityTextsHelper.js";
@@ -358,12 +357,12 @@ let Form = Form_1 = class Form extends UI5Element {
         ].forEach(layout => {
             if (this.isValidFormItemLayout(layout.labelSpan, layout.emptySpan)) {
                 const formItemLayout = layout.labelSpan === MAX_FORM_ITEM_CELLS ? `1fr` : `${layout.labelSpan}fr ${MAX_FORM_ITEM_CELLS - (layout.labelSpan + layout.emptySpan)}fr ${layout.emptySpan}fr`;
-                this.style.setProperty(getScopedVarName(`--ui5-form-item-layout-${layout.breakpoint}`), formItemLayout);
+                this.style.setProperty(`--ui5-form-item-layout-${layout.breakpoint}`, formItemLayout);
             }
             else {
                 // eslint-disable-next-line
                 console.warn(`Form :: invalid usage of emptySpan and/or labelSpan in ${layout.breakpoint} size. The labelSpan must be <=12 and when emptySpace is used - their combined values must not exceed 11.`);
-                this.style.setProperty(getScopedVarName(`--ui5-form-item-layout-${layout.breakpoint}`), layout.breakpoint === "S" ? DEFAULT_FORM_ITEM_LAYOUT_S : DEFAULT_FORM_ITEM_LAYOUT);
+                this.style.setProperty(`--ui5-form-item-layout-${layout.breakpoint}`, layout.breakpoint === "S" ? DEFAULT_FORM_ITEM_LAYOUT_S : DEFAULT_FORM_ITEM_LAYOUT);
             }
         });
     }
@@ -467,7 +466,7 @@ let Form = Form_1 = class Form extends UI5Element {
                         // eslint-disable-next-line no-continue
                         continue;
                     }
-                    items[currentItem].item.style.setProperty(getScopedVarName(`--ui5-form-item-order-${breakpoint}`), `${column + row * cols}`);
+                    items[currentItem].item.style.setProperty(`--ui5-form-item-order-${breakpoint}`, `${column + row * cols}`);
                     currentItem++;
                 }
             });
@@ -594,7 +593,7 @@ __decorate([
     property()
 ], Form.prototype, "itemSpacing", void 0);
 __decorate([
-    slot({ type: HTMLElement })
+    slot()
 ], Form.prototype, "header", void 0);
 __decorate([
     slot({

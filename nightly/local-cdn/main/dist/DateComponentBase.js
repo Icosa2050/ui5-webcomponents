@@ -81,7 +81,7 @@ let DateComponentBase = class DateComponentBase extends UI5Element {
         return maxDate || getMaxCalendarDate(this._primaryCalendarType);
     }
     get _formatPattern() {
-        return this.formatPattern || this.valueFormat || "medium"; // get from config
+        return this.formatPattern || this.valueFormat; // get from config
     }
     get _isPattern() {
         return this._formatPattern !== "medium" && this._formatPattern !== "short" && this._formatPattern !== "long";

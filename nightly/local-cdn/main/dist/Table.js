@@ -6,7 +6,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 var Table_1;
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
-import { customElement, slot, property, eventStrict, i18n, } from "@ui5/webcomponents-base/dist/decorators.js";
+import { customElement, slotStrict as slot, property, eventStrict, i18n, } from "@ui5/webcomponents-base/dist/decorators.js";
 import query from "@ui5/webcomponents-base/dist/decorators/query.js";
 import jsxRenderer from "@ui5/webcomponents-base/dist/renderer/JsxRenderer.js";
 import TableTemplate from "./TableTemplate.js";
@@ -18,7 +18,6 @@ import TableDragAndDrop from "./TableDragAndDrop.js";
 import TableCustomAnnouncement from "./TableCustomAnnouncement.js";
 import ResizeHandler from "@ui5/webcomponents-base/dist/delegate/ResizeHandler.js";
 import { findVerticalScrollContainer, scrollElementIntoView, isFeature, isValidColumnWidth, } from "./TableUtils.js";
-import { getScopedVarName } from "@ui5/webcomponents-base/dist/CustomElementsScope.js";
 import { getEffectiveAriaLabelText } from "@ui5/webcomponents-base/dist/util/AccessibilityTextsHelper.js";
 import { TABLE_NO_DATA, } from "./generated/i18n/i18n-defaults.js";
 /**
@@ -91,7 +90,7 @@ import { TABLE_NO_DATA, } from "./generated/i18n/i18n-defaults.js";
  * This can only be achieved through a custom accessibility announcement.
  * To support this, UI5 Web Components expose its own accessibility metadata via the `accessibilityInfo` property.
  * The `ui5-table` uses this information to create the required custom announcements dynamically.
- * If you include custom web components inside table cells that are not part of the standard UI5 Web Components set, their accessibility information can be provided using the `data-ui5-table-acc-text` attribute.
+ * If you include custom web components inside table cells that are not part of the standard UI5 Web Components set, their accessibility information can be provided using the `data-ui5-acc-text` attribute.
  *
  * ### ES6 Module Import
  *
@@ -186,7 +185,7 @@ let Table = Table_1 = class Table extends UI5Element {
             row._rowActionCount = this.rowActionCount;
             row._alternate = this.alternateRowColors && index % 2 === 0;
         });
-        this.style.setProperty(getScopedVarName("--ui5_grid_sticky_top"), this.stickyTop);
+        this.style.setProperty("--ui5_grid_sticky_top", this.stickyTop);
         this._refreshPopinState();
         this.features.forEach(feature => feature.onTableBeforeRendering?.(this));
         if (this.getDomRef()) {
@@ -312,12 +311,10 @@ let Table = Table_1 = class Table extends UI5Element {
     }
     get styles() {
         const virtualizer = this._getVirtualizer();
-        const headerStyleMap = this.headerRow?.[0]?.cells?.reduce((headerStyles, headerCell) => {
-            if (headerCell.horizontalAlign !== undefined && !headerCell._popin) {
-                headerStyles[`--horizontal-align-${headerCell._individualSlot}`] = headerCell.horizontalAlign;
-            }
-            return headerStyles;
-        }, {});
+        const headerStyleMap = {};
+        this.headerRow[0]?.cells.forEach(headerCell => {
+            headerStyleMap[`--halign-${headerCell._id}`] = headerCell.horizontalAlign || "normal";
+        });
         return {
             table: {
                 "grid-template-columns": this._gridTemplateColumns,
@@ -351,11 +348,11 @@ let Table = Table_1 = class Table extends UI5Element {
         }));
         // Row Action Cell Width
         if (this.rowActionCount > 0) {
-            widths.push(`calc(var(${getScopedVarName("--_ui5_button_base_min_width")}) * ${this.rowActionCount} + var(${getScopedVarName("--_ui5_table_row_actions_gap")}) * ${this.rowActionCount - 1} + var(${getScopedVarName("--_ui5_table_cell_horizontal_padding")}) * 2)`);
+            widths.push(`calc(var(--_ui5_button_base_min_width) * ${this.rowActionCount} + var(--_ui5_table_row_actions_gap) * ${this.rowActionCount - 1} + var(--_ui5_table_cell_horizontal_padding) * 2)`);
         }
         // Navigated Cell Width
         if (this._renderNavigated) {
-            widths.push(`var(${getScopedVarName("--_ui5_table_navigated_cell_width")})`);
+            widths.push(`var(--_ui5_table_navigated_cell_width)`);
         }
         return widths.join(" ");
     }

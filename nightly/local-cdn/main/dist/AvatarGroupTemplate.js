@@ -2,7 +2,14 @@ import { jsx as _jsx, jsxs as _jsxs } from "@ui5/webcomponents-base/jsx-runtime"
 import Button from "./Button.js";
 import AvatarSize from "./types/AvatarSize.js";
 export default function AvatarGroupTemplate() {
-    return (_jsx("div", { class: "ui5-avatar-group-root", children: _jsxs("div", { class: "ui5-avatar-group-items", role: this._role, tabindex: this._groupTabIndex, "aria-label": this._ariaLabelText, "aria-haspopup": this._containerAriaHasPopup, onClick: this._onClick, onKeyUp: this._onkeyup, onKeyDown: this._onkeydown, onFocusIn: this._onfocusin, children: [_jsx("slot", { onClick: this.onAvatarClick, "onui5-click": this.onAvatarUI5Click }), this._customOverflowButton ?
+    return (_jsx("div", { class: "ui5-avatar-group-root", children: _jsxs("div", { class: {
+                "ui5-avatar-group-items": true,
+                "ui5-avatar-group-items-xs": this.firstAvatarSize === AvatarSize.XS,
+                "ui5-avatar-group-items-s": this.firstAvatarSize === AvatarSize.S,
+                "ui5-avatar-group-items-m": this.firstAvatarSize === AvatarSize.M,
+                "ui5-avatar-group-items-l": this.firstAvatarSize === AvatarSize.L,
+                "ui5-avatar-group-items-xl": this.firstAvatarSize === AvatarSize.XL,
+            }, role: this._role, tabindex: this._groupTabIndex, "aria-label": this._ariaLabelText, "aria-haspopup": this._containerAriaHasPopup, onClick: this._onClick, onKeyUp: this._onkeyup, onKeyDown: this._onkeydown, onFocusIn: this._onfocusin, children: [_jsx("slot", { onClick: this.onAvatarClick, "onui5-click": this.onAvatarUI5Click }), this._customOverflowButton ?
                     // @ts-expect-error
                     _jsx("slot", { onClick: this.onOverflowButtonClick, name: "overflowButton" })
                     :

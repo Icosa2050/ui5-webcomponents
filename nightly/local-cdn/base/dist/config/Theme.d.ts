@@ -36,4 +36,16 @@ declare const isTheme: (theme: string) => boolean;
  */
 declare const isLegacyThemeFamily: () => boolean;
 declare const isLegacyThemeFamilyAsync: () => Promise<boolean>;
-export { getTheme, setTheme, isTheme, isLegacyThemeFamily, isLegacyThemeFamilyAsync, getDefaultTheme, };
+/**
+ * Returns the base theme of external theme.
+ * @private
+ * @returns {string | undefined} the base theme name
+ */
+declare const getBaseTheme: () => string | undefined;
+/**
+ * Sets the base theme of the current external theme.
+ * @param { string | undefined } theme the name of the new base theme
+ * @private
+ */
+declare const setBaseTheme: (theme: string | undefined) => void;
+export { getTheme, setTheme, isTheme, isLegacyThemeFamily, isLegacyThemeFamilyAsync, getDefaultTheme, getBaseTheme, setBaseTheme, };

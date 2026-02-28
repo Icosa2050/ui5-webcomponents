@@ -1,5 +1,7 @@
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
+import type { DefaultSlot } from "@ui5/webcomponents-base/dist/UI5Element.js";
 import type I18nBundle from "@ui5/webcomponents-base/dist/i18nBundle.js";
+import type PopoverPlacement from "./types/PopoverPlacement.js";
 import type ResponsivePopover from "./ResponsivePopover.js";
 import type ColorPalette from "./ColorPalette.js";
 import type { ColorPaletteItemClickEventDetail, IColorPaletteItem } from "./ColorPalette.js";
@@ -63,6 +65,20 @@ declare class ColorPalettePopover extends UI5Element {
      */
     defaultColor?: string;
     /**
+     * Defines the accessible name of the component.
+     * @default undefined
+     * @public
+     * @since 2.20.0
+     */
+    accessibleName?: string;
+    /**
+     * Receives id(or many ids) of the elements that label the component.
+     * @default undefined
+     * @public
+     * @since 2.20.0
+     */
+    accessibleNameRef?: string;
+    /**
      * Defines the open | closed state of the popover.
      * @public
      * @default false
@@ -79,10 +95,17 @@ declare class ColorPalettePopover extends UI5Element {
      */
     opener?: HTMLElement | string | null;
     /**
+     * Determines on which side the component is placed at.
+     * @default "Bottom"
+     * @public
+     * @since 2.19.0
+     */
+    placement: `${PopoverPlacement}`;
+    /**
      * Defines the content of the component.
      * @public
      */
-    colors: Array<IColorPaletteItem>;
+    colors: DefaultSlot<IColorPaletteItem>;
     static i18nBundle: I18nBundle;
     constructor();
     get responsivePopover(): ResponsivePopover;

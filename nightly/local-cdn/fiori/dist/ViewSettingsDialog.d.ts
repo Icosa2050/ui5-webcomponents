@@ -1,6 +1,6 @@
 import type I18nBundle from "@ui5/webcomponents-base/dist/i18nBundle.js";
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
-import type { ChangeInfo } from "@ui5/webcomponents-base/dist/UI5Element.js";
+import type { Slot, ChangeInfo } from "@ui5/webcomponents-base/dist/UI5Element.js";
 import type Dialog from "@ui5/webcomponents/dist/Dialog.js";
 import type List from "@ui5/webcomponents/dist/List.js";
 import type { ListItemClickEventDetail, ListSelectionChangeEventDetail } from "@ui5/webcomponents/dist/List.js";
@@ -144,21 +144,21 @@ declare class ViewSettingsDialog extends UI5Element {
      * **Note:** If you want to use this slot, you need to import used item: `import "@ui5/webcomponents-fiori/dist/SortItem.js";`
      * @public
      */
-    sortItems: Array<SortItem>;
+    sortItems: Slot<SortItem>;
     /**
      * Defines the `filterItems` list.
      *
      * **Note:** If you want to use this slot, you need to import used item: `import "@ui5/webcomponents-fiori/dist/FilterItem.js";`
      * @public
      */
-    filterItems: Array<FilterItem>;
+    filterItems: Slot<FilterItem>;
     /**
      * Defines the list of items against which the user could group data.
      *
      * **Note:** If you want to use this slot, you need to import used item: `import "@ui5/webcomponents-fiori/dist/GroupItem.js";`
      * @public
      */
-    groupItems: Array<GroupItem>;
+    groupItems: Slot<GroupItem>;
     _list: List;
     _dialog?: Dialog;
     _sortOrder?: List;

@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var SearchField_1;
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
 import property from "@ui5/webcomponents-base/dist/decorators/property.js";
-import slot from "@ui5/webcomponents-base/dist/decorators/slot.js";
+import slot from "@ui5/webcomponents-base/dist/decorators/slot-strict.js";
 import event from "@ui5/webcomponents-base/dist/decorators/event-strict.js";
 import customElement from "@ui5/webcomponents-base/dist/decorators/customElement.js";
 import i18n from "@ui5/webcomponents-base/dist/decorators/i18n.js";
@@ -40,6 +40,13 @@ import { SEARCH_FIELD_SCOPE_SELECT_LABEL, SEARCH_FIELD_CLEAR_ICON, SEARCH_FIELD_
 let SearchField = SearchField_1 = class SearchField extends UI5Element {
     constructor() {
         super(...arguments);
+        /**
+         * Indicates whether a loading indicator should be shown in the input field.
+         * @default false
+         * @since 2.19.0
+         * @public
+         */
+        this.fieldLoading = false;
         /**
          * Defines whether the clear icon of the search will be shown.
          * @default false
@@ -144,6 +151,9 @@ let SearchField = SearchField_1 = class SearchField extends UI5Element {
         }
     }
 };
+__decorate([
+    property({ type: Boolean })
+], SearchField.prototype, "fieldLoading", void 0);
 __decorate([
     property({ type: Boolean })
 ], SearchField.prototype, "showClearIcon", void 0);

@@ -1,3 +1,4 @@
+import type { Slot } from "@ui5/webcomponents-base/dist/UI5Element.js";
 import ValueState from "@ui5/webcomponents-base/dist/types/ValueState.js";
 import type I18nBundle from "@ui5/webcomponents-base/dist/i18nBundle.js";
 import Popup from "./Popup.js";
@@ -135,6 +136,7 @@ declare class Dialog extends Popup {
     _minWidth?: number;
     _cachedMinHeight?: number;
     _draggedOrResized: boolean;
+    _dragHandlerRegistered: boolean;
     /**
      * Defines the header HTML Element.
      *
@@ -144,14 +146,14 @@ declare class Dialog extends Popup {
      * `accessibleName` should be used.
      * @public
      */
-    header: Array<HTMLElement>;
+    header: Slot<HTMLElement>;
     /**
      * Defines the footer HTML Element.
      *
      * **Note:** When a `ui5-bar` is used in the footer, you should remove the default dialog's paddings.
      * @public
      */
-    footer: Array<HTMLElement>;
+    footer: Slot<HTMLElement>;
     static i18nBundle: I18nBundle;
     constructor();
     static _isHeader(element: HTMLElement): boolean;
@@ -175,15 +177,17 @@ declare class Dialog extends Popup {
     get _role(): "dialog" | "alertdialog" | undefined;
     _show(): void;
     onBeforeRendering(): void;
-    onEnterDOM(): void;
-    onExitDOM(): void;
     /**
      * @override
      */
     _resize(): void;
     _screenResize(): void;
+    _attachBrowserEvents(): void;
+    _detachBrowserEvents(): void;
     _attachScreenResizeHandler(): void;
     _detachScreenResizeHandler(): void;
+    _registerDragHandler(): void;
+    _deregisterDragHandler(): void;
     _center(): void;
     _revertSize: () => void;
     /**

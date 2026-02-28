@@ -10,6 +10,7 @@ import UserSettingsAppearanceViewItemCss from "./generated/themes/UserSettingsAp
 import { customElement, property, } from "@ui5/webcomponents-base/dist/decorators.js";
 import jsxRenderer from "@ui5/webcomponents-base/dist/renderer/JsxRenderer.js";
 import ListItemCustom from "@ui5/webcomponents/dist/ListItemCustom.js";
+import createInstanceChecker from "@ui5/webcomponents-base/dist/util/createInstanceChecker.js";
 // Import default icon used by appearance view items
 import "@ui5/webcomponents-icons/dist/product.js";
 let UserSettingsAppearanceViewItem = 
@@ -27,7 +28,6 @@ let UserSettingsAppearanceViewItem =
  *
  * @constructor
  * @extends ListItemCustom
- * @experimental
  * @public
  * @since 2.17.0
  */
@@ -58,6 +58,9 @@ class UserSettingsAppearanceViewItem extends ListItemCustom {
          * @public
          */
         this.colorScheme = "Accent7";
+    }
+    get isUserSettingsAppearanceViewItem() {
+        return true;
     }
 };
 __decorate([
@@ -93,11 +96,11 @@ UserSettingsAppearanceViewItem = __decorate([
      *
      * @constructor
      * @extends ListItemCustom
-     * @experimental
      * @public
      * @since 2.17.0
      */
 ], UserSettingsAppearanceViewItem);
 UserSettingsAppearanceViewItem.define();
+export const isInstanceOfUserSettingsAppearanceViewItem = createInstanceChecker("isUserSettingsAppearanceViewItem");
 export default UserSettingsAppearanceViewItem;
 //# sourceMappingURL=UserSettingsAppearanceViewItem.js.map

@@ -1,10 +1,11 @@
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
+import type { Slot, DefaultSlot } from "@ui5/webcomponents-base/dist/UI5Element.js";
 import DragAndDropHandler from "./delegate/DragAndDropHandler.js";
 import MovePlacement from "@ui5/webcomponents-base/dist/types/MovePlacement.js";
 import type DropIndicator from "./DropIndicator.js";
 import type ListItemBase from "./ListItemBase.js";
 import type ListItemGroupHeader from "./ListItemGroupHeader.js";
-import type WrappingType from "./types/WrappingType.js";
+import WrappingType from "./types/WrappingType.js";
 type ListItemGroupMoveEventDetail = {
     source: {
         element: HTMLElement;
@@ -24,6 +25,7 @@ type ListItemGroupMoveEventDetail = {
  * ### ES6 Module Import
  * `import "@ui5/webcomponents/dist/ListItemGroup.js";`
  * @csspart header - Used to style the header item of the group
+ * @csspart title - Used to style the title of the group header
  * @constructor
  * @extends UI5Element
  * @public
@@ -50,7 +52,7 @@ declare class ListItemGroup extends UI5Element {
      * Defines the items of the <code>ui5-li-group</code>.
      * @public
      */
-    items: Array<ListItemBase>;
+    items: DefaultSlot<ListItemBase>;
     /**
      * Defines if the text of the component should wrap when it's too long.
      * When set to "Normal", the content (title, description) will be wrapped
@@ -80,7 +82,7 @@ declare class ListItemGroup extends UI5Element {
     * **Note:** Using this slot, the default header text of group and the value of `headerText` property will be overwritten.
     * @public
     */
-    header: Array<ListItemBase>;
+    header: Slot<ListItemBase>;
     _dragAndDropHandler: DragAndDropHandler;
     constructor();
     get groupHeaderItem(): ListItemGroupHeader;
@@ -94,8 +96,8 @@ declare class ListItemGroup extends UI5Element {
     _ondrop(e: DragEvent): void;
     _filterPlacements(placements: MovePlacement[], draggedElement: HTMLElement, targetElement: HTMLElement): MovePlacement[];
     getFocusDomRef(): ListItemGroupHeader;
+    getGroupHeaderWrapping(): WrappingType;
 }
-declare const isInstanceOfListItemGroup: (object: any) => object is ListItemGroup;
 export default ListItemGroup;
-export { isInstanceOfListItemGroup };
+export declare const isInstanceOfListItemGroup: (object: any) => object is ListItemGroup;
 export type { ListItemGroupMoveEventDetail };

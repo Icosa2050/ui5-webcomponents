@@ -92,7 +92,7 @@ declare class DateComponentBase extends UI5Element {
     get _secondaryCalendarType(): CalendarType | "Gregorian" | "Islamic" | "Japanese" | "Buddhist" | "Persian" | undefined;
     get _minDate(): CalendarDate;
     get _maxDate(): CalendarDate;
-    get _formatPattern(): string;
+    get _formatPattern(): string | undefined;
     get _isPattern(): boolean;
     get _isValueFormatPattern(): boolean;
     get _isDisplayFormatPattern(): boolean;
@@ -106,7 +106,7 @@ declare class DateComponentBase extends UI5Element {
     _getDisplayStringFromTimestamp(timestamp: number): string;
     _getValueStringFromTimestamp(timestamp: number): string;
     getFormat(): import("sap/ui/core/format/DateFormat").default;
-    get _displayFormat(): string;
+    get _displayFormat(): string | undefined;
     get _valueFormat(): string;
     getDisplayFormat(): import("sap/ui/core/format/DateFormat").default;
     getValueFormat(): import("sap/ui/core/format/DateFormat").default;

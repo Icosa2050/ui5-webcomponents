@@ -1,4 +1,5 @@
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
+import type { DefaultSlot } from "@ui5/webcomponents-base/dist/UI5Element.js";
 import type { ResizeObserverCallback } from "@ui5/webcomponents-base/dist/delegate/ResizeHandler.js";
 import ItemNavigation from "@ui5/webcomponents-base/dist/delegate/ItemNavigation.js";
 import ScrollEnablement from "@ui5/webcomponents-base/dist/delegate/ScrollEnablement.js";
@@ -184,7 +185,7 @@ declare class Tokenizer extends UI5Element implements IFormInputElement {
      * Defines the tokens to be displayed.
      * @public
      */
-    tokens: Array<Token>;
+    tokens: DefaultSlot<Token>;
     static i18nBundle: I18nBundle;
     _resizeHandler: ResizeObserverCallback;
     _itemNav: ItemNavigation;

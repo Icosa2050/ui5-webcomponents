@@ -6,13 +6,12 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 var MultiInput_1;
 import property from "@ui5/webcomponents-base/dist/decorators/property.js";
-import slot from "@ui5/webcomponents-base/dist/decorators/slot.js";
+import slot from "@ui5/webcomponents-base/dist/decorators/slot-strict.js";
 import event from "@ui5/webcomponents-base/dist/decorators/event-strict.js";
 import customElement from "@ui5/webcomponents-base/dist/decorators/customElement.js";
 import jsxRenderer from "@ui5/webcomponents-base/dist/renderer/JsxRenderer.js";
-import { isShow, isBackSpace, isLeft, isRight, isRightCtrl, isHome, isEnd, isDown, isEnter, } from "@ui5/webcomponents-base/dist/Keys.js";
+import { isShow, isBackSpace, isLeft, isRight, isRightCtrl, isHome, isEnd, isDown, } from "@ui5/webcomponents-base/dist/Keys.js";
 import { isPhone } from "@ui5/webcomponents-base/dist/Device.js";
-import { getScopedVarName } from "@ui5/webcomponents-base/dist/CustomElementsScope.js";
 import { MULTIINPUT_ROLEDESCRIPTION_TEXT, MULTIINPUT_VALUE_HELP_LABEL, MULTIINPUT_VALUE_HELP, FORM_MIXED_TEXTFIELD_REQUIRED, MULTIINPUT_FILTER_BUTTON_LABEL, } from "./generated/i18n/i18n-defaults.js";
 import Input from "./Input.js";
 import MultiInputTemplate from "./MultiInputTemplate.js";
@@ -141,9 +140,6 @@ let MultiInput = MultiInput_1 = class MultiInput extends Input {
             this._skipOpenSuggestions = true; // Prevent input focus when navigating through the tokens
             return this._focusFirstToken(e);
         }
-        if (isEnter(e) && !!this._internals.form) {
-            e.preventDefault();
-        }
         if (isLeft(e)) {
             this._skipOpenSuggestions = true;
             return this._handleLeft(e);
@@ -225,7 +221,7 @@ let MultiInput = MultiInput_1 = class MultiInput extends Input {
     }
     onBeforeRendering() {
         super.onBeforeRendering();
-        this.style.setProperty(getScopedVarName("--_ui5-input-icons-count"), `${this.iconsCount}`);
+        this.style.setProperty("--_ui5-input-icons-count", `${this.iconsCount}`);
         this.tokenizerAvailable = this.tokens && this.tokens.length > 0;
         if (this.tokenizer) {
             this.tokenizer.readonly = this.readonly;

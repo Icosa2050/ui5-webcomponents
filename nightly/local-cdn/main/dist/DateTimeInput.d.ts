@@ -4,6 +4,7 @@ import Input from "./Input.js";
  * Intended to be used for the DateTime components.
  *
  * @class
+ * @extends Input
  * @private
  */
 declare class DateTimeInput extends Input {

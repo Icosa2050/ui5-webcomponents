@@ -25,12 +25,10 @@ import MenuItemGroup from "@ui5/webcomponents/dist/MenuItemGroup.js";
  * `import "@ui5/webcomponents/dist/UserMenuItemGroup.js";`
  * @constructor
  * @extends MenuItemGroup
- * @experimental
  * @since 2.12.0
  * @public
  */
 declare class UserMenuItemGroup extends MenuItemGroup {
 }
-declare const isInstanceOfUserMenuItemGroup: (object: any) => object is UserMenuItemGroup;
 export default UserMenuItemGroup;
-export { isInstanceOfUserMenuItemGroup, };
+export declare const isInstanceOfUserMenuItemGroup: (object: any) => object is UserMenuItemGroup;

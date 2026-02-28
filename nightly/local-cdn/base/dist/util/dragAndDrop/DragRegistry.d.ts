@@ -29,7 +29,7 @@ type MoveEventDetail = {
     };
 };
 declare const DragRegistry: {
-    setDraggedElement: (element: HTMLElement | null) => void;
+    setDraggedElement: (element: HTMLElement | null, e?: DragEvent) => void;
     clearDraggedElement: () => void;
     getDraggedElement: () => HTMLElement | null;
     startMultipleDrag: (count: number, e: DragEvent) => Promise<void>;

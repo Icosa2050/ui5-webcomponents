@@ -1,5 +1,6 @@
 import type { IOption } from "./Select.js";
 import ListItemBase from "./ListItemBase.js";
+import type { DefaultSlot } from "@ui5/webcomponents-base/dist/UI5Element.js";
 /**
  * @class
  *
@@ -38,7 +39,7 @@ declare class OptionCustom extends ListItemBase implements IOption {
      * Defines the content of the component.
      * @public
      */
-    content: Array<Node>;
+    content: DefaultSlot<Node>;
     /**
      * Defines the tooltip of the option.
      * @default undefined

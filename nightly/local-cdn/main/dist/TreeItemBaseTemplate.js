@@ -2,7 +2,7 @@ import { jsxs as _jsxs, jsx as _jsx, Fragment as _Fragment } from "@ui5/webcompo
 import ListItemTemplate from "./ListItemTemplate.js";
 import Icon from "./Icon.js";
 import navigationDownArrow from "@ui5/webcomponents-icons/dist/navigation-down-arrow.js";
-import navigatioRightArrow from "@ui5/webcomponents-icons/dist/navigation-right-arrow.js";
+import navigationRightArrow from "@ui5/webcomponents-icons/dist/navigation-right-arrow.js";
 const predefinedHooks = {
     listItemPreContent,
     listItemContent,
@@ -15,7 +15,7 @@ export default function TreeItemBaseTemplate(hooks) {
 }
 function listItemPreContent() {
     return (_jsx("div", { class: "ui5-li-tree-toggle-box", style: this.styles.preContent, children: this.showToggleButton &&
-            _jsx(Icon, { part: "toggle-icon", class: "ui5-li-tree-toggle-icon", name: this.expanded ? navigationDownArrow : navigatioRightArrow, showTooltip: true, accessibleName: this.iconAccessibleName, 
+            _jsx(Icon, { part: "toggle-icon", class: "ui5-li-tree-toggle-icon", name: this.expanded ? navigationDownArrow : navigationRightArrow, showTooltip: true, accessibleName: this.iconAccessibleName, 
                 // @ts-expect-error
                 onClick: this._toggleClick }) }));
 }

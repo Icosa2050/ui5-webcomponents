@@ -1,6 +1,7 @@
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
 import type MediaGalleryItemLayout from "./types/MediaGalleryItemLayout.js";
 import type { IMediaGalleryItem } from "./MediaGallery.js";
+import type { Slot, DefaultSlot } from "@ui5/webcomponents-base/dist/UI5Element.js";
 /**
  * @class
  * ### Overview
@@ -80,12 +81,12 @@ declare class MediaGalleryItem extends UI5Element implements IMediaGalleryItem {
      * Defines the content of the component.
      * @public
      */
-    content: Array<HTMLElement>;
+    content: DefaultSlot<HTMLElement>;
     /**
      * Defines the content of the thumbnail.
      * @public
      */
-    thumbnail: Array<HTMLElement>;
+    thumbnail: Slot<HTMLElement>;
     _monitoredThumbnail: HTMLElement | null;
     _monitoredContent: HTMLElement | null;
     constructor();

@@ -1,5 +1,6 @@
 import type { ClassMap } from "@ui5/webcomponents-base/dist/types.js";
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
+import type { DefaultSlot } from "@ui5/webcomponents-base/dist/UI5Element.js";
 import type { ResizeObserverCallback } from "@ui5/webcomponents-base/dist/delegate/ResizeHandler.js";
 import PopupAccessibleRole from "./types/PopupAccessibleRole.js";
 type PopupScrollEventDetail = {
@@ -123,7 +124,7 @@ declare abstract class Popup extends UI5Element {
      * Defines the content of the Popup.
      * @public
      */
-    content: Array<HTMLElement>;
+    content: DefaultSlot<HTMLElement>;
     /**
      * @private
      */
@@ -158,6 +159,8 @@ declare abstract class Popup extends UI5Element {
      * Prevents the user from interacting with the content under the block layer
      */
     _preventBlockLayerFocus(e: KeyboardEvent | MouseEvent): void;
+    _attachBrowserEvents(): void;
+    _detachBrowserEvents(): void;
     /**
      * Temporarily removes scrollbars from the html element
      * @protected

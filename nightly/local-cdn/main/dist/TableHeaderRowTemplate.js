@@ -7,7 +7,7 @@ import ClearAll from "@ui5/webcomponents-icons/dist/clear-all.js";
 import IconDesign from "./types/IconDesign.js";
 export default function TableHeaderRowTemplate(ariaColIndex = 1) {
     return (_jsxs(_Fragment, { children: [this._hasSelector &&
-                _jsx(TableHeaderCell, { id: "selection-cell", "aria-selected": this._isSelected, "aria-label": this._i18nSelection, "aria-description": this._selectionCellAriaDescription, "aria-colindex": ariaColIndex++, "data-ui5-table-selection-cell": true, "data-ui5-table-cell-fixed": true, "data-ui5-table-acc-text": "", children: !this._isMultiSelect ?
+                _jsx(TableHeaderCell, { id: "selection-cell", "aria-selected": this._isSelected, "aria-label": this._i18nSelection, "aria-description": this._selectionCellAriaDescription, "aria-colindex": ariaColIndex++, "data-ui5-table-selection-cell": true, "data-ui5-table-cell-fixed": true, "data-ui5-acc-text": "", children: !this._isMultiSelect ?
                         _jsx(_Fragment, {})
                         :
                             this._shouldRenderClearAll ?

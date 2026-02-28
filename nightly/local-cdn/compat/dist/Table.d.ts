@@ -1,5 +1,5 @@
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
-import type { ChangeInfo } from "@ui5/webcomponents-base/dist/UI5Element.js";
+import type { ChangeInfo, DefaultSlot, Slot } from "@ui5/webcomponents-base/dist/UI5Element.js";
 import type { ResizeObserverCallback } from "@ui5/webcomponents-base/dist/delegate/ResizeHandler.js";
 import ItemNavigation from "@ui5/webcomponents-base/dist/delegate/ItemNavigation.js";
 import type { ITabbable } from "@ui5/webcomponents-base/dist/delegate/ItemNavigation.js";
@@ -253,14 +253,14 @@ declare class Table extends UI5Element {
      * **Note:** Use `ui5-table-row` for the intended design.
      * @public
      */
-    rows: Array<ITableRow>;
+    rows: DefaultSlot<ITableRow>;
     /**
      * Defines the configuration for the columns of the component.
      *
      * **Note:** Use `ui5-table-column` for the intended design.
      * @public
      */
-    columns: Array<TableColumn>;
+    columns: Slot<TableColumn>;
     static i18nBundle: I18nBundle;
     fnHandleF7: (e: CustomEvent) => void;
     fnOnRowFocused: (e: CustomEvent) => void;

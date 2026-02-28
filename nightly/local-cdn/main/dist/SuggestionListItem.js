@@ -6,7 +6,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 import customElement from "@ui5/webcomponents-base/dist/decorators/customElement.js";
 import jsxRenderer from "@ui5/webcomponents-base/dist/renderer/JsxRenderer.js";
-import slot from "@ui5/webcomponents-base/dist/decorators/slot.js";
+import slot from "@ui5/webcomponents-base/dist/decorators/slot-strict.js";
 import ListItemStandard from "./ListItemStandard.js";
 import SuggestionListItemTemplate from "./SuggestionListItemTemplate.js";
 /**
@@ -35,7 +35,7 @@ let SuggestionListItem = class SuggestionListItem extends ListItemStandard {
     }
 };
 __decorate([
-    slot({ type: HTMLElement })
+    slot()
 ], SuggestionListItem.prototype, "richDescription", void 0);
 __decorate([
     slot({ type: Node, "default": true })

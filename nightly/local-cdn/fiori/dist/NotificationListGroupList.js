@@ -14,6 +14,7 @@ import { isSpace } from "@ui5/webcomponents-base/dist/Keys.js";
  * that is used to support keyboard navigation of the notification group internal list.
  *
  * @private
+ * @extends List
  */
 let NotificationListGroupList = class NotificationListGroupList extends List {
     getEnabledItems() {

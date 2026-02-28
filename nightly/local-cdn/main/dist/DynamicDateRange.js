@@ -17,7 +17,7 @@ import { renderFinished } from "@ui5/webcomponents-base/dist/Render.js";
 import { isF4, isShow } from "@ui5/webcomponents-base/dist/Keys.js";
 import DynamicDateRangeTemplate from "./DynamicDateRangeTemplate.js";
 import IconMode from "./types/IconMode.js";
-import { DYNAMIC_DATE_RANGE_SELECTED_TEXT, DYNAMIC_DATE_RANGE_EMPTY_SELECTED_TEXT, DYNAMIC_DATE_RANGE_NAVIGATION_ICON_TOOLTIP, } from "./generated/i18n/i18n-defaults.js";
+import { DYNAMIC_DATE_RANGE_SELECTED_TEXT, DYNAMIC_DATE_RANGE_EMPTY_SELECTED_TEXT, DYNAMIC_DATE_RANGE_NAVIGATION_ICON_TOOLTIP, DYNAMIC_DATE_RANGE_POPOVER_ACCESSIBLE_NAME, } from "./generated/i18n/i18n-defaults.js";
 // default calendar for bundling
 import "@ui5/webcomponents-localization/dist/features/calendar/Gregorian.js";
 // Styles
@@ -160,6 +160,9 @@ let DynamicDateRange = DynamicDateRange_1 = class DynamicDateRange extends UI5El
     }
     get tooltipNavigationIcon() {
         return DynamicDateRange_1.i18nBundle.getText(DYNAMIC_DATE_RANGE_NAVIGATION_ICON_TOOLTIP);
+    }
+    get popoverAccessibleName() {
+        return DynamicDateRange_1.i18nBundle.getText(DYNAMIC_DATE_RANGE_POPOVER_ACCESSIBLE_NAME);
     }
     _togglePicker() {
         if (this.open) {

@@ -4,6 +4,7 @@ import ListItemBase from "./ListItemBase.js";
 import type { ExpandableTextTemplateParams } from "./types/ExpandableTextTemplateParams.js";
 import ListItemAccessibleRole from "./types/ListItemAccessibleRole.js";
 import type WrappingType from "./types/WrappingType.js";
+import type { Slot } from "@ui5/webcomponents-base/dist/UI5Element.js";
 type ExpandableTextTemplate = (this: ListItemGroupHeader, params: ExpandableTextTemplateParams) => JSX.Element;
 /**
  * @class
@@ -55,7 +56,7 @@ declare class ListItemGroupHeader extends ListItemBase {
      * @private
      */
     expandableTextTemplate?: ExpandableTextTemplate;
-    subItems: Array<HTMLElement>;
+    subItems: Slot<HTMLElement>;
     static i18nBundle: I18nBundle;
     get effectiveAccRole(): AriaRole;
     get groupItem(): boolean;

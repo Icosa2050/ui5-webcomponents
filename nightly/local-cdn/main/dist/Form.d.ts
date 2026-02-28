@@ -1,4 +1,5 @@
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
+import type { Slot, DefaultSlot } from "@ui5/webcomponents-base/dist/UI5Element.js";
 import type { AriaRole } from "@ui5/webcomponents-base";
 import type I18nBundle from "@ui5/webcomponents-base/dist/i18nBundle.js";
 import type FormItemSpacing from "./types/FormItemSpacing.js";
@@ -285,7 +286,7 @@ declare class Form extends UI5Element {
      * **Note:** When a `header` is provided, the `headerText` property is ignored.
      * @public
      */
-    header: Array<HTMLElement>;
+    header: Slot<HTMLElement>;
     /**
      * Defines the component content - FormGroups or FormItems.
      *
@@ -293,7 +294,7 @@ declare class Form extends UI5Element {
      * Either use FormGroups and make sure all FormItems are part of a FormGroup, or use just FormItems without any FormGroups.
      * @public
      */
-    items: Array<IFormItem>;
+    items: DefaultSlot<IFormItem>;
     static i18nBundle: I18nBundle;
     /**
      * @private

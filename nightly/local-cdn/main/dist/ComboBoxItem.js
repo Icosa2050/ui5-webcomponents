@@ -33,6 +33,7 @@ let ComboBoxItem = class ComboBoxItem extends ListItemBase {
         /**
          * Indicates whether the item is selected
          * @protected
+         * @deprecated use value property of the item and selectedValue property of the ComboBox instead
          */
         this.selected = false;
         /**
@@ -54,6 +55,9 @@ __decorate([
 __decorate([
     property({ type: Boolean, noAttribute: true })
 ], ComboBoxItem.prototype, "_isVisible", void 0);
+__decorate([
+    property()
+], ComboBoxItem.prototype, "value", void 0);
 __decorate([
     property({ type: Boolean })
 ], ComboBoxItem.prototype, "focused", void 0);

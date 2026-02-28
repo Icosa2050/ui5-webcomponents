@@ -1,4 +1,5 @@
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
+import type { Slot } from "@ui5/webcomponents-base/dist/UI5Element.js";
 import type { IFormInputElement } from "@ui5/webcomponents-base/dist/features/InputElementsFormSupport.js";
 import type I18nBundle from "@ui5/webcomponents-base/dist/i18nBundle.js";
 import ValueState from "@ui5/webcomponents-base/dist/types/ValueState.js";
@@ -196,7 +197,7 @@ declare class TimePicker extends UI5Element implements IFormInputElement {
      * @since 1.0.0-rc.8
      * @public
      */
-    valueStateMessage: Array<HTMLElement>;
+    valueStateMessage: Slot<HTMLElement>;
     _timeSelectionClocks?: TimeSelectionClocks;
     _inputsPopover: Popover;
     _dateTimeInput: DateTimeInput;
@@ -269,6 +270,7 @@ declare class TimePicker extends UI5Element implements IFormInputElement {
     _updateValueAndFireEvents(value: string, normalizeValue: boolean, eventsNames: Array<"input" | "change" | "value-changed">): void;
     _updateValueState(): void;
     _handleInputChange(e: CustomEvent): void;
+    _onInputRequestSubmit(): void;
     _handleInputLiveChange(e: CustomEvent): void;
     _canOpenPicker(): boolean;
     _canOpenInputsPopover(): boolean;

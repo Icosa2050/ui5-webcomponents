@@ -1,4 +1,5 @@
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
+import type { Slot, DefaultSlot } from "@ui5/webcomponents-base/dist/UI5Element.js";
 import ValueState from "@ui5/webcomponents-base/dist/types/ValueState.js";
 import SelectTextSeparator from "./types/SelectTextSeparator.js";
 import "@ui5/webcomponents-icons/dist/error.js";
@@ -232,7 +233,7 @@ declare class Select extends UI5Element implements IFormInputElement {
      * **Note:** Use the `ui5-option` component to define the desired options.
      * @public
      */
-    options: Array<IOption>;
+    options: DefaultSlot<IOption>;
     /**
      * Defines the value state message that will be displayed as pop up under the component.
      *
@@ -245,7 +246,7 @@ declare class Select extends UI5Element implements IFormInputElement {
      * the `valueStateMessage` would be displayed as part of the same popover, if used on desktop, or dialog - on phone.
      * @public
     */
-    valueStateMessage: Array<HTMLElement>;
+    valueStateMessage: Slot<HTMLElement>;
     /**
      * Defines the HTML element that will be displayed in the component input part,
      * representing the selected option.
@@ -258,7 +259,7 @@ declare class Select extends UI5Element implements IFormInputElement {
      * @public
      * @since 1.17.0
     */
-    label: Array<HTMLElement>;
+    label: Slot<HTMLElement>;
     get formValidityMessage(): string;
     get formValidity(): ValidityStateFlags;
     formElementAnchor(): Promise<HTMLElement | undefined>;

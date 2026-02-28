@@ -1,4 +1,5 @@
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
+import type { DefaultSlot } from "@ui5/webcomponents-base/dist/UI5Element.js";
 import type I18nBundle from "@ui5/webcomponents-base/dist/i18nBundle.js";
 import type { ISegmentedButtonItem } from "./SegmentedButton.js";
 import type { IButton } from "./Button.js";
@@ -122,7 +123,7 @@ declare class SegmentedButtonItem extends UI5Element implements IButton, ISegmen
      * **Note:** Although this slot accepts HTML Elements, it is strongly recommended that you only use text in order to preserve the intended design.
      * @public
      */
-    text: Array<Node>;
+    text: DefaultSlot<Node>;
     static i18nBundle: I18nBundle;
     get ariaDescription(): string;
     constructor();

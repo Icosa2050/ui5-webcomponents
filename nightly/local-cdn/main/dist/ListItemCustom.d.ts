@@ -1,4 +1,5 @@
-import type { ClassMap } from "@ui5/webcomponents-base/dist/types.js";
+import type I18nBundle from "@ui5/webcomponents-base/dist/i18nBundle.js";
+import type { ClassMap, AccessibilityInfo } from "@ui5/webcomponents-base/dist/types.js";
 import ListItem from "./ListItem.js";
 /**
  * @class
@@ -19,6 +20,7 @@ import ListItem from "./ListItem.js";
  * @public
  */
 declare class ListItemCustom extends ListItem {
+    static i18nBundle: I18nBundle;
     /**
      * Defines whether the item is movable.
      * @default false
@@ -37,6 +39,24 @@ declare class ListItemCustom extends ListItem {
     accessibleName?: string;
     _onkeydown(e: KeyboardEvent): void;
     _onkeyup(e: KeyboardEvent): void;
+    get _accessibleNameRef(): string;
+    _onfocusin(e: FocusEvent): void;
+    _onfocusout(e: FocusEvent): void;
+    /**
+     * Checks if this element is currently being dragged
+     * @returns True if this element is being dragged
+     * @private
+     */
+    _isDragging(): boolean;
+    private _updateInvisibleTextContent;
+    private _clearInvisibleTextContent;
+    /**
+     * Gets delete button nodes to process for accessibility
+     * @returns Array of nodes to process
+     * @private
+     */
+    private _getDeleteButtonNodes;
     get classes(): ClassMap;
+    get accessibilityInfo(): AccessibilityInfo;
 }
 export default ListItemCustom;

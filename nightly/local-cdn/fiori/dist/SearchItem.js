@@ -6,7 +6,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 var SearchItem_1;
 import property from "@ui5/webcomponents-base/dist/decorators/property.js";
-import slot from "@ui5/webcomponents-base/dist/decorators/slot.js";
+import slot from "@ui5/webcomponents-base/dist/decorators/slot-strict.js";
 import ListItemBase from "@ui5/webcomponents/dist/ListItemBase.js";
 import customElement from "@ui5/webcomponents-base/dist/decorators/customElement.js";
 import SearchItemTemplate from "./SearchItemTemplate.js";

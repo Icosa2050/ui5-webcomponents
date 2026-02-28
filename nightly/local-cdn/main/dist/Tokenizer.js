@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var Tokenizer_1;
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
 import property from "@ui5/webcomponents-base/dist/decorators/property.js";
-import slot from "@ui5/webcomponents-base/dist/decorators/slot.js";
+import slot from "@ui5/webcomponents-base/dist/decorators/slot-strict.js";
 import event from "@ui5/webcomponents-base/dist/decorators/event-strict.js";
 import customElement from "@ui5/webcomponents-base/dist/decorators/customElement.js";
 import jsxRenderer from "@ui5/webcomponents-base/dist/renderer/JsxRenderer.js";
@@ -24,7 +24,7 @@ import { isSpace, isSpaceCtrl, isSpaceShift, isLeftCtrl, isRightCtrl, isUpCtrl, 
 import { isPhone } from "@ui5/webcomponents-base/dist/Device.js";
 import ListSelectionMode from "./types/ListSelectionMode.js";
 import TokenizerTemplate from "./TokenizerTemplate.js";
-import { MULTIINPUT_SHOW_MORE_TOKENS, TOKENIZER_ARIA_LABEL, TOKENIZER_POPOVER_REMOVE, TOKENIZER_ARIA_CONTAIN_TOKEN, TOKENIZER_ARIA_CONTAIN_ONE_TOKEN, TOKENIZER_ARIA_CONTAIN_SEVERAL_TOKENS, TOKENIZER_SHOW_ALL_ITEMS, TOKENIZER_CLEAR_ALL, TOKENIZER_DIALOG_OK_BUTTON, TOKENIZER_DIALOG_CANCEL_BUTTON, } from "./generated/i18n/i18n-defaults.js";
+import { MULTIINPUT_SHOW_MORE_TOKENS, TOKENIZER_ARIA_LABEL, TOKENIZER_ARIA_CONTAIN_TOKEN, TOKENIZER_ARIA_CONTAIN_ONE_TOKEN, TOKENIZER_ARIA_CONTAIN_SEVERAL_TOKENS, TOKENIZER_SHOW_ALL_ITEMS, TOKENIZER_CLEAR_ALL, TOKENIZER_DIALOG_OK_BUTTON, TOKENIZER_DIALOG_CANCEL_BUTTON, INPUT_SUGGESTIONS_TITLE, } from "./generated/i18n/i18n-defaults.js";
 // Styles
 import TokenizerCss from "./generated/themes/Tokenizer.css.js";
 import TokenizerPopoverCss from "./generated/themes/TokenizerPopover.css.js";
@@ -681,13 +681,25 @@ let Tokenizer = Tokenizer_1 = class Tokenizer extends UI5Element {
     }
     _fillClipboard(shortcutName, tokens) {
         const tokensTexts = tokens.filter(token => token.selected).map(token => token.text).join("\r\n");
-        const cutToClipboard = (e) => {
-            navigator.clipboard.writeText(tokensTexts);
+        // Async clipboard API (works in secure contexts - HTTPS/localhost)
+        if (navigator.clipboard?.writeText && window.isSecureContext) {
+            navigator.clipboard.writeText(tokensTexts)?.catch(() => {
+                // Silent fallback - user can retry
+            });
+            return;
+        }
+        // Fallback for HTTP: use ClipboardEvent with execCommand
+        // execCommand is deprecated but it is kept for compatibility reasons, as
+        // there is no other way to write to clipboard in non-secure contexts
+        const fillClipboardHandler = (e) => {
+            if (e.clipboardData) {
+                e.clipboardData.setData("text/plain", tokensTexts);
+            }
             e.preventDefault();
         };
-        document.addEventListener(shortcutName, cutToClipboard);
+        document.addEventListener(shortcutName, fillClipboardHandler);
         document.execCommand(shortcutName);
-        document.removeEventListener(shortcutName, cutToClipboard);
+        document.removeEventListener(shortcutName, fillClipboardHandler);
     }
     /**
      * Scrolls the container of the tokens to its beginning.
@@ -789,7 +801,7 @@ let Tokenizer = Tokenizer_1 = class Tokenizer extends UI5Element {
         return this.readonly || undefined;
     }
     get morePopoverTitle() {
-        return Tokenizer_1.i18nBundle.getText(TOKENIZER_POPOVER_REMOVE);
+        return getEffectiveAriaLabelText(this) || Tokenizer_1.i18nBundle.getText(INPUT_SUGGESTIONS_TITLE);
     }
     get overflownTokens() {
         if (!this.contentDom) {

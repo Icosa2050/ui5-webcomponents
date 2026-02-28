@@ -6,10 +6,11 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 var MenuItem_1;
 import jsxRenderer from "@ui5/webcomponents-base/dist/renderer/JsxRenderer.js";
+import createInstanceChecker from "@ui5/webcomponents-base/dist/util/createInstanceChecker.js";
 import customElement from "@ui5/webcomponents-base/dist/decorators/customElement.js";
 import property from "@ui5/webcomponents-base/dist/decorators/property.js";
 import event from "@ui5/webcomponents-base/dist/decorators/event-strict.js";
-import slot from "@ui5/webcomponents-base/dist/decorators/slot.js";
+import slot from "@ui5/webcomponents-base/dist/decorators/slot-strict.js";
 import i18n from "@ui5/webcomponents-base/dist/decorators/i18n.js";
 import { isLeft, isRight, isEnter, isSpace, isEnterShift, isSpaceShift, isShift, isTabNext, isTabPrevious, isDown, isUp, } from "@ui5/webcomponents-base/dist/Keys.js";
 import { isDesktop, isPhone } from "@ui5/webcomponents-base/dist/Device.js";
@@ -23,7 +24,7 @@ import ListItem from "./ListItem.js";
 import { isInstanceOfMenuSeparator } from "./MenuSeparator.js";
 import { isInstanceOfMenuItemGroup } from "./MenuItemGroup.js";
 import MenuItemTemplate from "./MenuItemTemplate.js";
-import { MENU_BACK_BUTTON_ARIA_LABEL, MENU_CLOSE_BUTTON_ARIA_LABEL, MENU_POPOVER_ACCESSIBLE_NAME, } from "./generated/i18n/i18n-defaults.js";
+import { MENU_BACK_BUTTON_ARIA_LABEL, MENU_CANCEL_BUTTON_TEXT, MENU_POPOVER_ACCESSIBLE_NAME, } from "./generated/i18n/i18n-defaults.js";
 // Styles
 import menuItemCss from "./generated/themes/MenuItem.css.js";
 /**
@@ -99,6 +100,7 @@ let MenuItem = MenuItem_1 = class MenuItem extends ListItem {
          */
         this._checkMode = "None";
         this._shiftPressed = false;
+        this._openedByMouse = false;
         this._itemNavigation = new ItemNavigation(this, {
             navigationMode: NavigationMode.Horizontal,
             behavior: ItemNavigationBehavior.Static,
@@ -152,8 +154,8 @@ let MenuItem = MenuItem_1 = class MenuItem extends ListItem {
     get labelBack() {
         return MenuItem_1.i18nBundle.getText(MENU_BACK_BUTTON_ARIA_LABEL);
     }
-    get labelClose() {
-        return MenuItem_1.i18nBundle.getText(MENU_CLOSE_BUTTON_ARIA_LABEL);
+    get labelCancel() {
+        return MenuItem_1.i18nBundle.getText(MENU_CANCEL_BUTTON_TEXT);
     }
     get accessibleNameText() {
         return MenuItem_1.i18nBundle.getText(MENU_POPOVER_ACCESSIBLE_NAME);
@@ -265,7 +267,7 @@ let MenuItem = MenuItem_1 = class MenuItem extends ListItem {
         if (!isInstanceOfMenuItem(item)) {
             return;
         }
-        item.focus();
+        item.getFocusDomRef()?.focus();
         this._closeOtherSubMenus(item);
     }
     _isSpace(e) {
@@ -335,7 +337,9 @@ let MenuItem = MenuItem_1 = class MenuItem extends ListItem {
         }
     }
     _afterPopoverOpen() {
-        this._allMenuItems[0]?.focus();
+        if (!this._openedByMouse) {
+            this._allMenuItems[0]?.focus();
+        }
         this.fireDecoratorEvent("open");
     }
     _beforePopoverClose(e) {
@@ -353,6 +357,7 @@ let MenuItem = MenuItem_1 = class MenuItem extends ListItem {
         }
     }
     _afterPopoverClose() {
+        this._openedByMouse = false;
         this.fireDecoratorEvent("close");
     }
     get isMenuItem() {
@@ -407,7 +412,7 @@ __decorate([
     slot({ "default": true, type: HTMLElement, invalidateOnChildChange: true })
 ], MenuItem.prototype, "items", void 0);
 __decorate([
-    slot({ type: HTMLElement })
+    slot()
 ], MenuItem.prototype, "endContent", void 0);
 __decorate([
     i18n("@ui5/webcomponents")
@@ -481,9 +486,6 @@ MenuItem = MenuItem_1 = __decorate([
     })
 ], MenuItem);
 MenuItem.define();
-const isInstanceOfMenuItem = (object) => {
-    return "isMenuItem" in object;
-};
 export default MenuItem;
-export { isInstanceOfMenuItem, };
+export const isInstanceOfMenuItem = createInstanceChecker("isMenuItem");
 //# sourceMappingURL=MenuItem.js.map

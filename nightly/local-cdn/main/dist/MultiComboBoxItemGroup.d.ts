@@ -1,3 +1,4 @@
+import type { DefaultSlot } from "@ui5/webcomponents-base/dist/UI5Element.js";
 import type { IMultiComboBoxItem } from "./MultiComboBox.js";
 import type MultiComboBoxItem from "./MultiComboBoxItem.js";
 import type ListItemGroupHeader from "./ListItemGroupHeader.js";
@@ -18,7 +19,7 @@ declare class MultiComboBoxItemGroup extends ComboBoxItemGroup implements IMulti
      * Defines the items of the <code>ui5-mcb-item-group</code>.
      * @public
      */
-    items: Array<MultiComboBoxItem>;
+    items: DefaultSlot<MultiComboBoxItem>;
     /**
      * Used to avoid tag name checks
      * @protected
@@ -28,6 +29,5 @@ declare class MultiComboBoxItemGroup extends ComboBoxItemGroup implements IMulti
     get stableDomRef(): string;
     getFocusDomRef(): ListItemGroupHeader;
 }
-declare const isInstanceOfMultiComboBoxItemGroup: (object: any) => object is MultiComboBoxItemGroup;
 export default MultiComboBoxItemGroup;
-export { isInstanceOfMultiComboBoxItemGroup };
+export declare const isInstanceOfMultiComboBoxItemGroup: (object: any) => object is MultiComboBoxItemGroup;

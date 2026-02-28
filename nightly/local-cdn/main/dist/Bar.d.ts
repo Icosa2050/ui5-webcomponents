@@ -1,4 +1,5 @@
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
+import type { DefaultSlot, Slot } from "@ui5/webcomponents-base/dist/UI5Element.js";
 import type BarDesign from "./types/BarDesign.js";
 import type BarAccessibleRole from "./types/BarAccessibleRole.js";
 /**
@@ -78,17 +79,17 @@ declare class Bar extends UI5Element {
     * Defines the content at the start of the bar.
     * @public
     */
-    startContent: Array<HTMLElement>;
+    startContent: Slot<HTMLElement>;
     /**
     * Defines the content in the middle of the bar.
     * @public
     */
-    middleContent: Array<HTMLElement>;
+    middleContent: DefaultSlot<HTMLElement>;
     /**
     * Defines the content at the end of the bar.
     * @public
     */
-    endContent: Array<HTMLElement>;
+    endContent: Slot<HTMLElement>;
     _handleResizeBound: () => void;
     get accInfo(): {
         label: string | undefined;

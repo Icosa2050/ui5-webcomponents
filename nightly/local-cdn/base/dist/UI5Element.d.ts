@@ -1,7 +1,7 @@
 import "@ui5/webcomponents-base/dist/ssr-dom.js";
 import type { JSX } from "./jsx-runtime.js";
 import UI5ElementMetadata from "./UI5ElementMetadata.js";
-import type { Slot, SlotValue, State, PropertyValue, Metadata } from "./UI5ElementMetadata.js";
+import type { Slot as SlotMetadata, SlotValue, State, PropertyValue, Metadata } from "./UI5ElementMetadata.js";
 import EventProvider from "./EventProvider.js";
 import type { TemplateFunction } from "./renderer/executeTemplate.js";
 import type { AccessibilityInfo, PromiseResolve, ComponentStylesData, ClassMap } from "./types.js";
@@ -38,6 +38,22 @@ type TargetedEventHandler<D, T> = {
 type Convert<T, K extends UI5Element> = {
     [Property in keyof T as `on${KebabToPascal<string & Property>}`]: IsAny<T[Property], any, TargetedEventHandler<T[Property], K>>;
 };
+declare const SlotMarker: unique symbol;
+declare const DefaultSlotMarker: unique symbol;
+export type Slot<T> = T[] & {
+    [SlotMarker]: true;
+};
+export type DefaultSlot<T> = T[] & {
+    [DefaultSlotMarker]: true;
+};
+export type IsSlot<T> = T extends {
+    [SlotMarker]: true;
+} ? true : T extends {
+    [DefaultSlotMarker]: true;
+} ? true : false;
+export type IsDefaultSlot<T> = T extends {
+    [DefaultSlotMarker]: true;
+} ? true : false;
 /**
  * @class
  * Base class for all UI5 Web Components
@@ -94,6 +110,7 @@ declare abstract class UI5Element extends HTMLElement {
      * @private
      */
     connectedCallback(): Promise<void>;
+    get definePromise(): Promise<void>;
     /**
      * Do not call this method from derivatives of UI5Element, use "onExitDOM" only
      * @private
@@ -140,7 +157,7 @@ declare abstract class UI5Element extends HTMLElement {
      * Removes all children from the slot and detaches listeners, if any
      * @private
      */
-    _clearSlot(slotName: string, slotData: Slot): void;
+    _clearSlot(slotName: string, slotData: SlotMetadata): void;
     /**
      * Attach a callback that will be executed whenever the component is invalidated
      *
@@ -406,7 +423,7 @@ declare abstract class UI5Element extends HTMLElement {
     static fetchI18nBundles(): Promise<I18nBundle[]>;
     static fetchCLDR(): Promise<void>;
     static asyncFinished: boolean;
-    static definePromise: Promise<void> | undefined;
+    static _definePromise: Promise<void> | undefined;
     static i18nBundleStorage: Record<string, I18nBundle>;
     static get i18nBundles(): Record<string, I18nBundle>;
     /**

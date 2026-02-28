@@ -10,7 +10,7 @@ import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
 import customElement from "@ui5/webcomponents-base/dist/decorators/customElement.js";
 import property from "@ui5/webcomponents-base/dist/decorators/property.js";
 import event from "@ui5/webcomponents-base/dist/decorators/event-strict.js";
-import slot from "@ui5/webcomponents-base/dist/decorators/slot.js";
+import slot from "@ui5/webcomponents-base/dist/decorators/slot-strict.js";
 import query from "@ui5/webcomponents-base/dist/decorators/query.js";
 import i18n from "@ui5/webcomponents-base/dist/decorators/i18n.js";
 import jsxRenderer from "@ui5/webcomponents-base/dist/renderer/JsxRenderer.js";
@@ -23,7 +23,7 @@ import "@ui5/webcomponents-localization/dist/features/calendar/Gregorian.js"; //
 import DateFormat from "@ui5/webcomponents-localization/dist/DateFormat.js";
 import IconMode from "./types/IconMode.js";
 import getCachedLocaleDataInstance from "@ui5/webcomponents-localization/dist/getCachedLocaleDataInstance.js";
-import { isShow, isEnter, isPageUp, isPageDown, isPageUpShift, isPageDownShift, isPageUpShiftCtrl, isPageDownShiftCtrl, isTabNext, isTabPrevious, isF6Next, isF6Previous, } from "@ui5/webcomponents-base/dist/Keys.js";
+import { isShow, isPageUp, isPageDown, isPageUpShift, isPageDownShift, isPageUpShiftCtrl, isPageDownShiftCtrl, isTabNext, isTabPrevious, isF6Next, isF6Previous, } from "@ui5/webcomponents-base/dist/Keys.js";
 import UI5Date from "@ui5/webcomponents-localization/dist/dates/UI5Date.js";
 import TimePickerTemplate from "./TimePickerTemplate.js";
 import { TIMEPICKER_SUBMIT_BUTTON, TIMEPICKER_CANCEL_BUTTON, TIMEPICKER_INPUT_DESCRIPTION, TIMEPICKER_POPOVER_ACCESSIBLE_NAME, DATETIME_COMPONENTS_PLACEHOLDER_PREFIX, VALUE_STATE_ERROR, VALUE_STATE_INFORMATION, VALUE_STATE_SUCCESS, VALUE_STATE_WARNING, TIMEPICKER_VALUE_MISSING, TIMEPICKER_PATTERN_MISSMATCH, TIMEPICKER_OPEN_ICON_TITLE_OPENED, TIMEPICKER_OPEN_ICON_TITLE, INPUT_SUGGESTIONS_TITLE, } from "./generated/i18n/i18n-defaults.js";
@@ -370,6 +370,11 @@ let TimePicker = TimePicker_1 = class TimePicker extends UI5Element {
         const target = e.target;
         this._updateValueAndFireEvents(target.value, true, ["change", "value-changed"]);
     }
+    _onInputRequestSubmit() {
+        if (this._internals.form) {
+            submitForm(this);
+        }
+    }
     _handleInputLiveChange(e) {
         if (this._isPhone) {
             e.preventDefault();
@@ -402,12 +407,7 @@ let TimePicker = TimePicker_1 = class TimePicker extends UI5Element {
         if (this.open) {
             return;
         }
-        if (isEnter(e)) {
-            if (this._internals.form) {
-                submitForm(this);
-            }
-        }
-        else if (isPageUpShiftCtrl(e)) {
+        if (isPageUpShiftCtrl(e)) {
             e.preventDefault();
             this._modifyValueBy(1, "second");
         }

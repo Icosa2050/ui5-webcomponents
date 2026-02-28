@@ -8,6 +8,7 @@ import getLocale from "@ui5/webcomponents-base/dist/locale/getLocale.js";
 const DEFAULT_DELIMITER = "-";
 /**
  * @class
+ * @implements {IDynamicDateRangeOption}
  * @constructor
  * @public
  * @since 2.16.0

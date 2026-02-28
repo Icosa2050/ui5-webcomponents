@@ -5,7 +5,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
-import { customElement, property, slot } from "@ui5/webcomponents-base/dist/decorators.js";
+import { customElement, property, slotStrict as slot } from "@ui5/webcomponents-base/dist/decorators.js";
 import jsxRenderer from "@ui5/webcomponents-base/dist/renderer/JsxRenderer.js";
 import UserSettingsViewTemplate from "./UserSettingsViewTemplate.js";
 import UserSettingViewCss from "./generated/themes/UserSettingsView.css.js";
@@ -17,7 +17,6 @@ import UserSettingViewCss from "./generated/themes/UserSettingsView.css.js";
  *
  * @constructor
  * @extends UI5Element
- * @experimental
  * @public
  * @since 2.8.0
  */

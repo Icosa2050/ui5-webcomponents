@@ -1,4 +1,5 @@
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
+import type { Slot } from "@ui5/webcomponents-base/dist/UI5Element.js";
 import type I18nBundle from "@ui5/webcomponents-base/dist/i18nBundle.js";
 import SideContentPosition from "./types/SideContentPosition.js";
 import SideContentVisibility from "./types/SideContentVisibility.js";
@@ -167,7 +168,7 @@ declare class DynamicSideContent extends UI5Element {
      * Defines the side content.
      * @public
      */
-    sideContent: Array<HTMLElement>;
+    sideContent: Slot<HTMLElement>;
     _mainContent: HTMLElement;
     _sideContent: HTMLElement;
     _resizeObserver?: ResizeObserver;

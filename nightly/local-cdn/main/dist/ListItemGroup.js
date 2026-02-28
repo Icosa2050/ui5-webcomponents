@@ -4,7 +4,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-import slot from "@ui5/webcomponents-base/dist/decorators/slot.js";
+import slot from "@ui5/webcomponents-base/dist/decorators/slot-strict.js";
 import event from "@ui5/webcomponents-base/dist/decorators/event-strict.js";
 import property from "@ui5/webcomponents-base/dist/decorators/property.js";
 import customElement from "@ui5/webcomponents-base/dist/decorators/customElement.js";
@@ -16,6 +16,8 @@ import MovePlacement from "@ui5/webcomponents-base/dist/types/MovePlacement.js";
 import ListItemGroupTemplate from "./ListItemGroupTemplate.js";
 // Styles
 import ListItemGroupCss from "./generated/themes/ListItemGroup.css.js";
+import WrappingType from "./types/WrappingType.js";
+import createInstanceChecker from "@ui5/webcomponents-base/dist/util/createInstanceChecker.js";
 /**
  * @class
  * ### Overview
@@ -26,6 +28,7 @@ import ListItemGroupCss from "./generated/themes/ListItemGroup.css.js";
  * ### ES6 Module Import
  * `import "@ui5/webcomponents/dist/ListItemGroup.js";`
  * @csspart header - Used to style the header item of the group
+ * @csspart title - Used to style the title of the group header
  * @constructor
  * @extends UI5Element
  * @public
@@ -102,6 +105,7 @@ let ListItemGroup = class ListItemGroup extends UI5Element {
     getFocusDomRef() {
         return this.groupHeaderItem || this.items.at(0);
     }
+    getGroupHeaderWrapping() { return WrappingType.None; }
 };
 __decorate([
     property()
@@ -123,7 +127,7 @@ __decorate([
     property({ type: Boolean })
 ], ListItemGroup.prototype, "focused", void 0);
 __decorate([
-    slot({ type: HTMLElement })
+    slot()
 ], ListItemGroup.prototype, "header", void 0);
 ListItemGroup = __decorate([
     customElement({
@@ -162,9 +166,6 @@ ListItemGroup = __decorate([
     })
 ], ListItemGroup);
 ListItemGroup.define();
-const isInstanceOfListItemGroup = (object) => {
-    return "isListItemGroup" in object;
-};
 export default ListItemGroup;
-export { isInstanceOfListItemGroup };
+export const isInstanceOfListItemGroup = createInstanceChecker("isListItemGroup");
 //# sourceMappingURL=ListItemGroup.js.map

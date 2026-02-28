@@ -8,6 +8,7 @@ import UploadState from "./types/UploadState.js";
 import "@ui5/webcomponents-icons/dist/refresh.js";
 import "@ui5/webcomponents-icons/dist/stop.js";
 import "@ui5/webcomponents-icons/dist/edit.js";
+import type { Slot } from "@ui5/webcomponents-base/dist/UI5Element.js";
 /**
  * @class
  *
@@ -109,7 +110,7 @@ declare class UploadCollectionItem extends ListItem {
      * **Note:** Use `ui5-icon` or `img` for the intended design.
      * @public
      */
-    thumbnail: Array<HTMLElement>;
+    thumbnail: Slot<HTMLElement>;
     static i18nFioriBundle: I18nBundle;
     /**
      * @override

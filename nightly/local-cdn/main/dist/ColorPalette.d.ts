@@ -1,4 +1,5 @@
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
+import type { DefaultSlot } from "@ui5/webcomponents-base/dist/UI5Element.js";
 import type I18nBundle from "@ui5/webcomponents-base/dist/i18nBundle.js";
 import ItemNavigation from "@ui5/webcomponents-base/dist/delegate/ItemNavigation.js";
 import type { ITabbable } from "@ui5/webcomponents-base/dist/delegate/ItemNavigation.js";
@@ -71,6 +72,20 @@ declare class ColorPalette extends UI5Element {
      */
     defaultColor?: string;
     /**
+     * Defines the accessible name of the component.
+     * @default undefined
+     * @public
+     * @since 2.20.0
+     */
+    accessibleName?: string;
+    /**
+     * Receives id(or many ids) of the elements that label the component.
+     * @default undefined
+     * @public
+     * @since 2.20.0
+     */
+    accessibleNameRef?: string;
+    /**
      * Defines the selected color, only valid CSS color values accepted
      * @private
      */
@@ -103,7 +118,7 @@ declare class ColorPalette extends UI5Element {
      * Defines the `ui5-color-palette-item` elements.
      * @public
      */
-    colors: Array<IColorPaletteItem>;
+    colors: DefaultSlot<IColorPaletteItem>;
     _itemNavigation: ItemNavigation;
     _itemNavigationRecentColors: ItemNavigation;
     _recentColors: Array<string>;

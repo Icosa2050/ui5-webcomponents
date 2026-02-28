@@ -1,4 +1,5 @@
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
+import type { DefaultSlot } from "@ui5/webcomponents-base/dist/UI5Element.js";
 import type I18nBundle from "@ui5/webcomponents-base/dist/i18nBundle.js";
 import type MenuItem from "./MenuItem.js";
 import MenuItemGroupCheckMode from "./types/MenuItemGroupCheckMode.js";
@@ -45,7 +46,7 @@ declare class MenuItemGroup extends UI5Element implements IMenuItem {
      * **Note:** The slot can hold any combination of components of type `ui5-menu-item` or `ui5-menu-separator` or both.
      * @public
      */
-    items: Array<IMenuItem>;
+    items: DefaultSlot<IMenuItem>;
     static i18nBundle: I18nBundle;
     get ariaLabelText(): string | undefined;
     get isGroup(): boolean;
@@ -73,6 +74,5 @@ declare class MenuItemGroup extends UI5Element implements IMenuItem {
      */
     _handleItemCheck(e: CustomEvent): void;
 }
-declare const isInstanceOfMenuItemGroup: (object: any) => object is MenuItemGroup;
 export default MenuItemGroup;
-export { isInstanceOfMenuItemGroup, };
+export declare const isInstanceOfMenuItemGroup: (object: any) => object is MenuItemGroup;

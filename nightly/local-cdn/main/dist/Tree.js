@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
 import customElement from "@ui5/webcomponents-base/dist/decorators/customElement.js";
 import property from "@ui5/webcomponents-base/dist/decorators/property.js";
-import slot from "@ui5/webcomponents-base/dist/decorators/slot.js";
+import slot from "@ui5/webcomponents-base/dist/decorators/slot-strict.js";
 import DragAndDropHandler from "./delegate/DragAndDropHandler.js";
 import MovePlacement from "@ui5/webcomponents-base/dist/types/MovePlacement.js";
 import event from "@ui5/webcomponents-base/dist/decorators/event-strict.js";
@@ -19,6 +19,7 @@ import ListAccessibleRole from "./types/ListAccessibleRole.js";
 import TreeTemplate from "./TreeTemplate.js";
 // Styles
 import TreeCss from "./generated/themes/Tree.css.js";
+import createInstanceChecker from "@ui5/webcomponents-base/dist/util/createInstanceChecker.js";
 /**
  * @class
  *
@@ -153,13 +154,13 @@ let Tree = class Tree extends UI5Element {
     }
     _onListItemMouseOver(e) {
         const target = e.target;
-        if (this._isInstanceOfTreeItemBase(target)) {
+        if (_isInstanceOfTreeItemBase(target)) {
             this.fireDecoratorEvent("item-mouseover", { item: target });
         }
     }
     _onListItemMouseOut(e) {
         const target = e.target;
-        if (this._isInstanceOfTreeItemBase(target)) {
+        if (_isInstanceOfTreeItemBase(target)) {
             this.fireDecoratorEvent("item-mouseout", { item: target });
         }
     }
@@ -246,9 +247,6 @@ let Tree = class Tree extends UI5Element {
             return placements.filter(placement => placement !== MovePlacement.On);
         }
         return placements;
-    }
-    _isInstanceOfTreeItemBase(object) {
-        return "isTreeItem" in object;
     }
 };
 __decorate([
@@ -391,6 +389,7 @@ Tree = __decorate([
         cancelable: true,
     })
 ], Tree);
+const _isInstanceOfTreeItemBase = createInstanceChecker("isTreeItem");
 const walkTree = (el, level, callback) => {
     (el.items).forEach((item, index) => {
         callback(item, level, index);

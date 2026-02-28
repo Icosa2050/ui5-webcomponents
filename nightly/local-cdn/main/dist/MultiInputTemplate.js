@@ -1,5 +1,6 @@
 import { jsx as _jsx, Fragment as _Fragment, jsxs as _jsxs } from "@ui5/webcomponents-base/jsx-runtime";
 import Icon from "./Icon.js";
+import multiSelectAll from "@ui5/webcomponents-icons/dist/multiselect-all.js";
 import InputTemplate from "./InputTemplate.js";
 import Tokenizer from "./Tokenizer.js";
 import ToggleButton from "./ToggleButton.js";
@@ -39,7 +40,7 @@ function multiInputSuggestionsList() {
     return (_jsx(List, { accessibleRole: ListAccessibleRole.ListBox, separators: this.suggestionSeparators, selectionMode: "Single", onMouseDown: this.onItemMouseDown, onItemClick: this._handleSuggestionItemPress, onSelectionChange: this._handleSelectionChange, children: _jsx("slot", {}) }));
 }
 function multiInputMobileHeader() {
-    return (_jsx(ToggleButton, { class: "ui5-multi-input-mobile-dialog-button", design: "Transparent", icon: "multiselect-all", accessibleName: this._filterButtonAccessibleName, disabled: !this.tokens?.length, pressed: this._effectiveShowTokensInSuggestions, onClick: () => {
+    return (_jsx(ToggleButton, { class: "ui5-multi-input-mobile-dialog-button", design: "Transparent", icon: multiSelectAll, accessibleName: this._filterButtonAccessibleName, disabled: !this.tokens?.length, pressed: this._effectiveShowTokensInSuggestions, onClick: () => {
             this._userToggledShowTokens = true;
             this._showTokensInSuggestions = !this._effectiveShowTokensInSuggestions;
         } }));

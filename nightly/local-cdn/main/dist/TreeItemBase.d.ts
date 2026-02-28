@@ -4,6 +4,7 @@ import type ValueState from "@ui5/webcomponents-base/dist/types/ValueState.js";
 import ListItem from "./ListItem.js";
 import "@ui5/webcomponents-icons/dist/navigation-right-arrow.js";
 import "@ui5/webcomponents-icons/dist/navigation-down-arrow.js";
+import type { DefaultSlot, Slot } from "@ui5/webcomponents-base/dist/UI5Element.js";
 type TreeItemBaseEventDetail = {
     item: TreeItemBase;
 };
@@ -125,7 +126,7 @@ declare class TreeItemBase extends ListItem {
      * **Note:** Use `ui5-tree-item` or `ui5-tree-item-custom`
      * @public
      */
-    items: Array<TreeItemBase>;
+    items: DefaultSlot<TreeItemBase>;
     /**
      * **Note:** While the slot allows option for setting custom avatar, to match the
      * design guidelines, please use the `ui5-avatar` with size XS.
@@ -135,7 +136,7 @@ declare class TreeItemBase extends ListItem {
      * @since 2.10.0
      * @public
      */
-    image: Array<HTMLElement>;
+    image: Slot<HTMLElement>;
     static i18nBundle: I18nBundle;
     onBeforeRendering(): void;
     get classes(): ClassMap;

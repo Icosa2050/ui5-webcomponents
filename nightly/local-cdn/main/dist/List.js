@@ -13,7 +13,7 @@ import toLowercaseEnumValue from "@ui5/webcomponents-base/dist/util/toLowercaseE
 import property from "@ui5/webcomponents-base/dist/decorators/property.js";
 import event from "@ui5/webcomponents-base/dist/decorators/event-strict.js";
 import customElement from "@ui5/webcomponents-base/dist/decorators/customElement.js";
-import slot from "@ui5/webcomponents-base/dist/decorators/slot.js";
+import slot from "@ui5/webcomponents-base/dist/decorators/slot-strict.js";
 import i18n from "@ui5/webcomponents-base/dist/decorators/i18n.js";
 import { renderFinished } from "@ui5/webcomponents-base/dist/Render.js";
 import getActiveElement from "@ui5/webcomponents-base/dist/util/getActiveElement.js";
@@ -35,7 +35,7 @@ import ListTemplate from "./ListTemplate.js";
 // Styles
 import listCss from "./generated/themes/List.css.js";
 // Texts
-import { LIST_ROLE_LIST_GROUP_DESCRIPTION, LIST_ROLE_LISTBOX_GROUP_DESCRIPTION, LOAD_MORE_TEXT, ARIA_LABEL_LIST_SELECTABLE, ARIA_LABEL_LIST_MULTISELECTABLE, ARIA_LABEL_LIST_DELETABLE, } from "./generated/i18n/i18n-defaults.js";
+import { LIST_ROLE_DESCRIPTION, LIST_ROLE_LIST_GROUP_DESCRIPTION, LIST_ROLE_LISTBOX_GROUP_DESCRIPTION, LOAD_MORE_TEXT, ARIA_LABEL_LIST_SELECTABLE, ARIA_LABEL_LIST_MULTISELECTABLE, ARIA_LABEL_LIST_DELETABLE, } from "./generated/i18n/i18n-defaults.js";
 import { isInstanceOfListItemGroup } from "./ListItemGroup.js";
 const INFINITE_SCROLL_DEBOUNCE_RATE = 250; // ms
 const PAGE_UP_DOWN_SIZE = 10;
@@ -340,7 +340,22 @@ let List = List_1 = class List extends UI5Element {
         return this._associatedLabelsRefTexts || getEffectiveAriaLabelText(this);
     }
     get ariaDescriptionText() {
-        return this._associatedDescriptionRefTexts || getEffectiveAriaDescriptionText(this) || this._getDescriptionForGroups();
+        const parts = [];
+        if (this.accessibleRole === ListAccessibleRole.List) {
+            parts.push(this.defaultAriaDescriptionText);
+        }
+        const externalDescription = this._associatedDescriptionRefTexts || getEffectiveAriaDescriptionText(this);
+        if (externalDescription) {
+            parts.push(externalDescription);
+        }
+        const groupDescription = this._getDescriptionForGroups();
+        if (groupDescription) {
+            parts.push(groupDescription);
+        }
+        return parts.join(" ");
+    }
+    get defaultAriaDescriptionText() {
+        return List_1.i18nBundle.getText(LIST_ROLE_DESCRIPTION);
     }
     get growingButtonAriaLabel() {
         return this.accessibilityAttributes.growingButton?.name;
@@ -519,6 +534,9 @@ let List = List_1 = class List extends UI5Element {
                 groupCount++;
                 // subtract group itself for proper group header item count
                 groupItemCount += groupItems.length - 1;
+            }
+            else if (hasListItems(item)) {
+                item.assignedSlot && items.push(...item.listItems);
             }
             else {
                 item.assignedSlot && items.push(item);
@@ -1207,5 +1225,8 @@ List = List_1 = __decorate([
     })
 ], List);
 List.define();
+const hasListItems = (item) => {
+    return "hasListItems" in item && item.hasListItems;
+};
 export default List;
 //# sourceMappingURL=List.js.map

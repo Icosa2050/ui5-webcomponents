@@ -1,4 +1,5 @@
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
+import type { Slot, DefaultSlot } from "@ui5/webcomponents-base/dist/UI5Element.js";
 import type { InputEventDetail } from "@ui5/webcomponents/dist/Input.js";
 import type { ListItemClickEventDetail } from "@ui5/webcomponents/dist/List.js";
 import type I18nBundle from "@ui5/webcomponents-base/dist/i18nBundle.js";
@@ -20,7 +21,6 @@ type UserSettingsBeforeCloseEventDetail = PopupBeforeCloseEventDetail;
  *
  * @constructor
  * @extends UI5Element
- * @experimental
  * @public
  * @since 2.8.0
  */
@@ -59,13 +59,13 @@ declare class UserSettingsDialog extends UI5Element {
      * **Note:**  If no setting item is set as `selected`, the first one will be selected.
      * @public
      */
-    items: Array<UserSettingsItem>;
+    items: DefaultSlot<UserSettingsItem>;
     /**
      * Defines the fixed user settings items.
      *
      * @public
      */
-    fixedItems: Array<UserSettingsItem>;
+    fixedItems: Slot<UserSettingsItem>;
     static i18nBundle: I18nBundle;
     /**
      * @private

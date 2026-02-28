@@ -8,7 +8,7 @@ var Breadcrumbs_1;
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
 import customElement from "@ui5/webcomponents-base/dist/decorators/customElement.js";
 import property from "@ui5/webcomponents-base/dist/decorators/property.js";
-import slot from "@ui5/webcomponents-base/dist/decorators/slot.js";
+import slot from "@ui5/webcomponents-base/dist/decorators/slot-strict.js";
 import event from "@ui5/webcomponents-base/dist/decorators/event-strict.js";
 import i18n from "@ui5/webcomponents-base/dist/decorators/i18n.js";
 import ItemNavigation from "@ui5/webcomponents-base/dist/delegate/ItemNavigation.js";
@@ -52,6 +52,7 @@ import breadcrumbsPopoverCss from "./generated/themes/BreadcrumbsPopover.css.js"
  * - [End] - Navigates to the last item.
  * @constructor
  * @extends UI5Element
+ * @implements {IOverflowToolbarItem}
  * @public
  * @since 1.0.0-rc.15
  */
@@ -451,6 +452,9 @@ let Breadcrumbs = Breadcrumbs_1 = class Breadcrumbs extends UI5Element {
     }
     get _cancelButtonText() {
         return Breadcrumbs_1.i18nBundle.getText(BREADCRUMBS_CANCEL_BUTTON);
+    }
+    get hasOverflow() {
+        return true;
     }
 };
 __decorate([

@@ -3,8 +3,12 @@ import { getI18nBundle } from "../../i18nBundle.js";
 import { DRAG_DROP_MULTIPLE_TEXT, } from "../../generated/i18n/i18n-defaults.js";
 const MIN_MULTI_DRAG_COUNT = 2;
 let draggedElement = null;
-const setDraggedElement = (element) => {
+const setDraggedElement = (element, e) => {
     draggedElement = element;
+    // Store the dragged element's ID in the dataTransfer object to ensure
+    // the drag operation is recognized across different browsers and contexts.
+    // Without this, Safari browser in iOS may not recognize the drag operation.
+    e?.dataTransfer?.setData("text/plain", element ? element.id : "");
 };
 const clearDraggedElement = () => {
     draggedElement = null;

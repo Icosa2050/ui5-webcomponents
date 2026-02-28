@@ -21,8 +21,8 @@ declare class ToolbarLabel extends ToolbarItem {
      */
     text: string;
     /**
-     * @override
      * ToolbarLabel is not interactive.
+     * @override
      */
     get isInteractive(): boolean;
     /**

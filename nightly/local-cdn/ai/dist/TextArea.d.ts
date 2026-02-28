@@ -1,5 +1,6 @@
 import { BaseTextArea } from "@ui5/webcomponents/dist/TextArea.js";
 import type I18nBundle from "@ui5/webcomponents-base/dist/i18nBundle.js";
+import type { Slot } from "@ui5/webcomponents-base/dist/UI5Element.js";
 type TextAreaVersionChangeEventDetail = {
     backwards: boolean;
 };
@@ -71,7 +72,7 @@ declare class TextArea extends BaseTextArea {
      */
     totalVersions: number;
     focused: boolean;
-    menu: Array<HTMLElement>;
+    menu: Slot<HTMLElement>;
     static i18nBundle: I18nBundle;
     static onDefine(): Promise<void>;
     /**

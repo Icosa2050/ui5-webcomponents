@@ -8,7 +8,7 @@ var Avatar_1;
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
 import customElement from "@ui5/webcomponents-base/dist/decorators/customElement.js";
 import property from "@ui5/webcomponents-base/dist/decorators/property.js";
-import slot from "@ui5/webcomponents-base/dist/decorators/slot.js";
+import slot from "@ui5/webcomponents-base/dist/decorators/slot-strict.js";
 import event from "@ui5/webcomponents-base/dist/decorators/event-strict.js";
 import i18n from "@ui5/webcomponents-base/dist/decorators/i18n.js";
 import jsxRenderer from "@ui5/webcomponents-base/dist/renderer/JsxRenderer.js";
@@ -22,6 +22,7 @@ import { AVATAR_TOOLTIP, AVATAR_TYPE_BUTTON, AVATAR_TYPE_IMAGE, } from "./genera
 // Styles
 import AvatarCss from "./generated/themes/Avatar.css.js";
 import AvatarSize from "./types/AvatarSize.js";
+import AvatarMode from "./types/AvatarMode.js";
 // Icon
 import "@ui5/webcomponents-icons/dist/employee.js";
 /**
@@ -36,7 +37,7 @@ import "@ui5/webcomponents-icons/dist/employee.js";
  *
  * ### Keyboard Handling
  *
- * - [Space] / [Enter] or [Return] - Fires the `click` event if the `interactive` property is set to true.
+ * - [Space] / [Enter] or [Return] - Fires the `click` event if the `mode` is set to `Interactive` or the deprecated `interactive` property is set to true.
  * - [Shift] - If [Space] is pressed, pressing [Shift] releases the component without triggering the click event.
  *
  * ### ES6 Module Import
@@ -61,12 +62,31 @@ let Avatar = Avatar_1 = class Avatar extends UI5Element {
         /**
          * Defines if the avatar is interactive (focusable and pressable).
          *
+         * **Note:** When set to `true`, this property takes precedence over the `mode` property,
+         * and the avatar will be rendered as interactive (role="button", focusable) regardless of the `mode` value.
+         *
          * **Note:** This property won't have effect if the `disabled`
          * property is set to `true`.
          * @default false
          * @public
+         * @deprecated Set `mode="Interactive"` instead for the same functionality with proper accessibility.
          */
         this.interactive = false;
+        /**
+         * Defines the mode of the component.
+         *
+         * **Note:**
+         * - `Image` (default) - renders with role="img"
+         * - `Decorative` - renders with role="presentation" and aria-hidden="true", making it purely decorative
+         * - `Interactive` - renders with role="button", focusable (tabindex="0"), and supports keyboard interaction
+         *
+         * **Note:** This property is ignored when the `interactive` property is set to `true`.
+         * In that case, the avatar will always be rendered as interactive.
+         * @default "Image"
+         * @public
+         * @since 2.20
+         */
+        this.mode = "Image";
         /**
          * Defines the name of the fallback icon, which should be displayed in the following cases:
          *
@@ -164,13 +184,26 @@ let Avatar = Avatar_1 = class Avatar extends UI5Element {
         return this.getAttribute("color-scheme") || this._colorScheme;
     }
     get _role() {
-        return this._interactive ? "button" : "img";
+        if (this._interactive) {
+            return "button";
+        }
+        if (this.mode === AvatarMode.Decorative) {
+            return "presentation";
+        }
+        return "img";
+    }
+    get effectiveAriaHidden() {
+        // interactive property takes precedence - never hidden when interactive
+        if (this.interactive) {
+            return undefined;
+        }
+        return this.mode === AvatarMode.Decorative ? "true" : undefined;
     }
     get _ariaHasPopup() {
         return this._getAriaHasPopup();
     }
     get _interactive() {
-        return this.interactive && !this.disabled;
+        return (this.interactive || this.mode === AvatarMode.Interactive) && !this.disabled;
     }
     get validInitials() {
         // initials should consist of only 1,2 or 3 latin letters
@@ -263,6 +296,7 @@ let Avatar = Avatar_1 = class Avatar extends UI5Element {
     }
     _getAriaHasPopup() {
         const ariaHaspopup = this.accessibilityAttributes.hasPopup;
+        // aria-haspopup only applies when avatar is interactive
         if (!this._interactive || !ariaHaspopup) {
             return;
         }
@@ -324,7 +358,7 @@ let Avatar = Avatar_1 = class Avatar extends UI5Element {
     get accessibilityInfo() {
         return {
             role: this._role,
-            type: this.interactive ? Avatar_1.i18nBundle.getText(AVATAR_TYPE_BUTTON) : Avatar_1.i18nBundle.getText(AVATAR_TYPE_IMAGE),
+            type: this._interactive ? Avatar_1.i18nBundle.getText(AVATAR_TYPE_BUTTON) : Avatar_1.i18nBundle.getText(AVATAR_TYPE_IMAGE),
             description: this.accessibleNameText,
             disabled: this.disabled,
         };
@@ -336,6 +370,9 @@ __decorate([
 __decorate([
     property({ type: Boolean })
 ], Avatar.prototype, "interactive", void 0);
+__decorate([
+    property()
+], Avatar.prototype, "mode", void 0);
 __decorate([
     property()
 ], Avatar.prototype, "icon", void 0);

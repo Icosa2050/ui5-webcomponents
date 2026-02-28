@@ -43,10 +43,6 @@ let SliderTooltip = SliderTooltip_1 = class SliderTooltip extends UI5Element {
         if (!this.hasAttribute("popover")) {
             this.setAttribute("popover", "manual");
         }
-        // Workaround to skip DOM state
-        if (this.inputRef && this.inputRef.value !== this.value) {
-            this.inputRef.value = this.value;
-        }
         if (this.isConnected) {
             if (this.open) {
                 this.showPopover();

@@ -8,9 +8,8 @@ var Text_1;
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
 import customElement from "@ui5/webcomponents-base/dist/decorators/customElement.js";
 import property from "@ui5/webcomponents-base/dist/decorators/property.js";
-import slot from "@ui5/webcomponents-base/dist/decorators/slot.js";
+import slot from "@ui5/webcomponents-base/dist/decorators/slot-strict.js";
 import jsxRenderer from "@ui5/webcomponents-base/dist/renderer/JsxRenderer.js";
-import { getScopedVarName } from "@ui5/webcomponents-base/dist/CustomElementsScope.js";
 import i18n from "@ui5/webcomponents-base/dist/decorators/i18n.js";
 import willShowContent from "@ui5/webcomponents-base/dist/util/willShowContent.js";
 import TextEmptyIndicatorMode from "./types/TextEmptyIndicatorMode.js";
@@ -65,7 +64,7 @@ let Text = Text_1 = class Text extends UI5Element {
         this.emptyIndicatorMode = "Off";
     }
     onBeforeRendering() {
-        this.style.setProperty(getScopedVarName("--_ui5_text_max_lines"), `${this.maxLines}`);
+        this.style.setProperty("--_ui5_text_max_lines", `${this.maxLines}`);
     }
     get hasText() {
         return willShowContent(this.text);

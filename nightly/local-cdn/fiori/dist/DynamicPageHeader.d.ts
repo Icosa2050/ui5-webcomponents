@@ -1,5 +1,6 @@
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
 import type I18nBundle from "@ui5/webcomponents-base/dist/i18nBundle.js";
+import type { DefaultSlot } from "@ui5/webcomponents-base/dist/UI5Element.js";
 /**
  * @class
  *
@@ -38,7 +39,7 @@ declare class DynamicPageHeader extends UI5Element {
      *
      * @public
      */
-    content: HTMLElement[];
+    content: DefaultSlot<HTMLElement>;
     /**
      * Defines if the header is snapped.
      *

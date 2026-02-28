@@ -8,7 +8,7 @@ var FlexibleColumnLayout_1;
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
 import customElement from "@ui5/webcomponents-base/dist/decorators/customElement.js";
 import property from "@ui5/webcomponents-base/dist/decorators/property.js";
-import slot from "@ui5/webcomponents-base/dist/decorators/slot.js";
+import slot from "@ui5/webcomponents-base/dist/decorators/slot-strict.js";
 import event from "@ui5/webcomponents-base/dist/decorators/event-strict.js";
 import i18n from "@ui5/webcomponents-base/dist/decorators/i18n.js";
 import jsxRenderer from "@ui5/webcomponents-base/dist/renderer/JsxRenderer.js";
@@ -160,7 +160,6 @@ let FlexibleColumnLayout = FlexibleColumnLayout_1 = class FlexibleColumnLayout e
         * @default {}
         * @public
         * @since 2.16.0
-        * @experimental
         */
         this.layoutsConfiguration = {};
         /**
@@ -1160,12 +1159,13 @@ FlexibleColumnLayout = FlexibleColumnLayout_1 = __decorate([
     })
     /**
      * Fired when the `layoutsConfiguration` changes via user interaction by dragging the separators.
+     *
+     * **Note:** The `layout-configuration-change` event is in an experimental state and is a subject to change.
      * @param {FCLLayout} layout The current layout
      * @param {MEDIA} media The current media type
      * @param {array} columnLayout The effective column layout, f.e ["67%", "33%", "0px"]
      * @public
      * @since 2.16.0
-     * @experimental
      */
     ,
     event("layout-configuration-change", {

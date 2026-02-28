@@ -1,4 +1,5 @@
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
+import type { DefaultSlot, Slot } from "@ui5/webcomponents-base/dist/UI5Element.js";
 import type { UI5CustomEvent } from "@ui5/webcomponents-base";
 import type { AriaAutoComplete, AriaRole, AriaHasPopup, ClassMap } from "@ui5/webcomponents-base/dist/types.js";
 import type { ResizeObserverCallback } from "@ui5/webcomponents-base/dist/delegate/ResizeHandler.js";
@@ -15,6 +16,7 @@ import type { ListItemClickEventDetail, ListSelectionChangeEventDetail } from ".
 import type ResponsivePopover from "./ResponsivePopover.js";
 import type InputKeyHint from "./types/InputKeyHint.js";
 import type InputComposition from "./features/InputComposition.js";
+import InputSuggestionsFilter from "./types/InputSuggestionsFilter.js";
 /**
  * Interface for components that represent a suggestion item, usable in `ui5-input`
  * @public
@@ -104,6 +106,7 @@ declare class Input extends UI5Element implements SuggestionComponent, IFormInpu
         "change": InputEventDetail;
         "input": InputEventDetail;
         "select": void;
+        "_request-submit": void;
         "selection-change": InputSelectionChangeEventDetail;
         "type-ahead": void;
         "suggestion-scroll": InputSuggestionScrollEventDetail;
@@ -182,14 +185,6 @@ declare class Input extends UI5Element implements SuggestionComponent, IFormInpu
      */
     value: string;
     /**
-     * Defines the inner stored value of the component.
-     *
-     * **Note:** The property is updated upon typing. In some special cases the old value is kept (e.g. deleting the value after the dot in a float)
-     * @default ""
-     * @private
-     */
-    _innerValue: string;
-    /**
      * Defines the value state of the component.
      * @default "None"
      * @public
@@ -264,6 +259,13 @@ declare class Input extends UI5Element implements SuggestionComponent, IFormInpu
      */
     open: boolean;
     /**
+     * Defines the filter type of the component.
+     * @default "None"
+     * @public
+     * @since 2.19.0
+     */
+    filter: `${InputSuggestionsFilter}`;
+    /**
      * Defines whether the clear icon is visible.
      * @default false
      * @private
@@ -326,12 +328,12 @@ declare class Input extends UI5Element implements SuggestionComponent, IFormInpu
      *
      * @public
      */
-    suggestionItems: Array<IInputSuggestionItem>;
+    suggestionItems: DefaultSlot<IInputSuggestionItem>;
     /**
      * Defines the icon to be displayed in the component.
      * @public
      */
-    icon: Array<IIcon>;
+    icon: Slot<IIcon>;
     /**
      * Defines the value state message that will be displayed as pop up under the component.
      * The value state message slot should contain only one root element.
@@ -346,7 +348,7 @@ declare class Input extends UI5Element implements SuggestionComponent, IFormInpu
      * @since 1.0.0-rc.6
      * @public
      */
-    valueStateMessage: Array<HTMLElement>;
+    valueStateMessage: Slot<HTMLElement>;
     hasSuggestionItemSelected: boolean;
     valueBeforeItemSelection: string;
     valueBeforeSelectionStart: string;
@@ -356,7 +358,6 @@ declare class Input extends UI5Element implements SuggestionComponent, IFormInpu
     lastConfirmedValue: string;
     isTyping: boolean;
     _handleResizeBound: ResizeObserverCallback;
-    _keepInnerValue: boolean;
     _shouldAutocomplete?: boolean;
     _enterKeyDown?: boolean;
     _isKeyNavigation?: boolean;
@@ -391,6 +392,7 @@ declare class Input extends UI5Element implements SuggestionComponent, IFormInpu
     _isGroupItem(item: IInputSuggestionItem): boolean;
     onBeforeRendering(): void;
     onAfterRendering(): void;
+    _adjustContainsSelectionRange(): void;
     _onkeydown(e: KeyboardEvent): void;
     _onkeyup(e: KeyboardEvent): void;
     get currentItemIndex(): number;
@@ -428,6 +430,9 @@ declare class Input extends UI5Element implements SuggestionComponent, IFormInpu
     _getFirstMatchingItem(current: string): IInputSuggestionItemSelectable | undefined;
     _handleSelectionChange(e: CustomEvent<ListSelectionChangeEventDetail>): void;
     _selectMatchingItem(item: IInputSuggestionItemSelectable): void;
+    _filterItems(value: string): void;
+    _filterGroups(filterType: `${InputSuggestionsFilter}`, groupItems: IInputSuggestionItem[]): IInputSuggestionItem[];
+    _resetItemVisibility(): void;
     _handleTypeAhead(item: IInputSuggestionItemSelectable): void;
     _handleResize(): void;
     _updateAssociatedLabelsTexts(): void;

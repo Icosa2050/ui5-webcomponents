@@ -1,4 +1,5 @@
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
+import type { DefaultSlot } from "@ui5/webcomponents-base/dist/UI5Element.js";
 /**
  * @class
  * ### Overview
@@ -7,7 +8,6 @@ import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
  *
  * @constructor
  * @extends UI5Element
- * @experimental
  * @public
  * @since 2.8.0
  */
@@ -38,6 +38,6 @@ declare class UserSettingsView extends UI5Element {
      *
      * @public
      */
-    content: Array<HTMLElement>;
+    content: DefaultSlot<HTMLElement>;
 }
 export default UserSettingsView;

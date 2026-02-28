@@ -8,7 +8,7 @@ var Tab_1;
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
 import customElement from "@ui5/webcomponents-base/dist/decorators/customElement.js";
 import property from "@ui5/webcomponents-base/dist/decorators/property.js";
-import slot from "@ui5/webcomponents-base/dist/decorators/slot.js";
+import slot from "@ui5/webcomponents-base/dist/decorators/slot-strict.js";
 import jsxRenderer from "@ui5/webcomponents-base/dist/renderer/JsxRenderer.js";
 import executeTemplate from "@ui5/webcomponents-base/dist/renderer/executeTemplate.js";
 import willShowContent from "@ui5/webcomponents-base/dist/util/willShowContent.js";
@@ -318,7 +318,7 @@ let Tab = Tab_1 = class Tab extends UI5Element {
     }
     _ondragstart(e) {
         if (e.target instanceof HTMLElement) {
-            DragRegistry.setDraggedElement(this);
+            DragRegistry.setDraggedElement(this, e);
             e.target.setAttribute("data-moving", "");
         }
     }

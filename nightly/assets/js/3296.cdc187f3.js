@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunk_ui5_webcomponents_website=self.webpackChunk_ui5_webcomponents_website||[]).push([[3296],{23296:(e,s,b)=>{b.r(s)}}]);

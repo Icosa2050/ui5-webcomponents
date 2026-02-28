@@ -8,7 +8,7 @@ var DynamicPage_1;
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
 import customElement from "@ui5/webcomponents-base/dist/decorators/customElement.js";
 import property from "@ui5/webcomponents-base/dist/decorators/property.js";
-import slot from "@ui5/webcomponents-base/dist/decorators/slot.js";
+import slot from "@ui5/webcomponents-base/dist/decorators/slot-strict.js";
 import query from "@ui5/webcomponents-base/dist/decorators/query.js";
 import event from "@ui5/webcomponents-base/dist/decorators/event-strict.js";
 import i18n from "@ui5/webcomponents-base/dist/decorators/i18n.js";
@@ -188,9 +188,15 @@ let DynamicPage = DynamicPage_1 = class DynamicPage extends UI5Element {
      * @public
      */
     set headerSnapped(snapped) {
-        if (snapped !== this._headerSnapped) {
-            this._toggleHeader();
+        if (snapped === this._headerSnapped) {
+            return;
         }
+        if (!this.scrollContainer) {
+            this._headerSnapped = snapped;
+            this.showHeaderInStickArea = snapped;
+            return;
+        }
+        this._toggleHeader();
     }
     snapOnScroll() {
         debounce(() => this.snapTitleByScroll(), SCROLL_DEBOUNCE_RATE);

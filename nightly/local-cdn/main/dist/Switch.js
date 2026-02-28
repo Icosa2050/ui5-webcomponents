@@ -10,9 +10,9 @@ import customElement from "@ui5/webcomponents-base/dist/decorators/customElement
 import property from "@ui5/webcomponents-base/dist/decorators/property.js";
 import event from "@ui5/webcomponents-base/dist/decorators/event-strict.js";
 import jsxRenderer from "@ui5/webcomponents-base/dist/renderer/JsxRenderer.js";
-import { isSpace, isEnter, isShift, isEscape, } from "@ui5/webcomponents-base/dist/Keys.js";
+import { isSpace, isEnter, isShift, isEscape, isSpaceShift, } from "@ui5/webcomponents-base/dist/Keys.js";
 import i18n from "@ui5/webcomponents-base/dist/decorators/i18n.js";
-import { getEffectiveAriaLabelText } from "@ui5/webcomponents-base/dist/util/AccessibilityTextsHelper.js";
+import { getEffectiveAriaLabelText, getAssociatedLabelForTexts } from "@ui5/webcomponents-base/dist/util/AccessibilityTextsHelper.js";
 import "@ui5/webcomponents-icons/dist/accept.js";
 import "@ui5/webcomponents-icons/dist/decline.js";
 import "@ui5/webcomponents-icons/dist/less.js";
@@ -96,6 +96,7 @@ let Switch = Switch_1 = class Switch extends UI5Element {
          */
         this.value = "";
         this._cancelAction = false;
+        this._isSpacePressed = false;
     }
     get formValidityMessage() {
         return Switch_1.i18nBundle.getText(FORM_CHECKABLE_REQUIRED);
@@ -119,16 +120,33 @@ let Switch = Switch_1 = class Switch extends UI5Element {
         this.toggle();
     }
     _onkeydown(e) {
-        this._cancelAction = isShift(e) || isEscape(e);
         if (isSpace(e)) {
             e.preventDefault();
+            this._isSpacePressed = true;
+        }
+        else if (isShift(e) || isEscape(e)) {
+            this._cancelAction = true;
         }
         if (isEnter(e)) {
             this._onclick();
         }
     }
     _onkeyup(e) {
-        if (isSpace(e) && !this._cancelAction) {
+        const isSpaceKey = isSpace(e);
+        const isCancelKey = isShift(e) || isEscape(e);
+        if (isSpaceKey || isSpaceShift(e)) {
+            if (this._cancelAction) {
+                this._cancelAction = false;
+                this._isSpacePressed = false;
+                e.preventDefault();
+                return;
+            }
+            this._isSpacePressed = false;
+        }
+        else if (isCancelKey && !this._isSpacePressed) {
+            this._cancelAction = false;
+        }
+        if (isSpaceKey) {
             this._onclick();
         }
     }
@@ -171,7 +189,7 @@ let Switch = Switch_1 = class Switch extends UI5Element {
         return this.checked ? this.accessibilityOnText : this.accessibilityOffText;
     }
     get ariaLabelText() {
-        return [getEffectiveAriaLabelText(this), this.hiddenText].join(" ").trim();
+        return [getEffectiveAriaLabelText(this) || getAssociatedLabelForTexts(this), this.hiddenText].join(" ").trim();
     }
 };
 __decorate([
@@ -210,6 +228,9 @@ __decorate([
 __decorate([
     property({ type: Boolean, noAttribute: true })
 ], Switch.prototype, "_cancelAction", void 0);
+__decorate([
+    property({ type: Boolean, noAttribute: true })
+], Switch.prototype, "_isSpacePressed", void 0);
 __decorate([
     i18n("@ui5/webcomponents")
 ], Switch, "i18nBundle", void 0);

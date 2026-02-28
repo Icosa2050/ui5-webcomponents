@@ -8,6 +8,7 @@ import customElement from "@ui5/webcomponents-base/dist/decorators/customElement
 import ListItemGroup from "@ui5/webcomponents/dist/ListItemGroup.js";
 import SearchItemGroupCss from "./generated/themes/SearchItemGroup.css.js";
 import ListBoxItemGroupTemplate from "@ui5/webcomponents/dist/ListBoxItemGroupTemplate.js";
+import WrappingType from "@ui5/webcomponents/dist/types/WrappingType.js";
 /**
  * @class
  * The `ui5-search-item-group` is type of suggestion item,
@@ -21,6 +22,9 @@ import ListBoxItemGroupTemplate from "@ui5/webcomponents/dist/ListBoxItemGroupTe
 let SearchItemGroup = class SearchItemGroup extends ListItemGroup {
     get isGroupItem() {
         return true;
+    }
+    getGroupHeaderWrapping() {
+        return WrappingType.Normal;
     }
 };
 SearchItemGroup = __decorate([

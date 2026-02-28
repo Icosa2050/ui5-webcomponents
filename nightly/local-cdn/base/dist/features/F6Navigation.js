@@ -188,6 +188,10 @@ class F6Navigation {
             f6Registry.instance = new F6Navigation();
         }
     }
+    static destroy() {
+        const f6Registry = getSharedResource("F6Registry", {});
+        f6Registry.instance?.destroy();
+    }
 }
 registerFeature("F6Navigation", F6Navigation);
 export default F6Navigation;

@@ -1,4 +1,5 @@
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
+import type { DefaultSlot } from "@ui5/webcomponents-base/dist/UI5Element.js";
 import type SplitButton from "@ui5/webcomponents/dist/SplitButton.js";
 import type ButtonDesign from "@ui5/webcomponents/dist/types/ButtonDesign.js";
 import type ButtonState from "./ButtonState.js";
@@ -122,7 +123,7 @@ declare class Button extends UI5Element {
      * you only use `ui5-ai-button-state` components in order to preserve the intended design.
      * @public
      */
-    states: Array<ButtonState>;
+    states: DefaultSlot<ButtonState>;
     _splitButton?: SplitButton;
     _hiddenSplitButton?: SplitButton;
     static i18nBundleAi: I18nBundle;

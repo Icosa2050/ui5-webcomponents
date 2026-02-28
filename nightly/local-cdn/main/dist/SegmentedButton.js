@@ -9,13 +9,12 @@ import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
 import customElement from "@ui5/webcomponents-base/dist/decorators/customElement.js";
 import property from "@ui5/webcomponents-base/dist/decorators/property.js";
 import event from "@ui5/webcomponents-base/dist/decorators/event-strict.js";
-import slot from "@ui5/webcomponents-base/dist/decorators/slot.js";
+import slot from "@ui5/webcomponents-base/dist/decorators/slot-strict.js";
 import { getEffectiveAriaLabelText, getAssociatedLabelForTexts, getEffectiveAriaDescriptionText, } from "@ui5/webcomponents-base/dist/util/AccessibilityTextsHelper.js";
 import jsxRenderer from "@ui5/webcomponents-base/dist/renderer/JsxRenderer.js";
 import ItemNavigation from "@ui5/webcomponents-base/dist/delegate/ItemNavigation.js";
 import i18n from "@ui5/webcomponents-base/dist/decorators/i18n.js";
-import { getScopedVarName } from "@ui5/webcomponents-base/dist/CustomElementsScope.js";
-import { isSpace, isEnter, isShift, isEscape, } from "@ui5/webcomponents-base/dist/Keys.js";
+import { isSpace, isEnter, isShift, isEscape, isSpaceShift, } from "@ui5/webcomponents-base/dist/Keys.js";
 import { SEGMENTEDBUTTON_ARIA_DESCRIPTION, SEGMENTEDBUTTON_ARIA_DESCRIBEDBY } from "./generated/i18n/i18n-defaults.js";
 import "./SegmentedButtonItem.js";
 import SegmentedButtonSelectionMode from "./types/SegmentedButtonSelectionMode.js";
@@ -66,7 +65,8 @@ let SegmentedButton = SegmentedButton_1 = class SegmentedButton extends UI5Eleme
             getItemsCallback: () => this.navigatableItems,
         });
         this.hasPreviouslyFocusedItem = false;
-        this._actionCanceled = false;
+        this._cancelAction = false;
+        this._isSpacePressed = false;
     }
     onBeforeRendering() {
         const items = this.getSlottedNodes("items");
@@ -78,7 +78,7 @@ let SegmentedButton = SegmentedButton_1 = class SegmentedButton extends UI5Eleme
         });
         this.normalizeSelection();
         if (!this.itemsFitContent) {
-            this.style.setProperty(getScopedVarName("--_ui5_segmented_btn_items_count"), `${visibleItems.length}`);
+            this.style.setProperty("--_ui5_segmented_btn_items_count", `${visibleItems.length}`);
         }
     }
     normalizeSelection() {
@@ -139,19 +139,29 @@ let SegmentedButton = SegmentedButton_1 = class SegmentedButton extends UI5Eleme
         }
         else if (isSpace(e)) {
             e.preventDefault(); // Prevent scrolling
-            this._actionCanceled = false; // Reset the action cancellation flag
+            this._isSpacePressed = true;
         }
         else if (isShift(e) || isEscape(e)) {
-            this._actionCanceled = true; // Set the flag to cancel the action
+            this._cancelAction = true; // Set the flag to cancel the action
         }
     }
     _onkeyup(e) {
-        if (isSpace(e)) {
-            // Only select if the action was not canceled
-            if (!this._actionCanceled) {
-                this._selectItem(e);
+        const isSpaceKey = isSpace(e);
+        const isCancelKey = isShift(e) || isEscape(e);
+        if (isSpaceKey || isSpaceShift(e)) {
+            if (this._cancelAction) {
+                this._cancelAction = false;
+                this._isSpacePressed = false;
+                e.preventDefault();
+                return;
             }
-            this._actionCanceled = false; // Reset the flag after handling
+            this._isSpacePressed = false;
+        }
+        else if (isCancelKey && !this._isSpacePressed) {
+            this._cancelAction = false;
+        }
+        if (isSpaceKey) {
+            this._selectItem(e);
         }
     }
     _onmousedown(e) {

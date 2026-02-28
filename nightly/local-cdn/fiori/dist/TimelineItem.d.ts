@@ -1,4 +1,5 @@
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
+import type { DefaultSlot } from "@ui5/webcomponents-base/dist/UI5Element.js";
 import type I18nBundle from "@ui5/webcomponents-base/dist/i18nBundle.js";
 import type { I18nText } from "@ui5/webcomponents-base/dist/i18nBundle.js";
 import type { ITimelineItem } from "./Timeline.js";
@@ -64,7 +65,7 @@ declare class TimelineItem extends UI5Element implements ITimelineItem {
      * Defines the content of the `ui5-timeline-item`.
      * @public
      */
-    content: Array<Node>;
+    content: DefaultSlot<Node>;
     /**
      * @private
      */

@@ -9,7 +9,7 @@ import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
 import customElement from "@ui5/webcomponents-base/dist/decorators/customElement.js";
 import event from "@ui5/webcomponents-base/dist/decorators/event-strict.js";
 import property from "@ui5/webcomponents-base/dist/decorators/property.js";
-import slot from "@ui5/webcomponents-base/dist/decorators/slot.js";
+import slot from "@ui5/webcomponents-base/dist/decorators/slot-strict.js";
 import jsxRenderer from "@ui5/webcomponents-base/dist/renderer/JsxRenderer.js";
 import ResizeHandler from "@ui5/webcomponents-base/dist/delegate/ResizeHandler.js";
 import { renderFinished } from "@ui5/webcomponents-base/dist/Render.js";
@@ -20,7 +20,6 @@ import { isDesktop, } from "@ui5/webcomponents-base/dist/Device.js";
 import { isSpace, isEnter, isDown, isRight, isLeft, isUp, isCtrl, } from "@ui5/webcomponents-base/dist/Keys.js";
 import MediaRange from "@ui5/webcomponents-base/dist/MediaRange.js";
 import i18n from "@ui5/webcomponents-base/dist/decorators/i18n.js";
-import { getScopedVarName } from "@ui5/webcomponents-base/dist/CustomElementsScope.js";
 import "@ui5/webcomponents-icons/dist/slim-arrow-up.js";
 import "@ui5/webcomponents-icons/dist/slim-arrow-down.js";
 import arraysAreEqual from "@ui5/webcomponents-base/dist/util/arraysAreEqual.js";
@@ -268,7 +267,7 @@ let TabContainer = TabContainer_1 = class TabContainer extends UI5Element {
         }
         e.dataTransfer.dropEffect = "move";
         e.dataTransfer.effectAllowed = "move";
-        DragRegistry.setDraggedElement(e.target.realTabReference);
+        DragRegistry.setDraggedElement(e.target.realTabReference, e);
     }
     _onHeaderDragEnter(e) {
         e.preventDefault();
@@ -383,7 +382,9 @@ let TabContainer = TabContainer_1 = class TabContainer extends UI5Element {
             let items = siblings;
             if (this.items.includes(realTabReference)) {
                 items = siblings.filter(sibling => {
-                    return e.target.items.some(el => el.realTabReference === sibling);
+                    return e.target.items
+                        .filter(isInstanceOfTab)
+                        .some(el => el.realTabReference === sibling);
                 });
             }
             const nextPosition = findClosestPositionsByKey(items, realTabReference, e.detail.originalEvent);
@@ -425,7 +426,9 @@ let TabContainer = TabContainer_1 = class TabContainer extends UI5Element {
             let items = siblings;
             if (this.items.includes(realTabReference)) {
                 items = siblings.filter(sibling => {
-                    return e.target.items.some(el => el.realTabReference === sibling);
+                    return (e.target.items)
+                        .filter(isInstanceOfTab)
+                        .some(el => el.realTabReference === sibling);
                 });
             }
             const nextPosition = findClosestPositionsByKey(items, realTabReference, e.detail.originalEvent);
@@ -510,7 +513,10 @@ let TabContainer = TabContainer_1 = class TabContainer extends UI5Element {
         if (!this.responsivePopover.open) {
             return undefined;
         }
-        return this.responsivePopover.content[0].items.find(item => item.realTabReference === realTab);
+        const listItems = this.responsivePopover.content[0].items;
+        return listItems
+            .filter(isInstanceOfTab)
+            .find(item => item.realTabReference === realTab);
     }
     _onTabStripKeyDown(e) {
         const tab = getTabInStrip(e.target);
@@ -654,8 +660,8 @@ let TabContainer = TabContainer_1 = class TabContainer extends UI5Element {
                     return this._findTabInOverflow(item);
                 },
                 style: {
-                    [getScopedVarName("--_ui5-tab-indentation-level")]: level,
-                    [getScopedVarName("--_ui5-tab-level-has-icon")]: semanticIcons ? "1" : "0",
+                    "--_ui5-tab-indentation-level": level,
+                    "--_ui5-tab-level-has-icon": semanticIcons ? "1" : "0",
                 },
             });
         });
@@ -1226,4 +1232,9 @@ const walk = (items, callback) => {
 };
 TabContainer.define();
 export default TabContainer;
+// TBD: currently, the createInstanceChecker could not be used
+// as it expects the checked property to be a boolean and true - (object[prop] === true);
+const isInstanceOfTab = (object) => {
+    return object !== undefined && "realTabReference" in object;
+};
 //# sourceMappingURL=TabContainer.js.map

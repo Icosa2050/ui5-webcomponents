@@ -1,4 +1,5 @@
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
+import type { Slot, DefaultSlot } from "@ui5/webcomponents-base/dist/UI5Element.js";
 import type { ResizeObserverCallback } from "@ui5/webcomponents-base/dist/delegate/ResizeHandler.js";
 import type I18nBundle from "@ui5/webcomponents-base/dist/i18nBundle.js";
 import type { IButton } from "@ui5/webcomponents/dist/Button.js";
@@ -179,7 +180,7 @@ declare class IllustratedMessage extends UI5Element {
     * @public
     * @since 1.7.0
     */
-    title: Array<HTMLElement> & string;
+    title: Slot<HTMLElement> & string;
     /**
     * Defines the subtitle of the component.
     *
@@ -187,14 +188,14 @@ declare class IllustratedMessage extends UI5Element {
     * @public
     * @since 1.0.0-rc.16
     */
-    subtitle: Array<HTMLElement>;
+    subtitle: Slot<HTMLElement>;
     /**
     * Defines the component actions.
     *
     * **Note:** Not displayed when the `design` property is set to `Base`.
     * @public
     */
-    actions: Array<IButton>;
+    actions: DefaultSlot<IButton>;
     illustrationTitle?: string;
     illustrationSubtitle?: string;
     static i18nBundle: I18nBundle;

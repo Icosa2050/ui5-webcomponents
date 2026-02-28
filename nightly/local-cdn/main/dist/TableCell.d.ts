@@ -21,7 +21,7 @@ declare class TableCell extends TableCellBase {
     _popinContent?: HTMLElement;
     onBeforeRendering(): void;
     _injectHeaderNodes(ref: HTMLElement | null): void;
-    get _headerCell(): import("./TableHeaderCell.js").default;
+    get _headerCell(): import("./TableHeaderCell.js").default | null | undefined;
     get _popinHeaderNodes(): Node[];
     get _i18nPopinColon(): string;
 }

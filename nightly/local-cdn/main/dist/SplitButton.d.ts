@@ -1,4 +1,5 @@
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
+import type { DefaultSlot } from "@ui5/webcomponents-base/dist/UI5Element.js";
 import type { AccessibilityAttributes } from "@ui5/webcomponents-base/dist/types.js";
 import type { UI5CustomEvent } from "@ui5/webcomponents-base";
 import type I18nBundle from "@ui5/webcomponents-base/dist/i18nBundle.js";
@@ -172,7 +173,7 @@ declare class SplitButton extends UI5Element {
      * **Note:** Although this slot accepts HTML Elements, it is strongly recommended that you only use text in order to preserve the intended design.
      * @public
      */
-    text: Array<Node>;
+    text: DefaultSlot<Node>;
     static i18nBundle: I18nBundle;
     onBeforeRendering(): void;
     _handleMouseClick(e: UI5CustomEvent<Button, "click">): void;
@@ -224,7 +225,9 @@ declare class SplitButton extends UI5Element {
         description: string;
     };
     get arrowButtonTooltip(): string;
+    get isSplitButton(): boolean;
     get ariaLabelText(): string;
 }
 export default SplitButton;
 export type { SplitButtonAccessibilityAttributes, };
+export declare const isInstanceOfSplitButton: (object: any) => object is SplitButton;

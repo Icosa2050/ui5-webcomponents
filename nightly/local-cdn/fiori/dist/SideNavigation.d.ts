@@ -1,4 +1,5 @@
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
+import type { Slot, DefaultSlot } from "@ui5/webcomponents-base/dist/UI5Element.js";
 import type ResponsivePopover from "@ui5/webcomponents/dist/ResponsivePopover.js";
 import type NavigationMenu from "./NavigationMenu.js";
 import type I18nBundle from "@ui5/webcomponents-base/dist/i18nBundle.js";
@@ -8,13 +9,15 @@ import type SideNavigationItemBase from "./SideNavigationItemBase.js";
 import type SideNavigationSelectableItemBase from "./SideNavigationSelectableItemBase.js";
 import type SideNavigationItem from "./SideNavigationItem.js";
 import type SideNavigationSubItem from "./SideNavigationSubItem.js";
-import type SideNavigationGroup from "./SideNavigationGroup.js";
 type SideNavigationPopoverContents = {
     item: SideNavigationItem;
     subItems: Array<SideNavigationSubItem>;
 };
 type SideNavigationSelectionChangeEventDetail = {
     item: SideNavigationItemBase;
+};
+type SideNavigationItemClickEventDetail = {
+    item: SideNavigationSelectableItemBase;
 };
 /**
  * @class
@@ -25,7 +28,7 @@ type SideNavigationSelectionChangeEventDetail = {
  * It consists of three containers: header (top-aligned), main navigation section (top-aligned) and the secondary section (bottom-aligned).
  *
  *  - The header is meant for displaying user related information - profile data, avatar, etc.
- *  - The main navigation section is related to the user’s current work context
+ *  - The main navigation section is related to the user's current work context.
  *  - The secondary section is mostly used to link additional information that may be of interest (legal information, developer communities, external help, contact information and so on).
  *
  * ### Usage
@@ -66,6 +69,7 @@ type SideNavigationSelectionChangeEventDetail = {
 declare class SideNavigation extends UI5Element {
     eventDetails: {
         "selection-change": SideNavigationSelectionChangeEventDetail;
+        "item-click": SideNavigationItemClickEventDetail;
     };
     /**
      * Defines whether the `ui5-side-navigation` is expanded or collapsed.
@@ -93,7 +97,7 @@ declare class SideNavigation extends UI5Element {
      *
      * @public
      */
-    items: Array<SideNavigationItemBase>;
+    items: DefaultSlot<SideNavigationItemBase>;
     /**
      * Defines the fixed items at the bottom of the component.
      *
@@ -101,7 +105,7 @@ declare class SideNavigation extends UI5Element {
      *
      * @public
      */
-    fixedItems: Array<SideNavigationItemBase>;
+    fixedItems: Slot<SideNavigationItemBase>;
     /**
      * Defines the header of the `ui5-side-navigation`.
      *
@@ -110,7 +114,7 @@ declare class SideNavigation extends UI5Element {
      * @public
      * @since 1.0.0-rc.11
      */
-    header: Array<HTMLElement>;
+    header: Slot<HTMLElement>;
     /**
      * @private
      */
@@ -137,6 +141,7 @@ declare class SideNavigation extends UI5Element {
     get navigationMenuPrimaryHiddenText(): string;
     get navigationMenuFooterHiddenText(): string;
     get overflowAccessibleName(): string;
+    get _effectiveCollapsed(): boolean;
     handlePopupItemClick(e: KeyboardEvent | PointerEvent): void;
     getOverflowPopover(): NavigationMenu;
     getPicker(): ResponsivePopover;
@@ -151,28 +156,31 @@ declare class SideNavigation extends UI5Element {
     get _rootRole(): "none" | undefined;
     getEnabledFixedItems(): Array<ITabbable>;
     getEnabledFlexibleItems(): Array<ITabbable>;
-    getEnabledItems(items: Array<SideNavigationItem | SideNavigationGroup>): Array<ITabbable>;
+    getEnabledItems(items: Array<SideNavigationItemBase>): Array<ITabbable>;
     focusItem(item: SideNavigationItemBase): void;
     onAfterRendering(): void;
     onEnterDOM(): void;
     onExitDOM(): void;
     handleResize(): void;
     _updateOverflowItems(): null | undefined;
-    _findFocusedItem(items: Array<SideNavigationItem | SideNavigationGroup>): SideNavigationItemBase | undefined;
-    _getSelectableItems(items: Array<SideNavigationItem | SideNavigationGroup>): Array<SideNavigationSelectableItemBase>;
-    _getFocusableItems(items: Array<SideNavigationItem | SideNavigationGroup>): Array<SideNavigationItemBase>;
-    _getAllItems(items: Array<SideNavigationItem | SideNavigationGroup>): Array<SideNavigationItemBase>;
-    _findSelectedItem(items: Array<SideNavigationItem | SideNavigationGroup>): SideNavigationSelectableItemBase | undefined;
+    _findFocusedItem(items: Array<SideNavigationItemBase>): SideNavigationItemBase | undefined;
+    _getSelectableItems(items: Array<SideNavigationItemBase>): Array<SideNavigationSelectableItemBase>;
+    _getFocusableItems(items: Array<SideNavigationItemBase>): Array<SideNavigationItemBase>;
+    _getAllItems(items: Array<SideNavigationItemBase>): Array<SideNavigationItemBase>;
+    _findSelectedItem(items: Array<SideNavigationItemBase>): SideNavigationSelectableItemBase | undefined;
     get overflowItems(): Array<HTMLElement>;
+    private _isSmallScreen;
     _handleItemClick(e: KeyboardEvent | MouseEvent, item: SideNavigationSelectableItemBase): void;
     _handleOverflowClick(): void;
     _getOverflowItems(): Array<SideNavigationItem>;
     _selectItem(item: SideNavigationSelectableItemBase): void;
     get _overflowItem(): SideNavigationItem | null;
     get isOverflow(): boolean;
+    get isSideNavigation(): boolean;
     captureRef(ref: HTMLElement & {
         associatedItem?: UI5Element;
     } | null): void;
 }
+export declare const isInstanceOfSideNavigation: (object: any) => object is SideNavigation;
 export default SideNavigation;
-export type { SideNavigationSelectionChangeEventDetail, };
+export type { SideNavigationSelectionChangeEventDetail, SideNavigationItemClickEventDetail, };

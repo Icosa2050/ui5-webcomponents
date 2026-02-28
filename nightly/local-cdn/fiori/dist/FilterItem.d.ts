@@ -1,4 +1,5 @@
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
+import type { Slot } from "@ui5/webcomponents-base/dist/UI5Element.js";
 import type FilterItemOption from "./FilterItemOption.js";
 /**
  * @class
@@ -39,6 +40,6 @@ declare class FilterItem extends UI5Element {
      * Defines the filter options available for this filter category.
      * @public
      */
-    values: Array<FilterItemOption>;
+    values: Slot<FilterItemOption>;
 }
 export default FilterItem;

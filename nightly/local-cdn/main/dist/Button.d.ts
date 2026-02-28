@@ -1,4 +1,5 @@
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
+import type { Slot, DefaultSlot } from "@ui5/webcomponents-base/dist/UI5Element.js";
 import type { AccessibilityAttributes, AriaRole } from "@ui5/webcomponents-base";
 import type { ITabbable } from "@ui5/webcomponents-base/dist/delegate/ItemNavigation.js";
 import type I18nBundle from "@ui5/webcomponents-base/dist/i18nBundle.js";
@@ -242,19 +243,20 @@ declare class Button extends UI5Element implements IButton {
      */
     _isTouch: boolean;
     _cancelAction: boolean;
+    _isSpacePressed: boolean;
     /**
      * Defines the text of the component.
      *
      * **Note:** Although this slot accepts HTML Elements, it is strongly recommended that you only use text in order to preserve the intended design.
      * @public
      */
-    text: Array<Node>;
+    text: DefaultSlot<Node>;
     /**
      * Adds a badge to the button.
      * @since 2.7.0
      * @public
      */
-    badge: Array<ButtonBadge>;
+    badge: Slot<ButtonBadge>;
     _deactivate: () => void;
     _onclickBound: (e: MouseEvent) => void;
     _clickHandlerAttached: boolean;
@@ -286,7 +288,7 @@ declare class Button extends UI5Element implements IButton {
         description: string | undefined;
         role: import("@ui5/webcomponents-base/dist/thirdparty/preact/jsx.js").JSXInternal.AriaRole;
         disabled: boolean;
-        children: Node[];
+        children: DefaultSlot<Node>;
         type: string;
     };
     get effectiveAccRoleTranslation(): string;

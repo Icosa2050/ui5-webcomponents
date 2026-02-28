@@ -3,6 +3,7 @@ import type { DynamicDateRangeValue, IDynamicDateRangeOption } from "../DynamicD
 import type { JsxTemplate } from "@ui5/webcomponents-base/dist/index.js";
 /**
  * @class
+ * @implements {IDynamicDateRangeOption}
  * @constructor
  * @public
  * @since 2.11.0

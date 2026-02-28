@@ -3,6 +3,7 @@ import DateFormat from "@ui5/webcomponents-localization/dist/DateFormat.js";
 import type { JsxTemplate } from "@ui5/webcomponents-base/dist/index.js";
 /**
  * @class
+ * @implements {IDynamicDateRangeOption}
  * @constructor
  * @public
  * @since 2.11.0

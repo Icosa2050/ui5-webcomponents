@@ -1,5 +1,6 @@
 import type I18nBundle from "@ui5/webcomponents-base/dist/i18nBundle.js";
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
+import type { DefaultSlot } from "@ui5/webcomponents-base/dist/UI5Element.js";
 import ItemNavigation from "@ui5/webcomponents-base/dist/delegate/ItemNavigation.js";
 import type { ITabbable } from "@ui5/webcomponents-base/dist/delegate/ItemNavigation.js";
 import type { ResizeObserverCallback } from "@ui5/webcomponents-base/dist/delegate/ResizeHandler.js";
@@ -50,7 +51,7 @@ declare class ProductSwitch extends UI5Element {
      * Defines the items of the `ui5-product-switch`.
      * @public
      */
-    items: Array<IProductSwitchItem>;
+    items: DefaultSlot<IProductSwitchItem>;
     _itemNavigation: ItemNavigation;
     _currentIndex: number;
     _rowSize: number;

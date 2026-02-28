@@ -8,7 +8,7 @@ var Input_1;
 import customElement from "@ui5/webcomponents-base/dist/decorators/customElement.js";
 import property from "@ui5/webcomponents-base/dist/decorators/property.js";
 import event from "@ui5/webcomponents-base/dist/decorators/event-strict.js";
-import slot from "@ui5/webcomponents-base/dist/decorators/slot.js";
+import slot from "@ui5/webcomponents-base/dist/decorators/slot-strict.js";
 import jsxRenderer from "@ui5/webcomponents-base/dist/renderer/JsxRenderer.js";
 import { isEscape, isF4Shift, } from "@ui5/webcomponents-base/dist/Keys.js";
 import BaseInput from "@ui5/webcomponents/dist/Input.js";
@@ -151,7 +151,7 @@ let Input = Input_1 = class Input extends BaseInput {
     /**
      * Handles the version change event from the versioning component.
      *
-     * @param {CustomEvent} e - The version change event
+     * @param e - The version change event
      */
     _handleVersionChange(e) {
         this.fireDecoratorEvent("version-change", {
@@ -280,7 +280,7 @@ Input = Input_1 = __decorate([
     /**
      * Fired when the user selects the version navigation buttons.
      *
-     * @param {boolean} backwards - Indicates if navigation is backwards (true) or forwards (false, default)
+     * @param { boolean } backwards The text of the currently clicked menu item.
      * @public
      */
     ,

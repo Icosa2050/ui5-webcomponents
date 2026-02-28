@@ -6,7 +6,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 var Toolbar_1;
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
-import slot from "@ui5/webcomponents-base/dist/decorators/slot.js";
+import slot from "@ui5/webcomponents-base/dist/decorators/slot-strict.js";
 import property from "@ui5/webcomponents-base/dist/decorators/property.js";
 import event from "@ui5/webcomponents-base/dist/decorators/event-strict.js";
 import customElement from "@ui5/webcomponents-base/dist/decorators/customElement.js";
@@ -16,7 +16,6 @@ import ResizeHandler from "@ui5/webcomponents-base/dist/delegate/ResizeHandler.j
 import { getEffectiveAriaLabelText } from "@ui5/webcomponents-base/dist/util/AccessibilityTextsHelper.js";
 import "@ui5/webcomponents-icons/dist/overflow.js";
 import i18n from "@ui5/webcomponents-base/dist/decorators/i18n.js";
-import { getScopedVarName } from "@ui5/webcomponents-base/dist/CustomElementsScope.js";
 import { TOOLBAR_OVERFLOW_BUTTON_ARIA_LABEL, TOOLBAR_POPOVER_AVAILABLE_VALUES, } from "./generated/i18n/i18n-defaults.js";
 import ToolbarTemplate from "./ToolbarTemplate.js";
 import ToolbarCss from "./generated/themes/Toolbar.css.js";
@@ -93,8 +92,8 @@ let Toolbar = Toolbar_1 = class Toolbar extends UI5Element {
     }
     get padding() {
         const toolbarComputedStyle = getComputedStyle(this.getDomRef());
-        return calculateCSSREMValue(toolbarComputedStyle, getScopedVarName("--_ui5-toolbar-padding-left"))
-            + calculateCSSREMValue(toolbarComputedStyle, getScopedVarName("--_ui5-toolbar-padding-right"));
+        return calculateCSSREMValue(toolbarComputedStyle, "--_ui5-toolbar-padding-left")
+            + calculateCSSREMValue(toolbarComputedStyle, "--_ui5-toolbar-padding-right");
     }
     get alwaysOverflowItems() {
         return this.items.filter((item) => item.overflowPriority === ToolbarItemOverflowBehavior.AlwaysOverflow);
@@ -180,14 +179,31 @@ let Toolbar = Toolbar_1 = class Toolbar extends UI5Element {
             const lastItem = this.interactiveItems.at(-1);
             lastItem?.focus();
         }
+        this.prePopulateAlwaysOverflowItems();
     }
     async onAfterRendering() {
         await renderFinished();
         this.storeItemsWidth();
         this.processOverflowLayout();
         this.items.forEach(item => {
-            item.isOverflowed = this.overflowItems.map(overflowItem => overflowItem).indexOf(item) !== -1;
+            this.addItemsAdditionalProperties(item);
         });
+    }
+    addItemsAdditionalProperties(item) {
+        item.isOverflowed = this.overflowItems.indexOf(item) !== -1;
+        const itemWrapper = this.shadowRoot.querySelector(`#${item._individualSlot}`);
+        if (item.hasOverflow && !item.isOverflowed && itemWrapper) {
+            // We need to set the max-width to the self-overflow element in order ot prevent it from taking all the available space,
+            // since, unlike the other items, it is allowed to grow and shrink
+            // We need to set the max-width to none and its position to absolute to allow the item to grow and measure its width,
+            // then when set, the max-width will be cached and we will set its highest value to not cut it when the Toolbar shrinks it
+            // on rendering and then we resize it manually.
+            itemWrapper.style.maxWidth = `none`;
+            itemWrapper?.classList.add("ui5-tb-self-overflow-grow");
+            item._maxWidth = Math.max(this.getItemWidth(item), item._maxWidth);
+            itemWrapper.style.maxWidth = `${item._maxWidth}px`;
+            itemWrapper?.classList.remove("ui5-tb-self-overflow-grow");
+        }
     }
     /**
      * Returns if the overflow popup is open.
@@ -309,19 +325,27 @@ let Toolbar = Toolbar_1 = class Toolbar extends UI5Element {
         return foundPrevNonSeparatorItem && foundNextNonSeperatorItem;
     }
     /**
+     * Adds AlwaysOverflow items to overflow to ensure they are never rendered outside overflow (and visual flash is prevented)
+     */
+    prePopulateAlwaysOverflowItems() {
+        this.alwaysOverflowItems.forEach(item => {
+            if (!this.itemsToOverflow.includes(item)) {
+                this.itemsToOverflow.push(item);
+            }
+        });
+    }
+    /**
      * Event Handlers
      */
     onOverflowPopoverClosed() {
         this.popoverOpen = false;
-    }
-    onBeforeClose(e) {
-        e.preventDefault();
     }
     onOverflowPopoverOpened() {
         this.popoverOpen = true;
     }
     onResize() {
         this.closeOverflow();
+        this.storeItemsWidth();
         this.processOverflowLayout();
     }
     /**
@@ -345,7 +369,7 @@ let Toolbar = Toolbar_1 = class Toolbar extends UI5Element {
         }
         const id = item._id;
         // Measure rendered width for spacers with width, and for normal items
-        const renderedItem = this.shadowRoot.querySelector(`#${item.slot}`);
+        const renderedItem = this.shadowRoot.querySelector(`#${item._individualSlot}`);
         let itemWidth = 0;
         if (renderedItem && !renderedItem.classList.contains("ui5-tb-popover-item") && renderedItem.offsetWidth && item._isRendering === false) {
             const ItemCSSStyleSet = getComputedStyle(renderedItem);
