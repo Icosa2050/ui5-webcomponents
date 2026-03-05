@@ -1063,6 +1063,36 @@
     },
     {
       "kind": "javascript-module",
+      "path": "dist/asset-registries/Icons.js",
+      "declarations": [],
+      "exports": []
+    },
+    {
+      "kind": "javascript-module",
+      "path": "dist/asset-registries/Illustrations.js",
+      "declarations": [],
+      "exports": []
+    },
+    {
+      "kind": "javascript-module",
+      "path": "dist/asset-registries/LocaleData.js",
+      "declarations": [],
+      "exports": []
+    },
+    {
+      "kind": "javascript-module",
+      "path": "dist/asset-registries/Themes.js",
+      "declarations": [],
+      "exports": []
+    },
+    {
+      "kind": "javascript-module",
+      "path": "dist/asset-registries/i18n.js",
+      "declarations": [],
+      "exports": []
+    },
+    {
+      "kind": "javascript-module",
       "path": "dist/config/AnimationMode.js",
       "declarations": [],
       "exports": []
@@ -1130,36 +1160,6 @@
     {
       "kind": "javascript-module",
       "path": "dist/config/Tooltips.js",
-      "declarations": [],
-      "exports": []
-    },
-    {
-      "kind": "javascript-module",
-      "path": "dist/asset-registries/Icons.js",
-      "declarations": [],
-      "exports": []
-    },
-    {
-      "kind": "javascript-module",
-      "path": "dist/asset-registries/Illustrations.js",
-      "declarations": [],
-      "exports": []
-    },
-    {
-      "kind": "javascript-module",
-      "path": "dist/asset-registries/LocaleData.js",
-      "declarations": [],
-      "exports": []
-    },
-    {
-      "kind": "javascript-module",
-      "path": "dist/asset-registries/Themes.js",
-      "declarations": [],
-      "exports": []
-    },
-    {
-      "kind": "javascript-module",
-      "path": "dist/asset-registries/i18n.js",
       "declarations": [],
       "exports": []
     },
