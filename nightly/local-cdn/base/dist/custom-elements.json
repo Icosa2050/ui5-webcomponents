@@ -238,46 +238,21 @@
           "members": [
             {
               "kind": "method",
-              "name": "onBeforeRendering",
+              "name": "attachComponentStateFinalized",
               "return": {
                 "type": {
                   "text": "void"
                 }
               },
-              "description": "Called every time before the component renders.",
-              "privacy": "public"
-            },
-            {
-              "kind": "method",
-              "name": "onAfterRendering",
-              "return": {
-                "type": {
-                  "text": "void"
+              "parameters": [
+                {
+                  "name": "callback",
+                  "type": {
+                    "text": "() => void"
+                  }
                 }
-              },
-              "description": "Called every time after the component renders.",
-              "privacy": "public"
-            },
-            {
-              "kind": "method",
-              "name": "onEnterDOM",
-              "return": {
-                "type": {
-                  "text": "void"
-                }
-              },
-              "description": "Called on connectedCallback - added to the DOM.",
-              "privacy": "public"
-            },
-            {
-              "kind": "method",
-              "name": "onExitDOM",
-              "return": {
-                "type": {
-                  "text": "void"
-                }
-              },
-              "description": "Called on disconnectedCallback - removed from the DOM.",
+              ],
+              "description": "Attach a callback that will be executed whenever the component's state is finalized",
               "privacy": "public"
             },
             {
@@ -301,6 +276,37 @@
             },
             {
               "kind": "method",
+              "name": "define",
+              "static": true,
+              "return": {
+                "type": {
+                  "text": "typeof UI5Element"
+                }
+              },
+              "description": "Registers a UI5 Web Component in the browser window object",
+              "privacy": "public"
+            },
+            {
+              "kind": "method",
+              "name": "detachComponentStateFinalized",
+              "return": {
+                "type": {
+                  "text": "void"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "callback",
+                  "type": {
+                    "text": "() => void"
+                  }
+                }
+              ],
+              "description": "Detach the callback that is executed whenever the component's state is finalized",
+              "privacy": "public"
+            },
+            {
+              "kind": "method",
               "name": "detachInvalidate",
               "return": {
                 "type": {
@@ -319,30 +325,103 @@
               "privacy": "public"
             },
             {
+              "kind": "field",
+              "name": "effectiveDir",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Determines whether the component should be rendered in RTL mode or not.\nReturns: \"rtl\", \"ltr\" or undefined",
+              "privacy": "public",
+              "default": "undefined",
+              "readonly": true
+            },
+            {
               "kind": "method",
-              "name": "onInvalidation",
+              "name": "fireDecoratorEvent",
               "return": {
                 "type": {
-                  "text": "void"
+                  "text": "boolean"
+                },
+                "description": "false, if the event was cancelled (preventDefault called), true otherwise"
+              },
+              "parameters": [
+                {
+                  "name": "data",
+                  "optional": true,
+                  "type": {
+                    "text": "this[\"eventDetails\"][N] | undefined"
+                  },
+                  "description": "additional data for the event"
+                },
+                {
+                  "name": "name",
+                  "type": {
+                    "text": "N"
+                  },
+                  "description": "name of the event"
+                }
+              ],
+              "description": "Fires a custom event, configured via the \"event\" decorator.",
+              "privacy": "public"
+            },
+            {
+              "kind": "method",
+              "name": "fireEvent",
+              "return": {
+                "type": {
+                  "text": "boolean"
+                },
+                "description": "false, if the event was cancelled (preventDefault called), true otherwise"
+              },
+              "parameters": [
+                {
+                  "name": "bubbles",
+                  "default": "true",
+                  "description": "true, if the event bubbles"
+                },
+                {
+                  "name": "cancelable",
+                  "default": "false",
+                  "description": "true, if the user can call preventDefault on the event object"
+                },
+                {
+                  "name": "data",
+                  "optional": true,
+                  "type": {
+                    "text": "T"
+                  },
+                  "description": "additional data for the event"
+                },
+                {
+                  "name": "name",
+                  "type": {
+                    "text": "string"
+                  },
+                  "description": "name of the event"
+                }
+              ],
+              "privacy": "public",
+              "deprecated": "use fireDecoratorEvent instead"
+            },
+            {
+              "kind": "method",
+              "name": "focus",
+              "return": {
+                "type": {
+                  "text": "Promise<void>"
                 }
               },
               "parameters": [
                 {
-                  "name": "changeInfo",
+                  "name": "focusOptions",
+                  "optional": true,
                   "type": {
-                    "text": "ChangeInfo",
-                    "references": [
-                      {
-                        "name": "ChangeInfo",
-                        "package": "@ui5/webcomponents-base",
-                        "module": "dist/UI5Element.js"
-                      }
-                    ]
+                    "text": "FocusOptions"
                   },
-                  "description": "An object with information about the change that caused invalidation.\nThe object can have the following properties:\n- type: (property|slot) tells what caused the invalidation\n1) property: a property value was changed either directly or as a result of changing the corresponding attribute\n2) slot: a slotted node(nodes) changed in one of several ways (see \"reason\")\n\n- name: the name of the property or slot that caused the invalidation\n\n- reason: (children|textcontent|childchange|slotchange) relevant only for type=\"slot\" only and tells exactly what changed in the slot\n1) children: immediate children (HTML elements or text nodes) were added, removed or reordered in the slot\n2) textcontent: text nodes in the slot changed value (or nested text nodes were added or changed value). Can only trigger for slots of \"type: Node\"\n3) slotchange: a slot element, slotted inside that slot had its \"slotchange\" event listener called. This practically means that transitively slotted children changed.\nCan only trigger if the child of a slot is a slot element itself.\n4) childchange: indicates that a UI5Element child in that slot was invalidated and in turn invalidated the component.\nCan only trigger for slots with \"invalidateOnChildChange\" metadata descriptor\n\n- newValue: the new value of the property (for type=\"property\" only)\n\n- oldValue: the old value of the property (for type=\"property\" only)\n\n- child the child that was changed (for type=\"slot\" and reason=\"childchange\" only)"
+                  "description": "additional options for the focus"
                 }
               ],
-              "description": "A callback that is executed each time an already rendered component is invalidated (scheduled for re-rendering)",
+              "description": "Set the focus to the element, returned by \"getFocusDomRef()\" (marked by \"data-sap-focus-ref\")",
               "privacy": "public"
             },
             {
@@ -380,190 +459,6 @@
             },
             {
               "kind": "method",
-              "name": "focus",
-              "return": {
-                "type": {
-                  "text": "Promise<void>"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "focusOptions",
-                  "optional": true,
-                  "type": {
-                    "text": "FocusOptions"
-                  },
-                  "description": "additional options for the focus"
-                }
-              ],
-              "description": "Set the focus to the element, returned by \"getFocusDomRef()\" (marked by \"data-sap-focus-ref\")",
-              "privacy": "public"
-            },
-            {
-              "kind": "method",
-              "name": "fireEvent",
-              "return": {
-                "type": {
-                  "text": "boolean"
-                },
-                "description": "false, if the event was cancelled (preventDefault called), true otherwise"
-              },
-              "parameters": [
-                {
-                  "name": "name",
-                  "type": {
-                    "text": "string"
-                  },
-                  "description": "name of the event"
-                },
-                {
-                  "name": "data",
-                  "optional": true,
-                  "type": {
-                    "text": "T"
-                  },
-                  "description": "additional data for the event"
-                },
-                {
-                  "name": "cancelable",
-                  "default": "false",
-                  "description": "true, if the user can call preventDefault on the event object"
-                },
-                {
-                  "name": "bubbles",
-                  "default": "true",
-                  "description": "true, if the event bubbles"
-                }
-              ],
-              "privacy": "public",
-              "deprecated": "use fireDecoratorEvent instead"
-            },
-            {
-              "kind": "method",
-              "name": "fireDecoratorEvent",
-              "return": {
-                "type": {
-                  "text": "boolean"
-                },
-                "description": "false, if the event was cancelled (preventDefault called), true otherwise"
-              },
-              "parameters": [
-                {
-                  "name": "name",
-                  "type": {
-                    "text": "N"
-                  },
-                  "description": "name of the event"
-                },
-                {
-                  "name": "data",
-                  "optional": true,
-                  "type": {
-                    "text": "this[\"eventDetails\"][N] | undefined"
-                  },
-                  "description": "additional data for the event"
-                }
-              ],
-              "description": "Fires a custom event, configured via the \"event\" decorator.",
-              "privacy": "public"
-            },
-            {
-              "kind": "method",
-              "name": "getSlottedNodes",
-              "return": {
-                "type": {
-                  "text": "Array<T>"
-                }
-              },
-              "description": "Returns the actual children, associated with a slot.\nUseful when there are transitive slots in nested component scenarios and you don't want to get a list of the slots, but rather of their content.",
-              "privacy": "public"
-            },
-            {
-              "kind": "method",
-              "name": "attachComponentStateFinalized",
-              "return": {
-                "type": {
-                  "text": "void"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "callback",
-                  "type": {
-                    "text": "() => void"
-                  }
-                }
-              ],
-              "description": "Attach a callback that will be executed whenever the component's state is finalized",
-              "privacy": "public"
-            },
-            {
-              "kind": "method",
-              "name": "detachComponentStateFinalized",
-              "return": {
-                "type": {
-                  "text": "void"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "callback",
-                  "type": {
-                    "text": "() => void"
-                  }
-                }
-              ],
-              "description": "Detach the callback that is executed whenever the component's state is finalized",
-              "privacy": "public"
-            },
-            {
-              "kind": "field",
-              "name": "effectiveDir",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "Determines whether the component should be rendered in RTL mode or not.\nReturns: \"rtl\", \"ltr\" or undefined",
-              "privacy": "public",
-              "default": "undefined",
-              "readonly": true
-            },
-            {
-              "kind": "field",
-              "name": "isUI5Element",
-              "type": {
-                "text": "boolean"
-              },
-              "description": "Used to duck-type UI5 elements without using instanceof",
-              "privacy": "public",
-              "default": "true",
-              "readonly": true
-            },
-            {
-              "kind": "method",
-              "name": "getUniqueDependencies",
-              "static": true,
-              "return": {
-                "type": {
-                  "text": "Array<typeof UI5Element>"
-                }
-              },
-              "description": "Returns a list of the unique dependencies for this UI5 Web Component",
-              "privacy": "public"
-            },
-            {
-              "kind": "method",
-              "name": "define",
-              "static": true,
-              "return": {
-                "type": {
-                  "text": "typeof UI5Element"
-                }
-              },
-              "description": "Registers a UI5 Web Component in the browser window object",
-              "privacy": "public"
-            },
-            {
-              "kind": "method",
               "name": "getMetadata",
               "static": true,
               "return": {
@@ -579,6 +474,111 @@
                 }
               },
               "description": "Returns an instance of UI5ElementMetadata.js representing this UI5 Web Component's full metadata (its and its parents')\nNote: not to be confused with the \"get metadata()\" method, which returns an object for this class's metadata only",
+              "privacy": "public"
+            },
+            {
+              "kind": "method",
+              "name": "getSlottedNodes",
+              "return": {
+                "type": {
+                  "text": "Array<T>"
+                }
+              },
+              "description": "Returns the actual children, associated with a slot.\nUseful when there are transitive slots in nested component scenarios and you don't want to get a list of the slots, but rather of their content.",
+              "privacy": "public"
+            },
+            {
+              "kind": "method",
+              "name": "getUniqueDependencies",
+              "static": true,
+              "return": {
+                "type": {
+                  "text": "Array<typeof UI5Element>"
+                }
+              },
+              "description": "Returns a list of the unique dependencies for this UI5 Web Component",
+              "privacy": "public"
+            },
+            {
+              "kind": "field",
+              "name": "isUI5Element",
+              "type": {
+                "text": "boolean"
+              },
+              "description": "Used to duck-type UI5 elements without using instanceof",
+              "privacy": "public",
+              "default": "true",
+              "readonly": true
+            },
+            {
+              "kind": "method",
+              "name": "onAfterRendering",
+              "return": {
+                "type": {
+                  "text": "void"
+                }
+              },
+              "description": "Called every time after the component renders.",
+              "privacy": "public"
+            },
+            {
+              "kind": "method",
+              "name": "onBeforeRendering",
+              "return": {
+                "type": {
+                  "text": "void"
+                }
+              },
+              "description": "Called every time before the component renders.",
+              "privacy": "public"
+            },
+            {
+              "kind": "method",
+              "name": "onEnterDOM",
+              "return": {
+                "type": {
+                  "text": "void"
+                }
+              },
+              "description": "Called on connectedCallback - added to the DOM.",
+              "privacy": "public"
+            },
+            {
+              "kind": "method",
+              "name": "onExitDOM",
+              "return": {
+                "type": {
+                  "text": "void"
+                }
+              },
+              "description": "Called on disconnectedCallback - removed from the DOM.",
+              "privacy": "public"
+            },
+            {
+              "kind": "method",
+              "name": "onInvalidation",
+              "return": {
+                "type": {
+                  "text": "void"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "changeInfo",
+                  "type": {
+                    "text": "ChangeInfo",
+                    "references": [
+                      {
+                        "name": "ChangeInfo",
+                        "package": "@ui5/webcomponents-base",
+                        "module": "dist/UI5Element.js"
+                      }
+                    ]
+                  },
+                  "description": "An object with information about the change that caused invalidation.\nThe object can have the following properties:\n- type: (property|slot) tells what caused the invalidation\n1) property: a property value was changed either directly or as a result of changing the corresponding attribute\n2) slot: a slotted node(nodes) changed in one of several ways (see \"reason\")\n\n- name: the name of the property or slot that caused the invalidation\n\n- reason: (children|textcontent|childchange|slotchange) relevant only for type=\"slot\" only and tells exactly what changed in the slot\n1) children: immediate children (HTML elements or text nodes) were added, removed or reordered in the slot\n2) textcontent: text nodes in the slot changed value (or nested text nodes were added or changed value). Can only trigger for slots of \"type: Node\"\n3) slotchange: a slot element, slotted inside that slot had its \"slotchange\" event listener called. This practically means that transitively slotted children changed.\nCan only trigger if the child of a slot is a slot element itself.\n4) childchange: indicates that a UI5Element child in that slot was invalidated and in turn invalidated the component.\nCan only trigger for slots with \"invalidateOnChildChange\" metadata descriptor\n\n- newValue: the new value of the property (for type=\"property\" only)\n\n- oldValue: the old value of the property (for type=\"property\" only)\n\n- child the child that was changed (for type=\"slot\" and reason=\"childchange\" only)"
+                }
+              ],
+              "description": "A callback that is executed each time an already rendered component is invalidated (scheduled for re-rendering)",
               "privacy": "public"
             }
           ],
@@ -627,14 +627,60 @@
           "members": [
             {
               "kind": "method",
-              "name": "validateSlotValue",
-              "static": true,
+              "name": "getAttributesList",
               "return": {
                 "type": {
-                  "text": "Node"
+                  "text": "Array<string>"
                 }
               },
-              "description": "Validates the slot's value and returns it if correct\nor throws an exception if not.\n**Note:** Only intended for use by UI5Element.js",
+              "description": "Returns an array with the attributes of the UI5 Element (in kebab-case)",
+              "privacy": "public"
+            },
+            {
+              "kind": "method",
+              "name": "getEvents",
+              "return": {
+                "type": {
+                  "text": "EventData",
+                  "references": [
+                    {
+                      "name": "EventData",
+                      "package": "@ui5/webcomponents-base",
+                      "module": "dist/UI5ElementMetadata.js"
+                    }
+                  ]
+                }
+              },
+              "description": "Returns an object with key-value pairs of events and their metadata definitions",
+              "privacy": "public"
+            },
+            {
+              "kind": "method",
+              "name": "getProperties",
+              "return": {
+                "type": {
+                  "text": "Record<string, Property>",
+                  "references": [
+                    {
+                      "name": "Property",
+                      "package": "@ui5/webcomponents-base",
+                      "module": "dist/UI5ElementMetadata.js"
+                    }
+                  ]
+                }
+              },
+              "description": "Returns an object with key-value pairs of properties and their metadata definitions",
+              "privacy": "public"
+            },
+            {
+              "kind": "method",
+              "name": "getPropertiesList",
+              "return": {
+                "type": {
+                  "text": "Array<string>"
+                }
+              },
+              "description": "Returns an array with the properties of the UI5 Element (in camelCase)",
               "privacy": "public"
             },
             {
@@ -646,6 +692,24 @@
                 }
               },
               "description": "Returns the tag of the UI5 Element without the scope",
+              "privacy": "public"
+            },
+            {
+              "kind": "method",
+              "name": "getSlots",
+              "return": {
+                "type": {
+                  "text": "Record<string, Slot>",
+                  "references": [
+                    {
+                      "name": "Slot",
+                      "package": "@ui5/webcomponents-base",
+                      "module": "dist/UI5ElementMetadata.js"
+                    }
+                  ]
+                }
+              },
+              "description": "Returns an object with key-value pairs of slots and their metadata definitions",
               "privacy": "public"
             },
             {
@@ -680,24 +744,13 @@
             },
             {
               "kind": "method",
-              "name": "getPropertiesList",
+              "name": "hasIndividualSlots",
               "return": {
                 "type": {
-                  "text": "Array<string>"
+                  "text": "boolean"
                 }
               },
-              "description": "Returns an array with the properties of the UI5 Element (in camelCase)",
-              "privacy": "public"
-            },
-            {
-              "kind": "method",
-              "name": "getAttributesList",
-              "return": {
-                "type": {
-                  "text": "Array<string>"
-                }
-              },
-              "description": "Returns an array with the attributes of the UI5 Element (in kebab-case)",
+              "description": "Determines whether this UI5 Element supports any slots with \"individualSlots: true\"",
               "privacy": "public"
             },
             {
@@ -709,17 +762,6 @@
                 }
               },
               "description": "Determines whether this UI5 Element supports any slots",
-              "privacy": "public"
-            },
-            {
-              "kind": "method",
-              "name": "hasIndividualSlots",
-              "return": {
-                "type": {
-                  "text": "boolean"
-                }
-              },
-              "description": "Determines whether this UI5 Element supports any slots with \"individualSlots: true\"",
               "privacy": "public"
             },
             {
@@ -746,56 +788,14 @@
             },
             {
               "kind": "method",
-              "name": "getProperties",
+              "name": "validateSlotValue",
+              "static": true,
               "return": {
                 "type": {
-                  "text": "Record<string, Property>",
-                  "references": [
-                    {
-                      "name": "Property",
-                      "package": "@ui5/webcomponents-base",
-                      "module": "dist/UI5ElementMetadata.js"
-                    }
-                  ]
+                  "text": "Node"
                 }
               },
-              "description": "Returns an object with key-value pairs of properties and their metadata definitions",
-              "privacy": "public"
-            },
-            {
-              "kind": "method",
-              "name": "getEvents",
-              "return": {
-                "type": {
-                  "text": "EventData",
-                  "references": [
-                    {
-                      "name": "EventData",
-                      "package": "@ui5/webcomponents-base",
-                      "module": "dist/UI5ElementMetadata.js"
-                    }
-                  ]
-                }
-              },
-              "description": "Returns an object with key-value pairs of events and their metadata definitions",
-              "privacy": "public"
-            },
-            {
-              "kind": "method",
-              "name": "getSlots",
-              "return": {
-                "type": {
-                  "text": "Record<string, Slot>",
-                  "references": [
-                    {
-                      "name": "Slot",
-                      "package": "@ui5/webcomponents-base",
-                      "module": "dist/UI5ElementMetadata.js"
-                    }
-                  ]
-                }
-              },
-              "description": "Returns an object with key-value pairs of slots and their metadata definitions",
+              "description": "Validates the slot's value and returns it if correct\nor throws an exception if not.\n**Note:** Only intended for use by UI5Element.js",
               "privacy": "public"
             }
           ]
@@ -823,6 +823,21 @@
           "declaration": {
             "name": "connectToComponent",
             "module": "dist/connectToComponent.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "dist/createReactComponent.js",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "name": "createReactComponent",
+            "module": "dist/createReactComponent.js"
           }
         }
       ]
@@ -867,6 +882,13 @@
               },
               "parameters": [
                 {
+                  "name": "params",
+                  "type": {
+                    "text": "Array<number | string>"
+                  },
+                  "description": "Values for the placeholders"
+                },
+                {
                   "name": "textObj",
                   "type": {
                     "text": "I18nText | string",
@@ -879,13 +901,6 @@
                     ]
                   },
                   "description": "key/defaultText pair or just the key"
-                },
-                {
-                  "name": "params",
-                  "type": {
-                    "text": "Array<number | string>"
-                  },
-                  "description": "Values for the placeholders"
                 }
               ],
               "description": "Returns a text in the currently loaded language",
@@ -1408,40 +1423,6 @@
           "members": [
             {
               "kind": "method",
-              "name": "register",
-              "static": true,
-              "return": {
-                "type": {
-                  "text": "void"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "element",
-                  "type": {
-                    "text": "HTMLElement"
-                  },
-                  "description": "UI5 Web Component or DOM Element to be observed"
-                },
-                {
-                  "name": "callback",
-                  "type": {
-                    "text": "ResizeObserverCallback",
-                    "references": [
-                      {
-                        "name": "ResizeObserverCallback",
-                        "package": "@ui5/webcomponents-base",
-                        "module": "dist/delegate/ResizeHandler.js"
-                      }
-                    ]
-                  },
-                  "description": "Callback to be executed"
-                }
-              ],
-              "privacy": "public"
-            },
-            {
-              "kind": "method",
               "name": "deregister",
               "static": true,
               "return": {
@@ -1450,13 +1431,6 @@
                 }
               },
               "parameters": [
-                {
-                  "name": "element",
-                  "type": {
-                    "text": "HTMLElement"
-                  },
-                  "description": "UI5 Web Component or DOM Element to be unobserved"
-                },
                 {
                   "name": "callback",
                   "type": {
@@ -1470,6 +1444,47 @@
                     ]
                   },
                   "description": "Callback to be removed"
+                },
+                {
+                  "name": "element",
+                  "type": {
+                    "text": "HTMLElement"
+                  },
+                  "description": "UI5 Web Component or DOM Element to be unobserved"
+                }
+              ],
+              "privacy": "public"
+            },
+            {
+              "kind": "method",
+              "name": "register",
+              "static": true,
+              "return": {
+                "type": {
+                  "text": "void"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "callback",
+                  "type": {
+                    "text": "ResizeObserverCallback",
+                    "references": [
+                      {
+                        "name": "ResizeObserverCallback",
+                        "package": "@ui5/webcomponents-base",
+                        "module": "dist/delegate/ResizeHandler.js"
+                      }
+                    ]
+                  },
+                  "description": "Callback to be executed"
+                },
+                {
+                  "name": "element",
+                  "type": {
+                    "text": "HTMLElement"
+                  },
+                  "description": "UI5 Web Component or DOM Element to be observed"
                 }
               ],
               "privacy": "public"

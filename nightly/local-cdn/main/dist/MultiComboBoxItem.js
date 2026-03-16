@@ -54,6 +54,9 @@ __decorate([
     property({ type: Boolean })
 ], MultiComboBoxItem.prototype, "selected", void 0);
 __decorate([
+    property()
+], MultiComboBoxItem.prototype, "value", void 0);
+__decorate([
     property({ type: Boolean, noAttribute: true })
 ], MultiComboBoxItem.prototype, "_isVisible", void 0);
 __decorate([

@@ -217,6 +217,8 @@ let StepInput = StepInput_1 = class StepInput extends UI5Element {
         this._languageChangeHandler = () => {
             this._formatter = undefined;
             this._languageChanged = true;
+            this._delimiter = undefined;
+            this._groupSeparator = undefined;
             return Promise.resolve();
         };
         attachLanguageChange(this._languageChangeHandler);
@@ -234,6 +236,20 @@ let StepInput = StepInput_1 = class StepInput extends UI5Element {
             });
         }
         return this._formatter;
+    }
+    get delimiter() {
+        if (!this._delimiter) {
+            const localeData = getCachedLocaleDataInstance(getLocale());
+            this._delimiter = localeData.getNumberSymbol("decimal") || ".";
+        }
+        return this._delimiter;
+    }
+    get groupSeparator() {
+        if (!this._groupSeparator) {
+            const localeData = getCachedLocaleDataInstance(getLocale());
+            this._groupSeparator = localeData.getNumberSymbol("group") || ",";
+        }
+        return this._groupSeparator;
     }
     get input() {
         return this.shadowRoot.querySelector("[ui5-input]");
@@ -369,9 +385,7 @@ let StepInput = StepInput_1 = class StepInput extends UI5Element {
         }
     }
     get _isValueWithCorrectPrecision() {
-        const localeData = getCachedLocaleDataInstance(getLocale());
-        // gets either "." or "," as delimiter which is based on locale, and splits the number by it
-        const delimiter = localeData.getNumberSymbol("decimal") || ".";
+        const delimiter = this.delimiter;
         // check if the value will be displayed with correct precision
         // _displayValue has special formatting logic
         if (this.valuePrecision === 0 && !this.input?.value.includes(delimiter) && ((this.value === 0) || (Number.isInteger(this.value)))) {
@@ -384,7 +398,8 @@ let StepInput = StepInput_1 = class StepInput extends UI5Element {
     }
     _onInputChange() {
         this._setDefaultInputValueIfNeeded();
-        const inputValue = this._parseNumber(this.input.value);
+        const updatedValue = this._removeGroupSeparators(this.input.value);
+        const inputValue = this._parseNumber(updatedValue);
         if (this._isValueChanged(inputValue)) {
             this._updateValueAndValidate(Number.isNaN(inputValue) ? this.min || 0 : inputValue);
             this.innerInput.value = this.input.value;
@@ -483,7 +498,13 @@ let StepInput = StepInput_1 = class StepInput extends UI5Element {
         return this.input.getDomRef().querySelector("input").selectionStart;
     }
     _getValueOnkeyDown(e, inputValue, cursorPosition) {
-        return `${inputValue.substring(0, cursorPosition)}${e.key}${inputValue.substring(cursorPosition)}`;
+        const typedValue = `${inputValue.substring(0, cursorPosition)}${e.key}${inputValue.substring(cursorPosition)}`;
+        const updatedValue = this._removeGroupSeparators(typedValue);
+        return updatedValue;
+    }
+    _removeGroupSeparators(value) {
+        const groupSeparator = this.groupSeparator;
+        return value.replaceAll(groupSeparator, "");
     }
     _isInputValueValid(typedValue, parsedValue) {
         return !Number.isNaN(parsedValue) && !/, {2,}/.test(typedValue);

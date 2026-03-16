@@ -17,7 +17,7 @@ import "@ui5/webcomponents-icons/dist/accept.js";
 import "@ui5/webcomponents-icons/dist/decline.js";
 import "@ui5/webcomponents-icons/dist/less.js";
 import SwitchDesign from "./types/SwitchDesign.js";
-import { FORM_CHECKABLE_REQUIRED } from "./generated/i18n/i18n-defaults.js";
+import { FORM_CHECKABLE_REQUIRED, SWITCH_ON, SWITCH_OFF, } from "./generated/i18n/i18n-defaults.js";
 // Template
 import SwitchTemplate from "./SwitchTemplate.js";
 // Styles
@@ -173,23 +173,27 @@ let Switch = Switch_1 = class Switch extends UI5Element {
     get _textOff() {
         return this.graphical ? "" : this.textOff;
     }
+    /**
+     * Determines if custom on/off texts duplicate the default role announcement.
+     * When textOn/textOff match the localized "On"/"Off" strings (case-insensitive),
+     * they duplicate what role="switch" with aria-checked already announces,
+     * so they should be aria-hidden to avoid duplicate screen reader announcements.
+     */
+    get _textAriaHidden() {
+        const on = this.textOn?.toLowerCase();
+        const off = this.textOff?.toLowerCase();
+        const i18nOn = Switch_1.i18nBundle.getText(SWITCH_ON).toLowerCase();
+        const i18nOff = Switch_1.i18nBundle.getText(SWITCH_OFF).toLowerCase();
+        return (on === i18nOn && off === i18nOff) || undefined;
+    }
     get effectiveTabIndex() {
         return this.disabled ? undefined : 0;
     }
     get effectiveAriaDisabled() {
         return this.disabled ? "true" : undefined;
     }
-    get accessibilityOnText() {
-        return this._textOn;
-    }
-    get accessibilityOffText() {
-        return this._textOff;
-    }
-    get hiddenText() {
-        return this.checked ? this.accessibilityOnText : this.accessibilityOffText;
-    }
     get ariaLabelText() {
-        return [getEffectiveAriaLabelText(this) || getAssociatedLabelForTexts(this), this.hiddenText].join(" ").trim();
+        return getEffectiveAriaLabelText(this) || getAssociatedLabelForTexts(this) || undefined;
     }
 };
 __decorate([

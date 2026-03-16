@@ -211,6 +211,7 @@ class Suggestions {
             items[previousSelectedIdx].focused = false;
             this.component.focused = true;
             this.component.hasSuggestionItemSelected = false;
+            this.component.value = this.component.typedInValue;
             this.selectedItemIndex -= 1;
             return;
         }
@@ -265,7 +266,7 @@ class Suggestions {
     _deselectItems() {
         const items = this._getItems();
         items.forEach(item => {
-            if (item.hasAttribute("ui5-suggestion-item")) {
+            if (item.hasAttribute("ui5-suggestion-item") || item.hasAttribute("ui5-suggestion-item-custom")) {
                 item.selected = false;
             }
             item.focused = false;

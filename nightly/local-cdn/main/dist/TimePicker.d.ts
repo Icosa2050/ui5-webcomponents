@@ -4,6 +4,7 @@ import type { IFormInputElement } from "@ui5/webcomponents-base/dist/features/In
 import type I18nBundle from "@ui5/webcomponents-base/dist/i18nBundle.js";
 import ValueState from "@ui5/webcomponents-base/dist/types/ValueState.js";
 import "@ui5/webcomponents-localization/dist/features/calendar/Gregorian.js";
+import DateFormat from "@ui5/webcomponents-localization/dist/DateFormat.js";
 import IconMode from "./types/IconMode.js";
 import type Popover from "./Popover.js";
 import type DateTimeInput from "./DateTimeInput.js";
@@ -43,8 +44,8 @@ type TimePickerInputEventDetail = TimePickerChangeInputEventDetail;
  * Supported format options are pattern-based on Unicode LDML Date Format notation.
  * For more information, see [UTS #35: Unicode Locale Data Markup Language](https://unicode.org/reports/tr35/tr35-dates.html#Date_Field_Symbol_Table).
  *
- * For example, if the `format-pattern` is "HH:mm:ss",
- * a valid value string is "11:42:35" and the same is displayed in the input.
+ * For example, if the valueFormat is "HH:mm:ss", the displayFormat is "hh:mm: ss a", and the used locale is English, a valid value string is "11:42:35", which leads to an output of "11:42:35 AM".
+ * If no placeholder is set to the TimePicker, the used displayFormat is displayed as a placeholder. If another placeholder is needed, it must be set.
  *
  * ### Keyboard handling
  * [F4], [Alt]+[Up], [Alt]+[Down] Open/Close picker dialog and move focus to it.
@@ -135,12 +136,27 @@ declare class TimePicker extends UI5Element implements IFormInputElement {
     placeholder?: string;
     /**
      * Determines the format, displayed in the input field.
+     * @default undefined
+     * @since 2.20.0
+     * @public
+     */
+    displayFormat?: string;
+    /**
+     * Determines the format, used for the value attribute.
+     * @default undefined
+     * @since 2.20.0
+     * @public
+     */
+    valueFormat?: string;
+    /**
+     * Determines the format, displayed in the input field.
      *
      * Example:
      * HH:mm:ss -> 11:42:35
      * hh:mm:ss a -> 2:23:15 PM
      * mm:ss -> 12:04 (only minutes and seconds)
      * @default undefined
+     * @deprecated Use displayFormat and valueFormat instead
      * @public
      */
     formatPattern?: string;
@@ -202,6 +218,12 @@ declare class TimePicker extends UI5Element implements IFormInputElement {
     _inputsPopover: Popover;
     _dateTimeInput: DateTimeInput;
     tempValue?: string;
+    /**
+     * Cached instance of DateFormat with a format pattern of "HH:mm:ss".
+     * Used by the getISOFormat method to avoid creating a new DateFormat instance on each call.
+     * @private
+     */
+    _isoFormatInstance?: DateFormat;
     static i18nBundle: I18nBundle;
     get formValidityMessage(): string;
     get formValidity(): ValidityStateFlags;
@@ -227,7 +249,8 @@ declare class TimePicker extends UI5Element implements IFormInputElement {
      * @protected
      */
     get _formatPattern(): string | undefined;
-    get _displayFormat(): string;
+    get _displayFormat(): string | undefined;
+    get _valueFormat(): string | undefined;
     get _effectiveValue(): string;
     get _timeSelectionValue(): string | undefined;
     get _isPhone(): boolean;
@@ -277,7 +300,13 @@ declare class TimePicker extends UI5Element implements IFormInputElement {
     _getInputField(): HTMLInputElement | import("./Input.js").default | null;
     _onkeydown(e: KeyboardEvent): void;
     get _isPattern(): boolean;
+    get _isValueFormatPattern(): boolean;
+    get _isDisplayFormatPattern(): boolean;
+    get displayValue(): string;
     getFormat(): import("sap/ui/core/format/DateFormat").default;
+    getISOFormat(): DateFormat;
+    getDisplayFormat(): import("sap/ui/core/format/DateFormat").default;
+    getValueFormat(): import("sap/ui/core/format/DateFormat").default;
     /**
      * Formats a Java Script date object into a string representing a locale date and time
      * according to the `formatPattern` property of the TimePicker instance
@@ -294,6 +323,29 @@ declare class TimePicker extends UI5Element implements IFormInputElement {
      * @public
      */
     isValid(value: string | undefined): boolean;
+    isValidDisplayValue(value: string | undefined): boolean;
+    /**
+     * Checks if a value is valid against the current `valueFormat` value.
+     *
+     * **Note:** an empty string is considered as valid value.
+     * @param value The value to be tested against the value format
+     * @public
+     */
+    isValidValue(value: string | undefined): boolean;
+    /**
+     * Converts a value from displayFormat to valueFormat
+     * @param value Value in displayFormat
+     * @returns Value in valueFormat
+     * @private
+     */
+    getValueFromDisplayValue(value: string): string;
+    /**
+     * Converts a value from valueFormat to displayFormat
+     * @param value Value in valueFormat
+     * @returns Value in displayFormat
+     * @private
+     */
+    getDisplayValueFromValue(value: string): string;
     normalizeValue(value: string): string;
     _modifyValueBy(amount: number, unit: string): void;
     /**

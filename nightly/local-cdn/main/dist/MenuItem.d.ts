@@ -205,6 +205,14 @@ declare class MenuItem extends ListItem implements IMenuItem {
     get labelBack(): string;
     get labelCancel(): string;
     get accessibleNameText(): string;
+    get endContentAccessibleName(): string;
+    get loadingText(): string;
+    /**
+     * Returns the text for aria-describedby, including loading state for iOS VoiceOver support.
+     * When a menu item with a submenu is focused and is in loading state, the loading text
+     * will be announced by screen readers.
+     */
+    get ariaSelectedText(): string | undefined;
     onBeforeRendering(): void;
     focus(focusOptions?: FocusOptions): Promise<void>;
     get _focusable(): boolean;

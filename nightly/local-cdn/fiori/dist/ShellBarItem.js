@@ -23,15 +23,29 @@ import shellBarV2ItemStyles from "./generated/themes/ShellBarItem.css.js";
  * @constructor
  * @extends UI5Element
  * @public
- * @experimental
  */
 let ShellBarItem = class ShellBarItem extends UI5Element {
     constructor() {
         super(...arguments);
         /**
-         * Defines accessibility attributes.
+         * Defines additional accessibility attributes on Shellbar Items.
+         *
+         * The accessibility attributes support the following values:
+         *
+         * - **expanded**: Indicates whether the button, or another grouping element it controls,
+         * is currently expanded or collapsed.
+         * Accepts the following string values: `true` or `false`.
+         *
+         * - **hasPopup**: Indicates the availability and type of interactive popup element,
+         * such as menu or dialog, that can be triggered by the button.
+         *
+         * - **controls**: Identifies the element (or elements) whose contents
+         * or presence are controlled by the component.
+         * Accepts a lowercase string value, referencing the ID of the element it controls.
+         *
          * @default {}
          * @public
+         * @since 2.9.0
          */
         this.accessibilityAttributes = {};
         /**

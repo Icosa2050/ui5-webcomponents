@@ -111,6 +111,14 @@ let TimeSelectionClocks = class TimeSelectionClocks extends TimePickerInternals 
         let clock;
         const toggleSpinButtonTarget = evt.target && evt.target.tagName.toLowerCase().indexOf("segmented") === -1;
         if (isEnter(evt)) {
+            // If Enter is pressed on AM/PM segmented button, apply the period change first
+            if (this._amPmFocused) {
+                const buttonAmPm = this._buttonAmPm();
+                const selectedItem = buttonAmPm?.selectedItems[0];
+                if (selectedItem?.textContent) {
+                    this._calculatePeriodChange(selectedItem.textContent);
+                }
+            }
             // Accept the time and close the popover
             this.fireDecoratorEvent("close-picker");
         }

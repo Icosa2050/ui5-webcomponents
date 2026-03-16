@@ -332,13 +332,13 @@ let MonthPicker = MonthPicker_1 = class MonthPicker extends CalendarPart {
     }
 };
 __decorate([
-    property({ type: Array })
+    property({ type: Array, noAttribute: true })
 ], MonthPicker.prototype, "selectedDates", void 0);
 __decorate([
     property()
 ], MonthPicker.prototype, "selectionMode", void 0);
 __decorate([
-    property({ type: Array })
+    property({ type: Array, noAttribute: true })
 ], MonthPicker.prototype, "_monthsInterval", void 0);
 __decorate([
     property({ type: Boolean, noAttribute: true })

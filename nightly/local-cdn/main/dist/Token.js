@@ -13,7 +13,7 @@ import customElement from "@ui5/webcomponents-base/dist/decorators/customElement
 import jsxRenderer from "@ui5/webcomponents-base/dist/renderer/JsxRenderer.js";
 import { isBackSpace, isSpace, isDelete, isSpaceCtrl, } from "@ui5/webcomponents-base/dist/Keys.js";
 import i18n from "@ui5/webcomponents-base/dist/decorators/i18n.js";
-import { TOKEN_ARIA_DELETABLE, TOKEN_ARIA_LABEL, TOKEN_ARIA_REMOVE } from "./generated/i18n/i18n-defaults.js";
+import { TOKEN_ARIA_DELETE, TOKEN_ARIA_DELETABLE, TOKEN_ARIA_LABEL } from "./generated/i18n/i18n-defaults.js";
 import TokenTemplate from "./TokenTemplate.js";
 // Styles
 import tokenStyles from "./generated/themes/Token.css.js";
@@ -118,7 +118,7 @@ let Token = Token_1 = class Token extends UI5Element {
         }
     }
     get tokenDeletableText() {
-        return Token_1.i18nBundle.getText(TOKEN_ARIA_REMOVE);
+        return Token_1.i18nBundle.getText(TOKEN_ARIA_DELETE);
     }
     get textDom() {
         return this.getDomRef()?.querySelector(".ui5-token--text");

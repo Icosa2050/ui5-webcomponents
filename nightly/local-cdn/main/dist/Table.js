@@ -160,7 +160,7 @@ let Table = Table_1 = class Table extends UI5Element {
         this.stickyTop = "0";
         this._invalidate = 0;
         this._renderNavigated = false;
-        this._events = ["keydown", "keyup", "click", "focusin", "focusout", "dragstart", "dragenter", "dragleave", "dragover", "drop", "dragend"];
+        this._events = ["keydown", "keyup", "click", "focusin", "focusout", "pointerdown", "dragstart", "dragenter", "dragleave", "dragover", "drop", "dragend"];
         this._poppedIn = [];
         this._containerWidth = 0;
         this._onResizeBound = this._onResize.bind(this);
@@ -313,7 +313,7 @@ let Table = Table_1 = class Table extends UI5Element {
         const virtualizer = this._getVirtualizer();
         const headerStyleMap = {};
         this.headerRow[0]?.cells.forEach(headerCell => {
-            headerStyleMap[`--halign-${headerCell._id}`] = headerCell.horizontalAlign || "normal";
+            headerStyleMap[`--halign-${headerCell._id}`] = headerCell.horizontalAlign || "initial";
         });
         return {
             table: {

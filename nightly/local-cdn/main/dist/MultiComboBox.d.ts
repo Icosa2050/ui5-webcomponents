@@ -29,6 +29,7 @@ import type InputComposition from "./features/InputComposition.js";
  */
 interface IMultiComboBoxItem extends UI5Element {
     text?: string;
+    value?: string;
     additionalText?: string;
     headerText?: string;
     selected: boolean;
@@ -110,6 +111,23 @@ declare class MultiComboBox extends UI5Element implements IFormInputElement {
      * @public
      */
     value: string;
+    /**
+     * Defines the values of the selected items.
+     *
+     * Use this property to programmatically select items by their `value` property.
+     * Each string in the array should match the `value` attribute of a `ui5-mcb-item`.
+     *
+     * **Note:** If an item doesn't have a `value` attribute set, it cannot be selected via this property.
+     *
+     * **Note:** The recommended approach is to set the `value` property on each `ui5-mcb-item`
+     * and use `selectedValues` for programmatic selection. The `selected` property on items is
+     * deprecated and should not be used together with `selectedValues`.
+     *
+     * @default []
+     * @public
+     * @since 2.20.0
+     */
+    selectedValues: Array<string>;
     /**
      * Determines the name by which the component will be identified upon submission in an HTML form.
      *
@@ -285,7 +303,6 @@ declare class MultiComboBox extends UI5Element implements IFormInputElement {
      * @public
      */
     valueStateMessage: Slot<HTMLElement>;
-    selectedValues: Array<IMultiComboBoxItem>;
     _inputLastValue: string;
     _deleting: boolean;
     _validationTimeout: Timeout | null;
@@ -393,6 +410,7 @@ declare class MultiComboBox extends UI5Element implements IFormInputElement {
     _getFirstMatchingItem(current: string): IMultiComboBoxItem | undefined;
     _startsWithMatchingItems(str: string): IMultiComboBoxItem[];
     _revertSelection(): void;
+    _syncSelection(): void;
     onBeforeRendering(): void;
     onAfterRendering(): void;
     get _isPhone(): boolean;

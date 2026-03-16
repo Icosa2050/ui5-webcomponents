@@ -65,7 +65,7 @@ class UI5ElementMetadata {
      */
     hasAttribute(propName) {
         const propData = this.getProperties()[propName];
-        return propData.type !== Object && propData.type !== Array && !propData.noAttribute;
+        return propData.type !== Object && !propData.noAttribute;
     }
     /**
      * Returns an array with the properties of the UI5 Element (in camelCase)

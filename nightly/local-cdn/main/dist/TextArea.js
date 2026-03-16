@@ -453,7 +453,7 @@ __decorate([
     property({ type: Boolean })
 ], TextArea.prototype, "exceeding", void 0);
 __decorate([
-    property({ type: Array })
+    property({ type: Array, noAttribute: true })
 ], TextArea.prototype, "_mirrorText", void 0);
 __decorate([
     property({ noAttribute: true })

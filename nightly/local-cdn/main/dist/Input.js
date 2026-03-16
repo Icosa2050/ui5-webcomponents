@@ -340,10 +340,12 @@ let Input = Input_1 = class Input extends UI5Element {
                 }
                 this._selectMatchingItem(item);
             }
+            else {
+                this._matchedSuggestionItem = undefined;
+            }
         }
     }
     onAfterRendering() {
-        const innerInput = this.getInputDOMRefSync();
         if (this.showSuggestions && this.Suggestions?._getPicker()) {
             this._listWidth = this.Suggestions._getListWidth();
             // disabled ItemNavigation from the list since we are not using it
@@ -356,14 +358,7 @@ let Input = Input_1 = class Input extends UI5Element {
             // 	innerInput.value = this._innerValue;
             // }
             if (this.typedInValue.length && this.value.length) {
-                // "Contains" filtering requires custom selection range handling.
-                // Example: "e" → "Belgium" (item does not start with typed value, so select all).
-                if (this.filter === InputSuggestionsFilter.Contains) {
-                    this._adjustContainsSelectionRange();
-                }
-                else {
-                    innerInput.setSelectionRange(this.typedInValue.length, this.value.length);
-                }
+                this._adjustSelectionRange();
             }
             this.fireDecoratorEvent("type-ahead");
         }
@@ -374,7 +369,7 @@ let Input = Input_1 = class Input extends UI5Element {
             this._valueStateLinks = this.linksInAriaValueStateHiddenText;
         }
     }
-    _adjustContainsSelectionRange() {
+    _adjustSelectionRange() {
         const innerInput = this.getInputDOMRefSync();
         const visibleItems = this.Suggestions?._getItems().filter(item => !item.hidden);
         const currentItem = visibleItems?.find(item => { return item.selected || item.focused; });
@@ -387,6 +382,10 @@ let Input = Input_1 = class Input extends UI5Element {
             else {
                 innerInput.setSelectionRange(0, this.value.length);
             }
+        }
+        else {
+            // No current item selected (e.g., during typing) - use default typeahead selection
+            innerInput.setSelectionRange(this.typedInValue.length, this.value.length);
         }
     }
     _onkeydown(e) {
@@ -527,9 +526,12 @@ let Input = Input_1 = class Input extends UI5Element {
         // if a group item is focused, this is false
         const suggestionItemPressed = !!(this.Suggestions?.onEnter(e));
         const innerInput = this.getInputDOMRefSync();
-        const matchingItem = this._selectableItems.find(item => {
-            return item.text === this.value;
-        });
+        let matchingItem = this._matchedSuggestionItem;
+        if (!matchingItem) {
+            matchingItem = this._selectableItems.find(item => {
+                return item.text?.toLowerCase() === this.value.toLowerCase();
+            });
+        }
         if (matchingItem) {
             const itemText = matchingItem.text || "";
             innerInput.setSelectionRange(itemText.length, itemText.length);
@@ -580,6 +582,7 @@ let Input = Input_1 = class Input extends UI5Element {
         const innerInput = this.getInputDOMRefSync();
         const isAutoCompleted = innerInput.selectionEnd - innerInput.selectionStart > 0;
         this.isTyping = false;
+        this._matchedSuggestionItem = undefined;
         if (this.value !== this.previousValue && this.value !== this.lastConfirmedValue && !this.open) {
             this.value = this.lastConfirmedValue ? this.lastConfirmedValue : this.previousValue;
             this.fireDecoratorEvent(INPUT_EVENTS.INPUT, { inputType: "" });
@@ -762,6 +765,7 @@ let Input = Input_1 = class Input extends UI5Element {
     }
     _selectMatchingItem(item) {
         item.selected = true;
+        this._matchedSuggestionItem = item;
     }
     _filterItems(value) {
         let matchingItems = [];
@@ -806,8 +810,12 @@ let Input = Input_1 = class Input extends UI5Element {
         });
     }
     _handleTypeAhead(item) {
-        const value = item.text ? item.text : "";
-        this.value = value;
+        const suggestionText = item.text ? item.text : "";
+        const typedValue = this.typedInValue;
+        // Preserve the user's typed input case during typing
+        if (suggestionText.toLowerCase().startsWith(typedValue.toLowerCase())) {
+            this.value = typedValue + suggestionText.substring(typedValue.length);
+        }
         this._performTextSelection = true;
         this._shouldAutocomplete = false;
     }
@@ -935,7 +943,16 @@ let Input = Input_1 = class Input extends UI5Element {
         if (this._isGroupItem(item)) {
             return;
         }
-        const itemText = item.text || "";
+        let originalItem = item;
+        if (this._matchedSuggestionItem) {
+            const matchedText = this._matchedSuggestionItem.text?.toLowerCase() || "";
+            const itemText = item.text?.toLowerCase() || "";
+            // Only use matched item if keyboard navigation or if it's the same item (case-insensitive)
+            if (keyboardUsed || matchedText === itemText) {
+                originalItem = this._matchedSuggestionItem;
+            }
+        }
+        const itemText = originalItem.text || "";
         const fireChange = keyboardUsed
             ? this.valueBeforeItemSelection !== itemText : this.previousValue !== itemText;
         this.hasSuggestionItemSelected = true;
@@ -951,6 +968,7 @@ let Input = Input_1 = class Input extends UI5Element {
             this.previousValue = this.value;
         }
         this.valueBeforeSelectionStart = "";
+        this._matchedSuggestionItem = undefined;
         this.isTyping = false;
         this.open = false;
     }
@@ -962,6 +980,10 @@ let Input = Input_1 = class Input extends UI5Element {
         const itemValue = this._isGroupItem(item) ? this.valueBeforeSelectionStart : item.text;
         this.value = itemValue || "";
         this._performTextSelection = true;
+        // Update the matched item when navigating with arrows to preserve correct case on Enter
+        if (!this._isGroupItem(item)) {
+            this._matchedSuggestionItem = item;
+        }
     }
     fireEventByAction(action, e) {
         const valueBeforeInput = this.value;
@@ -1468,7 +1490,7 @@ __decorate([
     property({ type: Object })
 ], Input.prototype, "Suggestions", void 0);
 __decorate([
-    property({ type: Array })
+    property({ type: Array, noAttribute: true })
 ], Input.prototype, "_linksListenersArray", void 0);
 __decorate([
     property({ type: Boolean, noAttribute: true })

@@ -6,7 +6,7 @@ export default function CarouselTemplate() {
     return (_jsxs("section", { class: {
             "ui5-carousel-root": true,
             [`ui5-carousel-background-${this._backgroundDesign}`]: true,
-        }, role: "region", "aria-label": this.ariaLabelTxt, "aria-roledescription": this._roleDescription, onFocusIn: this._onfocusin, onKeyDown: this._onkeydown, onMouseOut: this._onmouseout, onMouseOver: this._onmouseover, onTouchStart: this._ontouchstart, onMouseDown: this._onmousedown, children: [_jsxs("div", { class: this.classes.viewport, part: "content", children: [_jsx("div", { role: "list", "aria-label": this._ariaListLabel, class: this.classes.content, style: { transform: `translate3d(${this._isRTL ? "" : "-"}${this._currentSlideIndex * (this._itemWidth || 0)}px, 0, 0` }, children: this.items.map((itemInfo, i) => _jsx("div", { "data-sap-focus-ref": this._focusedItemIndex === i ? true : undefined, id: itemInfo.id, class: {
+        }, role: "region", "aria-label": this.ariaLabelTxt, "aria-roledescription": this._roleDescription, onFocusIn: this._onfocusin, onKeyDown: this._onkeydown, onMouseOut: this._onmouseout, onMouseOver: this._onmouseover, onTouchStart: this._ontouchstart, onMouseDown: this._onmousedown, children: [_jsxs("div", { class: this.classes.viewport, part: "content", children: [_jsx("div", { role: "list", "aria-label": this._ariaListLabel, class: this.classes.content, style: { transform: `translate3d(${this._isRTL ? "" : "-"}${this._currentPageIndex * (this._itemWidth || 0)}px, 0, 0` }, children: this.items.map((itemInfo, i) => _jsx("div", { "data-sap-focus-ref": this._focusedItemIndex === i ? true : undefined, id: itemInfo.id, class: {
                                 "ui5-carousel-item": true,
                                 "ui5-carousel-item--hidden": !itemInfo.visible,
                             }, style: { width: `${this._itemWidth || 0}px` }, part: "item", role: "listitem", "aria-posinset": itemInfo.posinset, "aria-setsize": itemInfo.setsize, "aria-hidden": !itemInfo.visible, tabindex: itemInfo.tabIndex, children: _jsx("slot", { name: itemInfo.item._individualSlot, tabindex: itemInfo.tabIndex }) })) }), this.showArrows.content &&
@@ -31,6 +31,6 @@ function navIndicator() {
             "ui5-carousel-navigation-dot--active": dot.active
         } }))
         :
-            _jsxs("div", { dir: "auto", class: "ui5-carousel-navigation-text", children: [this._currentSlideIndex + 1, "\u00A0", this.ofText, "\u00A0", this.pagesCount] });
+            _jsxs("div", { dir: "auto", class: "ui5-carousel-navigation-text", children: [this._currentPageIndex + 1, "\u00A0", this.ofText, "\u00A0", this.pagesCount] });
 }
 //# sourceMappingURL=CarouselTemplate.js.map

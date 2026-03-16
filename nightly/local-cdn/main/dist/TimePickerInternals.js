@@ -340,13 +340,13 @@ __decorate([
     property()
 ], TimePickerInternals.prototype, "_calendarType", void 0);
 __decorate([
-    property({ type: Array })
+    property({ type: Array, noAttribute: true })
 ], TimePickerInternals.prototype, "_entities", void 0);
 __decorate([
     property({ type: Object })
 ], TimePickerInternals.prototype, "_componentMap", void 0);
 __decorate([
-    property({ type: Array })
+    property({ type: Array, noAttribute: true })
 ], TimePickerInternals.prototype, "_periods", void 0);
 __decorate([
     property({ type: Number, noAttribute: true })

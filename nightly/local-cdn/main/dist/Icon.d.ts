@@ -69,7 +69,6 @@ interface IIcon extends HTMLElement {
  * ### Keyboard Handling
  *
  * - [Space] / [Enter] or [Return] - Fires the `click` event if the `mode` property is set to `Interactive`.
- * - [Shift] - If [Space] / [Enter] or [Return] is pressed, pressing [Shift] releases the ui5-icon without triggering the click event.
  *
  * ### ES6 Module Import
  *
@@ -164,6 +163,7 @@ declare class Icon extends UI5Element implements IIcon {
     viewBox?: string;
     customTemplate?: object;
     customTemplateAsString?: string;
+    _onclick(e: MouseEvent): void;
     _onkeydown(e: KeyboardEvent): void;
     _onkeyup(e: KeyboardEvent): void;
     /**

@@ -8,7 +8,7 @@ import jsxRenderer from "@ui5/webcomponents-base/dist/renderer/JsxRenderer.js";
 import customElement from "@ui5/webcomponents-base/dist/decorators/customElement.js";
 import property from "@ui5/webcomponents-base/dist/decorators/property.js";
 import event from "@ui5/webcomponents-base/dist/decorators/event-strict.js";
-import ToolbarItem from "./ToolbarItem.js";
+import ToolbarItemBase from "./ToolbarItemBase.js";
 import ToolbarButtonTemplate from "./ToolbarButtonTemplate.js";
 import ToolbarButtonCss from "./generated/themes/ToolbarButton.css.js";
 /**
@@ -22,13 +22,27 @@ import ToolbarButtonCss from "./generated/themes/ToolbarButton.css.js";
  * `import "@ui5/webcomponents/dist/ToolbarButton.js";`
  * @constructor
  * @abstract
- * @extends ToolbarItem
+ * @extends ToolbarItemBase
  * @public
  * @since 1.17.0
  */
-let ToolbarButton = class ToolbarButton extends ToolbarItem {
+let ToolbarButton = class ToolbarButton extends ToolbarItemBase {
     constructor() {
         super(...arguments);
+        /**
+        * Property used to define the access of the item to the overflow Popover. If "NeverOverflow" option is set,
+        * the item never goes in the Popover, if "AlwaysOverflow" - it never comes out of it.
+        * @public
+        * @default "Default"
+        */
+        this.overflowPriority = "Default";
+        /**
+         * Defines if the toolbar overflow popup should close upon interaction with the item.
+         * It will close by default.
+         * @default false
+         * @public
+         */
+        this.preventOverflowClosing = false;
         /**
          * Defines if the action is disabled.
          *
@@ -116,6 +130,12 @@ let ToolbarButton = class ToolbarButton extends ToolbarItem {
         };
     }
 };
+__decorate([
+    property()
+], ToolbarButton.prototype, "overflowPriority", void 0);
+__decorate([
+    property({ type: Boolean })
+], ToolbarButton.prototype, "preventOverflowClosing", void 0);
 __decorate([
     property({ type: Boolean })
 ], ToolbarButton.prototype, "disabled", void 0);

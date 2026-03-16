@@ -128,6 +128,12 @@ declare class Search extends SearchField {
      */
     _valueBeforeOpen: string;
     /**
+     * Holds the original typed value before arrow key navigation in dropdown.
+     * Used to restore the value when navigating back to the input field.
+     * @private
+     */
+    _valueBeforeArrowNav?: string;
+    /**
      * Holds the currently proposed item which will be selected if the user presses Enter.
      * @private
      */
@@ -137,6 +143,11 @@ declare class Search extends SearchField {
      * @private
      */
     _isTyping: boolean;
+    /**
+     * Bound reference to the delete handler for proper event listener removal.
+     * @private
+     */
+    _deleteHandler: (e: CustomEvent) => void;
     static i18nBundle: I18nBundle;
     constructor();
     onBeforeRendering(): void;
@@ -162,7 +173,9 @@ declare class Search extends SearchField {
     _popoupHasAnyContent(): boolean;
     _onFooterButtonKeyDown(e: KeyboardEvent): void;
     _onItemKeydown(e: KeyboardEvent): void;
+    _onListItemFocusIn(e: FocusEvent): void;
     _onItemClick(e: CustomEvent): void;
+    _onItemDelete(e: CustomEvent): void;
     _onkeydown(e: KeyboardEvent): void;
     _onFocusOutSearch(e: FocusEvent): void;
     _handleBeforeClose(e: CustomEvent<PopupBeforeCloseEventDetail>): void;

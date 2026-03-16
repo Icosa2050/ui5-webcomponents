@@ -1109,7 +1109,7 @@ __decorate([
     property({ type: Number })
 ], FlexibleColumnLayout.prototype, "_width", void 0);
 __decorate([
-    property({ type: Array })
+    property({ type: Array, noAttribute: true })
 ], FlexibleColumnLayout.prototype, "_columnLayout", void 0);
 __decorate([
     property({ type: Number })

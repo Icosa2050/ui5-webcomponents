@@ -13,7 +13,7 @@ import slot from "@ui5/webcomponents-base/dist/decorators/slot-strict.js";
 import i18n from "@ui5/webcomponents-base/dist/decorators/i18n.js";
 import jsxRenderer from "@ui5/webcomponents-base/dist/renderer/JsxRenderer.js";
 import { isSpace, isEnter, isEscape, isShift, isSpaceShift, } from "@ui5/webcomponents-base/dist/Keys.js";
-import { getEffectiveAriaLabelText } from "@ui5/webcomponents-base/dist/util/AccessibilityTextsHelper.js";
+import { getAllAccessibleNameRefTexts, registerUI5Element, deregisterUI5Element, } from "@ui5/webcomponents-base/dist/util/AccessibilityTextsHelper.js";
 import { getIconAccessibleName } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 import { isDesktop, isSafari, } from "@ui5/webcomponents-base/dist/Device.js";
 import willShowContent from "@ui5/webcomponents-base/dist/util/willShowContent.js";
@@ -224,6 +224,10 @@ let Button = Button_1 = class Button extends UI5Element {
             this.addEventListener("click", this._onclickBound);
             this._clickHandlerAttached = true;
         }
+        registerUI5Element(this, this._updateAccessibleNameRefTexts.bind(this));
+    }
+    _updateAccessibleNameRefTexts() {
+        this._accessibleNameRefTexts = getAllAccessibleNameRefTexts(this);
     }
     onExitDOM() {
         if (this._clickHandlerAttached) {
@@ -233,6 +237,7 @@ let Button = Button_1 = class Button extends UI5Element {
         if (activeButton === this) {
             activeButton = null;
         }
+        deregisterUI5Element(this);
     }
     async onBeforeRendering() {
         this._setBadgeOverlayStyle();
@@ -390,7 +395,8 @@ let Button = Button_1 = class Button extends UI5Element {
         return this.nonInteractive ? -1 : Number.parseInt(this.forcedTabIndex);
     }
     get ariaLabelText() {
-        const effectiveAriaLabelText = getEffectiveAriaLabelText(this) || "";
+        // Use accessibleNameRef texts (cached), then accessibleName (direct), then textContent as fallback
+        const effectiveAriaLabelText = this._accessibleNameRefTexts || this.accessibleName || "";
         const textContent = this.textContent || "";
         const internalLabelText = this.effectiveBadgeDescriptionText || "";
         // Use either the effective aria label text (if accessibleName is provided) or the button's text content
@@ -533,6 +539,9 @@ __decorate([
 __decorate([
     property({ type: Boolean, noAttribute: true })
 ], Button.prototype, "_isSpacePressed", void 0);
+__decorate([
+    property({ noAttribute: true })
+], Button.prototype, "_accessibleNameRefTexts", void 0);
 __decorate([
     slot({ type: Node, "default": true })
 ], Button.prototype, "text", void 0);

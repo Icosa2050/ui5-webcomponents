@@ -122,14 +122,14 @@ declare class RatingIndicator extends UI5Element {
      * @public
      * @since 2.20
      */
-    iconSelected?: string;
+    ratedIcon: string;
     /**
      * Defines the icon to be displayed for the unselected (empty) rating symbol.
      * @default "unfavorite"
      * @public
      * @since 2.20
      */
-    iconUnselected?: string;
+    unratedIcon: string;
     /**
      * @private
      */
@@ -155,8 +155,6 @@ declare class RatingIndicator extends UI5Element {
     get _ariaLabel(): string | undefined;
     get _ariaDescription(): string | undefined;
     get ariaReadonly(): "true" | undefined;
-    get effectiveIconSelected(): string;
-    get effectiveIconUnselected(): string;
 }
 export default RatingIndicator;
 export type { Star };

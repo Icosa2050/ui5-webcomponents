@@ -202,7 +202,7 @@ let DynamicPage = DynamicPage_1 = class DynamicPage extends UI5Element {
         debounce(() => this.snapTitleByScroll(), SCROLL_DEBOUNCE_RATE);
     }
     snapTitleByScroll() {
-        if (!this.dynamicPageTitle || !this.dynamicPageHeader || this.headerPinned) {
+        if (!this.dynamicPageTitle || !this.dynamicPageHeader || this.headerPinned || !this.scrollContainer) {
             return;
         }
         if (this.isToggled) {
@@ -229,7 +229,7 @@ let DynamicPage = DynamicPage_1 = class DynamicPage extends UI5Element {
             // If the header is snapped and the scroll is at the top, scroll down a bit
             // to avoid ending in an endless loop of snapping and unsnapping
             requestAnimationFrame(() => {
-                if (this.scrollContainer.scrollTop === 0) {
+                if (this.scrollContainer && this.scrollContainer.scrollTop === 0) {
                     this.scrollContainer.scrollTop = SCROLL_THRESHOLD;
                 }
             });
@@ -258,7 +258,7 @@ let DynamicPage = DynamicPage_1 = class DynamicPage extends UI5Element {
         if (this.headerPinned) {
             this.showHeaderInStickArea = true;
         }
-        else if (this.scrollContainer.scrollTop === 0) {
+        else if (this.scrollContainer && this.scrollContainer.scrollTop === 0) {
             this.showHeaderInStickArea = false;
         }
         this.fireDecoratorEvent("pin-button-toggle");
@@ -276,6 +276,9 @@ let DynamicPage = DynamicPage_1 = class DynamicPage extends UI5Element {
         this.dynamicPageTitle.focus();
     }
     async _toggleHeader() {
+        if (!this.scrollContainer) {
+            return;
+        }
         const headerHeight = this.dynamicPageHeader?.getBoundingClientRect().height || 0;
         const currentScrollTop = this.scrollContainer.scrollTop;
         if (!this._headerSnapped && this.headerPinned) {

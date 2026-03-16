@@ -301,6 +301,7 @@ let Tokenizer = Tokenizer_1 = class Tokenizer extends UI5Element {
         if (nextToken && !isPhone()) {
             setTimeout(() => {
                 nextToken.focus();
+                this._itemNav.setCurrentItem(nextToken);
             }, 0);
         }
     }
@@ -623,7 +624,7 @@ let Tokenizer = Tokenizer_1 = class Tokenizer extends UI5Element {
         });
         this._itemNav._currentIndex = -1;
         this._skipTabIndex = true;
-        if (!this.contains(relatedTarget)) {
+        if (!this.contains(relatedTarget) && !this.preventInitialFocus) {
             this._tokens[0].forcedTabIndex = "0";
             this._isFocusSetInternally = false;
             this._skipTabIndex = false;

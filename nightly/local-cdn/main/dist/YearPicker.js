@@ -315,13 +315,13 @@ let YearPicker = YearPicker_1 = class YearPicker extends CalendarPart {
     }
 };
 __decorate([
-    property({ type: Array })
+    property({ type: Array, noAttribute: true })
 ], YearPicker.prototype, "selectedDates", void 0);
 __decorate([
     property()
 ], YearPicker.prototype, "selectionMode", void 0);
 __decorate([
-    property({ type: Array })
+    property({ type: Array, noAttribute: true })
 ], YearPicker.prototype, "_yearsInterval", void 0);
 __decorate([
     property({ type: Boolean, noAttribute: true })

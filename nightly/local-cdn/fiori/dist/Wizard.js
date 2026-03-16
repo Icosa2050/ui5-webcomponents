@@ -784,7 +784,7 @@ __decorate([
     property({ type: Number })
 ], Wizard.prototype, "contentHeight", void 0);
 __decorate([
-    property({ type: Array })
+    property({ type: Array, noAttribute: true })
 ], Wizard.prototype, "_groupedTabs", void 0);
 __decorate([
     slot({

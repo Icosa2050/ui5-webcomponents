@@ -96,10 +96,10 @@ let Toolbar = Toolbar_1 = class Toolbar extends UI5Element {
             + calculateCSSREMValue(toolbarComputedStyle, "--_ui5-toolbar-padding-right");
     }
     get alwaysOverflowItems() {
-        return this.items.filter((item) => item.overflowPriority === ToolbarItemOverflowBehavior.AlwaysOverflow);
+        return this.items.filter(item => item.overflowPriority === ToolbarItemOverflowBehavior.AlwaysOverflow);
     }
     get movableItems() {
-        return this.items.filter((item) => item.overflowPriority !== ToolbarItemOverflowBehavior.AlwaysOverflow && item.overflowPriority !== ToolbarItemOverflowBehavior.NeverOverflow);
+        return this.items.filter(item => item.overflowPriority !== ToolbarItemOverflowBehavior.AlwaysOverflow && item.overflowPriority !== ToolbarItemOverflowBehavior.NeverOverflow);
     }
     get overflowItems() {
         // spacers are ignored
@@ -257,7 +257,7 @@ let Toolbar = Toolbar_1 = class Toolbar extends UI5Element {
     }
     storeItemsWidth() {
         let totalWidth = 0, minWidth = 0;
-        this.items.forEach((item) => {
+        this.items.forEach(item => {
             const itemWidth = this.getItemWidth(item);
             totalWidth += itemWidth;
             if (item.overflowPriority === ToolbarItemOverflowBehavior.NeverOverflow) {

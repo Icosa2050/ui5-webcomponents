@@ -366,6 +366,7 @@ declare class Input extends UI5Element implements SuggestionComponent, IFormInpu
     _clearIconClicked?: boolean;
     _focusedAfterClear: boolean;
     _changeToBeFired?: boolean;
+    _matchedSuggestionItem?: IInputSuggestionItemSelectable;
     _performTextSelection?: boolean;
     _isLatestValueFromSuggestions: boolean;
     _isChangeTriggeredBySuggestion: boolean;
@@ -392,7 +393,7 @@ declare class Input extends UI5Element implements SuggestionComponent, IFormInpu
     _isGroupItem(item: IInputSuggestionItem): boolean;
     onBeforeRendering(): void;
     onAfterRendering(): void;
-    _adjustContainsSelectionRange(): void;
+    _adjustSelectionRange(): void;
     _onkeydown(e: KeyboardEvent): void;
     _onkeyup(e: KeyboardEvent): void;
     get currentItemIndex(): number;

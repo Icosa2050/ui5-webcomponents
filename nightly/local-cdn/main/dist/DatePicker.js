@@ -24,7 +24,7 @@ import { isPageUp, isPageDown, isPageUpShift, isPageDownShift, isPageUpShiftCtrl
 import { isPhone, isDesktop } from "@ui5/webcomponents-base/dist/Device.js";
 import CalendarPickersMode from "./types/CalendarPickersMode.js";
 import "@ui5/webcomponents-icons/dist/appointment-2.js";
-import { DATEPICKER_OPEN_ICON_TITLE, DATEPICKER_OPEN_ICON_TITLE_OPENED, DATEPICKER_DATE_DESCRIPTION, DATETIME_COMPONENTS_PLACEHOLDER_PREFIX, INPUT_SUGGESTIONS_TITLE, DATEPICKER_POPOVER_ACCESSIBLE_NAME, VALUE_STATE_ERROR, VALUE_STATE_INFORMATION, VALUE_STATE_SUCCESS, VALUE_STATE_WARNING, DATEPICKER_VALUE_MISSING, DATEPICKER_PATTERN_MISSMATCH, DATEPICKER_RANGE_UNDERFLOW, DATEPICKER_RANGE_OVERFLOW, TIMEPICKER_CANCEL_BUTTON, } from "./generated/i18n/i18n-defaults.js";
+import { DATEPICKER_OPEN_ICON_TITLE, DATEPICKER_OPEN_ICON_TITLE_OPENED, DATEPICKER_DATE_DESCRIPTION, DATETIME_COMPONENTS_PLACEHOLDER_PREFIX, DATEPICKER_MOBILE_HEADER_TITLE, DATEPICKER_POPOVER_ACCESSIBLE_NAME, VALUE_STATE_ERROR, VALUE_STATE_INFORMATION, VALUE_STATE_SUCCESS, VALUE_STATE_WARNING, DATEPICKER_VALUE_MISSING, DATEPICKER_PATTERN_MISSMATCH, DATEPICKER_RANGE_UNDERFLOW, DATEPICKER_RANGE_OVERFLOW, TIMEPICKER_CANCEL_BUTTON, } from "./generated/i18n/i18n-defaults.js";
 import DateComponentBase from "./DateComponentBase.js";
 import InputType from "./types/InputType.js";
 import IconMode from "./types/IconMode.js";
@@ -561,7 +561,7 @@ let DatePicker = DatePicker_1 = class DatePicker extends DateComponentBase {
         return `${DatePicker_1.i18nBundle.getText(DATETIME_COMPONENTS_PLACEHOLDER_PREFIX)} ${this._lastDayOfTheYear}`;
     }
     get _headerTitleText() {
-        return this.ariaLabelText || DatePicker_1.i18nBundle.getText(INPUT_SUGGESTIONS_TITLE);
+        return this.ariaLabelText || DatePicker_1.i18nBundle.getText(DATEPICKER_MOBILE_HEADER_TITLE);
     }
     get showHeader() {
         return isPhone();

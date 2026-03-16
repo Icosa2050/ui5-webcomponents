@@ -455,7 +455,9 @@ let Dialog = Dialog_1 = class Dialog extends Popup {
         this._detachMouseResizeHandlers();
     }
     _handleDragStart(e) {
-        if (this.draggable) {
+        // Only prevent native drag behavior when dragging from the header
+        // to allow native drag-and-drop functionality in the dialog content.
+        if (this.draggable && e.target instanceof HTMLElement && Dialog_1._isHeader(e.target)) {
             e.preventDefault();
         }
     }

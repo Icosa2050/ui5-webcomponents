@@ -106,6 +106,21 @@ let RatingIndicator = RatingIndicator_1 = class RatingIndicator extends UI5Eleme
         */
         this.required = false;
         /**
+         * Defines the icon to be displayed for the selected (filled) rating symbol.
+         *
+         * @default "favorite"
+         * @public
+         * @since 2.20
+         */
+        this.ratedIcon = "favorite";
+        /**
+         * Defines the icon to be displayed for the unselected (empty) rating symbol.
+         * @default "unfavorite"
+         * @public
+         * @since 2.20
+         */
+        this.unratedIcon = "unfavorite";
+        /**
          * @private
          */
         this._stars = [];
@@ -235,12 +250,6 @@ let RatingIndicator = RatingIndicator_1 = class RatingIndicator extends UI5Eleme
     get ariaReadonly() {
         return this.readonly ? "true" : undefined;
     }
-    get effectiveIconSelected() {
-        return this.iconSelected || "favorite";
-    }
-    get effectiveIconUnselected() {
-        return this.iconUnselected || "unfavorite";
-    }
 };
 __decorate([
     property({ type: Number })
@@ -271,12 +280,12 @@ __decorate([
 ], RatingIndicator.prototype, "tooltip", void 0);
 __decorate([
     property()
-], RatingIndicator.prototype, "iconSelected", void 0);
+], RatingIndicator.prototype, "ratedIcon", void 0);
 __decorate([
     property()
-], RatingIndicator.prototype, "iconUnselected", void 0);
+], RatingIndicator.prototype, "unratedIcon", void 0);
 __decorate([
-    property({ type: Array })
+    property({ type: Array, noAttribute: true })
 ], RatingIndicator.prototype, "_stars", void 0);
 __decorate([
     property({ type: Boolean })

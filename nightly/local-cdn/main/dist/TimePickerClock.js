@@ -499,7 +499,7 @@ __decorate([
     property({ type: Number })
 ], TimePickerClock.prototype, "valueStep", void 0);
 __decorate([
-    property({ type: Array })
+    property({ type: Array, noAttribute: true })
 ], TimePickerClock.prototype, "_items", void 0);
 __decorate([
     property({ type: Object })

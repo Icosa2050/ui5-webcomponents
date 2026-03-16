@@ -19,8 +19,20 @@ declare class MultiComboBoxItem extends ComboBoxItem implements IMultiComboBoxIt
      * Defines the selected state of the component.
      * @default false
      * @public
+     * @deprecated Set the `value` property on items and use the `selectedValues` property on the parent `ui5-multi-combobox` instead for programmatic selection.
      */
     selected: boolean;
+    /**
+     * Defines the value of the component.
+     *
+     * Use this property to associate a unique identifier with the item,
+     * separate from the display text. This enables selecting items
+     * programmatically via `selectedValues` on the parent MultiComboBox.
+     * @default undefined
+     * @public
+     * @since 2.20.0
+     */
+    value?: string;
     /**
      * Defines whether the item is filtered
      * @private

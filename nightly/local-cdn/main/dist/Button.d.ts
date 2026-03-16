@@ -245,6 +245,11 @@ declare class Button extends UI5Element implements IButton {
     _cancelAction: boolean;
     _isSpacePressed: boolean;
     /**
+     * Constantly updated value of texts collected from the accessibleNameRef elements
+     * @private
+     */
+    _accessibleNameRefTexts?: string;
+    /**
      * Defines the text of the component.
      *
      * **Note:** Although this slot accepts HTML Elements, it is strongly recommended that you only use text in order to preserve the intended design.
@@ -264,6 +269,7 @@ declare class Button extends UI5Element implements IButton {
     constructor();
     _ontouchstart(): void;
     onEnterDOM(): void;
+    _updateAccessibleNameRefTexts(): void;
     onExitDOM(): void;
     onBeforeRendering(): Promise<void>;
     _setBadgeOverlayStyle(): void;

@@ -9,9 +9,8 @@ export default function ToolbarTemplate() {
                 }, role: this.accInfo.root.role, "aria-label": this.accInfo.root.accessibleName, children: [this.standardItems.map(item => {
                         return (_jsx("div", { class: {
                                 "ui5-tb-item": !item.hasFlexibleWidth,
-                                "ui5-tb-spacer": item.hasFlexibleWidth,
                                 "ui5-tb-self-overflow": item.hasOverflow,
-                            }, id: item._individualSlot, children: _jsx("slot", { name: item._individualSlot }) }));
+                            }, id: item._individualSlot, style: item.isSpacer ? item.styles : undefined, children: _jsx("slot", { name: item._individualSlot }) }));
                     }), _jsx(Button, { "aria-hidden": this.hideOverflowButton, icon: overflowIcon, design: "Transparent", onClick: this.toggleOverflow, class: {
                             "ui5-tb-item": true,
                             "ui5-tb-overflow-btn": true,

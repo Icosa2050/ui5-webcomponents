@@ -31,6 +31,7 @@ const registerCurrentRuntime = () => {
             },
             alias: currentRuntimeAlias,
             description: `Runtime ${currentRuntimeIndex} - ver ${versionInfo.version}${currentRuntimeAlias ? ` (${currentRuntimeAlias})` : ""}`,
+            importMetaUrl: import.meta.url,
         });
     }
 };

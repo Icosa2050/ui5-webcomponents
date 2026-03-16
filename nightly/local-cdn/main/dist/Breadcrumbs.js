@@ -52,7 +52,7 @@ import breadcrumbsPopoverCss from "./generated/themes/BreadcrumbsPopover.css.js"
  * - [End] - Navigates to the last item.
  * @constructor
  * @extends UI5Element
- * @implements {IOverflowToolbarItem}
+ * @implements {IToolbarItemContent}
  * @public
  * @since 1.0.0-rc.15
  */

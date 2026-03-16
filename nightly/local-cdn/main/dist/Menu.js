@@ -13,6 +13,8 @@ import event from "@ui5/webcomponents-base/dist/decorators/event-strict.js";
 import { isLeft, isRight, isEnter, isTabNext, isTabPrevious, isShow, } from "@ui5/webcomponents-base/dist/Keys.js";
 import { isPhone, isDesktop, } from "@ui5/webcomponents-base/dist/Device.js";
 import i18n from "@ui5/webcomponents-base/dist/decorators/i18n.js";
+import announce from "@ui5/webcomponents-base/dist/util/InvisibleMessage.js";
+import InvisibleMessageMode from "@ui5/webcomponents-base/dist/types/InvisibleMessageMode.js";
 import "@ui5/webcomponents-icons/dist/slim-arrow-right.js";
 import jsxRenderer from "@ui5/webcomponents-base/dist/renderer/JsxRenderer.js";
 import { renderFinished } from "@ui5/webcomponents-base/dist/Render.js";
@@ -23,7 +25,7 @@ import { isInstanceOfMenuItemGroup } from "./MenuItemGroup.js";
 import { isInstanceOfMenuSeparator } from "./MenuSeparator.js";
 import { isInstanceOfSplitButton } from "./SplitButton.js";
 import menuTemplate from "./MenuTemplate.js";
-import { MENU_CANCEL_BUTTON_TEXT, MENU_POPOVER_ACCESSIBLE_NAME, } from "./generated/i18n/i18n-defaults.js";
+import { MENU_CANCEL_BUTTON_TEXT, MENU_POPOVER_ACCESSIBLE_NAME, MENU_ITEM_LOADING, } from "./generated/i18n/i18n-defaults.js";
 // Styles
 import menuCss from "./generated/themes/Menu.css.js";
 const MENU_OPEN_DELAY = 300;
@@ -296,6 +298,9 @@ let Menu = Menu_1 = class Menu extends UI5Element {
     }
     _afterPopoverOpen() {
         this._allMenuItems[0]?.focus();
+        if (this.loading) {
+            announce(Menu_1.i18nBundle.getText(MENU_ITEM_LOADING), InvisibleMessageMode.Polite);
+        }
         this.fireDecoratorEvent("open");
     }
     _beforePopoverClose(e) {

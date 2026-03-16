@@ -6,7 +6,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 import property from "@ui5/webcomponents-base/dist/decorators/property.js";
 import customElement from "@ui5/webcomponents-base/dist/decorators/customElement.js";
-import ToolbarItem from "./ToolbarItem.js";
+import ToolbarItemBase from "./ToolbarItemBase.js";
 /**
  * @class
  *
@@ -14,12 +14,12 @@ import ToolbarItem from "./ToolbarItem.js";
  * The `ui5-toolbar-spacer` is an element, used for taking needed space for toolbar items to take 100% width.
  * It takes no space in calculating toolbar items width.
  * @constructor
- * @extends ToolbarItem
+ * @extends ToolbarItemBase
  * @abstract
  * @since 1.17.0
  * @public
  */
-let ToolbarSpacer = class ToolbarSpacer extends ToolbarItem {
+let ToolbarSpacer = class ToolbarSpacer extends ToolbarItemBase {
     get styles() {
         return this.width ? { width: this.width } : { flex: "auto" };
     }
@@ -31,6 +31,9 @@ let ToolbarSpacer = class ToolbarSpacer extends ToolbarItem {
     }
     get isInteractive() {
         return false;
+    }
+    get isSpacer() {
+        return true;
     }
 };
 __decorate([

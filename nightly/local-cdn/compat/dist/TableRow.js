@@ -305,7 +305,7 @@ __decorate([
     property({ type: Boolean })
 ], TableRow.prototype, "active", void 0);
 __decorate([
-    property({ type: Array })
+    property({ type: Array, noAttribute: true })
 ], TableRow.prototype, "_columnsInfo", void 0);
 __decorate([
     property()

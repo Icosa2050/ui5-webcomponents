@@ -1,4 +1,4 @@
-import ToolbarItem from "./ToolbarItem.js";
+import ToolbarItemBase from "./ToolbarItemBase.js";
 /**
  * @class
  *
@@ -6,12 +6,12 @@ import ToolbarItem from "./ToolbarItem.js";
  * The `ui5-toolbar-spacer` is an element, used for taking needed space for toolbar items to take 100% width.
  * It takes no space in calculating toolbar items width.
  * @constructor
- * @extends ToolbarItem
+ * @extends ToolbarItemBase
  * @abstract
  * @since 1.17.0
  * @public
  */
-declare class ToolbarSpacer extends ToolbarItem {
+declare class ToolbarSpacer extends ToolbarItemBase {
     /**
      * Defines the width of the spacer.
      *
@@ -30,5 +30,6 @@ declare class ToolbarSpacer extends ToolbarItem {
     get ignoreSpace(): boolean;
     get hasFlexibleWidth(): boolean;
     get isInteractive(): boolean;
+    get isSpacer(): boolean;
 }
 export default ToolbarSpacer;

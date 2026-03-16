@@ -81,10 +81,10 @@ declare class TableRow extends TableRowBase<TableCell> {
     _actionsCell?: TableCell;
     onBeforeRendering(): void;
     focus(focusOptions?: FocusOptions | undefined): Promise<void>;
+    _onpointerdown(e: PointerEvent): Promise<void>;
     _onkeydown(e: KeyboardEvent, eventOrigin: HTMLElement): void;
     _onclick(): void;
-    _onkeyup(): void;
-    _onfocusout(): void;
+    _setActive(deactivationEvent: string): void;
     _onOverflowButtonClick(e: UI5CustomEvent<Button, "click">): void;
     get _isInteractive(): boolean;
     get _isNavigable(): boolean;

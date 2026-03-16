@@ -10,7 +10,7 @@ export default function TableRowTemplate(ariaColIndex = 1) {
                 _jsx(TableCell, { id: "selection-cell", "aria-selected": this._isSelected, "aria-colindex": ariaColIndex++, "data-ui5-table-selection-cell": true, "data-ui5-table-cell-fixed": true, "data-ui5-acc-text": "", children: this._isMultiSelect ?
                         _jsx(CheckBox, { id: "selection-component", tabindex: -1, checked: this._isSelected, onChange: this._onSelectionChange, accessibleName: this._i18nRowSelector })
                         :
-                            _jsx(RadioButton, { id: "selection-component", tabindex: -1, name: this._tableId, checked: this._isSelected, onChange: this._onSelectionChange, accessibleName: this._i18nRowSelector }) }), this.cells.flatMap(cell => {
+                            _jsx(RadioButton, { id: "selection-component", tabindex: -1, checked: this._isSelected, onChange: this._onSelectionChange, accessibleName: this._i18nRowSelector }) }), this.cells.flatMap(cell => {
                 if (cell._popin) {
                     cell.role = null;
                     cell.ariaColIndex = null;

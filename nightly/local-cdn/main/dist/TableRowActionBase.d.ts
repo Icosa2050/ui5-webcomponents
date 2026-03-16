@@ -26,7 +26,7 @@ declare abstract class TableRowActionBase extends UI5Element {
     abstract getRenderInfo(): {
         text: string;
         icon: string;
-        interactive: boolean;
+        interactive?: boolean;
     };
     isFixedAction(): boolean;
     onEnterDOM(): void;
@@ -34,6 +34,6 @@ declare abstract class TableRowActionBase extends UI5Element {
     _onActionClick(e: UI5CustomEvent<Button, "click">): void;
     get _text(): string;
     get _icon(): string;
-    get _isInteractive(): boolean;
+    get _isInteractive(): boolean | undefined;
 }
 export default TableRowActionBase;

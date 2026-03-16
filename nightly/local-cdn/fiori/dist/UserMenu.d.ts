@@ -141,6 +141,7 @@ declare class UserMenu extends UI5Element {
     _selectedAccountManageBtn?: Button;
     onBeforeRendering(): void;
     onAfterRendering(): void;
+    _setupObserver(): void;
     get _isPhone(): boolean;
     _handleScroll(e: CustomEvent<PopupScrollEventDetail>): void;
     _handleIntersection(entries: IntersectionObserverEntry[]): void;

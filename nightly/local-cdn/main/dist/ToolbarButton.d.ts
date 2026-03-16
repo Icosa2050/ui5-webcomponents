@@ -1,6 +1,8 @@
 import type { ButtonAccessibilityAttributes } from "./Button.js";
 import type ButtonDesign from "./types/ButtonDesign.js";
-import ToolbarItem from "./ToolbarItem.js";
+import type ToolbarItemOverflowBehavior from "./types/ToolbarItemOverflowBehavior.js";
+import ToolbarItemBase from "./ToolbarItemBase.js";
+import type { ToolbarItemEventDetail } from "./ToolbarItemBase.js";
 type ToolbarButtonAccessibilityAttributes = ButtonAccessibilityAttributes;
 /**
  * @class
@@ -13,11 +15,28 @@ type ToolbarButtonAccessibilityAttributes = ButtonAccessibilityAttributes;
  * `import "@ui5/webcomponents/dist/ToolbarButton.js";`
  * @constructor
  * @abstract
- * @extends ToolbarItem
+ * @extends ToolbarItemBase
  * @public
  * @since 1.17.0
  */
-declare class ToolbarButton extends ToolbarItem {
+declare class ToolbarButton extends ToolbarItemBase {
+    eventDetails: ToolbarItemBase["eventDetails"] & {
+        click: ToolbarItemEventDetail;
+    };
+    /**
+    * Property used to define the access of the item to the overflow Popover. If "NeverOverflow" option is set,
+    * the item never goes in the Popover, if "AlwaysOverflow" - it never comes out of it.
+    * @public
+    * @default "Default"
+    */
+    overflowPriority: `${ToolbarItemOverflowBehavior}`;
+    /**
+     * Defines if the toolbar overflow popup should close upon interaction with the item.
+     * It will close by default.
+     * @default false
+     * @public
+     */
+    preventOverflowClosing: boolean;
     /**
      * Defines if the action is disabled.
      *

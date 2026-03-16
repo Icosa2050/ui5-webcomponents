@@ -150,11 +150,15 @@ declare class Switch extends UI5Element implements IFormInputElement {
     get hasNoLabel(): boolean;
     get _textOn(): string | undefined;
     get _textOff(): string | undefined;
+    /**
+     * Determines if custom on/off texts duplicate the default role announcement.
+     * When textOn/textOff match the localized "On"/"Off" strings (case-insensitive),
+     * they duplicate what role="switch" with aria-checked already announces,
+     * so they should be aria-hidden to avoid duplicate screen reader announcements.
+     */
+    get _textAriaHidden(): boolean | undefined;
     get effectiveTabIndex(): 0 | undefined;
     get effectiveAriaDisabled(): "true" | undefined;
-    get accessibilityOnText(): string | undefined;
-    get accessibilityOffText(): string | undefined;
-    get hiddenText(): string | undefined;
-    get ariaLabelText(): string;
+    get ariaLabelText(): string | undefined;
 }
 export default Switch;

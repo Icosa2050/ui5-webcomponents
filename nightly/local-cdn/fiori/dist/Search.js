@@ -66,6 +66,7 @@ let Search = Search_1 = class Search extends SearchField {
         this._typedInValue = "";
         this._valueBeforeOpen = this.getAttribute("value") || "";
         this._isTyping = false;
+        this._deleteHandler = this._onItemDelete.bind(this);
     }
     onBeforeRendering() {
         super.onBeforeRendering();
@@ -95,8 +96,13 @@ let Search = Search_1 = class Search extends SearchField {
                 this._selectMatchingItem(item);
             }
         }
+        // Update highlight text and attach delete listeners
         this._flattenItems.forEach(item => {
             item.highlightText = this._typedInValue;
+            // Listen for delete events on each item
+            // Using capture phase to ensure we catch it before application handlers
+            item.removeEventListener("ui5-delete", this._deleteHandler, true);
+            item.addEventListener("ui5-delete", this._deleteHandler, true);
         });
     }
     onAfterRendering() {
@@ -169,12 +175,19 @@ let Search = Search_1 = class Search extends SearchField {
     _handleArrowDown() {
         const focusableItems = this._getItemsList().listItems;
         const firstListItem = focusableItems.at(0);
-        if (this.open) {
-            this._deselectItems();
-            this.value = this._typedInValue || this.value;
-            this._innerValue = this.value;
-            firstListItem?.focus();
+        // Store the original value before navigation starts
+        if (this._valueBeforeArrowNav === undefined) {
+            this._valueBeforeArrowNav = this._typedInValue || this.value;
         }
+        this._deselectItems();
+        this.value = this._typedInValue || this.value;
+        this._innerValue = this.value;
+        // Clear any text selection to allow autocomplete to work again when navigating back
+        const innerInput = this.nativeInput;
+        if (innerInput) {
+            innerInput.setSelectionRange(this.value.length, this.value.length);
+        }
+        firstListItem?.focus();
     }
     _handleInnerClick() {
         if (isPhone()) {
@@ -198,6 +211,7 @@ let Search = Search_1 = class Search extends SearchField {
         innerInput.setSelectionRange(this.value.length, this.value.length);
         this.open = false;
         this._isTyping = false;
+        this._valueBeforeArrowNav = undefined;
     }
     _onMobileInputKeydown(e) {
         if (isEnter(e)) {
@@ -210,14 +224,23 @@ let Search = Search_1 = class Search extends SearchField {
         this.fireDecoratorEvent("search", { item: this._proposedItem });
     }
     _handleEscape() {
-        this.value = this._typedInValue || this.value;
-        this._innerValue = this.value;
+        // If arrow navigation was active, restore the original typed value
+        if (this._valueBeforeArrowNav !== undefined) {
+            this.value = this._valueBeforeArrowNav;
+            this._innerValue = this._valueBeforeArrowNav;
+            this._valueBeforeArrowNav = undefined;
+        }
+        else {
+            this.value = this._typedInValue || this.value;
+            this._innerValue = this.value;
+        }
         this._isTyping = false;
     }
     _handleInput(e) {
         super._handleInput(e);
         this._typedInValue = this.value;
         this._proposedItem = undefined;
+        this._valueBeforeArrowNav = undefined;
         if (isPhone()) {
             return;
         }
@@ -229,6 +252,7 @@ let Search = Search_1 = class Search extends SearchField {
         this._typedInValue = "";
         this._innerValue = "";
         this._shouldAutocomplete = false;
+        this._valueBeforeArrowNav = undefined;
         this.open = false;
     }
     _popoupHasAnyContent() {
@@ -255,11 +279,36 @@ let Search = Search_1 = class Search extends SearchField {
         const isTab = isTabNext(e);
         e.preventDefault();
         if (isFirstItem && isArrowUp) {
+            // Restore original value when navigating back to input
+            if (this._valueBeforeArrowNav !== undefined) {
+                this.value = this._valueBeforeArrowNav;
+                this._innerValue = this._valueBeforeArrowNav;
+                this._valueBeforeArrowNav = undefined;
+            }
             this.nativeInput?.focus();
             this._shouldAutocomplete = true;
         }
+        if (isEscape(e)) {
+            this._handleEscape();
+        }
         if ((isLastItem && isArrowDown) || isTab) {
             this._getFooterButton()?.focus();
+        }
+    }
+    _onListItemFocusIn(e) {
+        // Update input value when an item gets focus during arrow navigation
+        if (this._valueBeforeArrowNav === undefined) {
+            return;
+        }
+        const target = e.target;
+        const item = target;
+        // Don't update input value when focus is on action buttons or delete button
+        if (target.hasAttribute("ui5-button") || target.hasAttribute("ui5-icon")) {
+            return;
+        }
+        if (item && item.text && !this._isShowMoreItem(item)) {
+            this.value = item.text;
+            this._innerValue = item.text;
         }
     }
     _onItemClick(e) {
@@ -276,9 +325,34 @@ let Search = Search_1 = class Search extends SearchField {
         this._typedInValue = this.value;
         this._shouldAutocomplete = false;
         this._performTextSelection = true;
+        this._valueBeforeArrowNav = undefined;
         this.open = false;
         this._isTyping = false;
         this.focus();
+    }
+    _onItemDelete(e) {
+        // If we're in arrow navigation mode and an item was deleted,
+        // update the input to show the next matching item
+        if (this._valueBeforeArrowNav !== undefined) {
+            const deletedItem = e.target;
+            // Wait for the item to be removed from DOM
+            setTimeout(() => {
+                const nextItem = this._getFirstMatchingItem(this._valueBeforeArrowNav);
+                if (nextItem && nextItem !== deletedItem) {
+                    this.value = nextItem.text;
+                    this._innerValue = nextItem.text;
+                    this._selectMatchingItem(nextItem);
+                    nextItem.focus();
+                }
+                else {
+                    // No more matching items, restore original typed value
+                    this.value = this._valueBeforeArrowNav;
+                    this._innerValue = this._valueBeforeArrowNav;
+                    this._deselectItems();
+                    this.nativeInput?.focus();
+                }
+            }, 0);
+        }
     }
     _onkeydown(e) {
         super._onkeydown(e);
@@ -319,6 +393,7 @@ let Search = Search_1 = class Search extends SearchField {
     _handleClose() {
         this.open = false;
         this._isTyping = false;
+        this._valueBeforeArrowNav = undefined;
         this.fireDecoratorEvent("close");
     }
     _handleBeforeOpen() {

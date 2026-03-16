@@ -365,7 +365,7 @@ let YearRangePicker = YearRangePicker_1 = class YearRangePicker extends Calendar
     }
 };
 __decorate([
-    property({ type: Array })
+    property({ type: Array, noAttribute: true })
 ], YearRangePicker.prototype, "selectedDates", void 0);
 __decorate([
     property({ type: Boolean, noAttribute: true })
@@ -374,7 +374,7 @@ __decorate([
     property({ type: Number })
 ], YearRangePicker.prototype, "_secondTimestamp", void 0);
 __decorate([
-    property({ type: Array })
+    property({ type: Array, noAttribute: true })
 ], YearRangePicker.prototype, "_yearRanges", void 0);
 __decorate([
     property({ type: Boolean, noAttribute: true })

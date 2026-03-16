@@ -130,6 +130,23 @@ let MultiComboBox = MultiComboBox_1 = class MultiComboBox extends UI5Element {
          */
         this.value = "";
         /**
+         * Defines the values of the selected items.
+         *
+         * Use this property to programmatically select items by their `value` property.
+         * Each string in the array should match the `value` attribute of a `ui5-mcb-item`.
+         *
+         * **Note:** If an item doesn't have a `value` attribute set, it cannot be selected via this property.
+         *
+         * **Note:** The recommended approach is to set the `value` property on each `ui5-mcb-item`
+         * and use `selectedValues` for programmatic selection. The `selected` property on items is
+         * deprecated and should not be used together with `selectedValues`.
+         *
+         * @default []
+         * @public
+         * @since 2.20.0
+         */
+        this.selectedValues = [];
+        /**
          * Defines whether the value will be autcompleted to match an item
          * @default false
          * @public
@@ -250,7 +267,6 @@ let MultiComboBox = MultiComboBox_1 = class MultiComboBox extends UI5Element {
         this._filteredItems = [];
         this.selectedItems = [];
         this._previouslySelectedItems = [];
-        this.selectedValues = [];
         this._itemsBeforeOpen = [];
         this._inputLastValue = "";
         this._deleting = false;
@@ -410,6 +426,10 @@ let MultiComboBox = MultiComboBox_1 = class MultiComboBox extends UI5Element {
         deletingItems.forEach(item => {
             item.selected = false;
         });
+        if (this.selectedValues) {
+            const valuesToDelete = deletingItems.map(item => item.value);
+            this.selectedValues = this.selectedValues.filter(value => !valuesToDelete.includes(value));
+        }
         this._deleting = true;
         this._preventTokenizerToggle = true;
         this.focus();
@@ -906,14 +926,19 @@ let MultiComboBox = MultiComboBox_1 = class MultiComboBox extends UI5Element {
             }
             else {
                 this._previouslySelectedItems = this._getSelectedItems();
+                const previousSelectedValues = [...this.selectedValues];
                 matchingItem.selected = true;
                 this.value = "";
                 // during composition prevent _inputLiveChange for proper input clearing
                 if (this._isComposing) {
                     this._suppressNextLiveChange = true;
                 }
+                if (this.selectedValues && matchingItem.value) {
+                    this.selectedValues = [...this.selectedValues, matchingItem.value];
+                }
                 const changePrevented = this.fireSelectionChange();
                 if (changePrevented) {
+                    this.selectedValues = previousSelectedValues;
                     this._revertSelection();
                 }
             }
@@ -921,6 +946,11 @@ let MultiComboBox = MultiComboBox_1 = class MultiComboBox extends UI5Element {
             this.open = false;
         }
         else {
+            // If dropdown is open with a focused item, just close it instead of submitting
+            if (this.open && this._getList()._itemNavigation._currentIndex >= 0) {
+                this.open = false;
+                return;
+            }
             if (this._lastValue !== this.value) {
                 this._inputChange();
             }
@@ -1027,8 +1057,7 @@ let MultiComboBox = MultiComboBox_1 = class MultiComboBox extends UI5Element {
     }
     _getSelectedItems() {
         // Angular 2 way data binding
-        this.selectedValues = this._getItems().filter(item => item.selected);
-        return this.selectedValues;
+        return this._getItems().filter(item => item.selected);
     }
     _listSelectionChange(e) {
         let changePrevented;
@@ -1041,6 +1070,13 @@ let MultiComboBox = MultiComboBox_1 = class MultiComboBox extends UI5Element {
         }
         // don't call selection change right after selection as user can cancel it on phone
         if (!isPhone()) {
+            if (this.selectedValues) {
+                // Get values from all selected items (not just filtered ones)
+                this.selectedValues = this._getItems()
+                    .filter((i) => isInstanceOfMultiComboBoxItem(i) && i.selected)
+                    .map(i => i.value)
+                    .filter((v) => !!v);
+            }
             changePrevented = this.fireSelectionChange();
             if (changePrevented) {
                 e.preventDefault();
@@ -1192,6 +1228,14 @@ let MultiComboBox = MultiComboBox_1 = class MultiComboBox extends UI5Element {
             item.selected = this._previouslySelectedItems.includes(item);
         });
     }
+    _syncSelection() {
+        // set selected property of the items based on the selection value
+        this._getItems().forEach(item => {
+            if (isInstanceOfMultiComboBoxItem(item) && item.value) {
+                item.selected = this.selectedValues.includes(item.value);
+            }
+        });
+    }
     onBeforeRendering() {
         const input = this._innerInput;
         const autoCompletedChars = input && (input.selectionEnd || 0) - (input.selectionStart || 0);
@@ -1205,6 +1249,9 @@ let MultiComboBox = MultiComboBox_1 = class MultiComboBox extends UI5Element {
         if (input && !input.value) {
             this.valueBeforeAutoComplete = "";
             this._filteredItems = this._getItems();
+        }
+        if (this.selectedValues) {
+            this._syncSelection();
         }
         this.tokenizerAvailable = this._getSelectedItems().length > 0;
         this.style.setProperty("--_ui5-input-icons-count", `${this.iconsCount}`);
@@ -1490,7 +1537,7 @@ let MultiComboBox = MultiComboBox_1 = class MultiComboBox extends UI5Element {
         if (!this._tokenizer) {
             return;
         }
-        return getTokensCountText(this.selectedValues.length);
+        return getTokensCountText(this._getSelectedItems().length);
     }
     get _tokensCountTextId() {
         return "ui5-multi-combobox-hiddenText-nMore";
@@ -1622,6 +1669,9 @@ __decorate([
     property()
 ], MultiComboBox.prototype, "value", void 0);
 __decorate([
+    property({ type: Array })
+], MultiComboBox.prototype, "selectedValues", void 0);
+__decorate([
     property()
 ], MultiComboBox.prototype, "name", void 0);
 __decorate([
@@ -1679,10 +1729,10 @@ __decorate([
     property()
 ], MultiComboBox.prototype, "_valueBeforeOpen", void 0);
 __decorate([
-    property({ type: Array })
+    property({ type: Array, noAttribute: true })
 ], MultiComboBox.prototype, "_filteredItems", void 0);
 __decorate([
-    property({ type: Array })
+    property({ type: Array, noAttribute: true })
 ], MultiComboBox.prototype, "_previouslySelectedItems", void 0);
 __decorate([
     property({ type: Boolean })
@@ -1721,7 +1771,7 @@ __decorate([
     property({ type: Boolean })
 ], MultiComboBox.prototype, "_handleLinkNavigation", void 0);
 __decorate([
-    property({ type: Array })
+    property({ type: Array, noAttribute: true })
 ], MultiComboBox.prototype, "_linksListenersArray", void 0);
 __decorate([
     property({ type: Boolean, noAttribute: true })

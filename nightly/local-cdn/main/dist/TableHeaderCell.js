@@ -68,6 +68,7 @@ let TableHeaderCell = class TableHeaderCell extends TableCellBase {
     }
     onBeforeRendering() {
         super.onBeforeRendering();
+        this.style.textAlign = this.horizontalAlign || "";
         this.style.justifyContent = this.horizontalAlign || "";
         toggleAttribute(this, "aria-sort", this.sortIndicator !== SortOrder.None, this.sortIndicator.toLowerCase());
     }
