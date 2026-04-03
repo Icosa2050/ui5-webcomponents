@@ -1,13 +1,14 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "line-chart-time-axis";
-const pathData = "M352 320q-33 0-62.5-12.5t-51-34-34-51T192 160t12.5-62.5 34-51 51-34T352 0t62.5 12.5 51 34 34 51T512 160t-12.5 62.5-34 51-51 34T352 320zm0-269q-23 0-43 8.5t-34.5 23-23 34.5-8.5 43 8.5 43 23 34.5 34.5 23 43 8.5 43-8.5 34.5-23 23-34.5 8.5-43-8.5-43-23-34.5-34.5-23-43-8.5zm-10 129q-9-8-9-20v-51q0-11 7-18.5t18-7.5 18.5 7.5T384 109v39l22 18q10 7 10 20 0 10-7.5 17.5T390 211q-8 0-16-5zm144 140q11 0 18.5 7.5T512 346q0 6-3 12l-77 141q-6 13-22 13-10 0-16-6l-85-67-101 39q-6 2-10 2-11 0-19-9l-82-93-58 34q-7 4-13 4-11 0-18.5-7.5T0 390q0-14 13-22l77-45q6-3 12-3 13 0 20 9l84 95 98-38q6-2 10-2 9 0 16 6l72 57 62-114q8-13 22-13z";
+const pathData = "M2.986 10.048a.75.75 0 0 1 .834.214l2.64 3.08 2.994-1.281a.752.752 0 0 1 .777.113l2.303 1.92 2.061-3.708a.75.75 0 0 1 1.31.728l-2.5 4.5a.757.757 0 0 1-1.135.212L9.622 13.62l-3.076 1.32a.751.751 0 0 1-.865-.202l-2.588-3.02-1.957 1.176a.751.751 0 0 1-.772-1.287l2.622-1.56ZM11 0a5 5 0 1 1 0 10 5 5 0 0 1 0-10Zm0 1.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7Zm-.25 1a.75.75 0 0 1 .75.75v1.639l.969.775a.75.75 0 0 1-.938 1.172l-1.25-1a.75.75 0 0 1-.28-.586v-2a.75.75 0 0 1 .75-.75Z";
 const ltr = true;
 const accData = null;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v5";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, collection, packageName });
 
 export default "SAP-icons-v5/line-chart-time-axis";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

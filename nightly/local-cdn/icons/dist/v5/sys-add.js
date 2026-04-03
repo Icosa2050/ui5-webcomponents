@@ -1,13 +1,14 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "sys-add";
-const pathData = "M256 0q53 0 100 20t81.5 54.5T492 156t20 100-20 100-54.5 81.5T356 492t-100 20-100-20-81.5-54.5T20 356 0 256t20-100 54.5-81.5T156 20 256 0zm0 461q43 0 80.5-16t65-44 43.5-65 16-80-16-80.5-43.5-65-65-43.5T256 51t-80 16-65 43.5-44 65T51 256t16 80 44 65 65 44 80 16zm102-231q11 0 18.5 7.5T384 256t-7.5 18.5T358 282h-76v76q0 11-7.5 18.5T256 384t-18.5-7.5T230 358v-76h-76q-11 0-18.5-7.5T128 256t7.5-18.5T154 230h76v-76q0-11 7.5-18.5T256 128t18.5 7.5T282 154v76h76z";
+const pathData = "M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0Zm0 1.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13Zm0 3a.75.75 0 0 1 .75.75v2h2l.077.004a.75.75 0 0 1 0 1.492l-.077.004h-2v2a.75.75 0 0 1-1.5 0v-2h-2a.75.75 0 0 1 0-1.5h2v-2A.75.75 0 0 1 8 4.5Z";
 const ltr = false;
 const accData = null;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v5";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, collection, packageName });
 
 export default "SAP-icons-v5/sys-add";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

@@ -14,6 +14,7 @@ import query from "@ui5/webcomponents-base/dist/decorators/query.js";
 import { isPhone } from "@ui5/webcomponents-base/dist/Device.js";
 import jsxRenderer from "@ui5/webcomponents-base/dist/renderer/JsxRenderer.js";
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
+import { renderFinished } from "@ui5/webcomponents-base/dist/Render.js";
 import announce from "@ui5/webcomponents-base/dist/util/InvisibleMessage.js";
 import InvisibleMessageMode from "@ui5/webcomponents-base/dist/types/InvisibleMessageMode.js";
 import ViewSettingsDialogMode from "./types/ViewSettingsDialogMode.js";
@@ -392,15 +393,29 @@ let ViewSettingsDialog = ViewSettingsDialog_1 = class ViewSettingsDialog extends
             });
         });
     }
-    _navigateToFilters() {
+    async _navigateToFilters() {
         this._filterStepTwo = false;
+        await renderFinished();
+        if (this._filterList) {
+            this._filterList.focusFirstItem();
+        }
     }
-    _changeCurrentFilter(e) {
+    async _changeCurrentFilter(e) {
         this._filterStepTwo = true;
         this._currentSettings.filters = this._currentSettings.filters.map(filter => {
             filter.selected = filter.text === e.detail.item.innerText;
             return filter;
         });
+        await renderFinished();
+        if (this._filterOptions) {
+            const selectedItems = this._filterOptions.getSelectedItems();
+            if (selectedItems.length) {
+                selectedItems[0].focus();
+            }
+            else {
+                this._filterOptions.focusFirstItem();
+            }
+        }
     }
     /**
      * Sets focus on recently used control within the dialog.
@@ -667,6 +682,12 @@ __decorate([
 __decorate([
     query("[ui5-list][group-by]")
 ], ViewSettingsDialog.prototype, "_groupBy", void 0);
+__decorate([
+    query("[ui5-list][filter-list]")
+], ViewSettingsDialog.prototype, "_filterList", void 0);
+__decorate([
+    query("[ui5-list][filter-options]")
+], ViewSettingsDialog.prototype, "_filterOptions", void 0);
 __decorate([
     i18n("@ui5/webcomponents-fiori")
 ], ViewSettingsDialog, "i18nBundle", void 0);

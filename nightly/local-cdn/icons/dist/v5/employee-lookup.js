@@ -1,13 +1,14 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "employee-lookup";
-const pathData = "M320 128q0 26-10 49.5t-27.5 41T242 246t-50 10h-6q-28 0-52.5 10.5t-43 28.5-29 42.5T51 390v7h83q11 0 18.5 7t7.5 18-7.5 18.5T134 448H26q-11 0-18.5-7.5T0 422v-32q0-55 29-99.5t77-67.5l-5-5q-37-37-37-90 0-27 10-50t27.5-40.5 41-27.5T192 0t49.5 10.5 41 28T310 79t10 49zM192 51q-32 0-54.5 22.5T115 128t22.5 54.5T192 205t54.5-22.5T269 128t-22.5-54.5T192 51zm313 417q7 7 7 18t-7.5 18.5T486 512t-18-7l-69-70q-20 13-47 13-19 0-36.5-7.5t-31-21-21-31T256 352q0-20 7.5-37t21-30.5 31-21T352 256q20 0 37 7.5t30.5 21 21 30.5 7.5 37q0 27-13 47zm-153-71q18 0 31.5-13.5T397 352t-13.5-31.5T352 307t-31.5 13.5T307 352t13.5 31.5T352 397z";
+const pathData = "M11 8a3 3 0 0 1 3 3c0 .556-.154 1.075-.418 1.521l2.198 2.199a.75.75 0 1 1-1.06 1.06l-2.199-2.198A2.982 2.982 0 0 1 11 14a3 3 0 1 1 0-6ZM6 0a4 4 0 0 1 .355 7.983C6.133 8 5.981 8 5.798 8 3.418 8 1.5 9.911 1.5 12.25v.25h3.75a.75.75 0 0 1 0 1.5H.75a.75.75 0 0 1-.75-.75v-1c0-2.323 1.39-4.319 3.383-5.227A4 4 0 0 1 6 0Zm5 9.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3Zm-5-8a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5Z";
 const ltr = false;
 const accData = null;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v5";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, collection, packageName });
 
 export default "SAP-icons-v5/employee-lookup";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

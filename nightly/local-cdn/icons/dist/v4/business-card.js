@@ -1,13 +1,14 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "business-card";
-const pathData = "M0 96q0-14 9.5-23T32 64h448q14 0 23 9t9 23v320q0 13-9 22.5t-23 9.5H32q-13 0-22.5-9.5T0 416V96zm32 320h448V96H32v320zm224-32H64q0-54 24-75t72-21q-26 0-45-19t-19-45q0-27 19-45.5t45-18.5 45 18.5 19 45.5q0 26-19 45t-45 19q48 0 72 21t24 75zm48-160h96q16 0 16 16 0 6-4.5 11t-11.5 5h-96q-6 0-11-5t-5-11q0-7 5-11.5t11-4.5zm0-64h96q16 0 16 16 0 6-4.5 11t-11.5 5h-96q-6 0-11-5t-5-11q0-7 5-11.5t11-4.5z";
+const pathData = "M0 3c0-.292.099-.531.297-.719A.988.988 0 0 1 1 2h14c.292 0 .531.094.719.281A.973.973 0 0 1 16 3v10c0 .27-.094.505-.281.703A.947.947 0 0 1 15 14H1a.961.961 0 0 1-.703-.297A.961.961 0 0 1 0 13V3Zm1 10h14V3H1v10Zm7-1H2c0-1.125.25-1.906.75-2.344C3.25 9.22 4 9 5 9a1.92 1.92 0 0 1-1.406-.594A1.922 1.922 0 0 1 3 7c0-.563.198-1.036.594-1.422A1.948 1.948 0 0 1 5 5c.542 0 1.01.193 1.406.578C6.802 5.964 7 6.438 7 7a1.92 1.92 0 0 1-.594 1.406A1.922 1.922 0 0 1 5 9c1 0 1.75.219 2.25.656.5.438.75 1.219.75 2.344Zm1.5-5h3c.333 0 .5.167.5.5 0 .125-.047.24-.14.344A.462.462 0 0 1 12.5 8h-3a.478.478 0 0 1-.344-.156A.478.478 0 0 1 9 7.5c0-.146.052-.266.156-.36A.503.503 0 0 1 9.5 7Zm0-2h3c.333 0 .5.167.5.5 0 .125-.047.24-.14.344A.462.462 0 0 1 12.5 6h-3a.478.478 0 0 1-.344-.156A.478.478 0 0 1 9 5.5c0-.146.052-.266.156-.36A.503.503 0 0 1 9.5 5Z";
 const ltr = false;
 const accData = null;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v4";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, collection, packageName });
 
 export default "SAP-icons-v4/business-card";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

@@ -165,6 +165,8 @@ declare class ViewSettingsDialog extends UI5Element {
     _sortBy?: List;
     _groupOrder?: List;
     _groupBy?: List;
+    _filterList?: List;
+    _filterOptions?: List;
     static i18nBundle: I18nBundle;
     onBeforeRendering(): void;
     onInvalidation(changeInfo: ChangeInfo): void;
@@ -242,8 +244,8 @@ declare class ViewSettingsDialog extends UI5Element {
      * @private
      */
     _setSelectedProp(itemText: string): void;
-    _navigateToFilters(): void;
-    _changeCurrentFilter(e: CustomEvent<ListItemClickEventDetail>): void;
+    _navigateToFilters(): Promise<void>;
+    _changeCurrentFilter(e: CustomEvent<ListItemClickEventDetail>): Promise<void>;
     /**
      * Sets focus on recently used control within the dialog.
      */

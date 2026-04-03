@@ -1,13 +1,14 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "map-fill";
-const pathData = "M256 0q44 0 82 16t66 44 44 65.5 16 79.5q0 44-17 88t-44.5 83.5T341 449t-68 57q-5 4-9 5t-8 1-8-1-9-5q-34-24-68-57t-61.5-72.5T65 293t-17-88q0-42 16-79.5T108 60t66-44 82-16zm0 118q-40 0-66.5 26.5T163 211t26.5 66.5T256 304t66.5-26.5T349 211t-26.5-66.5T256 118z";
+const pathData = "M8 0c3.68 0 6.5 2.987 6.5 6.625 0 2.76-1.594 5.093-3.077 6.68a18.304 18.304 0 0 1-2.063 1.883s-.781.56-.997.699a.692.692 0 0 1-.683.039c-.23-.104-1.04-.738-1.04-.738a18.391 18.391 0 0 1-2.063-1.883C3.141 11.768 1.5 9.38 1.5 6.625 1.5 2.987 4.32 0 8 0Zm0 3.75a3 3 0 1 0 0 6 3 3 0 0 0 0-6Z";
 const ltr = false;
 const accData = null;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v5";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, collection, packageName });
 
 export default "SAP-icons-v5/map-fill";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

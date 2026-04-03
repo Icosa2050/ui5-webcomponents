@@ -1,13 +1,14 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "navigation-up-arrow";
-const pathData = "M86.5 380q-9 9-22.5 9t-22.5-9q-10-10-10-23t10-23l193-197q4-2 5-3 2-1 2.5-1.5t2.5-1.5q6-2 11-2 2 0 3 .5t2 .5q4 0 6 1t3.5 2 3.5 2q1 1 1.5 1t1.5 1 2 1l192 196q10 10 10 23t-10 23q-9 9-22.5 9t-22.5-9l-154-155q-16-10-32 0z";
+const pathData = "M2.715 11.723a.959.959 0 0 1-.702.277.959.959 0 0 1-.701-.277.967.967 0 0 1-.312-.708c0-.266.104-.502.312-.707L7.33 4.246a.723.723 0 0 0 .156-.092.361.361 0 0 0 .077-.046.362.362 0 0 1 .078-.046c.125-.041.24-.062.343-.062a.22.22 0 0 1 .094.015.14.14 0 0 0 .062.016.44.44 0 0 1 .297.092c.03.02.067.041.109.062.02.02.036.03.046.03.01 0 .026.01.047.031.021.02.042.03.063.03l5.986 6.032a.967.967 0 0 1 .312.707.967.967 0 0 1-.312.708.959.959 0 0 1-.701.277.959.959 0 0 1-.702-.277l-4.802-4.77a.889.889 0 0 0-.997 0l-4.771 4.77Z";
 const ltr = false;
 const accData = null;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v4";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, collection, packageName });
 
 export default "SAP-icons-v4/navigation-up-arrow";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

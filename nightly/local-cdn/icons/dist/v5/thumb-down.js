@@ -1,13 +1,14 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "thumb-down";
-const pathData = "M455 0q23 0 40 17t17 41v204q0 24-17 41t-40 17h-91l-66 175q-7 17-30 17-15 0-28.5-6.5t-24-17.5-17-26-6.5-32v-78H90q-37 0-63.5-26T0 263q0-11 3-21L43 69q8-31 32-50t56-19h324zm-90 269V51H131q-14 0-24.5 8T93 81L52 254q0 2-.5 4t-.5 4q0 16 11.5 27.5T90 301h128q11 0 18 7t7 18v104q0 18 15 26l64-171q3-8 9.5-12t14.5-4h19zm96-211q0-7-6-7h-39v218h39q6 0 6-7V58z";
+const pathData = "M14.25 0C15.223 0 16 .8 16 1.762v6.476C16 9.201 15.223 10 14.25 10h-2.883l-2.104 5.518a.75.75 0 0 1-.701.482 2.508 2.508 0 0 1-2.513-2.51v-2.46H2.768A2.774 2.774 0 0 1 .072 7.633l1.355-5.735A2.769 2.769 0 0 1 4.057 0H14.25ZM4.058 1.5a1.27 1.27 0 0 0-1.206.866L1.533 7.975a1.271 1.271 0 0 0 1.235 1.554h4.031a.75.75 0 0 1 .75.75v3.21c0 .39.218.726.54.895l2.06-5.402a.75.75 0 0 1 .7-.482h.651v-7H4.058ZM13 8.5h1.25a.26.26 0 0 0 .25-.262V1.762a.26.26 0 0 0-.25-.262H13v7Z";
 const ltr = true;
 const accData = null;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v5";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, collection, packageName });
 
 export default "SAP-icons-v5/thumb-down";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

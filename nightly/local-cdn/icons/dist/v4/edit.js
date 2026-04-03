@@ -1,13 +1,14 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "edit";
-const pathData = "M475 104q5 7 5 12 0 6-5 11L150 453q-4 4-8 4L32 480l22-110q0-5 4-9L384 36q4-4 11-4t11 4zm-121 99l-46-45L84 381l46 46zm87-88l-46-44-64 64 45 45z";
+const pathData = "M15.821 2.571c.12.167.179.31.179.429 0 .143-.06.274-.179.393L4.214 15.036c-.095.095-.19.143-.285.143L0 16l.786-3.929a.44.44 0 0 1 .143-.321L12.57.143A.531.531 0 0 1 12.964 0a.53.53 0 0 1 .393.143l2.464 2.428ZM11.5 6.107 9.857 4.5l-8 7.964L3.5 14.107l8-8Zm3.107-3.143-1.643-1.571-2.285 2.286 1.607 1.607 2.321-2.322Z";
 const ltr = false;
 const accData = null;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v4";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, collection, packageName });
 
 export default "SAP-icons-v4/edit";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

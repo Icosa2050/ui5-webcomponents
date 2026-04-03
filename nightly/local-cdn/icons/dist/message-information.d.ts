@@ -1,7 +1,8 @@
 declare const getPathData: () => Promise<string>;
 declare const ltr: boolean;
+declare const viewBox: string;
 declare const accData: { key: string; defaultText: string; }
 declare const _default: "message-information";
 
 export default _default;
-export { getPathData, ltr, accData };
+export { getPathData, ltr, viewBox, accData };

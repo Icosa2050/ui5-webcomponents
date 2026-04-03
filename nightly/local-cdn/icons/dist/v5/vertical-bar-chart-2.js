@@ -1,13 +1,14 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "vertical-bar-chart-2";
-const pathData = "M358 384q-11 0-18-7.5t-7-18.5V58q0-11 7-18.5t18-7.5 18.5 7.5T384 58v300q0 11-7.5 18.5T358 384zm-204 0q-11 0-18.5-7.5T128 358V90q0-11 7.5-18.5T154 64t18 7.5 7 18.5v268q0 11-7 18.5t-18 7.5zm300 0q-11 0-18-7.5t-7-18.5V186q0-11 7-18.5t18-7.5 18.5 7.5T480 186v172q0 11-7.5 18.5T454 384zm-204 0q-11 0-18.5-7.5T224 358V218q0-11 7.5-18.5T250 192t18 7.5 7 18.5v140q0 11-7 18.5t-18 7.5zm-192 0q-11 0-18.5-7.5T32 358v-44q0-11 7.5-18.5T58 288t18 7.5 7 18.5v44q0 11-7 18.5T58 384zm396 96H58q-11 0-18.5-7.5T32 454t7.5-18 18.5-7h396q11 0 18.5 7t7.5 18-7.5 18.5T454 480z";
+const pathData = "M14.25 13.5a.75.75 0 0 1 0 1.5H1.75a.75.75 0 0 1 0-1.5h12.5ZM1.75 9a.75.75 0 0 1 .75.75v1.5a.75.75 0 0 1-1.5 0v-1.5A.75.75 0 0 1 1.75 9Zm3-7a.75.75 0 0 1 .75.75v8.5a.75.75 0 0 1-1.5 0v-8.5A.75.75 0 0 1 4.75 2Zm3 4a.75.75 0 0 1 .75.75v4.5a.75.75 0 0 1-1.5 0v-4.5A.75.75 0 0 1 7.75 6Zm3.5-5a.75.75 0 0 1 .75.75v9.5a.75.75 0 0 1-1.5 0v-9.5a.75.75 0 0 1 .75-.75Zm3 4a.75.75 0 0 1 .75.75v5.5a.75.75 0 0 1-1.5 0v-5.5a.75.75 0 0 1 .75-.75Z";
 const ltr = false;
 const accData = null;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v5";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, collection, packageName });
 
 export default "SAP-icons-v5/vertical-bar-chart-2";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

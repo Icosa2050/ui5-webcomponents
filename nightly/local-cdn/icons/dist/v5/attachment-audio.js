@@ -1,13 +1,14 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "attachment-audio";
-const pathData = "M67 201v260h83q11 0 18.5 7t7.5 18-7.5 18.5T150 512H42q-11 0-18.5-7.5T16 486V192q0-10 6-17L165 9q6-9 19-9h190q11 0 18.5 7.5T400 26v108q0 11-7.5 18.5T374 160t-18-7.5-7-18.5V51H196l-20 24v66q0 21-15 36t-36 15H75zm403 55q11 0 18.5 7.5T496 282t-7.5 18-18.5 7h-64q-6 0-6 7v137q0 4-1 5-3 24-20.5 40T336 512q-27 0-45.5-19T272 448t18.5-45 45.5-19h6.5l6.5 1v-71q0-24 17-41t40-17h64z";
+const pathData = "M11.25 0C12.216 0 13 .784 13 1.75v3.5a.75.75 0 0 1-1.5 0v-3.5a.25.25 0 0 0-.25-.25H6.71a.25.25 0 0 0-.19.087L6 2.193V5.25a.75.75 0 0 1-.75.75H2.738c-.089.104-.238.37-.238.37v7.88c0 .138.112.25.25.25h3.5a.75.75 0 0 1 0 1.5h-3.5A1.75 1.75 0 0 1 1 14.25V6.37c0-.417.15-.821.42-1.139L5.38.611A1.751 1.751 0 0 1 6.71 0h4.54Zm4 8a.75.75 0 0 1 0 1.5h-2a.25.25 0 0 0-.25.25V14a2 2 0 1 1-1.5-1.935V9.75c0-.966.784-1.75 1.75-1.75h2Z";
 const ltr = false;
 const accData = null;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v5";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, collection, packageName });
 
 export default "SAP-icons-v5/attachment-audio";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

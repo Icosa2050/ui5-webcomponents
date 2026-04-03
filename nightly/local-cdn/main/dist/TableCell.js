@@ -5,6 +5,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 import customElement from "@ui5/webcomponents-base/dist/decorators/customElement.js";
+import property from "@ui5/webcomponents-base/dist/decorators/property.js";
 import query from "@ui5/webcomponents-base/dist/decorators/query.js";
 import TableCellTemplate from "./TableCellTemplate.js";
 import TableCellStyles from "./generated/themes/TableCell.css.js";
@@ -28,6 +29,21 @@ import { LABEL_COLON } from "./generated/i18n/i18n-defaults.js";
  * @public
  */
 let TableCell = class TableCell extends TableCellBase {
+    constructor() {
+        super(...arguments);
+        /**
+         * Defines whether the cell is visually merged with the cell directly above it.
+         *
+         * This is useful when consecutive cells in a column have the same value and should visually appear as a single merged cell.
+         * Although the cell is visually merged with the previous one, its content must still be provided for accessibility purposes.
+         * **Note:** This feature is disabled when cells are rendered as popin, and should remain `false` for interactive cell content.
+         *
+         * @default false
+         * @since 2.21.0
+         * @public
+         */
+        this.merged = false;
+    }
     onBeforeRendering() {
         super.onBeforeRendering();
         if (this.horizontalAlign) {
@@ -70,6 +86,9 @@ let TableCell = class TableCell extends TableCellBase {
         return TableCellBase.i18nBundle.getText(LABEL_COLON);
     }
 };
+__decorate([
+    property({ type: Boolean })
+], TableCell.prototype, "merged", void 0);
 __decorate([
     query("#popin-header")
 ], TableCell.prototype, "_popinHeader", void 0);

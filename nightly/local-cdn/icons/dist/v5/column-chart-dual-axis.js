@@ -1,13 +1,14 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "column-chart-dual-axis";
-const pathData = "M390 480H122q-38 0-64-26t-26-64V58q0-11 7.5-18.5T58 32t18 7.5T83 58v332q0 17 11 28t28 11h268q17 0 28-11t11-28V58q0-11 7-18.5t18-7.5 18.5 7.5T480 58v332q0 38-26 64t-64 26zm-140-96q-11 0-18.5-7.5T224 358V122q0-11 7.5-18.5T250 96t18 7.5 7 18.5v236q0 11-7 18.5t-18 7.5zm108 0q-11 0-18-7.5t-7-18.5V186q0-11 7-18.5t18-7.5 18.5 7.5T384 186v172q0 11-7.5 18.5T358 384zm-204 0q-11 0-18.5-7.5T128 358V250q0-11 7.5-18.5T154 224t18 7.5 7 18.5v108q0 11-7 18.5t-18 7.5z";
+const pathData = "M14.25 1a.75.75 0 0 1 .75.75v11.5A1.75 1.75 0 0 1 13.25 15H2.75A1.75 1.75 0 0 1 1 13.25V1.75a.75.75 0 0 1 1.5 0v11.5c0 .138.112.25.25.25h10.5a.25.25 0 0 0 .25-.25V1.75a.75.75 0 0 1 .75-.75Zm-9.5 6a.75.75 0 0 1 .75.75v3.5a.75.75 0 0 1-1.5 0v-3.5A.75.75 0 0 1 4.75 7ZM8 3a.75.75 0 0 1 .75.75v7.5a.75.75 0 0 1-1.5 0v-7.5A.75.75 0 0 1 8 3Zm3.25 2a.75.75 0 0 1 .75.75v5.5a.75.75 0 0 1-1.5 0v-5.5a.75.75 0 0 1 .75-.75Z";
 const ltr = false;
 const accData = null;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v5";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, collection, packageName });
 
 export default "SAP-icons-v5/column-chart-dual-axis";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

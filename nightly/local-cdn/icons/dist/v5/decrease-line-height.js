@@ -1,13 +1,14 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "decrease-line-height";
-const pathData = "M193 103q7-7 18-7t18.5 7.5T237 122q0 10-8 18l-76 76q-8 8-19 8-10 0-18-8l-76-76q-8-8-8-18 0-11 7.5-18.5T58 96t18 7l33 34V26q0-11 7-18.5T134 0t18.5 7.5T160 26v111zm89-20q-11 0-18.5-7T256 58t7.5-18.5T282 32h172q11 0 18.5 7.5T480 58t-7.5 18-18.5 7H282zm172 45q11 0 18.5 7.5T480 154t-7.5 18-18.5 7H346q-11 0-18.5-7t-7.5-18 7.5-18.5T346 128h108zm0 109q11 0 18.5 7t7.5 18-7.5 18.5T454 288H282q-11 0-18.5-7.5T256 262t7.5-18 18.5-7h172zM229 372q8 8 8 18 0 11-7.5 18.5T211 416q-10 0-18-8l-33-33v111q0 11-7.5 18.5T134 512t-18-7.5-7-18.5V375l-33 33q-8 8-18 8-11 0-18.5-7.5T32 390q0-10 8-18l76-77q9-7 18-7 10 0 19 7zm225-39q11 0 18.5 7t7.5 18-7.5 18.5T454 384H346q-11 0-18.5-7.5T320 358t7.5-18 18.5-7h108zm0 96q11 0 18.5 7t7.5 18-7.5 18.5T454 480H282q-11 0-18.5-7.5T256 454t7.5-18 18.5-7h172z";
+const pathData = "m4.78 9.22 2.5 2.5a.75.75 0 0 1-1.06 1.06L5 11.56l-.004 3.767a.75.75 0 0 1-1.492 0L3.5 11.56l-1.22 1.22a.75.75 0 0 1-1.06-1.06l2.5-2.5a.76.76 0 0 1 1.06 0Zm9.547 4.284a.75.75 0 0 1 0 1.492L8.75 15a.75.75 0 0 1 0-1.5l5.577.004ZM14.25 10.5a.75.75 0 0 1 0 1.5h-3.5a.75.75 0 0 1 0-1.5h3.5Zm.077-3.246a.75.75 0 0 1 0 1.492L8.75 8.75a.75.75 0 1 1 0-1.5l5.577.004ZM4.25 0A.75.75 0 0 1 5 .75v3.69l1.22-1.22a.75.75 0 0 1 1.06 1.06l-2.5 2.5a.757.757 0 0 1-1.06 0l-2.5-2.5a.75.75 0 0 1 1.06-1.06L3.5 4.44V.75A.75.75 0 0 1 4.25 0Zm10 4a.75.75 0 0 1 0 1.5h-3.5a.75.75 0 0 1 0-1.5h3.5Zm.077-2.996a.75.75 0 0 1 0 1.492l-.077.004h-5.5a.75.75 0 1 1 0-1.5h5.5l.077.004Z";
 const ltr = false;
 const accData = null;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v5";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, collection, packageName });
 
 export default "SAP-icons-v5/decrease-line-height";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

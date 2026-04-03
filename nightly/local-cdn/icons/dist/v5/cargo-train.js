@@ -1,13 +1,14 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "cargo-train";
-const pathData = "M416 105q29 14 46.5 42t17.5 63v110q0 23-10.5 40T440 385l-53 19 55 66q6 7 6 16 0 11-7.5 18.5T422 512t-19-9l-68-81-71 25h-17l-70-25-68 81q-7 9-19 9-11 0-18.5-7.5T64 486q0-9 6-16l55-66-53-19q-18-8-29-25t-11-40V210q0-35 17.5-63T96 105V58q0-24 17-41t40-17h206q23 0 40 17t17 41v47zm-51-47q0-7-6-7h-77v41h83V58zM147 92h83V51h-77q-6 0-6 7v34zm1 51q-27 0-46 19.5T83 210v59h346v-59q0-28-19-47.5T364 143H148zm108 100q-14 0-23-9t-9-23 9-23 23-9 23 9 9 23-9 23-23 9zm-64 77v53l38 14v-67h-38zm90 66l38-13v-53h-38v66zM83 320q0 13 9 18l49 17v-35H83zm337 18q9-5 9-18h-58v35z";
+const pathData = "M11.5 0c.966 0 1.75.784 1.75 1.75v1.44A2.749 2.749 0 0 1 15 5.75v4.255a2.75 2.75 0 0 1-1.972 2.638l-.615.18 1.443 1.986a.75.75 0 0 1-1.212.882l-1.758-2.417-2.39.707a1.75 1.75 0 0 1-.991 0l-2.392-.707-1.757 2.417a.75.75 0 0 1-1.212-.882l1.442-1.986-.614-.18A2.75 2.75 0 0 1 1 10.005V5.75c0-1.166.726-2.16 1.75-2.56V1.75C2.75.784 3.534 0 4.5 0h7Zm-6 11.824 1.75.517V9.5H5.5v2.324Zm3.25.517 1.75-.517V9.5H8.75v2.84ZM2.5 10.005c0 .554.365 1.042.896 1.2l.604.177V9.5H2.5v.505Zm9.5 1.377.604-.178c.53-.157.896-.645.896-1.2V9.5H12v1.882ZM3.75 4.5c-.69 0-1.25.56-1.25 1.25V8h11V5.75c0-.69-.56-1.25-1.25-1.25h-8.5ZM8 5a1 1 0 1 1 0 2 1 1 0 0 1 0-2Zm.75-2h3V1.75a.25.25 0 0 0-.25-.25H8.75V3ZM4.5 1.5a.25.25 0 0 0-.25.25V3h3V1.5H4.5Z";
 const ltr = false;
 const accData = null;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v5";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, collection, packageName });
 
 export default "SAP-icons-v5/cargo-train";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

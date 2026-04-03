@@ -1,13 +1,14 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "full-stacked-column-chart";
-const pathData = "M32 480V32h32v416h416v32H32zm96-440q0-8 8-8h48q8 0 8 8v176q0 8-8 8h-48q-8 0-8-8V40zm256 272V168q0-8 8-8h48q8 0 8 8v144q0 8-8 8h-48q-8 0-8-8zm-128-32V136q0-8 8-8h48q8 0 8 8v144q0 8-8 8h-48q-8 0-8-8zm128-161V40q0-8 8-8h48q8 0 8 8v79q0 8-8 8h-48q-8 0-8-8zM256 329q0-8 8-8h48q8 0 8 8v79q0 8-8 8h-48q-8 0-8-8v-79zm-120-73h48q8 0 8 8v79q0 8-8 8h-48q-8 0-8-8v-79q0-8 8-8zM256 88V40q0-8 8-8h48q8 0 8 8v48q0 8-8 8h-48q-8 0-8-8zm136 264h48q8 0 8 8v48q0 8-8 8h-48q-8 0-8-8v-48q0-8 8-8zm-264 56v-16q0-8 8-8h48q8 0 8 8v16q0 8-8 8h-48q-8 0-8-8z";
+const pathData = "M1 15V1h1v13h13v1H1ZM4 1.25c0-.167.083-.25.25-.25h1.5c.167 0 .25.083.25.25v5.5c0 .167-.083.25-.25.25h-1.5C4.083 7 4 6.917 4 6.75v-5.5Zm8 8.5v-4.5c0-.167.083-.25.25-.25h1.5c.167 0 .25.083.25.25v4.5c0 .167-.083.25-.25.25h-1.5c-.167 0-.25-.083-.25-.25Zm-4-1v-4.5c0-.167.083-.25.25-.25h1.5c.167 0 .25.083.25.25v4.5c0 .167-.083.25-.25.25h-1.5C8.083 9 8 8.917 8 8.75Zm4-5.031V1.25c0-.167.083-.25.25-.25h1.5c.167 0 .25.083.25.25v2.469c0 .166-.083.25-.25.25h-1.5c-.167 0-.25-.084-.25-.25ZM8 10.28c0-.166.083-.25.25-.25h1.5c.167 0 .25.084.25.25v2.469c0 .167-.083.25-.25.25h-1.5c-.167 0-.25-.083-.25-.25V10.28ZM4.25 8h1.5c.167 0 .25.083.25.25v2.469c0 .166-.083.25-.25.25h-1.5c-.167 0-.25-.084-.25-.25V8.25c0-.167.083-.25.25-.25ZM8 2.75v-1.5c0-.167.083-.25.25-.25h1.5c.167 0 .25.083.25.25v1.5c0 .167-.083.25-.25.25h-1.5C8.083 3 8 2.917 8 2.75ZM12.25 11h1.5c.167 0 .25.083.25.25v1.5c0 .167-.083.25-.25.25h-1.5c-.167 0-.25-.083-.25-.25v-1.5c0-.167.083-.25.25-.25ZM4 12.75v-.5c0-.167.083-.25.25-.25h1.5c.167 0 .25.083.25.25v.5c0 .167-.083.25-.25.25h-1.5c-.167 0-.25-.083-.25-.25Z";
 const ltr = false;
 const accData = null;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v4";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, collection, packageName });
 
 export default "SAP-icons-v4/full-stacked-column-chart";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

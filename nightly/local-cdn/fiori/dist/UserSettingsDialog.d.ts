@@ -96,6 +96,7 @@ declare class UserSettingsDialog extends UI5Element {
      * @private
      */
     _mediaRange?: any;
+    onEnterDOM(): void;
     onBeforeRendering(): void;
     _handleItemClick(e: CustomEvent<ListItemClickEventDetail>): void;
     _handleDialogAfterOpen(): void;

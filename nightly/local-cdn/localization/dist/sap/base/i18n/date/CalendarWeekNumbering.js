@@ -1,3 +1,10 @@
+/*!
+ * OpenUI5
+ * (c) Copyright 2026 SAP SE or an SAP affiliate company.
+ * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
+ */
+// Provides type module:sap/base/i18n/date/CalendarWeekNumbering.
+import _EnumHelper from "./_EnumHelper.js";
 /**
  * The <code>CalendarWeekNumbering</code> enum defines how to calculate calendar weeks. Each
  * value defines:
@@ -10,14 +17,7 @@
  * @public
  * @alias module:sap/base/i18n/date/CalendarWeekNumbering
  * @since 1.120
- */ /*!
-     * OpenUI5
-     * (c) Copyright 2009-2024 SAP SE or an SAP affiliate company.
-     * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
-     */
-
-// Provides type module:sap/base/i18n/date/CalendarWeekNumbering.
-
+ */
 var CalendarWeekNumbering = {
   /**
    * The default calendar week numbering:
@@ -61,6 +61,7 @@ var CalendarWeekNumbering = {
    */
   WesternTraditional: "WesternTraditional"
 };
+_EnumHelper.register("sap.base.i18n.date.CalendarWeekNumbering", CalendarWeekNumbering);
 
 /**
  * Returns an object containing the week configuration values for the given calendar week

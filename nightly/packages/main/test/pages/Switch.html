@@ -10,7 +10,7 @@
 
 
 	<script>// delete Document.prototype.adoptedStyleSheets</script>
-  <script type="module" crossorigin src="/webcomponents/nightly/assets/bundle.esm-rwhJubhr.js"></script>
+  <script type="module" crossorigin src="/webcomponents/nightly/assets/bundle.esm-B_8CsMXf.js"></script>
   <link rel="stylesheet" crossorigin href="/webcomponents/nightly/assets/Switch-Cacr4ulR.css">
 </head>
 
@@ -41,6 +41,16 @@
 		<ui5-switch checked disabled text-on="Yes" text-off="No"></ui5-switch>
 	</div>
 	<ui5-label id="lbl"></ui5-label>
+
+	<h3>Readonly Switch</h3>
+	<div class="switch2auto">
+		<ui5-switch id="readonlySwitchOn" readonly checked text-on="On" text-off="Off"></ui5-switch>
+		<ui5-switch id="readonlySwitchOff" readonly text-on="On" text-off="Off"></ui5-switch>
+		<ui5-switch id="readonlyCheckedSwitchOn" readonly checked></ui5-switch>
+		<ui5-switch id="readonlyCheckedSwitchOff" readonly></ui5-switch>
+		<ui5-switch id="readonlyGraphicalOn" design="Graphical" readonly checked></ui5-switch>
+		<ui5-switch id="readonlyGraphicalOff" design="Graphical" readonly></ui5-switch>
+	</div>
 
 	<h3>Change prevented Switch</h3>
 	<div class="switch2auto">

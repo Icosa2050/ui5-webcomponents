@@ -1,13 +1,14 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "horizontal-combination-chart";
-const pathData = "M454 429q11 0 18.5 7t7.5 18-7.5 18.5T454 480H58q-11 0-18.5-7.5T32 454V58q0-11 7.5-18.5T58 32t18 7.5T83 58v371h371zM320 106q-14-2-23-12.5T288 69q0-15 11.5-26T325 32q15 0 26.5 11T363 69q0 4-1 6l58 53q15 0 27 11t12 26q0 14-8.5 24T429 202l-35 55 40 56q11 2 18 12t7 22q0 15-11.5 26T421 384q-16 0-26.5-11.5T384 346q0-4 2-12l-26-35q-16 1-28-10.5T320 261q0-14 10-24.5t24-12.5l31-49q-1-4-1-11zM154 83q-11 0-18.5-7T128 58t7.5-18.5T154 32h44q11 0 18.5 7.5T224 58t-7.5 18-18.5 7h-44zm0 96q-11 0-18.5-7t-7.5-18 7.5-18.5T154 128h108q11 0 18.5 7.5T288 154t-7.5 18-18.5 7H154zm0 96q-11 0-18.5-7t-7.5-18 7.5-18.5T154 224h76q11 0 18.5 7.5T256 250t-7.5 18-18.5 7h-76zm0 96q-11 0-18.5-7t-7.5-18 7.5-18.5T154 320h140q11 0 18.5 7.5T320 346t-7.5 18-18.5 7H154z";
+const pathData = "M1.75 1a.75.75 0 0 1 .75.75v11.5c0 .138.112.25.25.25h11.5a.75.75 0 0 1 0 1.5H2.75A1.75 1.75 0 0 1 1 13.25V1.75A.75.75 0 0 1 1.75 1Zm8.5 0a1.26 1.26 0 0 1 1.235 1.425l1.59 1.589A1.24 1.24 0 0 1 14.5 5.25c0 .667-.523 1.21-1.18 1.246l-.893 1.338c.108.229.12.549.013.794l1.34 1.873a1.25 1.25 0 1 1-1.221.871l-1.34-1.874a1.249 1.249 0 0 1-.04-2.495l.892-1.34a1.274 1.274 0 0 1-.057-.589l-1.59-1.589A1.26 1.26 0 0 1 9 2.25C9 1.56 9.56 1 10.25 1Zm-1 9a.75.75 0 0 1 0 1.5h-4.5a.75.75 0 0 1 0-1.5h4.5Zm-2-3a.75.75 0 0 1 0 1.5h-2.5a.75.75 0 0 1 0-1.5h2.5Zm1-3a.75.75 0 0 1 0 1.5h-3.5a.75.75 0 0 1 0-1.5h3.5Zm-2-3a.75.75 0 0 1 0 1.5h-1.5a.75.75 0 0 1 0-1.5h1.5Z";
 const ltr = false;
 const accData = null;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v5";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, collection, packageName });
 
 export default "SAP-icons-v5/horizontal-combination-chart";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

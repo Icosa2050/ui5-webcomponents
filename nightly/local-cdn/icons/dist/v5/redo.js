@@ -2,13 +2,14 @@ import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icon
 import { ICON_REDO } from "../generated/i18n/i18n-defaults.js";
 
 const name = "redo";
-const pathData = "M160 160h256l-88-84q-8-8-8-18 0-11 7.5-18.5T346 32q10 0 17 7l141 134q8 8 8 19 0 12-8 18L363 345q-7 7-17 7-11 0-18.5-7.5T320 326q0-10 8-18l101-97H160q-22 0-42 8.5T83 243t-23.5 34.5T51 320q0 22 8.5 42T83 397t35 23.5 42 8.5h198q11 0 18.5 7t7.5 18-7.5 18.5T358 480H160q-33 0-62-12.5T47 433t-34.5-51T0 320t12.5-62T47 207t51-34.5 62-12.5z";
+const pathData = "M10.205 1.486a.75.75 0 0 1 1.06-.03l4.5 4.246a.751.751 0 0 1 0 1.091l-4.5 4.252a.75.75 0 0 1-1.03-1.09L13.361 7H4.75a3.25 3.25 0 1 0 0 6.5h6.5a.75.75 0 0 1 0 1.5h-6.5a4.75 4.75 0 0 1 0-9.5h8.616l-3.13-2.955a.75.75 0 0 1-.03-1.06Z";
 const ltr = false;
 const accData = ICON_REDO;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v5";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, accData, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, accData, collection, packageName });
 
 export default "SAP-icons-v5/redo";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

@@ -2,13 +2,14 @@ import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icon
 import { ICON_BACK_TO_TOP } from "../generated/i18n/i18n-defaults.js";
 
 const name = "back-to-top";
-const pathData = "M480 0q14 0 23 9.5t9 22.5q0 14-9 23t-23 9H32q-14 0-23-9T0 32Q0 19 9 9.5T32 0h448zm-98 239q12 11 0 23-12 11-23 0l-87-87v321q0 16-16 16t-16-16V177l-85 85q-5 5-11 5t-11-5q-12-11 0-23l102-101q10-9 22.5-9.5T280 138z";
+const pathData = "M15 0c.292 0 .531.099.719.297A.988.988 0 0 1 16 1a.973.973 0 0 1-.281.719A.974.974 0 0 1 15 2H1a.973.973 0 0 1-.719-.281A.973.973 0 0 1 0 1C0 .73.094.495.281.297A.947.947 0 0 1 1 0h14Zm-3.063 7.469c.25.229.25.468 0 .718-.25.23-.49.23-.718 0L8.5 5.47V15.5c0 .333-.167.5-.5.5-.333 0-.5-.167-.5-.5V5.531L4.844 8.188a.478.478 0 0 1-.344.156.478.478 0 0 1-.344-.156c-.25-.23-.25-.47 0-.72l3.188-3.155c.208-.188.442-.287.703-.297.26-.01.495.088.703.296l3.188 3.157Z";
 const ltr = false;
 const accData = ICON_BACK_TO_TOP;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v4";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, accData, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, accData, collection, packageName });
 
 export default "SAP-icons-v4/back-to-top";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

@@ -1,13 +1,14 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "pixelate";
-const pathData = "M96 352H32v-64h64v-64H32V64q0-13 9-22.5T64 32h384q14 0 23 9.5t9 22.5v160h-64v64h64v64h-64v64h64v32q0 14-9 23t-23 9h-32v-64h-64v64h-64v-64h-64v64h-64v-64H96v64H64q-14 0-23-9t-9-23v-32h64v-64zm64 0v64h64v-64h64v64h64v-64h64v-64h-64v-64h64v-64h-64v64h-64v-64h-64v64h-64v-64H96v64h64v64H96v64h64zm0-64h64v-64h64v64h64v64h-64v-64h-64v64h-64v-64z";
+const pathData = "M2.286 11.429H0V9.143h2.286V6.857H0V1.143C0 .833.107.565.321.339.536.113.81 0 1.143 0h13.714c.334 0 .607.113.822.34.214.225.321.493.321.803v5.714h-2.286v2.286H16v2.286h-2.286v2.285H16v1.143c0 .334-.107.607-.321.822a1.116 1.116 0 0 1-.822.321h-1.143v-2.286H11.43V16H9.143v-2.286H6.857V16H4.571v-2.286H2.286V16H1.143c-.333 0-.607-.107-.822-.321A1.116 1.116 0 0 1 0 14.857v-1.143h2.286V11.43Zm2.285 0v2.285h2.286V11.43h2.286v2.285h2.286V11.43h2.285V9.143H11.43V6.857h2.285V4.571H11.43v2.286H9.143V4.571H6.857v2.286H4.571V4.571H2.286v2.286H4.57v2.286H2.286v2.286H4.57Zm0-2.286h2.286V6.857h2.286v2.286h2.286v2.286H9.143V9.143H6.857v2.286H4.571V9.143Z";
 const ltr = false;
 const accData = null;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v4";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, collection, packageName });
 
 export default "SAP-icons-v4/pixelate";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

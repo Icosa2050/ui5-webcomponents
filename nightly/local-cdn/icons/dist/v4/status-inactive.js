@@ -1,13 +1,14 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "status-inactive";
-const pathData = "M256 0l256 256-256 256L0 256zM91 256l165 166 166-166L256 91z";
+const pathData = "m8 0 8 8-8 8-8-8 8-8ZM2.844 8 8 13.188 13.188 8 8 2.844 2.844 8Z";
 const ltr = false;
 const accData = null;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v4";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, collection, packageName });
 
 export default "SAP-icons-v4/status-inactive";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

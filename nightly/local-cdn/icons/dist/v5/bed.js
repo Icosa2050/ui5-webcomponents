@@ -1,13 +1,14 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "bed";
-const pathData = "M512 454q0 11-7.5 18.5T486 480t-18-7.5-7-18.5v-51H51v51q0 11-7 18.5T26 480t-18.5-7.5T0 454V186q0-11 7.5-18.5T26 160t18 7.5 7 18.5v166h173V218q0-11 7.5-18.5T250 192h140q26 0 48 9.5t38.5 26 26 38.5 9.5 48v140zM112 320q-20 0-34-14t-14-34 14-34 34-14 34 14 14 34-14 34-34 14zm163 32h186v-38q0-29-21-50t-50-21H275v109z";
+const pathData = "M.75 3a.75.75 0 0 1 .75.75V9H7V4.75A.75.75 0 0 1 7.75 4l4.693.005A3.75 3.75 0 0 1 16 7.75v4.5a.75.75 0 0 1-1.5 0V10.5h-13v1.75a.75.75 0 0 1-1.5 0v-8.5A.75.75 0 0 1 .75 3ZM8.5 9h6V7.75a2.25 2.25 0 0 0-2.02-2.238L8.5 5.5V9Zm-5-4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Z";
 const ltr = false;
 const accData = null;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v5";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, collection, packageName });
 
 export default "SAP-icons-v5/bed";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

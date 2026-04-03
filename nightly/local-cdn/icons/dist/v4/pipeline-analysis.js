@@ -1,13 +1,14 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "pipeline-analysis";
-const pathData = "M170.95 64h300q9 0 8 10l-92 368q-1 6-8 6h-116q-7 0-7-6l-92-368q-2-4 .5-7t6.5-3zm-138 384V64q0-14 9-23t23-9h48q16 0 16 16 0 6-4.5 11t-11.5 5h-48v96h48q16 0 16 16 0 6-4.5 11t-11.5 5h-48v64h48q16 0 16 16 0 6-4.5 11t-11.5 5h-48v64h48q16 0 16 16t-16 16h-48v64h48q16 0 16 16 0 6-4.5 11t-11.5 5h-48q-14 0-23-9.5t-9-22.5zm185-288h206l16-64h-238zm24 96h158l16-64h-190zm8 32l16 64h110l16-64h-142zm32 128h78l8-32h-94z";
+const pathData = "M4.941 1.158h10.702c.214 0 .31.12.286.357l-3.282 13.113c-.024.142-.12.213-.286.213H8.223c-.166 0-.25-.07-.25-.213L4.693 1.515c-.048-.095-.042-.178.017-.25a.288.288 0 0 1 .232-.107ZM.018 14.841V1.158c0-.332.107-.605.321-.82.214-.213.488-.32.82-.32h1.713c.38 0 .571.19.571.57a.573.573 0 0 1-.16.392.528.528 0 0 1-.41.178H1.16V4.58h1.712c.38 0 .571.19.571.57a.573.573 0 0 1-.16.392.528.528 0 0 1-.41.178H1.16V8h1.712c.38 0 .571.191.571.571a.573.573 0 0 1-.16.392.528.528 0 0 1-.41.178H1.16v2.28h1.712c.38 0 .571.19.571.57 0 .38-.19.57-.57.57H1.16v2.281h1.712c.38 0 .571.19.571.57a.573.573 0 0 1-.16.393.528.528 0 0 1-.41.178H1.16c-.333 0-.607-.113-.82-.339a1.126 1.126 0 0 1-.322-.802Zm6.6-10.262h7.349l.57-2.28h-8.49l.57 2.28ZM7.474 8h5.636l.571-2.28H6.903L7.474 8Zm.286 1.14.571 2.28h3.924l.571-2.28H7.76Zm1.142 4.561h2.783l.285-1.14H8.616L8.9 13.7Z";
 const ltr = false;
 const accData = null;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v4";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, collection, packageName });
 
 export default "SAP-icons-v4/pipeline-analysis";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

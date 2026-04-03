@@ -1,13 +1,14 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "cancel";
-const pathData = "M256 0q53 0 100 20t81.5 54.5T492 156t20 100-20 100-54.5 81.5T356 492t-100 20-100-20-81.5-54.5T20 356 0 256t20-100 54.5-81.5T156 20 256 0zm162 382q43-55 43-126 0-43-16-80.5t-43.5-65-65-43.5T256 51q-71 0-126 43zM51 256q0 43 16 80t44 65 65 44 80 16q71 0 126-43L94 130q-43 55-43 126z";
+const pathData = "M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0ZM2.905 3.966A6.5 6.5 0 0 0 8 14.5a6.469 6.469 0 0 0 4.033-1.406L2.905 3.966ZM8 1.5a6.47 6.47 0 0 0-4.034 1.405l9.128 9.128A6.469 6.469 0 0 0 14.5 8 6.5 6.5 0 0 0 8 1.5Z";
 const ltr = true;
 const accData = null;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v5";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, collection, packageName });
 
 export default "SAP-icons-v5/cancel";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

@@ -217,6 +217,12 @@ declare class Tokenizer extends UI5Element implements IFormInputElement {
     _getVisibleTokens(): Token[];
     onAfterRendering(): void;
     /**
+     * Updates the lastVisibleToken property on tokens.
+     * When collapsed with overflow, marks the last visible token for proper spacing to the n-more indicator.
+     * @private
+     */
+    _updateLastVisibleTokenAttribute(): void;
+    /**
      * Scrolls the container to the end to ensure very long tokens are visible at their end.
      * Otherwise, tokens may appear visually cut off.
      * @protected

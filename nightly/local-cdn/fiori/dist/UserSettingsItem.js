@@ -86,7 +86,7 @@ let UserSettingsItem = class UserSettingsItem extends UI5Element {
         return this.pages.find(view => view.selected) || this.pages[0];
     }
     get ariaLabelledByText() {
-        return `${this.text} ${this.accessibleName}`.trim();
+        return `${this.text} ${this.accessibleName || ""}`.trim();
     }
     get _tooltip() {
         return this.tooltip ? this.tooltip : this.text;

@@ -1,13 +1,14 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "add-coursebook";
-const pathData = "M196 441q6-2 10-2 11 0 18.5 7.5T232 465q0 17-16 23l-53 22q-6 2-9 2-11 0-18.5-7.5T128 486V184q0-18 16-24l190-76-49-30-234 88v312q0 11-7 18.5T26 480t-18.5-7.5T0 454V125q0-17 17-24L279 2q3-2 9-2 7 0 14 4l102 64q12 7 12 22v140q0 11-7.5 18.5T390 256t-18-7.5-7-18.5V127l-186 74v247zm290-67q11 0 18.5 7.5T512 400t-7.5 18.5T486 426h-60v60q0 11-7.5 18.5T400 512t-18.5-7.5T374 486v-60h-60q-11 0-18.5-7.5T288 400t7.5-18.5T314 374h60v-60q0-11 7.5-18.5T400 288t18.5 7.5T426 314v60h60z";
+const pathData = "M8.825.02a.752.752 0 0 1 .569.091l3.25 2a.75.75 0 0 1 .356.64v3.5a.75.75 0 0 1-1.5 0V3.81l-6 2.444v7.858l.704-.301a.75.75 0 0 1 .592 1.379l-1.75.75A.752.752 0 0 1 4 15.25v-9.5a.75.75 0 0 1 .467-.694l6.076-2.476-1.628-1.002L1.5 4.275v9.975a.75.75 0 0 1-1.5 0V3.75a.75.75 0 0 1 .494-.705L8.825.021ZM12.5 9a.75.75 0 0 1 .75.75v2h2a.75.75 0 0 1 0 1.5h-2v2a.75.75 0 0 1-1.5 0v-2h-2a.75.75 0 0 1 0-1.5h2v-2A.75.75 0 0 1 12.5 9Z";
 const ltr = false;
 const accData = null;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v5";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, collection, packageName });
 
 export default "SAP-icons-v5/add-coursebook";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

@@ -1,13 +1,14 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "along-stacked-chart";
-const pathData = "M154 147q-11 0-18.5-7t-7.5-18 7.5-18.5T154 96h44q11 0 18.5 7.5T224 122t-7.5 18-18.5 7h-44zM32 160q-14 0-23-9t-9-23 9-23 23-9 23 9 9 23-9 23-23 9zm320-32q0 14-9 23t-23 9-23-9-9-23 9-23 23-9 23 9 9 23zm64 32q-14 0-23-9t-9-23 9-23 23-9 23 9 9 23-9 23-23 9zM26 275q-11 0-18.5-7T0 250t7.5-18.5T26 224h108q11 0 18.5 7.5T160 250t-7.5 18-18.5 7H26zm460-51q11 0 18.5 7.5T512 250t-7.5 18-18.5 7H378q-11 0-18.5-7t-7.5-18 7.5-18.5T378 224h108zm-230 64q-14 0-23-9t-9-23 9-23 23-9 23 9 9 23-9 23-23 9zm6 64q11 0 18.5 7.5T288 378t-7.5 18-18.5 7H154q-11 0-18.5-7t-7.5-18 7.5-18.5T154 352h108zm-230 0q14 0 23 9t9 23-9 23-23 9-23-9-9-23 9-23 23-9zm352 0q14 0 23 9t9 23-9 23-23 9-23-9-9-23 9-23 23-9z";
+const pathData = "M1 11a1 1 0 1 1 0 2 1 1 0 0 1 0-2Zm7.25.5a.75.75 0 0 1 0 1.5h-3.5a.75.75 0 0 1 0-1.5h3.5ZM12 11a1 1 0 1 1 0 2 1 1 0 0 1 0-2ZM4.25 7.5a.75.75 0 0 1 0 1.5H.75a.75.75 0 0 1 0-1.5h3.5ZM7 7a1 1 0 1 1 0 2 1 1 0 0 1 0-2Zm8.25.5a.75.75 0 0 1 0 1.5h-4.5a.75.75 0 0 1 0-1.5h4.5ZM1 3a1 1 0 1 1 0 2 1 1 0 0 1 0-2Zm5.25.5a.75.75 0 0 1 0 1.5h-2.5a.75.75 0 0 1 0-1.5h2.5ZM10 3a1 1 0 1 1 0 2 1 1 0 0 1 0-2Zm3 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2Z";
 const ltr = false;
 const accData = null;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v5";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, collection, packageName });
 
 export default "SAP-icons-v5/along-stacked-chart";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

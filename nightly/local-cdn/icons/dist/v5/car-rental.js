@@ -1,13 +1,14 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "car-rental";
-const pathData = "M512 454q0 11-7.5 18.5T486 480h-28q-11 0-18.5-7.5T432 454v-19H80v19q0 11-7.5 18.5T54 480H26q-11 0-18.5-7.5T0 454V198q0-3 2-9l35-98q10-26 33-42.5T122 32h264q27 0 49.5 15T469 88l41 100q1 3 1.5 5.5t.5 5.5v255zM122 83q-12 0-22 7t-14 18l-24 65h386l-27-66q-4-11-13.5-17.5T386 83H122zM51 384h410V224H51v160zm88-128q17 0 30 13t13 30-13 30-30 13-30-13-13-30 13-30 30-13zm234 0q17 0 30 13t13 30-13 30-30 13-30-13-13-30 13-30 30-13z";
+const pathData = "M12.132 1a2.75 2.75 0 0 1 2.563 1.753l1.118 2.876c.124.317.187.655.187.996v7.125a1.25 1.25 0 1 1-2.5 0V13h-11v.75a1.25 1.25 0 1 1-2.5 0V6.625c0-.34.063-.679.187-.996l1.118-2.876A2.75 2.75 0 0 1 3.868 1h8.264ZM1.5 11.25c0 .138.112.25.25.25h12.5a.25.25 0 0 0 .25-.25V7h-13v4.25ZM4.25 8a1.25 1.25 0 1 1 0 2.5 1.25 1.25 0 0 1 0-2.5Zm7.5 0a1.25 1.25 0 1 1 0 2.5 1.25 1.25 0 0 1 0-2.5ZM3.868 2.5a1.25 1.25 0 0 0-1.165.797L1.847 5.5h12.306l-.856-2.203a1.25 1.25 0 0 0-1.165-.797H3.868Z";
 const ltr = false;
 const accData = null;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v5";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, collection, packageName });
 
 export default "SAP-icons-v5/car-rental";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

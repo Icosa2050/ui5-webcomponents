@@ -43,21 +43,26 @@ const setThemeRoot = (themeRoot) => {
         return;
     }
     currThemeRoot = themeRoot;
-    if (!validateThemeRoot(themeRoot)) {
-        console.warn(`The ${themeRoot} is not valid. Check the allowed origins as suggested in the "setThemeRoot" description.`); // eslint-disable-line
-        return;
-    }
     return attachCustomThemeStylesToHead(getTheme());
 };
-const formatThemeLink = (theme) => {
-    return `${getThemeRoot()}Base/baseLib/${theme}/css_variables.css`; // theme root is always set at this point.
+const formatThemeLink = (theme, validatedThemeRoot) => {
+    return `${validatedThemeRoot}Base/baseLib/${theme}/css_variables.css`;
 };
 const attachCustomThemeStylesToHead = async (theme) => {
     const link = document.querySelector(`[sap-ui-webcomponents-theme="${theme}"]`);
     if (link) {
         document.head.removeChild(link);
     }
-    await createLinkInHead(formatThemeLink(theme), { "sap-ui-webcomponents-theme": theme });
+    const themeRoot = getThemeRoot();
+    if (!themeRoot) {
+        return;
+    }
+    const validatedThemeRoot = validateThemeRoot(themeRoot);
+    if (!validatedThemeRoot) {
+        console.warn(`The ${themeRoot} is not valid. Check the allowed origins as suggested in the "setThemeRoot" description.`); // eslint-disable-line
+        return;
+    }
+    await createLinkInHead(formatThemeLink(theme, validatedThemeRoot), { "sap-ui-webcomponents-theme": theme });
 };
 export { getThemeRoot, setThemeRoot, attachCustomThemeStylesToHead, };
 //# sourceMappingURL=ThemeRoot.js.map

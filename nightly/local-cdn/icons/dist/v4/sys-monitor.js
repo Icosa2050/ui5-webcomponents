@@ -1,13 +1,14 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "sys-monitor";
-const pathData = "M480 32q14 0 23 9t9 23v320q0 13-9 22.5t-23 9.5H32q-13 0-22.5-9.5T0 384V64q0-14 9.5-23T32 32h448zm0 32H32v320h448V64zM368 448q16 0 16 16 0 6-4.5 11t-11.5 5H144q-6 0-11-5t-5-11q0-7 5-11.5t11-4.5h224z";
+const pathData = "M15 1c.292 0 .531.094.719.281A.973.973 0 0 1 16 2v10c0 .27-.094.505-.281.703A.947.947 0 0 1 15 13H1a.961.961 0 0 1-.703-.297A.961.961 0 0 1 0 12V2c0-.292.099-.531.297-.719A.988.988 0 0 1 1 1h14Zm0 1H1v10h14V2Zm-3.5 12c.333 0 .5.167.5.5 0 .125-.047.24-.14.344a.462.462 0 0 1-.36.156h-7a.478.478 0 0 1-.344-.156A.478.478 0 0 1 4 14.5c0-.146.052-.266.156-.36A.503.503 0 0 1 4.5 14h7Z";
 const ltr = false;
 const accData = null;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v4";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, collection, packageName });
 
 export default "SAP-icons-v4/sys-monitor";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

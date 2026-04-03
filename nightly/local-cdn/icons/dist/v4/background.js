@@ -1,13 +1,14 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "background";
-const pathData = "M368 192q-20 0-34-14t-14-34 14-34 34-14 34 14 14 34-14 34-34 14zm80-160q14 0 23 9t9 23v384q0 14-9 23t-23 9H64q-13 0-22.5-9T32 448V64q0-14 9.5-23T64 32h384zm0 32H64v384h384V64zm-92 288l-58-85 22-43 96 128h-60zm-7 32H94l130-183z";
+const pathData = "M11.5 6c-.417 0-.77-.146-1.063-.438A1.446 1.446 0 0 1 10 4.5c0-.417.146-.77.438-1.063A1.447 1.447 0 0 1 11.5 3c.417 0 .77.146 1.063.438.291.291.437.645.437 1.062 0 .417-.146.77-.438 1.063A1.447 1.447 0 0 1 11.5 6ZM14 1c.292 0 .531.094.719.281A.973.973 0 0 1 15 2v12a.974.974 0 0 1-.281.719A.974.974 0 0 1 14 15H2a.988.988 0 0 1-.703-.281A.947.947 0 0 1 1 14V2c0-.292.099-.531.297-.719A.988.988 0 0 1 2 1h12Zm0 1H2v12h12V2Zm-2.875 9L9.312 8.344 10 7l3 4h-1.875Zm-.219 1H2.937L7 6.281 10.906 12Z";
 const ltr = false;
 const accData = null;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v4";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, collection, packageName });
 
 export default "SAP-icons-v4/background";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

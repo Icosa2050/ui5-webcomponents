@@ -1,13 +1,14 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "keyboard-and-mouse";
-const pathData = "M422 32q38 0 64 26t26 64v76q0 11-7.5 18.5T486 224t-18-7.5-7-18.5v-76q0-17-11-28t-28-11H90q-17 0-28 11t-11 28v204q0 16 11 27.5T90 365h172q11 0 18.5 7t7.5 18-7.5 18.5T262 416H90q-38 0-64-26T0 326V122q0-38 26-64t64-26h332zM122 141q25 0 25 25 0 26-25 26-26 0-26-26 0-25 26-25zm121 25q0 26-25 26-26 0-26-26 0-25 26-25 25 0 25 25zm96 0q0 26-25 26-26 0-26-26 0-25 26-25 25 0 25 25zm83 0q0 26-25 26-26 0-26-26 0-25 26-25 25 0 25 25zM218 288q-11 0-18.5-7.5T192 262t7.5-18 18.5-7h44q11 0 18.5 7t7.5 18-7.5 18.5T262 288h-44zm-96-51q25 0 25 25 0 26-25 26-26 0-26-26 0-25 26-25zm390 121q0 17-14 23l-21 11 31 48q4 7 4 14 0 11-7.5 18.5T486 480q-7 0-14-5l-45-31-10 21q-7 17-24 15-18-2-23-17l-49-141q0-2-.5-4t-.5-4q0-11 7.5-18.5T346 288q5 0 7 1l141 45q16 5 18 22v2z";
+const pathData = "M10.238 10.23c.21-.22.53-.29.82-.19l4.401 1.47a.8.8 0 0 1 .1 1.47l-.66.33.96 1.45c.21.32.17.74-.1 1.01-.271.271-.646.304-.99.08l-1.45-.96-.33.66a.798.798 0 0 1-1.47-.1l-1.47-4.4c-.1-.29-.02-.6.19-.82Zm3.016-9.228a2.75 2.75 0 0 1 2.75 2.75V8.25a.75.75 0 0 1-1.5 0V3.752c0-.69-.56-1.25-1.25-1.25h-10.5c-.69 0-1.25.56-1.25 1.25v5.5c0 .69.56 1.25 1.25 1.25H7.25a.75.75 0 0 1 0 1.5H2.754a2.75 2.75 0 0 1-2.75-2.75v-5.5a2.75 2.75 0 0 1 2.75-2.75h10.5ZM3.75 7.5a.75.75 0 1 1 0 1.5.75.75 0 0 1 0-1.5Zm5 0a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h2Zm-5-3.25a.75.75 0 1 1 0 1.5.75.75 0 0 1 0-1.5Zm3 0a.75.75 0 1 1 0 1.5.75.75 0 0 1 0-1.5Zm3 0a.75.75 0 1 1 0 1.5.75.75 0 0 1 0-1.5Zm3 0a.75.75 0 1 1 0 1.5.75.75 0 0 1 0-1.5Z";
 const ltr = false;
 const accData = null;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v5";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, collection, packageName });
 
 export default "SAP-icons-v5/keyboard-and-mouse";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

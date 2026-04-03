@@ -1,13 +1,14 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "permission";
-const pathData = "M83 201v260h84q11 0 18.5 7t7.5 18-7.5 18.5T167 512H58q-11 0-18.5-7.5T32 486V192q0-10 6-17L181 9q6-9 19-9h190q11 0 18.5 7.5T416 26v109q0 11-7.5 18.5T390 161t-18-7.5-7-18.5V51H212l-20 23v67q0 21-15 36t-36 15H91zm326 55q15 0 27.5 5.5t22.5 15 15.5 21.5 5.5 24q0 14-7.5 22.5T454 353t-18-7.5-7-18.5q0-8-6-14t-14-6-14 6-6 14v34q12 8 19.5 20.5T416 410v44q0 24-17 41t-41 17h-76q-24 0-41-17t-17-41v-44q0-24 17-41t41-17h56v-25q0-29 21-50t50-21zm-44 154q0-7-7-7h-76q-7 0-7 7v44q0 7 7 7h76q7 0 7-7v-44z";
+const pathData = "M11.25 0C12.216 0 13 .784 13 1.75v3.5a.75.75 0 0 1-1.5 0v-3.5a.25.25 0 0 0-.25-.25H6.71a.25.25 0 0 0-.19.087L6 2.193V5.25a.75.75 0 0 1-.75.75H2.738l-.238.37v7.88c0 .138.112.25.25.25h2.5a.75.75 0 0 1 0 1.5h-2.5A1.75 1.75 0 0 1 1 14.25V6.37c0-.417.15-.821.42-1.139L5.38.611A1.751 1.751 0 0 1 6.71 0h4.54Zm2.604 8.25c1.028 0 1.906.744 2.075 1.758l.061.369a.75.75 0 0 1-1.48.246l-.062-.37a.603.603 0 0 0-1.198.1V11a.75.75 0 0 1 .75.75v3.5a.75.75 0 0 1-.75.75h-4.5a.75.75 0 0 1-.75-.75v-3.5a.75.75 0 0 1 .75-.75h3v-.646c0-1.162.942-2.104 2.104-2.104ZM9.5 14.5h3v-2h-3v2Z";
 const ltr = false;
 const accData = null;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v5";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, collection, packageName });
 
 export default "SAP-icons-v5/permission";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

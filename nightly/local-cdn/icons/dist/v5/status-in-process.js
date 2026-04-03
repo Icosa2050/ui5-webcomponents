@@ -1,13 +1,14 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "status-in-process";
-const pathData = "M505 399q7 13 7 27 0 21-15.5 37.5T456 480H56q-25 0-40.5-16.5T0 426q0-14 7-27L208 59q17-27 48-27 14 0 27 6.5T304 59zM288 176q0-14-9-23t-23-9-23 9-9 23v96q0 14 9 23t23 9 23-9 9-23v-96zm-32 240q14 0 23-9t9-23-9-23-23-9-23 9-9 23 9 23 23 9z";
+const pathData = "M6.492 1.855a1.75 1.75 0 0 1 3.008 0l6.25 10.503c.693 1.167-.148 2.645-1.505 2.645H1.752c-1.357 0-2.197-1.478-1.504-2.645L6.492 1.855Zm1.503 9.138a1 1 0 1 0 0 2.002 1 1 0 0 0 0-2.002Zm0-7a1 1 0 0 0-1 1v4a1 1 0 0 0 2 0v-4a1 1 0 0 0-1-1Z";
 const ltr = false;
 const accData = null;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v5";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, collection, packageName });
 
 export default "SAP-icons-v5/status-in-process";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

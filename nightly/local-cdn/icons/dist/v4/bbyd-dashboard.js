@@ -1,13 +1,14 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "bbyd-dashboard";
-const pathData = "M216.5 0h265q8 0 14 6.5t6 14.5v286q0 9-6 15t-14 6h-265q-9 0-15-6t-6-15V21q0-8 6-14.5t15-6.5zm-206 314V196q0-6 4.5-10.5t10.5-4.5h118q6 0 10 4.5t4 10.5v118q0 6-4 10.5t-10 4.5h-118q-6 0-10.5-4.5T10.5 314zm199 52h118q15 0 15 15v116q0 15-15 15h-118q-6 0-10.5-4t-4.5-11V381q0-6 4.5-10.5t10.5-4.5zm9 22v102h102V388h-102zm-185-184v102h102V204h-102zm291-129v175h48V75h-48zm-255 374v-78q0-5 5-5h79q4 0 4 5v78q0 5-4 5h-79q-5 0-5-5zm333-339v140h47V110h-47zm-157 44v96h47v-96h-47z";
+const pathData = "M6.333.016h8.127c.163 0 .307.068.43.203a.657.657 0 0 1 .183.452v8.92a.64.64 0 0 1-.184.467.583.583 0 0 1-.43.188H6.334a.619.619 0 0 1-.46-.188.64.64 0 0 1-.184-.467V.67c0-.166.061-.317.184-.452a.595.595 0 0 1 .46-.203ZM.016 9.809v-3.68c0-.125.046-.234.138-.328a.439.439 0 0 1 .322-.14h3.618a.39.39 0 0 1 .307.14.482.482 0 0 1 .123.328v3.68a.479.479 0 0 1-.123.327.39.39 0 0 1-.307.14H.476a.438.438 0 0 1-.322-.14.453.453 0 0 1-.138-.327Zm6.102 1.622h3.62c.306 0 .46.156.46.468v3.617c0 .312-.154.468-.46.468h-3.62a.465.465 0 0 1-.322-.125.44.44 0 0 1-.138-.343V11.9c0-.125.046-.234.138-.328.092-.094.2-.14.322-.14Zm.276.686v3.18h3.128v-3.18H6.394ZM.721 6.378V9.56h3.128V6.38H.721Zm8.924-4.023v5.458h1.472V2.355H9.645ZM1.825 14.02v-2.432c0-.104.051-.156.153-.156h2.423c.082 0 .123.052.123.156v2.432c0 .104-.041.156-.123.156H1.978c-.102 0-.153-.052-.153-.156ZM12.037 3.447v4.366h1.442V3.447h-1.442ZM7.222 4.819v2.994h1.442V4.819H7.222Z";
 const ltr = false;
 const accData = null;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v4";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, collection, packageName });
 
 export default "SAP-icons-v4/bbyd-dashboard";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

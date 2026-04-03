@@ -4,10 +4,11 @@ const name = "data-access";
 const pathData = "M31.5 63h224V-1l224 128-224 128v64h224v128h-224v64l-224-128 224-128v-64h-224V63z";
 const ltr = false;
 const accData = null;
+const viewBox = "0 0 512 512";
 const collection = "business-suite-v1";
 const packageName = "@ui5/webcomponents-icons-business-suite";
 
-registerIcon(name, { pathData, ltr, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, collection, packageName });
 
 export default "business-suite-v1/data-access";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

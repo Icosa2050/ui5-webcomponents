@@ -1,13 +1,14 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "strikethrough";
-const pathData = "M64 64V32h384v32H288v160h-64V64H64zM32 272q0-16 16-16h416q16 0 16 16t-16 16H48q-16 0-16-16zm192 48h64v160h-64V320z";
+const pathData = "M2 2V1h12v1H9v5H7V2H2ZM1 8.5c0-.333.167-.5.5-.5h13c.333 0 .5.167.5.5 0 .333-.167.5-.5.5h-13c-.333 0-.5-.167-.5-.5ZM7 10h2v5H7v-5Z";
 const ltr = false;
 const accData = null;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v4";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, collection, packageName });
 
 export default "SAP-icons-v4/strikethrough";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

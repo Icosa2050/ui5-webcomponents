@@ -1,13 +1,14 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "blank-tag";
-const pathData = "M486 448H140q-14 0-23-12L6 270q-4-5-4-14t4-14L117 76q9-12 23-12h346q11 0 19.5 8t8.5 20v328q0 12-8.5 20t-19.5 8zm-333-51h309V115H153L58 256zm25-93q-20 0-34-14t-14-34 14-34 34-14q19 0 33.5 14t14.5 34-14.5 34-33.5 14z";
+const pathData = "M13.25 2A2.75 2.75 0 0 1 16 4.75v6.5A2.75 2.75 0 0 1 13.25 14H5.32a2.75 2.75 0 0 1-2.288-1.225L.126 8.416a.75.75 0 0 1 0-.832l2.906-4.36A2.75 2.75 0 0 1 5.32 2h7.93ZM5.32 3.5a1.25 1.25 0 0 0-1.04.557L1.651 8l2.63 3.943a1.25 1.25 0 0 0 1.04.557h7.929c.69 0 1.25-.56 1.25-1.25v-6.5c0-.69-.56-1.25-1.25-1.25H5.32Zm.18 3a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Z";
 const ltr = false;
 const accData = null;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v5";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, collection, packageName });
 
 export default "SAP-icons-v5/blank-tag";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

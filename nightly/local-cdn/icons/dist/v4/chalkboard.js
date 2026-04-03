@@ -1,13 +1,14 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "chalkboard";
-const pathData = "M.5 417V89q0-16 12-27.5t29-11.5h430q16 0 28 11.5t12 27.5v328q0 17-12 31.5t-28 14.5h-430q-17 0-29-14.5T.5 417zm187-82h41l26-41 26 41h43l-48-68 44-62h-41l-24 35-23-35h-42l45 63zm-148-151v35q30-9 50-29v145h38V134h-31q-6 19-23.5 32t-33.5 18zm370 6v145h38V134h-32q-5 17-22 31t-34 19v35q26-8 50-29zm-1 229v-40h-160v40h160z";
+const pathData = "M0 13.552V3.228c0-.336.125-.625.376-.866C.626 2.121.929 2 1.284 2h13.464c.334 0 .626.12.876.362.25.241.376.53.376.866v10.324c0 .357-.125.687-.376.992-.25.304-.543.456-.876.456H1.284c-.355 0-.658-.152-.908-.456-.25-.305-.376-.635-.376-.992Zm5.855-2.581H7.14l.814-1.29.814 1.29h1.347L8.61 8.83l1.377-1.952H8.704L7.953 7.98l-.72-1.102H5.918l1.409 1.983-1.472 2.109ZM1.221 6.218V7.32c.626-.19 1.148-.494 1.566-.913v4.564h1.19V4.644h-.971c-.125.399-.37.735-.736 1.007-.365.273-.715.462-1.049.567Zm11.585.189v4.564h1.19V4.644h-1.002c-.104.357-.334.682-.689.976-.355.294-.71.493-1.064.598V7.32c.542-.168 1.064-.473 1.565-.913Zm-.031 7.208v-1.26h-5.01v1.26h5.01Z";
 const ltr = true;
 const accData = null;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v4";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, collection, packageName });
 
 export default "SAP-icons-v4/chalkboard";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

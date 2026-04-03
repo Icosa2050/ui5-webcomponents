@@ -1,13 +1,14 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "toaster-down";
-const pathData = "M486 0q11 0 18.5 7.5T512 26v12q0 11-7.5 18.5T486 64h-6v233q0 13-5.5 28.5T460 354t-21.5 21.5T412 384q-11 0-19.5-7t-8.5-19q0-8 5-15t14-9q11-4 18.5-14t7.5-23V64H83v233q0 13 7.5 23t18.5 14q9 2 14 9t5 15q0 11-8 18t-20 7q-14 0-26.5-8T52 354t-14.5-28-5.5-29V64h-6q-11 0-18.5-7.5T0 38V26Q0 15 7.5 7.5T26 0h460zM358 128q11 0 18.5 7.5T384 154t-7.5 18-18.5 7H154q-11 0-18.5-7t-7.5-18 7.5-18.5T154 128h204zm-43 263q7-7 18-7t18 7.5 7 18.5-7 18l-77 76q-7 8-18 8-9 0-18-7l-77-77q-7-7-7-18t7-18.5 18-7.5 18 7l33 34V282q0-11 7.5-18.5T256 256t18.5 7.5T282 282v143z";
+const pathData = "M8 8a.75.75 0 0 1 .75.75v4.545l.942-1.047a.75.75 0 0 1 1.116 1.004l-2.25 2.5a.758.758 0 0 1-1.116 0l-2.25-2.5a.75.75 0 0 1 1.116-1.004l.942 1.047V8.75A.75.75 0 0 1 8 8Zm7.25-8a.75.75 0 0 1 .75.75l-.004.577A.75.75 0 0 1 15.25 2H15v7.266A2.734 2.734 0 0 1 12.266 12h-.016a.75.75 0 0 1 0-1.5h.016c.681 0 1.234-.553 1.234-1.234V2h-11v7.434c0 .589.477 1.066 1.066 1.066.415 0 .934.182.934.75 0 .54-.52.75-.934.75A2.566 2.566 0 0 1 1 9.434V2H.75A.75.75 0 0 1 0 1.25v-.5A.75.75 0 0 1 .75 0h14.5Zm-4 4a.75.75 0 0 1 0 1.5h-6.5a.75.75 0 0 1 0-1.5h6.5Z";
 const ltr = false;
 const accData = null;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v5";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, collection, packageName });
 
 export default "SAP-icons-v5/toaster-down";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

@@ -1,13 +1,14 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "ppt-attachment";
-const pathData = "M256 128h160q13 0 22.5 9.5T448 160v32h32q13 0 22.5 9.5T512 224v128q0 14-9.5 23t-22.5 9H320q-14 0-23-9t-9-23v-32h-32q-14 0-23-9t-9-23V160q0-13 9-22.5t23-9.5zM0 480V128L128 0h224q13 0 22.5 9t9.5 23v64h-32V32H160v96q0 14-9.5 23t-23.5 9H32v320h320v-48h32v48q0 14-9 23t-23 9H32q-14 0-23-9t-9-23zm320-128h160V224H320v128zm96-192H256v128h32v-64q0-13 9-22.5t23-9.5h96v-32z";
+const pathData = "M8 4h5c.27 0 .505.099.703.297A.961.961 0 0 1 14 5v1h1c.27 0 .505.099.703.297A.961.961 0 0 1 16 7v4a.947.947 0 0 1-.297.719A.988.988 0 0 1 15 12h-5a.973.973 0 0 1-.719-.281A.974.974 0 0 1 9 11v-1H8a.973.973 0 0 1-.719-.281A.973.973 0 0 1 7 9V5c0-.27.094-.505.281-.703A.947.947 0 0 1 8 4ZM0 15V4l4-4h7c.27 0 .505.094.703.281A.947.947 0 0 1 12 1v2h-1V1H5v3a.947.947 0 0 1-.297.719A1.027 1.027 0 0 1 3.97 5H1v10h10v-1.5h1V15a.974.974 0 0 1-.281.719A.974.974 0 0 1 11 16H1a.973.973 0 0 1-.719-.281A.974.974 0 0 1 0 15Zm10-4h5V7h-5v4Zm3-6H8v4h1V7c0-.27.094-.505.281-.703A.947.947 0 0 1 10 6h3V5Z";
 const ltr = false;
 const accData = null;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v4";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, collection, packageName });
 
 export default "SAP-icons-v4/ppt-attachment";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

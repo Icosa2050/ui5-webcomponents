@@ -1,13 +1,14 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "quality-issue";
-const pathData = "M436 480H76q-31 0-53.5-21T0 407q0-19 10-37L191 68q10-17 27-26.5t36-9.5q11 0 23 3.5t22.5 10T317 61t7 20-7 18.5-17 7.5q-16 0-22-12-7-12-22-12t-21 12L54 396q-3 6-3 11 0 9 7.5 15.5T76 429h360q10 0 17.5-6.5T461 407q0-5-3-11l-23-37q-3-6-3-13 0-11 7-18.5t18-7.5q16 0 22 12l23 38q10 16 10 37 0 31-22.5 52T436 480zm51-333H371q-11 0-18-7t-7-18 7-18.5 18-7.5h116q11 0 18 7.5t7 18.5-7 18-18 7zM256 296q-11 0-18-7.5t-7-18.5v-85q0-11 7-18.5t18-7.5 18.5 7.5T282 185v85q0 11-7.5 18.5T256 296zm230-85H371q-11 0-18.5-7t-7.5-18 7.5-18.5T371 160h115q11 0 18 7.5t7 18.5-7 18-18 7zm0 64H371q-11 0-18.5-7t-7.5-18 7.5-18.5T371 224h115q11 0 18 7.5t7 18.5-7 18-18 7zM256 401q-13 0-22-9t-9-23q0-13 9-22t22-9 22 9 9 22q0 14-9 23t-22 9z";
+const pathData = "M1.752 15.003c-1.357 0-2.197-1.478-1.504-2.644L6.492 1.856A1.75 1.75 0 0 1 9.5 1.855l.601 1.008a.75.75 0 0 1-1.29.768l-.6-1.01a.251.251 0 0 0-.43 0L1.537 13.125a.25.25 0 0 0 .215.378h12.494a.25.25 0 0 0 .214-.378l-.593-.993a.75.75 0 0 1 1.287-.77l.595.997c.694 1.166-.146 2.644-1.504 2.644H1.752Zm9.993-9.51a.75.75 0 0 1 0-1.5h3.5a.75.75 0 1 1 0 1.5h-3.5Zm-3.75 3.5a.75.75 0 0 1-.75-.75v-2.5a.75.75 0 0 1 1.5 0v2.5a.75.75 0 0 1-.75.75Zm3.75-1.5a.75.75 0 0 1 0-1.5h3.5a.75.75 0 1 1 0 1.5h-3.5Zm0 2a.75.75 0 0 1 0-1.5h3.5a.75.75 0 1 1 0 1.5h-3.5Zm-3.75 2.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z";
 const ltr = false;
 const accData = null;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v5";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, collection, packageName });
 
 export default "SAP-icons-v5/quality-issue";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

@@ -2,13 +2,14 @@ import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icon
 import { ICON_RESIZE_HORIZONTAL } from "../generated/i18n/i18n-defaults.js";
 
 const name = "resize-horizontal";
-const pathData = "M198 480q-11 0-18-7.5t-7-18.5V58q0-11 7-18.5t18-7.5 18.5 7.5T224 58v396q0 11-7.5 18.5T198 480zm116 0q-11 0-18.5-7.5T288 454V58q0-11 7.5-18.5T314 32t18 7.5 7 18.5v396q0 11-7 18.5t-18 7.5zM103 358q-12 0-19-7L8 274q-8-8-8-18t8-18l76-77q8-8 19-8t18 7.5 7 18.5-7 18l-59 59 59 59q7 7 7 18t-7 18-18 7zm307 0q-11 0-18-7t-7-18 7-18l59-59-59-59q-7-7-7-18t7-18.5 18-7.5 19 8l76 77q7 6 7 18 0 11-7 18l-76 77q-7 7-19 7z";
+const pathData = "M6.25 1a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-1.5 0V1.75A.75.75 0 0 1 6.25 1Zm3.5 0a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-1.5 0V1.75A.75.75 0 0 1 9.75 1ZM2.748 5.442a.75.75 0 0 1 1.004 1.116L1.872 8.25l1.88 1.692a.75.75 0 0 1-1.004 1.116l-2.5-2.25a.75.75 0 0 1 0-1.116l2.5-2.25Zm9.444-.194a.75.75 0 0 1 1.06-.056l2.5 2.25a.75.75 0 0 1 0 1.116l-2.5 2.25a.75.75 0 0 1-1.004-1.116L14.128 8l-1.88-1.692a.75.75 0 0 1-.056-1.06Z";
 const ltr = false;
 const accData = ICON_RESIZE_HORIZONTAL;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v5";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, accData, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, accData, collection, packageName });
 
 export default "SAP-icons-v5/resize-horizontal";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

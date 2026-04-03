@@ -61,6 +61,7 @@ let TableRow = class TableRow extends TableRowBase {
         toggleAttribute(this, "draggable", this.movable, "true");
         toggleAttribute(this, "_interactive", this._isInteractive);
         toggleAttribute(this, "_alternate", this._alternate);
+        toggleAttribute(this, "_haspopin", this._hasPopin);
     }
     async focus(focusOptions) {
         this.setAttribute("tabindex", "-1");
@@ -117,6 +118,9 @@ let TableRow = class TableRow extends TableRowBase {
         return this._fixedActions.find(action => {
             return action.hasAttribute("ui5-table-row-action-navigation") && !action.invisible && !action._isInteractive;
         }) !== undefined;
+    }
+    get _hasPopin() {
+        return this.cells.some(c => c._popin && !c._popinHidden);
     }
     get _rowIndex() {
         if (this.position !== undefined) {
@@ -193,7 +197,7 @@ __decorate([
         "default": true,
         individualSlots: true,
         invalidateOnChildChange: {
-            properties: ["_popin", "_popinHidden"],
+            properties: ["merged", "_popin", "_popinHidden"],
             slots: false,
         },
     })

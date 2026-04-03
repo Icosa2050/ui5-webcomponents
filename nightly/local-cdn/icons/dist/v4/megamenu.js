@@ -1,13 +1,14 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "megamenu";
-const pathData = "M384.37 160q10 0 14.5 9.5t-2.5 17.5l-128 159q-5 6-12.5 6t-12.5-6l-127-159q-7-8-3-17.5t15-9.5h256z";
+const pathData = "M11.993 5c.208 0 .359.099.452.297a.467.467 0 0 1-.078.547l-3.99 4.968a.486.486 0 0 1-.39.188.486.486 0 0 1-.39-.188L3.64 5.845a.488.488 0 0 1-.094-.547c.083-.198.24-.297.468-.297h7.98Z";
 const ltr = false;
 const accData = null;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v4";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, collection, packageName });
 
 export default "SAP-icons-v4/megamenu";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

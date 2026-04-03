@@ -1,13 +1,14 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "pause";
-const pathData = "M64 32h384q13 0 22.5 9.5T480 64v384q0 14-9.5 23t-22.5 9H64q-14 0-23-9t-9-23V64q0-13 9-22.5T64 32zm0 416h384V64H64v384zm224-304h32v225h-32V144zm-96 225V144h32v225h-32z";
+const pathData = "M2 1h12c.27 0 .505.099.703.297A.961.961 0 0 1 15 2v12a.947.947 0 0 1-.297.719A.988.988 0 0 1 14 15H2a.973.973 0 0 1-.719-.281A.974.974 0 0 1 1 14V2c0-.27.094-.505.281-.703A.947.947 0 0 1 2 1Zm0 13h12V2H2v12Zm7-9.5h1v7.031H9V4.5Zm-3 7.031V4.5h1v7.031H6Z";
 const ltr = false;
 const accData = null;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v4";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, collection, packageName });
 
 export default "SAP-icons-v4/pause";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

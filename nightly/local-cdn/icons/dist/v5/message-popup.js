@@ -1,13 +1,14 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "message-popup";
-const pathData = "M486 512q-10 0-17-7l-95-89H90q-38 0-64-26T0 326V90q0-38 26-64T90 0h332q38 0 64 26t26 64v396q0 11-7.5 18.5T486 512zM90 51q-17 0-28 11T51 90v236q0 17 11 28t28 11h294q11 0 18 7l59 55V90q0-17-11-28t-28-11H90zm166 173q-11 0-18.5-7.5T230 198v-76q0-11 7.5-18.5T256 96t18.5 7.5T282 122v76q0 11-7.5 18.5T256 224zm0 32q13 0 22.5 9.5T288 288t-9.5 22.5T256 320t-22.5-9.5T224 288t9.5-22.5T256 256z";
+const pathData = "M13.639 0C14.939 0 16 1.061 16 2.362v7.817c0 1.3-1.061 2.321-2.361 2.321h-9.34l-3 3.267c-.454.489-1.299.156-1.299-.51V2.361A2.367 2.367 0 0 1 2.361 0H13.64ZM2.36 1.5a.866.866 0 0 0-.861.862v10.986l1.979-2.122c.136-.119.311-.226.494-.226h9.666c.472 0 .861-.349.861-.821V2.362a.866.866 0 0 0-.861-.861H2.36ZM8 8.004a1 1 0 1 1 0 2 1 1 0 0 1 0-2Zm0-5.502a.75.75 0 0 1 .75.75v3.002a.75.75 0 1 1-1.5 0V3.25A.75.75 0 0 1 8 2.5Z";
 const ltr = false;
 const accData = null;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v5";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, collection, packageName });
 
 export default "SAP-icons-v5/message-popup";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

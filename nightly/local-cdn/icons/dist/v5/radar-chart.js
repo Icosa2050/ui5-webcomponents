@@ -1,13 +1,14 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "radar-chart";
-const pathData = "M468 132q12 7 12 22v204q0 14-12 22L270 508q-5 4-14 4t-14-4L44 380q-12-8-12-22V154q0-15 12-22L242 4q5-4 14-4t14 4zm-39 35L256 56 83 167v177l173 112 173-112V167zm-139-3q4-16 16.5-26t29.5-10q20 0 34 14t14 34q0 17-10.5 30T346 223l-38 113q12 13 12 32 0 20-14 34t-34 14-34-14-14-34q0-7 1-10l-71-71q-3 1-10 1-20 0-34-14t-14-34 14-34 34-14q17 0 30 11zm-30 157l34-105-103 35z";
+const pathData = "M7.691.066a.75.75 0 0 1 .713.052l6.25 4A.75.75 0 0 1 15 4.75v6.5a.75.75 0 0 1-.346.632l-6.25 4a.75.75 0 0 1-.808 0l-6.25-4A.75.75 0 0 1 1 11.25v-6.5a.75.75 0 0 1 .346-.632L7.69.066ZM2.5 5.16v5.679l5.5 3.52 5.5-3.52V5.16L8 1.64 2.5 5.16Zm8-1.16a1.5 1.5 0 0 1 .632 2.858l-1.37 3.833a1.5 1.5 0 1 1-2.76.872L4.437 8.996A1.498 1.498 0 0 1 4.5 6a1.5 1.5 0 0 1 .808.236L9.14 4.867A1.5 1.5 0 0 1 10.5 4ZM5.995 7.582c-.013.24-.08.464-.192.66l1.954 1.954c.196-.112.42-.179.659-.192l1.182-3.308a1.506 1.506 0 0 1-.295-.295L5.995 7.582Z";
 const ltr = false;
 const accData = null;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v5";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, collection, packageName });
 
 export default "SAP-icons-v5/radar-chart";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

@@ -88,6 +88,7 @@ declare class TableRow extends TableRowBase<TableCell> {
     _onOverflowButtonClick(e: UI5CustomEvent<Button, "click">): void;
     get _isInteractive(): boolean;
     get _isNavigable(): boolean;
+    get _hasPopin(): boolean;
     get _rowIndex(): number;
     get _hasOverflowActions(): boolean;
     get _flexibleActions(): TableRowActionBase[];

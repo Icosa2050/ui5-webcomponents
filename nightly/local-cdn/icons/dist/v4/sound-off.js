@@ -1,13 +1,14 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "sound-off";
-const pathData = "M23 0l489 489-23 23L0 23zm201 153l140-82q7-7 20-7 12 0 22 9t10 23v252l-32-32V96l-139 82-23-24q1 0 2-1zM97 185q1-3 2-6.5t4-7.5l25 25v124h64q5 1 9 1t9 1q8 2 16 3.5t15 6.5l55 32 83 83q-4-1-7.5-2t-7.5-4l-140-82q-5-4-16-5.5t-16-1.5h-64q-13 0-19-5t-9-11q-4-7-4-16V192q0-6 1-7z";
+const pathData = "M.719 0 16 15.281l-.719.719L0 .719.719 0ZM7 4.781l4.375-2.562C11.521 2.073 11.729 2 12 2c.25 0 .48.094.688.281A.924.924 0 0 1 13 3v7.875l-1-1V3L7.656 5.563l-.718-.75c.02 0 .041-.01.062-.032Zm-3.969 1c.021-.062.042-.13.063-.203a.74.74 0 0 1 .125-.234L4 6.125V10h2c.104.02.198.031.281.031.084 0 .177.01.282.031.166.042.333.079.5.11.166.031.322.099.468.203l1.719 1 2.594 2.594a7.579 7.579 0 0 1-.235-.063.741.741 0 0 1-.234-.125L7 11.22c-.104-.084-.27-.14-.5-.172A4.161 4.161 0 0 0 6 11H4c-.27 0-.469-.052-.594-.156a1.077 1.077 0 0 1-.281-.344A.99.99 0 0 1 3 10V6c0-.125.01-.198.031-.219Z";
 const ltr = true;
 const accData = null;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v4";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, collection, packageName });
 
 export default "SAP-icons-v4/sound-off";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

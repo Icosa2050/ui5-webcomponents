@@ -3,7 +3,7 @@
 // -------------------------- VERSION -------------------------------------
 /*!
  * OpenUI5
- * (c) Copyright 2009-2024 SAP SE or an SAP affiliate company.
+ * (c) Copyright 2026 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 
@@ -34,9 +34,9 @@ var rVersion = /^[0-9]+(?:\.([0-9]+)(?:\.([0-9]+))?)?(.*)$/;
  *
  * @param {int|string|any[]|module:sap/base/util/Version} vMajor the major part of the version (int) or any of the single
  *        parameter variants explained above.
- * @param {int} iMinor the minor part of the version number
- * @param {int} iPatch the patch part of the version number
- * @param {string} sSuffix the suffix part of the version number
+ * @param {int} [iMinor] the minor part of the version number
+ * @param {int} [iPatch] the patch part of the version number
+ * @param {string} [sSuffix] the suffix part of the version number
  * @class Represents a version consisting of major, minor, patch version, and suffix, for example '1.2.7-SNAPSHOT'.
  * @since 1.58
  * @alias module:sap/base/util/Version
@@ -72,7 +72,7 @@ function Version(vMajor, iMinor, iPatch, sSuffix) {
   /**
    * Returns a string representation of this version.
    *
-   * @return {string} a string representation of this version.
+   * @returns {string} a string representation of this version.
    * @public
    */
   this.toString = function () {
@@ -82,7 +82,7 @@ function Version(vMajor, iMinor, iPatch, sSuffix) {
   /**
    * Returns the major version part of this version.
    *
-   * @return {int} the major version part of this version
+   * @returns {int} the major version part of this version
    * @public
    */
   this.getMajor = function () {
@@ -92,7 +92,7 @@ function Version(vMajor, iMinor, iPatch, sSuffix) {
   /**
    * Returns the minor version part of this version.
    *
-   * @return {int} the minor version part of this version
+   * @returns {int} the minor version part of this version
    * @public
    */
   this.getMinor = function () {
@@ -102,7 +102,7 @@ function Version(vMajor, iMinor, iPatch, sSuffix) {
   /**
    * Returns the patch (or micro) version part of this version.
    *
-   * @return {int} the patch version part of this version
+   * @returns {int} the patch version part of this version
    * @public
    */
   this.getPatch = function () {
@@ -112,7 +112,7 @@ function Version(vMajor, iMinor, iPatch, sSuffix) {
   /**
    * Returns the version suffix of this version.
    *
-   * @return {string} the version suffix of this version
+   * @returns {string} the version suffix of this version
    * @public
    */
   this.getSuffix = function () {
@@ -123,14 +123,20 @@ function Version(vMajor, iMinor, iPatch, sSuffix) {
    * Compares this version with a given one.
    *
    * The version with which this version should be compared can be given as a <code>sap/base/util/Version</code> instance,
-   * as a string (e.g. <code>v.compareto("1.4.5")</code>). Or major, minor, patch and suffix values can be given as
+   * as a string (e.g. <code>v.compareTo("1.4.5")</code>). Or major, minor, patch and suffix values can be given as
    * separate parameters (e.g. <code>v.compareTo(1, 4, 5)</code>) or in an array (e.g. <code>v.compareTo([1, 4, 5])</code>).
    *
-   * @return {int} 0, if the given version is equal to this version, a negative value if the given other version is greater
+   * @param {int|string|any[]|module:sap/base/util/Version} vOtherMajor
+   *                The major part (an integer) of the version to compare to or the full version in any of the single
+   *                parameter variants, as documented for the {@link module:sap/base/util/Version constructor}.
+   * @param {int} [iOtherMinor] A minor version to compare to (only valid when <code>vOther</code> is a single integer)
+   * @param {int} [iOtherPatch] A patch version to compare to (only valid when <code>vOther</code> is a single integer)
+   * @param {string} [sOtherSuffix] A version suffix like "-SNAPSHOT" to compare to (only valid when <code>vOther</code> is an integer)
+   * @returns {int} 0, if the given version is equal to this version, a negative value if the given other version is greater
    *               and a positive value otherwise
    * @public
    */
-  this.compareTo = function () {
+  this.compareTo = function (vOtherMajor, iOtherMinor, iOtherPatch, sOtherSuffix) {
     var vOther = Version.apply(window, arguments);
     /*eslint-disable no-nested-ternary */
     return vMajor - vOther.getMajor() || iMinor - vOther.getMinor() || iPatch - vOther.getPatch() || (sSuffix < vOther.getSuffix() ? -1 : sSuffix === vOther.getSuffix() ? 0 : 1);
@@ -147,7 +153,7 @@ function Version(vMajor, iMinor, iPatch, sSuffix) {
  *
  * @param {string|any[]|module:sap/base/util/Version} vMin the start of the range (inclusive)
  * @param {string|any[]|module:sap/base/util/Version} vMax the end of the range (exclusive)
- * @return {boolean} <code>true</code> if this version is greater or equal to <code>vMin</code> and smaller
+ * @returns {boolean} <code>true</code> if this version is greater or equal to <code>vMin</code> and smaller
  *                   than <code>vMax</code>, <code>false</code> otherwise.
  * @public
  */

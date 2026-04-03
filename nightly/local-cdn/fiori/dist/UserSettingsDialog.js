@@ -69,6 +69,9 @@ let UserSettingsDialog = UserSettingsDialog_1 = class UserSettingsDialog extends
          */
         this._showNoSearchResult = false;
     }
+    onEnterDOM() {
+        this.setAttribute("data-sap-ui-fastnavgroup-container", "true");
+    }
     onBeforeRendering() {
         this._mediaRange = MediaRange.getCurrentRange(MediaRange.RANGESETS.RANGE_4STEPS);
         const searchValue = this._searchValue.toLowerCase();
@@ -101,6 +104,15 @@ let UserSettingsDialog = UserSettingsDialog_1 = class UserSettingsDialog extends
         if (!this._selectedSetting) {
             this._selectedSetting = this.items[0] || this.fixedItems[0];
         }
+        const allItems = [...this.items, ...this.fixedItems];
+        allItems.forEach(item => {
+            if (item === this._selectedSetting) {
+                item.setAttribute("data-sap-ui-fastnavgroup", "true");
+            }
+            else {
+                item.removeAttribute("data-sap-ui-fastnavgroup");
+            }
+        });
     }
     _handleItemClick(e) {
         const setting = e.detail.item;

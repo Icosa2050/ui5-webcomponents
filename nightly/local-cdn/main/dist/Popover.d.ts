@@ -161,6 +161,7 @@ declare class Popover extends Popup {
     _oldPlacement?: CalculatedPlacement;
     _width?: string;
     _height?: string;
+    _openerIntersectionObserver?: IntersectionObserver | null;
     _popoverResize: PopoverResize;
     _initialWidth?: string;
     _initialHeight?: string;
@@ -209,6 +210,22 @@ declare class Popover extends Popup {
      * @returns The adjusted top in px.
      */
     _adjustForIOSKeyboard(top: number): number;
+    /**
+     * Callback invoked when the opener element's intersection status changes.
+     * Closes the popover when the opener is no longer visible.
+     * @private
+     */
+    _onOpenerIntersection(entries: Array<IntersectionObserverEntry>): void;
+    /**
+     * Starts observing the opener element's visibility in the viewport.
+     * @private
+     */
+    _observeOpenerVisibility(): void;
+    /**
+     * Stops observing the opener element and cleans up the IntersectionObserver instance.
+     * @private
+     */
+    _unobserveOpenerVisibility(): void;
     getPopoverSize(calcScrollHeight?: boolean): PopoverSize;
     _showOutsideViewport(): void;
     _isUI5AbstractElement(el: HTMLElement): el is UI5Element;

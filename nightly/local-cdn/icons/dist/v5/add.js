@@ -2,13 +2,14 @@ import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icon
 import { ICON_ADD } from "../generated/i18n/i18n-defaults.js";
 
 const name = "add";
-const pathData = "M454 230q11 0 18.5 7.5T480 256t-7.5 18.5T454 282H282v172q0 11-7.5 18.5T256 480t-18.5-7.5T230 454V282H58q-11 0-18.5-7.5T32 256t7.5-18.5T58 230h172V58q0-11 7.5-18.5T256 32t18.5 7.5T282 58v172h172z";
+const pathData = "M8 1a.75.75 0 0 1 .75.75v5.5h5.5a.75.75 0 0 1 0 1.5h-5.5v5.5a.75.75 0 0 1-1.5 0v-5.5h-5.5a.75.75 0 0 1 0-1.5h5.5v-5.5A.75.75 0 0 1 8 1Z";
 const ltr = false;
 const accData = ICON_ADD;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v5";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, accData, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, accData, collection, packageName });
 
 export default "SAP-icons-v5/add";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

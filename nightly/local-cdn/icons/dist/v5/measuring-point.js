@@ -1,13 +1,14 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "measuring-point";
-const pathData = "M454 89q11 0 18.5 7.5T480 115q0 3-2 9l-36 88v178q0 24-17 41t-40 17H282q-24 0-41-17t-17-41V90q0-11 7.5-18.5T250 64t18 7.5 7 18.5v70h51q11 0 18.5 7.5T352 186t-7.5 18-18.5 7h-51v13h51q11 0 18.5 7.5T352 250t-7.5 18-18.5 7h-51v26h51q11 0 18.5 7t7.5 18-7.5 18.5T326 352h-51v38q0 7 7 7h103q6 0 6-7V207q0-4 2-10l38-92q6-16 23-16zm-305 66q11 8 11 21t-11 21l-77 54q-7 5-14 5-11 0-18.5-7.5T32 230V122q0-11 7.5-18.5T58 96q7 0 14 5z";
+const pathData = "M7.75 2a.75.75 0 0 1 .75.75V6.5h1.75a.75.75 0 0 1 0 1.5H8.5v1.5h1.75a.75.75 0 0 1 0 1.5H8.5v1.25c0 .138.112.25.25.25h3a.25.25 0 0 0 .25-.25v-6c0-.136.037-.27.107-.386l1.5-2.5a.751.751 0 0 1 1.287.772L13.5 6.458v5.792A1.75 1.75 0 0 1 11.75 14h-3A1.75 1.75 0 0 1 7 12.25v-9.5A.75.75 0 0 1 7.75 2Zm-5.498.192 2.5 2.25a.75.75 0 0 1 0 1.116l-2.5 2.25C1.779 8.233 1 7.886 1 7.25v-4.5c0-.636.779-.983 1.252-.558Z";
 const ltr = false;
 const accData = null;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v5";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, collection, packageName });
 
 export default "SAP-icons-v5/measuring-point";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

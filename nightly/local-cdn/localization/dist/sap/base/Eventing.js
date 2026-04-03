@@ -1,20 +1,21 @@
 /*!
  * OpenUI5
- * (c) Copyright 2009-2024 SAP SE or an SAP affiliate company.
+ * (c) Copyright 2026 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 // Provides mixin sap/base/Eventing
 import assert from "./assert.js";
 import Event from "./Event.js";
 /**
- * Eventing
+ * @class A simple eventing implementation that manages listeners and can fire events.
  *
  * @author SAP SE
- * @version 1.120.17
+ * @version 1.146.0
  *
  * @since 1.120.0
  * @private
  * @ui5-restricted sap.ui.core sap/base/i18n
+ * @alias module:sap/base/Eventing
  */
 class Eventing {
   #mEventRegistry = {};

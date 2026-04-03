@@ -7,7 +7,7 @@ import ButtonDesign from "./types/ButtonDesign.js";
 import iconOverflow from "@ui5/webcomponents-icons/dist/overflow.js";
 export default function TableRowTemplate(ariaColIndex = 1) {
     return (_jsxs(_Fragment, { children: [this._hasSelector &&
-                _jsx(TableCell, { id: "selection-cell", "aria-selected": this._isSelected, "aria-colindex": ariaColIndex++, "data-ui5-table-selection-cell": true, "data-ui5-table-cell-fixed": true, "data-ui5-acc-text": "", children: this._isMultiSelect ?
+                _jsx(TableCell, { id: "selection-cell", "aria-selected": this._isSelected, "aria-colindex": ariaColIndex++, "data-border-merged": this._firstVisibleCell?.merged ? "" : null, "data-ui5-table-selection-cell": true, "data-ui5-acc-text": "", children: this._isMultiSelect ?
                         _jsx(CheckBox, { id: "selection-component", tabindex: -1, checked: this._isSelected, onChange: this._onSelectionChange, accessibleName: this._i18nRowSelector })
                         :
                             _jsx(RadioButton, { id: "selection-component", tabindex: -1, checked: this._isSelected, onChange: this._onSelectionChange, accessibleName: this._i18nRowSelector }) }), this.cells.flatMap(cell => {

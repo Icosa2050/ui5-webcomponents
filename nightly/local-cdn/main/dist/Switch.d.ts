@@ -48,10 +48,20 @@ declare class Switch extends UI5Element implements IFormInputElement {
      */
     design: `${SwitchDesign}`;
     /**
+     * Defines whether the component is in readonly state.
+     *
+     * **Note:** A readonly switch cannot be toggled by user interaction,
+     * but can still be focused and its value read programmatically.
+     * @default false
+     * @public
+     * @since 2.21.0
+     */
+    readonly: boolean;
+    /**
      * Defines if the component is checked.
      *
      * **Note:** The property can be changed with user interaction,
-     * either by cliking the component, or by pressing the `Enter` or `Space` key.
+     * either by clicking the component, or by pressing the `Enter` or `Space` key.
      * @default false
      * @formEvents change
      * @formProperty
@@ -142,6 +152,7 @@ declare class Switch extends UI5Element implements IFormInputElement {
     formElementAnchor(): Promise<HTMLElement | undefined>;
     get formFormattedValue(): string | null;
     get sapNextIcon(): "accept" | "less";
+    _onfocusin(): void;
     _onclick(): void;
     _onkeydown(e: KeyboardEvent): void;
     _onkeyup(e: KeyboardEvent): void;
@@ -158,6 +169,7 @@ declare class Switch extends UI5Element implements IFormInputElement {
      */
     get _textAriaHidden(): boolean | undefined;
     get effectiveTabIndex(): 0 | undefined;
+    get effectiveAriaReadonly(): "true" | undefined;
     get effectiveAriaDisabled(): "true" | undefined;
     get ariaLabelText(): string | undefined;
 }

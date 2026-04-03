@@ -1,13 +1,14 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "gender-male-and-female";
-const pathData = "M182 403h-76q-11 0-18.5-7.5T80 377t7.5-18 18.5-7h76v-35q-44-9-73-43.5T80 192q0-27 10-50t27.5-40.5T158 74t50-10q26 0 48 9t39 26l48-48h-45q-11 0-18.5-7.5T272 25t7.5-18T298 0h108q11 0 18.5 7t7.5 18v109q0 11-7.5 18.5T406 160t-18-7.5-7-18.5V86l-56 55q11 25 11 51 0 47-29 81.5T234 317v35h76q11 0 18.5 7t7.5 18-7.5 18.5T310 403h-76v83q0 11-7.5 18.5T208 512t-18.5-7.5T182 486v-83zm26-134q32 0 54.5-22.5T285 192t-22.5-54.5T208 115t-54.5 22.5T131 192t22.5 54.5T208 269z";
+const pathData = "M14.25 0a.75.75 0 0 1 .75.75v3.5a.75.75 0 0 1-1.5 0V2.56l-1.836 1.836A4 4 0 0 1 8.75 9.929V11h2.5a.75.75 0 0 1 0 1.5h-2.5v2.75a.75.75 0 0 1-1.5 0V12.5h-2.5a.75.75 0 0 1 0-1.5h2.5V9.929a4 4 0 1 1 3.547-6.787L12.44 1.5h-1.69a.75.75 0 0 1 0-1.5h3.5ZM8 3.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5Z";
 const ltr = true;
 const accData = null;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v5";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, collection, packageName });
 
 export default "SAP-icons-v5/gender-male-and-female";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

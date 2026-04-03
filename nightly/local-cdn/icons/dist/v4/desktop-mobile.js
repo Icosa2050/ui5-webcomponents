@@ -1,13 +1,14 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "desktop-mobile";
-const pathData = "M32 320h288v32H32q-13 0-22.5-9.5T0 320V64q0-14 9.5-23T32 32h352q14 0 23 9t9 23v128h-32V64H32v256zm240 64q16 0 16 16 0 6-4.5 11t-11.5 5H144q-6 0-11-5t-5-11q0-7 5-11.5t11-4.5h128zm208-160q13 0 22.5 9t9.5 23v192q0 14-9.5 23t-22.5 9h-96q-14 0-23-9t-9-23V256q0-14 9-23t23-9h96zm0 32h-96v192h96V256z";
+const pathData = "M1 10h9v1H1a.961.961 0 0 1-.703-.297A.961.961 0 0 1 0 10V2c0-.292.099-.531.297-.719A.988.988 0 0 1 1 1h11c.292 0 .531.094.719.281A.973.973 0 0 1 13 2v4h-1V2H1v8Zm7.5 2c.333 0 .5.167.5.5 0 .125-.047.24-.14.344A.462.462 0 0 1 8.5 13h-4a.478.478 0 0 1-.344-.156A.478.478 0 0 1 4 12.5c0-.146.052-.266.156-.36A.503.503 0 0 1 4.5 12h4ZM15 7c.27 0 .505.094.703.281A.947.947 0 0 1 16 8v6a.947.947 0 0 1-.297.719A.988.988 0 0 1 15 15h-3a.974.974 0 0 1-.719-.281A.974.974 0 0 1 11 14V8c0-.292.094-.531.281-.719A.974.974 0 0 1 12 7h3Zm0 1h-3v6h3V8Z";
 const ltr = false;
 const accData = null;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v4";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, collection, packageName });
 
 export default "SAP-icons-v4/desktop-mobile";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

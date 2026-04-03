@@ -1,13 +1,14 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "checklist-item";
-const pathData = "M439 0q31 0 52 21.5T512 73v150q0 33-25 55L280 503q-9 9-24 9-14 0-23-9L26 278Q0 255 0 223V73q0-30 21.5-51.5T73 0h366zm36 73q0-15-10-25.5T439 37H73q-15 0-25.5 10.5T37 73v150q0 16 13 27l206 225 207-225q12-10 12-27V73z";
+const pathData = "M13.004 1c.565 0 1.039.196 1.422.588.383.392.574.861.574 1.408v4.102a1.92 1.92 0 0 1-.684 1.504l-5.66 6.152C8.492 14.918 8.273 15 8 15a.852.852 0 0 1-.629-.246l-5.66-6.152C1.237 8.182 1 7.68 1 7.098V2.996c0-.547.196-1.016.588-1.408A1.921 1.921 0 0 1 2.996 1h10.008Zm.984 1.996a.974.974 0 0 0-.273-.697.937.937 0 0 0-.711-.287H2.996a.95.95 0 0 0-.697.287.95.95 0 0 0-.287.697v4.102c0 .291.118.537.355.738L8 13.988l5.66-6.152c.219-.182.328-.428.328-.738V2.996Z";
 const ltr = false;
 const accData = null;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v4";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, collection, packageName });
 
 export default "SAP-icons-v4/checklist-item";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

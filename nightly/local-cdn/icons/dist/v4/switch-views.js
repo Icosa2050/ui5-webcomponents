@@ -1,13 +1,14 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "switch-views";
-const pathData = "M384 128q13 0 22.5 9.5T416 160v320q0 14-9.5 23t-22.5 9H160q-14 0-23-9t-9-23V160q0-13 9-22.5t23-9.5h224zm0 32H160v320h224V160zM32 352h64v32H32q-14 0-23-9t-9-23V32Q0 19 9 9.5T32 0h224q13 0 22.5 9.5T288 32H32v320zM480 64q13 0 22.5 9.5T512 96v320q0 14-9.5 23t-22.5 9h-32v-32h32V96H224q0-13 9-22.5t23-9.5h224z";
+const pathData = "M12 4c.27 0 .505.099.703.297A.961.961 0 0 1 13 5v10a.947.947 0 0 1-.297.719A.988.988 0 0 1 12 16H5a.973.973 0 0 1-.719-.281A.974.974 0 0 1 4 15V5c0-.27.094-.505.281-.703A.947.947 0 0 1 5 4h7Zm0 1H5v10h7V5ZM1 11h2v1H1a.973.973 0 0 1-.719-.281A.974.974 0 0 1 0 11V1C0 .73.094.495.281.297A.947.947 0 0 1 1 0h7c.27 0 .505.099.703.297A.961.961 0 0 1 9 1H1v10Zm14-9c.27 0 .505.099.703.297A.961.961 0 0 1 16 3v10a.947.947 0 0 1-.297.719A.988.988 0 0 1 15 14h-1v-1h1V3H7c0-.27.094-.505.281-.703A.947.947 0 0 1 8 2h7Z";
 const ltr = false;
 const accData = null;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v4";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, collection, packageName });
 
 export default "SAP-icons-v4/switch-views";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

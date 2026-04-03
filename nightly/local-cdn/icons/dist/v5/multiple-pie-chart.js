@@ -1,13 +1,14 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "multiple-pie-chart";
-const pathData = "M112 0q48 0 80 32t32 80-32 80-80 32-80-32-32-80 32-80 80-32zm288 224q-48 0-80-32t-32-80 32-80 80-32 80 32 32 80-32 80-80 32zm-288-51q26 0 43.5-17t17.5-43h-61V51q-26 0-43.5 17.5T51 112t17.5 43.5T112 173zM400 51q-26 0-43.5 17.5T339 112t17.5 43.5T400 173q6 0 9-1V52q-3-1-9-1zM112 288q48 0 80 32t32 80-32 80-80 32-80-32-32-80 32-80 80-32zm288 0q48 0 80 32t32 80-32 80-80 32-80-32-32-80 32-80 80-32zm-288 51q-26 0-43.5 17.5T51 400q0 27 18 43l43-43v-61z";
+const pathData = "M3.5 9C5.473 9 7 10.527 7 12.5S5.473 16 3.5 16 0 14.473 0 12.5 1.527 9 3.5 9Zm9 0c1.973 0 3.5 1.527 3.5 3.5S14.473 16 12.5 16 9 14.473 9 12.5 10.527 9 12.5 9Zm-9 1.5c-1.144 0-2 .856-2 2 0 .642.269 1.193.707 1.553l1.543-1.544v-1.994a2.23 2.23 0 0 0-.25-.015ZM3.5 0C5.473 0 7 1.527 7 3.5S5.473 7 3.5 7 0 5.473 0 3.5 1.527 0 3.5 0Zm9 0C14.473 0 16 1.527 16 3.5S14.473 7 12.5 7 9 5.473 9 3.5 10.527 0 12.5 0Zm-9 1.5c-1.144 0-2 .856-2 2 0 1.144.856 2 2 2 1.144 0 2-.856 2-2h-2v-2Zm9 0c-1.144 0-2 .856-2 2 0 1.144.856 2 2 2 .085 0 .169-.006.251-.016L12.75 3.75V1.515a2.225 2.225 0 0 0-.25-.015Z";
 const ltr = false;
 const accData = null;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v5";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, collection, packageName });
 
 export default "SAP-icons-v5/multiple-pie-chart";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

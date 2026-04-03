@@ -1,13 +1,14 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "passenger-train";
-const pathData = "M480 294q0 37-19 66.5T410 404l63 65q7 7 7 17 0 11-7.5 18.5T454 512q-10 0-18-8l-85-88H161l-85 88q-8 8-18 8-11 0-18.5-7.5T32 486q0-10 7-17l62-65q-31-14-50-43.5T32 294V122q0-26 9.5-48t26-38.5 39-26T154 0h204q25 0 47.5 9.5t39 26 26 38.5 9.5 48v172zM154 51q-29 0-50 21t-21 50v6h346v-6q0-29-21-50t-50-21H154zm204 314q29 0 50-21t21-50V179H83v115q0 29 21 50t50 21h204zM256 224q20 0 34 14t14 34-14 34-34 14-34-14-14-34 14-34 34-14z";
+const pathData = "M11.25 0A3.75 3.75 0 0 1 15 3.75v5.5a3.75 3.75 0 0 1-2.593 3.566l1.45 1.993a.75.75 0 0 1-1.213.882L10.687 13H5.313l-1.957 2.691a.75.75 0 0 1-1.212-.882l1.448-1.993A3.75 3.75 0 0 1 1 9.25v-5.5A3.75 3.75 0 0 1 4.75 0h6.5ZM2.5 9.25a2.25 2.25 0 0 0 2.25 2.25h6.5a2.25 2.25 0 0 0 2.25-2.25V5.5h-11v3.75Zm5.5-2a1.25 1.25 0 1 1 0 2.5 1.25 1.25 0 0 1 0-2.5ZM4.75 1.5C3.507 1.5 2.5 2.51 2.5 4h11c0-1.49-1.007-2.5-2.25-2.5h-6.5Z";
 const ltr = false;
 const accData = null;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v5";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, collection, packageName });
 
 export default "SAP-icons-v5/passenger-train";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

@@ -1,13 +1,14 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "favorite";
-const pathData = "M378.36 297.834q-5.996 3.998-2.998 8.995l71.96 193.892q1.999 4.997-2.499 8.995t-9.494.999l-174.903-123.93q-4.997-3-8.995 0L76.53 510.714q-4.997 2.998-9.495-1t-2.499-8.994l71.96-193.892q2-5.997-2.998-8.995L3.569 205.885q-4.997-2.998-2.998-8.495t6.996-5.497h165.908q4.997 0 7.995-4.997L248.433 4.997Q250.432 0 255.929 0t7.495 4.997l66.963 181.899q1.999 4.997 7.996 4.997H503.29q5.996 0 7.995 5.497t-2.998 8.495z";
+const pathData = "M11.827 9.307c-.125.084-.156.177-.094.281l2.25 6.06c.041.104.015.197-.078.28-.094.084-.193.094-.297.032L8.14 12.087c-.105-.062-.198-.062-.282 0L2.392 15.96c-.104.062-.203.052-.297-.031-.093-.084-.12-.177-.078-.281l2.25-6.06c.041-.125.01-.218-.094-.28L.112 6.433c-.105-.063-.136-.151-.094-.266.042-.114.114-.171.219-.171h5.186c.104 0 .187-.052.25-.157L7.766.156C7.807.052 7.886 0 8 0c.115 0 .193.052.234.156l2.094 5.684c.041.105.124.157.25.157h5.154c.125 0 .209.057.25.171.042.115.01.203-.094.266l-4.06 2.873Z";
 const ltr = false;
 const accData = null;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v4";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, collection, packageName });
 
 export default "SAP-icons-v4/favorite";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

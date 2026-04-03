@@ -1,13 +1,14 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "slim-arrow-up";
-const pathData = "M96 326q0-10 7-17l135-141q6-8 18-8 11 0 19 8l134 141q7 7 7 17 0 11-7.5 18.5T390 352q-10 0-18-8L256 223 140 344q-8 8-18 8-11 0-18.5-7.5T96 326z";
+const pathData = "M12.83 9.727a.75.75 0 0 0-.104-1.056L8.48 5.17a.75.75 0 0 0-.954 0l-4.252 3.5a.75.75 0 0 0 .954 1.158l3.775-3.107 3.771 3.107a.75.75 0 0 0 1.056-.102Z";
 const ltr = false;
 const accData = null;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v5";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, collection, packageName });
 
 export default "SAP-icons-v5/slim-arrow-up";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

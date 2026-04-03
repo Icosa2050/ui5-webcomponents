@@ -2,13 +2,14 @@ import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icon
 import { ICON_RESIZE_HORIZONTAL } from "../generated/i18n/i18n-defaults.js";
 
 const name = "resize-horizontal";
-const pathData = "M288 16q0-6 4.5-11T304 0t11.5 5 4.5 11v480q0 16-16 16t-16-16V16zm-96 0q0-6 4.5-11T208 0t11.5 5 4.5 11v480q0 16-16 16t-16-16V16zm197 140q-12-11 0-23 5-5 11-5t11 5l92 99q9 10 9 23t-9 22l-92 101q-5 5-11.5 5t-11.5-5-5-11.5 5-11.5l87-95q6-5 0-11zM37 249q-6 6 0 11l87 95q5 5 5 11.5t-5 11.5-11.5 5-11.5-5L9 277q-9-9-9-22t9-23l92-99q5-5 11-5t11 5q12 12 0 23z";
+const pathData = "M9 .5c0-.125.047-.24.14-.344A.462.462 0 0 1 9.5 0c.146 0 .266.052.36.156.093.104.14.219.14.344v15c0 .333-.167.5-.5.5-.333 0-.5-.167-.5-.5V.5Zm-3 0c0-.125.047-.24.14-.344A.462.462 0 0 1 6.5 0c.146 0 .266.052.36.156A.51.51 0 0 1 7 .5v15c0 .333-.167.5-.5.5-.333 0-.5-.167-.5-.5V.5Zm6.156 4.375c-.25-.23-.25-.469 0-.719A.478.478 0 0 1 12.5 4c.125 0 .24.052.344.156l2.875 3.094c.187.208.281.448.281.719 0 .27-.094.5-.281.687l-2.875 3.156a.494.494 0 0 1-.719 0 .494.494 0 0 1 0-.718l2.719-2.969c.125-.104.125-.219 0-.344l-2.688-2.906Zm-11 2.906c-.125.125-.125.24 0 .344l2.719 2.969a.494.494 0 0 1 0 .719.494.494 0 0 1-.719 0L.281 8.655A.935.935 0 0 1 0 7.97c0-.271.094-.51.281-.719l2.875-3.094A.478.478 0 0 1 3.5 4c.125 0 .24.052.344.156.25.25.25.49 0 .719L1.156 7.781Z";
 const ltr = false;
 const accData = ICON_RESIZE_HORIZONTAL;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v4";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, accData, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, accData, collection, packageName });
 
 export default "SAP-icons-v4/resize-horizontal";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

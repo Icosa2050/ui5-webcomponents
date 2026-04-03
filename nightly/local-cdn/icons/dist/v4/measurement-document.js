@@ -1,13 +1,14 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "measurement-document";
-const pathData = "M124.5 64q0-14 9-23t23-9h32V0h32v32h192V0h32v32h32q13 0 22.5 9t9.5 23v352q0 14-9.5 23t-22.5 9h-192v-32h192V128h-320v32h-32V64zm-106 96h11q6 0 8 5 5 8 8 20.5t7 26.5q2 10 4 21t4 23h96v32h-96v32h96v32h-96v32h96v32h-96v64h160V168q0-8 8-8h16q8 0 8 8v312q0 14-9.5 23t-22.5 9h-160q-14 0-23-9.5t-9-22.5V271q-2-20-6.5-46.5T7.5 177q-2-6 1-11.5t10-5.5zm270 96h24q4 0 4 4v92h32V196q0-4 4-4h24q4 0 4 4v156h32v-92q0-4 4-4h24q4 0 4 4v124h-160V260q0-4 4-4zm124-192v32h32V64h-32zm-224 0v32h32V64h-32z";
+const pathData = "M3.96 2c0-.292.095-.531.286-.719.192-.187.436-.281.734-.281H6V0h1.02v1h5.919V0h1.02v1h1.02c.277 0 .516.094.718.281A.938.938 0 0 1 16 2v11a.938.938 0 0 1-.303.719 1.019 1.019 0 0 1-.717.281H9v-1h5.98V4h-10v1H3.96V2ZM.375 5h.351c.128 0 .213.052.255.156.106.167.191.38.255.64.064.261.138.537.223.829A37.522 37.522 0 0 1 1.715 8h3.061v1h-3.06v1h3.06v1h-3.06v1h3.06v1h-3.06v2H7V5.25c0-.167.085-.25.255-.25h.51c.17 0 .255.083.255.25V15a.938.938 0 0 1-.303.719A1.019 1.019 0 0 1 7 16H1.715a.976.976 0 0 1-.733-.297A.978.978 0 0 1 .695 15V8.469a21.337 21.337 0 0 0-.207-1.453A5.55 5.55 0 0 0 .026 5.53a.426.426 0 0 1 .031-.36c.064-.112.17-.17.32-.17Zm8.752 3h.765c.085 0 .127.042.127.125V11h.919V6.125c0-.083.043-.125.128-.125h.765c.085 0 .127.042.127.125V11h1.02V8.125c0-.083.043-.125.128-.125h.766c.085 0 .127.042.127.125V12H9V8.125C9 8.042 9.043 8 9.128 8Zm3.811-6v1h1.02V2h-1.02ZM6 2v1h1.02V2H6Z";
 const ltr = false;
 const accData = null;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v4";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, collection, packageName });
 
 export default "SAP-icons-v4/measurement-document";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

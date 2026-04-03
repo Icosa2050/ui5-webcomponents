@@ -1,13 +1,14 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "bus-public-transport";
-const pathData = "M512 166q0 11-7.5 18.5T486 192h-22v198q0 24-17 41t-40 17h-10v38q0 11-7 18.5t-18 7.5-18.5-7-7.5-18v-39H166v38q0 11-7 18.5t-18 7.5-18.5-7-7.5-18v-39h-9q-24 0-41-17t-17-41V192H26q-11 0-18.5-7.5T0 166v-44q0-11 7.5-18.5T26 96q15 0 22 14V58q0-24 17-41t41-17h301q23 0 40 17t17 41v50q8-12 22-12 10 0 18 6.5t8 18.5v45zM106 51q-6 0-6 7v147h313V58q0-7-6-7H106zm301 346q6 0 6-7V256H100v134q0 7 6 7h301zM160 288q14 0 23 9t9 23-9 23-23 9-23-9-9-23 9-23 23-9zm192 0q14 0 23 9t9 23-9 23-23 9-23-9-9-23 9-23 23-9z";
+const pathData = "M11.75 0a2.75 2.75 0 0 1 2.75 2.75v1a.75.75 0 0 1 1.5 0V5a.75.75 0 0 1-.75.75h-.75v5.5c0 .854-.39 1.617-1 2.121v1.379a1.25 1.25 0 1 1-2.5 0V14H5v.75a1.25 1.25 0 1 1-2.5 0v-1.379c-.61-.504-1-1.267-1-2.121v-5.5H.75A.75.75 0 0 1 0 5V3.75a.75.75 0 0 1 1.5 0v-1A2.75 2.75 0 0 1 4.25 0h7.5ZM3 11.25c0 .69.56 1.25 1.25 1.25h7.5c.69 0 1.25-.56 1.25-1.25V8H3v3.25ZM5 9a1 1 0 1 1 0 2 1 1 0 0 1 0-2Zm6 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2ZM4.25 1.5C3.56 1.5 3 2.06 3 2.75V6.5h10V2.75c0-.69-.56-1.25-1.25-1.25h-7.5Z";
 const ltr = false;
 const accData = null;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v5";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, collection, packageName });
 
 export default "SAP-icons-v5/bus-public-transport";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

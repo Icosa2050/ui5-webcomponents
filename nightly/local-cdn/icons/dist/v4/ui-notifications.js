@@ -1,13 +1,14 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "ui-notifications";
-const pathData = "M0 128q0-26 19-45t45-19h448v32H64q-14 0-23 9t-9 23v256q0 14 9 23t23 9h384v32H64q-26 0-45-19T0 384V128zm160 176q0-16 16-16h336v32H176q-16 0-16-16zm-48-112h256q16 0 16 16t-16 16H112q-16 0-16-16t16-16z";
+const pathData = "M0 4c0-.542.198-1.01.594-1.406A1.922 1.922 0 0 1 2 2h14v1H2a.973.973 0 0 0-.719.281A.973.973 0 0 0 1 4v8c0 .292.094.531.281.719A.973.973 0 0 0 2 13h12v1H2a1.92 1.92 0 0 1-1.406-.594A1.922 1.922 0 0 1 0 12V4Zm5 5.5c0-.333.167-.5.5-.5H16v1H5.5c-.333 0-.5-.167-.5-.5ZM3.5 6h8c.333 0 .5.167.5.5 0 .333-.167.5-.5.5h-8c-.333 0-.5-.167-.5-.5 0-.333.167-.5.5-.5Z";
 const ltr = false;
 const accData = null;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v4";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, collection, packageName });
 
 export default "SAP-icons-v4/ui-notifications";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

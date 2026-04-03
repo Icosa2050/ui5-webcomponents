@@ -1,13 +1,14 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "direction-arrows";
-const pathData = "M135 128q11 0 18 7.5t7 18.5v204q0 11-8 18.5t-18 7.5-17-7L8 275q-8-8-8-19t8-19l109-102q7-7 18-7zm369 109q8 8 8 19t-8 19L395 377q-7 7-17 7t-18-7.5-8-18.5V154q0-12 8-19t19-7q9 0 16 7z";
+const pathData = "M3.737 4.2A.751.751 0 0 1 5 4.75v6.5a.75.75 0 0 1-1.262.55L.236 8.55a.758.758 0 0 1 0-1.1L3.737 4.2Zm7.715-.137a.751.751 0 0 1 .81.137l3.502 3.25a.758.758 0 0 1 0 1.1l-3.502 3.25a.751.751 0 0 1-1.26-.55v-6.5a.75.75 0 0 1 .45-.687Z";
 const ltr = false;
 const accData = null;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v5";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, collection, packageName });
 
 export default "SAP-icons-v5/direction-arrows";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

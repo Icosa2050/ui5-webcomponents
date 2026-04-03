@@ -1,13 +1,14 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "master-task-triangle";
-const pathData = "M498 336q14 30 14 58 0 24-10 45.5T475.5 477t-39 25.5T390 512H122q-24 0-46.5-9.5t-39-25.5T10 439.5 0 393q0-15 3.5-30T15 335l18-28 43 26-17 28q-8 16-8 32 0 29 21.5 48.5T122 461h268q31 0 51-20.5t20-47.5q0-8-2.5-16.5T452 359L318 87q-9-19-26.5-27.5T256 51q-19 0-35.5 9T193 87l-11 21-45-24 12-22q17-31 46-46.5T256 0t61.5 15T363 62zm-386-48q-33 0-56.5-23.5T32 208t23.5-56.5T112 128t56.5 23.5T192 208t-23.5 56.5T112 288z";
+const pathData = "M1.736 15.003c-1.359 0-2.118-1.61-1.541-2.582.576-.973.632-1.06.632-1.06a.75.75 0 1 1 1.289.77l-.595.994a.25.25 0 0 0 .215.378h12.51a.25.25 0 0 0 .215-.378L8.209 2.621a.252.252 0 0 0-.43 0l-.602 1.01a.752.752 0 0 1-1.29-.768l.6-1.008c.68-1.14 2.334-1.14 3.013 0l6.251 10.504c.694 1.166-.147 2.644-1.505 2.644H1.736Zm2.755-5.01a2.502 2.502 0 0 1-2.503-2.5c0-1.38 1.12-2.5 2.503-2.5a2.502 2.502 0 0 1 2.503 2.5c0 1.381-1.121 2.5-2.503 2.5Z";
 const ltr = false;
 const accData = null;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v5";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, collection, packageName });
 
 export default "SAP-icons-v5/master-task-triangle";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

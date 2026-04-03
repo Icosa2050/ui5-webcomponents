@@ -1,13 +1,14 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "text-align-right";
-const pathData = "M58 83q-11 0-18.5-7T32 58t7.5-18.5T58 32h396q11 0 18.5 7.5T480 58t-7.5 18-18.5 7H58zm192 128q-11 0-18.5-7t-7.5-18 7.5-18.5T250 160h204q11 0 18.5 7.5T480 186t-7.5 18-18.5 7H250zM58 352q-11 0-18.5-7.5T32 326t7.5-18 18.5-7h396q11 0 18.5 7t7.5 18-7.5 18.5T454 352H58zm192 128q-11 0-18.5-7.5T224 454t7.5-18 18.5-7h204q11 0 18.5 7t7.5 18-7.5 18.5T454 480H250z";
+const pathData = "M14.25 13.5a.75.75 0 0 1 0 1.5h-6.5a.75.75 0 0 1 0-1.5h6.5Zm0-4a.75.75 0 0 1 0 1.5H1.75a.75.75 0 0 1 0-1.5h12.5Zm0-4.5a.75.75 0 0 1 0 1.5h-6.5a.75.75 0 0 1 0-1.5h6.5Zm0-4a.75.75 0 0 1 0 1.5H1.75a.75.75 0 0 1 0-1.5h12.5Z";
 const ltr = true;
 const accData = null;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v5";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, collection, packageName });
 
 export default "SAP-icons-v5/text-align-right";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

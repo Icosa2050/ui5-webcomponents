@@ -3,22 +3,24 @@ const getMetaTagValue = (metaTagName) => {
     const metaTag = document.querySelector(`META[name="${metaTagName}"]`), metaTagContent = metaTag && metaTag.getAttribute("content");
     return metaTagContent;
 };
-const validateThemeOrigin = (origin) => {
+const validateThemeOrigin = (origin, isSameOrigin = false) => {
     const allowedOrigins = getMetaTagValue("sap-allowed-theme-origins") ?? getMetaTagValue("sap-allowedThemeOrigins"); // Prioritize the new meta tag name
     // If no allowed origins are specified, block.
     if (!allowedOrigins) {
         return false;
     }
+    // If it's same-origin (relative URL resolved to current page), allow it when there's any meta tag present
+    // The presence of the meta tag indicates the user wants to use theme roots
+    if (isSameOrigin) {
+        return true;
+    }
     return allowedOrigins.split(",").some(allowedOrigin => {
         return allowedOrigin === "*" || origin === allowedOrigin.trim();
     });
 };
-const buildCorrectUrl = (oldUrl, newOrigin) => {
-    const oldUrlPath = new URL(oldUrl).pathname;
-    return new URL(oldUrlPath, newOrigin).toString();
-};
 const validateThemeRoot = (themeRoot) => {
     let resultUrl;
+    let isSameOrigin = false;
     try {
         if (themeRoot.startsWith(".") || themeRoot.startsWith("/")) {
             // Handle relative url
@@ -26,18 +28,21 @@ const validateThemeRoot = (themeRoot) => {
             // new URL("./newExmPath", "http://example.com/exmPath") => http://example.com/exmPath/newExmPath
             // new URL("../newExmPath", "http://example.com/exmPath") => http://example.com/newExmPath
             resultUrl = new URL(themeRoot, getLocationHref()).toString();
+            isSameOrigin = true;
         }
         else {
             const themeRootURL = new URL(themeRoot);
             const origin = themeRootURL.origin;
-            if (origin && validateThemeOrigin(origin)) {
+            const currentOrigin = new URL(getLocationHref()).origin;
+            // Check if the absolute URL is same-origin
+            isSameOrigin = origin === currentOrigin;
+            if (origin && validateThemeOrigin(origin, isSameOrigin)) {
                 // If origin is allowed, use it
                 resultUrl = themeRootURL.toString();
             }
             else {
-                // If origin is not allow and the URL is not relative, we have to replace the origin
-                // with current location
-                resultUrl = buildCorrectUrl(themeRootURL.toString(), getLocationHref());
+                // If origin is not allowed, return undefined to indicate validation failed
+                return undefined;
             }
         }
         if (!resultUrl.endsWith("/")) {
@@ -47,6 +52,7 @@ const validateThemeRoot = (themeRoot) => {
     }
     catch (e) {
         // Catch if URL is not correct
+        return undefined;
     }
 };
 export default validateThemeRoot;

@@ -65,6 +65,6 @@ declare class UserMenuAccount extends UI5Element {
      * @since 2.9.0
      */
     loading: boolean;
-    get _initials(): string;
+    get _initials(): string | undefined;
 }
 export default UserMenuAccount;

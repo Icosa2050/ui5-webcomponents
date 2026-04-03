@@ -1,13 +1,14 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "rhombus-milestone";
-const pathData = "M495 215q17 17 17 41 0 22-17 41L297 495q-17 17-41 17t-41-17L17 297Q0 278 0 256q0-24 17-41L215 17q17-17 41-17t41 17zm-36 45q2-1 2-4t-2-5L261 53q-2-2-5-2t-4 2L53 251q-2 4-2 5 0 2 2 4l199 199q2 2 4 2 1 0 5-2z";
+const pathData = "M14.134 8.884a1.25 1.25 0 0 0 0-1.768L8.886 1.868a1.25 1.25 0 0 0-1.768 0L1.87 7.116a1.25 1.25 0 0 0 0 1.768l5.248 5.248a1.25 1.25 0 0 0 1.768 0l5.248-5.248Zm-4.188 6.309a2.75 2.75 0 0 1-3.889 0L.81 9.945a2.75 2.75 0 0 1 0-3.89L6.057.809a2.75 2.75 0 0 1 3.89 0l5.248 5.248a2.75 2.75 0 0 1 0 3.889l-5.249 5.248Z";
 const ltr = false;
 const accData = null;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v5";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, collection, packageName });
 
 export default "SAP-icons-v5/rhombus-milestone";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

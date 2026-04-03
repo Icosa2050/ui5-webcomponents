@@ -1,5 +1,5 @@
 import { isLegacyThemeFamilyAsync } from "@ui5/webcomponents-base/dist/config/Theme.js";
-import { pathData as pathDatav2, ltr, accData } from "./v2/system-hana.js";
+import { pathData as pathDatav2, ltr, viewBox, accData } from "./v2/system-hana.js";
 import { pathData as pathDatav3 } from "./v3/system-hana.js";
 
 const getPathData = async() => {
@@ -7,4 +7,4 @@ const getPathData = async() => {
 };
 
 export default "tnt/system-hana";
-export { getPathData, ltr, accData };
+export { getPathData, ltr, viewBox, accData };

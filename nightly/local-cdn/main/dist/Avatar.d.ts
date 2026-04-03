@@ -245,6 +245,11 @@ declare class Avatar extends UI5Element implements ITabbable, IAvatarGroupItem {
     _onImageLoad(e: Event): void;
     _onImageError(e: Event): void;
     get accessibilityInfo(): {
+        role?: undefined;
+        type?: undefined;
+        description?: undefined;
+        disabled?: undefined;
+    } | {
         role: AriaRole;
         type: string;
         description: string;

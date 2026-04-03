@@ -1,13 +1,14 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "cause";
-const pathData = "M0 64q0-14 9.5-23T32 32h128v32H32v384h384V320h32v128q0 13-9 22.5t-23 9.5H32q-13 0-22.5-9.5T0 448V64zm165 132q5-5 12-5 6 0 11 5l68 76v-48q0-47 17-86.5T319 68t69-48 85-20h23q16 0 16 16t-16 16h-16q-40 0-75 15t-61 41-41 61-15 75v48l69-76q5-5 12-5 6 0 11 5 11 11 0 22l-84 93q-9 9-23 9-12 0-23-9l-85-93q-11-11 0-22z";
+const pathData = "M1 2.867c0-.273.093-.496.278-.671a.928.928 0 0 1 .66-.263h3.75v.934h-3.75v11.2h11.25v-3.734h.937v3.734a.92.92 0 0 1-.264.656.89.89 0 0 1-.674.277H1.938a.903.903 0 0 1-.659-.277.895.895 0 0 1-.278-.656v-11.2Zm4.834 3.85a.48.48 0 0 1 .352-.146c.117 0 .224.048.322.146L8.5 8.933v-1.4c0-.914.166-1.755.498-2.523a6.696 6.696 0 0 1 1.348-2.027 6.473 6.473 0 0 1 2.021-1.4A6.766 6.766 0 0 1 14.857 1h.674c.313 0 .469.156.469.467 0 .31-.156.466-.469.466h-.469a5.54 5.54 0 0 0-2.197.438 5.64 5.64 0 0 0-1.787 1.196 5.617 5.617 0 0 0-1.201 1.779c-.293.68-.44 1.41-.44 2.187v1.4l2.022-2.216a.48.48 0 0 1 .351-.146c.118 0 .225.048.323.146.215.214.215.427 0 .641l-2.461 2.713a.915.915 0 0 1-.674.262c-.234 0-.459-.087-.674-.262l-2.49-2.713c-.215-.214-.215-.427 0-.641Z";
 const ltr = false;
 const accData = null;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v4";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, collection, packageName });
 
 export default "SAP-icons-v4/cause";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

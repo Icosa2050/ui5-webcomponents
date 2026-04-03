@@ -426,6 +426,7 @@ let Button = Button_1 = class Button extends UI5Element {
             disabled: this.disabled,
             children: this.text,
             type: this.effectiveAccRoleTranslation,
+            label: this.ariaLabelText,
         };
     }
     get effectiveAccRoleTranslation() {

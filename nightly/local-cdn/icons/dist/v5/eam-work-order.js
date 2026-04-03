@@ -1,13 +1,14 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "eam-work-order";
-const pathData = "M480 320H32q-14 0-23-9t-9-23 9-23 23-9q0-34 9.5-65.5T69 132t43-48 56-34l-1-11v-1l-1-2v-1q0-12 11-19t26-10.5T233 1t23-1 23 1 30 4.5T335 16t11 19v1l-1 2v1l-1 11q31 13 56 34t43 48 27.5 58.5T480 256q14 0 23 9t9 23-9 23-23 9zM221 54l17 87h36l17-87q-16-3-35-3-18 0-35 3zm208 202q0-49-25.5-90.5T334 102l-15 70q-2 8-8.5 14t-16.5 6h-76q-10 0-16.5-6t-8.5-14l-15-70q-44 22-69.5 63.5T83 256h346zm77 138l-94 109q-8 9-19 9-12 0-19-8l-47-52q-7-7-7-17 0-11 7.5-18.5T346 409t18 9l28 30 75-87q8-9 19-9t18.5 7.5T512 378q0 8-6 16z";
+const pathData = "M14.68 11.262a.75.75 0 0 1 1.14.976l-3 3.5a.75.75 0 0 1-1.1.042l-1.5-1.5a.75.75 0 0 1 1.06-1.06l.927.926 2.474-2.884ZM8 0c.744 0 1.485.06 2.218.282a.75.75 0 0 1 .51.9l-.088.348C13.14 2.595 15 5.087 15 8a1 1 0 1 1 0 2H1a1 1 0 1 1 0-2c0-2.913 1.86-5.404 4.36-6.47l-.088-.348a.75.75 0 0 1 .51-.9C6.515.06 7.256 0 8 0Zm1.991 5.364A.75.75 0 0 1 9.25 6h-2.5a.75.75 0 0 1-.741-.636l-.358-2.32C3.815 3.954 2.5 5.85 2.5 8h11c0-2.15-1.316-4.047-3.152-4.956l-.357 2.32ZM6.914 1.566l.51 2.886h1.151l.51-2.886c-.71-.1-1.46-.1-2.17 0Z";
 const ltr = true;
 const accData = null;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v5";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, collection, packageName });
 
 export default "SAP-icons-v5/eam-work-order";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

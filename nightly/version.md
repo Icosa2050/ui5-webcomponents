@@ -1,8 +1,7 @@
-commit 8da1a641aa99b84e43c6447a423c42bfe11da63a
-Author: ilhan007 <ilhan.myumyun@sap.com>
-Date:   Fri Mar 13 21:51:21 2026 +0200
+commit b38ce3906ca3c0592fc141be00050233316e0cb1
+Author: GDamyanov <georgi.damianov93@gmail.com>
+Date:   Thu Apr 2 17:22:42 2026 +0300
 
-    fix: match both # and ## version headings in changelog extraction
+    chore(ui5-time-picker): since tags are updated (#13358)
     
-    Lerna generates `## [x.y.z]` for patch releases but the regex only
-    matched `# [x.y.z]`, causing empty release notes for hotfix releases.
+    Since tags are updated on displayValue, valueFormat properties and isValidValue method

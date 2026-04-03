@@ -1,9 +1,8 @@
 /*!
  * OpenUI5
- * (c) Copyright 2009-2024 SAP SE or an SAP affiliate company.
+ * (c) Copyright 2026 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
-import BaseConfig from "./config.js";
 import now from "./util/now.js";
 /**
  * A Logging API for JavaScript.
@@ -202,8 +201,8 @@ function getLogEntryListenerInstance() {
  *   Name of the component that produced the log entry
  * @param {function} [fnSupportInfo]
  *   Callback that returns an additional support object to be logged in support mode.
- *   This function is only called if support info mode is turned on with
- *   <code>logSupportInfo(true)</code>. To avoid negative effects regarding execution times and
+ *   This function is only called if support info mode is turned on via
+ *   the Support Assistant. To avoid negative effects regarding execution times and
  *   memory consumption, the returned object should be a simple immutable JSON object with mostly
  *   static and stable content.
  * @public
@@ -225,8 +224,8 @@ Log.fatal = function (sMessage, vDetails, sComponent, fnSupportInfo) {
  *   Name of the component that produced the log entry
  * @param {function} [fnSupportInfo]
  *   Callback that returns an additional support object to be logged in support mode.
- *   This function is only called if support info mode is turned on with
- *   <code>logSupportInfo(true)</code>. To avoid negative effects regarding execution times and
+ *   This function is only called if support info mode is turned on via
+ *   the Support Assistant. To avoid negative effects regarding execution times and
  *   memory consumption, the returned object should be a simple immutable JSON object with mostly
  *   static and stable content.
  * @public
@@ -248,8 +247,8 @@ Log.error = function (sMessage, vDetails, sComponent, fnSupportInfo) {
  *   Name of the component that produced the log entry
  * @param {function} [fnSupportInfo]
  *   Callback that returns an additional support object to be logged in support mode.
- *   This function is only called if support info mode is turned on with
- *   <code>logSupportInfo(true)</code>. To avoid negative effects regarding execution times and
+ *   This function is only called if support info mode is turned on via
+ *   the Support Assistant. To avoid negative effects regarding execution times and
  *   memory consumption, the returned object should be a simple immutable JSON object with mostly
  *   static and stable content.
  * @public
@@ -271,8 +270,8 @@ Log.warning = function (sMessage, vDetails, sComponent, fnSupportInfo) {
  *   Name of the component that produced the log entry
  * @param {function} [fnSupportInfo]
  *   Callback that returns an additional support object to be logged in support mode.
- *   This function is only called if support info mode is turned on with
- *   <code>logSupportInfo(true)</code>. To avoid negative effects regarding execution times and
+ *   This function is only called if support info mode is turned on via
+ *   the Support Assistant. To avoid negative effects regarding execution times and
  *   memory consumption, the returned object should be a simple immutable JSON object with mostly
  *   static and stable content.
  * @public
@@ -294,8 +293,8 @@ Log.info = function (sMessage, vDetails, sComponent, fnSupportInfo) {
  *   Name of the component that produced the log entry
  * @param {function} [fnSupportInfo]
  *   Callback that returns an additional support object to be logged in support mode.
- *   This function is only called if support info mode is turned on with
- *   <code>logSupportInfo(true)</code>. To avoid negative effects regarding execution times and
+ *   This function is only called if support info mode is turned on via
+ *   the Support Assistant. To avoid negative effects regarding execution times and
  *   memory consumption, the returned object should be a simple immutable JSON object with mostly
  *   static and stable content.
  * @public
@@ -317,8 +316,8 @@ Log.debug = function (sMessage, vDetails, sComponent, fnSupportInfo) {
  *   Name of the component that produced the log entry
  * @param {function} [fnSupportInfo]
  *   Callback that returns an additional support object to be logged in support mode.
- *   This function is only called if support info mode is turned on with
- *   <code>logSupportInfo(true)</code>. To avoid negative effects regarding execution times and
+ *   This function is only called if support info mode is turned on via
+ *   the Support Assistant. To avoid negative effects regarding execution times and
  *   memory consumption, the returned object should be a simple immutable JSON object with mostly
  *   static and stable content.
  * @public
@@ -418,8 +417,8 @@ Log.logSupportInfo = function (bEnabled) {
  * @param {string} [sComponent]
  *   The log component under which the message should be logged
  * @param {function} [fnSupportInfo] Callback that returns an additional support object to be
- *   logged in support mode. This function is only called if support info mode is turned on with
- *   <code>logSupportInfo(true)</code>. To avoid negative effects regarding execution times and
+ *   logged in support mode. This function is only called if support info mode is turned on via
+ *   the Support Assistant. To avoid negative effects regarding execution times and
  *   memory consumption, the returned object should be a simple immutable JSON object with mostly
  *   static and stable content.
  * @returns {module:sap/base/Log.Entry}
@@ -734,17 +733,4 @@ Log.getLogger = function (sComponent, iDefaultLogLevel) {
   }
   return new Logger(sComponent);
 };
-
-// set LogLevel
-const sLogLevel = BaseConfig.get({
-  name: "sapUiLogLevel",
-  type: BaseConfig.Type.String,
-  defaultValue: undefined,
-  external: true
-});
-if (sLogLevel) {
-  Log.setLevel(Log.Level[sLogLevel.toUpperCase()] || parseInt(sLogLevel));
-} else if (!globalThis["sap-ui-optimized"]) {
-  Log.setLevel(Log.Level.DEBUG);
-}
 export default Log;

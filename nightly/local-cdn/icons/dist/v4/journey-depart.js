@@ -1,13 +1,14 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "journey-depart";
-const pathData = "M503 232q9 10 9 23t-9 23l-92 86q-5 5-11 5t-11-5-5-11.5 5-11.5l75-69H208q-16 0-16-16t16-16h256l-75-68q-5-5-5-11.5t5-11.5 11-5 11 5zM192 416q53 0 95-31h47q-26 29-63 46t-79 17q-40 0-75-15t-61-41-41-61-15-75 15-75 41-61 61-41 75-15q42 0 79 17.5t63 46.5h-48q-20-14-44-23t-50-9q-33 0-62.5 12.5t-51 34.5-34 51T32 256t12.5 62 34 51 51 34.5T192 416z";
+const pathData = "M15.719 7.25c.187.208.281.448.281.719 0 .27-.094.51-.281.718l-2.875 2.688a.477.477 0 0 1-.344.156.477.477 0 0 1-.344-.156.494.494 0 0 1 0-.719L14.5 8.5h-8c-.333 0-.5-.167-.5-.5 0-.333.167-.5.5-.5h8l-2.344-2.125a.494.494 0 0 1 0-.719.478.478 0 0 1 .344-.156c.125 0 .24.052.344.156l2.875 2.594ZM6 13a4.873 4.873 0 0 0 2.969-.969h1.469a5.94 5.94 0 0 1-1.97 1.438A5.843 5.843 0 0 1 6 14a5.886 5.886 0 0 1-2.344-.469A6.017 6.017 0 0 1 1.75 12.25a6.02 6.02 0 0 1-1.281-1.906A5.886 5.886 0 0 1 0 8c0-.833.156-1.615.469-2.344A6.02 6.02 0 0 1 1.75 3.75a6.02 6.02 0 0 1 1.906-1.281A5.886 5.886 0 0 1 6 2c.875 0 1.698.182 2.469.547A6.13 6.13 0 0 1 10.438 4h-1.5a6.153 6.153 0 0 0-1.376-.719A4.414 4.414 0 0 0 6 3a4.957 4.957 0 0 0-3.547 1.469c-.448.458-.802.99-1.062 1.593C1.13 6.668 1 7.313 1 8s.13 1.333.39 1.938a5.212 5.212 0 0 0 1.063 1.593c.448.459.98.818 1.594 1.078A4.94 4.94 0 0 0 6 13Z";
 const ltr = false;
 const accData = null;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v4";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, collection, packageName });
 
 export default "SAP-icons-v4/journey-depart";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

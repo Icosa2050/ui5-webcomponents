@@ -1,15 +1,17 @@
 /*!
  * OpenUI5
- * (c) Copyright 2009-2024 SAP SE or an SAP affiliate company.
+ * (c) Copyright 2026 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 /* global Set */
 // Provides class sap.ui.base.DataType
+import future from "../../base/future.js";
 import ObjectPath from "../../base/util/ObjectPath.js";
 import assert from "../../base/assert.js";
 import Log from "../../base/Log.js";
 import isPlainObject from "../../base/util/isPlainObject.js";
 import resolveReference from "../../base/util/resolveReference.js";
+import _EnumHelper from "../../base/i18n/date/_EnumHelper.js";
 /**
  * Pseudo-Constructor for class <code>DataType</code>, never to be used.
  *
@@ -428,6 +430,28 @@ function createEnumType(sTypeName, oEnum) {
   };
   return oType;
 }
+const oLoggedErrors = new Set();
+
+/**
+ * Logs an error only once per class name and property name combination.
+ *
+ * If the class name and property name are not given, the message is logged.
+ *
+ * @param {string} sClassName - The name of the class where the error occurred.
+ * @param {string} sPropertyName - The name of the property causing the error.
+ * @param {string} sMessage - Additional message to log.
+ */
+function logErrorOnce(sClassName, sPropertyName, sMessage) {
+  if (sClassName && sPropertyName) {
+    const sKey = `${sClassName}::${sPropertyName}`;
+    if (!oLoggedErrors.has(sKey)) {
+      oLoggedErrors.add(sKey);
+      Log.error(`Property "${sPropertyName}" of "${sClassName}": ${sMessage}`);
+    }
+  } else {
+    Log.error(sMessage);
+  }
+}
 
 /**
  * Looks up the type with the given name and returns it.
@@ -468,11 +492,12 @@ function createEnumType(sTypeName, oEnum) {
  * needed by the specific control or class definition.
  *
  * @param {string} sTypeName Qualified name of the type to retrieve
+ * @param {sap.ui.base.ManagedObject.MetadataOptions.Property} [oProperty] Metadata of the property
  * @returns {sap.ui.base.DataType|undefined} Type object or <code>undefined</code> when
  *     no such type has been defined yet
  * @public
  */
-DataType.getType = function (sTypeName) {
+DataType.getType = function (sTypeName, oProperty) {
   assert(sTypeName && typeof sTypeName === 'string', "sTypeName must be a non-empty string");
   var oType = mTypes[sTypeName];
   if (!(oType instanceof DataType)) {
@@ -496,7 +521,7 @@ DataType.getType = function (sTypeName) {
       if (oType == null) {
         oType = ObjectPath.get(sTypeName);
         if (oType != null) {
-          Log.error(`The type '${sTypeName}' was accessed via globals. Defining enums via globals is deprecated. Please require the module 'sap/ui/base/DataType' and call the static 'DataType.registerEnum' API.`);
+          logErrorOnce(oProperty?._oParent.getName(), oProperty?.name, `[DEPRECATED] The type '${sTypeName}' was accessed via globals. Defining types via globals is deprecated. ` + `In case the referenced type is an enum: require the module 'sap/ui/base/DataType' and call the static 'DataType.registerEnum' API. ` + `In case the referenced type is non-primitive, please note that only primitive types (and those derived from them) are supported for ManagedObject properties. ` + `If the given type is an interface or a subclass of ManagedObject, you can define a "0..1" aggregation instead of a property`);
         }
       }
       if (oType instanceof DataType) {
@@ -505,10 +530,10 @@ DataType.getType = function (sTypeName) {
         oType = mTypes[sTypeName] = createEnumType(sTypeName, oType);
         delete mEnumRegistry[sTypeName];
       } else if (oType) {
-        Log.warning("[FUTURE FATAL] '" + sTypeName + "' is not a valid data type. Falling back to type 'any'.");
+        future.warningThrows("'" + sTypeName + "' is not a valid data type. Falling back to type 'any'.");
         oType = mTypes.any;
       } else {
-        Log.error("[FUTURE FATAL] data type '" + sTypeName + "' could not be found.");
+        future.errorThrows("data type '" + sTypeName + "' could not be found.");
         oType = undefined;
       }
     }
@@ -565,20 +590,20 @@ DataType.createType = function (sName, mSettings, vBase) {
   assert(typeof sName === "string" && sName, "DataType.createType: type name must be a non-empty string");
   assert(vBase == null || vBase instanceof DataType || typeof vBase === "string" && vBase, "DataType.createType: base type must be empty or a DataType or a non-empty string");
   if (/[\[\]]/.test(sName)) {
-    Log.error("[FUTURE FATAL] DataType.createType: array types ('something[]') must not be created with createType, " + "they're created on-the-fly by DataType.getType");
+    future.errorThrows("DataType.createType: array types ('something[]') must not be created with createType, " + "they're created on-the-fly by DataType.getType");
   }
   if (typeof vBase === "string") {
     vBase = DataType.getType(vBase);
   }
   vBase = vBase || mTypes.any;
   if (vBase.isArrayType() || vBase.isEnumType()) {
-    Log.error("[FUTURE FATAL] DataType.createType: base type must not be an array- or enum-type");
+    future.errorThrows("DataType.createType: base type must not be an array- or enum-type");
   }
   if (sName === 'array' || mTypes[sName] instanceof DataType) {
     if (sName === 'array' || mTypes[sName].getBaseType() == null) {
       throw new Error("DataType.createType: primitive or hidden type " + sName + " can't be re-defined");
     }
-    Log.warning("[FUTURE FATAL] DataTypes.createType: type " + sName + " is redefined. " + "This is an unsupported usage of DataType and might cause issues.");
+    future.warningThrows("DataTypes.createType: type " + sName + " is redefined. " + "This is an unsupported usage of DataType and might cause issues.");
   }
   var oType = mTypes[sName] = createType(sName, mSettings, vBase);
   return oType;
@@ -599,10 +624,15 @@ DataType.registerInterfaceTypes = function (aTypes) {
   aTypes.forEach(function (sType) {
     oInterfaces.add(sType);
 
-    // Defining the interface on global namespace for compatibility reasons.
-    // This has never been a public feature and it is strongly discouraged it be relied upon.
-    // An interface must always be referenced by a string literal, not via the global namespace.
-    ObjectPath.set(sType, sType);
+    /**
+     * @deprecated
+     */
+    (() => {
+      // Defining the interface on global namespace for compatibility reasons.
+      // This has never been a public feature and it is strongly discouraged it be relied upon.
+      // An interface must always be referenced by a string literal, not via the global namespace.
+      ObjectPath.set(sType, sType);
+    })();
   });
 };
 
@@ -654,4 +684,25 @@ DataType._isEnumCandidate = function (oObject) {
 DataType.isInterfaceType = function (sType) {
   return oInterfaces.has(sType);
 };
+
+/**
+ * A string type representing an ID or a name.
+ *
+ * Allowed is a sequence of characters (capital/lowercase), digits, underscores, hyphens, dots and/or colons.
+ * It may start with a character or underscore only.
+ *
+ * @typedef {string} sap.ui.core.ID
+ * @final
+ * @public
+ * @ui5-module-override sap/ui/core/library ID
+ */
+DataType.createType('sap.ui.core.ID', {
+  isValid: function (vValue) {
+    return /^([A-Za-z_][-A-Za-z0-9_.:]*)$/.test(vValue);
+  }
+}, DataType.getType('string'));
+
+// The enum helper receives the final registerEnum function and ensures
+// that all early collected enums are correctly registered
+_EnumHelper.inject(DataType.registerEnum);
 export default DataType;

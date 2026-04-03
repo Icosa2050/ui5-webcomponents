@@ -1,13 +1,14 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "eraser";
-const pathData = "M454 32q11 0 18.5 7.5T480 58v74q0 9-7 18L150 472q-8 8-18 8t-18-8l-74-74q-8-8-8-18t8-18L362 39q9-7 18-7h74zm-25 51h-38L255 219l38 38 136-136V83zM168 306l38 38 51-51-38-38zm2 74l-38-38-38 38 38 38zm284 49q11 0 18.5 7t7.5 18-7.5 18.5T454 480H282q-11 0-18.5-7.5T256 454t7.5-18 18.5-7h172z";
+const pathData = "M15.25 14.5a.75.75 0 0 1 0 1.5h-5.5a.75.75 0 0 1 0-1.5h5.5Zm0-14.5a.75.75 0 0 1 .75.75V3.5a.75.75 0 0 1-.219.53L4.38 15.478a1.75 1.75 0 0 1-2.48 0L.516 14.092a1.75 1.75 0 0 1 .004-2.477L11.97.22A.75.75 0 0 1 12.5 0h2.75ZM1.578 12.679a.25.25 0 0 0 0 .353l1.384 1.388a.25.25 0 0 0 .354 0l1.932-1.94-1.747-1.715-1.923 1.914Zm2.985-2.973 1.743 1.711 7.885-7.918-1.691-1.69-7.937 7.897Z";
 const ltr = false;
 const accData = null;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v5";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, collection, packageName });
 
 export default "SAP-icons-v5/eraser";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

@@ -1,13 +1,14 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "kpi-managing-my-area";
-const pathData = "M327 100q-7-7-7-17 0-11 7.5-18t18.5-7 18 8l28 30 75-87q8-9 20-9 10 0 17.5 7.5T512 25q0 9-6 17l-94 109q-7 9-19 9-11 0-19-8zm-49 154q13 6 28.5 15.5T322 296q0 10-7 17t-17 7q-11 0-22-9-13-11-35.5-17t-42.5-6h-13q-28 0-52.5 10.5T90 327t-28.5 42.5T51 422v7h147q11 0 18.5 7t7.5 18-7.5 18.5T198 480H26q-11 0-18.5-7.5T0 454v-32q0-55 29-99.5t77-67.5l-5-5q-37-37-37-90 0-27 10-50t27.5-40.5 41-27.5T192 32t49.5 10.5 41 28T310 111t10 49-11 51-31 43zM192 83q-32 0-54.5 22.5T115 160t22.5 54.5T192 237t54.5-22.5T269 160t-22.5-54.5T192 83zm295 282q11 0 18 7t7 18-7 18.5-18 7.5H346q-11 0-18.5-7.5T320 390t7.5-18 18.5-7h141zm0 96q11 0 18 7.5t7 18.5-7 18-18 7H346q-11 0-18.5-7t-7.5-18 7.5-18.5T346 461h141z";
+const pathData = "M15.25 14.5a.75.75 0 0 1 0 1.5h-4.5a.75.75 0 0 1 0-1.5h4.5ZM5.25 0a4 4 0 0 1 2.41 7.192 4.15 4.15 0 0 1 1.109.766.75.75 0 0 1-1.039 1.084c-.811-.648-1.485-.792-2.654-.792-1.934 0-3.577 1.676-3.577 3.833v.419h5.684a.75.75 0 1 1 0 1.5H.75a.75.75 0 0 1-.75-.75v-1.169C0 9.971 1.183 8.11 2.923 7.252A4 4 0 0 1 5.25 0Zm10 11.5a.75.75 0 0 1 0 1.5h-4.5a.75.75 0 0 1 0-1.5h4.5Zm-10-10a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5ZM14.68.262a.75.75 0 0 1 1.14.976l-3 3.5a.758.758 0 0 1-1.1.042l-1.5-1.5a.75.75 0 1 1 1.06-1.06l.927.926L14.681.262Z";
 const ltr = true;
 const accData = null;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v5";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, collection, packageName });
 
 export default "SAP-icons-v5/kpi-managing-my-area";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

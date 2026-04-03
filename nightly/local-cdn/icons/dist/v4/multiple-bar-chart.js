@@ -1,13 +1,14 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "multiple-bar-chart";
-const pathData = "M511.5 480v32h-188v-32h188zm-510 32v-32h188v32H1.5zm510-289h-188v-31h188v31zm-510-31h188v31H1.5v-31zm112-192v151h-36V0h36zm286 151V0h36v151h-36zm-322 300V301h36v150h-36zm322 0V301h36v150h-36zm-248 0V338h38v113h-38zm322 0V338h38v113h-38zm-322-300V38h38v113h-38zm360-113v113h-38V38h38zm-472 37v76h-38V75h38zm322 0v76h-38V75h38zm-38 376v-75h38v75h-38zm-322 0v-75h38v75h-38z";
+const pathData = "M16 15v1h-5.898v-1H16ZM0 16v-1h5.898v1H0Zm16-9.031h-5.898V6H16v.969ZM0 6h5.898v.969H0V6Zm3.514-6v4.719h-1.13V0h1.13Zm8.972 4.719V0h1.13v4.719h-1.13ZM2.384 14.094V9.406h1.13v4.688h-1.13Zm10.102 0V9.406h1.13v4.688h-1.13Zm-7.78 0v-3.531h1.192v3.53H4.706Zm10.102 0v-3.531H16v3.53h-1.192ZM4.706 4.719V1.187h1.192V4.72H4.706ZM16 1.187V4.72h-1.192V1.187H16ZM1.192 2.345V4.72H0V2.344h1.192Zm10.102 0V4.72h-1.192V2.344h1.192Zm-1.192 11.75V11.75h1.192v2.344h-1.192ZM0 14.094V11.75h1.192v2.344H0Z";
 const ltr = false;
 const accData = null;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v4";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, collection, packageName });
 
 export default "SAP-icons-v4/multiple-bar-chart";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

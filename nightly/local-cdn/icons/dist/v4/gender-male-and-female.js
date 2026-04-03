@@ -1,13 +1,14 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "gender-male-and-female";
-const pathData = "M192 400H96q-16 0-16-16t16-16h96v-50q-24-3-44.5-14T112 276.5 88.5 238 80 192q0-27 10-50t27.5-40.5T158 74t50-10q29 0 53 11.5t42 30.5l74-74h-89q-16 0-16-16t16-16h128q16 0 16 16v128q0 16-16 16t-16-16V55l-79 78q7 14 11 28.5t4 30.5q0 24-8.5 46T304 276.5 268.5 304 224 318v50h96q16 0 16 16t-16 16h-96v96q0 16-16 16t-16-16v-96zm16-112q40 0 68-28t28-68-28-68-68-28-68 28-28 68 28 68 68 28z";
+const pathData = "M6.5 12.5h-3c-.333 0-.5-.167-.5-.5 0-.333.167-.5.5-.5h3V9.937A3.95 3.95 0 0 1 5.11 9.5 4.113 4.113 0 0 1 4 8.64 3.954 3.954 0 0 1 3 6c0-.563.104-1.083.313-1.563a4.065 4.065 0 0 1 2.124-2.125A3.892 3.892 0 0 1 7 2c.604 0 1.156.12 1.656.36.5.239.938.557 1.313.953L12.28 1H9.5C9.167 1 9 .833 9 .5c0-.333.167-.5.5-.5h4c.333 0 .5.167.5.5v4c0 .333-.167.5-.5.5-.333 0-.5-.167-.5-.5V1.719l-2.469 2.437c.146.292.26.589.344.89.083.303.125.62.125.954a3.954 3.954 0 0 1-1 2.64c-.313.344-.682.63-1.11.86a3.95 3.95 0 0 1-1.39.438V11.5h3c.333 0 .5.167.5.5 0 .333-.167.5-.5.5h-3v3c0 .333-.167.5-.5.5-.333 0-.5-.167-.5-.5v-3ZM7 9c.833 0 1.542-.292 2.125-.875A2.893 2.893 0 0 0 10 6c0-.833-.292-1.542-.875-2.125A2.893 2.893 0 0 0 7 3c-.833 0-1.542.292-2.125.875A2.893 2.893 0 0 0 4 6c0 .833.292 1.542.875 2.125A2.893 2.893 0 0 0 7 9Z";
 const ltr = true;
 const accData = null;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v4";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, collection, packageName });
 
 export default "SAP-icons-v4/gender-male-and-female";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

@@ -2,13 +2,14 @@ import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icon
 import { ICON_IPHONE } from "../generated/i18n/i18n-defaults.js";
 
 const name = "iphone";
-const pathData = "M352 0q26 0 45 19t19 45v384q0 27-19 45.5T352 512H160q-26 0-45-18.5T96 448V64q0-26 19-45t45-19h192zm-96 480q10 0 17-6.5t7-17.5q0-10-7-17t-17-7-17 7-7 17q0 11 7 17.5t17 6.5zM384 64H128v352h256V64z";
+const pathData = "M11 0c.542 0 1.01.198 1.406.594C12.802.99 13 1.458 13 2v12c0 .563-.198 1.037-.594 1.422A1.948 1.948 0 0 1 11 16H5c-.542 0-1.01-.193-1.406-.578A1.907 1.907 0 0 1 3 14V2c0-.542.198-1.01.594-1.406A1.922 1.922 0 0 1 5 0h6ZM8 15a.752.752 0 0 0 .531-.203.71.71 0 0 0 .219-.547.723.723 0 0 0-.219-.531A.723.723 0 0 0 8 13.5a.723.723 0 0 0-.531.219.723.723 0 0 0-.219.531c0 .23.073.412.219.547A.752.752 0 0 0 8 15Zm4-13H4v11h8V2Z";
 const ltr = false;
 const accData = ICON_IPHONE;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v4";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, accData, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, accData, collection, packageName });
 
 export default "SAP-icons-v4/iphone";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

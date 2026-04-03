@@ -356,6 +356,9 @@ let Avatar = Avatar_1 = class Avatar extends UI5Element {
         this._imageLoadError = true;
     }
     get accessibilityInfo() {
+        if (this.mode === AvatarMode.Decorative) {
+            return {};
+        }
         return {
             role: this._role,
             type: this._interactive ? Avatar_1.i18nBundle.getText(AVATAR_TYPE_BUTTON) : Avatar_1.i18nBundle.getText(AVATAR_TYPE_IMAGE),

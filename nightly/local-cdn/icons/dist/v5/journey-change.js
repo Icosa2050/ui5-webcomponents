@@ -1,13 +1,14 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "journey-change";
-const pathData = "M505 391q7 9 7 19 0 9-7 18l-77 77q-7 7-18 7t-18.5-7.5T384 486q0-10 8-18l33-33H228q-32 0-54.5-22T151 359q0-17 6.5-32t20.5-26l148-128q10-9 10-20t-7.5-18-18.5-7H87l34 33q7 7 7 18t-7.5 18.5T102 205q-10 0-18-8L8 120q-8-6-8-18 0-10 8-18L84 7q7-7 18-7t18.5 7.5T128 26t-7 18L87 77h223q32 0 54.5 22t22.5 54q0 34-27 58L211 339q-9 9-9 20t7.5 18 18.5 7h197l-33-33q-8-8-8-18 0-11 7.5-18.5T410 307q10 0 18 8z";
+const pathData = "M2.72.22a.75.75 0 0 1 1.06 1.06L2.56 2.5h6.544c2.755 0 3.798 3.6 1.471 5.073L7.227 9.694C6.17 10.364 6.644 12 7.896 12h5.544l-1.22-1.22a.75.75 0 1 1 1.06-1.06l2.5 2.5a.75.75 0 0 1 0 1.06l-2.5 2.5a.75.75 0 0 1-1.06-1.06l1.22-1.22H7.896c-2.755 0-3.798-3.6-1.471-5.073l3.348-2.121C10.83 5.636 10.356 4 9.104 4H2.561l1.22 1.22A.75.75 0 1 1 2.72 6.28l-2.5-2.5a.75.75 0 0 1 0-1.06l2.5-2.5Z";
 const ltr = false;
 const accData = null;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v5";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, collection, packageName });
 
 export default "SAP-icons-v5/journey-change";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

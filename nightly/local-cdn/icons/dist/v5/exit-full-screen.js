@@ -2,13 +2,14 @@ import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icon
 import { ICON_EXIT_FULL_SCREEN } from "../generated/i18n/i18n-defaults.js";
 
 const name = "exit-full-screen";
-const pathData = "M486 0q11 0 18.5 7.5T512 26t-7 18l-98 97h47q11 0 18.5 7t7.5 18-7.5 18.5T454 192H346q-11 0-18.5-7.5T320 166V58q0-11 7.5-18.5T346 32t18 7.5 7 18.5v47l97-98q7-7 18-7zM230 32q11 0 18.5 7.5T256 58t-7.5 18-18.5 7H90q-7 0-7 7v140q0 11-7 18.5T58 256t-18.5-7.5T32 230V90q0-24 17-41t41-17h140zm224 224q11 0 18.5 7.5T480 282v140q0 24-17 41t-41 17H282q-11 0-18.5-7.5T256 454t7.5-18 18.5-7h140q7 0 7-7V282q0-11 7-18.5t18-7.5zm-288 64q11 0 18.5 7.5T192 346v108q0 11-7.5 18.5T166 480t-18-7.5-7-18.5v-47l-97 98q-7 7-18 7t-18.5-7.5T0 486q0-10 8-18l97-97H58q-11 0-18.5-7T32 346t7.5-18.5T58 320h108z";
+const pathData = "M5.254 10.003a.75.75 0 0 1 .75.75v3.503a.75.75 0 0 1-1.5 0V12.64l-3.23 3.146a.75.75 0 1 1-1.046-1.074l3.293-3.209H1.758a.75.75 0 0 1 0-1.5h3.496Zm8.996-1a.75.75 0 0 1 .75.75v2.5a2.75 2.75 0 0 1-2.75 2.75h-2.5a.75.75 0 0 1 0-1.5h2.5c.69 0 1.25-.56 1.25-1.25v-2.5a.75.75 0 0 1 .75-.75Zm-8-8a.75.75 0 0 1 0 1.5h-2.5c-.69 0-1.25.56-1.25 1.25v2.5a.75.75 0 0 1-1.5 0v-2.5a2.75 2.75 0 0 1 2.75-2.75h2.5Zm8.46-.776a.75.75 0 1 1 1.073 1.046l-3.146 3.23h1.615a.75.75 0 0 1 0 1.5H10.75a.75.75 0 0 1-.75-.75V1.757a.75.75 0 0 1 1.5 0v1.764L14.71.227Z";
 const ltr = false;
 const accData = ICON_EXIT_FULL_SCREEN;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v5";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, accData, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, accData, collection, packageName });
 
 export default "SAP-icons-v5/exit-full-screen";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

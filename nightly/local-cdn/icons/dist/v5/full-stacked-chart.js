@@ -1,13 +1,14 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "full-stacked-chart";
-const pathData = "M198 256h-44q-11 0-18.5-7.5T128 230t7.5-18 18.5-7h44q11 0 18.5 7t7.5 18-7.5 18.5T198 256zm96 128h-44q-11 0-18.5-7.5T224 358t7.5-18 18.5-7h44q11 0 18.5 7t7.5 18-7.5 18.5T294 384zm64-256H250q-11 0-18.5-7.5T224 102t7.5-18 18.5-7h108q11 0 18.5 7t7.5 18-7.5 18.5T358 128zm96 256h-76q-11 0-18.5-7.5T352 358t7.5-18 18.5-7h76q11 0 18.5 7t7.5 18-7.5 18.5T454 384zm-294 0q-14 0-23-9t-9-23 9-23 23-9 23 9 9 23-9 23-23 9zm0-64q14 0 23 9t9 23-9 23-23 9-23-9-9-23 9-23 23-9zm128-64q-14 0-23-9t-9-23 9-23 23-9 23 9 9 23-9 23-23 9zm0-64q14 0 23 9t9 23-9 23-23 9-23-9-9-23 9-23 23-9zm-128-65q-14 0-23-9t-9-23 9-23 23-9 23 9 9 23-9 23-23 9zm0-64q14 0 23 9t9 23-9 23-23 9-23-9-9-23 9-23 23-9zm288 65q-14 0-23-9t-9-23 9-23 23-9 23 9 9 23-9 23-23 9zm0-64q14 0 23 9t9 23-9 23-23 9-23-9-9-23 9-23 23-9zm6 192h-76q-11 0-18.5-7.5T352 230t7.5-18 18.5-7h76q11 0 18.5 7t7.5 18-7.5 18.5T454 256zm0 224H58q-11 0-18.5-7.5T32 454V58q0-11 7.5-18.5T58 32t18 7.5T83 58v371h371q11 0 18.5 7t7.5 18-7.5 18.5T454 480z";
+const pathData = "M1.75 1a.75.75 0 0 1 .75.75v11.5c0 .138.112.25.25.25h11.5a.75.75 0 0 1 0 1.5H2.75A1.75 1.75 0 0 1 1 13.25V1.75A.75.75 0 0 1 1.75 1Zm3 9.5a.75.75 0 1 1 0 1.5.75.75 0 0 1 0-1.5Zm4.5 0a.75.75 0 0 1 0 1.5h-1.5a.75.75 0 0 1 0-1.5h1.5Zm5 0a.75.75 0 0 1 0 1.5h-2.5a.75.75 0 0 1 0-1.5h2.5Zm-8-4a.75.75 0 0 1 0 1.5h-1.5a.75.75 0 0 1 0-1.5h1.5Zm3 0a.75.75 0 1 1 0 1.5.75.75 0 0 1 0-1.5Zm5 0a.75.75 0 0 1 0 1.5h-2.5a.75.75 0 0 1 0-1.5h2.5Zm-9.5-4a.75.75 0 1 1 0 1.5.75.75 0 0 1 0-1.5Zm4.5 0a.75.75 0 0 1 0 1.5h-1.5a.75.75 0 0 1 0-1.5h1.5Zm2.5 0a.75.75 0 1 1 0 1.5.75.75 0 0 1 0-1.5Zm2.5 0a.75.75 0 1 1 0 1.5.75.75 0 0 1 0-1.5Z";
 const ltr = false;
 const accData = null;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v5";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, collection, packageName });
 
 export default "SAP-icons-v5/full-stacked-chart";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

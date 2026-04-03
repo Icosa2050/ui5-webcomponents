@@ -1,6 +1,6 @@
 /*!
  * OpenUI5
- * (c) Copyright 2009-2024 SAP SE or an SAP affiliate company.
+ * (c) Copyright 2026 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 /**
@@ -21,7 +21,7 @@ import Log from "../../base/Log.js";
  * @class Base class for all SAPUI5 Objects.
  * @abstract
  * @author Malte Wedel
- * @version 1.120.17
+ * @version 1.146.0
  * @public
  * @alias sap.ui.base.Object
  * @throws {Error} When an instance of the class or its subclasses is created without the <code>new</code> operator.

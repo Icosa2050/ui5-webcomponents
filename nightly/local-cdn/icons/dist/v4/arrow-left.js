@@ -1,13 +1,14 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "arrow-left";
-const pathData = "M169 74q9-10 22-10t22 10q10 9 10 22t-10 23L108 224h372q13 0 22.5 9.5T512 256q0 14-9.5 23t-22.5 9H108l106 106q9 9 9 22.5t-9 22.5q-10 10-23 10t-23-10L9 279q-9-9-9-22.5T9 234z";
+const pathData = "M.281 8.683A.95.95 0 0 1 0 7.982a.95.95 0 0 1 .281-.701l4.964-4.97A.99.99 0 0 1 5.964 2c.27 0 .51.104.719.312a.95.95 0 0 1 .28.701.95.95 0 0 1-.28.701L3.375 7H15a.99.99 0 0 1 .703.28.943.943 0 0 1 .297.717.96.96 0 0 1-.297.702.962.962 0 0 1-.703.296H3.375l3.276 3.29a.984.984 0 0 1 .313.718c0 .27-.104.498-.313.685a.891.891 0 0 1-.687.312.892.892 0 0 1-.688-.312L.281 8.683Z";
 const ltr = false;
 const accData = null;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v4";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, collection, packageName });
 
 export default "SAP-icons-v4/arrow-left";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

@@ -1,5 +1,5 @@
 import { isLegacyThemeFamilyAsync } from "@ui5/webcomponents-base/dist/config/Theme.js";
-import { pathData as pathDatav1, ltr, accData } from "./v1/thumb-sideway-filled.js";
+import { pathData as pathDatav1, ltr, viewBox, accData } from "./v1/thumb-sideway-filled.js";
 import { pathData as pathDatav2 } from "./v2/thumb-sideway-filled.js";
 
 const getPathData = async() => {
@@ -7,4 +7,4 @@ const getPathData = async() => {
 };
 
 export default "business-suite/thumb-sideway-filled";
-export { getPathData, ltr, accData };
+export { getPathData, ltr, viewBox, accData };

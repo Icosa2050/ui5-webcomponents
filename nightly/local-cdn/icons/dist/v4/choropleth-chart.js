@@ -1,13 +1,14 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "choropleth-chart";
-const pathData = "M32.5 252V32h191v56l-64 104v37l-37-37h-53v49l154 47v55l-63 137-34-31-15-95-46-87zm264-28h183v63l-32 65-64 96-50 32V361l-74-74zm1-28v-55l36-32h37l73-77h36v146l-36-37v37h-19l-18-37h-36l-37 55h-36zm54-164v53h-37z";
+const pathData = "M0 7.857V0h6.837v2L4.546 5.714v1.322L3.22 5.714H1.324v1.75l5.513 1.679v1.964L4.582 16l-1.217-1.107-.537-3.393L1.18 8.393 0 7.857Zm9.45-1H16v2.25l-1.145 2.322-2.291 3.428L10.774 16v-4.25L8.125 9.107l1.325-2.25Zm.035-1V3.893l1.29-1.143h1.323L14.711 0H16v5.214l-1.289-1.321v1.321h-.68l-.644-1.321h-1.289l-1.324 1.964H9.485ZM11.418 0v1.893h-1.324L11.418 0Z";
 const ltr = true;
 const accData = null;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v4";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, collection, packageName });
 
 export default "SAP-icons-v4/choropleth-chart";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

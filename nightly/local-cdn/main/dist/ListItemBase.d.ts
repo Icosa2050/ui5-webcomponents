@@ -67,6 +67,10 @@ declare class ListItemBase extends UI5Element implements ITabbable {
     _onkeydown(e: KeyboardEvent): void;
     _onkeyup(e: KeyboardEvent): void;
     _onclick(e: MouseEvent): void;
+    _isDisabledInteractiveContentClicked(e: MouseEvent): boolean;
+    _isNativeInteractiveElement(target: HTMLElement): boolean;
+    _isCustomInteractiveElement(target: HTMLElement): boolean;
+    _isElementDisabled(target: HTMLElement): boolean;
     /**
      * Override from subcomponent, if needed
      */

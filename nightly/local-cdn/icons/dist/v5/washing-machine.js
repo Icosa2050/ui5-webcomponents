@@ -1,13 +1,14 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "washing-machine";
-const pathData = "M391 480H122q-38 0-64-26t-26-64V121q0-37 26-63t64-26h269q37 0 63 26t26 63v269q0 38-26 64t-63 26zM122 83q-17 0-28 11t-11 27v269q0 17 11 28t28 11h269q16 0 27-11t11-28V121q0-16-11-27t-27-11H122zm262 77q0 14-9 23t-23 9-23-9-9-23 9-23 23-9 23 9 9 23zM256 384q-40 0-68-28t-28-68 28-68 68-28 68 28 28 68-28 68-68 28zm0-141q-19 0-32 13t-13 32 13 32 32 13 32-13 13-32-13-32-32-13z";
+const pathData = "M12.25 1A2.75 2.75 0 0 1 15 3.75v8.5A2.75 2.75 0 0 1 12.25 15h-8.5A2.75 2.75 0 0 1 1 12.25v-8.5A2.75 2.75 0 0 1 3.75 1h8.5Zm-8.5 1.5c-.69 0-1.25.56-1.25 1.25v8.5c0 .69.56 1.25 1.25 1.25h8.5c.69 0 1.25-.56 1.25-1.25v-8.5c0-.69-.56-1.25-1.25-1.25h-8.5ZM8 5.5a3.5 3.5 0 1 1 0 7 3.5 3.5 0 0 1 0-7ZM8 7a2 2 0 0 0-1.968 2.346 1.92 1.92 0 0 1 1.955-.086l.269.143c.188.1.413.11.61.025l.835-.364A.75.75 0 0 1 10 9.003V9a2 2 0 0 0-2-2Zm3-4a1 1 0 1 1 0 2 1 1 0 0 1 0-2Zm-4.752.25a.75.75 0 0 1 0 1.5H4.751a.75.75 0 1 1 0-1.5h1.497Z";
 const ltr = false;
 const accData = null;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v5";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, collection, packageName });
 
 export default "SAP-icons-v5/washing-machine";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

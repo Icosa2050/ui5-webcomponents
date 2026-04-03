@@ -4,10 +4,11 @@ const name = "stock-requirements";
 const pathData = "M172 192h168v128H172V192zm157 209h54v-99h74v99h55l-92 111zM0 111L92 0l91 111h-54v99H55v-99H0z";
 const ltr = false;
 const accData = null;
+const viewBox = "0 0 512 512";
 const collection = "business-suite-v1";
 const packageName = "@ui5/webcomponents-icons-business-suite";
 
-registerIcon(name, { pathData, ltr, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, collection, packageName });
 
 export default "business-suite-v1/stock-requirements";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

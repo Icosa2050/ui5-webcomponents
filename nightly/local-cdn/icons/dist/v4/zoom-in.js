@@ -2,13 +2,14 @@ import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icon
 import { ICON_ZOOM_IN } from "../generated/i18n/i18n-defaults.js";
 
 const name = "zoom-in";
-const pathData = "M32 208q0-36 14-68t38-56 56-38 68-14 68 14 56 38 38 56 14 68q0 28-8.5 53T353 308l117 118q10 9 10 22.5T470 471q-9 9-22 9-12 0-23-9L308 353q-43 31-100 31-36 0-68-13.5T84 333t-38-56-14-69zm32 0q0 30 11 56.5t30.5 46 46 30.5 56.5 11 56-11 45.5-30.5 31-46T352 208t-11.5-56-31-45.5-45.5-31T208 64t-56.5 11.5-46 31T75 152t-11 56zm128-16v-80h33v80h80v32h-80v81h-33v-81h-80v-32h80z";
+const pathData = "M1 6.5c0-.75.146-1.458.438-2.125a5.655 5.655 0 0 1 1.187-1.75c.5-.5 1.083-.896 1.75-1.188A5.243 5.243 0 0 1 6.5 1c.75 0 1.458.146 2.125.438.667.291 1.25.687 1.75 1.187s.896 1.083 1.188 1.75C11.854 5.042 12 5.75 12 6.5a5.11 5.11 0 0 1-.266 1.656 6.805 6.805 0 0 1-.703 1.469l3.656 3.688a.907.907 0 0 1 .313.703.907.907 0 0 1-.313.703A.935.935 0 0 1 14 15c-.25 0-.49-.094-.719-.281L9.625 11.03c-.896.647-1.938.97-3.125.97a5.41 5.41 0 0 1-2.125-.422 5.437 5.437 0 0 1-1.75-1.172c-.5-.5-.896-1.083-1.188-1.75A5.32 5.32 0 0 1 1 6.5Zm1 0c0 .625.115 1.214.344 1.766.229.552.547 1.03.953 1.437.406.406.885.724 1.437.953A4.56 4.56 0 0 0 6.5 11a4.446 4.446 0 0 0 3.172-1.297 4.6 4.6 0 0 0 .969-1.437C10.88 7.714 11 7.125 11 6.5s-.12-1.208-.36-1.75a4.652 4.652 0 0 0-.968-1.422A4.651 4.651 0 0 0 8.25 2.36 4.277 4.277 0 0 0 6.5 2c-.625 0-1.214.12-1.766.36a4.6 4.6 0 0 0-1.437.968A4.431 4.431 0 0 0 2 6.5ZM6 6V3.5h1.031V6h2.5v1h-2.5v2.531H6V7H3.5V6H6Z";
 const ltr = false;
 const accData = ICON_ZOOM_IN;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v4";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, accData, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, accData, collection, packageName });
 
 export default "SAP-icons-v4/zoom-in";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

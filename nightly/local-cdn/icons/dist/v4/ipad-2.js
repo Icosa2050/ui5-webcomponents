@@ -2,13 +2,14 @@ import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icon
 import { ICON_IPAD } from "../generated/i18n/i18n-defaults.js";
 
 const name = "ipad-2";
-const pathData = "M32 448q-13 0-22.5-9.5T0 416V96q0-14 9.5-23T32 64h448q14 0 23 9t9 23v320q0 13-9 22.5t-23 9.5H32zm64-32h352V96H96v320zM56 232q-10 0-17 7t-7 17 7 17 17 7q11 0 17.5-7t6.5-17-6.5-17-17.5-7z";
+const pathData = "M1 14a.961.961 0 0 1-.703-.297A.961.961 0 0 1 0 13V3c0-.292.099-.531.297-.719A.988.988 0 0 1 1 2h14c.292 0 .531.094.719.281A.973.973 0 0 1 16 3v10c0 .27-.094.505-.281.703A.947.947 0 0 1 15 14H1Zm2-1h11V3H3v10ZM1.75 7.25a.723.723 0 0 0-.531.219A.723.723 0 0 0 1 8c0 .208.073.385.219.531a.723.723 0 0 0 .531.219.71.71 0 0 0 .547-.219A.752.752 0 0 0 2.5 8a.752.752 0 0 0-.203-.531.71.71 0 0 0-.547-.219Z";
 const ltr = false;
 const accData = ICON_IPAD;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v4";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, accData, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, accData, collection, packageName });
 
 export default "SAP-icons-v4/ipad-2";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

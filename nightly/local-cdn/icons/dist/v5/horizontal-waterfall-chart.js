@@ -1,13 +1,14 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "horizontal-waterfall-chart";
-const pathData = "M454 429q11 0 18.5 7t7.5 18-7.5 18.5T454 480H58q-11 0-18.5-7.5T32 454V58q0-11 7.5-18.5T58 32t18 7.5T83 58v371h371zM154 115q-11 0-18.5-7T128 90t7.5-18.5T154 64h300q11 0 18.5 7.5T480 90t-7.5 18-18.5 7H154zm300 45q11 0 18.5 7.5T480 186t-7.5 18-18.5 7h-44q-11 0-18.5-7t-7.5-18 7.5-18.5T410 160h44zm-96 64q11 0 18.5 7.5T384 250t-7.5 18-18.5 7H250q-11 0-18.5-7t-7.5-18 7.5-18.5T250 224h108zM154 384q-11 0-18.5-7.5T128 358t7.5-18 18.5-7h108q11 0 18.5 7t7.5 18-7.5 18.5T262 384H154z";
+const pathData = "M1.75 1a.75.75 0 0 1 .75.75v11.5c0 .138.112.25.25.25h11.5a.75.75 0 0 1 0 1.5H2.75A1.75 1.75 0 0 1 1 13.25V1.75A.75.75 0 0 1 1.75 1Zm6.5 9a.75.75 0 0 1 0 1.5h-3.5a.75.75 0 0 1 0-1.5h3.5Zm3-3a.75.75 0 0 1 0 1.5h-3.5a.75.75 0 0 1 0-1.5h3.5Zm3-2a.75.75 0 0 1 0 1.5h-1.5a.75.75 0 0 1 0-1.5h1.5Zm0-3a.75.75 0 0 1 0 1.5h-9.5a.75.75 0 0 1 0-1.5h9.5Z";
 const ltr = true;
 const accData = null;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v5";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, collection, packageName });
 
 export default "SAP-icons-v5/horizontal-waterfall-chart";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

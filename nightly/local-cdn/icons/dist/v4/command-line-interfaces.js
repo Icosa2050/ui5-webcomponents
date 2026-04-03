@@ -1,13 +1,14 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "command-line-interfaces";
-const pathData = "M8.982 86.83Q0 77.848 0 64.374t8.982-22.456q9.981-9.98 22.956-9.98t22.955 9.98l191.626 191.626Q255.5 242.526 255.5 256t-8.982 22.456L55.89 471.08q-9.98 9.98-22.955 9.98t-21.957-9.98q-9.98-8.983-9.98-21.957t9.98-22.955l156.694-158.69q11.976-11.977 0-22.956zm471.08 328.36q13.973 0 22.956 8.982T512 447.127q0 12.974-8.982 22.456t-22.956 9.481H256.5q-12.975 0-22.456-9.481t-9.482-22.456q0-13.973 9.482-22.955t22.456-8.983h223.563z";
+const pathData = "M.28 2.711a.949.949 0 0 1-.28-.7c0-.28.093-.513.28-.7A.986.986 0 0 1 .997 1c.27 0 .509.104.717.311l5.982 5.973c.187.187.28.42.28.7 0 .28-.093.514-.28.7L1.745 14.69a.986.986 0 0 1-.717.311.888.888 0 0 1-.685-.311.886.886 0 0 1-.312-.685.98.98 0 0 1 .312-.715l4.891-4.947c.25-.249.25-.487 0-.715L.28 2.71ZM15.003 13.01c.29 0 .53.093.717.28.187.187.28.425.28.715 0 .27-.093.503-.28.7a.944.944 0 0 1-.717.296h-6.98a.959.959 0 0 1-.7-.296.956.956 0 0 1-.296-.7c0-.29.099-.528.296-.715a.986.986 0 0 1 .7-.28h6.98Z";
 const ltr = false;
 const accData = null;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v4";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, collection, packageName });
 
 export default "SAP-icons-v4/command-line-interfaces";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

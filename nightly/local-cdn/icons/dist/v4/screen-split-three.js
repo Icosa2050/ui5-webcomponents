@@ -1,13 +1,14 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "screen-split-three";
-const pathData = "M64 32h384q13 0 22.5 9t9.5 23v384q0 13-9.5 22.5T448 480H64q-14 0-23-9.5T32 448V64q0-14 9-23t23-9zm128 416h128V64H192v384zm160 0h96V64h-96v384zm-192 0V64H64v384h96z";
+const pathData = "M2 1h12c.27 0 .505.094.703.281A.947.947 0 0 1 15 2v12c0 .27-.099.505-.297.703A.961.961 0 0 1 14 15H2a.947.947 0 0 1-.719-.297A.988.988 0 0 1 1 14V2c0-.292.094-.531.281-.719A.973.973 0 0 1 2 1Zm4 13h4V2H6v12Zm5 0h3V2h-3v12Zm-6 0V2H2v12h3Z";
 const ltr = false;
 const accData = null;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v4";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, collection, packageName });
 
 export default "SAP-icons-v4/screen-split-three";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

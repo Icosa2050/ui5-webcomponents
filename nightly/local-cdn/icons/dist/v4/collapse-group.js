@@ -2,13 +2,14 @@ import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icon
 import { ICON_COLLAPSE_GROUP } from "../generated/i18n/i18n-defaults.js";
 
 const name = "collapse-group";
-const pathData = "M267.5 120q-12-11-23 0l-159 157q-10 10-23 10t-22-10q-10-9-10-22t10-23l193-191q9-9 22.5-9t22.5 9l192 192q10 10 10 23t-10 23q-9 9-22.5 9t-22.5-9zm0 193q-12-11-23 0l-159 157q-10 10-23 10t-22-10q-10-9-10-22t10-23l193-191q9-9 22.5-9t22.5 9l192 192q10 10 10 23t-10 23q-9 9-22.5 9t-22.5-9z";
+const pathData = "M8.373 3.744c-.249-.229-.487-.229-.715 0L2.71 8.639a.983.983 0 0 1-.715.312.885.885 0 0 1-.685-.312.889.889 0 0 1-.31-.686c0-.27.104-.51.311-.717l6.005-5.955a.949.949 0 0 1 .7-.281c.28 0 .513.094.7.28l5.973 5.987a.987.987 0 0 1 .311.717.99.99 0 0 1-.311.718.949.949 0 0 1-.7.28.949.949 0 0 1-.7-.28L8.373 3.744Zm0 6.018c-.249-.229-.487-.229-.715 0L2.71 14.657a.982.982 0 0 1-.715.312.885.885 0 0 1-.685-.312.889.889 0 0 1-.311-.686c0-.27.104-.51.311-.717l6.005-5.956a.949.949 0 0 1 .7-.28c.28 0 .513.093.7.28l5.973 5.987a.987.987 0 0 1 .311.717c0 .27-.104.51-.311.717a.949.949 0 0 1-.7.281.949.949 0 0 1-.7-.28L8.373 9.761Z";
 const ltr = false;
 const accData = ICON_COLLAPSE_GROUP;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v4";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, accData, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, accData, collection, packageName });
 
 export default "SAP-icons-v4/collapse-group";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

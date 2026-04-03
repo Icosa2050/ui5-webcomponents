@@ -37,6 +37,9 @@ import selectCss from "./generated/themes/Select.css.js";
 import ResponsivePopoverCommonCss from "./generated/themes/ResponsivePopoverCommon.css.js";
 import ValueStateMessageCss from "./generated/themes/ValueStateMessage.css.js";
 import SelectPopoverCss from "./generated/themes/SelectPopover.css.js";
+const isPrintableCharacter = (e) => {
+    return e.key.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey;
+};
 /**
  * @class
  *
@@ -380,16 +383,22 @@ let Select = Select_1 = class Select extends UI5Element {
         }
         else if (isEnd(e)) {
             this._handleEndKey(e);
+            // When focus is on the list item, Enter triggers _handleItemPress via the List item-click
+            // event, which already calls _handleSelectionChange and prevents default.
+            // Skip here to avoid a double selection change.
         }
-        else if (isEnter(e)) {
+        else if (isEnter(e) && !e.defaultPrevented) {
             this._handleSelectionChange();
         }
         else if (isUp(e) || isDown(e)) {
             this._handleArrowNavigation(e);
         }
+        else if (isPrintableCharacter(e)) {
+            this._handleKeyboardNavigation(e);
+        }
     }
     _handleKeyboardNavigation(e) {
-        if (isEnter(e) || this.readonly) {
+        if (this.readonly) {
             return;
         }
         const typedCharacter = e.key.toLowerCase();
@@ -580,9 +589,9 @@ let Select = Select_1 = class Select extends UI5Element {
     _applyFocusToSelectedItem() {
         this.options.forEach(option => {
             option.focused = option.selected;
-            if (option.focused && isPhone()) {
-                // on phone, the popover opens full screen (dialog)
-                // move focus to option to read out dialog header
+            if (option.focused) {
+                // move focus to the selected option so screen readers
+                // can announce it when the popover opens
                 option.focus();
             }
         });

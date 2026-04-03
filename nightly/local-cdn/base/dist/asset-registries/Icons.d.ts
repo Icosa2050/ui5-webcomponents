@@ -10,6 +10,7 @@ type CollectionData = {
         path?: string;
         paths?: Array<string>;
         ltr?: boolean;
+        viewBox?: string;
         acc?: I18nText;
     }>;
 };

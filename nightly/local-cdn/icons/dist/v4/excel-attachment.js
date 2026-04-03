@@ -1,13 +1,14 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "excel-attachment";
-const pathData = "M512 384H192V160h320v224zM0 480V128L128 0h224q13 0 22.5 9t9.5 23v96h-32V32H160v96q0 14-9.5 23t-23.5 9H32v320h320v-64h32v64q0 14-9 23t-23 9H32q-14 0-23-9t-9-23zm224-193v65h65v-65h-65zm192 65h64v-65h-64v65zm-192-97h65v-63h-65v63zm97 97h63v-65h-63v65zm159-97v-63h-64v63h64zm-159 0h63v-63h-63v63z";
+const pathData = "M16 12H6V5h10v7ZM0 15V4l4-4h7c.27 0 .505.094.703.281A.947.947 0 0 1 12 1v3h-1V1H5v3a.947.947 0 0 1-.297.719A1.027 1.027 0 0 1 3.97 5H1v10h10v-2h1v2a.974.974 0 0 1-.281.719A.974.974 0 0 1 11 16H1a.973.973 0 0 1-.719-.281A.974.974 0 0 1 0 15Zm7-6.031V11h2.031V8.969H7ZM13 11h2V8.969h-2V11ZM7 7.969h2.031V6H7v1.969ZM10.031 11H12V8.969h-1.969V11ZM15 7.969V6h-2v1.969h2Zm-4.969 0H12V6h-1.969v1.969Z";
 const ltr = false;
 const accData = null;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v4";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, collection, packageName });
 
 export default "SAP-icons-v4/excel-attachment";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

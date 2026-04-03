@@ -2,13 +2,14 @@ import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icon
 import { ICON_SYNCHRONIZE } from "../generated/i18n/i18n-defaults.js";
 
 const name = "synchronize";
-const pathData = "M26 192q-11 0-18.5-7.5T0 166q0-2 1-6t5-12q17-33 42.5-60.5t58-47 70-30T254 0q60 0 113.5 23.5T461 90V58q0-11 7-18.5t18-7.5 18.5 7.5T512 58v108q0 11-7.5 18.5T486 192H378q-11 0-18.5-7.5T352 166t7.5-18 18.5-7h59q-33-43-81-66.5T254 51q-66 0-121 34t-84 93q-8 14-23 14zm460 128q11 0 18.5 7.5T512 346q0 2-1 6t-5 12q-16 33-42.5 60.5t-59 47-70 30T258 512q-60 0-113.5-23.5T51 422v32q0 11-7 18.5T26 480t-18.5-7.5T0 454V346q0-11 7.5-18.5T26 320h108q11 0 18.5 7.5T160 346t-7.5 18-18.5 7H75q33 43 81 66.5T258 461q66 0 121-34t84-93q8-14 23-14z";
+const pathData = "M4.25 10a.75.75 0 0 1 0 1.5H2.118c1.409 1.823 3.647 3 5.882 3 2.754 0 5.345-1.543 6.575-4.077a.75.75 0 0 1 1.35.654C14.435 14.147 11.305 16 8 16c-2.435 0-4.821-1.127-6.5-2.917v1.167a.75.75 0 0 1-1.5 0v-3.5A.75.75 0 0 1 .75 10h3.5ZM8 0a8.864 8.864 0 0 1 6.5 2.834V1.75a.75.75 0 0 1 1.5 0v3.5a.75.75 0 0 1-.75.75h-3.5a.75.75 0 0 1 0-1.5h2.179c-1.37-1.887-3.59-3-5.929-3-2.657 0-5.318 1.663-6.585 4.097a.75.75 0 0 1-1.33-.694C1.598 2 4.757 0 8 0Z";
 const ltr = false;
 const accData = ICON_SYNCHRONIZE;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v5";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, accData, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, accData, collection, packageName });
 
 export default "SAP-icons-v5/synchronize";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

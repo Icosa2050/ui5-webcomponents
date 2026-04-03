@@ -1,5 +1,5 @@
 import { isLegacyThemeFamilyAsync } from "@ui5/webcomponents-base/dist/config/Theme.js";
-import { pathData as pathDatav4, ltr, accData } from "./v4/folder-blank.js";
+import { pathData as pathDatav4, ltr, viewBox, accData } from "./v4/folder-blank.js";
 import { pathData as pathDatav5 } from "./v5/folder-blank.js";
 
 const getPathData = async() => {
@@ -7,4 +7,4 @@ const getPathData = async() => {
 };
 
 export default "folder-blank";
-export { getPathData, ltr, accData };
+export { getPathData, ltr, viewBox, accData };

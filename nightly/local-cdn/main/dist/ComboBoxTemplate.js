@@ -12,6 +12,6 @@ export default function ComboBoxTemplate() {
                         _jsx(Icon, { slot: "icon", name: slimArrowDown, tabindex: -1, class: {
                                 "inputIcon": true,
                                 "inputIcon--pressed": this._iconPressed,
-                            }, accessibleName: this._iconAccessibleNameText, onClick: this._arrowClick })] }), ComboBoxPopoverTemplate.call(this)] }));
+                            }, accessibleName: this._iconAccessibleNameText, onMouseDown: this._arrowMouseDown, onClick: this._arrowClick })] }), ComboBoxPopoverTemplate.call(this)] }));
 }
 //# sourceMappingURL=ComboBoxTemplate.js.map

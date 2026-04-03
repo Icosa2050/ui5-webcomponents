@@ -34,6 +34,7 @@ declare abstract class TableRowBase<TCell extends TableCellBase = TableCellBase>
     get _isMultiSelect(): boolean;
     get _hasSelector(): boolean | undefined;
     get _visibleCells(): TCell[];
+    get _firstVisibleCell(): TCell | undefined;
     get _popinCells(): TCell[];
     get _stickyCells(): (HTMLElement | undefined)[];
     get _i18nRowSelector(): string;

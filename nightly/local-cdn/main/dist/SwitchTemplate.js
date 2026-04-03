@@ -12,7 +12,7 @@ export default function SwitchTemplate() {
             "ui5-switch--semantic": this.graphical,
             "ui5-switch--no-label": !(this.graphical || this.textOn || this.textOff),
             "ui5-switch--safari": isSafari(),
-        }, role: "switch", "aria-label": this.ariaLabelText, "aria-checked": this.checked, "aria-disabled": this.effectiveAriaDisabled, "aria-required": this.required, onClick: this._onclick, onKeyUp: this._onkeyup, onKeyDown: this._onkeydown, tabindex: this.effectiveTabIndex, title: this.tooltip, children: [_jsx("div", { class: "ui5-switch-inner", children: _jsx("div", { class: "ui5-switch-track", part: "slider", children: _jsxs("div", { class: "ui5-switch-slider", children: [this.graphical ?
+        }, role: "switch", "aria-label": this.ariaLabelText, "aria-checked": this.checked, "aria-disabled": this.effectiveAriaDisabled, "aria-readonly": this.effectiveAriaReadonly, "aria-required": this.required, onClick: this._onclick, onKeyUp: this._onkeyup, onKeyDown: this._onkeydown, onFocusIn: this._onfocusin, tabindex: this.effectiveTabIndex, title: this.tooltip, children: [_jsx("div", { class: "ui5-switch-inner", children: _jsx("div", { class: "ui5-switch-track", part: "slider", children: _jsxs("div", { class: "ui5-switch-slider", children: [this.graphical ?
                                 _jsxs(_Fragment, { children: [_jsx("span", { class: "ui5-switch-text ui5-switch-text--on", children: _jsx(Icon, { name: acceptIcon, class: "ui5-switch-icon-on" }) }), _jsx("span", { class: "ui5-switch-text ui5-switch-text--off", children: _jsx(Icon, { name: declineIcon, class: "ui5-switch-icon-off" }) })] })
                                 :
                                     _jsx(_Fragment, { children: this.hasNoLabel ?

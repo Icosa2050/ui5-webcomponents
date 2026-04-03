@@ -1,13 +1,14 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "vertical-waterfall-chart";
-const pathData = "M154 384q-11 0-18.5-7.5T128 358V58q0-11 7.5-18.5T154 32t18 7.5 7 18.5v300q0 11-7 18.5t-18 7.5zm96-256q-11 0-18.5-7.5T224 102V58q0-11 7.5-18.5T250 32t18 7.5 7 18.5v44q0 11-7 18.5t-18 7.5zm204 352H58q-11 0-18.5-7.5T32 454V58q0-11 7.5-18.5T58 32t18 7.5T83 58v371h371q11 0 18.5 7t7.5 18-7.5 18.5T454 480zM326 288q-11 0-18-7.5t-7-18.5V122q0-11 7-18.5t18-7.5 18.5 7.5T352 122v140q0 11-7.5 18.5T326 288zm96 64q-11 0-18-7.5t-7-18.5V218q0-11 7-18.5t18-7.5 18.5 7.5T448 218v108q0 11-7.5 18.5T422 352z";
+const pathData = "M1.75 1a.75.75 0 0 1 .75.75v11.5c0 .138.112.25.25.25h11.5a.75.75 0 0 1 0 1.5H2.75A1.75 1.75 0 0 1 1 13.25V1.75A.75.75 0 0 1 1.75 1Zm3 0a.75.75 0 0 1 .75.75v9.5a.75.75 0 0 1-1.5 0v-9.5A.75.75 0 0 1 4.75 1Zm9 5a.75.75 0 0 1 .75.75v3.5a.75.75 0 0 1-1.5 0v-3.5a.75.75 0 0 1 .75-.75Zm-3-3a.75.75 0 0 1 .75.75v4.5a.75.75 0 0 1-1.5 0v-4.5a.75.75 0 0 1 .75-.75Zm-3-2a.75.75 0 0 1 .75.75v1.5a.75.75 0 0 1-1.5 0v-1.5A.75.75 0 0 1 7.75 1Z";
 const ltr = true;
 const accData = null;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v5";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, collection, packageName });
 
 export default "SAP-icons-v5/vertical-waterfall-chart";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

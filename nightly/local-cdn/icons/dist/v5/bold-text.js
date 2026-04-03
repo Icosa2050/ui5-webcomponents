@@ -1,13 +1,14 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "bold-text";
-const pathData = "M364 244q30 16 49 45.5t19 65.5q0 26-10 48.5T395 443t-39.5 27-48.5 10H106q-11 0-18.5-7.5T80 454V58q0-11 7.5-18.5T106 32h169q26 0 48.5 10T363 69t27 39.5 10 48.5-9.5 48-26.5 39zm-233-14h144q31 0 52.5-21.5T349 157q0-31-21.5-52.5T275 83H131v147zm176 199q31 0 52.5-21.5T381 355q0-30-21.5-51.5T307 282H131v147h176z";
+const pathData = "M9.106 1a3.882 3.882 0 0 1 3.883 3.875 3.857 3.857 0 0 1-1.169 2.768A3.877 3.877 0 0 1 14 11.125 3.882 3.882 0 0 1 10.117 15H3.75a.75.75 0 0 1-.75-.75V1.75A.75.75 0 0 1 3.75 1h5.356ZM4.5 13.5h5.617a2.382 2.382 0 0 0 2.383-2.375 2.382 2.382 0 0 0-2.383-2.375H4.5v4.75Zm0-6.25h4.606a2.382 2.382 0 0 0 2.383-2.375A2.382 2.382 0 0 0 9.106 2.5H4.5v4.75Z";
 const ltr = true;
 const accData = null;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v5";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, collection, packageName });
 
 export default "SAP-icons-v5/bold-text";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

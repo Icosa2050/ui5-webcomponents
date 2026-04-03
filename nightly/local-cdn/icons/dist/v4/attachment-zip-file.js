@@ -1,13 +1,14 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "attachment-zip-file";
-const pathData = "M40 128L168 0h96v31h-64v97q0 13-9.5 22t-23.5 9H72v321h368V31h-32V0h32q14 0 23 9t9 23v448q0 13-9 22.5t-23 9.5H72q-13 0-22.5-9.5T40 480V128zm287 264q-30 0-51-22t-21-52q0-8 3-21t7-25l33-81v-31h31v-32h-34V97h34V64h-34V33h34V0h31v33h-31v31h31v33h-31v31h31v32h-31v31h30l36 99 6 28q0 30-22 52t-52 22zm-2-36q15 0 27.5-12.5T365 316q0-14-12-24-10-12-24-12-15 0-27.5 12.5T289 320q0 13 11.5 24.5T325 356z";
+const pathData = "m1 4 4.148-4H8.26v.969H6.185V4c0 .27-.102.5-.308.688-.205.187-.459.28-.761.28H2.037V15h11.926V.969h-1.037V0h1.037c.302 0 .55.094.745.281A.955.955 0 0 1 15 1v14a.97.97 0 0 1-.292.703 1 1 0 0 1-.745.297H2.037a1.02 1.02 0 0 1-.73-.297A.944.944 0 0 1 1 15V4Zm9.3 8.25c-.647 0-1.198-.23-1.652-.688a2.23 2.23 0 0 1-.68-1.624c0-.167.032-.386.097-.657.065-.27.14-.531.227-.781l1.07-2.531V5h1.004V4H9.264v-.969h1.102V2H9.264v-.969h1.102V0h1.004v1.031h-1.004V2h1.004v1.031h-1.004V4h1.004v1h-1.004v.969h.972l1.167 3.093.194.876c0 .624-.238 1.166-.713 1.624a2.347 2.347 0 0 1-1.685.688Zm-.064-1.125c.324 0 .621-.13.891-.39.27-.261.405-.547.405-.86 0-.292-.13-.542-.389-.75-.216-.25-.475-.375-.777-.375-.324 0-.621.13-.891.39-.27.261-.406.547-.406.86 0 .27.125.526.373.766.249.24.513.359.794.359Z";
 const ltr = false;
 const accData = null;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v4";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, collection, packageName });
 
 export default "SAP-icons-v4/attachment-zip-file";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

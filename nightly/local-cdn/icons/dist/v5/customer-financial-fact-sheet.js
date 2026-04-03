@@ -1,13 +1,14 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "customer-financial-fact-sheet";
-const pathData = "M432 128q26 0 45 20t19 46q0 23-14.5 42T445 260v23q0 13-7.5 20.5T419 311t-18-7-7-18v-26h-26q-11 0-18.5-7.5T342 234t7.5-18 18.5-7h64q5 0 9-4t4-11-4-11-9-4h-26q-26 0-45-19t-19-45q0-23 15-41t37-23V26q0-11 7-18.5T419 0t18.5 8.5T445 34v17h25q11 0 18.5 7.5T496 77t-7.5 18-18.5 7h-64q-5 0-8.5 4t-3.5 9 3.5 9 8.5 4h26zm-26 256q11 0 18.5 7.5T432 410v76q0 11-7.5 18.5T406 512H42q-11 0-18.5-7.5T16 486V192q0-10 6-17L165 9q6-9 19-9h94q11 0 18.5 7.5T304 26t-7.5 18-18.5 7h-82l-20 23v67q0 21-15 36t-36 15H75l-8 9v260h314v-51q0-11 7-18.5t18-7.5zM288 240q0 20-14 34t-34 14-34-14-14-34 14-34 34-14 34 14 14 34zM144 385q0-25 20.5-45t49.5-20h52q29 0 49.5 20t20.5 45q0 14-7.5 22.5T310 416H170q-13 0-19.5-8.5T144 385z";
+const pathData = "M8.25 0a.75.75 0 0 1 0 1.5H6.71a.25.25 0 0 0-.19.087L6 2.193V4.25A1.75 1.75 0 0 1 4.25 6H2.738c-.089.104-.238.37-.238.37v7.88c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-2a.75.75 0 0 1 1.5 0v2A1.75 1.75 0 0 1 11.25 16h-8.5A1.75 1.75 0 0 1 1 14.25V6.37c0-.417.15-.821.42-1.139L5.38.611A1.751 1.751 0 0 1 6.71 0h1.54ZM7 10a2.5 2.5 0 0 1 2.5 2.5.5.5 0 0 1-.5.5H5a.515.515 0 0 1-.5-.5A2.5 2.5 0 0 1 7 10Zm6.75-10a.75.75 0 0 1 .75.75v.75h.75a.75.75 0 0 1 0 1.5h-2.317c-.25 0-.433.269-.433.5 0 .243.194.5.45.5h.9c.638 0 1.188.215 1.58.607.78.782.757 2.05-.014 2.801-.25.244-.562.415-.916.509v.833a.75.75 0 0 1-1.5 0V8h-1.25a.75.75 0 0 1 0-1.5h2.1c.312 0 .65-.137.65-.495 0-.362-.33-.505-.65-.505h-.9c-1.16 0-1.95-1.006-1.95-2 0-1.106.87-2 2-2V.75a.75.75 0 0 1 .75-.75ZM7 6a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Z";
 const ltr = true;
 const accData = null;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v5";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, collection, packageName });
 
 export default "SAP-icons-v5/customer-financial-fact-sheet";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

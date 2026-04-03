@@ -1,13 +1,14 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "bbyd-dashboard";
-const pathData = "M454 0q24 0 41 17t17 41v236q0 24-17 41t-41 17H218q-24 0-41-17t-17-41V58q0-24 17-41t41-17h236zm7 58q0-7-7-7H218q-7 0-7 7v236q0 7 7 7h236q7 0 7-7V58zM336 96q11 0 18.5 7.5T362 122v108q0 11-7.5 18.5T336 256t-18.5-7.5T310 230V122q0-11 7.5-18.5T336 96zm-74 32q11 0 18.5 7.5T288 154v76q0 11-7.5 18.5T262 256t-18-7.5-7-18.5v-76q0-11 7-18.5t18-7.5zm-160 32q11 0 18.5 7.5T128 186v108q0 11-7.5 18.5T102 320H26q-11 0-18.5-7.5T0 294V186q0-11 7.5-18.5T26 160h76zm308 0q11 0 18 7.5t7 18.5v44q0 11-7 18.5t-18 7.5-18.5-7.5T384 230v-44q0-11 7.5-18.5T410 160zM77 211H51v58h26v-58zm249 173q11 0 18.5 7.5T352 410v76q0 11-7.5 18.5T326 512H218q-11 0-18.5-7.5T192 486v-76q0-11 7.5-18.5T218 384h108zm-224 0q11 0 18.5 7.5T128 410v76q0 11-7.5 18.5T102 512H26q-11 0-18.5-7.5T0 486v-76q0-11 7.5-18.5T26 384h76zm199 51h-58v26h58v-26z";
+const pathData = "M3.25 11a.75.75 0 0 1 .75.75v3.5a.75.75 0 0 1-.75.75H.75a.75.75 0 0 1-.75-.75v-3.5A.75.75 0 0 1 .75 11h2.5Zm7 1a.75.75 0 0 1 .75.75v2.5a.75.75 0 0 1-.75.75h-4.5a.75.75 0 0 1-.75-.75v-2.5a.75.75 0 0 1 .75-.75h4.5ZM1.5 14.5h1v-2h-1v2Zm5 0h3v-1h-3v1ZM14.24 0C15.211 0 16 .788 16 1.76v7.48A1.76 1.76 0 0 1 14.24 11H6.76A1.76 1.76 0 0 1 5 9.24V1.76C5 .789 5.788 0 6.76 0h7.48ZM3.25 4a.75.75 0 0 1 .75.75v4.5a.75.75 0 0 1-.75.75H.75A.75.75 0 0 1 0 9.25v-4.5A.75.75 0 0 1 .75 4h2.5Zm3.51-2.5a.26.26 0 0 0-.26.26v7.48c0 .143.117.26.26.26h7.48a.26.26 0 0 0 .26-.26V1.76a.26.26 0 0 0-.26-.26H6.76Zm-5.26 7h1v-3h-1v3ZM8.25 4a.75.75 0 0 1 .75.75v2.5a.75.75 0 0 1-1.5 0v-2.5A.75.75 0 0 1 8.25 4Zm2.25-1a.75.75 0 0 1 .75.75v3.5a.75.75 0 0 1-1.5 0v-3.5A.75.75 0 0 1 10.5 3Zm2.25 2a.75.75 0 0 1 .75.75v1.5a.75.75 0 0 1-1.5 0v-1.5a.75.75 0 0 1 .75-.75Z";
 const ltr = false;
 const accData = null;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v5";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, collection, packageName });
 
 export default "SAP-icons-v5/bbyd-dashboard";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

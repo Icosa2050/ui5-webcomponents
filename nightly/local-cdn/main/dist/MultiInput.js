@@ -107,11 +107,11 @@ let MultiInput = MultiInput_1 = class MultiInput extends Input {
         }
     }
     valueHelpMouseDown(e) {
-        const target = e.target;
+        e.preventDefault();
+        this.focus();
         this.closeValueStatePopover();
         this.tokenizer.open = false;
         this._valueHelpIconPressed = true;
-        target.focus();
     }
     _tokenizerFocusOut(e) {
         if (!this.contains(e.relatedTarget) && !this.shadowRoot.contains(e.relatedTarget)) {
@@ -224,6 +224,8 @@ let MultiInput = MultiInput_1 = class MultiInput extends Input {
         this.tokenizerAvailable = this.tokens && this.tokens.length > 0;
         if (this.tokenizer) {
             this.tokenizer.readonly = this.readonly;
+            // Set the CSS variable on the tokenizer element so it's available in the shadow DOM
+            this.tokenizer.style.setProperty("--_ui5-input-icons-count", `${this.iconsCount}`);
         }
     }
     /**

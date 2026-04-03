@@ -20326,7 +20326,7 @@
                 "text": "boolean"
               },
               "default": "false",
-              "description": "Defines if the component is checked.\n\n**Note:** The property can be changed with user interaction,\neither by cliking the component, or by pressing the `Enter` or `Space` key.",
+              "description": "Defines if the component is checked.\n\n**Note:** The property can be changed with user interaction,\neither by clicking the component, or by pressing the `Enter` or `Space` key.",
               "privacy": "public"
             },
             {
@@ -20364,6 +20364,16 @@
               },
               "description": "Determines the name by which the component will be identified upon submission in an HTML form.\n\n**Note:** This property is only applicable within the context of an HTML Form element.",
               "default": "undefined",
+              "privacy": "public"
+            },
+            {
+              "kind": "field",
+              "name": "readonly",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Defines whether the component is in readonly state.\n\n**Note:** A readonly switch cannot be toggled by user interaction,\nbut can still be focused and its value read programmatically.",
               "privacy": "public"
             },
             {
@@ -20446,7 +20456,7 @@
               }
             },
             {
-              "description": "Defines if the component is checked.\n\n**Note:** The property can be changed with user interaction,\neither by cliking the component, or by pressing the `Enter` or `Space` key.",
+              "description": "Defines if the component is checked.\n\n**Note:** The property can be changed with user interaction,\neither by clicking the component, or by pressing the `Enter` or `Space` key.",
               "name": "checked",
               "default": "false",
               "fieldName": "checked",
@@ -20479,6 +20489,15 @@
               "fieldName": "name",
               "type": {
                 "text": "string | undefined"
+              }
+            },
+            {
+              "description": "Defines whether the component is in readonly state.\n\n**Note:** A readonly switch cannot be toggled by user interaction,\nbut can still be focused and its value read programmatically.",
+              "name": "readonly",
+              "default": "false",
+              "fieldName": "readonly",
+              "type": {
+                "text": "boolean"
               }
             },
             {
@@ -21382,6 +21401,36 @@
               "description": "Determines the horizontal alignment of table cells.",
               "default": "undefined",
               "privacy": "public"
+            },
+            {
+              "kind": "field",
+              "name": "merged",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Defines whether the cell is visually merged with the cell directly above it.\n\nThis is useful when consecutive cells in a column have the same value and should visually appear as a single merged cell.\nAlthough the cell is visually merged with the previous one, its content must still be provided for accessibility purposes.\n**Note:** This feature is disabled when cells are rendered as popin, and should remain `false` for interactive cell content.",
+              "privacy": "public"
+            }
+          ],
+          "attributes": [
+            {
+              "description": "Determines the horizontal alignment of table cells.",
+              "name": "horizontal-align",
+              "default": "undefined",
+              "fieldName": "horizontalAlign",
+              "type": {
+                "text": "\"Start\" | \"End\" | \"Center\" | \"Left\" | \"Right\" | undefined"
+              }
+            },
+            {
+              "description": "Defines whether the cell is visually merged with the cell directly above it.\n\nThis is useful when consecutive cells in a column have the same value and should visually appear as a single merged cell.\nAlthough the cell is visually merged with the previous one, its content must still be provided for accessibility purposes.\n**Note:** This feature is disabled when cells are rendered as popin, and should remain `false` for interactive cell content.",
+              "name": "merged",
+              "default": "false",
+              "fieldName": "merged",
+              "type": {
+                "text": "boolean"
+              }
             }
           ],
           "superclass": {
@@ -21395,17 +21444,6 @@
             {
               "name": "default",
               "description": "Defines the content of the component."
-            }
-          ],
-          "attributes": [
-            {
-              "description": "Determines the horizontal alignment of table cells.",
-              "name": "horizontal-align",
-              "default": "undefined",
-              "fieldName": "horizontalAlign",
-              "type": {
-                "text": "\"Start\" | \"End\" | \"Center\" | \"Left\" | \"Right\" | undefined"
-              }
             }
           ]
         }

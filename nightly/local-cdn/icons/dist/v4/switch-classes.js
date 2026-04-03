@@ -1,13 +1,14 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "switch-classes";
-const pathData = "M0 512v-64q0-27 10-50t27.5-40.5 41-27.5 49.5-10h32q-40 0-68-28t-28-68 28-68 68-28 68 28 28 68-28 68-68 28h32q27 0 50 10t40.5 27.5T310 398t10 50v64H0zm32-64v32h256v-32q0-40-28-68t-68-28h-64q-19 0-36.5 7.5t-31 20.5-21 30.5T32 448zM192 96V64h224q14 0 23 9t9 23v320q0 13-9 22.5t-23 9.5h-64v-32h64V96H192zM480 0q14 0 23 9t9 23v352h-32V32H256V0h224zM160 288q27 0 45.5-19t18.5-45q0-27-18.5-45.5T160 160q-26 0-45 18.5T96 224q0 26 19 45t45 19z";
+const pathData = "M0 16v-2c0-.563.104-1.083.313-1.563A4.015 4.015 0 0 1 4 10h1a2.893 2.893 0 0 1-2.125-.874A2.893 2.893 0 0 1 2 7c0-.833.292-1.542.875-2.125A2.893 2.893 0 0 1 5 4c.833 0 1.542.292 2.125.875S8 6.167 8 7s-.292 1.542-.875 2.125A2.893 2.893 0 0 1 5 10h1c.563 0 1.083.104 1.563.313a4.064 4.064 0 0 1 2.125 2.124c.208.48.312 1 .312 1.563v2H0Zm1-2v1h8v-1c0-.833-.292-1.542-.875-2.125A2.893 2.893 0 0 0 6 11H4c-.396 0-.776.078-1.14.234-.365.157-.688.37-.97.641-.28.27-.5.588-.656.953A2.943 2.943 0 0 0 1 14ZM6 3V2h7c.292 0 .531.094.719.281A.973.973 0 0 1 14 3v10c0 .27-.094.505-.281.703A.947.947 0 0 1 13 14h-2v-1h2V3H6Zm9-3c.292 0 .531.094.719.281A.973.973 0 0 1 16 1v11h-1V1H8V0h7ZM5 9c.563 0 1.036-.198 1.422-.594C6.807 8.01 7 7.542 7 7c0-.563-.193-1.036-.578-1.422A1.933 1.933 0 0 0 5 5c-.542 0-1.01.193-1.406.578C3.198 5.964 3 6.438 3 7c0 .542.198 1.01.594 1.406A1.92 1.92 0 0 0 5 9Z";
 const ltr = false;
 const accData = null;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v4";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, collection, packageName });
 
 export default "SAP-icons-v4/switch-classes";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

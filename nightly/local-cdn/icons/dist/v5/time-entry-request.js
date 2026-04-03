@@ -1,13 +1,14 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "time-entry-request";
-const pathData = "M262 461q11 0 18.5 7t7.5 18-7.5 18.5T262 512h-6q-53 0-99.5-20T75 437t-55-81.5T0 256t20-99.5T75 75t81.5-55T256 0q44 0 84 14t73 39 56.5 59.5T503 188q2 5 2 6.5v3.5q0 11-7.5 18.5T479 224q-8 0-15.5-5.5T454 205q-9-34-27.5-62.5t-45-48.5T323 62.5 256 51q-42 0-79.5 16T111 111t-44 65.5T51 256t16 79.5 44 65.5 65.5 44 79.5 16h6zm0-365q11 0 18.5 7.5T288 122v131q0 8-5 15l-77 105q-8 11-20 11-11 0-18.5-7.5T160 358q0-7 5-15l72-98V122q0-11 7-18.5t18-7.5zm224 192q11 0 18.5 7.5T512 314t-7.5 18-18.5 7H378q-11 0-18.5-7t-7.5-18 7.5-18.5T378 288h108zm0 86q11 0 18.5 7.5T512 400t-7.5 18.5T486 426H378q-11 0-18.5-7.5T352 400t7.5-18.5T378 374h108zm0 87q11 0 18.5 7t7.5 18-7.5 18.5T486 512H378q-11 0-18.5-7.5T352 486t7.5-18 18.5-7h108z";
+const pathData = "M8.118 0c3.567 0 6.754 2.331 7.842 5.507a.75.75 0 0 1-1.42.486C13.662 3.43 11.05 1.5 8.118 1.5 4.448 1.5 1.5 4.418 1.5 8s2.948 6.5 6.618 6.5c.535 0 .882.336.882.75s-.287.75-.882.75C3.643 16 0 12.433 0 8s3.643-8 8.118-8Zm7.132 14.5a.75.75 0 0 1 0 1.5h-3.5a.75.75 0 0 1 0-1.5h3.5Zm0-3a.75.75 0 0 1 0 1.5h-3.5a.75.75 0 0 1 0-1.5h3.5Zm-7-8.5a.75.75 0 0 1 .75.75v4.24a.75.75 0 0 1-.298.599l-3 2.263a.75.75 0 0 1-.904-1.197L7.5 7.616V3.75A.75.75 0 0 1 8.25 3Zm6.997 5.5a.75.75 0 0 1 0 1.5H11.75a.75.75 0 0 1 0-1.5h3.497Z";
 const ltr = false;
 const accData = null;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v5";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, collection, packageName });
 
 export default "SAP-icons-v5/time-entry-request";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

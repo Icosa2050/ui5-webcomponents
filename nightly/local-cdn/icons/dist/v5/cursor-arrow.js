@@ -1,13 +1,14 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "cursor-arrow";
-const pathData = "M406 252q10 6 10 20 0 19-19 24l-92 25 49 102q3 6 3 12 0 14-14 23l-41 19q-4 3-11 3-15 0-23-14l-51-106-82 52q-5 4-13 4-11 0-18.5-7.5T96 390V58q0-11 7.5-18.5T122 32q9 0 16 6zm-71 8L147 111v232l85-54q3-3 7-3z";
+const pathData = "m5.217 1.163 8.506 6.752c.487.387.3 1.193-.31 1.323l-3.29.699 1.8 3.492c.19.371.034.84-.342 1.02l-1.001.482a.752.752 0 0 1-.998-.342l-1.807-3.614-2.583 1.886C4.706 13.215 4 12.856 4 12.253V1.752c0-.616.735-.971 1.217-.59Zm.284 9.613 2.626-1.912a.75.75 0 0 1 .22-.084l3.194-.68L5.5 3.305v7.47Z";
 const ltr = false;
 const accData = null;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v5";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, collection, packageName });
 
 export default "SAP-icons-v5/cursor-arrow";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

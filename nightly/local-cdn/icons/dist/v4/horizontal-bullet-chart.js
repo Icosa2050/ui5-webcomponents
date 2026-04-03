@@ -1,13 +1,14 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "horizontal-bullet-chart";
-const pathData = "M104 352h304q8 0 8 8v48q0 8-8 8H104q-8 0-8-8v-48q0-8 8-8zm-8-120q0-8 8-8h240q8 0 8 8v48q0 8-8 8H104q-8 0-8-8v-48zM63 32v448H32V32h31zm33 120v-48q0-8 8-8h143q8 0 8 8v48q0 8-8 8H104q-8 0-8-8zm352 168h32v128h-32V320zm-32-128v128h-31V192h31zM319 64v128h-31V64h31z";
+const pathData = "M3.25 11h9.5c.167 0 .25.083.25.25v1.5c0 .167-.083.25-.25.25h-9.5c-.167 0-.25-.083-.25-.25v-1.5c0-.167.083-.25.25-.25ZM3 7.25c0-.167.083-.25.25-.25h7.5c.167 0 .25.083.25.25v1.5c0 .167-.083.25-.25.25h-7.5C3.083 9 3 8.917 3 8.75v-1.5ZM1.969 1v14H1V1h.969ZM3 4.75v-1.5c0-.167.083-.25.25-.25h4.469c.166 0 .25.083.25.25v1.5c0 .167-.084.25-.25.25H3.25C3.083 5 3 4.917 3 4.75ZM14 10h1v4h-1v-4Zm-1-4v4h-.969V6H13ZM9.969 2v4H9V2h.969Z";
 const ltr = false;
 const accData = null;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v4";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, collection, packageName });
 
 export default "SAP-icons-v4/horizontal-bullet-chart";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

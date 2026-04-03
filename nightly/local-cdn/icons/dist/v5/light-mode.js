@@ -1,13 +1,14 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "light-mode";
-const pathData = "M256 96q-11 0-18.5-7.5T230 70V25q0-11 7.5-18T256 0t18 7 7 18v45q0 11-7 18.5T256 96zm-155 32q-12 0-18-8L51 88q-8-6-8-18 0-10 7.5-17.5T69 45t18 7l32 32q7 7 7 18t-7.5 18.5T101 128zm309 0q-11 0-18.5-7.5T384 102q0-10 8-18l32-32q6-7 18-7 10 0 17.5 7.5T467 70q0 12-7 18l-32 32q-8 8-18 8zM256 384q-27 0-50-10t-40.5-27.5T138 306t-10-50 10-50 27.5-40.5T206 138t50-10 50 10 40.5 27.5T374 206t10 50-10 50-27.5 40.5T306 374t-50 10zm0-205q-32 0-54.5 22.5T179 256t22.5 54.5T256 333t54.5-22.5T333 256t-22.5-54.5T256 179zM71 275H26q-11 0-18.5-7.5T0 249t7.5-18 18.5-7h45q11 0 18 7t7 18-7 18.5-18 7.5zm416 0h-45q-11 0-18.5-7.5T416 249t7.5-18 18.5-7h45q11 0 18 7t7 18-7 18.5-18 7.5zm-45 192q-12 0-18-8l-32-32q-8-6-8-18 0-10 7.5-17.5T410 384t18 7l32 32q7 7 7 18t-7.5 18.5T442 467zm-371 0q-11 0-18.5-7.5T45 441q0-10 8-18l32-32q6-7 18-7 10 0 17.5 7.5T128 409q0 12-7 18l-32 32q-8 8-18 8zm185 45q-11 0-18.5-7t-7.5-18v-46q0-11 7.5-18t18.5-7 18 7 7 18v46q0 11-7 18t-18 7z";
+const pathData = "M8 13a.75.75 0 0 1 .75.75v1.5a.75.75 0 0 1-1.5 0v-1.5A.75.75 0 0 1 8 13Zm-5.28-.78a.75.75 0 1 1 1.06 1.06l-1 1a.75.75 0 1 1-1.06-1.06l1-1Zm9.5 0a.75.75 0 0 1 1.06 0l1 1a.75.75 0 1 1-1.06 1.06l-1-1a.75.75 0 0 1 0-1.06ZM8 4a4 4 0 1 1 0 8 4 4 0 0 1 0-8Zm0 1.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5ZM2.25 7.25a.75.75 0 0 1 0 1.5H.75a.75.75 0 0 1 0-1.5h1.5Zm13 0a.75.75 0 0 1 0 1.5h-1.5a.75.75 0 0 1 0-1.5h1.5ZM1.72 1.72a.75.75 0 0 1 1.06 0l1 1a.75.75 0 1 1-1.06 1.06l-1-1a.75.75 0 0 1 0-1.06Zm11.5 0a.75.75 0 1 1 1.06 1.06l-1 1a.75.75 0 1 1-1.06-1.06l1-1ZM8 0a.75.75 0 0 1 .75.75v1.5a.75.75 0 0 1-1.5 0V.75A.75.75 0 0 1 8 0Z";
 const ltr = false;
 const accData = null;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v5";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, collection, packageName });
 
 export default "SAP-icons-v5/light-mode";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

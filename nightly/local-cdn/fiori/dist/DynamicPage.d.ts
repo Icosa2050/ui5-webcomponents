@@ -140,6 +140,7 @@ declare class DynamicPage extends UI5Element {
     get headerSnapped(): boolean;
     get hasSnappedTitleOnMobile(): number | false | undefined;
     get headerAriaLabel(): string | undefined;
+    get _hidePinButton(): boolean;
     /**
      * Defines if the header is snapped.
      *

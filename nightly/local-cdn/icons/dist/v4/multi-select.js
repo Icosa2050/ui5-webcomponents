@@ -2,13 +2,14 @@ import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icon
 import { ICON_MULTI_SELECT } from "../generated/i18n/i18n-defaults.js";
 
 const name = "multi-select";
-const pathData = "M64 416v64h64v-64H64zm-32 96V384h128v128H32zm60-229l80-96 20 19L92 323l-60-59 20-19zm372-27q16 0 16 16t-16 16H273q-6 0-11-5t-5-11q0-16 16-16h191zm0 192q16 0 16 16t-16 16H273q-6 0-11-5t-5-11q0-16 16-16h191zM92 97l80-97 20 19L92 137 32 78l20-21zm372-32q16 0 16 16t-16 16H273q-6 0-11-5t-5-11q0-16 16-16h191z";
+const pathData = "M2 13v2h2v-2H2Zm-1 3v-4h4v4H1Zm1.875-7.156 2.5-3L6 6.437l-3.125 3.657L1 8.25l.625-.594 1.25 1.188ZM14.5 8c.333 0 .5.167.5.5 0 .333-.167.5-.5.5H8.531a.478.478 0 0 1-.344-.156.478.478 0 0 1-.156-.344c0-.333.167-.5.5-.5H14.5Zm0 6c.333 0 .5.167.5.5 0 .333-.167.5-.5.5H8.531a.478.478 0 0 1-.344-.156.478.478 0 0 1-.156-.344c0-.333.167-.5.5-.5H14.5ZM2.875 3.031 5.375 0 6 .594 2.875 4.28 1 2.438l.625-.657 1.25 1.25Zm11.625-1c.333 0 .5.167.5.5 0 .334-.167.5-.5.5H8.531a.478.478 0 0 1-.344-.156.478.478 0 0 1-.156-.344c0-.333.167-.5.5-.5H14.5Z";
 const ltr = true;
 const accData = ICON_MULTI_SELECT;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v4";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, accData, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, accData, collection, packageName });
 
 export default "SAP-icons-v4/multi-select";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

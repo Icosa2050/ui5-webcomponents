@@ -1,13 +1,14 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "media-pause";
-const pathData = "M358 480h-33q-11 0-18.5-7.5T299 454V58q0-11 7.5-18.5T325 32h33q11 0 18.5 7.5T384 58v396q0 11-7.5 18.5T358 480zm-171 0h-33q-11 0-18.5-7.5T128 454V58q0-11 7.5-18.5T154 32h33q11 0 18.5 7.5T213 58v396q0 11-7.5 18.5T187 480z";
+const pathData = "M5.827 1.004a.75.75 0 0 1 .673.746v12.5a.75.75 0 0 1-.75.75h-1a.75.75 0 0 1-.75-.75V1.75A.75.75 0 0 1 4.75 1l1.077.004Zm5.5 0A.75.75 0 0 1 12 1.75v12.5a.75.75 0 0 1-.75.75h-1a.75.75 0 0 1-.75-.75V1.75a.75.75 0 0 1 .75-.75l1.077.004Z";
 const ltr = false;
 const accData = null;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v5";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, collection, packageName });
 
 export default "SAP-icons-v5/media-pause";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

@@ -1,13 +1,14 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "trip-report";
-const pathData = "M422 96q38 0 64 26t26 64v236q0 38-26 64t-64 26H90q-38 0-64-26T0 422V186q0-38 26-64t64-26h38V58q0-24 17-41t41-17h140q24 0 41 17t17 41v38h38zm-243 0h154V58q0-7-7-7H186q-7 0-7 7v38zm282 90q0-17-11-28t-28-11H90q-17 0-28 11t-11 28v236q0 17 11 28t28 11h332q17 0 28-11t11-28V186zm-253 6q23 0 43.5 9t35.5 24 24 35.5 9 43.5-9 43.5-24 35.5-35.5 24-43.5 9-43.5-9-35.5-24-24-35.5-9-43.5 9-43.5 24-35.5 35.5-24 43.5-9zm182 22q11 0 18.5 7.5T416 240t-7.5 18.5T390 266h-12q-11 0-18.5-7.5T352 240t7.5-18.5T378 214h12zm-121 90q0-18-10-32.5T234 249v44l31 32q4-9 4-21zm-122 0q0 25 18 43t43 18q5 0 10.5-1t10.5-3l-39-39q-8-8-8-18v-55q-15 8-25 22.5T147 304zm243-26q11 0 18.5 7.5T416 304t-7.5 18.5T390 330h-12q-11 0-18.5-7.5T352 304t7.5-18.5T378 278h12zm0 116h-12q-11 0-18.5-7.5T352 368t7.5-18.5T378 342h12q11 0 18.5 7.5T416 368t-7.5 18.5T390 394z";
+const pathData = "M10.249 0c.966 0 1.75.784 1.75 1.75V3h1.251A2.75 2.75 0 0 1 16 5.75v7.5A2.75 2.75 0 0 1 13.25 16H2.75A2.75 2.75 0 0 1 0 13.25v-7.5A2.75 2.75 0 0 1 2.75 3h1.249V1.75c0-.966.784-1.75 1.75-1.75h4.5ZM2.75 4.5c-.69 0-1.25.56-1.25 1.25v7.5c0 .69.56 1.25 1.25 1.25h10.5c.69 0 1.25-.56 1.25-1.25v-7.5c0-.69-.56-1.25-1.25-1.25H2.75ZM6 5.5a4 4 0 1 1 0 8 4 4 0 0 1 0-8Zm6.75 5.5a.75.75 0 0 1 0 1.5h-1a.75.75 0 0 1 0-1.5h1ZM5 7.209a2.5 2.5 0 0 0 1.501 4.74l-1.136-1.47A1.75 1.75 0 0 1 5 9.409v-2.2Zm1.5 2.2a.25.25 0 0 0 .052.153l1.27 1.644A2.487 2.487 0 0 0 8.5 9.5a2.5 2.5 0 0 0-2-2.45v2.36ZM12.75 9a.75.75 0 0 1 0 1.5h-1a.75.75 0 0 1 0-1.5h1Zm0-2a.75.75 0 0 1 0 1.5h-1a.75.75 0 0 1 0-1.5h1ZM5.749 1.5a.25.25 0 0 0-.25.25V3h5V1.75a.25.25 0 0 0-.25-.25h-4.5Z";
 const ltr = false;
 const accData = null;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v5";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, collection, packageName });
 
 export default "SAP-icons-v5/trip-report";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

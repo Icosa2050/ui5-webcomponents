@@ -1,13 +1,14 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "windows-doors";
-const pathData = "M486 64q11 0 18.5 7.5T512 90v176q0 11-7.5 18.5T486 292H303q-11 0-18.5-7.5T277 266V90q0-11 7.5-18.5T303 64h183zm-277 0q11 0 18.5 7.5T235 90v332q0 11-7.5 18.5T209 448H26q-11 0-18.5-7.5T0 422V90q0-11 7.5-18.5T26 64h183zm252 51h-41v37h41v-37zm-133 0v37h41v-37h-41zm-144 0H51v282h133V115zm144 126h41v-38h-41v38zm133 0v-38h-41v38h41zm-324 27q-23 0-23-22t23-22 23 22-23 22z";
+const pathData = "M6.25 2a.75.75 0 0 1 .75.75v10.5a.75.75 0 0 1-.75.75H.75a.75.75 0 0 1-.75-.75V2.75A.75.75 0 0 1 .75 2h5.5ZM1.5 12.5h4v-9h-4v9ZM15.25 2a.75.75 0 0 1 .75.75v6a.75.75 0 0 1-.75.75h-6a.75.75 0 0 1-.75-.75v-6A.75.75 0 0 1 9.25 2h6Zm-11 5a1 1 0 1 1 0 2 1 1 0 0 1 0-2ZM10 8h1.5V6.5H10V8Zm3 0h1.5V6.5H13V8Zm-3-3h1.5V3.5H10V5Zm3 0h1.5V3.5H13V5Z";
 const ltr = false;
 const accData = null;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v5";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, collection, packageName });
 
 export default "SAP-icons-v5/windows-doors";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

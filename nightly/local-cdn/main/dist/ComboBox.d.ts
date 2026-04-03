@@ -333,6 +333,7 @@ declare class ComboBox extends UI5Element implements IFormInputElement {
     _getItemsList(): List;
     _resetFilter(): void;
     _resetItemVisibility(): void;
+    _arrowMouseDown(e: MouseEvent): void;
     _arrowClick(): void;
     _handleMobileKeydown(e: KeyboardEvent): void;
     _handleMobileInput(e: CustomEvent<InputEventDetail>): void;
@@ -361,6 +362,12 @@ declare class ComboBox extends UI5Element implements IFormInputElement {
     _closeRespPopover(e?: Event | null): void;
     _openRespPopover(): void;
     _filterItems(str: string): IComboBoxItem[];
+    /**
+     * Sets the markupText property of an item with highlighted first match.
+     * @param item The ComboBox item to highlight
+     * @private
+     */
+    _highlightItem(item: ComboBoxItem): void;
     _getFirstMatchingItem(current: string): IComboBoxItem | void;
     _applyAtomicValueAndSelection(item: IComboBoxItem, filterValue: string): void;
     _selectMatchingItem(): void;

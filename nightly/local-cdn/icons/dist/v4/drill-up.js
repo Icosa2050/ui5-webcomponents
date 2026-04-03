@@ -2,13 +2,14 @@ import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icon
 import { ICON_DRILL_UP } from "../generated/i18n/i18n-defaults.js";
 
 const name = "drill-up";
-const pathData = "M268 89q-5-5-11.5-5T245 89l-126 97q-11 9-23.5 9.5T74 186q-10-9-10-22.5T74 141L234 10q9-10 22.5-10T279 10l160 129q9 9 9 22.5t-9 22.5q-10 10-22 9.5t-23-9.5zm-2 161q-4-4-9.5-4t-9.5 4l-106 82q-9 8-19.5 8t-18.5-8-8-19 8-19l134-110q8-8 19-8t19 8l135 109q8 8 8 18.5t-8 18.5q-17 17-38 0zm0 149q-9-9-17 0l-95 73q-8 7-17.5 7t-16.5-7-7-17 7-17l120-98q8-8 17.5-8t16.5 8l120 97q7 7 7 16.5t-7 16.5q-15 15-33 0z";
+const pathData = "M3.688 6.762c-.23.188-.47.287-.72.298-.25.01-.478-.09-.687-.298A.957.957 0 0 1 2 6.057c0-.281.094-.516.281-.704l5-4.04A.906.906 0 0 1 7.984 1c.282 0 .516.104.704.313l5 4.102A.91.91 0 0 1 14 6.12a.91.91 0 0 1-.313.705.825.825 0 0 1-.671.297 1.22 1.22 0 0 1-.735-.297L8.344 3.787a.494.494 0 0 0-.719 0L3.687 6.762Zm.687 4.572c-.438.355-.833.355-1.188 0a.796.796 0 0 1 0-1.159l4.22-3.413A.81.81 0 0 1 8 6.512a.81.81 0 0 1 .594.25l4.187 3.445c.167.167.25.365.25.595 0 .23-.083.428-.25.595a.793.793 0 0 1-.578.25.9.9 0 0 1-.61-.25L8.282 8.829a.405.405 0 0 0-.297-.125.405.405 0 0 0-.296.125l-3.313 2.505Zm.344 4.384c-.375.313-.719.313-1.032 0a.708.708 0 0 1-.218-.517c0-.198.073-.37.219-.516l3.75-3.038a.665.665 0 0 1 .515-.25c.198 0 .38.083.547.25l3.75 3.07a.726.726 0 0 1 .219.531.726.726 0 0 1-.219.533.705.705 0 0 1-.516.219.813.813 0 0 1-.546-.22l-2.97-2.285c-.166-.188-.343-.188-.53 0l-2.97 2.223Z";
 const ltr = false;
 const accData = ICON_DRILL_UP;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v4";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, accData, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, accData, collection, packageName });
 
 export default "SAP-icons-v4/drill-up";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

@@ -1,13 +1,14 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "employee-pane";
-const pathData = "M32 448V64q0-14 9.5-23T64 32h384q14 0 23 9t9 23v384q0 14-9 23t-23 9H64q-13 0-22.5-9T32 448zm64 0v-32q0-26 7-49.5t22.5-41 40-27.5 58.5-10h64q35 0 59.5 10t39.5 27.5 22 41 7 49.5v32h32V64H64v384h32zM256 96q40 0 68 28t28 68-28 68-68 28-68-28-28-68 28-68 68-28zM128 448h256v-32q0-96-96-96h-64q-96 0-96 96v32zm64-256q0 27 19 45.5t45 18.5 45-18.5 19-45.5q0-26-19-45t-45-19-45 19-19 45zm64 192h96v32h-96v-32z";
+const pathData = "M1 14V2c0-.292.099-.531.297-.719A.988.988 0 0 1 2 1h12c.292 0 .531.094.719.281A.973.973 0 0 1 15 2v12a.974.974 0 0 1-.281.719A.974.974 0 0 1 14 15H2a.988.988 0 0 1-.703-.281A.947.947 0 0 1 1 14Zm2 0v-1c0-.542.073-1.057.219-1.547.146-.49.38-.916.703-1.281.323-.365.74-.651 1.25-.86C5.682 9.104 6.292 9 7 9h2c.73 0 1.349.104 1.86.313.51.208.921.494 1.234.859.312.364.541.791.687 1.281.146.49.219 1.005.219 1.547v1h1V2H2v12h1ZM8 3c.833 0 1.542.292 2.125.875S11 5.167 11 6s-.292 1.542-.875 2.125A2.893 2.893 0 0 1 8 9a2.893 2.893 0 0 1-2.125-.875A2.893 2.893 0 0 1 5 6c0-.833.292-1.542.875-2.125A2.893 2.893 0 0 1 8 3ZM4 14h8v-1c0-2-1-3-3-3H7c-2 0-3 1-3 3v1Zm2-8c0 .563.198 1.036.594 1.422C6.99 7.807 7.458 8 8 8c.542 0 1.01-.193 1.406-.578C9.802 7.036 10 6.562 10 6a1.92 1.92 0 0 0-.594-1.406A1.922 1.922 0 0 0 8 4a1.92 1.92 0 0 0-1.406.594A1.922 1.922 0 0 0 6 6Zm2 6h3v1H8v-1Z";
 const ltr = false;
 const accData = null;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v4";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, collection, packageName });
 
 export default "SAP-icons-v4/employee-pane";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

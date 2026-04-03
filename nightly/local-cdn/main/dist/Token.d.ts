@@ -70,6 +70,12 @@ declare class Token extends UI5Element implements IToken {
      */
     toBeDeleted: boolean;
     /**
+     * Set by the tokenizer to mark the last visible token before overflow.
+     * @default false
+     * @private
+     */
+    lastVisibleToken: boolean;
+    /**
      * Defines the tabIndex of the component.
      * @private
      */

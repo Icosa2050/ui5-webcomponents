@@ -1,13 +1,14 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "strikethrough";
-const pathData = "M147 197q-9 0-15-6t-9.5-14-5-17.5T116 143q0-23 11-43.5T157 64t44.5-23.5T257 32t56 8.5T358 63t30 32.5 11 38.5q0 17-7.5 25.5T373 168t-18.5-7.5T347 140q0-23-26-40t-64-17q-37 0-63.5 17.5T167 143q0 5 1 9.5t3 10.5q2 4 2 8 0 11-7.5 18.5T147 197zm307 40q11 0 18.5 7t7.5 18-7.5 18.5T454 288h-78q11 15 17 32t6 35q0 28-12.5 51T354 445.5 308.5 471t-51.5 9-51.5-9-45.5-25.5-32-39.5-12-51q0-11 7-18t18-7 18.5 8 7.5 22q0 13 7 25.5t19.5 22 29 15.5 34.5 6q37 0 63.5-22t26.5-52q0-22-14.5-40T293 288H58q-11 0-18.5-7.5T32 262t7.5-18 18.5-7h396z";
+const pathData = "M14.25 7.5a.75.75 0 0 1 0 1.5h-2.508c.47.606.758 1.34.758 2.15 0 2.197-2.079 3.85-4.375 3.85S3.75 13.347 3.75 11.15a.75.75 0 0 1 1.5 0c0 1.164 1.186 2.35 2.875 2.35S11 12.314 11 11.15c0-.883-.655-1.757-1.735-2.15H1.75a.75.75 0 0 1 0-1.5h12.5ZM8.12 1c1.133 0 2.197.327 2.997.907.803.583 1.373 1.455 1.373 2.503a.75.75 0 0 1-1.5 0c0-.461-.245-.92-.755-1.289C9.723 2.75 8.977 2.5 8.12 2.5c-.857 0-1.604.25-2.116.621-.51.37-.754.828-.754 1.29 0 .214.05.38.142.652a.75.75 0 0 1-1.423.474c-.09-.268-.219-.642-.219-1.127 0-1.048.57-1.92 1.373-2.503C5.923 1.327 6.987 1 8.12 1Z";
 const ltr = false;
 const accData = null;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v5";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, collection, packageName });
 
 export default "SAP-icons-v5/strikethrough";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

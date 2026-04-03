@@ -1,13 +1,14 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "chevron-phase-2";
-const pathData = "M508 243q4 5 4 13t-4 13l-87 142q-23 37-65 37H26q-11 0-18.5-7.5T0 422q0-8 4-13l94-153L4 103q-4-5-4-13 0-11 7.5-18.5T26 64h330q42 0 65 37z";
+const pathData = "M11.195 2.013a1.75 1.75 0 0 1 1.214.72l3.451 4.831a.75.75 0 0 1 0 .872l-3.45 4.832a1.75 1.75 0 0 1-1.425.732H.75c-.598 0-.958-.699-.61-1.185L3.578 8 .14 3.186C-.208 2.699.152 2 .75 2l10.445.013Z";
 const ltr = false;
 const accData = null;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v5";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, collection, packageName });
 
 export default "SAP-icons-v5/chevron-phase-2";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

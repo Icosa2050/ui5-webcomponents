@@ -72,6 +72,12 @@ let Token = Token_1 = class Token extends UI5Element {
          */
         this.toBeDeleted = false;
         /**
+         * Set by the tokenizer to mark the last visible token before overflow.
+         * @default false
+         * @private
+         */
+        this.lastVisibleToken = false;
+        /**
          * Defines the tabIndex of the component.
          * @private
          */
@@ -158,6 +164,9 @@ __decorate([
 __decorate([
     property({ type: Boolean })
 ], Token.prototype, "toBeDeleted", void 0);
+__decorate([
+    property({ type: Boolean })
+], Token.prototype, "lastVisibleToken", void 0);
 __decorate([
     property({ noAttribute: true })
 ], Token.prototype, "forcedTabIndex", void 0);

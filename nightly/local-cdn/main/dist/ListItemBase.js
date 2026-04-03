@@ -107,10 +107,41 @@ let ListItemBase = class ListItemBase extends UI5Element {
         }
     }
     _onclick(e) {
-        if (this.getFocusDomRef().matches(":has(:focus-within)")) {
+        if (this.getFocusDomRef().matches(":has(:focus-within)") || this._isDisabledInteractiveContentClicked(e)) {
             return;
         }
         this.fireItemPress(e);
+    }
+    _isDisabledInteractiveContentClicked(e) {
+        const path = e.composedPath();
+        const focusDomRef = this.getFocusDomRef();
+        return path.some(target => {
+            if (!(target instanceof HTMLElement)) {
+                return false;
+            }
+            if (target === this || target === focusDomRef) {
+                return false;
+            }
+            if (!this._isNativeInteractiveElement(target) && !this._isCustomInteractiveElement(target)) {
+                return false;
+            }
+            return this._isElementDisabled(target);
+        });
+    }
+    _isNativeInteractiveElement(target) {
+        return target.matches("button, input, select, textarea");
+    }
+    _isCustomInteractiveElement(target) {
+        const targetWithDisabled = target;
+        return target.tagName.includes("-")
+            && ("disabled" in targetWithDisabled || target.hasAttribute("aria-disabled"));
+    }
+    _isElementDisabled(target) {
+        const targetWithDisabled = target;
+        if (typeof targetWithDisabled.disabled === "boolean") {
+            return targetWithDisabled.disabled;
+        }
+        return target.getAttribute("aria-disabled") === "true";
     }
     /**
      * Override from subcomponent, if needed

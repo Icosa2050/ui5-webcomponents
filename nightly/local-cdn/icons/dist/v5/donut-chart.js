@@ -1,13 +1,14 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "donut-chart";
-const pathData = "M256 0q53 0 100 20t81.5 54.5T492 156t20 100-20 100-54.5 81.5T356 492t-100 20-100-20-81.5-54.5T20 356 0 256t20-100 54.5-81.5T156 20 256 0zm202 224q-5-35-21-65t-40.5-52.5-55.5-37T275 52v77q38 6 66.5 32t38.5 63h78zM51 256q0 38 13 72t36 61 55 45 69 24v-78q-42-11-69-45t-27-79 27-79 69-45V54q-37 6-69 24t-55 45-36 61-13 72zm205 77q32 0 54.5-22.5T333 256t-22.5-54.5T256 179t-54.5 22.5T179 256t22.5 54.5T256 333zm19 127q37-3 69.5-18.5t57-40 40-57T460 275h-77q-7 42-36.5 71.5T275 383v77z";
+const pathData = "M8 0a8 8 0 0 1 8 8c0 4.418-3.654 8.004-8.072 8.004C3.573 16.004 0 12.359 0 8a8 8 0 0 1 8-8Zm3.968 8.5a4 4 0 0 1-3.47 3.468c.002.419.002 1.676.002 2.51A6.497 6.497 0 0 0 14.479 8.5h-2.511ZM7 1.576a6.502 6.502 0 0 0 0 12.847c0-.819.01-2.547.01-2.547A4.001 4.001 0 0 1 7 4.126v-2.55ZM8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5Zm.5-1.469c1.64.205 2.97 1.4 3.374 2.969h2.549A6.5 6.5 0 0 0 8.5 1.52v2.511Z";
 const ltr = false;
 const accData = null;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v5";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, collection, packageName });
 
 export default "SAP-icons-v5/donut-chart";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

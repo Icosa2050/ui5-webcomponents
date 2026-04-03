@@ -5,10 +5,17 @@ import getThemeDesignerTheme from "../theming/getThemeDesignerTheme.js";
 import { DEFAULT_THEME, SUPPORTED_THEMES } from "../generated/AssetParameters.js";
 import { boot, isBooted } from "../Boot.js";
 import { attachConfigurationReset } from "./ConfigurationReset.js";
+import { fireConfigChange, attachConfigChange, getSharedValue } from "./ConfigurationSync.js";
 let curTheme;
 let curBaseTheme;
 attachConfigurationReset(() => {
     curTheme = undefined;
+});
+attachConfigChange("theme", (theme) => {
+    curTheme = theme;
+    if (isBooted()) {
+        applyTheme(curTheme).then(() => reRenderAllUI5Elements({ themeAware: true }));
+    }
 });
 /**
  * Returns the current theme.
@@ -17,7 +24,7 @@ attachConfigurationReset(() => {
  */
 const getTheme = () => {
     if (curTheme === undefined) {
-        curTheme = getConfiguredTheme();
+        curTheme = getSharedValue("theme") ?? getConfiguredTheme();
     }
     return curTheme;
 };
@@ -32,6 +39,7 @@ const setTheme = async (theme) => {
         return;
     }
     curTheme = theme;
+    fireConfigChange("theme", theme);
     if (isBooted()) {
         // Update CSS Custom Properties
         await applyTheme(curTheme);

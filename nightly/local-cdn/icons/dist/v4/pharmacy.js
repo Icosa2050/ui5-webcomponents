@@ -1,13 +1,14 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "pharmacy";
-const pathData = "M64 224q0-42 27-69t69-27V96h-32q-14 0-23-9t-9-23V32q0-14 9-23t23-9h256q14 0 23 9t9 23v32q0 14-9 23t-23 9h-32v32q42 0 69 27t27 69v256q0 14-9 23t-23 9H96q-14 0-23-9t-9-23V224zm32 0v256h320V224q0-26-19-45t-45-19h-32V96H192v64h-32q-26 0-45 19t-19 45zm64 64h64v-64h64v64h64v64h-64v64h-64v-64h-64v-64zM384 64V32H128v32h256z";
+const pathData = "M2 7c0-.875.281-1.594.844-2.156C3.406 4.28 4.125 4 5 4V3H4a.973.973 0 0 1-.719-.281A.973.973 0 0 1 3 2V1c0-.292.094-.531.281-.719A.973.973 0 0 1 4 0h8c.292 0 .531.094.719.281A.973.973 0 0 1 13 1v1a.973.973 0 0 1-.281.719A.974.974 0 0 1 12 3h-1v1c.875 0 1.594.281 2.156.844C13.72 5.406 14 6.125 14 7v8a.974.974 0 0 1-.281.719A.974.974 0 0 1 13 16H3a.973.973 0 0 1-.719-.281A.974.974 0 0 1 2 15V7Zm1 0v8h10V7a1.92 1.92 0 0 0-.594-1.406A1.922 1.922 0 0 0 11 5h-1V3H6v2H5a1.92 1.92 0 0 0-1.406.594A1.922 1.922 0 0 0 3 7Zm2 2h2V7h2v2h2v2H9v2H7v-2H5V9Zm7-7V1H4v1h8Z";
 const ltr = false;
 const accData = null;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v4";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, collection, packageName });
 
 export default "SAP-icons-v4/pharmacy";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

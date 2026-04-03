@@ -1,13 +1,14 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "thing-type";
-const pathData = "M422 96q38 0 64 26t26 64v128q0 37-26 63t-64 26H267l-95 101q-8 8-18 8-11 0-18.5-7.5T128 486V337l-86 73q-6 6-16 6-11 0-18.5-7.5T0 390V90q0-38 26-64T90 0h204q38 0 64 26t26 64v6h38zM128 270v-84q0-38 26-64t64-26h115v-6q0-17-11-28t-28-11H90q-17 0-28 11T51 90v245zm333-84q0-17-11-28t-28-11H218q-17 0-28 11t-11 28v236l58-62q8-8 19-8h166q17 0 28-11t11-27V186z";
+const pathData = "M10.083 0A1.92 1.92 0 0 1 12 1.917V4h2.083A1.92 1.92 0 0 1 16 5.917v5.658a1.92 1.92 0 0 1-1.917 1.916H7.411L5.3 15.761A.75.75 0 0 1 4 15.25V9.491h-.589L1.3 11.761A.75.75 0 0 1 0 11.25V1.917A1.92 1.92 0 0 1 1.917 0h8.166ZM5.917 5.5a.42.42 0 0 0-.417.417v7.425l1.034-1.112a.75.75 0 0 1 .549-.239h7a.42.42 0 0 0 .417-.416V5.917a.42.42 0 0 0-.417-.417H5.917Zm-4-4a.42.42 0 0 0-.417.417v7.425L2.534 8.23a.75.75 0 0 1 .549-.239H4V5.917A1.92 1.92 0 0 1 5.917 4H10.5V1.917a.42.42 0 0 0-.417-.417H1.917Z";
 const ltr = false;
 const accData = null;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v5";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, collection, packageName });
 
 export default "SAP-icons-v5/thing-type";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

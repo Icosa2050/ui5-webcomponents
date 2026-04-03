@@ -1,13 +1,14 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "rotate";
-const pathData = "M217 62q7 7 7 18t-7 18l-55 54q-8 8-18 8-11 0-18-7.5t-7-18.5 7-18l11-10H90q-17 0-28 11t-11 27v86q0 11-7 18.5T26 256t-18.5-7.5T0 230v-86q0-37 26-63.5T90 54h47l-11-10q-7-7-7-18t7-18.5T144 0t18 7zm269 130q11 0 18.5 7.5T512 218v268q0 11-7.5 18.5T486 512H218q-11 0-18.5-7.5T192 486V218q0-11 7.5-18.5T218 192h268zm-25 51H243v218h218V243z";
+const pathData = "M14.25 6c.966 0 1.75.783 1.75 1.75v6.5A1.75 1.75 0 0 1 14.25 16h-6.5A1.75 1.75 0 0 1 6 14.25v-6.5C6 6.783 6.784 6 7.75 6h6.5Zm-6.5 1.5a.25.25 0 0 0-.25.25v6.5c0 .138.112.25.25.25h6.5a.25.25 0 0 0 .25-.25v-6.5a.25.25 0 0 0-.25-.25h-6.5ZM3.987.22a.75.75 0 0 1 1.06 0l1.768 1.767a.75.75 0 0 1 0 1.06L5.048 4.816a.75.75 0 1 1-1.06-1.06l.473-.474H2.75c-.69 0-1.25.56-1.25 1.25v2.722a.75.75 0 0 1-1.5 0V4.53a2.75 2.75 0 0 1 2.75-2.75h1.738l-.5-.5a.75.75 0 0 1 0-1.061Z";
 const ltr = false;
 const accData = null;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v5";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, collection, packageName });
 
 export default "SAP-icons-v5/rotate";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

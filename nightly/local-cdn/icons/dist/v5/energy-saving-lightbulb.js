@@ -1,13 +1,14 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "energy-saving-lightbulb";
-const pathData = "M142 48q-14-6-14-22 0-11 7-18.5T153 0q6 0 12 3l205 102q14 8 14 23 0 11-7.5 18.5T358 154q-6 0-11-3zm0 103q-14-8-14-23 0-11 7-18.5t18-7.5q6 0 12 3l205 102q14 9 14 23 0 11-7.5 18.5T358 256q-6 0-11-3zm228 159q14 7 14 23 0 14-14 23l-38 18v80q0 24-16.5 41T275 512h-39q-23 0-40-17t-17-41v-80l-37-18q-14-8-14-23 0-11 7-18.5t18-7.5q6 0 12 3l51 25q14 8 14 23v26h51v-26q0-14 14-23l6-2-159-80q-14-6-14-23 0-11 7-18t18-7q4 0 12 2zm-95 151q6 0 6-7v-19h-51v19q0 7 6 7h39z";
+const pathData = "M4.08 6.915a.75.75 0 0 1 1.005-.336l6.5 3.25a.75.75 0 0 1 0 1.342l-1.085.542v2.537A1.75 1.75 0 0 1 8.75 16h-1.5a1.75 1.75 0 0 1-1.75-1.75v-2.537l-1.085-.542a.75.75 0 0 1 .67-1.342l1.5.75A.75.75 0 0 1 7 11.25V12h2v-.75a.75.75 0 0 1 .415-.67l.158-.08-5.158-2.58a.75.75 0 0 1-.336-1.005ZM7 14.25c0 .138.112.25.25.25h1.5a.25.25 0 0 0 .25-.25v-.75H7v.75ZM4.08 3.665a.75.75 0 0 1 1.005-.336l6.5 3.25a.75.75 0 0 1-.67 1.342l-6.5-3.25a.75.75 0 0 1-.336-1.006Zm0-3.25A.75.75 0 0 1 5.084.079l6.5 3.25a.75.75 0 0 1-.67 1.342l-6.5-3.25A.75.75 0 0 1 4.079.415Z";
 const ltr = false;
 const accData = null;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v5";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, collection, packageName });
 
 export default "SAP-icons-v5/energy-saving-lightbulb";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

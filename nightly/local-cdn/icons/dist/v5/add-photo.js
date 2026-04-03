@@ -2,13 +2,14 @@ import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icon
 import { ICON_ADD_PHOTO } from "../generated/i18n/i18n-defaults.js";
 
 const name = "add-photo";
-const pathData = "M314 138q-11 0-18.5-7.5T288 112t7.5-18.5T314 86h60V26q0-11 7.5-18.5T400 0t18.5 7.5T426 26v60h60q11 0 18.5 7.5T512 112t-7.5 18.5T486 138h-60v60q0 11-7.5 18.5T400 224t-18.5-7.5T374 198v-60h-60zM90 429q11 0 18 7t7 18-7 18.5-18 7.5H58q-24 0-41-17T0 422V186q0-24 17-41t41-17h61l44-54q7-10 20-10h47q11 0 18.5 7.5T256 90t-7.5 18-18.5 7h-34l-40 49q-7 9-13 12t-11 3H58q-7 0-7 7v236q0 7 7 7h32zm22-205q16 0 16 16t-16 16-16-16 16-16zm144 0q27 0 50 10t40.5 27.5T374 302t10 50-10 50-27.5 40.5T306 470t-50 10-50-10-40.5-27.5T138 402t-10-50 10-50 27.5-40.5T206 234t50-10zm0 205q32 0 54.5-22.5T333 352t-22.5-54.5T256 275t-54.5 22.5T179 352t22.5 54.5T256 429zm230-141q11 0 18.5 7.5T512 314v108q0 24-17 41t-41 17h-28q-11 0-18.5-7.5T400 454t7.5-18 18.5-7h28q7 0 7-7V314q0-11 7-18.5t18-7.5z";
+const pathData = "M7.25 1a.75.75 0 0 1 0 1.5H5.875L4.66 4.12a.95.95 0 0 1-.76.38H1.75a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h1.5a.75.75 0 0 1 0 1.5h-1.5A1.75 1.75 0 0 1 0 12.25v-7.5C0 3.784.784 3 1.75 3h1.875l1.22-1.612A1.25 1.25 0 0 1 5.75 1h1.5ZM8 6a4 4 0 1 1 0 8 4 4 0 0 1 0-8Zm7.25 1.602a.75.75 0 0 1 .75.75v3.898A1.75 1.75 0 0 1 14.25 14h-1.502a.75.75 0 0 1 0-1.5h1.502a.25.25 0 0 0 .25-.25V8.352a.75.75 0 0 1 .75-.75ZM8 7.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5ZM3.5 5.75a.75.75 0 1 1 0 1.5.75.75 0 0 1 0-1.5Zm9-5.75a.75.75 0 0 1 .75.75v2l2.077.004a.75.75 0 0 1 0 1.492l-2.077.004v2a.75.75 0 0 1-1.5 0v-2h-2a.75.75 0 0 1 0-1.5h2v-2A.75.75 0 0 1 12.5 0Z";
 const ltr = false;
 const accData = ICON_ADD_PHOTO;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v5";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, accData, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, accData, collection, packageName });
 
 export default "SAP-icons-v5/add-photo";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

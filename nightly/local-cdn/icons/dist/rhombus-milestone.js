@@ -1,5 +1,5 @@
 import { isLegacyThemeFamilyAsync } from "@ui5/webcomponents-base/dist/config/Theme.js";
-import { pathData as pathDatav4, ltr, accData } from "./v4/rhombus-milestone.js";
+import { pathData as pathDatav4, ltr, viewBox, accData } from "./v4/rhombus-milestone.js";
 import { pathData as pathDatav5 } from "./v5/rhombus-milestone.js";
 
 const getPathData = async() => {
@@ -7,4 +7,4 @@ const getPathData = async() => {
 };
 
 export default "rhombus-milestone";
-export { getPathData, ltr, accData };
+export { getPathData, ltr, viewBox, accData };

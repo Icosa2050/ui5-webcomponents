@@ -296,6 +296,7 @@ declare class Button extends UI5Element implements IButton {
         disabled: boolean;
         children: DefaultSlot<Node>;
         type: string;
+        label: string;
     };
     get effectiveAccRoleTranslation(): string;
     get effectiveBadgeDescriptionText(): string;

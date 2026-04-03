@@ -1,13 +1,14 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "insurance-life";
-const pathData = "M67 201v260h84q11 0 18.5 7t7.5 18-7.5 18.5T151 512H42q-11 0-18.5-7.5T16 486V192q0-10 6-17L165 9q6-9 19-9h190q11 0 18.5 7.5T400 26v109q0 11-7.5 18.5T374 161t-18-7.5-7-18.5V51H196l-20 24v66q0 21-15 36t-36 15H75zm301 104q0-20 13.5-34.5T415 256q19 0 34 12t15 35q0 20-13 34.5T417 352q-18 0-33.5-12T368 305zm-64-17q24 0 36 15t12 33-12 33-36 15-36-15-12-33 12-33 36-15zm122 96q15 0 27.5 5.5t22.5 15 15 21.5 5 24q0 15-7.5 22.5T470 480h-37q-3-26-16.5-46.5T385 404q-8-5-8-7 1-7 11-10t15-3h23zm-96 32q29 0 49.5 20t20.5 45q0 15-7.5 23t-18.5 8H234q-11 0-18.5-8t-7.5-23q0-25 20.5-45t49.5-20h52z";
+const pathData = "M11.25 0C12.216 0 13 .784 13 1.75v3.5a.75.75 0 0 1-1.5 0v-3.5a.25.25 0 0 0-.25-.25H6.71a.25.25 0 0 0-.19.087L6 2.193V5.25a.75.75 0 0 1-.75.75H2.738c-.089.104-.238.37-.238.37v7.88c0 .138.112.25.25.25h2.5a.75.75 0 0 1 0 1.5h-2.5A1.75 1.75 0 0 1 1 14.25V6.37c0-.417.15-.821.42-1.139L5.38.611A1.751 1.751 0 0 1 6.71 0h4.54ZM10 13a2.5 2.5 0 0 1 2.5 2.5.5.5 0 0 1-.5.5H8a.515.515 0 0 1-.5-.5A2.5 2.5 0 0 1 10 13Zm3.5-1a2.5 2.5 0 0 1 2.5 2.5.5.5 0 0 1-.5.5h-2.126a4.005 4.005 0 0 0-1.61-2.297A2.499 2.499 0 0 1 13.5 12ZM10 9a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm3.5-1a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Z";
 const ltr = false;
 const accData = null;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v5";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, collection, packageName });
 
 export default "SAP-icons-v5/insurance-life";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

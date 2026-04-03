@@ -2,13 +2,14 @@ import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icon
 import { ICON_FLAG } from "../generated/i18n/i18n-defaults.js";
 
 const name = "flag";
-const pathData = "M422 64q11 0 18.5 7.5T448 90v236q0 14-13 22l-17 10q-47 26-96 26-31 0-53.5-10T220 347q-9-6-23.5-9.5T165 334q-15 0-24 3.5T115 352v134q0 11-7 18.5T90 512t-18.5-7.5T64 486V26q0-11 7.5-18.5T90 0t18 7.5 7 18.5v15q11-4 23-6.5t28-2.5q29 0 50 9t49 26q38 22 73 22 30 0 56-13l17-9q5-3 11-3z";
+const pathData = "M2.75 0a.75.75 0 0 1 .75.75v.564a4.565 4.565 0 0 1 4.191.454c.156.103.328.189.49.284 1.578 1.009 3.183.85 4.768.037a.672.672 0 0 1 .692.026.75.75 0 0 1 .359.64v7.47a.75.75 0 0 1-.37.646v.001c-1.998 1.192-4.256 1.65-6.275.276l-.45-.3c-.993-.67-2.287-.565-3.405.168v4.234a.75.75 0 0 1-1.5 0V.75A.75.75 0 0 1 2.75 0Z";
 const ltr = true;
 const accData = ICON_FLAG;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v5";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, accData, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, accData, collection, packageName });
 
 export default "SAP-icons-v5/flag";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

@@ -1,13 +1,14 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "pull-down";
-const pathData = "M42 261q9-9 22-9 14 0 23 9l139 141q0-2-.5-7.5T225 369t-.5-61.5T224 192h64l-1 210 139-141q9-9 22-9 14 0 23 9 9 10 9 23t-9 22L279 503q-2 0-5 3-2 1-3.5 2t-3.5 2l-5 1q-1 1-6 1-1 0-3.5-.5L245 510q-2-1-2.5-1.5T240 507t-2.5-1.5-2.5-1.5l-1-1h-1L42 306q-10-9-10-22t10-23zm182-133h64v32h-64v-32zm0-64h64v32h-64V64zm64-64v32h-64V0h64z";
+const pathData = "M1.328 8.156a.933.933 0 0 1 .686-.28.97.97 0 0 1 .717.28l4.334 4.397c0-.041-.005-.12-.016-.234-.01-.114-.015-.379-.015-.795 0-.416-.006-1.055-.016-1.918s-.016-2.063-.016-3.602h1.996l-.031 6.55L13.3 8.155a.933.933 0 0 1 .686-.28c.291 0 .53.093.718.28.187.208.28.447.28.717 0 .27-.093.5-.28.686l-5.987 6.144c-.041 0-.093.032-.156.094a1.02 1.02 0 0 0-.109.062.878.878 0 0 1-.109.063l-.156.03c-.02.022-.083.032-.187.032a.66.66 0 0 1-.109-.016l-.234-.046a.36.36 0 0 1-.078-.047.361.361 0 0 0-.078-.047.36.36 0 0 1-.078-.047.358.358 0 0 0-.078-.046l-.03-.032h-.032L1.328 9.56a.888.888 0 0 1-.312-.686c0-.27.104-.51.312-.717Zm5.674-4.148h1.996v.998H7.002v-.998Zm0-1.996h1.996v.998H7.002v-.998ZM8.998.016v.998H7.002V.016h1.996Z";
 const ltr = false;
 const accData = null;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v4";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, collection, packageName });
 
 export default "SAP-icons-v4/pull-down";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

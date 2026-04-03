@@ -1,7 +1,6 @@
 import merge from "./thirdparty/merge.js";
 import { getFeature } from "./FeaturesRegistry.js";
 import { DEFAULT_THEME } from "./generated/AssetParameters.js";
-import validateThemeRoot from "./validateThemeRoot.js";
 import AnimationMode from "./types/AnimationMode.js";
 import { resetConfiguration as resetConfigurationFn } from "./config/ConfigurationReset.js";
 import { getLocationSearch } from "./Location.js";
@@ -32,13 +31,6 @@ const getTheme = () => {
 };
 const getThemeRoot = () => {
     initConfiguration();
-    if (initialConfig.themeRoot === undefined) {
-        return;
-    }
-    if (!validateThemeRoot(initialConfig.themeRoot)) {
-        console.warn(`The ${initialConfig.themeRoot} is not valid. Check the allowed origins as suggested in the "setThemeRoot" description.`); // eslint-disable-line
-        return;
-    }
     return initialConfig.themeRoot;
 };
 const getLanguage = () => {
@@ -128,7 +120,7 @@ const parseURLParameters = () => {
 };
 const normalizeThemeRootParamValue = (value) => {
     const themeRoot = value.split("@")[1];
-    return validateThemeRoot(themeRoot);
+    return themeRoot;
 };
 const normalizeThemeParamValue = (param, value) => {
     if (param === "theme" && value.includes("@")) { // the theme parameter might have @<URL-TO-THEME> in the value - strip this

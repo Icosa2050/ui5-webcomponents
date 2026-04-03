@@ -8,7 +8,7 @@ export default function DynamicPageTemplate() {
 }
 function headerActions() {
     if (!this.hasSnappedTitleOnMobile && this.hasHeading) {
-        return (_jsx(DynamicPageHeaderActions, { snapped: this.headerSnapped, pinned: this.headerPinned, hidePinButton: this.hidePinButton, "onui5-expand-button-click": this.onExpandClick, "onui5-pin-button-click": this.onPinClick, "onui5-expand-button-hover-in": this.onExpandHoverIn, "onui5-expand-button-hover-out": this.onExpandHoverOut }));
+        return (_jsx(DynamicPageHeaderActions, { snapped: this.headerSnapped, pinned: this.headerPinned, hidePinButton: this._hidePinButton, "onui5-expand-button-click": this.onExpandClick, "onui5-pin-button-click": this.onPinClick, "onui5-expand-button-hover-in": this.onExpandHoverIn, "onui5-expand-button-hover-out": this.onExpandHoverOut }));
     }
 }
 //# sourceMappingURL=DynamicPageTemplate.js.map

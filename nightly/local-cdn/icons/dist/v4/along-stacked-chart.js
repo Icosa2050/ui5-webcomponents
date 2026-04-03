@@ -1,13 +1,14 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "along-stacked-chart";
-const pathData = "M224 232q0-8 8-8h144q8 0 8 8v80q0 8-8 8H232q-8 0-8-8v-80zM32 312v-79q0-8 8-8h144q8 0 8 8v79q0 8-8 8H40q-8 0-8-8zm0 160v-80q0-8 8-8h112q8 0 8 8v80q0 8-8 8H40q-8 0-8-8zm320-80q0-8 8-8h112q8 0 8 8v79q0 8-8 8H360q-8 0-8-8v-79zm-96-240V72q0-8 8-8h80q8 0 8 8v80q0 8-8 8h-80q-8 0-8-8zM32 72q0-8 8-8h80q8 0 8 8v80q0 8-8 8H40q-8 0-8-8V72zm192 320q0-8 8-8h80q8 0 8 8v79q0 8-8 8h-80q-8 0-8-8v-79zm192-160q0-8 8-8h48q8 0 8 8v80q0 8-8 8h-48q-8 0-8-8v-80zM168 64h48q8 0 8 8v80q0 8-8 8h-48q-8 0-8-8V72q0-8 8-8z";
+const pathData = "M7 7.25c0-.167.083-.25.25-.25h4.5c.167 0 .25.083.25.25v2.5c0 .167-.083.25-.25.25h-4.5C7.083 10 7 9.917 7 9.75v-2.5Zm-6 2.5V7.281c0-.166.083-.25.25-.25h4.5c.167 0 .25.084.25.25V9.75c0 .167-.083.25-.25.25h-4.5C1.083 10 1 9.917 1 9.75Zm0 5v-2.5c0-.167.083-.25.25-.25h3.5c.167 0 .25.083.25.25v2.5c0 .167-.083.25-.25.25h-3.5c-.167 0-.25-.083-.25-.25Zm10-2.5c0-.167.083-.25.25-.25h3.5c.167 0 .25.083.25.25v2.469c0 .166-.083.25-.25.25h-3.5c-.167 0-.25-.084-.25-.25V12.25Zm-3-7.5v-2.5c0-.167.083-.25.25-.25h2.5c.167 0 .25.083.25.25v2.5c0 .167-.083.25-.25.25h-2.5C8.083 5 8 4.917 8 4.75Zm-7-2.5c0-.167.083-.25.25-.25h2.5c.167 0 .25.083.25.25v2.5c0 .167-.083.25-.25.25h-2.5C1.083 5 1 4.917 1 4.75v-2.5Zm6 10c0-.167.083-.25.25-.25h2.5c.167 0 .25.083.25.25v2.469c0 .166-.083.25-.25.25h-2.5c-.167 0-.25-.084-.25-.25V12.25Zm6-5c0-.167.083-.25.25-.25h1.5c.167 0 .25.083.25.25v2.5c0 .167-.083.25-.25.25h-1.5c-.167 0-.25-.083-.25-.25v-2.5ZM5.25 2h1.5c.167 0 .25.083.25.25v2.5c0 .167-.083.25-.25.25h-1.5C5.083 5 5 4.917 5 4.75v-2.5c0-.167.083-.25.25-.25Z";
 const ltr = false;
 const accData = null;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v4";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, collection, packageName });
 
 export default "SAP-icons-v4/along-stacked-chart";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

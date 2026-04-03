@@ -7,7 +7,9 @@ const loadThemeProperties = async (themeName) => {
         case "sap_fiori_3_hcb": return (await fetch(new URL("../assets/themes/sap_fiori_3_hcb/parameters-bundle.css.json", import.meta.url))).json();
         case "sap_fiori_3_hcw": return (await fetch(new URL("../assets/themes/sap_fiori_3_hcw/parameters-bundle.css.json", import.meta.url))).json();
         case "sap_horizon": return (await fetch(new URL("../assets/themes/sap_horizon/parameters-bundle.css.json", import.meta.url))).json();
+        case "sap_horizon_auto": return (await fetch(new URL("../assets/themes/sap_horizon_auto/parameters-bundle.css.json", import.meta.url))).json();
         case "sap_horizon_dark": return (await fetch(new URL("../assets/themes/sap_horizon_dark/parameters-bundle.css.json", import.meta.url))).json();
+        case "sap_horizon_hc_auto": return (await fetch(new URL("../assets/themes/sap_horizon_hc_auto/parameters-bundle.css.json", import.meta.url))).json();
         case "sap_horizon_hcb": return (await fetch(new URL("../assets/themes/sap_horizon_hcb/parameters-bundle.css.json", import.meta.url))).json();
         case "sap_horizon_hcw": return (await fetch(new URL("../assets/themes/sap_horizon_hcw/parameters-bundle.css.json", import.meta.url))).json();
         default: throw "unknown theme";
@@ -20,6 +22,6 @@ const loadAndCheck = async (themeName) => {
     }
     return data;
 };
-["sap_fiori_3", "sap_fiori_3_dark", "sap_fiori_3_hcb", "sap_fiori_3_hcw", "sap_horizon", "sap_horizon_dark", "sap_horizon_hcb", "sap_horizon_hcw"]
+["sap_fiori_3", "sap_fiori_3_dark", "sap_fiori_3_hcb", "sap_fiori_3_hcw", "sap_horizon", "sap_horizon_auto", "sap_horizon_dark", "sap_horizon_hc_auto", "sap_horizon_hcb", "sap_horizon_hcw"]
     .forEach(themeName => registerThemePropertiesLoader("@" + "u" + "i" + "5" + "/" + "w" + "e" + "b" + "c" + "o" + "m" + "p" + "o" + "n" + "e" + "n" + "t" + "s" + "-" + "c" + "o" + "m" + "p" + "a" + "t", themeName, loadAndCheck, "host"));
 //# sourceMappingURL=Themes-fetch.js.map

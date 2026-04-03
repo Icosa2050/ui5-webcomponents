@@ -1,13 +1,13 @@
 /*!
  * OpenUI5
- * (c) Copyright 2009-2024 SAP SE or an SAP affiliate company.
+ * (c) Copyright 2026 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 // Provides class sap.ui.core.date.Islamic
 import UniversalDate from "./UniversalDate.js";
-import CalendarType from "../CalendarType.js";
 import Log from "../../../base/Log.js";
 import Formatting from "../../../base/i18n/Formatting.js";
+import CalendarType from "../../../base/i18n/date/CalendarType.js";
 import _Calendars from "./_Calendars.js";
 /**
  * The Islamic date class

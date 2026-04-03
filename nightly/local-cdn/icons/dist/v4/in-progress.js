@@ -1,13 +1,14 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "in-progress";
-const pathData = "M342 352q-7 0-13-6l-86-68q-6-6-6-13V147q0-19 19-19t19 19v110l80 63q6 4 6 13 0 8-5.5 13.5T342 352zM32 448V64q0-13 9-22.5T64 32h384q13 0 22.5 9.5T480 64v384q0 14-9.5 23t-22.5 9H64q-14 0-23-9t-9-23zm416 0V64H64v384h384z";
+const pathData = "M10.688 11a.568.568 0 0 1-.407-.188L7.594 8.688a.567.567 0 0 1-.188-.407V4.594C7.406 4.198 7.604 4 8 4c.396 0 .594.198.594.594V8.03l2.5 1.969c.125.083.187.219.187.406a.573.573 0 0 1-.172.422.574.574 0 0 1-.421.172ZM1 14V2c0-.27.094-.505.281-.703A.947.947 0 0 1 2 1h12c.27 0 .505.099.703.297A.961.961 0 0 1 15 2v12a.947.947 0 0 1-.297.719A.988.988 0 0 1 14 15H2a.973.973 0 0 1-.719-.281A.974.974 0 0 1 1 14Zm13 0V2H2v12h12Z";
 const ltr = true;
 const accData = null;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v4";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, collection, packageName });
 
 export default "SAP-icons-v4/in-progress";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

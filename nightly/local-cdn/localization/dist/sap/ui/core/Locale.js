@@ -1,6 +1,6 @@
 /*!
  * OpenUI5
- * (c) Copyright 2009-2024 SAP SE or an SAP affiliate company.
+ * (c) Copyright 2026 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
 //Provides the locale object sap.ui.core.Locale
@@ -19,7 +19,7 @@ var mCache = Object.create(null);
  *
  * @extends sap.ui.base.Object
  * @author SAP SE
- * @version 1.120.17
+ * @version 1.146.0
  * @public
  * @alias sap.ui.core.Locale
  */
@@ -76,7 +76,7 @@ var Locale = BaseObject.extend("sap.ui.core.Locale", /** @lends sap.ui.core.Loca
   /**
    * Get the locale variants as a single string or <code>null</code>.
    *
-   * Multiple variants are separated by a dash '-'.
+   * Multiple variants are separated by a hyphen '-'.
    *
    * @returns {string|null} the variant or <code>null</code>
    * @public
@@ -87,7 +87,7 @@ var Locale = BaseObject.extend("sap.ui.core.Locale", /** @lends sap.ui.core.Loca
   /**
    * Get the locale variants as an array of individual variants.
    *
-   * The separating dashes are not part of the result.
+   * The separating hyphens are not part of the result.
    * If there is no variant section in the locale tag, an empty array is returned.
    *
    * @returns {string[]} the individual variant sections
@@ -100,8 +100,8 @@ var Locale = BaseObject.extend("sap.ui.core.Locale", /** @lends sap.ui.core.Loca
    * Get the locale extension as a single string or <code>null</code>.
    *
    * The extension always consists of a singleton character (not 'x'),
-   * a dash '-' and one or more extension token, each separated
-   * again with a dash.
+   * a hyphen '-' and one or more extension token, each separated
+   * again with a hyphen.
    *
    * Use {@link #getExtensions} to get the individual extension tokens as an array.
    *
@@ -114,7 +114,7 @@ var Locale = BaseObject.extend("sap.ui.core.Locale", /** @lends sap.ui.core.Loca
   /**
    * Get the locale extensions as an array of tokens.
    *
-   * The leading singleton and the separating dashes are not part of the result.
+   * The leading singleton and the separating hyphens are not part of the result.
    * If there is no extensions section in the locale tag, an empty array is returned.
    *
    * @returns {string[]} the individual extension sections
@@ -135,7 +135,7 @@ var Locale = BaseObject.extend("sap.ui.core.Locale", /** @lends sap.ui.core.Loca
   /**
    * Get the locale private use section as an array of tokens.
    *
-   * The leading singleton and the separating dashes are not part of the result.
+   * The leading singleton and the separating hyphens are not part of the result.
    * If there is no private use section in the locale tag, an empty array is returned.
    *
    * @returns {string[]} the tokens of the private use section
@@ -177,7 +177,7 @@ var Locale = BaseObject.extend("sap.ui.core.Locale", /** @lends sap.ui.core.Loca
    * @returns {string} a language code that should
    * @public
    * @since 1.17.0
-   * @deprecated As of 1.44, use {@link sap.ui.core.Configuration#getSAPLogonLanguage} instead
+   * @deprecated As of 1.44, use {@link module:sap/base/i18n/Localization.getSAPLogonLanguage} instead
    *   as that class allows to configure an SAP Logon language.
    */
   getSAPLogonLanguage: function () {

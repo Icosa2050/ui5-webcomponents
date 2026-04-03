@@ -1,13 +1,14 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "per-diem";
-const pathData = "M390 64q38 0 64 26t26 64v12q0 11-7.5 18.5T454 192t-18-7.5-7-18.5v-12q0-17-11-28t-28-11h-6v19q0 11-7.5 18.5T358 160t-18-7.5-7-18.5v-19H179v19q0 11-7 18.5t-18 7.5-18.5-7.5T128 134v-19h-6q-17 0-28 11t-11 28v51h179q11 0 18.5 7t7.5 18-7.5 18.5T262 256H83v166q0 17 11 28t28 11h140q11 0 18.5 7t7.5 18-7.5 18.5T262 512H122q-38 0-64-26t-26-64V154q0-38 26-64t64-26h6V26q0-11 7.5-18.5T154 0t18 7.5 7 18.5v38h154V26q0-11 7-18.5T358 0t18.5 7.5T384 26v38h6zm1 239q-13 0-13 16 0 7 4 10.5t9 3.5h25q26 0 45 19t19 45q0 23-14.5 40T429 459v27q0 11-7.5 18.5T403 512t-18-7.5-7-18.5v-25h-26q-11 0-18.5-7.5T326 435t7.5-18 18.5-7h64q5 0 9-4t4-9-4-9-9-4h-26q-26 0-45-19.5T326 319q0-23 15-42t37-24v-23q0-11 7-18t18-7 18.5 7 7.5 18v22h25q11 0 18.5 7.5T480 278t-7.5 18-18.5 7h-63z";
+const pathData = "M11.25 0a.75.75 0 0 1 .75.75V2c1.583 0 3 1.058 3 2.75v.5a.75.75 0 0 1-1.5 0v-.5c0-.868-.741-1.25-1.5-1.25v.75a.75.75 0 0 1-1.5 0V3.5h-5v.75a.75.75 0 0 1-1.5 0V3.5c-.759 0-1.5.382-1.5 1.25V6h5.75a.75.75 0 0 1 0 1.5H2.5v5.75c0 .69.56 1.25 1.25 1.25h3a.75.75 0 0 1 0 1.5h-3A2.75 2.75 0 0 1 1 13.25v-8.5C1 3.058 2.417 2 4 2V.75a.75.75 0 0 1 1.5 0V2h5V.75a.75.75 0 0 1 .75-.75Zm1.5 6.5a.75.75 0 0 1 .75.75V8h.75a.75.75 0 0 1 0 1.5h-2.317c-.25 0-.433.269-.433.5 0 .243.194.5.45.5h.9c.638 0 1.188.215 1.58.607.78.782.757 2.05-.014 2.801-.25.244-.562.415-.916.509v.833a.75.75 0 0 1-1.5 0v-.75h-1.25a.75.75 0 0 1 0-1.5h2.1c.312 0 .65-.137.65-.495 0-.362-.33-.505-.65-.505h-.9C10.79 12 10 10.994 10 10c0-1.106.848-2 2-2v-.75a.75.75 0 0 1 .75-.75Z";
 const ltr = true;
 const accData = null;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v5";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, collection, packageName });
 
 export default "SAP-icons-v5/per-diem";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

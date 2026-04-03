@@ -1,13 +1,14 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "bookmark";
-const pathData = "M254.444 291.86l-69.728 62.755V73.712h141.447v280.903zM398.879 0v512L254.444 388.482 112 512V0h286.88zm-36.856 36.856H148.856v396.451l105.588-92.638 107.58 92.638V36.856z";
+const pathData = "M7.969 9.12 5.78 11.083v-8.78h4.438v8.779L7.969 9.12ZM12.5 0v16l-4.531-3.86L3.5 16V0h9Zm-1.156 1.152H4.656V13.54l3.313-2.895 3.375 2.895V1.15Z";
 const ltr = false;
 const accData = null;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v4";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, collection, packageName });
 
 export default "SAP-icons-v4/bookmark";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

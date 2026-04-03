@@ -561,6 +561,7 @@ let TimePicker = TimePicker_1 = class TimePicker extends UI5Element {
      * **Note:** an empty string is considered as valid value.
      * @param value The value to be tested against the value format
      * @public
+     * @since 2.21.0
      */
     isValidValue(value) {
         if (value === "") {

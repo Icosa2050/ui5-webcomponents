@@ -63,10 +63,20 @@ let Switch = Switch_1 = class Switch extends UI5Element {
          */
         this.design = "Textual";
         /**
+         * Defines whether the component is in readonly state.
+         *
+         * **Note:** A readonly switch cannot be toggled by user interaction,
+         * but can still be focused and its value read programmatically.
+         * @default false
+         * @public
+         * @since 2.21.0
+         */
+        this.readonly = false;
+        /**
          * Defines if the component is checked.
          *
          * **Note:** The property can be changed with user interaction,
-         * either by cliking the component, or by pressing the `Enter` or `Space` key.
+         * either by clicking the component, or by pressing the `Enter` or `Space` key.
          * @default false
          * @formEvents change
          * @formProperty
@@ -116,12 +126,25 @@ let Switch = Switch_1 = class Switch extends UI5Element {
     get sapNextIcon() {
         return this.checked ? "accept" : "less";
     }
+    _onfocusin() {
+        // Reset keyboard state on focus to prevent stale state from previous interactions
+        this._cancelAction = false;
+        this._isSpacePressed = false;
+    }
     _onclick() {
+        if (this.readonly) {
+            return;
+        }
         this.toggle();
     }
     _onkeydown(e) {
         if (isSpace(e)) {
             e.preventDefault();
+        }
+        if (this.readonly) {
+            return;
+        }
+        if (isSpace(e)) {
             this._isSpacePressed = true;
         }
         else if (isShift(e) || isEscape(e)) {
@@ -132,6 +155,9 @@ let Switch = Switch_1 = class Switch extends UI5Element {
         }
     }
     _onkeyup(e) {
+        if (this.readonly) {
+            return;
+        }
         const isSpaceKey = isSpace(e);
         const isCancelKey = isShift(e) || isEscape(e);
         if (isSpaceKey || isSpaceShift(e)) {
@@ -151,7 +177,7 @@ let Switch = Switch_1 = class Switch extends UI5Element {
         }
     }
     toggle() {
-        if (!this.disabled) {
+        if (!this.disabled && !this.readonly) {
             this.checked = !this.checked;
             const changePrevented = !this.fireDecoratorEvent("change");
             // Angular two way data binding;
@@ -189,6 +215,9 @@ let Switch = Switch_1 = class Switch extends UI5Element {
     get effectiveTabIndex() {
         return this.disabled ? undefined : 0;
     }
+    get effectiveAriaReadonly() {
+        return this.readonly ? "true" : undefined;
+    }
     get effectiveAriaDisabled() {
         return this.disabled ? "true" : undefined;
     }
@@ -199,6 +228,9 @@ let Switch = Switch_1 = class Switch extends UI5Element {
 __decorate([
     property()
 ], Switch.prototype, "design", void 0);
+__decorate([
+    property({ type: Boolean })
+], Switch.prototype, "readonly", void 0);
 __decorate([
     property({ type: Boolean })
 ], Switch.prototype, "checked", void 0);

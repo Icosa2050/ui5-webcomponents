@@ -1,10 +1,11 @@
 /*!
  * OpenUI5
- * (c) Copyright 2009-2024 SAP SE or an SAP affiliate company.
+ * (c) Copyright 2026 SAP SE or an SAP affiliate company.
  * Licensed under the Apache License, Version 2.0 - see LICENSE.txt.
  */
-import Configuration from "../Configuration.js";
-import TimezoneUtil from "../format/TimezoneUtil.js";
+import Log from "../../../base/Log.js";
+import Localization from "../../../base/i18n/Localization.js";
+import TimezoneUtils from "../../../base/i18n/date/TimezoneUtils.js";
 var aAllParts = ["year", "month", "day", "hour", "minute", "second", "fractionalSecond"],
   // "2023", "2023-01", "2023-01-20", "+002023-01-20" are parsed by JavaScript Date as UTC
   // timestamps, whereas "798", "2023-1", "2023-01-5" are parsed as local dates.
@@ -22,6 +23,9 @@ var aAllParts = ["year", "month", "day", "hour", "minute", "second", "fractional
     Fri: 5,
     Sat: 6
   };
+// Regular expression for local date string parts around the switch to Daylight Saving Time; the date part has to
+// exist, time part parts may be optional; e.g. "2023-03-31T02:00" or "2023-3-31 2:00"
+const rLocalDate = /^(\d{1,4})-(\d{1,2})-(\d{1,2})(?:[T ](\d{1,2})(?::(\d{1,2})(?::(\d{1,2})(?:\.(\d{1,3}))?)?)?)?$/;
 
 /**
  * Pads the start of the absolute given value with zeros up to the given length. If the given
@@ -51,20 +55,21 @@ function addLeadingZeros(iValue, iLength) {
  * @class A date implementation considering the configured time zone
  *
  *   A subclass of JavaScript <code>Date</code> that considers the configured time zone, see
- *   {@link sap.ui.core.Configuration#getTimezone}. All JavaScript <code>Date</code> functions
- *   that use the local browser time zone, like <code>getDate</code>,
+ *   {@link module:sap/base/i18n/Localization.getTimezone Localization.getTimezone}. All JavaScript
+ *   <code>Date</code> functions that use the local browser time zone, like <code>getDate</code>,
  *   <code>setDate</code>, and <code>toString</code>, are overwritten and use the
  *   configured time zone to compute the values.
  *
  *   Use {@link module:sap/ui/core/date/UI5Date.getInstance} to create new date instances.
  *
  *   <b>Note:</b> Adjusting the time zone in a running application can lead to unexpected data
- *   inconsistencies. For more information, see {@link sap.ui.core.Configuration#setTimezone}.
+ *   inconsistencies. For more information, see
+ *   {@link module:sap/base/i18n/Localization.setTimezone Localization.setTimezone}.
  *
  * @hideconstructor
  * @public
  * @since 1.111.0
- * @version 1.120.17
+ * @version 1.146.0
  */
 function UI5Date(vDateParts, sTimezoneID) {
   var oDateInstance = UI5Date._createDateInstance(vDateParts);
@@ -86,9 +91,45 @@ function UI5Date(vDateParts, sTimezoneID) {
     return;
   }
   if (vDateParts.length > 1 || vDateParts.length === 1 && typeof vDateParts[0] === "string" && !rIsUTCString.test(vDateParts[0])) {
-    this._setParts(aAllParts,
     // JavaScript Date parsed the arguments already in local browser time zone
-    [oDateInstance.getFullYear(), oDateInstance.getMonth(), oDateInstance.getDate(), oDateInstance.getHours(), oDateInstance.getMinutes(), oDateInstance.getSeconds(), oDateInstance.getMilliseconds()]);
+    const aLocalDateParts = [oDateInstance.getFullYear(), oDateInstance.getMonth(), oDateInstance.getDate(), oDateInstance.getHours(), oDateInstance.getMinutes(), oDateInstance.getSeconds(), oDateInstance.getMilliseconds()];
+    // If the given local timestamp does not exist in the current browser time zone (switch to Daylight Saving
+    // Time) the values in aLocalDateParts don't match the input and have to be corrected
+    const iLocalTimezoneOffset = oDateInstance.getTimezoneOffset();
+    // the maximum time shift is 2 hours, so check whether 2 hours ago is in another time zone
+    const iTimezoneOffset2hAgo = new Date(oDateInstance.getTime() - 7200000).getTimezoneOffset();
+    // only the switch to the Daylight Saving Time needs to be fixed (e.g. from GMT+1 with the offset -60 to
+    // GMT+2 with the offset -120, or from GMT-5 with the offset 300 to GMT-4 with the offset 240);
+    // in the other case aLocalDateParts contain already the expected date/time parts
+    if (iLocalTimezoneOffset < iTimezoneOffset2hAgo) {
+      // year, seconds and milliseconds don't change when switching to Daylight Saving Time; update the other
+      // parts
+      if (vDateParts.length > 1) {
+        // timestamp near switch to Daylight Saving Time -> take the original values for month, day, hours,
+        // minutes (other parts are not modified by Daylight Saving Time switch)
+        aLocalDateParts[1] = vDateParts[1] || 0;
+        aLocalDateParts[2] = vDateParts[2] !== undefined ? vDateParts[2] : 1;
+        aLocalDateParts[3] = vDateParts[3] !== undefined ? vDateParts[3] : 0;
+        aLocalDateParts[4] = vDateParts[4] !== undefined ? vDateParts[4] : 0;
+      } else {
+        // vDateParts.length === 1
+        // string based local input near the switch to Daylight Saving Time can only be handled in the ISO
+        // format
+        const aDateParts = rLocalDate.exec(vDateParts[0]);
+        if (aDateParts) {
+          aLocalDateParts[1] = +aDateParts[2] - 1; // use + operator to get the value as used by Date
+          aLocalDateParts[2] = aDateParts[3];
+          aLocalDateParts[3] = aDateParts[4] !== undefined ? aDateParts[4] : 0;
+          aLocalDateParts[4] = aDateParts[5] !== undefined ? aDateParts[5] : 0;
+        } else {
+          // other string based local input near the switch to Daylight Saving Time cannot be handled
+          // without re-implementing parse logic of JavaScript Date -> recommend to use the constructor
+          // with more than 1 argument or to use the ISO format
+          Log.warning("UI5Date for '" + vDateParts[0] + "' cannot be ensured to be correct as it is near" + " the change from standard time to daylight saving time in the current browser locale;" + " use the constructor with more than 1 arguments or use the ISO format instead", oDateInstance, "sap.ui.core.date.UI5Date");
+        }
+      }
+    }
+    this._setParts(aAllParts, aLocalDateParts);
   }
 }
 UI5Date.prototype = Object.create(Date.prototype, {
@@ -114,7 +155,7 @@ UI5Date.prototype._getPart = function (sPart) {
   if (isNaN(this.oDate)) {
     return NaN;
   }
-  this.oDateParts = this.oDateParts || TimezoneUtil._getParts(this.oDate, this.sTimezoneID);
+  this.oDateParts = this.oDateParts || TimezoneUtils._getParts(this.oDate, this.sTimezoneID);
   if (sPart === "weekday") {
     return mWeekdayToDay[this.oDateParts.weekday];
   }
@@ -188,16 +229,16 @@ UI5Date.prototype._setParts = function (aParts, aValues) {
       second: "0"
     };
   } else {
-    oCurrentDateParts = TimezoneUtil._getParts(this.oDate, this.sTimezoneID);
+    oCurrentDateParts = TimezoneUtils._getParts(this.oDate, this.sTimezoneID);
   }
   oDateParts = Object.assign({}, oCurrentDateParts, oDateParts);
 
   // NaN may happen if no year is given if current date is invalid
-  oNewDateAsUTCTimestamp = TimezoneUtil._getDateFromParts(oDateParts);
+  oNewDateAsUTCTimestamp = TimezoneUtils._getDateFromParts(oDateParts);
   if (isNaN(oNewDateAsUTCTimestamp)) {
     return this.setTime(NaN);
   }
-  iNewTimestamp = oNewDateAsUTCTimestamp.getTime() + TimezoneUtil.calculateOffset(oNewDateAsUTCTimestamp, this.sTimezoneID) * 1000;
+  iNewTimestamp = oNewDateAsUTCTimestamp.getTime() + TimezoneUtils.calculateOffset(oNewDateAsUTCTimestamp, this.sTimezoneID) * 1000;
   return this.setTime(iNewTimestamp);
 };
 
@@ -332,7 +373,7 @@ UI5Date.prototype.getSeconds = function () {
  * @public
  */
 UI5Date.prototype.getTimezoneOffset = function () {
-  return TimezoneUtil.calculateOffset(this.oDate, this.sTimezoneID) / 60;
+  return TimezoneUtils.calculateOffset(this.oDate, this.sTimezoneID) / 60;
 };
 
 /**
@@ -781,13 +822,15 @@ UI5Date.prototype.toDateString = function () {
  * object interpreted by default in the configured time zone, see
  * <code>Date.prototype.toLocaleDateString</code>.
  *
- * @param {string} [sLocale=sap.ui.core.Configuration.getLanguageTag()]
- *   The locale used for formatting; the configured locale by default
+ * @param {string} [sLocale]
+ *   The locale used for formatting; by default, the string representation of
+ *  {@link module:sap/base/i18n/Localization.getLanguageTag Localization.getLanguageTag}
  * @param {object} [oOptions]
  *   The options object used for formatting, corresponding to the options parameter of the
  *   <code>Intl.DateTimeFormat</code> constructor
- * @param {string} [oOptions.timeZone=sap.ui.core.Configuration.getTimezone()]
- *   The IANA time zone ID; the configured time zone by default
+ * @param {string} [oOptions.timeZone]
+ *   The IANA time zone ID; by default
+ *   {@link module:sap/base/i18n/Localization.getTimezone Localization.getTimezone}
  * @returns {string}
  *   The language-dependent representation of the date part of this date object
  *
@@ -800,13 +843,15 @@ UI5Date.prototype.toDateString = function () {
  * Returns a string with a language-dependent representation of this date object interpreted by
  * default in the configured time zone, see <code>Date.prototype.toLocaleString</code>.
  *
- * @param {string} [sLocale=sap.ui.core.Configuration.getLanguageTag()]
- *   The locale used for formatting; the configured locale by default
+ * @param {string} [sLocale]
+ *   The locale used for formatting; by default, the string representation of
+ *   {@link module:sap/base/i18n/Localization.getLanguageTag Localization.getLanguageTag}
  * @param {object} [oOptions]
  *   The options object used for formatting, corresponding to the options parameter of the
  *   <code>Intl.DateTimeFormat</code> constructor
- * @param {string} [oOptions.timeZone=sap.ui.core.Configuration.getTimezone()]
- *   The IANA time zone ID; the configured time zone by default
+ * @param {string} [oOptions.timeZone]
+ *   The IANA time zone ID;  by default
+ *   {@link module:sap/base/i18n/Localization.getTimezone Localization.getTimezone}
  * @returns {string}
  *   The language-dependent representation of this date object
  *
@@ -820,13 +865,15 @@ UI5Date.prototype.toDateString = function () {
  * object interpreted by default in the configured time zone, see
  * <code>Date.prototype.toLocaleTimeString</code>.
  *
- * @param {string} [sLocale=sap.ui.core.Configuration.getLanguageTag()]
- *   The locale used for formatting; the configured locale by default
+ * @param {string} [sLocale]
+ *   The locale used for formatting; by default, the string representation of
+ *   {@link module:sap/base/i18n/Localization.getLanguageTag Localization.getLanguageTag}
  * @param {object} [oOptions]
  *   The options object used for formatting, corresponding to the options parameter of the
  *   <code>Intl.DateTimeFormat</code> constructor
- * @param {string} [oOptions.timeZone=sap.ui.core.Configuration.getTimezone()]
- *   The IANA time zone ID; the configured time zone by default
+ * @param {string} [oOptions.timeZone]
+ *   The IANA time zone ID;  by default
+ *   {@link module:sap/base/i18n/Localization.getTimezone Localization.getTimezone}
  * @returns {string}
  *   The language-dependent representation of the time part of this date object
  *
@@ -902,7 +949,7 @@ UI5Date.prototype.toTimeString = function () {
 });
 ["toLocaleDateString", "toLocaleString", "toLocaleTimeString"].forEach(function (sMethod) {
   UI5Date.prototype[sMethod] = function (sLocale, oOptions) {
-    return this.oDate[sMethod](sLocale || Configuration.getLanguageTag(), Object.assign({
+    return this.oDate[sMethod](sLocale || Localization.getLanguageTag().toString(), Object.assign({
       timeZone: this.sTimezoneID
     }, oOptions));
   };
@@ -943,7 +990,8 @@ UI5Date._createDateInstance = function (vParts) {
  * parameters are the same as the ones supported by the JavaScript Date constructor.
  *
  * <b>Note:</b> Adjusting the time zone in a running application can lead to unexpected data
- * inconsistencies. For more information, see {@link sap.ui.core.Configuration#setTimezone}.
+ * inconsistencies. For more information, see
+ * {@link module:sap/base/i18n/Localization.setTimezone Localization.setTimezone}.
  *
  * @param {int|string|Date|module:sap/ui/core/date/UI5Date|null} [vYearOrValue]
  *   Same meaning as in the JavaScript Date constructor
@@ -958,11 +1006,11 @@ UI5Date._createDateInstance = function (vParts) {
  *   The date instance that considers the configured time zone in all local getters and setters.
  *
  * @public
- * @see sap.ui.core.Configuration#getTimezone
+ * @see module:sap/base/i18n/Localization.getTimezone
  */
 UI5Date.getInstance = function () {
-  var sTimezone = Configuration.getTimezone();
-  if (sTimezone !== TimezoneUtil.getLocalTimezone()) {
+  var sTimezone = Localization.getTimezone();
+  if (sTimezone !== TimezoneUtils.getLocalTimezone()) {
     return new UI5Date(arguments, sTimezone);
   }
   // time zones are equal -> use JavaScript Date as it is
@@ -984,7 +1032,7 @@ UI5Date.checkDate = function (oDate) {
   if (isNaN(oDate.getTime())) {
     throw new Error("The given Date is not valid");
   }
-  if (!(oDate instanceof UI5Date) && Configuration.getTimezone() !== TimezoneUtil.getLocalTimezone()) {
+  if (!(oDate instanceof UI5Date) && Localization.getTimezone() !== TimezoneUtils.getLocalTimezone()) {
     throw new Error("Configured time zone requires the parameter 'oDate' to be an instance of" + " sap.ui.core.date.UI5Date");
   }
 };

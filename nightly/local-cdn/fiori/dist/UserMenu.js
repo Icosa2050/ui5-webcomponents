@@ -242,7 +242,7 @@ let UserMenu = UserMenu_1 = class UserMenu extends UI5Element {
         return this.footer.length === 0;
     }
     getAccountDescriptionText(account) {
-        return `${account.subtitleText} ${account.description} ${account.selected ? UserMenu_1.i18nBundle.getText(USER_MENU_POPOVER_ACCESSIBLE_ACCOUNT_SELECTED_TXT) : ""}`;
+        return `${account.titleText} ${account.subtitleText} ${account.description} ${account.selected ? UserMenu_1.i18nBundle.getText(USER_MENU_POPOVER_ACCESSIBLE_ACCOUNT_SELECTED_TXT) : ""}`;
     }
     getAccountByRefId(refId) {
         return this.accounts.find(account => account._id === refId);

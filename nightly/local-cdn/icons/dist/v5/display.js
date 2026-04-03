@@ -2,13 +2,14 @@ import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icon
 import { ICON_DISPLAY } from "../generated/i18n/i18n-defaults.js";
 
 const name = "display";
-const pathData = "M505 298q3 9 5 18.5t2 20.5q0 22-9 42.5T479 415t-35 24-43 9q-22 0-42.5-8.5t-36-23-25-33.5-9.5-40q0-22-9-32.5T256 300t-23 10.5-9 32.5q0 21-9.5 40t-25 33.5-36 23T111 448t-42.5-9T33 415 9 379.5 0 336q0-18 6-36l59-195q5-19 20-30t35-11h46q11 0 18.5 7.5T192 90t-7.5 18-18.5 7h-46q-4 0-6 5L81 228q8-2 15.5-3t15.5-1q26 0 49.5 11.5T201 269q23-20 55-20t55 20q16-22 39.5-33.5T400 224q8 0 15.5 1t15.5 3l-33-108q-2-5-6-5h-46q-11 0-18.5-7T320 90t7.5-18.5T346 64h46q19 0 34.5 11t20.5 30zm-393 99q25 0 43-18t18-43-18-43-43-18-43 18-18 43 18 43 43 18zm288 0q25 0 43-18t18-43-18-43-43-18-43 18-18 43 18 43 43 18z";
+const pathData = "M5.25 2a.75.75 0 1 1 0 1.5H3.53a.251.251 0 0 0-.243.186l-.94 3.511A3.516 3.516 0 0 1 3.513 7c1.221 0 2.297.622 2.926 1.565A2.503 2.503 0 0 1 8.026 8c.603 0 1.155.213 1.588.565a3.512 3.512 0 0 1 4.09-1.368l-.938-3.511a.251.251 0 0 0-.243-.186H10.76a.758.758 0 0 1-.76-.75c0-.414.344-.75.76-.75h1.763c.795 0 1.492.533 1.697 1.299 0 0 .993 3.68 1.571 5.876.8 2.604-.784 4.825-3.25 4.825a3.506 3.506 0 0 1-3.511-3.5c0-.552-.45-1-1.004-1s-1.003.448-1.003 1c0 1.933-1.572 3.5-3.511 3.5-1.987 0-3.61-1.712-3.507-3.685.013-.248.128-.776.256-1.14l1.572-5.876A1.755 1.755 0 0 1 3.53 2h1.72ZM3.512 8.5a2.003 2.003 0 0 0-2.007 2c0 1.105.898 2 2.007 2a2.003 2.003 0 0 0 2.006-2c0-1.105-.898-2-2.006-2Zm9.03 0a2.003 2.003 0 0 0-2.007 2c0 1.105.898 2 2.006 2a2.003 2.003 0 0 0 2.007-2c0-1.105-.898-2-2.007-2Z";
 const ltr = false;
 const accData = ICON_DISPLAY;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v5";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, accData, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, accData, collection, packageName });
 
 export default "SAP-icons-v5/display";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

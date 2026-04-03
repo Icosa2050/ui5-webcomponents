@@ -1,13 +1,14 @@
 import { registerIcon } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 
 const name = "trend-up";
-const pathData = "M447 289q1 14-8 23t-23 8q-14 1-23-8.5t-9-23.5l1-147-263 263q-9 9-22.5 9T77 404q-10-10-9.5-23t9.5-22L340 96l-148 1q-13 0-22.5-9.5T160 65q0-14 9.5-23.5T193 32h223q13 0 22.5 9.5T448 64z";
+const pathData = "M13.969 10.095c.02.293-.064.535-.253.724-.189.189-.43.273-.725.252a.865.865 0 0 1-.726-.268 1.035 1.035 0 0 1-.283-.74l.031-4.63-8.294 8.284a.963.963 0 0 1-.71.283.963.963 0 0 1-.709-.284.94.94 0 0 1-.3-.724 1 1 0 0 1 .3-.693l8.294-8.283-4.667.031a.97.97 0 0 1-.71-.299c-.2-.2-.3-.436-.3-.709 0-.294.1-.54.3-.74.2-.2.447-.299.741-.299h7.033c.273 0 .51.1.71.3.2.199.299.435.299.708l-.031 7.086Z";
 const ltr = false;
 const accData = null;
+const viewBox = "0 0 16 16";
 const collection = "SAP-icons-v4";
 const packageName = "@ui5/webcomponents-icons";
 
-registerIcon(name, { pathData, ltr, collection, packageName });
+registerIcon(name, { pathData, ltr, viewBox, collection, packageName });
 
 export default "SAP-icons-v4/trend-up";
-export { pathData, ltr, accData };
+export { pathData, ltr, viewBox, accData };

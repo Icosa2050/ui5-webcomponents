@@ -1,7 +1,7 @@
 {
   "$schema": "https://raw.githubusercontent.com/JetBrains/web-types/master/schema/web-types.json",
   "name": "@ui5/webcomponents",
-  "version": "2.21.0-rc.0",
+  "version": "2.21.0-rc.4",
   "description-markup": "markdown",
   "contributions": {
     "html": {
@@ -9563,7 +9563,7 @@
             },
             {
               "name": "checked",
-              "description": "Defines if the component is checked.\n\n**Note:** The property can be changed with user interaction,\neither by cliking the component, or by pressing the `Enter` or `Space` key.",
+              "description": "Defines if the component is checked.\n\n**Note:** The property can be changed with user interaction,\neither by clicking the component, or by pressing the `Enter` or `Space` key.",
               "value": { "type": "boolean", "default": "false" }
             },
             {
@@ -9583,6 +9583,11 @@
               "name": "name",
               "description": "Determines the name by which the component will be identified upon submission in an HTML form.\n\n**Note:** This property is only applicable within the context of an HTML Form element.",
               "value": { "type": "string | undefined", "default": "undefined" }
+            },
+            {
+              "name": "readonly",
+              "description": "Defines whether the component is in readonly state.\n\n**Note:** A readonly switch cannot be toggled by user interaction,\nbut can still be focused and its value read programmatically.",
+              "value": { "type": "boolean", "default": "false" }
             },
             {
               "name": "required",
@@ -9630,7 +9635,7 @@
               },
               {
                 "name": "checked",
-                "description": "Defines if the component is checked.\n\n**Note:** The property can be changed with user interaction,\neither by cliking the component, or by pressing the `Enter` or `Space` key.",
+                "description": "Defines if the component is checked.\n\n**Note:** The property can be changed with user interaction,\neither by clicking the component, or by pressing the `Enter` or `Space` key.",
                 "value": { "type": "boolean" }
               },
               {
@@ -9647,6 +9652,11 @@
                 "name": "name",
                 "description": "Determines the name by which the component will be identified upon submission in an HTML form.\n\n**Note:** This property is only applicable within the context of an HTML Form element.",
                 "value": { "type": "string | undefined" }
+              },
+              {
+                "name": "readonly",
+                "description": "Defines whether the component is in readonly state.\n\n**Note:** A readonly switch cannot be toggled by user interaction,\nbut can still be focused and its value read programmatically.",
+                "value": { "type": "boolean" }
               },
               {
                 "name": "required",
@@ -10096,6 +10106,11 @@
                 "type": "\"Start\" | \"End\" | \"Center\" | \"Left\" | \"Right\" | undefined",
                 "default": "undefined"
               }
+            },
+            {
+              "name": "merged",
+              "description": "Defines whether the cell is visually merged with the cell directly above it.\n\nThis is useful when consecutive cells in a column have the same value and should visually appear as a single merged cell.\nAlthough the cell is visually merged with the previous one, its content must still be provided for accessibility purposes.\n**Note:** This feature is disabled when cells are rendered as popin, and should remain `false` for interactive cell content.",
+              "value": { "type": "boolean", "default": "false" }
             }
           ],
           "slots": [
@@ -10113,6 +10128,11 @@
                 "value": {
                   "type": "\"Start\" | \"End\" | \"Center\" | \"Left\" | \"Right\" | undefined"
                 }
+              },
+              {
+                "name": "merged",
+                "description": "Defines whether the cell is visually merged with the cell directly above it.\n\nThis is useful when consecutive cells in a column have the same value and should visually appear as a single merged cell.\nAlthough the cell is visually merged with the previous one, its content must still be provided for accessibility purposes.\n**Note:** This feature is disabled when cells are rendered as popin, and should remain `false` for interactive cell content.",
+                "value": { "type": "boolean" }
               }
             ],
             "events": []

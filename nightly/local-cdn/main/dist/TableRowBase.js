@@ -79,6 +79,9 @@ let TableRowBase = TableRowBase_1 = class TableRowBase extends UI5Element {
     get _visibleCells() {
         return this.cells.filter(c => !c._popin);
     }
+    get _firstVisibleCell() {
+        return this.cells.find(c => !c._popin);
+    }
     get _popinCells() {
         return this.cells.filter(c => c._popin && !c._popinHidden);
     }

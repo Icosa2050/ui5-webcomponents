@@ -27,6 +27,7 @@ import { submitForm } from "@ui5/webcomponents-base/dist/features/InputElementsF
 import { isBackSpace, isDelete, isShow, isUp, isDown, isEnter, isEscape, isTabNext, isTabPrevious, isPageUp, isPageDown, isHome, isEnd, isCtrlAltF8, } from "@ui5/webcomponents-base/dist/Keys.js";
 import { attachListeners } from "@ui5/webcomponents-base/dist/util/valueStateNavigation.js";
 import arraysAreEqual from "@ui5/webcomponents-base/dist/util/arraysAreEqual.js";
+import generateHighlightedMarkupFirstMatch from "@ui5/webcomponents-base/dist/util/generateHighlightedMarkupFirstMatch.js";
 import * as Filters from "./Filters.js";
 import { VALUE_STATE_SUCCESS, VALUE_STATE_ERROR, VALUE_STATE_WARNING, VALUE_STATE_INFORMATION, VALUE_STATE_TYPE_SUCCESS, VALUE_STATE_TYPE_INFORMATION, VALUE_STATE_TYPE_ERROR, VALUE_STATE_TYPE_WARNING, VALUE_STATE_LINK, VALUE_STATE_LINKS, VALUE_STATE_LINK_MAC, VALUE_STATE_LINKS_MAC, INPUT_SUGGESTIONS_TITLE, COMBOBOX_AVAILABLE_OPTIONS, COMBOBOX_DIALOG_OK_BUTTON, COMBOBOX_DIALOG_CANCEL_BUTTON, SELECT_OPTIONS, LIST_ITEM_POSITION, LIST_ITEM_GROUP_HEADER, INPUT_CLEAR_ICON_ACC_NAME, FORM_TEXTFIELD_REQUIRED, } from "./generated/i18n/i18n-defaults.js";
 // Templates
@@ -284,6 +285,23 @@ let ComboBox = ComboBox_1 = class ComboBox extends UI5Element {
         if (this.selectedValue) {
             this._useSelectedValue = true;
         }
+        // Highlight filtered items
+        this._filteredItems.forEach(item => {
+            if (!item) {
+                return;
+            }
+            if (isInstanceOfComboBoxItemGroup(item)) {
+                // For grouped items, highlight each item in the group
+                item.items.forEach(nestedItem => {
+                    if (nestedItem) {
+                        this._highlightItem(nestedItem);
+                    }
+                });
+            }
+            else {
+                this._highlightItem(item);
+            }
+        });
         this._selectMatchingItem();
         this._initialRendering = false;
         this.style.setProperty("--_ui5-input-icons-count", `${this.iconsCount}`);
@@ -415,8 +433,11 @@ let ComboBox = ComboBox_1 = class ComboBox extends UI5Element {
             item._isVisible = false;
         });
     }
-    _arrowClick() {
+    _arrowMouseDown(e) {
+        e.preventDefault();
         this.inner.focus();
+    }
+    _arrowClick() {
         this._resetFilter();
         if (isPhone() && this.value && !this._lastValue) {
             this._lastValue = this.value;
@@ -793,6 +814,14 @@ let ComboBox = ComboBox_1 = class ComboBox extends UI5Element {
         });
         return [...filteredItemGroups, ...filteredItems];
     }
+    /**
+     * Sets the markupText property of an item with highlighted first match.
+     * @param item The ComboBox item to highlight
+     * @private
+     */
+    _highlightItem(item) {
+        item.markupText = generateHighlightedMarkupFirstMatch(item.text || "", this.filterValue);
+    }
     _getFirstMatchingItem(current) {
         const allItems = this._getItems();
         const currentlyFocusedItem = allItems.find(item => item.focused === true);
@@ -927,6 +956,11 @@ let ComboBox = ComboBox_1 = class ComboBox extends UI5Element {
             return this._closeRespPopover();
         }
         this.value = this._selectedItemText;
+        // On first item select the _useSelectedValue is still false.
+        // In case the item has a value property, we set the _useSelectedValue to true to start working with the value instead with the text.
+        if (!this._useSelectedValue && item.value !== undefined) {
+            this._useSelectedValue = true;
+        }
         if (this._useSelectedValue) {
             this.selectedValue = item.value;
         }
