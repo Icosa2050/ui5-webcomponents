@@ -1126,21 +1126,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "dist/converters/DOMReference.js",
-      "declarations": [],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "default",
-          "declaration": {
-            "name": "DOMReferenceConverter",
-            "module": "dist/converters/DOMReference.js"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "dist/config/AnimationMode.js",
       "declarations": [],
       "exports": []
@@ -1219,183 +1204,15 @@
     },
     {
       "kind": "javascript-module",
-      "path": "dist/delegate/ItemNavigation.js",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "The ItemNavigation class manages the calculations to determine the correct \"tabindex\" for a group of related items inside a root component.\nImportant: ItemNavigation only does the calculations and does not change \"tabindex\" directly, this is a responsibility of the developer.\n\nThe keys that trigger ItemNavigation are:\n - Up/down\n - Left/right\n - Home/End\n\nUsage:\n1) Use the \"getItemsCallback\" constructor property to pass a callback to ItemNavigation, which, whenever called, will return the list of items to navigate among.\n\nEach item passed to ItemNavigation via \"getItemsCallback\" must be:\n - A) either a UI5Element with a \"forcedTabIndex\" property\n - B) or an Object with \"id\" and \"forcedTabIndex\" properties which represents a part of the root component's shadow DOM.\n   The \"id\" must be a valid ID within the shadow root of the component ItemNavigation operates on.\n   This object must not be a DOM object because, as said, ItemNavigation will not set \"tabindex\" on it. It must be a representation of a DOM object only\n   and the developer has the responsibility to update the \"tabindex\" in the component's DOM.\n - C) a combination of the above\n\nWhenever the user navigates with the keyboard, ItemNavigation will modify the \"forcedTabIndex\" properties of the items.\nIt is the items' responsibilities to re-render themselves and apply the correct value of \"tabindex\" (i.e. to map the \"forcedTabIndex\" ItemNavigation set to them to the \"tabindex\" property).\nIf the items of the ItemNavigation are UI5Elements themselves, this can happen naturally since they will be invalidated by their \"forcedTabIndex\" property.\nIf the items are Objects with \"id\" and \"forcedTabIndex\" however, it is the developer's responsibility to apply these and the easiest way is to have the root component invalidated by ItemNavigation.\nTo do so, set the \"affectedPropertiesNames\" constructor property to point to one or more of the root component's properties that need refreshing when \"forcedTabIndex\" is changed deeply.\n\n2) Call the \"setCurrentItem\" method of ItemNavigation whenever you want to change the current item.\nThis is most commonly required if the user for example clicks on an item and thus selects it directly.\nPass as the only argument to \"setCurrentItem\" the item that becomes current (must be one of the items, returned by \"getItemsCallback\").",
-          "name": "ItemNavigation",
-          "members": [
-            {
-              "kind": "method",
-              "name": "setCurrentItem",
-              "return": {
-                "type": {
-                  "text": "void"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "current",
-                  "type": {
-                    "text": "ITabbable",
-                    "references": [
-                      {
-                        "name": "ITabbable",
-                        "package": "@ui5/webcomponents-base",
-                        "module": "dist/delegate/ItemNavigation.js"
-                      }
-                    ]
-                  },
-                  "description": "the new selected item",
-                  "_ui5privacy": "public"
-                }
-              ],
-              "description": "Call this method to set a new \"current\" (selected) item in the item navigation\nNote: the item passed to this function must be one of the items, returned by the getItemsCallback function",
-              "privacy": "public"
-            },
-            {
-              "kind": "method",
-              "name": "setRowSize",
-              "return": {
-                "type": {
-                  "text": "void"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "newRowSize",
-                  "type": {
-                    "text": "number"
-                  },
-                  "_ui5privacy": "public"
-                }
-              ],
-              "description": "Call this method to dynamically change the row size",
-              "privacy": "public"
-            }
-          ],
-          "_ui5privacy": "public"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "default",
-          "declaration": {
-            "name": "ItemNavigation",
-            "module": "dist/delegate/ItemNavigation.js"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "dist/delegate/ResizeHandler.js",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "Allows to register/deregister resize observers for a DOM element",
-          "name": "ResizeHandler",
-          "members": [
-            {
-              "kind": "method",
-              "name": "deregister",
-              "static": true,
-              "return": {
-                "type": {
-                  "text": "void"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "callback",
-                  "type": {
-                    "text": "ResizeObserverCallback",
-                    "references": [
-                      {
-                        "name": "ResizeObserverCallback",
-                        "package": "@ui5/webcomponents-base",
-                        "module": "dist/delegate/ResizeHandler.js"
-                      }
-                    ]
-                  },
-                  "description": "Callback to be removed",
-                  "_ui5privacy": "public"
-                },
-                {
-                  "name": "element",
-                  "type": {
-                    "text": "HTMLElement"
-                  },
-                  "description": "UI5 Web Component or DOM Element to be unobserved",
-                  "_ui5privacy": "public"
-                }
-              ],
-              "privacy": "public"
-            },
-            {
-              "kind": "method",
-              "name": "register",
-              "static": true,
-              "return": {
-                "type": {
-                  "text": "void"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "callback",
-                  "type": {
-                    "text": "ResizeObserverCallback",
-                    "references": [
-                      {
-                        "name": "ResizeObserverCallback",
-                        "package": "@ui5/webcomponents-base",
-                        "module": "dist/delegate/ResizeHandler.js"
-                      }
-                    ]
-                  },
-                  "description": "Callback to be executed",
-                  "_ui5privacy": "public"
-                },
-                {
-                  "name": "element",
-                  "type": {
-                    "text": "HTMLElement"
-                  },
-                  "description": "UI5 Web Component or DOM Element to be observed",
-                  "_ui5privacy": "public"
-                }
-              ],
-              "privacy": "public"
-            }
-          ],
-          "_ui5privacy": "public"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "default",
-          "declaration": {
-            "name": "ResizeHandler",
-            "module": "dist/delegate/ResizeHandler.js"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "dist/delegate/ScrollEnablement.js",
+      "path": "dist/converters/DOMReference.js",
       "declarations": [],
       "exports": [
         {
           "kind": "js",
           "name": "default",
           "declaration": {
-            "name": "ScrollEnablement",
-            "module": "dist/delegate/ScrollEnablement.js"
+            "name": "DOMReferenceConverter",
+            "module": "dist/converters/DOMReference.js"
           }
         }
       ]
@@ -1666,6 +1483,189 @@
       "path": "dist/features/patchPopup.js",
       "declarations": [],
       "exports": []
+    },
+    {
+      "kind": "javascript-module",
+      "path": "dist/delegate/ItemNavigation.js",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "The ItemNavigation class manages the calculations to determine the correct \"tabindex\" for a group of related items inside a root component.\nImportant: ItemNavigation only does the calculations and does not change \"tabindex\" directly, this is a responsibility of the developer.\n\nThe keys that trigger ItemNavigation are:\n - Up/down\n - Left/right\n - Home/End\n\nUsage:\n1) Use the \"getItemsCallback\" constructor property to pass a callback to ItemNavigation, which, whenever called, will return the list of items to navigate among.\n\nEach item passed to ItemNavigation via \"getItemsCallback\" must be:\n - A) either a UI5Element with a \"forcedTabIndex\" property\n - B) or an Object with \"id\" and \"forcedTabIndex\" properties which represents a part of the root component's shadow DOM.\n   The \"id\" must be a valid ID within the shadow root of the component ItemNavigation operates on.\n   This object must not be a DOM object because, as said, ItemNavigation will not set \"tabindex\" on it. It must be a representation of a DOM object only\n   and the developer has the responsibility to update the \"tabindex\" in the component's DOM.\n - C) a combination of the above\n\nWhenever the user navigates with the keyboard, ItemNavigation will modify the \"forcedTabIndex\" properties of the items.\nIt is the items' responsibilities to re-render themselves and apply the correct value of \"tabindex\" (i.e. to map the \"forcedTabIndex\" ItemNavigation set to them to the \"tabindex\" property).\nIf the items of the ItemNavigation are UI5Elements themselves, this can happen naturally since they will be invalidated by their \"forcedTabIndex\" property.\nIf the items are Objects with \"id\" and \"forcedTabIndex\" however, it is the developer's responsibility to apply these and the easiest way is to have the root component invalidated by ItemNavigation.\nTo do so, set the \"affectedPropertiesNames\" constructor property to point to one or more of the root component's properties that need refreshing when \"forcedTabIndex\" is changed deeply.\n\n2) Call the \"setCurrentItem\" method of ItemNavigation whenever you want to change the current item.\nThis is most commonly required if the user for example clicks on an item and thus selects it directly.\nPass as the only argument to \"setCurrentItem\" the item that becomes current (must be one of the items, returned by \"getItemsCallback\").",
+          "name": "ItemNavigation",
+          "members": [
+            {
+              "kind": "method",
+              "name": "setCurrentItem",
+              "return": {
+                "type": {
+                  "text": "void"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "current",
+                  "type": {
+                    "text": "ITabbable",
+                    "references": [
+                      {
+                        "name": "ITabbable",
+                        "package": "@ui5/webcomponents-base",
+                        "module": "dist/delegate/ItemNavigation.js"
+                      }
+                    ]
+                  },
+                  "description": "the new selected item",
+                  "_ui5privacy": "public"
+                }
+              ],
+              "description": "Call this method to set a new \"current\" (selected) item in the item navigation\nNote: the item passed to this function must be one of the items, returned by the getItemsCallback function",
+              "privacy": "public"
+            },
+            {
+              "kind": "method",
+              "name": "setRowSize",
+              "return": {
+                "type": {
+                  "text": "void"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "newRowSize",
+                  "type": {
+                    "text": "number"
+                  },
+                  "_ui5privacy": "public"
+                }
+              ],
+              "description": "Call this method to dynamically change the row size",
+              "privacy": "public"
+            }
+          ],
+          "_ui5privacy": "public"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "name": "ItemNavigation",
+            "module": "dist/delegate/ItemNavigation.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "dist/delegate/ResizeHandler.js",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "Allows to register/deregister resize observers for a DOM element",
+          "name": "ResizeHandler",
+          "members": [
+            {
+              "kind": "method",
+              "name": "deregister",
+              "static": true,
+              "return": {
+                "type": {
+                  "text": "void"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "callback",
+                  "type": {
+                    "text": "ResizeObserverCallback",
+                    "references": [
+                      {
+                        "name": "ResizeObserverCallback",
+                        "package": "@ui5/webcomponents-base",
+                        "module": "dist/delegate/ResizeHandler.js"
+                      }
+                    ]
+                  },
+                  "description": "Callback to be removed",
+                  "_ui5privacy": "public"
+                },
+                {
+                  "name": "element",
+                  "type": {
+                    "text": "HTMLElement"
+                  },
+                  "description": "UI5 Web Component or DOM Element to be unobserved",
+                  "_ui5privacy": "public"
+                }
+              ],
+              "privacy": "public"
+            },
+            {
+              "kind": "method",
+              "name": "register",
+              "static": true,
+              "return": {
+                "type": {
+                  "text": "void"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "callback",
+                  "type": {
+                    "text": "ResizeObserverCallback",
+                    "references": [
+                      {
+                        "name": "ResizeObserverCallback",
+                        "package": "@ui5/webcomponents-base",
+                        "module": "dist/delegate/ResizeHandler.js"
+                      }
+                    ]
+                  },
+                  "description": "Callback to be executed",
+                  "_ui5privacy": "public"
+                },
+                {
+                  "name": "element",
+                  "type": {
+                    "text": "HTMLElement"
+                  },
+                  "description": "UI5 Web Component or DOM Element to be observed",
+                  "_ui5privacy": "public"
+                }
+              ],
+              "privacy": "public"
+            }
+          ],
+          "_ui5privacy": "public"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "name": "ResizeHandler",
+            "module": "dist/delegate/ResizeHandler.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "dist/delegate/ScrollEnablement.js",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "name": "ScrollEnablement",
+            "module": "dist/delegate/ScrollEnablement.js"
+          }
+        }
+      ]
     },
     {
       "kind": "javascript-module",
