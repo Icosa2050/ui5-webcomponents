@@ -1966,418 +1966,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "dist/types/AnimationMode.js",
-      "declarations": [
-        {
-          "kind": "enum",
-          "name": "AnimationMode",
-          "description": "Different types of AnimationMode.",
-          "_ui5privacy": "public",
-          "members": [
-            {
-              "kind": "field",
-              "static": true,
-              "privacy": "public",
-              "default": "basic",
-              "name": "Basic",
-              "readonly": true
-            },
-            {
-              "kind": "field",
-              "static": true,
-              "privacy": "public",
-              "default": "full",
-              "name": "Full",
-              "readonly": true
-            },
-            {
-              "kind": "field",
-              "static": true,
-              "privacy": "public",
-              "default": "minimal",
-              "name": "Minimal",
-              "readonly": true
-            },
-            {
-              "kind": "field",
-              "static": true,
-              "privacy": "public",
-              "default": "none",
-              "name": "None",
-              "readonly": true
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "default",
-          "declaration": {
-            "name": "AnimationMode",
-            "module": "dist/types/AnimationMode.js"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "dist/types/CalendarType.js",
-      "declarations": [
-        {
-          "kind": "enum",
-          "name": "CalendarType",
-          "description": "Different calendar types.",
-          "_ui5privacy": "public",
-          "members": [
-            {
-              "kind": "field",
-              "static": true,
-              "privacy": "public",
-              "default": "Buddhist",
-              "name": "Buddhist",
-              "readonly": true
-            },
-            {
-              "kind": "field",
-              "static": true,
-              "privacy": "public",
-              "default": "Gregorian",
-              "name": "Gregorian",
-              "readonly": true
-            },
-            {
-              "kind": "field",
-              "static": true,
-              "privacy": "public",
-              "default": "Islamic",
-              "name": "Islamic",
-              "readonly": true
-            },
-            {
-              "kind": "field",
-              "static": true,
-              "privacy": "public",
-              "default": "Japanese",
-              "name": "Japanese",
-              "readonly": true
-            },
-            {
-              "kind": "field",
-              "static": true,
-              "privacy": "public",
-              "default": "Persian",
-              "name": "Persian",
-              "readonly": true
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "default",
-          "declaration": {
-            "name": "CalendarType",
-            "module": "dist/types/CalendarType.js"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "dist/types/InvisibleMessageMode.js",
-      "declarations": [],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "default",
-          "declaration": {
-            "name": "InvisibleMessageMode",
-            "module": "dist/types/InvisibleMessageMode.js"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "dist/types/ItemNavigationBehavior.js",
-      "declarations": [
-        {
-          "kind": "enum",
-          "name": "ItemNavigationBehavior",
-          "description": "Different behavior for ItemNavigation.",
-          "_ui5privacy": "public",
-          "members": [
-            {
-              "kind": "field",
-              "static": true,
-              "privacy": "public",
-              "description": "Cycling behavior: navigating past the last item continues with the first and vice versa.",
-              "default": "Cyclic",
-              "name": "Cyclic",
-              "readonly": true
-            },
-            {
-              "kind": "field",
-              "static": true,
-              "privacy": "public",
-              "description": "Static behavior: navigations stops at the first or last item.",
-              "default": "Static",
-              "name": "Static",
-              "readonly": true
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "default",
-          "declaration": {
-            "name": "ItemNavigationBehavior",
-            "module": "dist/types/ItemNavigationBehavior.js"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "dist/types/MovePlacement.js",
-      "declarations": [
-        {
-          "kind": "enum",
-          "name": "MovePlacement",
-          "description": "Placements of a moved element relative to a target element.",
-          "_ui5privacy": "public",
-          "members": [
-            {
-              "kind": "field",
-              "static": true,
-              "privacy": "public",
-              "default": "After",
-              "name": "After",
-              "readonly": true
-            },
-            {
-              "kind": "field",
-              "static": true,
-              "privacy": "public",
-              "default": "Before",
-              "name": "Before",
-              "readonly": true
-            },
-            {
-              "kind": "field",
-              "static": true,
-              "privacy": "public",
-              "default": "On",
-              "name": "On",
-              "readonly": true
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "default",
-          "declaration": {
-            "name": "MovePlacement",
-            "module": "dist/types/MovePlacement.js"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "dist/types/NavigationMode.js",
-      "declarations": [
-        {
-          "kind": "enum",
-          "name": "NavigationMode",
-          "description": "Different navigation modes for ItemNavigation.",
-          "_ui5privacy": "public",
-          "members": [
-            {
-              "kind": "field",
-              "static": true,
-              "privacy": "public",
-              "default": "Auto",
-              "name": "Auto",
-              "readonly": true
-            },
-            {
-              "kind": "field",
-              "static": true,
-              "privacy": "public",
-              "default": "Horizontal",
-              "name": "Horizontal",
-              "readonly": true
-            },
-            {
-              "kind": "field",
-              "static": true,
-              "privacy": "public",
-              "default": "Paging",
-              "name": "Paging",
-              "readonly": true
-            },
-            {
-              "kind": "field",
-              "static": true,
-              "privacy": "public",
-              "default": "Vertical",
-              "name": "Vertical",
-              "readonly": true
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "default",
-          "declaration": {
-            "name": "NavigationMode",
-            "module": "dist/types/NavigationMode.js"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "dist/types/Orientation.js",
-      "declarations": [],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "default",
-          "declaration": {
-            "name": "Orientation",
-            "module": "dist/types/Orientation.js"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "dist/types/SortOrder.js",
-      "declarations": [
-        {
-          "kind": "enum",
-          "name": "SortOrder",
-          "description": "Defines the sort order.",
-          "_ui5privacy": "public",
-          "_ui5since": "2.8.0",
-          "members": [
-            {
-              "kind": "field",
-              "static": true,
-              "privacy": "public",
-              "description": "Sorting is applied in ascending order.",
-              "default": "Ascending",
-              "name": "Ascending",
-              "readonly": true
-            },
-            {
-              "kind": "field",
-              "static": true,
-              "privacy": "public",
-              "description": "Sorting is applied in descending order.",
-              "default": "Descending",
-              "name": "Descending",
-              "readonly": true
-            },
-            {
-              "kind": "field",
-              "static": true,
-              "privacy": "public",
-              "description": "Sorting is not applied.",
-              "default": "None",
-              "name": "None",
-              "readonly": true
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "default",
-          "declaration": {
-            "name": "SortOrder",
-            "module": "dist/types/SortOrder.js"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "dist/types/ValueState.js",
-      "declarations": [
-        {
-          "kind": "enum",
-          "name": "ValueState",
-          "description": "Different types of ValueStates.",
-          "_ui5privacy": "public",
-          "members": [
-            {
-              "kind": "field",
-              "static": true,
-              "privacy": "public",
-              "default": "Critical",
-              "name": "Critical",
-              "readonly": true
-            },
-            {
-              "kind": "field",
-              "static": true,
-              "privacy": "public",
-              "default": "Information",
-              "name": "Information",
-              "readonly": true
-            },
-            {
-              "kind": "field",
-              "static": true,
-              "privacy": "public",
-              "default": "Negative",
-              "name": "Negative",
-              "readonly": true
-            },
-            {
-              "kind": "field",
-              "static": true,
-              "privacy": "public",
-              "default": "None",
-              "name": "None",
-              "readonly": true
-            },
-            {
-              "kind": "field",
-              "static": true,
-              "privacy": "public",
-              "default": "Positive",
-              "name": "Positive",
-              "readonly": true
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "default",
-          "declaration": {
-            "name": "ValueState",
-            "module": "dist/types/ValueState.js"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "dist/util/AccessibilityTextsHelper.js",
       "declarations": [],
       "exports": []
@@ -2948,6 +2536,418 @@
           "declaration": {
             "name": "willShowContent",
             "module": "dist/util/willShowContent.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "dist/types/AnimationMode.js",
+      "declarations": [
+        {
+          "kind": "enum",
+          "name": "AnimationMode",
+          "description": "Different types of AnimationMode.",
+          "_ui5privacy": "public",
+          "members": [
+            {
+              "kind": "field",
+              "static": true,
+              "privacy": "public",
+              "default": "basic",
+              "name": "Basic",
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "static": true,
+              "privacy": "public",
+              "default": "full",
+              "name": "Full",
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "static": true,
+              "privacy": "public",
+              "default": "minimal",
+              "name": "Minimal",
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "static": true,
+              "privacy": "public",
+              "default": "none",
+              "name": "None",
+              "readonly": true
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "name": "AnimationMode",
+            "module": "dist/types/AnimationMode.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "dist/types/CalendarType.js",
+      "declarations": [
+        {
+          "kind": "enum",
+          "name": "CalendarType",
+          "description": "Different calendar types.",
+          "_ui5privacy": "public",
+          "members": [
+            {
+              "kind": "field",
+              "static": true,
+              "privacy": "public",
+              "default": "Buddhist",
+              "name": "Buddhist",
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "static": true,
+              "privacy": "public",
+              "default": "Gregorian",
+              "name": "Gregorian",
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "static": true,
+              "privacy": "public",
+              "default": "Islamic",
+              "name": "Islamic",
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "static": true,
+              "privacy": "public",
+              "default": "Japanese",
+              "name": "Japanese",
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "static": true,
+              "privacy": "public",
+              "default": "Persian",
+              "name": "Persian",
+              "readonly": true
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "name": "CalendarType",
+            "module": "dist/types/CalendarType.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "dist/types/InvisibleMessageMode.js",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "name": "InvisibleMessageMode",
+            "module": "dist/types/InvisibleMessageMode.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "dist/types/ItemNavigationBehavior.js",
+      "declarations": [
+        {
+          "kind": "enum",
+          "name": "ItemNavigationBehavior",
+          "description": "Different behavior for ItemNavigation.",
+          "_ui5privacy": "public",
+          "members": [
+            {
+              "kind": "field",
+              "static": true,
+              "privacy": "public",
+              "description": "Cycling behavior: navigating past the last item continues with the first and vice versa.",
+              "default": "Cyclic",
+              "name": "Cyclic",
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "static": true,
+              "privacy": "public",
+              "description": "Static behavior: navigations stops at the first or last item.",
+              "default": "Static",
+              "name": "Static",
+              "readonly": true
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "name": "ItemNavigationBehavior",
+            "module": "dist/types/ItemNavigationBehavior.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "dist/types/MovePlacement.js",
+      "declarations": [
+        {
+          "kind": "enum",
+          "name": "MovePlacement",
+          "description": "Placements of a moved element relative to a target element.",
+          "_ui5privacy": "public",
+          "members": [
+            {
+              "kind": "field",
+              "static": true,
+              "privacy": "public",
+              "default": "After",
+              "name": "After",
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "static": true,
+              "privacy": "public",
+              "default": "Before",
+              "name": "Before",
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "static": true,
+              "privacy": "public",
+              "default": "On",
+              "name": "On",
+              "readonly": true
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "name": "MovePlacement",
+            "module": "dist/types/MovePlacement.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "dist/types/NavigationMode.js",
+      "declarations": [
+        {
+          "kind": "enum",
+          "name": "NavigationMode",
+          "description": "Different navigation modes for ItemNavigation.",
+          "_ui5privacy": "public",
+          "members": [
+            {
+              "kind": "field",
+              "static": true,
+              "privacy": "public",
+              "default": "Auto",
+              "name": "Auto",
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "static": true,
+              "privacy": "public",
+              "default": "Horizontal",
+              "name": "Horizontal",
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "static": true,
+              "privacy": "public",
+              "default": "Paging",
+              "name": "Paging",
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "static": true,
+              "privacy": "public",
+              "default": "Vertical",
+              "name": "Vertical",
+              "readonly": true
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "name": "NavigationMode",
+            "module": "dist/types/NavigationMode.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "dist/types/Orientation.js",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "name": "Orientation",
+            "module": "dist/types/Orientation.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "dist/types/SortOrder.js",
+      "declarations": [
+        {
+          "kind": "enum",
+          "name": "SortOrder",
+          "description": "Defines the sort order.",
+          "_ui5privacy": "public",
+          "_ui5since": "2.8.0",
+          "members": [
+            {
+              "kind": "field",
+              "static": true,
+              "privacy": "public",
+              "description": "Sorting is applied in ascending order.",
+              "default": "Ascending",
+              "name": "Ascending",
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "static": true,
+              "privacy": "public",
+              "description": "Sorting is applied in descending order.",
+              "default": "Descending",
+              "name": "Descending",
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "static": true,
+              "privacy": "public",
+              "description": "Sorting is not applied.",
+              "default": "None",
+              "name": "None",
+              "readonly": true
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "name": "SortOrder",
+            "module": "dist/types/SortOrder.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "dist/types/ValueState.js",
+      "declarations": [
+        {
+          "kind": "enum",
+          "name": "ValueState",
+          "description": "Different types of ValueStates.",
+          "_ui5privacy": "public",
+          "members": [
+            {
+              "kind": "field",
+              "static": true,
+              "privacy": "public",
+              "default": "Critical",
+              "name": "Critical",
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "static": true,
+              "privacy": "public",
+              "default": "Information",
+              "name": "Information",
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "static": true,
+              "privacy": "public",
+              "default": "Negative",
+              "name": "Negative",
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "static": true,
+              "privacy": "public",
+              "default": "None",
+              "name": "None",
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "static": true,
+              "privacy": "public",
+              "default": "Positive",
+              "name": "Positive",
+              "readonly": true
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "name": "ValueState",
+            "module": "dist/types/ValueState.js"
           }
         }
       ]
