@@ -8,12 +8,14 @@ import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
 import customElement from "@ui5/webcomponents-base/dist/decorators/customElement.js";
 import property from "@ui5/webcomponents-base/dist/decorators/property.js";
 import jsxRenderer from "@ui5/webcomponents-base/dist/renderer/JsxRenderer.js";
-import { getIconDataSync } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
+import { getIconData, getIconDataSync } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
+import { getI18nBundle } from "@ui5/webcomponents-base/dist/i18nBundle.js";
 // Template
 import AvatarBadgeTemplate from "./AvatarBadgeTemplate.js";
 // Styles
 import AvatarBadgeCss from "./generated/themes/AvatarBadge.css.js";
 import ValueState from "@ui5/webcomponents-base/dist/types/ValueState.js";
+const ICON_NOT_FOUND = "ICON_NOT_FOUND";
 /**
  * @class
  * ### Overview
@@ -65,8 +67,36 @@ let AvatarBadge = class AvatarBadge extends UI5Element {
          */
         this.invalid = false;
     }
-    onBeforeRendering() {
-        this.invalid = !this.icon || !getIconDataSync(this.icon);
+    async onBeforeRendering() {
+        const icon = this.icon;
+        if (!icon) {
+            this.invalid = true;
+            this.effectiveTooltip = undefined;
+            return;
+        }
+        const iconData = getIconDataSync(icon) || await getIconData(icon);
+        this.invalid = !iconData || iconData === ICON_NOT_FOUND;
+        if (this.invalid) {
+            this.effectiveTooltip = undefined;
+        }
+        else if (this.tooltip) {
+            // User-provided tooltip takes precedence
+            this.effectiveTooltip = this.tooltip;
+        }
+        else if (iconData && iconData !== ICON_NOT_FOUND && iconData.accData) {
+            // Use the icon's registered i18n label (e.g., message-error -> "Error")
+            if (iconData.packageName) {
+                const i18nBundle = await getI18nBundle(iconData.packageName);
+                this.effectiveTooltip = i18nBundle.getText(iconData.accData) || undefined;
+            }
+            else {
+                this.effectiveTooltip = iconData.accData.defaultText || undefined;
+            }
+        }
+        else {
+            // Derive from icon name (e.g., "edit" -> "Edit")
+            this.effectiveTooltip = icon.charAt(0).toUpperCase() + icon.slice(1);
+        }
     }
 };
 __decorate([
@@ -74,13 +104,20 @@ __decorate([
 ], AvatarBadge.prototype, "icon", void 0);
 __decorate([
     property()
+], AvatarBadge.prototype, "tooltip", void 0);
+__decorate([
+    property()
 ], AvatarBadge.prototype, "state", void 0);
 __decorate([
     property({ type: Boolean })
 ], AvatarBadge.prototype, "invalid", void 0);
+__decorate([
+    property({ noAttribute: true })
+], AvatarBadge.prototype, "effectiveTooltip", void 0);
 AvatarBadge = __decorate([
     customElement({
         tag: "ui5-avatar-badge",
+        languageAware: true,
         renderer: jsxRenderer,
         styles: AvatarBadgeCss,
         template: AvatarBadgeTemplate,

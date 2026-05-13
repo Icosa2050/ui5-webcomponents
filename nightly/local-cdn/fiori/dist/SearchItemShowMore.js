@@ -57,7 +57,7 @@ let SearchItemShowMore = SearchItemShowMore_1 = class SearchItemShowMore extends
     }
     _onclick(e, fromKeyboard = false) {
         e.stopImmediatePropagation();
-        this.fireDecoratorEvent("click", { fromKeyboard });
+        this.fireDecoratorEvent("click", { item: this, originalEvent: e, fromKeyboard });
     }
     _onkeydown(e) {
         if (isEnter(e)) {

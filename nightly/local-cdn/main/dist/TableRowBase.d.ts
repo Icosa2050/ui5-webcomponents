@@ -17,13 +17,17 @@ declare abstract class TableRowBase<TCell extends TableCellBase = TableCellBase>
     _rowActionCount: number;
     _renderNavigated: boolean;
     _alternate: boolean;
+    _renderDummyCell: boolean;
     _selectionCell?: HTMLElement;
     _navigatedCell?: HTMLElement;
     static i18nBundle: I18nBundle;
+    isHeaderRow(): boolean;
     onEnterDOM(): void;
     onBeforeRendering(): void;
+    onAfterRendering(): void;
     getFocusDomRef(): this;
-    isHeaderRow(): boolean;
+    focus(focusOptions?: FocusOptions | undefined): Promise<void>;
+    _handleCustomFocusOutline(): void;
     _onSelectionChange(): void;
     _onkeydown(e: KeyboardEvent, eventOrigin: HTMLElement): void;
     get _table(): Table | undefined;
@@ -36,6 +40,7 @@ declare abstract class TableRowBase<TCell extends TableCellBase = TableCellBase>
     get _visibleCells(): TCell[];
     get _firstVisibleCell(): TCell | undefined;
     get _popinCells(): TCell[];
+    get _hasPopin(): boolean;
     get _stickyCells(): (HTMLElement | undefined)[];
     get _i18nRowSelector(): string;
 }

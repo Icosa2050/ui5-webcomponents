@@ -80,7 +80,6 @@ declare class TableRow extends TableRowBase<TableCell> {
     _popinCell?: TableCell;
     _actionsCell?: TableCell;
     onBeforeRendering(): void;
-    focus(focusOptions?: FocusOptions | undefined): Promise<void>;
     _onpointerdown(e: PointerEvent): Promise<void>;
     _onkeydown(e: KeyboardEvent, eventOrigin: HTMLElement): void;
     _onclick(): void;
@@ -88,7 +87,6 @@ declare class TableRow extends TableRowBase<TableCell> {
     _onOverflowButtonClick(e: UI5CustomEvent<Button, "click">): void;
     get _isInteractive(): boolean;
     get _isNavigable(): boolean;
-    get _hasPopin(): boolean;
     get _rowIndex(): number;
     get _hasOverflowActions(): boolean;
     get _flexibleActions(): TableRowActionBase[];

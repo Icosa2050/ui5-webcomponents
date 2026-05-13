@@ -85,6 +85,7 @@ declare class RangeSlider extends SliderBase implements IFormInputElement {
     tooltipStartValueState: `${ValueState}`;
     tooltipEndValueState: `${ValueState}`;
     rangePressed: boolean;
+    _progressFocused: boolean;
     _isStartValueValid: boolean;
     _isEndValueValid: boolean;
     _startValue: number;
@@ -105,9 +106,17 @@ declare class RangeSlider extends SliderBase implements IFormInputElement {
     _lastValidStartValue: string;
     _lastValidEndValue: string;
     _areInputValuesSwapped: boolean;
+    _onDocumentClickBound: (e: MouseEvent) => void;
     static i18nBundle: I18nBundle;
     get formFormattedValue(): FormData;
     constructor();
+    onEnterDOM(): void;
+    onExitDOM(): void;
+    /**
+     * Handles document-level clicks to clear progress focus when clicking outside.
+     * @private
+     */
+    _onDocumentClick(e: MouseEvent): void;
     get _ariaDisabled(): true | undefined;
     get _ariaLabelledByText(): string;
     get _ariaHandlesText(): AriaHandlesText;
@@ -306,9 +315,18 @@ declare class RangeSlider extends SliderBase implements IFormInputElement {
     get tickmarksObject(): boolean[];
     get _startHandle(): HTMLElement;
     get _endHandle(): HTMLElement;
-    get _progressBar(): HTMLElement;
+    get _progressBar(): HTMLElement | null;
     get _ariaLabelledByStartHandleText(): string;
     get _ariaLabelledByEndHandleText(): string;
+    /**
+     * @private
+     */
+    get _ariaLabelStartHandle(): string;
+    /**
+     * @private
+     */
+    get _ariaLabelEndHandle(): string;
+    _getAriaLabelHandle(handleDescription: string): string;
     get _ariaLabelledByInputText(): string;
     get _ariaDescribedByInputText(): string;
     get styles(): {

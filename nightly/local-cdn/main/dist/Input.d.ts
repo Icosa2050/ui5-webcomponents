@@ -13,6 +13,7 @@ import InputType from "./types/InputType.js";
 import type Popover from "./Popover.js";
 import type { IIcon } from "./Icon.js";
 import type { ListItemClickEventDetail, ListSelectionChangeEventDetail } from "./List.js";
+import type { ListItemBaseClickEventDetail } from "./ListItemBase.js";
 import type ResponsivePopover from "./ResponsivePopover.js";
 import type InputKeyHint from "./types/InputKeyHint.js";
 import type InputComposition from "./features/InputComposition.js";
@@ -25,6 +26,9 @@ interface IInputSuggestionItem extends UI5Element {
     focused: boolean;
     additionalText?: string;
     items?: IInputSuggestionItem[];
+    eventDetails: {
+        click?: ListItemBaseClickEventDetail;
+    };
 }
 interface IInputSuggestionItemSelectable extends IInputSuggestionItem {
     text?: string;
@@ -68,8 +72,8 @@ type InputSuggestionScrollEventDetail = {
  *
  * The `ui5-input` component allows the user to enter and edit text or numeric values in one line.
  *
- * Additionally, you can provide `suggestionItems`,
- * that are displayed in a popover right under the input.
+ * Additionally, you can provide `suggestionItems`
+ * that are displayed in a popover right under the input. Keep in mind that `ui5-input` with type `Number` does not support suggestions.
  *
  * The text field can be editable or read-only (`readonly` property),
  * and it can be enabled or disabled (`disabled` property).
@@ -170,6 +174,7 @@ declare class Input extends UI5Element implements SuggestionComponent, IFormInpu
      * and the current language settings, especially for type `Number`.
      * - The property is mostly intended to be used with touch devices
      * that use different soft keyboard layouts depending on the given input type.
+     * - Type `Number` does not support suggestions.
      * @default "Text"
      * @public
      */
@@ -325,6 +330,8 @@ declare class Input extends UI5Element implements SuggestionComponent, IFormInpu
      * property is set to `true`.
      *
      * **Note:** The `<ui5-suggestion-item>`, `<ui5-suggestion-item-group>` and `ui5-suggestion-item-custom` are recommended to be used as suggestion items.
+     *
+     * **Note:** Input with type `Number` does not support suggestions.
      *
      * @public
      */

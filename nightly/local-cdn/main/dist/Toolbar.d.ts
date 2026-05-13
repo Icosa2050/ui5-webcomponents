@@ -73,6 +73,15 @@ declare class Toolbar extends UI5Element {
      */
     accessibleNameRef?: string;
     /**
+     * Defines the accessible ARIA name of the overflow button of the component.
+     *
+     * **Note:** When not set, the built-in translation for "Additional Options" is used.
+     * @default undefined
+     * @public
+     * @since 2.22.0
+     */
+    overflowButtonAccessibleName?: string;
+    /**
      * Defines the toolbar design.
      * @public
      * @default "Solid"

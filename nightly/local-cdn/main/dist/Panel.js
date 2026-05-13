@@ -18,6 +18,7 @@ import AnimationMode from "@ui5/webcomponents-base/dist/types/AnimationMode.js";
 import { getAnimationMode } from "@ui5/webcomponents-base/dist/config/AnimationMode.js";
 import { supportsTouch } from "@ui5/webcomponents-base/dist/Device.js";
 import i18n from "@ui5/webcomponents-base/dist/decorators/i18n.js";
+import { getTabbableElements } from "@ui5/webcomponents-base/dist/util/TabbableElements.js";
 import PanelTemplate from "./PanelTemplate.js";
 import { PANEL_ICON } from "./generated/i18n/i18n-defaults.js";
 // Styles
@@ -142,6 +143,12 @@ let Panel = Panel_1 = class Panel extends UI5Element {
         this._animationRunning = false;
         this._pendingToggle = false;
         this._touched = false;
+        /**
+         * Indicates whether the content area should be focusable.
+         * This is true when content is scrollable and has no focusable children.
+         * @private
+         */
+        this._contentFocusable = false;
     }
     onBeforeRendering() {
         // If the animation is running, it will set the content expanded state at the end
@@ -149,6 +156,9 @@ let Panel = Panel_1 = class Panel extends UI5Element {
             this._contentExpanded = !this.collapsed;
         }
         this._hasHeader = !!this.header.length;
+    }
+    onAfterRendering() {
+        this._updateContentFocusable();
     }
     shouldToggle(element) {
         const customContent = this.header.length;
@@ -239,6 +249,44 @@ let Panel = Panel_1 = class Panel extends UI5Element {
     }
     _headerOnTarget(target) {
         return target.classList.contains("sapMPanelWrappingDiv");
+    }
+    /**
+     * Updates the focusability of the content area.
+     * Content becomes focusable when:
+     * - Panel is expanded (not collapsed)
+     * - Content is scrollable (scrollHeight > clientHeight or scrollWidth > clientWidth)
+     * - No focusable children exist inside
+     * @private
+     */
+    _updateContentFocusable() {
+        // Not focusable when collapsed
+        if (this.collapsed) {
+            this._contentFocusable = false;
+            return;
+        }
+        const contentDom = this.shadowRoot?.querySelector(".ui5-panel-content");
+        if (!contentDom) {
+            this._contentFocusable = false;
+            return;
+        }
+        // Check if scrollable (vertical OR horizontal)
+        const isScrollable = contentDom.scrollHeight > contentDom.clientHeight
+            || contentDom.scrollWidth > contentDom.clientWidth;
+        if (!isScrollable) {
+            this._contentFocusable = false;
+            return;
+        }
+        // Check for focusable children (synchronous)
+        const tabbables = getTabbableElements(contentDom);
+        this._contentFocusable = tabbables.length === 0;
+    }
+    /**
+     * Returns the tabindex for the content area.
+     * Returns 0 when content should be focusable, undefined otherwise (removes attribute).
+     * @private
+     */
+    get _contentTabIndex() {
+        return this._contentFocusable ? 0 : undefined;
     }
     get toggleButtonTitle() {
         return Panel_1.i18nBundle.getText(PANEL_ICON);
@@ -337,6 +385,9 @@ __decorate([
 __decorate([
     property({ type: Boolean })
 ], Panel.prototype, "_touched", void 0);
+__decorate([
+    property({ type: Boolean, noAttribute: true })
+], Panel.prototype, "_contentFocusable", void 0);
 __decorate([
     slot()
 ], Panel.prototype, "header", void 0);

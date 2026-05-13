@@ -22,8 +22,11 @@ export default function PanelTemplate() {
                                                     }, name: slimArrowRight, showTooltip: true, accessibleName: this.toggleButtonTitle }) }), this._hasHeader ?
                                     _jsx("slot", { name: "header" })
                                     : // else
-                                        _jsx("div", { id: `${this._id}-header-title`, class: "ui5-panel-header-title", children: this.headerText })] }) }), _jsx("div", { class: "ui5-panel-content", id: `${this._id}-content`, tabindex: -1, style: {
+                                        _jsx("div", { id: `${this._id}-header-title`, class: "ui5-panel-header-title", children: this.headerText })] }) }), _jsx("div", { class: {
+                        "ui5-panel-content-wrapper": true,
+                        "ui5-panel-content-focusable": this._contentFocusable,
+                    }, style: {
                         display: this._contentExpanded ? "block" : "none",
-                    }, part: "content", children: _jsx("slot", {}) })] }) }));
+                    }, children: _jsx("div", { class: "ui5-panel-content", id: `${this._id}-content`, tabindex: this._contentTabIndex, part: "content", children: _jsx("slot", {}) }) })] }) }));
 }
 //# sourceMappingURL=PanelTemplate.js.map

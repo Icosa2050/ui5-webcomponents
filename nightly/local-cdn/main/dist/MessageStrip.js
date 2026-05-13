@@ -170,6 +170,7 @@ __decorate([
 MessageStrip = MessageStrip_1 = __decorate([
     customElement({
         tag: "ui5-message-strip",
+        fastNavigation: true,
         languageAware: true,
         renderer: jsxRenderer,
         template: MessageStripTemplate,

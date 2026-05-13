@@ -12,6 +12,7 @@ import jsxRender from "@ui5/webcomponents-base/dist/renderer/JsxRenderer.js";
 import ResizeHandler from "@ui5/webcomponents-base/dist/delegate/ResizeHandler.js";
 import { isPhone, supportsTouch } from "@ui5/webcomponents-base/dist/Device.js";
 import { isEscape, isHome, isEnd, isUp, isDown, isRight, isLeft, isUpCtrl, isDownCtrl, isRightCtrl, isLeftCtrl, isPlus, isMinus, isPageUp, isPageDown, isF2, } from "@ui5/webcomponents-base/dist/Keys.js";
+import { SliderHandleType } from "./SliderHandle.js";
 // Styles
 import sliderBaseStyles from "./generated/themes/SliderBase.css.js";
 import { getAssociatedLabelForTexts } from "@ui5/webcomponents-base/dist/util/AccessibilityTextsHelper.js";
@@ -201,10 +202,24 @@ class SliderBase extends UI5Element {
     }
     _onkeydown(e) {
         const target = e.target;
-        if (isF2(e) && target.classList.contains("ui5-slider-handle")) {
-            target.parentNode.querySelector("[ui5-slider-tooltip]").focus();
+        const isHandleFocused = target.hasAttribute("ui5-slider-handle");
+        if (isF2(e) && isHandleFocused) {
+            const handleType = target.getAttribute("handle-type");
+            let tooltipSelector;
+            if (handleType === SliderHandleType.Start) {
+                tooltipSelector = "[data-sap-ui-start-value]";
+            }
+            else if (handleType === SliderHandleType.End) {
+                tooltipSelector = "[data-sap-ui-end-value]";
+            }
+            else {
+                tooltipSelector = "[ui5-slider-tooltip]";
+            }
+            const tooltip = this.shadowRoot.querySelector(tooltipSelector);
+            tooltip?.focus();
+            return;
         }
-        if (this.disabled || this._effectiveStep === 0 || target.hasAttribute("ui5-slider-handle")) {
+        if (this.disabled || this._effectiveStep === 0) {
             return;
         }
         if (SliderBase_1._isActionKey(e) && target && !target.hasAttribute("ui5-slider-tooltip")) {
@@ -270,16 +285,7 @@ class SliderBase extends UI5Element {
         }
         if (this.labelInterval <= 0 || this._hiddenTickmarks) {
             this._labelsOverlapping = true;
-            return;
         }
-        // Check if there are any overlapping labels.
-        // If so - only the first and the last one should be visible
-        const remInPx = parseFloat(getComputedStyle(document.documentElement).fontSize); // calculate 1 rem in pixels
-        const childWidthPx = 2 * remInPx; // as specified label must be 2 rems so calculate one child width in pixels
-        const labelItemsParent = this.shadowRoot.querySelector(".ui5-slider-labels");
-        const labelItemsSumWidth = this._labels.length * childWidthPx; // all labels width
-        const labelItemsParentWidth = labelItemsParent.clientWidth; // label parent width
-        this._labelsOverlapping = labelItemsParentWidth < labelItemsSumWidth;
     }
     /**
      * Called when the user starts interacting with the slider.
@@ -584,9 +590,6 @@ class SliderBase extends UI5Element {
     }
     get _tabIndex() {
         return this.disabled ? -1 : 0;
-    }
-    get _ariaKeyshortcuts() {
-        return this.editableTooltip ? "F2" : undefined;
     }
     get _ariaDescribedByHandleText() {
         return this.editableTooltip ? "ui5-slider-InputDesc" : undefined;

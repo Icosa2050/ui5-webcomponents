@@ -27,6 +27,7 @@ import { VSD_DIALOG_TITLE_SORT, VSD_SUBMIT_BUTTON, VSD_CANCEL_BUTTON, VSD_RESET_
 import ViewSettingsDialogTemplate from "./ViewSettingsDialogTemplate.js";
 // Styles
 import viewSettingsDialogCSS from "./generated/themes/ViewSettingsDialog.css.js";
+const CUSTOM_MODE_PREFIX = "customTabs-";
 /**
  * @class
  * ### Overview
@@ -79,6 +80,23 @@ let ViewSettingsDialog = ViewSettingsDialog_1 = class ViewSettingsDialog extends
          */
         this.open = false;
         /**
+         * Controls whether the Reset button is always enabled.
+         *
+         * By default, the Reset button is enabled only when the built-in settings (Sort, Filter, Group)
+         * differ from their initial state — the component can detect these changes automatically.
+         * However, when the dialog contains custom tabs, the component has no way to detect
+         * whether the custom tab content has been modified by the user.
+         *
+         * Set this property to `true` when the user has made changes inside a custom tab, so that
+         * the Reset button becomes enabled and the user can trigger a reset.
+         * Set it back to `false` once the custom tab content is back to its initial state
+         * (e.g. after the user confirms or after a reset is applied).
+         * @default false
+         * @public
+         * @since 2.22.0
+         */
+        this.resetEnabled = false;
+        /**
          * Stores current settings of the dialog.
          * @private
          */
@@ -104,7 +122,7 @@ let ViewSettingsDialog = ViewSettingsDialog_1 = class ViewSettingsDialog extends
          * @since 1.0.0-rc.16
          * @private
          */
-        this._currentMode = "Sort";
+        this._currentMode = ViewSettingsDialogMode.Sort;
         /**
          * When in Filter By mode, defines whether we need to show the list of keys, or the list with values.
          * @since 1.0.0-rc.16
@@ -125,6 +143,10 @@ let ViewSettingsDialog = ViewSettingsDialog_1 = class ViewSettingsDialog extends
         }
         if (this.shouldBuildGroup) {
             this._currentMode = ViewSettingsDialogMode.Group;
+            return;
+        }
+        if (this.shouldBuildCustomTabs && (!this.isModeCustom || !this._selectedCustomTab)) {
+            this._currentMode = this._defaultMode;
         }
     }
     onInvalidation(changeInfo) {
@@ -165,9 +187,38 @@ let ViewSettingsDialog = ViewSettingsDialog_1 = class ViewSettingsDialog extends
     get shouldBuildGroup() {
         return !!this.groupItems.length;
     }
+    get shouldBuildCustomTabs() {
+        return !!this.customTabs.length;
+    }
     get hasPagination() {
-        const buildConditions = [this.shouldBuildSort, this.shouldBuildFilter, this.shouldBuildGroup];
-        return buildConditions.filter(condition => condition).length > 1;
+        const builtInTabsCount = [this.shouldBuildSort, this.shouldBuildFilter, this.shouldBuildGroup]
+            .filter(condition => condition)
+            .length;
+        if (this.shouldBuildCustomTabs) {
+            return builtInTabsCount + this.customTabs.length > 1;
+        }
+        return builtInTabsCount > 1;
+    }
+    get _defaultMode() {
+        if (this.shouldBuildSort) {
+            return ViewSettingsDialogMode.Sort;
+        }
+        if (this.shouldBuildFilter) {
+            return ViewSettingsDialogMode.Filter;
+        }
+        if (this.shouldBuildGroup) {
+            return ViewSettingsDialogMode.Group;
+        }
+        if (this.shouldBuildCustomTabs) {
+            return this._customTabMode(this.customTabs[0]);
+        }
+        return ViewSettingsDialogMode.Sort;
+    }
+    get _selectedCustomTab() {
+        if (!this._isCustomMode(this._currentMode)) {
+            return;
+        }
+        return this.customTabs.find(tab => this._customTabMode(tab) === this._currentMode);
     }
     get _filterByTitle() {
         const selectedFilterText = this._selectedFilter ? this._selectedFilter.text : "";
@@ -233,6 +284,9 @@ let ViewSettingsDialog = ViewSettingsDialog_1 = class ViewSettingsDialog extends
      * Determines disabled state of the `Reset` button.
      */
     get _disableResetButton() {
+        if (this.resetEnabled) {
+            return false;
+        }
         return this._dialog && this._settingsAreInitial && this._filteresAreInitial;
     }
     get _settingsAreInitial() {
@@ -334,6 +388,9 @@ let ViewSettingsDialog = ViewSettingsDialog_1 = class ViewSettingsDialog extends
     get isModeGroup() {
         return this._currentMode === ViewSettingsDialogMode.Group;
     }
+    get isModeCustom() {
+        return this._isCustomMode(this._currentMode);
+    }
     get showBackButton() {
         return this.isModeFilter && this._filterStepTwo;
     }
@@ -362,7 +419,10 @@ let ViewSettingsDialog = ViewSettingsDialog_1 = class ViewSettingsDialog extends
     }
     _handleModeChange(e) {
         const mode = e.detail.selectedItems[0].getAttribute("data-mode");
-        this._currentMode = ViewSettingsDialogMode[mode];
+        if (!mode || !this._isValidMode(mode)) {
+            return;
+        }
+        this._currentMode = mode;
     }
     _handleFilterValueItemClick(e) {
         const itemText = e.detail.targetItem.innerText;
@@ -483,7 +543,7 @@ let ViewSettingsDialog = ViewSettingsDialog_1 = class ViewSettingsDialog extends
     _restoreConfirmedOnEscape(evt) {
         if (evt.detail.escPressed) {
             this._cancelSettings();
-            this._currentMode = ViewSettingsDialogMode.Sort;
+            this._currentMode = this._defaultMode;
             this._filterStepTwo = false;
         }
     }
@@ -495,6 +555,7 @@ let ViewSettingsDialog = ViewSettingsDialog_1 = class ViewSettingsDialog extends
         this._recentlyFocused = this._sortOrder;
         this._focusRecentlyUsedControl();
         announce(this._resetButtonAction, InvisibleMessageMode.Assertive);
+        this.fireDecoratorEvent("reset");
     }
     /**
      * Sets current settings to ones passed as `settings` argument.
@@ -502,8 +563,28 @@ let ViewSettingsDialog = ViewSettingsDialog_1 = class ViewSettingsDialog extends
      */
     _restoreSettings(settings) {
         this._currentSettings = JSON.parse(JSON.stringify(settings));
-        this._currentMode = ViewSettingsDialogMode.Sort;
+        this._currentMode = this._defaultMode;
         this._filterStepTwo = false;
+    }
+    isCurrentCustomTabMode(tab) {
+        return this._currentMode === this._customTabMode(tab);
+    }
+    _customTabMode(tab) {
+        return tab._individualSlot;
+    }
+    _isCustomMode(mode) {
+        return mode.startsWith(CUSTOM_MODE_PREFIX);
+    }
+    _isValidMode(mode) {
+        if (mode === ViewSettingsDialogMode.Sort
+            || mode === ViewSettingsDialogMode.Filter
+            || mode === ViewSettingsDialogMode.Group) {
+            return true;
+        }
+        if (this._isCustomMode(mode)) {
+            return this.customTabs.some(tab => this._customTabMode(tab) === mode);
+        }
+        return false;
     }
     /**
      * Stores `Sort Order` list as recently used control and its selected item in current state.
@@ -638,6 +719,9 @@ __decorate([
     property({ type: Boolean })
 ], ViewSettingsDialog.prototype, "open", void 0);
 __decorate([
+    property({ type: Boolean })
+], ViewSettingsDialog.prototype, "resetEnabled", void 0);
+__decorate([
     property({ type: Object })
 ], ViewSettingsDialog.prototype, "_recentlyFocused", void 0);
 __decorate([
@@ -650,7 +734,7 @@ __decorate([
     property({ type: Object })
 ], ViewSettingsDialog.prototype, "_confirmedSettings", void 0);
 __decorate([
-    property()
+    property({ noAttribute: true })
 ], ViewSettingsDialog.prototype, "_currentMode", void 0);
 __decorate([
     property({ type: Boolean, noAttribute: true })
@@ -664,6 +748,16 @@ __decorate([
 __decorate([
     slot()
 ], ViewSettingsDialog.prototype, "groupItems", void 0);
+__decorate([
+    slot({
+        type: HTMLElement,
+        individualSlots: true,
+        invalidateOnChildChange: {
+            properties: true,
+            slots: false,
+        },
+    })
+], ViewSettingsDialog.prototype, "customTabs", void 0);
 __decorate([
     query("[ui5-list]")
 ], ViewSettingsDialog.prototype, "_list", void 0);
@@ -756,6 +850,22 @@ ViewSettingsDialog = ViewSettingsDialog_1 = __decorate([
      */
     ,
     event("close", {
+        bubbles: true,
+    })
+    /**
+     * Fired when the Reset button is clicked.
+     *
+     * **Note:** This event is particularly relevant when the dialog contains custom tabs.
+     * By default, the Reset button resets all built-in settings (sort, filter, group) to their
+     * initial values. However, the component has no knowledge of the content or state inside
+     * custom tabs — it cannot detect what has changed or what the "default" values are.
+     * Therefore, when this event is fired, it is the application developer's responsibility
+     * to listen for it and manually reset the custom tab content to its initial state.
+     * @since 2.22.0
+     * @public
+     */
+    ,
+    event("reset", {
         bubbles: true,
     })
 ], ViewSettingsDialog);

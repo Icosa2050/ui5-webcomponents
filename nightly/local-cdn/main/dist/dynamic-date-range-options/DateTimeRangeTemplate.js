@@ -6,8 +6,13 @@ import { DYNAMIC_DATE_TIME_RANGE_TEXT_TO_LABEL, DYNAMIC_DATE_TIME_RANGE_TEXT_FRO
 export default function DateTimeRangeTemplate() {
     const currentOperator = this.currentValue?.operator || "DATETIMERANGE";
     const getDateFromValue = (index = 0) => {
-        if (this.value?.operator === currentOperator && this.value.values && this.value.values.length === 2) {
-            return this.getOption(this.value.operator)?.format(this.value)?.split("-")[index].trim();
+        const source = this.currentValue?.operator === currentOperator && this.currentValue.values?.length === 2
+            ? this.currentValue
+            : this.value?.operator === currentOperator && this.value.values?.length === 2
+                ? this.value
+                : undefined;
+        if (source) {
+            return this.getOption(source.operator)?.format(source)?.split("-")[index].trim();
         }
         return undefined;
     };

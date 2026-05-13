@@ -16,7 +16,7 @@ interface IColorPaletteItem extends UI5Element, ITabbable {
     index?: number;
     selected?: boolean;
 }
-type ColorPaletteNavigationItem = IColorPaletteItem | Button;
+type ColorPaletteNavigationItem = ColorPaletteItem | Button;
 type ColorPaletteItemClickEventDetail = {
     color: string;
 };
@@ -118,7 +118,7 @@ declare class ColorPalette extends UI5Element {
      * Defines the `ui5-color-palette-item` elements.
      * @public
      */
-    colors: DefaultSlot<IColorPaletteItem>;
+    colors: DefaultSlot<ColorPaletteItem>;
     _itemNavigation: ItemNavigation;
     _itemNavigationRecentColors: ItemNavigation;
     _recentColors: Array<string>;
@@ -132,7 +132,7 @@ declare class ColorPalette extends UI5Element {
     onAfterRendering(): void;
     selectColor(item: ColorPaletteItem): void;
     _setColor(color: string): void;
-    get effectiveColorItems(): IColorPaletteItem[];
+    get effectiveColorItems(): ColorPaletteItem[];
     /**
      * Ensures that only one item is selected or only the last selected item remains active if more than one are explicitly set as 'selected'.
      * @private
@@ -157,8 +157,8 @@ declare class ColorPalette extends UI5Element {
     _isUpOrDownNavigatableColorPaletteItem(e: KeyboardEvent): boolean;
     _isPrevious(e: KeyboardEvent): boolean;
     _isNext(e: KeyboardEvent): boolean;
-    _isFirstSwatch(target: ColorPaletteItem, swatches: Array<IColorPaletteItem>): boolean;
-    _isLastSwatch(target: ColorPaletteItem, swatches: Array<IColorPaletteItem>): boolean;
+    _isFirstSwatch(target: ColorPaletteItem, swatches: Array<ColorPaletteItem>): boolean;
+    _isLastSwatch(target: ColorPaletteItem, swatches: Array<ColorPaletteItem>): boolean;
     /**
      * Checks if the target swatch is the first swatch in its row.
      * @private
@@ -263,8 +263,8 @@ declare class ColorPalette extends UI5Element {
     /**
      * Returns the selected item.
      */
-    get selectedItem(): ColorPaletteItem | IColorPaletteItem | undefined;
-    get allColorsInPalette(): (ColorPaletteItem | IColorPaletteItem)[];
+    get selectedItem(): ColorPaletteItem | undefined;
+    get allColorsInPalette(): ColorPaletteItem[];
     get colorPaletteDialogTitle(): string;
     get colorPaletteDialogOKButton(): string;
     get colorPaletteCancelButton(): string;
@@ -272,7 +272,7 @@ declare class ColorPalette extends UI5Element {
      * Returns the selected color.
      */
     get selectedColor(): string | undefined;
-    get displayedColors(): Array<IColorPaletteItem>;
+    get displayedColors(): Array<ColorPaletteItem>;
     get colorContainerLabel(): string;
     get colorPaletteMoreColorsText(): string;
     get colorPaletteDefaultColorText(): string;

@@ -262,7 +262,7 @@ let StepInput = StepInput_1 = class StepInput extends UI5Element {
     }
     _onButtonFocusOut() {
         setTimeout(() => {
-            if (!this._inputFocused) {
+            if (!this._inputFocused && !this.shadowRoot.activeElement) {
                 this.inputOuter.removeAttribute("focused");
             }
         }, 0);
@@ -281,12 +281,10 @@ let StepInput = StepInput_1 = class StepInput extends UI5Element {
         this._onInputChange();
     }
     _onMouseWheel(e) {
-        if (this.disabled || this.readonly) {
+        if (this.disabled || this.readonly || !this._isFocused) {
             return;
         }
-        if (this._isFocused) {
-            e.preventDefault();
-        }
+        e.preventDefault();
         const isScrollUp = e.deltaY < 0;
         const modifier = isScrollUp ? this.step : -this.step;
         this._modifyValue(modifier, true);
@@ -509,14 +507,26 @@ let StepInput = StepInput_1 = class StepInput extends UI5Element {
     _isInputValueValid(typedValue, parsedValue) {
         return !Number.isNaN(parsedValue) && !/, {2,}/.test(typedValue);
     }
-    _decSpin() {
+    _decSpin(e) {
+        if (this._isFocused || this._decIconDisabled) {
+            e.preventDefault();
+        }
         if (!this._decIconDisabled) {
             this._spinValue(false, true);
         }
+        else {
+            this.input.focus();
+        }
     }
-    _incSpin() {
+    _incSpin(e) {
+        if (this._isFocused || this._incIconDisabled) {
+            e.preventDefault();
+        }
         if (!this._incIconDisabled) {
             this._spinValue(true, true);
+        }
+        else {
+            this.input.focus();
         }
     }
     /**

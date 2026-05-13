@@ -10,7 +10,7 @@ import type CalendarType from "@ui5/webcomponents-base/dist/types/CalendarType.j
  * @returns {String}
  */
 declare const convertMonthNumbersToMonthNames: (firstMonth: number, lastMonth: number, calendarType?: `${CalendarType}`) => {
-    text: any;
-    textInfo: any;
+    text: string;
+    textInfo: string;
 };
 export default convertMonthNumbersToMonthNames;

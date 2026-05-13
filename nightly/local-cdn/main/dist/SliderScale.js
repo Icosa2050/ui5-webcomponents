@@ -91,6 +91,32 @@ let SliderScale = SliderScale_1 = class SliderScale extends UI5Element {
          */
         this.labelInterval = 0;
         /**
+         * Tab index for the progress bar.
+         * @default -1
+         * @private
+         */
+        this.progressTabIndex = -1;
+        /**
+         * Indicates that the progress bar is being pressed/dragged.
+         * Used to show the focus outline during mouse interaction.
+         * @default false
+         * @private
+         */
+        this.progressPressed = false;
+        /**
+         * Indicates that the progress bar should show as focused.
+         * Set by parent component (RangeSlider) when the progress bar has focus.
+         * @default false
+         * @private
+         */
+        this.progressFocused = false;
+        /**
+         * Indicates that the progress bar is being hovered.
+         * @default false
+         * @private
+         */
+        this.progressHovered = false;
+        /**
          * @private
          */
         this._labelInterval = 1;
@@ -159,6 +185,20 @@ let SliderScale = SliderScale_1 = class SliderScale extends UI5Element {
             ? this.getBoundingClientRect().width
             : this.getBoundingClientRect().height;
         return containerSize / tickmarksCount;
+    }
+    _onProgressMouseEnter() {
+        this.progressHovered = true;
+        this.handles.forEach(handle => {
+            if (!handle.active) {
+                handle.hovered = true;
+            }
+        });
+    }
+    _onProgressMouseLeave() {
+        this.progressHovered = false;
+        this.handles.forEach(handle => {
+            handle.hovered = false;
+        });
     }
     get _tickmarksCount() {
         if (this.step === 0) {
@@ -271,6 +311,33 @@ __decorate([
 __decorate([
     property({ type: Number })
 ], SliderScale.prototype, "labelInterval", void 0);
+__decorate([
+    property({ type: Number })
+], SliderScale.prototype, "progressTabIndex", void 0);
+__decorate([
+    property()
+], SliderScale.prototype, "progressRole", void 0);
+__decorate([
+    property({ type: Number })
+], SliderScale.prototype, "progressAriaValueNow", void 0);
+__decorate([
+    property()
+], SliderScale.prototype, "progressAriaValueText", void 0);
+__decorate([
+    property()
+], SliderScale.prototype, "progressAriaLabel", void 0);
+__decorate([
+    property({ type: Boolean })
+], SliderScale.prototype, "progressAriaDisabled", void 0);
+__decorate([
+    property({ type: Boolean })
+], SliderScale.prototype, "progressPressed", void 0);
+__decorate([
+    property({ type: Boolean })
+], SliderScale.prototype, "progressFocused", void 0);
+__decorate([
+    property({ type: Boolean })
+], SliderScale.prototype, "progressHovered", void 0);
 __decorate([
     property({ type: Number })
 ], SliderScale.prototype, "_labelInterval", void 0);

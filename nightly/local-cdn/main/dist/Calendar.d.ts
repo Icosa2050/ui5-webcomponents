@@ -16,6 +16,7 @@ import type CalendarLegend from "./CalendarLegend.js";
 import type { CalendarLegendItemSelectionChangeEventDetail } from "./CalendarLegend.js";
 import type SpecialCalendarDate from "./SpecialCalendarDate.js";
 import type CalendarLegendItemType from "./types/CalendarLegendItemType.js";
+import type { ResizeObserverCallback } from "@ui5/webcomponents-base/dist/delegate/ResizeHandler.js";
 import "@ui5/webcomponents-localization/dist/features/calendar/Gregorian.js";
 import type { YearRangePickerChangeEventDetail } from "./YearRangePicker.js";
 interface ICalendarPicker extends HTMLElement {
@@ -196,6 +197,13 @@ declare class Calendar extends CalendarPart {
      */
     hideWeekNumbers: boolean;
     /**
+     * Defines whether the component displays two months side by side in the picker popup.
+     * @default false
+     * @private
+     * @since 2.22.0
+     */
+    _showTwoMonths: boolean;
+    /**
      * Which picker is currently visible to the user: day/month/year/yearRange
      * @private
      */
@@ -242,8 +250,34 @@ declare class Calendar extends CalendarPart {
      * @private
      */
     _selectedItemType: `${CalendarLegendItemType}`;
+    _phoneMode: boolean;
+    _handleResizeBound: ResizeObserverCallback;
     static i18nBundle: I18nBundle;
     constructor();
+    onEnterDOM(): void;
+    get _phoneView(): boolean;
+    get _portraitView(): boolean;
+    /**
+     * Handles document resize to switch between `phoneMode` and `portraitMode`.
+     * - `_phoneMode`: When resolution is under PHONE_MODE_BREAKPOINT (regardless of device type)
+     */
+    _handleResize(): void;
+    onExitDOM(): void;
+    /**
+     * Returns the timestamp for a specific month index when displaying multiple months
+     * @private
+     */
+    _getMonthTimestamp(monthIndex: number): number;
+    /**
+     * Generates header button text (month and year) for a specific month timestamp
+     * @private
+     */
+    _getHeaderTextForMonth(monthTimestamp: number): {
+        monthText: string;
+        yearText: string;
+        secondMonthText?: string;
+        secondYearText?: string;
+    };
     /**
      * @private
      */
@@ -299,9 +333,11 @@ declare class Calendar extends CalendarPart {
     _setSecondaryCalendarTypeButtonText(): void;
     get secondaryCalendarTypeButtonText(): {
         yearButtonText: string;
-        monthButtonText: any;
-        monthButtonInfo: any;
+        monthButtonText: string;
+        monthButtonInfo: string;
     } | undefined;
+    get _isCompactMode(): boolean;
+    get _monthsToShow(): 1 | 2;
     /**
      * The month button is hidden when the month picker or year picker is shown
      * @private
@@ -321,6 +357,9 @@ declare class Calendar extends CalendarPart {
     get _isMonthPickerHidden(): boolean;
     get _isYearPickerHidden(): boolean;
     get _isYearRangePickerHidden(): boolean;
+    get _isDefaultHeaderModeInMultipleMonths(): boolean;
+    get _shouldShowOnePickerHeaderButtonInMultipleMonths(): boolean;
+    get _inert(): boolean;
     get _currentYearRange(): CalendarYearRangeT;
     _fireEventAndUpdateSelectedDates(selectedDates: Array<number>): void;
     onSelectedDatesChange(e: CustomEvent<DayPickerChangeEventDetail>): void;
@@ -381,9 +420,15 @@ declare class Calendar extends CalendarPart {
     onYearButtonKeyUp(e: KeyboardEvent): void;
     onYearRangeButtonKeyDown(e: KeyboardEvent): void;
     onYearRangeButtonKeyUp(e: KeyboardEvent): void;
-    _handleNavigationButtonKeyDown(e: MouseEvent, isDisabled: boolean, action: () => void): void;
+    _handleNavigationButtonClick(e: MouseEvent, isDisabled: boolean, action: () => void): void;
+    _handlePrevNextButtonKeyDown(e: KeyboardEvent, isDisabled: boolean, action: () => void): void;
+    _handlePrevNextButtonKeyUp(e: KeyboardEvent, isDisabled: boolean, action: () => void): void;
     onPrevButtonClick(e: MouseEvent): void;
     onNextButtonClick(e: MouseEvent): void;
+    onPrevButtonKeyDown(e: KeyboardEvent): void;
+    onPrevButtonKeyUp(e: KeyboardEvent): void;
+    onNextButtonKeyDown(e: KeyboardEvent): void;
+    onNextButtonKeyUp(e: KeyboardEvent): void;
     /**
      * Returns an array of UTC timestamps, representing the selected dates.
      * @protected

@@ -19,6 +19,7 @@ import type { ListItemClickEventDetail } from "./List.js";
 import "./ComboBoxItemGroup.js";
 import type ComboBoxFilter from "./types/ComboBoxFilter.js";
 import type { InputEventDetail } from "./Input.js";
+import type { ListItemBaseClickEventDetail } from "./ListItemBase.js";
 import type InputComposition from "./features/InputComposition.js";
 /**
  * Interface for components that may be slotted inside a `ui5-combobox`
@@ -34,6 +35,9 @@ interface IComboBoxItem extends UI5Element {
     additionalText?: string;
     _isVisible?: boolean;
     items?: Array<IComboBoxItem>;
+    eventDetails: {
+        click?: ListItemBaseClickEventDetail;
+    };
 }
 type ValueStateAnnouncement = Record<Exclude<ValueState, ValueState.None>, string>;
 type ValueStateTypeAnnouncement = Record<Exclude<ValueState, ValueState.None>, string>;

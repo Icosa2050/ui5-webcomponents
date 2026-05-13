@@ -19,7 +19,7 @@
 
 	<script>// delete Document.prototype.adoptedStyleSheets;</script>
 
-  <script type="module" crossorigin src="/webcomponents/nightly/assets/bundle.esm-CA90DYOa.js"></script>
+  <script type="module" crossorigin src="/webcomponents/nightly/assets/bundle.esm-BKFSedR7.js"></script>
   <link rel="stylesheet" crossorigin href="/webcomponents/nightly/assets/RangeSlider-BeG9WnSL.css">
 </head>
 
@@ -27,6 +27,10 @@
 		<section class="group">
 			<h2>Basic Range Slider</h2>
 			<ui5-range-slider id="basic-range-slider" accessible-name="Basic Range Slider" end-value="20"></ui5-range-slider>
+
+			<h2>Range Slider with Label (for attribute)</h2>
+			<label for="labeled-range-slider">Temperature Range</label>
+			<ui5-range-slider id="labeled-range-slider" min="0" max="100" start-value="20" end-value="80" show-tooltip></ui5-range-slider>
 
 			<h2>Range Slider with custom min and max properties and tooltip</h2>
 			<ui5-range-slider id="basic-range-slider-with-tooltip" min="50" max="200" show-tooltip></ui5-range-slider>

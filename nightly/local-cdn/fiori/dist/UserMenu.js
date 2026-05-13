@@ -12,11 +12,12 @@ import query from "@ui5/webcomponents-base/dist/decorators/query.js";
 import DOMReferenceConverter from "@ui5/webcomponents-base/dist/converters/DOMReference.js";
 import i18n from "@ui5/webcomponents-base/dist/decorators/i18n.js";
 import { isInstanceOfMenuItem } from "@ui5/webcomponents/dist/MenuItem.js";
-import { isPhone } from "@ui5/webcomponents-base/dist/Device.js";
+import { isPhone, isDesktop } from "@ui5/webcomponents-base/dist/Device.js";
 import UserMenuTemplate from "./UserMenuTemplate.js";
 import UserMenuCss from "./generated/themes/UserMenu.css.js";
 // Texts
 import { USER_MENU_OTHER_ACCOUNT_BUTTON_TXT, USER_MENU_MANAGE_ACCOUNT_BUTTON_TXT, USER_MENU_SIGN_OUT_BUTTON_TXT, USER_MENU_POPOVER_ACCESSIBLE_NAME, USER_MENU_EDIT_AVATAR_TXT, USER_MENU_EDIT_ACCOUNTS_TXT, USER_MENU_CLOSE_DIALOG_BUTTON, USER_MENU_POPOVER_ACCESSIBLE_ACCOUNT_SELECTED_TXT, USER_MENU_CURRENT_INFORMATION_TXT, USER_MENU_ACTIONS_TXT, } from "./generated/i18n/i18n-defaults.js";
+const MENU_OPEN_DELAY = 300;
 /**
  * @class
  * ### Overview
@@ -160,7 +161,7 @@ let UserMenu = UserMenu_1 = class UserMenu extends UI5Element {
         this._closeUserMenu();
     }
     _handleMenuItemClick(e) {
-        const item = e.detail.item; // imrove: improve this ideally without "as" cating
+        const item = e.detail.item;
         item._updateCheckedState();
         if (!item._popover) {
             const eventPrevented = !this.fireDecoratorEvent("item-click", {
@@ -171,6 +172,7 @@ let UserMenu = UserMenu_1 = class UserMenu extends UI5Element {
             }
         }
         else {
+            this._closeOtherSubMenus(item);
             this._openItemSubMenu(item);
         }
     }
@@ -191,13 +193,43 @@ let UserMenu = UserMenu_1 = class UserMenu extends UI5Element {
         this.open = false;
         this.fireDecoratorEvent("close");
     }
-    _openItemSubMenu(item) {
+    _itemMouseOver(e) {
+        if (!isDesktop()) {
+            return;
+        }
+        const item = e.target;
+        if (!isInstanceOfMenuItem(item)) {
+            return;
+        }
+        item.getFocusDomRef()?.focus();
+        this._startOpenTimeout(item);
+    }
+    _startOpenTimeout(item) {
+        clearTimeout(this._timeout);
+        this._timeout = setTimeout(() => {
+            this._closeOtherSubMenus(item);
+            this._openItemSubMenu(item, true);
+        }, MENU_OPEN_DELAY);
+    }
+    _closeOtherSubMenus(item) {
+        if (!this._menuItems.includes(item)) {
+            return;
+        }
+        this._menuItems.forEach(menuItem => {
+            if (menuItem !== item) {
+                menuItem._close();
+            }
+        });
+    }
+    _openItemSubMenu(item, openedByMouse = false) {
+        clearTimeout(this._timeout);
         if (!item._popover || item._popover.open) {
             return;
         }
         item._popover.opener = item;
         item._popover.open = true;
         item.selected = true;
+        item._openedByMouse = openedByMouse;
     }
     _closeUserMenu() {
         this.open = false;

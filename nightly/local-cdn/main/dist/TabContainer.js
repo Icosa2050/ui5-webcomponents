@@ -470,7 +470,7 @@ let TabContainer = TabContainer_1 = class TabContainer extends UI5Element {
             await this._togglePopover(tab);
             return;
         }
-        this._onHeaderItemSelect(tab);
+        this._onHeaderItemSelect(tab, e);
     }
     async _onTabExpandButtonClick(e) {
         e.stopPropagation();
@@ -491,7 +491,7 @@ let TabContainer = TabContainer_1 = class TabContainer extends UI5Element {
         }
         // if clicked between the expand button and the tab
         if (!tabInstance) {
-            this._onHeaderItemSelect(opener.parentElement);
+            this._onHeaderItemSelect(opener.parentElement, e);
             return;
         }
         await this._togglePopover(opener, true);
@@ -536,7 +536,7 @@ let TabContainer = TabContainer_1 = class TabContainer extends UI5Element {
                 this._onTabStripClick(e);
             }
             else {
-                this._onHeaderItemSelect(tab);
+                this._onHeaderItemSelect(tab, e);
             }
         }
         if (isSpace(e)) {
@@ -562,18 +562,18 @@ let TabContainer = TabContainer_1 = class TabContainer extends UI5Element {
                 this._onTabStripClick(e);
             }
             else {
-                this._onHeaderItemSelect(tab);
+                this._onHeaderItemSelect(tab, e);
             }
         }
     }
-    _onHeaderItemSelect(tab) {
+    _onHeaderItemSelect(tab, originalEvent) {
         if (!tab.hasAttribute("disabled")) {
-            this._onItemSelect(tab.id);
+            this._onItemSelect(tab.id, originalEvent);
         }
     }
     async _onOverflowListItemClick(e) {
         e.preventDefault(); // cancel the item selection
-        this._onItemSelect(e.detail.item.id.slice(0, -3)); // strip "-li" from end of id
+        this._onItemSelect(e.detail.item.id.slice(0, -3), e); // strip "-li" from end of id
         this._closePopover();
         await renderFinished();
         const selectedTopLevel = this._getRootTab(this._selectedTab);
@@ -598,12 +598,15 @@ let TabContainer = TabContainer_1 = class TabContainer extends UI5Element {
         });
         return result;
     }
-    _onItemSelect(selectedTabId) {
+    _onItemSelect(selectedTabId, originalEvent) {
         const selectedTabIndex = this._itemsFlat.findIndex(item => item.__id === selectedTabId);
         const selectedTab = this._itemsFlat[selectedTabIndex];
         const selectionSuccessful = this.selectTab(selectedTab, selectedTabIndex);
         if (!selectionSuccessful) {
             return;
+        }
+        if (originalEvent) {
+            selectedTab.fireDecoratorEvent("click", { tab: selectedTab, originalEvent });
         }
         // update selected property on all items
         this._itemsFlat.forEach(item => {

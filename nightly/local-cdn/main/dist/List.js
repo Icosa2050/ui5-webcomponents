@@ -39,6 +39,12 @@ import { LIST_ROLE_DESCRIPTION, LIST_ROLE_LIST_GROUP_DESCRIPTION, LIST_ROLE_LIST
 import { isInstanceOfListItemGroup } from "./ListItemGroup.js";
 const INFINITE_SCROLL_DEBOUNCE_RATE = 250; // ms
 const PAGE_UP_DOWN_SIZE = 10;
+// Maps the List's accessible-role to the expected child item ARIA role (lowercase)
+const LIST_ACCESSIBLE_ROLE_TO_ITEM_ROLE = {
+    Menu: "menuitem",
+    Tree: "treeitem",
+    ListBox: "option",
+};
 /**
  * @class
  *
@@ -422,12 +428,14 @@ let List = List_1 = class List extends UI5Element {
     }
     prepareListItems() {
         const slottedItems = this.getItemsForProcessing();
+        const inheritedItemRole = LIST_ACCESSIBLE_ROLE_TO_ITEM_ROLE[this.accessibleRole];
         slottedItems.forEach((item, key) => {
             const isLastChild = key === slottedItems.length - 1;
             const showBottomBorder = this.separators === ListSeparator.All
                 || (this.separators === ListSeparator.Inner && !isLastChild);
             if (item.hasConfigurableMode) {
                 item._selectionMode = this.selectionMode;
+                item._inheritedAccessibleRole = inheritedItemRole;
             }
             item.hasBorder = showBottomBorder;
             item.mediaRange = this.mediaRange;

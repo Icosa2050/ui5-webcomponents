@@ -108,11 +108,13 @@ let SegmentedButton = SegmentedButton_1 = class SegmentedButton extends UI5Eleme
         if (target.disabled || target === this.getDomRef() || !isTargetSegmentedButtonItem) {
             return;
         }
+        // Check if preventDefault was called on the native event (e.g., by item's semantic click handler)
+        if (e.defaultPrevented) {
+            return;
+        }
         switch (this.selectionMode) {
             case SegmentedButtonSelectionMode.Multiple:
-                if (e instanceof KeyboardEvent) {
-                    target.selected = !target.selected;
-                }
+                target.selected = !target.selected;
                 break;
             default:
                 this._applySingleSelection(target);
@@ -135,7 +137,7 @@ let SegmentedButton = SegmentedButton_1 = class SegmentedButton extends UI5Eleme
     }
     _onkeydown(e) {
         if (isEnter(e)) {
-            this._selectItem(e); // Enter key behavior remains unaffected
+            this._selectItem(e);
         }
         else if (isSpace(e)) {
             e.preventDefault(); // Prevent scrolling

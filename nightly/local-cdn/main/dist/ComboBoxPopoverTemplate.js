@@ -3,6 +3,7 @@ import Icon from "./Icon.js";
 import Button from "./Button.js";
 import List from "./List.js";
 import Input from "./Input.js";
+import Title from "./Title.js";
 import PopoverHorizontalAlign from "./types/PopoverHorizontalAlign.js";
 import Popover from "./Popover.js";
 import ResponsivePopover from "./ResponsivePopover.js";
@@ -12,7 +13,7 @@ import generateHighlightedMarkupFirstMatch from "@ui5/webcomponents-base/dist/ut
 export default function ComboBoxPopoverTemplate() {
     return (_jsxs(_Fragment, { children: [_jsxs(ResponsivePopover, { id: this.responsivePopoverId, class: this.classes.popover, style: this.styles.suggestionsPopover, tabindex: -1, open: this.open, opener: this, hideArrow: true, preventFocusRestore: true, preventInitialFocus: true, placement: "Bottom", horizontalAlign: "Start", accessibleName: this._popupLabel, onBeforeOpen: this._beforeOpenPopover, onOpen: this._afterOpenPopover, onClose: this._afterClosePopover, onKeyDown: this._handlePopoverKeydown, onFocusOut: this._handlePopoverFocusout, children: [this.loading &&
                         _jsx(BusyIndicator, { active: true, class: "ui5-combobox-busy" }), !this.loading && this._isPhone &&
-                        _jsxs(_Fragment, { children: [_jsxs("div", { slot: "header", class: "ui5-responsive-popover-header", children: [_jsx("div", { class: "row", children: _jsx("span", { children: this._headerTitleText }) }), _jsx("div", { class: "row", children: _jsx(Input, { open: this.openOnMobile, placeholder: this.placeholder, valueState: this.valueState, showClearIcon: this.showClearIcon, noTypeahead: this.noTypeahead, onKeyDown: this._handleMobileKeydown, onInput: this._handleMobileInput, onChange: this._inputChange, children: this._filteredItems.flatMap(item => {
+                        _jsxs(_Fragment, { children: [_jsxs("div", { slot: "header", class: "ui5-responsive-popover-header", children: [_jsx("div", { class: "row", children: _jsx(Title, { level: "H1", wrappingType: "None", class: "ui5-responsive-popover-header-text", children: this._headerTitleText }) }), _jsx("div", { class: "row", children: _jsx(Input, { open: this.openOnMobile, placeholder: this.placeholder, valueState: this.valueState, showClearIcon: this.showClearIcon, noTypeahead: this.noTypeahead, onKeyDown: this._handleMobileKeydown, onInput: this._handleMobileInput, onChange: this._inputChange, children: this._filteredItems.flatMap(item => {
                                                     if (item.isGroupItem && item.items) {
                                                         // For group items, return all nested items
                                                         return item.items

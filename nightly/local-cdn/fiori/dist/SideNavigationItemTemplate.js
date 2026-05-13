@@ -21,6 +21,6 @@ function ItemTemplate() {
                             !!this.items.length &&
                                 _jsx(Icon, { class: "ui5-sn-item-toggle-icon", name: this.expanded ? navDownArrow : navRightArrow, accessibleName: this._arrowTooltip, showTooltip: true, onClick: this._onToggleClick }), this.isExternalLink &&
                         _jsx(Icon, { class: "ui5-sn-item-external-link-icon", name: arrowRight })] }), !this.sideNavCollapsed && !!this.items.length &&
-                _jsx("ul", { id: this._groupId, class: "ui5-sn-item-ul", "aria-label": this.text, role: "group", children: _jsx("slot", {}) })] }));
+                _jsx("ul", { id: this._groupId, class: "ui5-sn-item-ul", "aria-label": this.accessibleName || this.text, role: "group", children: _jsx("slot", {}) })] }));
 }
 //# sourceMappingURL=SideNavigationItemTemplate.js.map

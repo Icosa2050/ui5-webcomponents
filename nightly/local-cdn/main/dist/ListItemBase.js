@@ -110,6 +110,7 @@ let ListItemBase = class ListItemBase extends UI5Element {
         if (this.getFocusDomRef().matches(":has(:focus-within)") || this._isDisabledInteractiveContentClicked(e)) {
             return;
         }
+        e.stopPropagation();
         this.fireItemPress(e);
     }
     _isDisabledInteractiveContentClicked(e) {
@@ -162,6 +163,7 @@ let ListItemBase = class ListItemBase extends UI5Element {
         if (isEnter(e)) {
             e.preventDefault();
         }
+        this.fireDecoratorEvent("click", { item: this, originalEvent: e });
         this.fireDecoratorEvent("_press", { item: this, selected: this.selected, key: e.key });
     }
     _handleTabNext(e) {
@@ -249,6 +251,20 @@ ListItemBase = __decorate([
     customElement({
         renderer: jsxRenderer,
         styles: [styles, draggableElementStyles],
+    })
+    /**
+     * Fired when the component is activated either with a mouse/tap or by using the Enter or Space key.
+     *
+     * **Note:** The event will not be fired if the `disabled` property is set to `true`.
+     *
+     * @since 2.22.0
+     * @public
+     * @param {ListItemBase} item The activated item.
+     * @param {Event} originalEvent The original event from the user interaction.
+     */
+    ,
+    event("click", {
+        bubbles: true,
     }),
     event("request-tabindex-change", {
         bubbles: true,

@@ -143,6 +143,12 @@ declare class Panel extends UI5Element {
     _pendingToggle: boolean;
     _touched: boolean;
     /**
+     * Indicates whether the content area should be focusable.
+     * This is true when content is scrollable and has no focusable children.
+     * @private
+     */
+    _contentFocusable: boolean;
+    /**
      * Defines the component header area.
      *
      * **Note:** When a header is provided, the `headerText` property is ignored.
@@ -151,6 +157,7 @@ declare class Panel extends UI5Element {
     header: Slot<HTMLElement>;
     static i18nBundle: I18nBundle;
     onBeforeRendering(): void;
+    onAfterRendering(): void;
     shouldToggle(element: HTMLElement): boolean;
     get shouldNotAnimate(): boolean;
     _isMobile(): void;
@@ -161,6 +168,21 @@ declare class Panel extends UI5Element {
     _headerKeyUp(e: KeyboardEvent): void;
     _toggleOpen(): void;
     _headerOnTarget(target: HTMLElement): boolean;
+    /**
+     * Updates the focusability of the content area.
+     * Content becomes focusable when:
+     * - Panel is expanded (not collapsed)
+     * - Content is scrollable (scrollHeight > clientHeight or scrollWidth > clientWidth)
+     * - No focusable children exist inside
+     * @private
+     */
+    _updateContentFocusable(): void;
+    /**
+     * Returns the tabindex for the content area.
+     * Returns 0 when content should be focusable, undefined otherwise (removes attribute).
+     * @private
+     */
+    get _contentTabIndex(): number | undefined;
     get toggleButtonTitle(): string;
     get expanded(): boolean;
     get accRole(): Lowercase<PanelAccessibleRole>;

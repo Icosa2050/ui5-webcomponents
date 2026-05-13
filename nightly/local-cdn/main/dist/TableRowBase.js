@@ -29,6 +29,10 @@ let TableRowBase = TableRowBase_1 = class TableRowBase extends UI5Element {
         this._rowActionCount = 0;
         this._renderNavigated = false;
         this._alternate = false;
+        this._renderDummyCell = false;
+    }
+    isHeaderRow() {
+        return false;
     }
     onEnterDOM() {
         !this.role && this.setAttribute("role", "row");
@@ -36,12 +40,37 @@ let TableRowBase = TableRowBase_1 = class TableRowBase extends UI5Element {
     }
     onBeforeRendering() {
         toggleAttribute(this, "aria-selected", this._isSelectable, `${this._isSelected}`);
+        toggleAttribute(this, "_has-popin", this._hasPopin);
+    }
+    onAfterRendering() {
+        this._handleCustomFocusOutline();
     }
     getFocusDomRef() {
         return this;
     }
-    isHeaderRow() {
-        return false;
+    async focus(focusOptions) {
+        this.setAttribute("tabindex", "-1");
+        HTMLElement.prototype.focus.call(this, focusOptions);
+        this._handleCustomFocusOutline();
+        return Promise.resolve();
+    }
+    _handleCustomFocusOutline() {
+        if (this._renderDummyCell && !this._hasPopin && document.activeElement === this) {
+            const cells = [...this.shadowRoot.children].flatMap(element => {
+                return element.localName === "slot" ? element.assignedElements() : [element];
+            });
+            const customOutlineAttribute = "data-ui5-custom-outline";
+            cells.forEach(cell => cell.removeAttribute(customOutlineAttribute));
+            const firstVisibleCell = cells.at(0);
+            const lastVisibleCell = cells.at(-2);
+            if (firstVisibleCell === lastVisibleCell) {
+                firstVisibleCell?.setAttribute(customOutlineAttribute, "startend");
+            }
+            else {
+                firstVisibleCell?.setAttribute(customOutlineAttribute, "start");
+                lastVisibleCell?.setAttribute(customOutlineAttribute, "end");
+            }
+        }
     }
     _onSelectionChange() {
         const tableSelection = this._tableSelection;
@@ -85,6 +114,9 @@ let TableRowBase = TableRowBase_1 = class TableRowBase extends UI5Element {
     get _popinCells() {
         return this.cells.filter(c => c._popin && !c._popinHidden);
     }
+    get _hasPopin() {
+        return (this._table?.rows.length ?? 0) > 0 && this.cells.some(c => c._popin && !c._popinHidden);
+    }
     get _stickyCells() {
         return [this._selectionCell, ...this.cells, this._navigatedCell].filter(cell => cell?.hasAttribute("fixed"));
     }
@@ -104,6 +136,9 @@ __decorate([
 __decorate([
     property({ type: Boolean, noAttribute: true })
 ], TableRowBase.prototype, "_alternate", void 0);
+__decorate([
+    property({ type: Boolean })
+], TableRowBase.prototype, "_renderDummyCell", void 0);
 __decorate([
     query("#selection-cell")
 ], TableRowBase.prototype, "_selectionCell", void 0);

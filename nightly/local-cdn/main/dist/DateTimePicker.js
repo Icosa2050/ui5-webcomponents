@@ -435,9 +435,6 @@ __decorate([
     property({ type: Object })
 ], DateTimePicker.prototype, "_previewValues", void 0);
 __decorate([
-    property()
-], DateTimePicker.prototype, "_lastValidValue", void 0);
-__decorate([
     query("[ui5-time-selection-clocks]")
 ], DateTimePicker.prototype, "_clocks", void 0);
 DateTimePicker = DateTimePicker_1 = __decorate([

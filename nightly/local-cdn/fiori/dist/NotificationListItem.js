@@ -294,8 +294,9 @@ let NotificationListItem = NotificationListItem_1 = class NotificationListItem e
     /**
      * Event handlers
      */
-    _onclick() {
-        this.fireItemPress();
+    _onclick(e) {
+        e.stopPropagation();
+        this.fireItemPress(e);
     }
     _onShowMoreClick(e) {
         e.preventDefault();
@@ -350,13 +351,14 @@ let NotificationListItem = NotificationListItem_1 = class NotificationListItem e
     /**
      * Private
      */
-    fireItemPress() {
+    fireItemPress(e) {
         if (this.getFocusDomRef().matches(":has(:focus-within)")) {
             return;
         }
         // NotificationListItem will never be assigned to a variable of type ListItemBase
         // typescipt complains here, if that is the case, the parameter to the _press event handler could be a ListItemBase item,
         // but this is never the case, all components are used by their class and never assigned to a variable with a type of ListItemBase
+        this.fireDecoratorEvent("click", { item: this, originalEvent: e });
         this.fireDecoratorEvent("_press", { item: this });
     }
     onResize() {
@@ -430,6 +432,18 @@ NotificationListItem = NotificationListItem_1 = __decorate([
         template: NotificationListItemTemplate,
     }),
     event("_press", {
+        bubbles: true,
+    })
+    /**
+     * Fired when the component is activated either with a mouse/tap or by using the Enter or Space key.
+     *
+     * @since 2.22.0
+     * @public
+     * @param {NotificationListItem} item The activated item.
+     * @param {Event} originalEvent The original event from the user interaction.
+     */
+    ,
+    event("click", {
         bubbles: true,
     })
     /**

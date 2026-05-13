@@ -6,6 +6,7 @@ import type { ListItemClickEventDetail } from "@ui5/webcomponents/dist/List.js";
 import type ResponsivePopover from "@ui5/webcomponents/dist/ResponsivePopover.js";
 import type I18nBundle from "@ui5/webcomponents-base/dist/i18nBundle.js";
 import type { PopupScrollEventDetail } from "@ui5/webcomponents/dist/Popup.js";
+import type { Timeout } from "@ui5/webcomponents-base/dist/types.js";
 import type UserMenuAccount from "./UserMenuAccount.js";
 import type UserMenuItem from "./UserMenuItem.js";
 type UserMenuItemClickEventDetail = {
@@ -130,6 +131,10 @@ declare class UserMenu extends UI5Element {
     /**
      * @private
      */
+    _timeout?: Timeout;
+    /**
+     * @private
+     */
     _responsivePopover?: ResponsivePopover;
     /**
      * @private
@@ -154,7 +159,10 @@ declare class UserMenu extends UI5Element {
     _handleMenuItemClose(): void;
     _handlePopoverAfterOpen(): void;
     _handlePopoverAfterClose(): void;
-    _openItemSubMenu(item: UserMenuItem): void;
+    _itemMouseOver(e: MouseEvent): void;
+    _startOpenTimeout(item: UserMenuItem): void;
+    _closeOtherSubMenus(item: UserMenuItem): void;
+    _openItemSubMenu(item: UserMenuItem, openedByMouse?: boolean): void;
     _closeUserMenu(): void;
     get _otherAccounts(): Slot<UserMenuAccount>;
     get _manageAccountButtonText(): string;

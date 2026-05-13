@@ -8,7 +8,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 	<meta charset="utf-8">
 
-  <script type="module" crossorigin src="/webcomponents/nightly/assets/bundle.esm-BTfKuRa5.js"></script>
+  <script type="module" crossorigin src="/webcomponents/nightly/assets/bundle.esm-BV9-J0GY.js"></script>
   <link rel="stylesheet" crossorigin href="/webcomponents/nightly/assets/Timeline-CfrlPcdf.css">
 </head>
 
@@ -358,6 +358,33 @@
 								<ui5-avatar initials="BR"></ui5-avatar>
 							</ui5-avatar-group>
 							<div>Review project deliverables</div>
+						</ui5-timeline-item>
+					</ui5-timeline-group-item>
+				</ui5-timeline>
+			</div>
+		</section>
+
+		<section style="width: 100%;">
+			<h2>Timeline with Various Timeline Item States</h2>
+			<div style="width: 50%; margin: 1rem;">
+				<ui5-timeline id="test-timeline">
+					<ui5-timeline-group-item group-name="Build">
+						<ui5-timeline-item title="Compile" subtitle="Testing suite A" icon="sap-icon://accept" icon-tooltip="Compilation successful" name="Testing suite A" state="Positive">
+							Compilation succeeded.
+						</ui5-timeline-item>
+						<ui5-timeline-item title="Lint" subtitle="Testing suite B" icon="sap-icon://message-information" name="Testing suite B" state="Information">
+							Lint completed with minor issues.
+						</ui5-timeline-item>
+					</ui5-timeline-group-item>
+					<ui5-timeline-group-item group-name="Test">
+						<ui5-timeline-item title="Unit Test" subtitle="Testing suite C" icon="sap-icon://decline" name="Testing suite C" state="Negative">
+							Unit tests failed.
+						</ui5-timeline-item>
+						<ui5-timeline-item title="Integration Test" subtitle="Testing suite D" icon="sap-icon://message-warning" name="Testing suite D" state="Critical">
+							Integration tests have warnings.
+						</ui5-timeline-item>
+						<ui5-timeline-item title="E2E Test" subtitle="Testing suite E" icon="sap-icon://accept" name="Testing suite E" state="Positive">
+							End-to-end tests passed.
 						</ui5-timeline-item>
 					</ui5-timeline-group-item>
 				</ui5-timeline>

@@ -42,6 +42,16 @@ declare class AvatarBadge extends UI5Element {
      */
     icon?: string;
     /**
+     * Defines the tooltip text of the badge icon.
+     *
+     * **Note:** If not provided, the badge uses the icon accessible name.
+     * If no icon accessible name is available, a generic fallback text is used.
+     * @default undefined
+     * @public
+     * @since 2.22.0
+     */
+    tooltip?: string;
+    /**
      * Defines the state of the badge, which determines its styling.
      *
      * Available options:
@@ -59,6 +69,10 @@ declare class AvatarBadge extends UI5Element {
      * @private
      */
     invalid: boolean;
-    onBeforeRendering(): void;
+    /**
+     * @private
+     */
+    effectiveTooltip?: string;
+    onBeforeRendering(): Promise<void>;
 }
 export default AvatarBadge;

@@ -1,7 +1,7 @@
 import type ListItemBase from "./ListItemBase.js";
-import type { AriaRole } from "@ui5/webcomponents-base/";
+import type { AriaRole, JsxTemplate } from "@ui5/webcomponents-base/";
 export default function ListItemBaseTemplate(this: ListItemBase, hooks?: {
-    listItemContent: () => void;
+    listItemContent: JsxTemplate;
 }, injectedProps?: {
     role?: AriaRole;
     title?: string;

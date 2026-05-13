@@ -104,7 +104,7 @@ let MonthPicker = MonthPicker_1 = class MonthPicker extends CalendarPart {
                 selected: isSelected || isSelectedBetween,
                 ariaSelected: isSelected || isSelectedBetween,
                 name: monthsNames[i],
-                nameInSecType: this.hasSecondaryCalendarType && this._getDisplayedSecondaryMonthText(timestamp).text,
+                nameInSecType: this.hasSecondaryCalendarType ? this._getDisplayedSecondaryMonthText(timestamp).text : undefined,
                 disabled: isDisabled,
                 ariaDisabled: isDisabled,
                 classes: "ui5-mp-item",

@@ -10,7 +10,7 @@ export default function TimelineItemTemplate() {
                     "ui5-tli-indicator-short-line": this.forcedLineWidth === "ShortLineWidth",
                     "ui5-tli-indicator-large-line": this.forcedLineWidth === "LargeLineWidth",
                 }, children: _jsx("div", { class: "ui5-tli-icon-outer", children: this.icon ?
-                        _jsx(Icon, { class: "ui5-tli-icon", name: this.icon, mode: "Decorative" })
+                        _jsx(Icon, { class: "ui5-tli-icon", name: this.icon, mode: "Decorative", showTooltip: !!this.iconTooltip, accessibleName: this.iconTooltip })
                         :
                             _jsx("div", { class: "ui5-tli-dummy-icon-container" }) }) }), !this.hideBubble &&
                 _jsxs("div", { "data-sap-focus-ref": true, class: "ui5-tli-bubble", role: this.effectiveRole, tabindex: parseInt(this.forcedTabIndex), "aria-label": accessibleLabel, "aria-description": this.timelineItemStateText, children: [_jsxs("div", { class: "ui5-tli-title", children: [this.name && name.call(this), _jsx("span", { children: this.titleText })] }), _jsx("div", { class: "ui5-tli-subtitle", children: this.subtitleText }), this.content &&

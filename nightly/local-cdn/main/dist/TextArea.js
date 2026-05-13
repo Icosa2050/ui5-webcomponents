@@ -153,6 +153,12 @@ let TextArea = TextArea_1 = class TextArea extends UI5Element {
          * @private
          */
         this._mirrorText = [];
+        /**
+         * Indicates whether IME composition is currently active
+         * @default false
+         * @private
+         */
+        this._isComposing = false;
         this._firstRendering = true;
         this._openValueStateMsgPopover = false;
         this._fnOnResize = this._onResize.bind(this);
@@ -160,9 +166,11 @@ let TextArea = TextArea_1 = class TextArea extends UI5Element {
     }
     onEnterDOM() {
         ResizeHandler.register(this, this._fnOnResize);
+        this._enableComposition();
     }
     onExitDOM() {
         ResizeHandler.deregister(this, this._fnOnResize);
+        this._composition?.removeEventListeners();
     }
     onBeforeRendering() {
         if (!this.value) {
@@ -190,6 +198,9 @@ let TextArea = TextArea_1 = class TextArea extends UI5Element {
     }
     _onkeydown(e) {
         this._keyDown = true;
+        if (this._isComposing) {
+            return;
+        }
         if (isEscape(e)) {
             const nativeTextArea = this.getInputDomRef();
             const prevented = !this.fireDecoratorEvent("input", {
@@ -308,6 +319,29 @@ let TextArea = TextArea_1 = class TextArea extends UI5Element {
         return {
             exceededText, leftCharactersCount, calcedMaxLength,
         };
+    }
+    _enableComposition() {
+        if (this._composition) {
+            return;
+        }
+        const setup = (FeatureClass) => {
+            this._composition = new FeatureClass({
+                getInputEl: () => this.getInputDomRef(),
+                updateCompositionState: (isComposing) => {
+                    this._isComposing = isComposing;
+                },
+            });
+            this._composition.addEventListeners();
+        };
+        if (TextArea_1.composition) {
+            setup(TextArea_1.composition);
+        }
+        else {
+            import("./features/InputComposition.js").then(CompositionModule => {
+                TextArea_1.composition = CompositionModule.default;
+                setup(CompositionModule.default);
+            });
+        }
     }
     get classes() {
         return {
@@ -461,6 +495,9 @@ __decorate([
 __decorate([
     property({ type: Number })
 ], TextArea.prototype, "_width", void 0);
+__decorate([
+    property({ type: Boolean, noAttribute: true })
+], TextArea.prototype, "_isComposing", void 0);
 __decorate([
     slot()
 ], TextArea.prototype, "valueStateMessage", void 0);

@@ -388,6 +388,17 @@
               "description": "Defines the state of the badge, which determines its styling.\n\nAvailable options:\n- `None` (default) - Standard appearance\n- `Positive` - Green, used for success/approved states\n- `Critical` - Orange, used for warning states\n- `Negative` - Red, used for error/rejected states\n- `Information` - Blue, used for informational states",
               "default": "\"None\"",
               "privacy": "public"
+            },
+            {
+              "kind": "field",
+              "name": "tooltip",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Defines the tooltip text of the badge icon.\n\n**Note:** If not provided, the badge uses the icon accessible name.\nIf no icon accessible name is available, a generic fallback text is used.",
+              "default": "undefined",
+              "privacy": "public",
+              "_ui5since": "2.22.0"
             }
           ],
           "attributes": [
@@ -407,6 +418,15 @@
               "fieldName": "state",
               "type": {
                 "text": "\"None\" | \"Positive\" | \"Critical\" | \"Negative\" | \"Information\""
+              }
+            },
+            {
+              "description": "Defines the tooltip text of the badge icon.\n\n**Note:** If not provided, the badge uses the icon accessible name.\nIf no icon accessible name is available, a generic fallback text is used.",
+              "name": "tooltip",
+              "default": "undefined",
+              "fieldName": "tooltip",
+              "type": {
+                "text": "string | undefined"
               }
             }
           ],
@@ -1132,6 +1152,61 @@
               "privacy": "public"
             }
           ],
+          "events": [
+            {
+              "name": "click",
+              "_ui5privacy": "public",
+              "type": {
+                "text": "CustomEvent<BreadcrumbsItemClickEventDetail>",
+                "references": [
+                  {
+                    "name": "BreadcrumbsItemClickEventDetail",
+                    "package": "@ui5/webcomponents",
+                    "module": "dist/BreadcrumbsItem.js"
+                  }
+                ]
+              },
+              "description": "Fired when the component is activated either with a mouse/tap or by using the Enter or Space key.\n\n**Note:** The event is also fired for the current page location item (the last item), which is not a link by design.",
+              "_ui5Cancelable": true,
+              "_ui5allowPreventDefault": true,
+              "_ui5Bubbles": true,
+              "_ui5since": "2.22.0",
+              "_ui5parameters": [
+                {
+                  "type": {
+                    "text": "boolean"
+                  },
+                  "name": "altKey",
+                  "_ui5privacy": "public",
+                  "description": "Returns whether the \"ALT\" key was pressed when the event was triggered."
+                },
+                {
+                  "type": {
+                    "text": "boolean"
+                  },
+                  "name": "ctrlKey",
+                  "_ui5privacy": "public",
+                  "description": "Returns whether the \"CTRL\" key was pressed when the event was triggered."
+                },
+                {
+                  "type": {
+                    "text": "boolean"
+                  },
+                  "name": "metaKey",
+                  "_ui5privacy": "public",
+                  "description": "Returns whether the \"META\" key was pressed when the event was triggered."
+                },
+                {
+                  "type": {
+                    "text": "boolean"
+                  },
+                  "name": "shiftKey",
+                  "_ui5privacy": "public",
+                  "description": "Returns whether the \"SHIFT\" key was pressed when the event was triggered."
+                }
+              ]
+            }
+          ],
           "attributes": [
             {
               "description": "Defines the accessible ARIA name of the item.",
@@ -1512,6 +1587,17 @@
             },
             {
               "kind": "field",
+              "name": "form",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Associates the button with a form element by the form's `id` attribute.\nWhen set, the button can submit or reset the specified form even if the button\nis not a descendant of that form.\n\n**Note:** This property takes effect only when the button's \"type\" property is set to \"Submit\" or \"Reset\".",
+              "default": "undefined",
+              "privacy": "public",
+              "_ui5since": "2.21.0"
+            },
+            {
+              "kind": "field",
               "name": "icon",
               "type": {
                 "text": "string | undefined"
@@ -1715,6 +1801,15 @@
               "name": "end-icon",
               "default": "undefined",
               "fieldName": "endIcon",
+              "type": {
+                "text": "string | undefined"
+              }
+            },
+            {
+              "description": "Associates the button with a form element by the form's `id` attribute.\nWhen set, the button can submit or reset the specified form even if the button\nis not a descendant of that form.\n\n**Note:** This property takes effect only when the button's \"type\" property is set to \"Submit\" or \"Reset\".",
+              "name": "form",
+              "default": "undefined",
+              "fieldName": "form",
               "type": {
                 "text": "string | undefined"
               }
@@ -4006,12 +4101,12 @@
               "description": "Defines the `ui5-color-palette-item` elements.",
               "_ui5propertyName": "colors",
               "_ui5type": {
-                "text": "Array<IColorPaletteItem>",
+                "text": "Array<ColorPaletteItem>",
                 "references": [
                   {
-                    "name": "IColorPaletteItem",
+                    "name": "ColorPaletteItem",
                     "package": "@ui5/webcomponents",
-                    "module": "dist/ColorPalette.js"
+                    "module": "dist/ColorPaletteItem.js"
                   }
                 ]
               },
@@ -4151,6 +4246,17 @@
             },
             {
               "kind": "field",
+              "name": "tooltip",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Defines the tooltip of the component. When not set, the color value is used as the tooltip.",
+              "default": "undefined",
+              "privacy": "public",
+              "_ui5since": "2.22.0"
+            },
+            {
+              "kind": "field",
               "name": "value",
               "type": {
                 "text": "string"
@@ -4158,6 +4264,37 @@
               "default": "\"\"",
               "description": "Defines the colour of the component.\n\n**Note:** The value should be a valid CSS color.",
               "privacy": "public"
+            }
+          ],
+          "events": [
+            {
+              "name": "click",
+              "_ui5privacy": "public",
+              "type": {
+                "text": "CustomEvent<ColorPaletteItemNativeClickEventDetail>",
+                "references": [
+                  {
+                    "name": "ColorPaletteItemNativeClickEventDetail",
+                    "package": "@ui5/webcomponents",
+                    "module": "dist/ColorPaletteItem.js"
+                  }
+                ]
+              },
+              "description": "Fired when the component is activated either with a mouse/tap or by using the Enter or Space key.\n\n**Note:** The event will not be fired if the `disabled` property is set to `true`.",
+              "_ui5Cancelable": true,
+              "_ui5allowPreventDefault": true,
+              "_ui5Bubbles": true,
+              "_ui5since": "2.22.0",
+              "_ui5parameters": [
+                {
+                  "type": {
+                    "text": "Event"
+                  },
+                  "name": "originalEvent",
+                  "_ui5privacy": "public",
+                  "description": "The original DOM event that triggered the click. Use this to access modifier keys (altKey, ctrlKey, metaKey, shiftKey) and other native event properties."
+                }
+              ]
             }
           ],
           "attributes": [
@@ -4168,6 +4305,15 @@
               "fieldName": "selected",
               "type": {
                 "text": "boolean"
+              }
+            },
+            {
+              "description": "Defines the tooltip of the component. When not set, the color value is used as the tooltip.",
+              "name": "tooltip",
+              "default": "undefined",
+              "fieldName": "tooltip",
+              "type": {
+                "text": "string | undefined"
               }
             },
             {
@@ -5222,6 +5368,52 @@
               "name": "IComboBoxItem",
               "package": "@ui5/webcomponents",
               "module": "dist/ComboBox.js"
+            }
+          ],
+          "events": [
+            {
+              "name": "click",
+              "_ui5privacy": "public",
+              "type": {
+                "text": "CustomEvent<ListItemBaseClickEventDetail>",
+                "references": [
+                  {
+                    "name": "ListItemBaseClickEventDetail",
+                    "package": "@ui5/webcomponents",
+                    "module": "dist/ListItemBase.js"
+                  }
+                ]
+              },
+              "description": "Fired when the component is activated either with a mouse/tap or by using the Enter or Space key.\n\n**Note:** The event will not be fired if the `disabled` property is set to `true`.",
+              "_ui5Cancelable": false,
+              "_ui5allowPreventDefault": false,
+              "_ui5Bubbles": true,
+              "_ui5since": "2.22.0",
+              "_ui5parameters": [
+                {
+                  "type": {
+                    "text": "ListItemBase",
+                    "references": [
+                      {
+                        "name": "ListItemBase",
+                        "package": "@ui5/webcomponents",
+                        "module": "dist/ListItemBase.js"
+                      }
+                    ]
+                  },
+                  "name": "item",
+                  "_ui5privacy": "public",
+                  "description": "The activated item."
+                },
+                {
+                  "type": {
+                    "text": "Event"
+                  },
+                  "name": "originalEvent",
+                  "_ui5privacy": "public",
+                  "description": "The original event from the user interaction."
+                }
+              ]
             }
           ]
         }
@@ -6510,7 +6702,7 @@
       "declarations": [
         {
           "kind": "class",
-          "description": "### Overview\nThe DateRangePicker enables the users to enter a localized date range using touch, mouse, keyboard input, or by selecting a date range in the calendar.\n\n### Usage\nThe user can enter a date by:\nUsing the calendar that opens in a popup or typing it in directly in the input field (not available for mobile devices).\nFor the `ui5-daterange-picker`\n### ES6 Module Import\n\n`import \"@ui5/webcomponents/dist/DateRangePicker.js\";`\n\n### Keyboard Handling\nThe `ui5-daterange-picker` provides advanced keyboard handling.\n\nWhen the `ui5-daterange-picker` input field is focused the user can\nincrement or decrement respectively the range start or end date, depending on where the cursor is.\nThe following shortcuts are available:\n\n- [Page Down] - Decrements the corresponding day of the month by one\n- [Shift] + [Page Down] - Decrements the corresponding month by one\n- [Shift] + [Ctrl] + [Page Down] - Decrements the corresponding year by one\n- [Page Up] - Increments the corresponding day of the month by one\n- [Shift] + [Page Up] - Increments the corresponding month by one\n- [Shift] + [Ctrl] + [Page Up] - Increments the corresponding year by one",
+          "description": "### Overview\nThe DateRangePicker enables the users to enter a localized date range using touch, mouse, keyboard input, or by selecting a date range in the calendar.\n\n### Usage\nThe user can enter a date by:\nUsing the calendar that opens in a popup or typing it in directly in the input field (not available for mobile devices).\nFor the `ui5-daterange-picker`:\n\n**Note:** Relative date values such as \"today\", \"yesterday\", or \"tomorrow\" are not supported.\nEntering a relative date sets the component to an error state.\n### ES6 Module Import\n\n`import \"@ui5/webcomponents/dist/DateRangePicker.js\";`\n\n### Keyboard Handling\nThe `ui5-daterange-picker` provides advanced keyboard handling.\n\nWhen the `ui5-daterange-picker` input field is focused the user can\nincrement or decrement respectively the range start or end date, depending on where the cursor is.\nThe following shortcuts are available:\n\n- [Page Down] - Decrements the corresponding day of the month by one\n- [Shift] + [Page Down] - Decrements the corresponding month by one\n- [Shift] + [Ctrl] + [Page Down] - Decrements the corresponding year by one\n- [Page Up] - Increments the corresponding day of the month by one\n- [Shift] + [Page Up] - Increments the corresponding month by one\n- [Shift] + [Ctrl] + [Page Up] - Increments the corresponding year by one",
           "name": "DateRangePicker",
           "members": [
             {
@@ -6902,6 +7094,17 @@
             },
             {
               "kind": "field",
+              "name": "showTwoMonths",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Defines whether the component displays two months side by side in the picker popup.\n\nWhen enabled, two consecutive months are shown, making it easier to select date ranges\nthat span multiple months without the need to navigate between months.\n\n**Note:** On mobile devices only a single month\nwill be displayed regardless of this setting.",
+              "privacy": "public",
+              "_ui5since": "2.22.0"
+            },
+            {
+              "kind": "field",
               "name": "startDateValue",
               "type": {
                 "text": "Date | null"
@@ -7166,6 +7369,15 @@
               "name": "show-clear-icon",
               "default": "false",
               "fieldName": "showClearIcon",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "description": "Defines whether the component displays two months side by side in the picker popup.\n\nWhen enabled, two consecutive months are shown, making it easier to select date ranges\nthat span multiple months without the need to navigate between months.\n\n**Note:** On mobile devices only a single month\nwill be displayed regardless of this setting.",
+              "name": "show-two-months",
+              "default": "false",
+              "fieldName": "showTwoMonths",
               "type": {
                 "text": "boolean"
               }
@@ -7578,7 +7790,7 @@
                 ]
               },
               "default": "\"Text\"",
-              "description": "Defines the HTML type of the component.\n\n**Notes:**\n\n- The particular effect of this property differs depending on the browser\nand the current language settings, especially for type `Number`.\n- The property is mostly intended to be used with touch devices\nthat use different soft keyboard layouts depending on the given input type.",
+              "description": "Defines the HTML type of the component.\n\n**Notes:**\n\n- The particular effect of this property differs depending on the browser\nand the current language settings, especially for type `Number`.\n- The property is mostly intended to be used with touch devices\nthat use different soft keyboard layouts depending on the given input type.\n- Type `Number` does not support suggestions.",
               "privacy": "public"
             },
             {
@@ -7622,7 +7834,7 @@
           "slots": [
             {
               "name": "default",
-              "description": "Defines the suggestion items.\n\n**Note:** The suggestions would be displayed only if the `showSuggestions`\nproperty is set to `true`.\n\n**Note:** The `<ui5-suggestion-item>`, `<ui5-suggestion-item-group>` and `ui5-suggestion-item-custom` are recommended to be used as suggestion items.",
+              "description": "Defines the suggestion items.\n\n**Note:** The suggestions would be displayed only if the `showSuggestions`\nproperty is set to `true`.\n\n**Note:** The `<ui5-suggestion-item>`, `<ui5-suggestion-item-group>` and `ui5-suggestion-item-custom` are recommended to be used as suggestion items.\n\n**Note:** Input with type `Number` does not support suggestions.",
               "_ui5propertyName": "suggestionItems",
               "_ui5type": {
                 "text": "Array<IInputSuggestionItem>",
@@ -7812,7 +8024,7 @@
               }
             },
             {
-              "description": "Defines the HTML type of the component.\n\n**Notes:**\n\n- The particular effect of this property differs depending on the browser\nand the current language settings, especially for type `Number`.\n- The property is mostly intended to be used with touch devices\nthat use different soft keyboard layouts depending on the given input type.",
+              "description": "Defines the HTML type of the component.\n\n**Notes:**\n\n- The particular effect of this property differs depending on the browser\nand the current language settings, especially for type `Number`.\n- The property is mostly intended to be used with touch devices\nthat use different soft keyboard layouts depending on the given input type.\n- Type `Number` does not support suggestions.",
               "name": "type",
               "default": "\"Text\"",
               "fieldName": "type",
@@ -11031,7 +11243,7 @@
         },
         {
           "kind": "class",
-          "description": "### Overview\n\nThe `ui5-input` component allows the user to enter and edit text or numeric values in one line.\n\nAdditionally, you can provide `suggestionItems`,\nthat are displayed in a popover right under the input.\n\nThe text field can be editable or read-only (`readonly` property),\nand it can be enabled or disabled (`disabled` property).\nTo visualize semantic states, such as \"Negative\" or \"Critical\", the `valueState` property is provided.\nWhen the user makes changes to the text, the change event is fired,\nwhich enables you to react on any text change.\n\n### Keyboard Handling\nThe `ui5-input` provides the following keyboard shortcuts:\n\n- [Escape] - Closes the suggestion list, if open. If closed or not enabled, cancels changes and reverts to the value which the Input field had when it got the focus.\n- [Enter] or [Return] - If suggestion list is open takes over the current matching item and closes it. If value state or group header is focused, does nothing.\n- [Down] - Focuses the next matching item in the suggestion list. Selection-change event is fired.\n- [Up] - Focuses the previous matching item in the suggestion list. Selection-change event is fired.\n- [Home] - If focus is in the text input, moves caret before the first character. If focus is in the list, highlights the first item and updates the input accordingly.\n- [End] - If focus is in the text input, moves caret after the last character. If focus is in the list, highlights the last item and updates the input accordingly.\n- [Page Up] - If focus is in the list, moves highlight up by page size (10 items by default). If focus is in the input, does nothing.\n- [Page Down] - If focus is in the list, moves highlight down by page size (10 items by default). If focus is in the input, does nothing.\n- [Ctrl]+[Alt]+[F8] or [Command]+[Option]+[F8] - Focuses the first link in the value state message, if available. Pressing [Tab] moves the focus to the next link in the value state message, or closes the value state message if there are no more links.\n\n### ES6 Module Import\n\n`import \"@ui5/webcomponents/dist/Input.js\";`",
+          "description": "### Overview\n\nThe `ui5-input` component allows the user to enter and edit text or numeric values in one line.\n\nAdditionally, you can provide `suggestionItems`\nthat are displayed in a popover right under the input. Keep in mind that `ui5-input` with type `Number` does not support suggestions.\n\nThe text field can be editable or read-only (`readonly` property),\nand it can be enabled or disabled (`disabled` property).\nTo visualize semantic states, such as \"Negative\" or \"Critical\", the `valueState` property is provided.\nWhen the user makes changes to the text, the change event is fired,\nwhich enables you to react on any text change.\n\n### Keyboard Handling\nThe `ui5-input` provides the following keyboard shortcuts:\n\n- [Escape] - Closes the suggestion list, if open. If closed or not enabled, cancels changes and reverts to the value which the Input field had when it got the focus.\n- [Enter] or [Return] - If suggestion list is open takes over the current matching item and closes it. If value state or group header is focused, does nothing.\n- [Down] - Focuses the next matching item in the suggestion list. Selection-change event is fired.\n- [Up] - Focuses the previous matching item in the suggestion list. Selection-change event is fired.\n- [Home] - If focus is in the text input, moves caret before the first character. If focus is in the list, highlights the first item and updates the input accordingly.\n- [End] - If focus is in the text input, moves caret after the last character. If focus is in the list, highlights the last item and updates the input accordingly.\n- [Page Up] - If focus is in the list, moves highlight up by page size (10 items by default). If focus is in the input, does nothing.\n- [Page Down] - If focus is in the list, moves highlight down by page size (10 items by default). If focus is in the input, does nothing.\n- [Ctrl]+[Alt]+[F8] or [Command]+[Option]+[F8] - Focuses the first link in the value state message, if available. Pressing [Tab] moves the focus to the next link in the value state message, or closes the value state message if there are no more links.\n\n### ES6 Module Import\n\n`import \"@ui5/webcomponents/dist/Input.js\";`",
           "name": "Input",
           "cssParts": [
             {
@@ -11050,7 +11262,7 @@
           "slots": [
             {
               "name": "default",
-              "description": "Defines the suggestion items.\n\n**Note:** The suggestions would be displayed only if the `showSuggestions`\nproperty is set to `true`.\n\n**Note:** The `<ui5-suggestion-item>`, `<ui5-suggestion-item-group>` and `ui5-suggestion-item-custom` are recommended to be used as suggestion items.",
+              "description": "Defines the suggestion items.\n\n**Note:** The suggestions would be displayed only if the `showSuggestions`\nproperty is set to `true`.\n\n**Note:** The `<ui5-suggestion-item>`, `<ui5-suggestion-item-group>` and `ui5-suggestion-item-custom` are recommended to be used as suggestion items.\n\n**Note:** Input with type `Number` does not support suggestions.",
               "_ui5propertyName": "suggestionItems",
               "_ui5type": {
                 "text": "Array<IInputSuggestionItem>",
@@ -11271,7 +11483,7 @@
                 ]
               },
               "default": "\"Text\"",
-              "description": "Defines the HTML type of the component.\n\n**Notes:**\n\n- The particular effect of this property differs depending on the browser\nand the current language settings, especially for type `Number`.\n- The property is mostly intended to be used with touch devices\nthat use different soft keyboard layouts depending on the given input type.",
+              "description": "Defines the HTML type of the component.\n\n**Notes:**\n\n- The particular effect of this property differs depending on the browser\nand the current language settings, especially for type `Number`.\n- The property is mostly intended to be used with touch devices\nthat use different soft keyboard layouts depending on the given input type.\n- Type `Number` does not support suggestions.",
               "privacy": "public"
             },
             {
@@ -11530,7 +11742,7 @@
               }
             },
             {
-              "description": "Defines the HTML type of the component.\n\n**Notes:**\n\n- The particular effect of this property differs depending on the browser\nand the current language settings, especially for type `Number`.\n- The property is mostly intended to be used with touch devices\nthat use different soft keyboard layouts depending on the given input type.",
+              "description": "Defines the HTML type of the component.\n\n**Notes:**\n\n- The particular effect of this property differs depending on the browser\nand the current language settings, especially for type `Number`.\n- The property is mostly intended to be used with touch devices\nthat use different soft keyboard layouts depending on the given input type.\n- Type `Number` does not support suggestions.",
               "name": "type",
               "default": "\"Text\"",
               "fieldName": "type",
@@ -12909,6 +13121,17 @@
             },
             {
               "kind": "field",
+              "name": "accessibleRole",
+              "type": {
+                "text": "Exclude<ListItemAccessibleRole, ListItemAccessibleRole.Group> | undefined"
+              },
+              "description": "Used to define the role of the list item.\n\n**Note:** If not set, the role is automatically inherited from the parent `ui5-list` based on its `accessible-role` property\n(e.g. `Menu` -> `MenuItem`, `Tree` -> `TreeItem`, `ListBox` -> `Option`).\nAn explicitly set `accessible-role` on the list item takes precedence over the inherited role.",
+              "default": "undefined",
+              "privacy": "public",
+              "_ui5since": "1.3.0"
+            },
+            {
+              "kind": "field",
               "name": "highlight",
               "type": {
                 "text": "Highlight",
@@ -12977,6 +13200,50 @@
           ],
           "events": [
             {
+              "name": "click",
+              "_ui5privacy": "public",
+              "type": {
+                "text": "CustomEvent<ListItemBaseClickEventDetail>",
+                "references": [
+                  {
+                    "name": "ListItemBaseClickEventDetail",
+                    "package": "@ui5/webcomponents",
+                    "module": "dist/ListItemBase.js"
+                  }
+                ]
+              },
+              "description": "Fired when the component is activated either with a mouse/tap or by using the Enter or Space key.\n\n**Note:** The event will not be fired if the `disabled` property is set to `true`.",
+              "_ui5Cancelable": false,
+              "_ui5allowPreventDefault": false,
+              "_ui5Bubbles": true,
+              "_ui5since": "2.22.0",
+              "_ui5parameters": [
+                {
+                  "type": {
+                    "text": "ListItemBase",
+                    "references": [
+                      {
+                        "name": "ListItemBase",
+                        "package": "@ui5/webcomponents",
+                        "module": "dist/ListItemBase.js"
+                      }
+                    ]
+                  },
+                  "name": "item",
+                  "_ui5privacy": "public",
+                  "description": "The activated item."
+                },
+                {
+                  "type": {
+                    "text": "Event"
+                  },
+                  "name": "originalEvent",
+                  "_ui5privacy": "public",
+                  "description": "The original event from the user interaction."
+                }
+              ]
+            },
+            {
               "name": "detail-click",
               "_ui5privacy": "public",
               "type": {
@@ -12996,6 +13263,15 @@
               "fieldName": "accessibilityAttributes",
               "type": {
                 "text": "ListItemAccessibilityAttributes"
+              }
+            },
+            {
+              "description": "Used to define the role of the list item.\n\n**Note:** If not set, the role is automatically inherited from the parent `ui5-list` based on its `accessible-role` property\n(e.g. `Menu` -> `MenuItem`, `Tree` -> `TreeItem`, `ListBox` -> `Option`).\nAn explicitly set `accessible-role` on the list item takes precedence over the inherited role.",
+              "name": "accessible-role",
+              "default": "undefined",
+              "fieldName": "accessibleRole",
+              "type": {
+                "text": "\"None\" | \"ListItem\" | \"MenuItem\" | \"TreeItem\" | \"Option\" | undefined"
               }
             },
             {
@@ -13073,6 +13349,52 @@
           "kind": "class",
           "description": "A class to serve as a foundation\nfor the `ListItem` and `ListItemGroupHeader` classes.",
           "name": "ListItemBase",
+          "events": [
+            {
+              "name": "click",
+              "_ui5privacy": "public",
+              "type": {
+                "text": "CustomEvent<ListItemBaseClickEventDetail>",
+                "references": [
+                  {
+                    "name": "ListItemBaseClickEventDetail",
+                    "package": "@ui5/webcomponents",
+                    "module": "dist/ListItemBase.js"
+                  }
+                ]
+              },
+              "description": "Fired when the component is activated either with a mouse/tap or by using the Enter or Space key.\n\n**Note:** The event will not be fired if the `disabled` property is set to `true`.",
+              "_ui5Cancelable": false,
+              "_ui5allowPreventDefault": false,
+              "_ui5Bubbles": true,
+              "_ui5since": "2.22.0",
+              "_ui5parameters": [
+                {
+                  "type": {
+                    "text": "ListItemBase",
+                    "references": [
+                      {
+                        "name": "ListItemBase",
+                        "package": "@ui5/webcomponents",
+                        "module": "dist/ListItemBase.js"
+                      }
+                    ]
+                  },
+                  "name": "item",
+                  "_ui5privacy": "public",
+                  "description": "The activated item."
+                },
+                {
+                  "type": {
+                    "text": "Event"
+                  },
+                  "name": "originalEvent",
+                  "_ui5privacy": "public",
+                  "description": "The original event from the user interaction."
+                }
+              ]
+            }
+          ],
           "superclass": {
             "name": "UI5Element",
             "package": "@ui5/webcomponents-base",
@@ -13186,6 +13508,17 @@
             },
             {
               "kind": "field",
+              "name": "accessibleRole",
+              "type": {
+                "text": "Exclude<ListItemAccessibleRole, ListItemAccessibleRole.Group> | undefined"
+              },
+              "description": "Used to define the role of the list item.\n\n**Note:** If not set, the role is automatically inherited from the parent `ui5-list` based on its `accessible-role` property\n(e.g. `Menu` -> `MenuItem`, `Tree` -> `TreeItem`, `ListBox` -> `Option`).\nAn explicitly set `accessible-role` on the list item takes precedence over the inherited role.",
+              "default": "undefined",
+              "privacy": "public",
+              "_ui5since": "1.3.0"
+            },
+            {
+              "kind": "field",
               "name": "highlight",
               "type": {
                 "text": "Highlight",
@@ -13283,6 +13616,15 @@
               }
             },
             {
+              "description": "Used to define the role of the list item.\n\n**Note:** If not set, the role is automatically inherited from the parent `ui5-list` based on its `accessible-role` property\n(e.g. `Menu` -> `MenuItem`, `Tree` -> `TreeItem`, `ListBox` -> `Option`).\nAn explicitly set `accessible-role` on the list item takes precedence over the inherited role.",
+              "name": "accessible-role",
+              "default": "undefined",
+              "fieldName": "accessibleRole",
+              "type": {
+                "text": "\"None\" | \"ListItem\" | \"MenuItem\" | \"TreeItem\" | \"Option\" | undefined"
+              }
+            },
+            {
               "description": "Defines the highlight state of the list items.\nAvailable options are: `\"None\"` (by default), `\"Positive\"`, `\"Critical\"`, `\"Information\"` and `\"Negative\"`.",
               "name": "highlight",
               "default": "\"None\"",
@@ -13346,6 +13688,50 @@
           "customElement": true,
           "_ui5privacy": "public",
           "events": [
+            {
+              "name": "click",
+              "_ui5privacy": "public",
+              "type": {
+                "text": "CustomEvent<ListItemBaseClickEventDetail>",
+                "references": [
+                  {
+                    "name": "ListItemBaseClickEventDetail",
+                    "package": "@ui5/webcomponents",
+                    "module": "dist/ListItemBase.js"
+                  }
+                ]
+              },
+              "description": "Fired when the component is activated either with a mouse/tap or by using the Enter or Space key.\n\n**Note:** The event will not be fired if the `disabled` property is set to `true`.",
+              "_ui5Cancelable": false,
+              "_ui5allowPreventDefault": false,
+              "_ui5Bubbles": true,
+              "_ui5since": "2.22.0",
+              "_ui5parameters": [
+                {
+                  "type": {
+                    "text": "ListItemBase",
+                    "references": [
+                      {
+                        "name": "ListItemBase",
+                        "package": "@ui5/webcomponents",
+                        "module": "dist/ListItemBase.js"
+                      }
+                    ]
+                  },
+                  "name": "item",
+                  "_ui5privacy": "public",
+                  "description": "The activated item."
+                },
+                {
+                  "type": {
+                    "text": "Event"
+                  },
+                  "name": "originalEvent",
+                  "_ui5privacy": "public",
+                  "description": "The original event from the user interaction."
+                }
+              ]
+            },
             {
               "name": "detail-click",
               "_ui5privacy": "public",
@@ -13680,7 +14066,53 @@
           },
           "tagName": "ui5-li-group-header",
           "customElement": true,
-          "_ui5privacy": "private"
+          "_ui5privacy": "private",
+          "events": [
+            {
+              "name": "click",
+              "_ui5privacy": "public",
+              "type": {
+                "text": "CustomEvent<ListItemBaseClickEventDetail>",
+                "references": [
+                  {
+                    "name": "ListItemBaseClickEventDetail",
+                    "package": "@ui5/webcomponents",
+                    "module": "dist/ListItemBase.js"
+                  }
+                ]
+              },
+              "description": "Fired when the component is activated either with a mouse/tap or by using the Enter or Space key.\n\n**Note:** The event will not be fired if the `disabled` property is set to `true`.",
+              "_ui5Cancelable": false,
+              "_ui5allowPreventDefault": false,
+              "_ui5Bubbles": true,
+              "_ui5since": "2.22.0",
+              "_ui5parameters": [
+                {
+                  "type": {
+                    "text": "ListItemBase",
+                    "references": [
+                      {
+                        "name": "ListItemBase",
+                        "package": "@ui5/webcomponents",
+                        "module": "dist/ListItemBase.js"
+                      }
+                    ]
+                  },
+                  "name": "item",
+                  "_ui5privacy": "public",
+                  "description": "The activated item."
+                },
+                {
+                  "type": {
+                    "text": "Event"
+                  },
+                  "name": "originalEvent",
+                  "_ui5privacy": "public",
+                  "description": "The original event from the user interaction."
+                }
+              ]
+            }
+          ]
         }
       ],
       "exports": [
@@ -13817,6 +14249,17 @@
               "default": "undefined",
               "privacy": "public",
               "_ui5since": "1.0.0-rc.15"
+            },
+            {
+              "kind": "field",
+              "name": "accessibleRole",
+              "type": {
+                "text": "Exclude<ListItemAccessibleRole, ListItemAccessibleRole.Group> | undefined"
+              },
+              "description": "Used to define the role of the list item.\n\n**Note:** If not set, the role is automatically inherited from the parent `ui5-list` based on its `accessible-role` property\n(e.g. `Menu` -> `MenuItem`, `Tree` -> `TreeItem`, `ListBox` -> `Option`).\nAn explicitly set `accessible-role` on the list item takes precedence over the inherited role.",
+              "default": "undefined",
+              "privacy": "public",
+              "_ui5since": "1.3.0"
             },
             {
               "kind": "field",
@@ -14006,6 +14449,15 @@
               }
             },
             {
+              "description": "Used to define the role of the list item.\n\n**Note:** If not set, the role is automatically inherited from the parent `ui5-list` based on its `accessible-role` property\n(e.g. `Menu` -> `MenuItem`, `Tree` -> `TreeItem`, `ListBox` -> `Option`).\nAn explicitly set `accessible-role` on the list item takes precedence over the inherited role.",
+              "name": "accessible-role",
+              "default": "undefined",
+              "fieldName": "accessibleRole",
+              "type": {
+                "text": "\"None\" | \"ListItem\" | \"MenuItem\" | \"TreeItem\" | \"Option\" | undefined"
+              }
+            },
+            {
               "description": "Defines the `additionalText`, displayed in the end of the list item.",
               "name": "additional-text",
               "default": "undefined",
@@ -14132,6 +14584,50 @@
           "customElement": true,
           "_ui5privacy": "public",
           "events": [
+            {
+              "name": "click",
+              "_ui5privacy": "public",
+              "type": {
+                "text": "CustomEvent<ListItemBaseClickEventDetail>",
+                "references": [
+                  {
+                    "name": "ListItemBaseClickEventDetail",
+                    "package": "@ui5/webcomponents",
+                    "module": "dist/ListItemBase.js"
+                  }
+                ]
+              },
+              "description": "Fired when the component is activated either with a mouse/tap or by using the Enter or Space key.\n\n**Note:** The event will not be fired if the `disabled` property is set to `true`.",
+              "_ui5Cancelable": false,
+              "_ui5allowPreventDefault": false,
+              "_ui5Bubbles": true,
+              "_ui5since": "2.22.0",
+              "_ui5parameters": [
+                {
+                  "type": {
+                    "text": "ListItemBase",
+                    "references": [
+                      {
+                        "name": "ListItemBase",
+                        "package": "@ui5/webcomponents",
+                        "module": "dist/ListItemBase.js"
+                      }
+                    ]
+                  },
+                  "name": "item",
+                  "_ui5privacy": "public",
+                  "description": "The activated item."
+                },
+                {
+                  "type": {
+                    "text": "Event"
+                  },
+                  "name": "originalEvent",
+                  "_ui5privacy": "public",
+                  "description": "The original event from the user interaction."
+                }
+              ]
+            },
             {
               "name": "detail-click",
               "_ui5privacy": "public",
@@ -14586,6 +15082,17 @@
             },
             {
               "kind": "field",
+              "name": "accessibleRole",
+              "type": {
+                "text": "Exclude<ListItemAccessibleRole, ListItemAccessibleRole.Group> | undefined"
+              },
+              "description": "Used to define the role of the list item.\n\n**Note:** If not set, the role is automatically inherited from the parent `ui5-list` based on its `accessible-role` property\n(e.g. `Menu` -> `MenuItem`, `Tree` -> `TreeItem`, `ListBox` -> `Option`).\nAn explicitly set `accessible-role` on the list item takes precedence over the inherited role.",
+              "default": "undefined",
+              "privacy": "public",
+              "_ui5since": "1.3.0"
+            },
+            {
+              "kind": "field",
               "name": "additionalText",
               "type": {
                 "text": "string | undefined"
@@ -14798,6 +15305,50 @@
               "_ui5since": "2.12.0"
             },
             {
+              "name": "click",
+              "_ui5privacy": "public",
+              "type": {
+                "text": "CustomEvent<ListItemBaseClickEventDetail>",
+                "references": [
+                  {
+                    "name": "ListItemBaseClickEventDetail",
+                    "package": "@ui5/webcomponents",
+                    "module": "dist/ListItemBase.js"
+                  }
+                ]
+              },
+              "description": "Fired when the component is activated either with a mouse/tap or by using the Enter or Space key.\n\n**Note:** The event will not be fired if the `disabled` property is set to `true`.",
+              "_ui5Cancelable": false,
+              "_ui5allowPreventDefault": false,
+              "_ui5Bubbles": true,
+              "_ui5since": "2.22.0",
+              "_ui5parameters": [
+                {
+                  "type": {
+                    "text": "ListItemBase",
+                    "references": [
+                      {
+                        "name": "ListItemBase",
+                        "package": "@ui5/webcomponents",
+                        "module": "dist/ListItemBase.js"
+                      }
+                    ]
+                  },
+                  "name": "item",
+                  "_ui5privacy": "public",
+                  "description": "The activated item."
+                },
+                {
+                  "type": {
+                    "text": "Event"
+                  },
+                  "name": "originalEvent",
+                  "_ui5privacy": "public",
+                  "description": "The original event from the user interaction."
+                }
+              ]
+            },
+            {
               "name": "close",
               "_ui5privacy": "public",
               "type": {
@@ -14849,6 +15400,15 @@
               "fieldName": "accessibleName",
               "type": {
                 "text": "string | undefined"
+              }
+            },
+            {
+              "description": "Used to define the role of the list item.\n\n**Note:** If not set, the role is automatically inherited from the parent `ui5-list` based on its `accessible-role` property\n(e.g. `Menu` -> `MenuItem`, `Tree` -> `TreeItem`, `ListBox` -> `Option`).\nAn explicitly set `accessible-role` on the list item takes precedence over the inherited role.",
+              "name": "accessible-role",
+              "default": "undefined",
+              "fieldName": "accessibleRole",
+              "type": {
+                "text": "\"None\" | \"ListItem\" | \"MenuItem\" | \"TreeItem\" | \"Option\" | undefined"
               }
             },
             {
@@ -15112,6 +15672,52 @@
               "name": "IMenuItem",
               "package": "@ui5/webcomponents",
               "module": "dist/Menu.js"
+            }
+          ],
+          "events": [
+            {
+              "name": "click",
+              "_ui5privacy": "public",
+              "type": {
+                "text": "CustomEvent<ListItemBaseClickEventDetail>",
+                "references": [
+                  {
+                    "name": "ListItemBaseClickEventDetail",
+                    "package": "@ui5/webcomponents",
+                    "module": "dist/ListItemBase.js"
+                  }
+                ]
+              },
+              "description": "Fired when the component is activated either with a mouse/tap or by using the Enter or Space key.\n\n**Note:** The event will not be fired if the `disabled` property is set to `true`.",
+              "_ui5Cancelable": false,
+              "_ui5allowPreventDefault": false,
+              "_ui5Bubbles": true,
+              "_ui5since": "2.22.0",
+              "_ui5parameters": [
+                {
+                  "type": {
+                    "text": "ListItemBase",
+                    "references": [
+                      {
+                        "name": "ListItemBase",
+                        "package": "@ui5/webcomponents",
+                        "module": "dist/ListItemBase.js"
+                      }
+                    ]
+                  },
+                  "name": "item",
+                  "_ui5privacy": "public",
+                  "description": "The activated item."
+                },
+                {
+                  "type": {
+                    "text": "Event"
+                  },
+                  "name": "originalEvent",
+                  "_ui5privacy": "public",
+                  "description": "The original event from the user interaction."
+                }
+              ]
             }
           ]
         }
@@ -16132,6 +16738,52 @@
               "_ui5since": "2.20.0"
             }
           ],
+          "events": [
+            {
+              "name": "click",
+              "_ui5privacy": "public",
+              "type": {
+                "text": "CustomEvent<ListItemBaseClickEventDetail>",
+                "references": [
+                  {
+                    "name": "ListItemBaseClickEventDetail",
+                    "package": "@ui5/webcomponents",
+                    "module": "dist/ListItemBase.js"
+                  }
+                ]
+              },
+              "description": "Fired when the component is activated either with a mouse/tap or by using the Enter or Space key.\n\n**Note:** The event will not be fired if the `disabled` property is set to `true`.",
+              "_ui5Cancelable": false,
+              "_ui5allowPreventDefault": false,
+              "_ui5Bubbles": true,
+              "_ui5since": "2.22.0",
+              "_ui5parameters": [
+                {
+                  "type": {
+                    "text": "ListItemBase",
+                    "references": [
+                      {
+                        "name": "ListItemBase",
+                        "package": "@ui5/webcomponents",
+                        "module": "dist/ListItemBase.js"
+                      }
+                    ]
+                  },
+                  "name": "item",
+                  "_ui5privacy": "public",
+                  "description": "The activated item."
+                },
+                {
+                  "type": {
+                    "text": "Event"
+                  },
+                  "name": "originalEvent",
+                  "_ui5privacy": "public",
+                  "description": "The original event from the user interaction."
+                }
+              ]
+            }
+          ],
           "attributes": [
             {
               "description": "Defines the additional text of the component.",
@@ -16451,7 +17103,7 @@
           "slots": [
             {
               "name": "default",
-              "description": "Defines the suggestion items.\n\n**Note:** The suggestions would be displayed only if the `showSuggestions`\nproperty is set to `true`.\n\n**Note:** The `<ui5-suggestion-item>`, `<ui5-suggestion-item-group>` and `ui5-suggestion-item-custom` are recommended to be used as suggestion items.",
+              "description": "Defines the suggestion items.\n\n**Note:** The suggestions would be displayed only if the `showSuggestions`\nproperty is set to `true`.\n\n**Note:** The `<ui5-suggestion-item>`, `<ui5-suggestion-item-group>` and `ui5-suggestion-item-custom` are recommended to be used as suggestion items.\n\n**Note:** Input with type `Number` does not support suggestions.",
               "_ui5propertyName": "suggestionItems",
               "_ui5type": {
                 "text": "Array<IInputSuggestionItem>",
@@ -16697,7 +17349,7 @@
                 ]
               },
               "default": "\"Text\"",
-              "description": "Defines the HTML type of the component.\n\n**Notes:**\n\n- The particular effect of this property differs depending on the browser\nand the current language settings, especially for type `Number`.\n- The property is mostly intended to be used with touch devices\nthat use different soft keyboard layouts depending on the given input type.",
+              "description": "Defines the HTML type of the component.\n\n**Notes:**\n\n- The particular effect of this property differs depending on the browser\nand the current language settings, especially for type `Number`.\n- The property is mostly intended to be used with touch devices\nthat use different soft keyboard layouts depending on the given input type.\n- Type `Number` does not support suggestions.",
               "privacy": "public"
             },
             {
@@ -17004,7 +17656,7 @@
               }
             },
             {
-              "description": "Defines the HTML type of the component.\n\n**Notes:**\n\n- The particular effect of this property differs depending on the browser\nand the current language settings, especially for type `Number`.\n- The property is mostly intended to be used with touch devices\nthat use different soft keyboard layouts depending on the given input type.",
+              "description": "Defines the HTML type of the component.\n\n**Notes:**\n\n- The particular effect of this property differs depending on the browser\nand the current language settings, especially for type `Number`.\n- The property is mostly intended to be used with touch devices\nthat use different soft keyboard layouts depending on the given input type.\n- Type `Number` does not support suggestions.",
               "name": "type",
               "default": "\"Text\"",
               "fieldName": "type",
@@ -17211,6 +17863,52 @@
               "package": "@ui5/webcomponents",
               "module": "dist/Select.js"
             }
+          ],
+          "events": [
+            {
+              "name": "click",
+              "_ui5privacy": "public",
+              "type": {
+                "text": "CustomEvent<ListItemBaseClickEventDetail>",
+                "references": [
+                  {
+                    "name": "ListItemBaseClickEventDetail",
+                    "package": "@ui5/webcomponents",
+                    "module": "dist/ListItemBase.js"
+                  }
+                ]
+              },
+              "description": "Fired when the component is activated either with a mouse/tap or by using the Enter or Space key.\n\n**Note:** The event will not be fired if the `disabled` property is set to `true`.",
+              "_ui5Cancelable": false,
+              "_ui5allowPreventDefault": false,
+              "_ui5Bubbles": true,
+              "_ui5since": "2.22.0",
+              "_ui5parameters": [
+                {
+                  "type": {
+                    "text": "ListItemBase",
+                    "references": [
+                      {
+                        "name": "ListItemBase",
+                        "package": "@ui5/webcomponents",
+                        "module": "dist/ListItemBase.js"
+                      }
+                    ]
+                  },
+                  "name": "item",
+                  "_ui5privacy": "public",
+                  "description": "The activated item."
+                },
+                {
+                  "type": {
+                    "text": "Event"
+                  },
+                  "name": "originalEvent",
+                  "_ui5privacy": "public",
+                  "description": "The original event from the user interaction."
+                }
+              ]
+            }
           ]
         }
       ],
@@ -17346,6 +18044,52 @@
               "name": "IOption",
               "package": "@ui5/webcomponents",
               "module": "dist/Select.js"
+            }
+          ],
+          "events": [
+            {
+              "name": "click",
+              "_ui5privacy": "public",
+              "type": {
+                "text": "CustomEvent<ListItemBaseClickEventDetail>",
+                "references": [
+                  {
+                    "name": "ListItemBaseClickEventDetail",
+                    "package": "@ui5/webcomponents",
+                    "module": "dist/ListItemBase.js"
+                  }
+                ]
+              },
+              "description": "Fired when the component is activated either with a mouse/tap or by using the Enter or Space key.\n\n**Note:** The event will not be fired if the `disabled` property is set to `true`.",
+              "_ui5Cancelable": false,
+              "_ui5allowPreventDefault": false,
+              "_ui5Bubbles": true,
+              "_ui5since": "2.22.0",
+              "_ui5parameters": [
+                {
+                  "type": {
+                    "text": "ListItemBase",
+                    "references": [
+                      {
+                        "name": "ListItemBase",
+                        "package": "@ui5/webcomponents",
+                        "module": "dist/ListItemBase.js"
+                      }
+                    ]
+                  },
+                  "name": "item",
+                  "_ui5privacy": "public",
+                  "description": "The activated item."
+                },
+                {
+                  "type": {
+                    "text": "Event"
+                  },
+                  "name": "originalEvent",
+                  "_ui5privacy": "public",
+                  "description": "The original event from the user interaction."
+                }
+              ]
             }
           ]
         }
@@ -20438,6 +21182,37 @@
               "_ui5since": "1.2.0"
             }
           ],
+          "events": [
+            {
+              "name": "click",
+              "_ui5privacy": "public",
+              "type": {
+                "text": "CustomEvent<SegmentedButtonItemClickEventDetail>",
+                "references": [
+                  {
+                    "name": "SegmentedButtonItemClickEventDetail",
+                    "package": "@ui5/webcomponents",
+                    "module": "dist/SegmentedButtonItem.js"
+                  }
+                ]
+              },
+              "description": "Fired when the component is activated either with a mouse/tap or by using the Enter or Space key.\n\n**Note:** The event will not be fired if the `disabled` property is set to `true`.",
+              "_ui5Cancelable": true,
+              "_ui5allowPreventDefault": true,
+              "_ui5Bubbles": true,
+              "_ui5since": "2.22.0",
+              "_ui5parameters": [
+                {
+                  "type": {
+                    "text": "Event"
+                  },
+                  "name": "originalEvent",
+                  "_ui5privacy": "public",
+                  "description": "The original DOM event that triggered the click. Use this to access modifier keys (altKey, ctrlKey, metaKey, shiftKey) and other native event properties."
+                }
+              ]
+            }
+          ],
           "attributes": [
             {
               "description": "Defines the accessible description of the component.",
@@ -21566,110 +22341,6 @@
           "kind": "class",
           "description": "The <code>ui5-slider-handle</code> component represents the handle of the <code>ui5-slider</code> component.",
           "name": "SliderHandle",
-          "members": [
-            {
-              "kind": "field",
-              "name": "active",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Defines whether the slider handle is active.\n<br><br>\n<b>Note:</b> An active slider handle is currently being interacted with.",
-              "privacy": "public",
-              "_ui5since": "2.19.0"
-            },
-            {
-              "kind": "field",
-              "name": "disabled",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Defines whether the slider handle is disabled.\n<br><br>\n<b>Note:</b> A disabled slider handle cannot be interacted with.",
-              "privacy": "public",
-              "_ui5since": "2.19.0"
-            },
-            {
-              "kind": "field",
-              "name": "max",
-              "type": {
-                "text": "number"
-              },
-              "default": "100",
-              "description": "Defines the maximum value of the slider handle.\n<br><br>\n<b>Note:</b> The value should be greater than the <code>min</code> property of the parent <code>ui5-slider</code>.",
-              "privacy": "public",
-              "_ui5since": "2.19.0"
-            },
-            {
-              "kind": "field",
-              "name": "min",
-              "type": {
-                "text": "number"
-              },
-              "default": "0",
-              "description": "Defines the minimum value of the slider handle.\n<br><br>\n<b>Note:</b> The value should be less than the <code>max</code> property of the parent <code>ui5-slider</code>.",
-              "privacy": "public",
-              "_ui5since": "2.19.0"
-            },
-            {
-              "kind": "field",
-              "name": "value",
-              "type": {
-                "text": "number"
-              },
-              "default": "0",
-              "description": "Defines the value of the slider handle.\n<br><br>\n<b>Note:</b> The value should be between the <code>min</code> and <code>max</code> properties of the parent <code>ui5-slider</code>.",
-              "privacy": "public",
-              "_ui5since": "2.19.0"
-            }
-          ],
-          "attributes": [
-            {
-              "description": "Defines whether the slider handle is active.\n<br><br>\n<b>Note:</b> An active slider handle is currently being interacted with.",
-              "name": "active",
-              "default": "false",
-              "fieldName": "active",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "description": "Defines whether the slider handle is disabled.\n<br><br>\n<b>Note:</b> A disabled slider handle cannot be interacted with.",
-              "name": "disabled",
-              "default": "false",
-              "fieldName": "disabled",
-              "type": {
-                "text": "boolean"
-              }
-            },
-            {
-              "description": "Defines the maximum value of the slider handle.\n<br><br>\n<b>Note:</b> The value should be greater than the <code>min</code> property of the parent <code>ui5-slider</code>.",
-              "name": "max",
-              "default": "100",
-              "fieldName": "max",
-              "type": {
-                "text": "number"
-              }
-            },
-            {
-              "description": "Defines the minimum value of the slider handle.\n<br><br>\n<b>Note:</b> The value should be less than the <code>max</code> property of the parent <code>ui5-slider</code>.",
-              "name": "min",
-              "default": "0",
-              "fieldName": "min",
-              "type": {
-                "text": "number"
-              }
-            },
-            {
-              "description": "Defines the value of the slider handle.\n<br><br>\n<b>Note:</b> The value should be between the <code>min</code> and <code>max</code> properties of the parent <code>ui5-slider</code>.",
-              "name": "value",
-              "default": "0",
-              "fieldName": "value",
-              "type": {
-                "text": "number"
-              }
-            }
-          ],
           "superclass": {
             "name": "UI5Element",
             "package": "@ui5/webcomponents-base",
@@ -21677,7 +22348,7 @@
           },
           "tagName": "ui5-slider-handle",
           "customElement": true,
-          "_ui5since": "2.19.0",
+          "_ui5since": "2.22.0",
           "_ui5privacy": "private"
         }
       ],
@@ -22497,6 +23168,52 @@
               "package": "@ui5/webcomponents",
               "module": "dist/Input.js"
             }
+          ],
+          "events": [
+            {
+              "name": "click",
+              "_ui5privacy": "public",
+              "type": {
+                "text": "CustomEvent<ListItemBaseClickEventDetail>",
+                "references": [
+                  {
+                    "name": "ListItemBaseClickEventDetail",
+                    "package": "@ui5/webcomponents",
+                    "module": "dist/ListItemBase.js"
+                  }
+                ]
+              },
+              "description": "Fired when the component is activated either with a mouse/tap or by using the Enter or Space key.\n\n**Note:** The event will not be fired if the `disabled` property is set to `true`.",
+              "_ui5Cancelable": false,
+              "_ui5allowPreventDefault": false,
+              "_ui5Bubbles": true,
+              "_ui5since": "2.22.0",
+              "_ui5parameters": [
+                {
+                  "type": {
+                    "text": "ListItemBase",
+                    "references": [
+                      {
+                        "name": "ListItemBase",
+                        "package": "@ui5/webcomponents",
+                        "module": "dist/ListItemBase.js"
+                      }
+                    ]
+                  },
+                  "name": "item",
+                  "_ui5privacy": "public",
+                  "description": "The activated item."
+                },
+                {
+                  "type": {
+                    "text": "Event"
+                  },
+                  "name": "originalEvent",
+                  "_ui5privacy": "public",
+                  "description": "The original event from the user interaction."
+                }
+              ]
+            }
           ]
         }
       ],
@@ -22575,6 +23292,52 @@
               "name": "IInputSuggestionItemSelectable",
               "package": "@ui5/webcomponents",
               "module": "dist/Input.js"
+            }
+          ],
+          "events": [
+            {
+              "name": "click",
+              "_ui5privacy": "public",
+              "type": {
+                "text": "CustomEvent<ListItemBaseClickEventDetail>",
+                "references": [
+                  {
+                    "name": "ListItemBaseClickEventDetail",
+                    "package": "@ui5/webcomponents",
+                    "module": "dist/ListItemBase.js"
+                  }
+                ]
+              },
+              "description": "Fired when the component is activated either with a mouse/tap or by using the Enter or Space key.\n\n**Note:** The event will not be fired if the `disabled` property is set to `true`.",
+              "_ui5Cancelable": false,
+              "_ui5allowPreventDefault": false,
+              "_ui5Bubbles": true,
+              "_ui5since": "2.22.0",
+              "_ui5parameters": [
+                {
+                  "type": {
+                    "text": "ListItemBase",
+                    "references": [
+                      {
+                        "name": "ListItemBase",
+                        "package": "@ui5/webcomponents",
+                        "module": "dist/ListItemBase.js"
+                      }
+                    ]
+                  },
+                  "name": "item",
+                  "_ui5privacy": "public",
+                  "description": "The activated item."
+                },
+                {
+                  "type": {
+                    "text": "Event"
+                  },
+                  "name": "originalEvent",
+                  "_ui5privacy": "public",
+                  "description": "The original event from the user interaction."
+                }
+              ]
             }
           ]
         }
@@ -22955,6 +23718,17 @@
             },
             {
               "kind": "field",
+              "name": "accessibleRole",
+              "type": {
+                "text": "Exclude<ListItemAccessibleRole, ListItemAccessibleRole.Group> | undefined"
+              },
+              "description": "Used to define the role of the list item.\n\n**Note:** If not set, the role is automatically inherited from the parent `ui5-list` based on its `accessible-role` property\n(e.g. `Menu` -> `MenuItem`, `Tree` -> `TreeItem`, `ListBox` -> `Option`).\nAn explicitly set `accessible-role` on the list item takes precedence over the inherited role.",
+              "default": "undefined",
+              "privacy": "public",
+              "_ui5since": "1.3.0"
+            },
+            {
+              "kind": "field",
               "name": "additionalText",
               "type": {
                 "text": "string | undefined"
@@ -23149,6 +23923,15 @@
               }
             },
             {
+              "description": "Used to define the role of the list item.\n\n**Note:** If not set, the role is automatically inherited from the parent `ui5-list` based on its `accessible-role` property\n(e.g. `Menu` -> `MenuItem`, `Tree` -> `TreeItem`, `ListBox` -> `Option`).\nAn explicitly set `accessible-role` on the list item takes precedence over the inherited role.",
+              "name": "accessible-role",
+              "default": "undefined",
+              "fieldName": "accessibleRole",
+              "type": {
+                "text": "\"None\" | \"ListItem\" | \"MenuItem\" | \"TreeItem\" | \"Option\" | undefined"
+              }
+            },
+            {
               "description": "Defines the `additionalText`, displayed in the end of the list item.",
               "name": "additional-text",
               "default": "undefined",
@@ -23267,6 +24050,50 @@
             }
           ],
           "events": [
+            {
+              "name": "click",
+              "_ui5privacy": "public",
+              "type": {
+                "text": "CustomEvent<ListItemBaseClickEventDetail>",
+                "references": [
+                  {
+                    "name": "ListItemBaseClickEventDetail",
+                    "package": "@ui5/webcomponents",
+                    "module": "dist/ListItemBase.js"
+                  }
+                ]
+              },
+              "description": "Fired when the component is activated either with a mouse/tap or by using the Enter or Space key.\n\n**Note:** The event will not be fired if the `disabled` property is set to `true`.",
+              "_ui5Cancelable": false,
+              "_ui5allowPreventDefault": false,
+              "_ui5Bubbles": true,
+              "_ui5since": "2.22.0",
+              "_ui5parameters": [
+                {
+                  "type": {
+                    "text": "ListItemBase",
+                    "references": [
+                      {
+                        "name": "ListItemBase",
+                        "package": "@ui5/webcomponents",
+                        "module": "dist/ListItemBase.js"
+                      }
+                    ]
+                  },
+                  "name": "item",
+                  "_ui5privacy": "public",
+                  "description": "The activated item."
+                },
+                {
+                  "type": {
+                    "text": "Event"
+                  },
+                  "name": "originalEvent",
+                  "_ui5privacy": "public",
+                  "description": "The original event from the user interaction."
+                }
+              ]
+            },
             {
               "name": "detail-click",
               "_ui5privacy": "public",
@@ -23741,6 +24568,52 @@
               "description": "The text to be displayed for the item.",
               "default": "undefined",
               "privacy": "public"
+            }
+          ],
+          "events": [
+            {
+              "name": "click",
+              "_ui5privacy": "public",
+              "type": {
+                "text": "CustomEvent<TabClickEventDetail>",
+                "references": [
+                  {
+                    "name": "TabClickEventDetail",
+                    "package": "@ui5/webcomponents",
+                    "module": "dist/Tab.js"
+                  }
+                ]
+              },
+              "description": "Fired when the tab is selected either with a mouse/tap or by using the Enter or Space key.",
+              "_ui5Cancelable": false,
+              "_ui5allowPreventDefault": false,
+              "_ui5Bubbles": true,
+              "_ui5since": "2.22.0",
+              "_ui5parameters": [
+                {
+                  "type": {
+                    "text": "Event"
+                  },
+                  "name": "originalEvent",
+                  "_ui5privacy": "public",
+                  "description": "The original event from the user interaction."
+                },
+                {
+                  "type": {
+                    "text": "Tab",
+                    "references": [
+                      {
+                        "name": "Tab",
+                        "package": "@ui5/webcomponents",
+                        "module": "dist/Tab.js"
+                      }
+                    ]
+                  },
+                  "name": "tab",
+                  "_ui5privacy": "public",
+                  "description": "The selected tab."
+                }
+              ]
             }
           ],
           "attributes": [
@@ -24784,7 +25657,7 @@
                 "text": "boolean"
               },
               "default": "false",
-              "description": "Defines whether the cell is visually merged with the cell directly above it.\n\nThis is useful when consecutive cells in a column have the same value and should visually appear as a single merged cell.\nAlthough the cell is visually merged with the previous one, its content must still be provided for accessibility purposes.\n**Note:** This feature is disabled when cells are rendered as popin, and should remain `false` for interactive cell content.",
+              "description": "Defines whether the cell is visually merged with the cell directly above it.\n\nThis is useful if consecutive cells in a column have the same value and should visually appear as a single merged cell.\nAlthough the cell is visually merged with the previous one, its content must still be provided for accessibility purposes.\n**Note:** This feature is disabled when cells are rendered as a popin, and should remain `false` for interactive cell content.",
               "privacy": "public",
               "_ui5since": "2.21.0"
             }
@@ -24800,7 +25673,7 @@
               }
             },
             {
-              "description": "Defines whether the cell is visually merged with the cell directly above it.\n\nThis is useful when consecutive cells in a column have the same value and should visually appear as a single merged cell.\nAlthough the cell is visually merged with the previous one, its content must still be provided for accessibility purposes.\n**Note:** This feature is disabled when cells are rendered as popin, and should remain `false` for interactive cell content.",
+              "description": "Defines whether the cell is visually merged with the cell directly above it.\n\nThis is useful if consecutive cells in a column have the same value and should visually appear as a single merged cell.\nAlthough the cell is visually merged with the previous one, its content must still be provided for accessibility purposes.\n**Note:** This feature is disabled when cells are rendered as a popin, and should remain `false` for interactive cell content.",
               "name": "merged",
               "default": "false",
               "fieldName": "merged",
@@ -28718,6 +29591,17 @@
             },
             {
               "kind": "field",
+              "name": "form",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Associates the button with a form element by the form's `id` attribute.\nWhen set, the button can submit or reset the specified form even if the button\nis not a descendant of that form.\n\n**Note:** This property takes effect only when the button's \"type\" property is set to \"Submit\" or \"Reset\".",
+              "default": "undefined",
+              "privacy": "public",
+              "_ui5since": "2.21.0"
+            },
+            {
+              "kind": "field",
               "name": "icon",
               "type": {
                 "text": "string | undefined"
@@ -28868,6 +29752,15 @@
               "name": "end-icon",
               "default": "undefined",
               "fieldName": "endIcon",
+              "type": {
+                "text": "string | undefined"
+              }
+            },
+            {
+              "description": "Associates the button with a form element by the form's `id` attribute.\nWhen set, the button can submit or reset the specified form even if the button\nis not a descendant of that form.\n\n**Note:** This property takes effect only when the button's \"type\" property is set to \"Submit\" or \"Reset\".",
+              "name": "form",
+              "default": "undefined",
+              "fieldName": "form",
               "type": {
                 "text": "string | undefined"
               }
@@ -29187,6 +30080,17 @@
             },
             {
               "kind": "field",
+              "name": "form",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Associates the button with a form element by the form's `id` attribute.\nWhen set, the button can submit or reset the specified form even if the button\nis not a descendant of that form.\n\n**Note:** This property takes effect only when the button's \"type\" property is set to \"Submit\" or \"Reset\".",
+              "default": "undefined",
+              "privacy": "public",
+              "_ui5since": "2.21.0"
+            },
+            {
+              "kind": "field",
               "name": "icon",
               "type": {
                 "text": "string | undefined"
@@ -29387,6 +30291,15 @@
               "name": "end-icon",
               "default": "undefined",
               "fieldName": "endIcon",
+              "type": {
+                "text": "string | undefined"
+              }
+            },
+            {
+              "description": "Associates the button with a form element by the form's `id` attribute.\nWhen set, the button can submit or reset the specified form even if the button\nis not a descendant of that form.\n\n**Note:** This property takes effect only when the button's \"type\" property is set to \"Submit\" or \"Reset\".",
+              "name": "form",
+              "default": "undefined",
+              "fieldName": "form",
               "type": {
                 "text": "string | undefined"
               }
@@ -29998,6 +30911,17 @@
               },
               "description": "Returns if the overflow popup is open.",
               "privacy": "public"
+            },
+            {
+              "kind": "field",
+              "name": "overflowButtonAccessibleName",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Defines the accessible ARIA name of the overflow button of the component.\n\n**Note:** When not set, the built-in translation for \"Additional Options\" is used.",
+              "default": "undefined",
+              "privacy": "public",
+              "_ui5since": "2.22.0"
             }
           ],
           "attributes": [
@@ -30035,6 +30959,15 @@
               "fieldName": "design",
               "type": {
                 "text": "\"Transparent\" | \"Solid\""
+              }
+            },
+            {
+              "description": "Defines the accessible ARIA name of the overflow button of the component.\n\n**Note:** When not set, the built-in translation for \"Additional Options\" is used.",
+              "name": "overflow-button-accessible-name",
+              "default": "undefined",
+              "fieldName": "overflowButtonAccessibleName",
+              "type": {
+                "text": "string | undefined"
               }
             }
           ],
@@ -31715,6 +32648,17 @@
             },
             {
               "kind": "field",
+              "name": "accessibleRole",
+              "type": {
+                "text": "Exclude<ListItemAccessibleRole, ListItemAccessibleRole.Group> | undefined"
+              },
+              "description": "Used to define the role of the list item.\n\n**Note:** If not set, the role is automatically inherited from the parent `ui5-list` based on its `accessible-role` property\n(e.g. `Menu` -> `MenuItem`, `Tree` -> `TreeItem`, `ListBox` -> `Option`).\nAn explicitly set `accessible-role` on the list item takes precedence over the inherited role.",
+              "default": "undefined",
+              "privacy": "public",
+              "_ui5since": "1.3.0"
+            },
+            {
+              "kind": "field",
               "name": "additionalText",
               "type": {
                 "text": "string | undefined"
@@ -31903,6 +32847,15 @@
               }
             },
             {
+              "description": "Used to define the role of the list item.\n\n**Note:** If not set, the role is automatically inherited from the parent `ui5-list` based on its `accessible-role` property\n(e.g. `Menu` -> `MenuItem`, `Tree` -> `TreeItem`, `ListBox` -> `Option`).\nAn explicitly set `accessible-role` on the list item takes precedence over the inherited role.",
+              "name": "accessible-role",
+              "default": "undefined",
+              "fieldName": "accessibleRole",
+              "type": {
+                "text": "\"None\" | \"ListItem\" | \"MenuItem\" | \"TreeItem\" | \"Option\" | undefined"
+              }
+            },
+            {
               "description": "Defines the `additionalText`, displayed in the end of the tree item.",
               "name": "additional-text",
               "default": "undefined",
@@ -32074,6 +33027,50 @@
           ],
           "events": [
             {
+              "name": "click",
+              "_ui5privacy": "public",
+              "type": {
+                "text": "CustomEvent<ListItemBaseClickEventDetail>",
+                "references": [
+                  {
+                    "name": "ListItemBaseClickEventDetail",
+                    "package": "@ui5/webcomponents",
+                    "module": "dist/ListItemBase.js"
+                  }
+                ]
+              },
+              "description": "Fired when the component is activated either with a mouse/tap or by using the Enter or Space key.\n\n**Note:** The event will not be fired if the `disabled` property is set to `true`.",
+              "_ui5Cancelable": false,
+              "_ui5allowPreventDefault": false,
+              "_ui5Bubbles": true,
+              "_ui5since": "2.22.0",
+              "_ui5parameters": [
+                {
+                  "type": {
+                    "text": "ListItemBase",
+                    "references": [
+                      {
+                        "name": "ListItemBase",
+                        "package": "@ui5/webcomponents",
+                        "module": "dist/ListItemBase.js"
+                      }
+                    ]
+                  },
+                  "name": "item",
+                  "_ui5privacy": "public",
+                  "description": "The activated item."
+                },
+                {
+                  "type": {
+                    "text": "Event"
+                  },
+                  "name": "originalEvent",
+                  "_ui5privacy": "public",
+                  "description": "The original event from the user interaction."
+                }
+              ]
+            },
+            {
               "name": "detail-click",
               "_ui5privacy": "public",
               "type": {
@@ -32186,6 +33183,17 @@
               "default": "undefined",
               "privacy": "public",
               "_ui5since": "1.8.0"
+            },
+            {
+              "kind": "field",
+              "name": "accessibleRole",
+              "type": {
+                "text": "Exclude<ListItemAccessibleRole, ListItemAccessibleRole.Group> | undefined"
+              },
+              "description": "Used to define the role of the list item.\n\n**Note:** If not set, the role is automatically inherited from the parent `ui5-list` based on its `accessible-role` property\n(e.g. `Menu` -> `MenuItem`, `Tree` -> `TreeItem`, `ListBox` -> `Option`).\nAn explicitly set `accessible-role` on the list item takes precedence over the inherited role.",
+              "default": "undefined",
+              "privacy": "public",
+              "_ui5since": "1.3.0"
             },
             {
               "kind": "field",
@@ -32338,6 +33346,50 @@
           ],
           "events": [
             {
+              "name": "click",
+              "_ui5privacy": "public",
+              "type": {
+                "text": "CustomEvent<ListItemBaseClickEventDetail>",
+                "references": [
+                  {
+                    "name": "ListItemBaseClickEventDetail",
+                    "package": "@ui5/webcomponents",
+                    "module": "dist/ListItemBase.js"
+                  }
+                ]
+              },
+              "description": "Fired when the component is activated either with a mouse/tap or by using the Enter or Space key.\n\n**Note:** The event will not be fired if the `disabled` property is set to `true`.",
+              "_ui5Cancelable": false,
+              "_ui5allowPreventDefault": false,
+              "_ui5Bubbles": true,
+              "_ui5since": "2.22.0",
+              "_ui5parameters": [
+                {
+                  "type": {
+                    "text": "ListItemBase",
+                    "references": [
+                      {
+                        "name": "ListItemBase",
+                        "package": "@ui5/webcomponents",
+                        "module": "dist/ListItemBase.js"
+                      }
+                    ]
+                  },
+                  "name": "item",
+                  "_ui5privacy": "public",
+                  "description": "The activated item."
+                },
+                {
+                  "type": {
+                    "text": "Event"
+                  },
+                  "name": "originalEvent",
+                  "_ui5privacy": "public",
+                  "description": "The original event from the user interaction."
+                }
+              ]
+            },
+            {
               "name": "detail-click",
               "_ui5privacy": "public",
               "type": {
@@ -32366,6 +33418,15 @@
               "fieldName": "accessibleName",
               "type": {
                 "text": "string | undefined"
+              }
+            },
+            {
+              "description": "Used to define the role of the list item.\n\n**Note:** If not set, the role is automatically inherited from the parent `ui5-list` based on its `accessible-role` property\n(e.g. `Menu` -> `MenuItem`, `Tree` -> `TreeItem`, `ListBox` -> `Option`).\nAn explicitly set `accessible-role` on the list item takes precedence over the inherited role.",
+              "name": "accessible-role",
+              "default": "undefined",
+              "fieldName": "accessibleRole",
+              "type": {
+                "text": "\"None\" | \"ListItem\" | \"MenuItem\" | \"TreeItem\" | \"Option\" | undefined"
               }
             },
             {
@@ -32594,6 +33655,17 @@
             },
             {
               "kind": "field",
+              "name": "accessibleRole",
+              "type": {
+                "text": "Exclude<ListItemAccessibleRole, ListItemAccessibleRole.Group> | undefined"
+              },
+              "description": "Used to define the role of the list item.\n\n**Note:** If not set, the role is automatically inherited from the parent `ui5-list` based on its `accessible-role` property\n(e.g. `Menu` -> `MenuItem`, `Tree` -> `TreeItem`, `ListBox` -> `Option`).\nAn explicitly set `accessible-role` on the list item takes precedence over the inherited role.",
+              "default": "undefined",
+              "privacy": "public",
+              "_ui5since": "1.3.0"
+            },
+            {
+              "kind": "field",
               "name": "additionalTextState",
               "type": {
                 "text": "ValueState",
@@ -32771,6 +33843,15 @@
               }
             },
             {
+              "description": "Used to define the role of the list item.\n\n**Note:** If not set, the role is automatically inherited from the parent `ui5-list` based on its `accessible-role` property\n(e.g. `Menu` -> `MenuItem`, `Tree` -> `TreeItem`, `ListBox` -> `Option`).\nAn explicitly set `accessible-role` on the list item takes precedence over the inherited role.",
+              "name": "accessible-role",
+              "default": "undefined",
+              "fieldName": "accessibleRole",
+              "type": {
+                "text": "\"None\" | \"ListItem\" | \"MenuItem\" | \"TreeItem\" | \"Option\" | undefined"
+              }
+            },
+            {
               "description": "Defines the state of the `additionalText`.\n\nAvailable options are: `\"None\"` (by default), `\"Positive\"`, `\"Critical\"`, `\"Information\"` and `\"Negative\"`.",
               "name": "additional-text-state",
               "default": "\"None\"",
@@ -32889,6 +33970,50 @@
           "_ui5since": "1.9.2",
           "_ui5privacy": "public",
           "events": [
+            {
+              "name": "click",
+              "_ui5privacy": "public",
+              "type": {
+                "text": "CustomEvent<ListItemBaseClickEventDetail>",
+                "references": [
+                  {
+                    "name": "ListItemBaseClickEventDetail",
+                    "package": "@ui5/webcomponents",
+                    "module": "dist/ListItemBase.js"
+                  }
+                ]
+              },
+              "description": "Fired when the component is activated either with a mouse/tap or by using the Enter or Space key.\n\n**Note:** The event will not be fired if the `disabled` property is set to `true`.",
+              "_ui5Cancelable": false,
+              "_ui5allowPreventDefault": false,
+              "_ui5Bubbles": true,
+              "_ui5since": "2.22.0",
+              "_ui5parameters": [
+                {
+                  "type": {
+                    "text": "ListItemBase",
+                    "references": [
+                      {
+                        "name": "ListItemBase",
+                        "package": "@ui5/webcomponents",
+                        "module": "dist/ListItemBase.js"
+                      }
+                    ]
+                  },
+                  "name": "item",
+                  "_ui5privacy": "public",
+                  "description": "The activated item."
+                },
+                {
+                  "type": {
+                    "text": "Event"
+                  },
+                  "name": "originalEvent",
+                  "_ui5privacy": "public",
+                  "description": "The original event from the user interaction."
+                }
+              ]
+            },
             {
               "name": "detail-click",
               "_ui5privacy": "public",

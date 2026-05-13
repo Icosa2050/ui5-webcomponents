@@ -12,6 +12,10 @@ import type { TabContainerStripInfo, TabContainerOverflowInfo, ITab } from "./Ta
 import type ListItemCustom from "./ListItemCustom.js";
 import TabInStripTemplate from "./TabInStripTemplate.js";
 import TabInOverflowTemplate from "./TabInOverflowTemplate.js";
+type TabClickEventDetail = {
+    tab: Tab;
+    originalEvent: Event;
+};
 interface TabInStrip extends HTMLElement {
     realTabReference: Tab;
 }
@@ -30,6 +34,9 @@ interface TabInOverflow extends ListItemCustom {
  * @public
  */
 declare class Tab extends UI5Element implements ITabbable, ITab {
+    eventDetails: {
+        click: TabClickEventDetail;
+    };
     /**
      * The text to be displayed for the item.
      * @default undefined
@@ -170,4 +177,4 @@ declare class Tab extends UI5Element implements ITabbable, ITab {
     } | null): void;
 }
 export default Tab;
-export type { TabInStrip, TabInOverflow, };
+export type { TabInStrip, TabInOverflow, TabClickEventDetail, };

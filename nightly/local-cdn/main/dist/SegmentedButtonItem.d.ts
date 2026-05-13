@@ -3,6 +3,9 @@ import type { DefaultSlot } from "@ui5/webcomponents-base/dist/UI5Element.js";
 import type I18nBundle from "@ui5/webcomponents-base/dist/i18nBundle.js";
 import type { ISegmentedButtonItem } from "./SegmentedButton.js";
 import type { IButton } from "./Button.js";
+type SegmentedButtonItemClickEventDetail = {
+    originalEvent: Event;
+};
 /**
  * @class
  *
@@ -25,6 +28,9 @@ import type { IButton } from "./Button.js";
  * @public
  */
 declare class SegmentedButtonItem extends UI5Element implements IButton, ISegmentedButtonItem {
+    eventDetails: {
+        "click": SegmentedButtonItemClickEventDetail;
+    };
     /**
      * Defines whether the component is disabled.
      * A disabled component can't be selected or
@@ -138,3 +144,4 @@ declare class SegmentedButtonItem extends UI5Element implements IButton, ISegmen
     get slotTextContent(): string;
 }
 export default SegmentedButtonItem;
+export type { SegmentedButtonItemClickEventDetail };

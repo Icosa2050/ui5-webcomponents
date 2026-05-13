@@ -218,6 +218,9 @@ class TableNavigation extends TableExtension {
         for (const target of e.composedPath()) {
             if (target.nodeType === Node.ELEMENT_NODE) {
                 const element = target;
+                if (element.getAttribute("data-excluded-from-navigation") === "nofocus") {
+                    break;
+                }
                 if (element.matches(":focus-within")) {
                     focusableElement = element;
                     break;

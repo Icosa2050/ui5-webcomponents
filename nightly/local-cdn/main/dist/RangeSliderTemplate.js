@@ -1,22 +1,27 @@
 import { jsx as _jsx, Fragment as _Fragment, jsxs as _jsxs } from "@ui5/webcomponents-base/jsx-runtime";
-import directionArrows from "@ui5/webcomponents-icons/dist/direction-arrows.js";
-import Icon from "./Icon.js";
-import SliderBaseTemplate from "./SliderBaseTemplate.js";
 import SliderTooltip from "./SliderTooltip.js";
+import SliderHandle, { SliderHandleType } from "./SliderHandle.js";
+import SliderScale from "./SliderScale.js";
+const _handlePosition = (min, max, value) => {
+    const range = max - min;
+    const position = ((value - min) / range) * 100;
+    return position;
+};
+const startHandle = (slider) => {
+    const position = _handlePosition(slider.min, slider.max, slider.startValue);
+    return (_jsxs(_Fragment, { children: [_jsx(SliderHandle, { value: slider.startValue, min: slider.min, max: slider.max, tabIndex: slider._tabIndex, active: slider.rangePressed, handleType: SliderHandleType.Start, "aria-orientation": "horizontal", part: "handle", exportparts: "icon: handle-icon", role: "slider", "aria-valuemin": slider.min, "aria-valuemax": slider.max, "aria-valuenow": slider.startValue, "aria-label": slider._ariaLabelStartHandle, "aria-disabled": slider._ariaDisabled, "aria-describedby": slider._ariaDescribedByHandleText, onFocusIn: slider._onfocusin, onFocusOut: slider._onfocusout, style: {
+                    "inset-inline-start": `clamp(0%, ${position}%, 100%)`,
+                } }), startTooltip(slider)] }));
+};
+const endHandle = (slider) => {
+    const position = _handlePosition(slider.min, slider.max, slider.endValue);
+    return (_jsxs(_Fragment, { children: [_jsx(SliderHandle, { value: slider.endValue, min: slider.min, max: slider.max, tabIndex: slider._tabIndex, active: slider.rangePressed, handleType: SliderHandleType.End, "aria-orientation": "horizontal", part: "handle", exportparts: "icon: handle-icon", role: "slider", "aria-valuemin": slider.min, "aria-valuemax": slider.max, "aria-valuenow": slider.endValue, "aria-label": slider._ariaLabelEndHandle, "aria-disabled": slider._ariaDisabled, "aria-describedby": slider._ariaDescribedByHandleText, onFocusIn: slider._onfocusin, onFocusOut: slider._onfocusout, style: {
+                    "inset-inline-start": `clamp(0%, ${position}%, 100%)`,
+                } }), endTooltip(slider)] }));
+};
+const startTooltip = (slider) => (_jsx(SliderTooltip, { open: slider._tooltipsOpen, value: slider.tooltipStartValue, valueState: slider.tooltipStartValueState, min: slider.min, max: slider.max, "data-sap-ui-start-value": true, editable: slider.editableTooltip, followRef: slider._startHandle, onChange: slider._onTooltipChange, onKeyDown: slider._onTooltipKeydown, onFocusChange: slider._onTooltipFocusChange, onOpen: slider._onTooltipOpen, onInput: slider._onTooltipInput }));
+const endTooltip = (slider) => (_jsx(SliderTooltip, { open: slider._tooltipsOpen, value: slider.tooltipEndValue, valueState: slider.tooltipEndValueState, min: slider.min, max: slider.max, "data-sap-ui-end-value": true, editable: slider.editableTooltip, followRef: slider._endHandle, onChange: slider._onTooltipChange, onKeyDown: slider._onTooltipKeydown, onFocusChange: slider._onTooltipFocusChange, onOpen: slider._onTooltipOpen, onInput: slider._onTooltipInput }));
 export default function RangeSliderTemplate() {
-    return SliderBaseTemplate.call(this, {
-        handlesAriaText,
-        progressBar,
-        handles,
-    });
-}
-export function handlesAriaText() {
-    return (_jsxs(_Fragment, { children: [_jsx("span", { id: "ui5-slider-startHandleDesc", class: "ui5-hidden-text", children: this._ariaHandlesText.startHandleText }), _jsx("span", { id: "ui5-slider-endHandleDesc", class: "ui5-hidden-text", children: this._ariaHandlesText.endHandleText })] }));
-}
-export function progressBar() {
-    return (_jsx("div", { class: "ui5-slider-progress-container", part: "progress-container", children: _jsx("div", { class: "ui5-slider-progress", part: "progress-bar", style: this.styles.progress, onFocusIn: this._onfocusin, onFocusOut: this._onfocusout, role: "slider", tabIndex: this._tabIndex, "aria-orientation": "horizontal", "aria-valuemin": this.min, "aria-valuemax": this.max, "aria-valuenow": this._ariaValueNow, "aria-valuetext": `From ${this.startValue} to ${this.endValue}`, "aria-label": this._ariaLabel, "aria-disabled": this._ariaDisabled }) }));
-}
-export function handles() {
-    return (_jsxs(_Fragment, { children: [_jsxs("div", { class: "ui5-slider-handle-container", style: this.styles.startHandle, part: "handle-container", children: [_jsx("div", { class: "ui5-slider-handle ui5-slider-handle--start", part: "handle", onFocusIn: this._onfocusin, onFocusOut: this._onfocusout, role: "slider", tabindex: this._tabIndex, "aria-orientation": "horizontal", "aria-valuemin": this.min, "aria-valuemax": this.max, "aria-valuenow": this.startValue, "aria-labelledby": this._ariaLabelledByStartHandleText, "aria-disabled": this._ariaDisabled, "aria-describedby": this._ariaDescribedByHandleText, "aria-keyshortcuts": this._ariaKeyshortcuts, children: _jsx(Icon, { name: directionArrows, mode: "Decorative", "slider-icon": true }) }), _jsx(SliderTooltip, { open: this._tooltipsOpen, value: this.tooltipStartValue, valueState: this.tooltipStartValueState, min: this.min, max: this.max, "data-sap-ui-start-value": true, editable: this.editableTooltip, followRef: this._startHandle, onChange: this._onTooltipChange, onKeyDown: this._onTooltipKeydown, onFocusChange: this._onTooltipFocusChange, onOpen: this._onTooltipOpen, onInput: this._onTooltipInput })] }), _jsxs("div", { class: "ui5-slider-handle-container", style: this.styles.endHandle, part: "handle-container", children: [_jsx("div", { class: "ui5-slider-handle ui5-slider-handle--end", part: "handle", onFocusIn: this._onfocusin, onFocusOut: this._onfocusout, role: "slider", tabIndex: this._tabIndex, "aria-orientation": "horizontal", "aria-valuemin": this.min, "aria-valuemax": this.max, "aria-valuenow": this.endValue, "aria-labelledby": this._ariaLabelledByEndHandleText, "aria-describedby": this._ariaDescribedByHandleText, "aria-disabled": this._ariaDisabled, "aria-keyshortcuts": "F2", children: _jsx(Icon, { name: directionArrows, mode: "Decorative", "slider-icon": true }) }), _jsx(SliderTooltip, { open: this._tooltipsOpen, value: this.tooltipEndValue, valueState: this.tooltipEndValueState, min: this.min, max: this.max, "data-sap-ui-end-value": true, editable: this.editableTooltip, followRef: this._endHandle, onChange: this._onTooltipChange, onKeyDown: this._onTooltipKeydown, onFocusChange: this._onTooltipFocusChange, onOpen: this._onTooltipOpen, onInput: this._onTooltipInput })] })] }));
+    return (_jsx(_Fragment, { children: _jsx("div", { class: "ui5-slider-evo-root", part: "root-container", onMouseDown: this._onmousedown, onTouchStart: this._onmousedown, onMouseOver: this._onmouseover, onMouseOut: this._onmouseout, onKeyDown: this._onkeydown, onKeyUp: this._onkeyup, children: _jsxs(SliderScale, { startValue: this.startValue, endValue: this.endValue, min: this.min, max: this.max, step: this._effectiveStep, showTickmarks: this.showTickmarks, labelInterval: this.labelInterval, progressTabIndex: this._tabIndex, progressAriaValueNow: this._ariaValueNow, progressAriaValueText: `From ${this.startValue} to ${this.endValue}`, progressAriaLabel: this._ariaLabel, progressAriaDisabled: this._ariaDisabled, progressPressed: this.rangePressed, progressFocused: this._progressFocused, onFocusIn: this._onfocusin, onFocusOut: this._onfocusout, part: "scale", exportparts: "inner: scale-inner, progress: progress-bar", children: [startHandle(this), endHandle(this), this.editableTooltip && _jsx(_Fragment, { children: _jsx("span", { id: "ui5-slider-InputDesc", class: "ui5-hidden-text", children: this._ariaDescribedByInputText }) })] }) }) }));
 }
 //# sourceMappingURL=RangeSliderTemplate.js.map

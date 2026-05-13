@@ -5,6 +5,7 @@ import type { ResizeObserverCallback } from "@ui5/webcomponents-base/dist/delega
 import type I18nBundle from "@ui5/webcomponents-base/dist/i18nBundle.js";
 import type { IFormInputElement } from "@ui5/webcomponents-base/dist/features/InputElementsFormSupport.js";
 import type Popover from "./Popover.js";
+import type InputComposition from "./features/InputComposition.js";
 type TokenizedText = Array<string>;
 type IndexedTokenizedText = Array<{
     text: string;
@@ -192,6 +193,12 @@ declare class TextArea extends UI5Element implements IFormInputElement {
      */
     _width?: number;
     /**
+     * Indicates whether IME composition is currently active
+     * @default false
+     * @private
+     */
+    _isComposing: boolean;
+    /**
      * Defines the value state message that will be displayed as pop up under the component.
      * The value state message slot should contain only one root element.
      *
@@ -210,7 +217,9 @@ declare class TextArea extends UI5Element implements IFormInputElement {
     _keyDown?: boolean;
     previousValue: string;
     valueStatePopover?: Popover;
+    _composition?: InputComposition;
     static i18nBundle: I18nBundle;
+    static composition: typeof InputComposition;
     get formValidityMessage(): string | undefined;
     get formValidity(): ValidityStateFlags;
     formElementAnchor(): Promise<HTMLElement | undefined>;
@@ -248,6 +257,7 @@ declare class TextArea extends UI5Element implements IFormInputElement {
         leftCharactersCount: number | undefined;
         calcedMaxLength: number | undefined;
     };
+    _enableComposition(): void;
     get classes(): {
         root: {
             "ui5-textarea-root": boolean;

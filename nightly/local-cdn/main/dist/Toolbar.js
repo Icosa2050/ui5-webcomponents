@@ -134,7 +134,7 @@ let Toolbar = Toolbar_1 = class Toolbar extends UI5Element {
                 accessibleName: this.ariaLabelText,
             },
             overflowButton: {
-                accessibleName: Toolbar_1.i18nBundle.getText(TOOLBAR_OVERFLOW_BUTTON_ARIA_LABEL),
+                accessibleName: this.overflowButtonAccessibleName || Toolbar_1.i18nBundle.getText(TOOLBAR_OVERFLOW_BUTTON_ARIA_LABEL),
                 tooltip: Toolbar_1.i18nBundle.getText(TOOLBAR_OVERFLOW_BUTTON_ARIA_LABEL),
                 accessibilityAttributes: {
                     expanded: this.popoverOpen,
@@ -403,6 +403,9 @@ __decorate([
 __decorate([
     property()
 ], Toolbar.prototype, "accessibleNameRef", void 0);
+__decorate([
+    property()
+], Toolbar.prototype, "overflowButtonAccessibleName", void 0);
 __decorate([
     property()
 ], Toolbar.prototype, "design", void 0);

@@ -11,12 +11,31 @@ import jsxRenderer from "@ui5/webcomponents-base/dist/renderer/JsxRenderer.js";
 import SliderHandleTemplate from "./SliderHandleTemplate.js";
 import styles from "./generated/themes/SliderHandle.css.js";
 /**
+ * Handle types for the slider handle component.
+ * @private
+ */
+var SliderHandleType;
+(function (SliderHandleType) {
+    /**
+     * Start handle (left handle in LTR mode).
+     */
+    SliderHandleType["Start"] = "Start";
+    /**
+     * End handle (right handle in LTR mode).
+     */
+    SliderHandleType["End"] = "End";
+    /**
+     * Single handle (used by regular Slider).
+     */
+    SliderHandleType["Single"] = "Single";
+})(SliderHandleType || (SliderHandleType = {}));
+/**
  * @class
  * The <code>ui5-slider-handle</code> component represents the handle of the <code>ui5-slider</code> component.
  *
  * @constructor
  * @extends UI5Element
- * @since 2.19.0
+ * @since 2.22.0
  * @private
  */
 let SliderHandle = class SliderHandle extends UI5Element {
@@ -26,48 +45,54 @@ let SliderHandle = class SliderHandle extends UI5Element {
          * Defines the value of the slider handle.
          * <br><br>
          * <b>Note:</b> The value should be between the <code>min</code> and <code>max</code> properties of the parent <code>ui5-slider</code>.
-         * @since 2.19.0
-         * @public
+         * @since 2.22.0
          */
         this.value = 0;
         /**
          * Defines the minimum value of the slider handle.
          * <br><br>
          * <b>Note:</b> The value should be less than the <code>max</code> property of the parent <code>ui5-slider</code>.
-         * @since 2.19.0
-         * @public
+         * @since 2.22.0
          */
         this.min = 0;
         /**
          * Defines the maximum value of the slider handle.
          * <br><br>
          * <b>Note:</b> The value should be greater than the <code>min</code> property of the parent <code>ui5-slider</code>.
-         * @since 2.19.0
-         * @public
+         * @since 2.22.0
          */
         this.max = 100;
-        /**
-         * Defines whether the slider handle is disabled.
-         * <br><br>
-         * <b>Note:</b> A disabled slider handle cannot be interacted with.
-         * @since 2.19.0
-         * @public
-         */
-        this.disabled = false;
         /**
          * Defines whether the slider handle is active.
          * <br><br>
          * <b>Note:</b> An active slider handle is currently being interacted with.
-         * @since 2.19.0
-         * @public
+         * @since 2.22.0
+         *
+         * @private
          */
         this.active = false;
+        /**
+         * Defines whether the slider handle should appear hovered.
+         * <br><br>
+         * <b>Note:</b> Used when the progress bar is hovered to show both handles as hovered.
+         * @since 2.22.0
+         *
+         * @private
+         */
+        this.hovered = false;
         /**
          * Defines the orientation of the slider handle.
          *
          * @private
          */
         this.orientation = "Horizontal";
+        /**
+         * Defines the type of handle for styling purposes.
+         * Used by RangeSlider to differentiate between start and end handles.
+         *
+         * @private
+         */
+        this.handleType = "Single";
     }
     getFocusDomRef() {
         return this;
@@ -84,13 +109,16 @@ __decorate([
 ], SliderHandle.prototype, "max", void 0);
 __decorate([
     property({ type: Boolean })
-], SliderHandle.prototype, "disabled", void 0);
+], SliderHandle.prototype, "active", void 0);
 __decorate([
     property({ type: Boolean })
-], SliderHandle.prototype, "active", void 0);
+], SliderHandle.prototype, "hovered", void 0);
 __decorate([
     property()
 ], SliderHandle.prototype, "orientation", void 0);
+__decorate([
+    property()
+], SliderHandle.prototype, "handleType", void 0);
 SliderHandle = __decorate([
     customElement({
         tag: "ui5-slider-handle",
@@ -101,4 +129,5 @@ SliderHandle = __decorate([
 ], SliderHandle);
 SliderHandle.define();
 export default SliderHandle;
+export { SliderHandleType };
 //# sourceMappingURL=SliderHandle.js.map

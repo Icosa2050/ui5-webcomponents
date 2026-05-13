@@ -12,6 +12,7 @@ import "@ui5/webcomponents-icons/dist/nav-back.js";
 import type SortItem from "./SortItem.js";
 import type FilterItem from "./FilterItem.js";
 import type GroupItem from "./GroupItem.js";
+import type ViewSettingsDialogCustomTab from "./ViewSettingsDialogCustomTab.js";
 type VSDFilter = Record<string, Array<string>>;
 type VSDFilters = Array<VSDFilter>;
 type VSDSettings = {
@@ -50,6 +51,9 @@ type VSDInternalSettings = {
         index: number;
     }>;
 };
+declare const CUSTOM_MODE_PREFIX = "customTabs-";
+type ViewSettingsCustomMode = `${typeof CUSTOM_MODE_PREFIX}${number}`;
+type ViewSettingsDialogInternalMode = `${ViewSettingsDialogMode}` | ViewSettingsCustomMode;
 /**
  * @class
  * ### Overview
@@ -85,6 +89,7 @@ declare class ViewSettingsDialog extends UI5Element {
         "before-open": void;
         "open": void;
         "close": void;
+        "reset": void;
     };
     /**
      * Defines the initial sort order.
@@ -106,6 +111,23 @@ declare class ViewSettingsDialog extends UI5Element {
      * @since 2.0.0
      */
     open: boolean;
+    /**
+     * Controls whether the Reset button is always enabled.
+     *
+     * By default, the Reset button is enabled only when the built-in settings (Sort, Filter, Group)
+     * differ from their initial state — the component can detect these changes automatically.
+     * However, when the dialog contains custom tabs, the component has no way to detect
+     * whether the custom tab content has been modified by the user.
+     *
+     * Set this property to `true` when the user has made changes inside a custom tab, so that
+     * the Reset button becomes enabled and the user can trigger a reset.
+     * Set it back to `false` once the custom tab content is back to its initial state
+     * (e.g. after the user confirms or after a reset is applied).
+     * @default false
+     * @public
+     * @since 2.22.0
+     */
+    resetEnabled: boolean;
     /**
      * Keeps recently focused list in order to focus it on next dialog open.
      * @private
@@ -131,7 +153,7 @@ declare class ViewSettingsDialog extends UI5Element {
      * @since 1.0.0-rc.16
      * @private
      */
-    _currentMode: `${ViewSettingsDialogMode}`;
+    _currentMode: ViewSettingsDialogInternalMode;
     /**
      * When in Filter By mode, defines whether we need to show the list of keys, or the list with values.
      * @since 1.0.0-rc.16
@@ -159,6 +181,16 @@ declare class ViewSettingsDialog extends UI5Element {
      * @public
      */
     groupItems: Slot<GroupItem>;
+    /**
+     * Defines custom tabs for the dialog.
+     *
+     * The custom tabs are rendered after the built-in tabs (`Sort`, `Filter`, `Group`).
+     *
+     * **Note:** If you want to use this slot, you need to import the item: `import "@ui5/webcomponents-fiori/dist/ViewSettingsDialogCustomTab.js";`
+     * @public
+     * @since 2.22.0
+     */
+    customTabs: Slot<ViewSettingsDialogCustomTab>;
     _list: List;
     _dialog?: Dialog;
     _sortOrder?: List;
@@ -178,7 +210,10 @@ declare class ViewSettingsDialog extends UI5Element {
     get shouldBuildSort(): boolean;
     get shouldBuildFilter(): boolean;
     get shouldBuildGroup(): boolean;
+    get shouldBuildCustomTabs(): boolean;
     get hasPagination(): boolean;
+    get _defaultMode(): ViewSettingsDialogInternalMode;
+    get _selectedCustomTab(): ViewSettingsDialogCustomTab | undefined;
     get _filterByTitle(): string;
     get _dialogTitle(): string;
     get _okButtonLabel(): string;
@@ -230,6 +265,7 @@ declare class ViewSettingsDialog extends UI5Element {
     get isModeSort(): boolean;
     get isModeFilter(): boolean;
     get isModeGroup(): boolean;
+    get isModeCustom(): boolean;
     get showBackButton(): boolean;
     /**
      * Shows the dialog.
@@ -285,6 +321,10 @@ declare class ViewSettingsDialog extends UI5Element {
      * @param settings
      */
     _restoreSettings(settings: VSDInternalSettings): void;
+    isCurrentCustomTabMode(tab: ViewSettingsDialogCustomTab): boolean;
+    _customTabMode(tab: ViewSettingsDialogCustomTab): ViewSettingsCustomMode;
+    _isCustomMode(mode: string): mode is ViewSettingsCustomMode;
+    _isValidMode(mode: string): mode is ViewSettingsDialogInternalMode;
     /**
      * Stores `Sort Order` list as recently used control and its selected item in current state.
      */

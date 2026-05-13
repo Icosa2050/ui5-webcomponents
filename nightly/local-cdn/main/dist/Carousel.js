@@ -570,7 +570,7 @@ let Carousel = Carousel_1 = class Carousel extends UI5Element {
             return;
         }
         if (newItemIndex > items.length - effectiveItemsPerPage) {
-            newItemIndex = items.length - effectiveItemsPerPage;
+            newItemIndex = Math.max(0, items.length - effectiveItemsPerPage);
         }
         const lastItemIndex = newItemIndex + effectiveItemsPerPage;
         this._visibleItemsIndexes = [];

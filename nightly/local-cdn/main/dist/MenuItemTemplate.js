@@ -10,15 +10,20 @@ import slimArrowRight from "@ui5/webcomponents-icons/dist/slim-arrow-right.js";
 import Icon from "./Icon.js";
 import ListItemTemplate from "./ListItemTemplate.js";
 const predefinedHooks = {
-    listItemContent,
     iconBegin,
+    menuItemTextContent,
 };
 export default function MenuItemTemplate(hooks) {
     const currentHooks = { ...predefinedHooks, ...hooks };
+    if (!hooks?.listItemContent) {
+        currentHooks.listItemContent = function listItemContent() {
+            return (_jsxs(_Fragment, { children: [currentHooks.menuItemTextContent.call(this), rightContent.call(this), checkmarkContent.call(this)] }));
+        };
+    }
     return _jsxs(_Fragment, { children: [ListItemTemplate.call(this, currentHooks), listItemPostContent.call(this)] });
 }
-function listItemContent() {
-    return (_jsxs(_Fragment, { children: [this.text && _jsx("div", { class: "ui5-menu-item-text", children: this.text }), rightContent.call(this), checkmarkContent.call(this)] }));
+function menuItemTextContent() {
+    return _jsx(_Fragment, { children: this.text && _jsx("div", { class: "ui5-menu-item-text", children: this.text }) });
 }
 function checkmarkContent() {
     return !this._markChecked ? "" : (_jsx("div", { class: "ui5-menu-item-checked", children: _jsx(Icon, { name: checkIcon, class: "ui5-menu-item-icon-checked" }) }));

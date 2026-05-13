@@ -11,7 +11,6 @@ import event from "@ui5/webcomponents-base/dist/decorators/event-strict.js";
 import i18n from "@ui5/webcomponents-base/dist/decorators/i18n.js";
 import DateFormat from "@ui5/webcomponents-localization/dist/DateFormat.js";
 import { isEnter, isSpace, isDown, isUp, isLeft, isRight, isHome, isEnd, isHomeCtrl, isEndCtrl, isPageUp, isPageDown, } from "@ui5/webcomponents-base/dist/Keys.js";
-import getLocale from "@ui5/webcomponents-base/dist/locale/getLocale.js";
 import transformDateToSecondaryType from "@ui5/webcomponents-localization/dist/dates/transformDateToSecondaryType.js";
 import CalendarDate from "@ui5/webcomponents-localization/dist/dates/CalendarDate.js";
 import CalendarPart from "./CalendarPart.js";
@@ -74,9 +73,8 @@ let YearPicker = YearPicker_1 = class YearPicker extends CalendarPart {
     }
     _buildYears() {
         const pageSize = this._getPageSize();
-        const locale = getLocale();
-        const oYearFormat = DateFormat.getDateInstance({ format: "y", calendarType: this._primaryCalendarType }, locale);
-        const oYearFormatInSecType = DateFormat.getDateInstance({ format: "y", calendarType: this.secondaryCalendarType }, locale);
+        const oYearFormat = DateFormat.getDateInstance({ format: "y", calendarType: this._primaryCalendarType });
+        const oYearFormatInSecType = DateFormat.getDateInstance({ format: "y", calendarType: this.secondaryCalendarType });
         const calendarDate = this._calendarDate; // store the value of the expensive getter
         const minDate = this._minDate; // store the value of the expensive getter
         const maxDate = this._maxDate; // store the value of the expensive getter

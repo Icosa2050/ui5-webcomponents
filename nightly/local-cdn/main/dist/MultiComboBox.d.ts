@@ -22,6 +22,7 @@ import type { ListSelectionChangeEventDetail } from "./List.js";
 import ToggleButton from "./ToggleButton.js";
 import type ComboBoxFilter from "./types/ComboBoxFilter.js";
 import type { InputEventDetail } from "./Input.js";
+import type { ListItemBaseClickEventDetail } from "./ListItemBase.js";
 import type InputComposition from "./features/InputComposition.js";
 /**
  * Interface for components that may be slotted inside a `ui5-multi-combobox` as items
@@ -36,6 +37,9 @@ interface IMultiComboBoxItem extends UI5Element {
     isGroupItem?: boolean;
     _isVisible?: boolean;
     items?: Array<IMultiComboBoxItem>;
+    eventDetails: {
+        click?: ListItemBaseClickEventDetail;
+    };
 }
 type ValueStateAnnouncement = Record<Exclude<ValueState, ValueState.None>, string>;
 type ValueStateTypeAnnouncement = Record<Exclude<ValueState, ValueState.None>, string>;
@@ -356,7 +360,7 @@ declare class MultiComboBox extends UI5Element implements IFormInputElement {
     _tokenizerFocusIn(): void;
     _onkeydown(e: KeyboardEvent): void;
     _selectItems(matchingItems: IMultiComboBoxItem[]): void;
-    _handlePaste(e: ClipboardEvent): Promise<void>;
+    _handlePaste(e: ClipboardEvent): void;
     _handleTokenCreationUponPaste(pastedText: string, e: KeyboardEvent | ClipboardEvent): void;
     _handleInsertPaste(e: KeyboardEvent): Promise<void>;
     _handleShow(e: KeyboardEvent): void;

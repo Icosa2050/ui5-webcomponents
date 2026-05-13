@@ -112,12 +112,18 @@ let TimelineItem = TimelineItem_1 = class TimelineItem extends UI5Element {
         if (this.timelineItemStateText) {
             parts.push(this.timelineItemStateText);
         }
+        if (this.iconTooltip) {
+            parts.push(this.iconTooltip);
+        }
         return parts.join(", ");
     }
 };
 __decorate([
     property()
 ], TimelineItem.prototype, "icon", void 0);
+__decorate([
+    property()
+], TimelineItem.prototype, "iconTooltip", void 0);
 __decorate([
     property()
 ], TimelineItem.prototype, "name", void 0);

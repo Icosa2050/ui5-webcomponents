@@ -944,6 +944,12 @@ let ComboBox = ComboBox_1 = class ComboBox extends UI5Element {
     }
     _itemMousedown(e) {
         e.preventDefault();
+        const target = e.target;
+        const listItem = target.closest("[ui5-cb-item], [ui5-cb-item-group]");
+        if (listItem) {
+            this._clearFocus();
+            listItem.focused = true;
+        }
     }
     _selectItem(e) {
         const item = e.detail.item;
@@ -961,8 +967,13 @@ let ComboBox = ComboBox_1 = class ComboBox extends UI5Element {
         if (!this._useSelectedValue && item.value !== undefined) {
             this._useSelectedValue = true;
         }
-        if (this._useSelectedValue) {
+        // Always set selectedValue when the item has a value property, regardless of _useSelectedValue state
+        if (item.value !== undefined) {
             this.selectedValue = item.value;
+        }
+        else if (this._useSelectedValue) {
+            // Only clear selectedValue if we were using it before
+            this.selectedValue = undefined;
         }
         if (!item.selected) {
             this.fireDecoratorEvent("selection-change", {
@@ -1071,7 +1082,7 @@ let ComboBox = ComboBox_1 = class ComboBox extends UI5Element {
         }
     }
     get _headerTitleText() {
-        return ComboBox_1.i18nBundle.getText(INPUT_SUGGESTIONS_TITLE);
+        return getAssociatedLabelForTexts(this) || ComboBox_1.i18nBundle.getText(INPUT_SUGGESTIONS_TITLE);
     }
     get _iconAccessibleNameText() {
         return ComboBox_1.i18nBundle.getText(SELECT_OPTIONS);

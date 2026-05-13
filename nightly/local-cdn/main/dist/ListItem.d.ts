@@ -116,13 +116,17 @@ declare abstract class ListItem extends ListItemBase {
     selected: boolean;
     /**
      * Used to define the role of the list item.
-     * @private
-     * @default "ListItem"
-     * @since 1.3.0
      *
+     * **Note:** If not set, the role is automatically inherited from the parent `ui5-list` based on its `accessible-role` property
+     * (e.g. `Menu` -> `MenuItem`, `Tree` -> `TreeItem`, `ListBox` -> `Option`).
+     * An explicitly set `accessible-role` on the list item takes precedence over the inherited role.
+     * @default undefined
+     * @public
+     * @since 1.3.0
      */
-    accessibleRole: `${ListItemAccessibleRole}`;
+    accessibleRole?: `${Exclude<ListItemAccessibleRole, ListItemAccessibleRole.Group>}`;
     _forcedAccessibleRole?: string;
+    _inheritedAccessibleRole?: string;
     _selectionMode: `${ListSelectionMode}`;
     /**
      * Defines the current media query size.
@@ -177,7 +181,7 @@ declare abstract class ListItem extends ListItemBase {
     get typeNavigation(): boolean;
     get typeActive(): boolean;
     get _ariaSelected(): boolean | undefined;
-    get listItemAccessibleRole(): AriaRole | undefined;
+    get listItemAccessibleRole(): import("@ui5/webcomponents-base/dist/thirdparty/preact/jsx.js").JSXInternal.AriaRole;
     get ariaSelectedText(): string | undefined;
     get deleteText(): string;
     get hasDeleteButtonSlot(): boolean;

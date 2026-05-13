@@ -426,6 +426,9 @@ let Tokenizer = Tokenizer_1 = class Tokenizer extends UI5Element {
     }
     _onkeydown(e) {
         const isCtrl = !!(e.metaKey || e.ctrlKey);
+        if (isEscape(e)) {
+            return this._deselectAllTokens();
+        }
         if ((isCtrl && ["c", "x"].includes(e.key.toLowerCase())) || isDeleteShift(e) || isInsertCtrl(e)) {
             e.preventDefault();
             const isCut = e.key.toLowerCase() === "x" || isDeleteShift(e);
@@ -696,6 +699,15 @@ let Tokenizer = Tokenizer_1 = class Tokenizer extends UI5Element {
             });
         }
     }
+    _deselectAllTokens() {
+        const hadSelection = this._selectedTokens.length > 0;
+        this._tokens.forEach(token => { token.selected = false; });
+        if (hadSelection) {
+            this.fireDecoratorEvent("selection-change", {
+                tokens: [],
+            });
+        }
+    }
     get hasTokens() {
         return this._tokens.length > 0;
     }
@@ -824,7 +836,7 @@ let Tokenizer = Tokenizer_1 = class Tokenizer extends UI5Element {
         return this.readonly || undefined;
     }
     get morePopoverTitle() {
-        return getEffectiveAriaLabelText(this) || Tokenizer_1.i18nBundle.getText(INPUT_SUGGESTIONS_TITLE);
+        return this.popoverTitle || getEffectiveAriaLabelText(this) || Tokenizer_1.i18nBundle.getText(INPUT_SUGGESTIONS_TITLE);
     }
     get overflownTokens() {
         if (!this.contentDom) {
@@ -920,6 +932,9 @@ __decorate([
 __decorate([
     property({ type: Number })
 ], Tokenizer.prototype, "popoverMinWidth", void 0);
+__decorate([
+    property()
+], Tokenizer.prototype, "popoverTitle", void 0);
 __decorate([
     property({ type: Boolean })
 ], Tokenizer.prototype, "preventInitialFocus", void 0);

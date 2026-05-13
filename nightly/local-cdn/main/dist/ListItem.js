@@ -86,14 +86,6 @@ let ListItem = ListItem_1 = class ListItem extends ListItemBase {
          * @since 1.24
          */
         this.highlight = "None";
-        /**
-         * Used to define the role of the list item.
-         * @private
-         * @default "ListItem"
-         * @since 1.3.0
-         *
-         */
-        this.accessibleRole = "ListItem";
         this._selectionMode = "None";
         /**
          * Defines the current media query size.
@@ -267,7 +259,13 @@ let ListItem = ListItem_1 = class ListItem extends ListItemBase {
         return undefined;
     }
     get listItemAccessibleRole() {
-        return (this._forcedAccessibleRole || this.accessibleRole.toLowerCase());
+        if (this._forcedAccessibleRole) {
+            return this._forcedAccessibleRole;
+        }
+        if (this.accessibleRole) {
+            return this.accessibleRole.toLowerCase();
+        }
+        return (this._inheritedAccessibleRole || "listitem");
     }
     get ariaSelectedText() {
         let ariaSelectedText;
@@ -395,6 +393,9 @@ __decorate([
 __decorate([
     property()
 ], ListItem.prototype, "_forcedAccessibleRole", void 0);
+__decorate([
+    property({ noAttribute: true })
+], ListItem.prototype, "_inheritedAccessibleRole", void 0);
 __decorate([
     property()
 ], ListItem.prototype, "_selectionMode", void 0);

@@ -25,7 +25,7 @@ export default function UserMenuTemplate() {
                         }, slot: "header", children: [this._titleMovedToHeader &&
                                 _jsx(Title, { level: "H1", wrappingType: "None", children: this._selectedAccount.titleText }), this._isPhone && _jsx(Button, { icon: decline, design: "Transparent", accessibleName: this._closeDialogAriaLabel, onClick: this._closeUserMenu, slot: "endContent" })] }), _jsx("div", { class: "ui5-user-menu-header", children: headerContent.call(this) })] }), this.showOtherAccounts &&
                 _jsx(_Fragment, { children: otherAccountsContent.call(this) }), this.menuItems.length > 0 &&
-                _jsx(List, { id: "ui5-user-menu-list", class: "ui5-user-menu-list", selectionMode: "None", separators: "None", accessibleRole: "Menu", accessibleName: this._ariaLabelledByActions, onItemClick: this._handleMenuItemClick, "onui5-close-menu": this._handleMenuItemClose, children: _jsx("slot", {}) }), this._hasCustomFooter &&
+                _jsx(List, { id: "ui5-user-menu-list", class: "ui5-user-menu-list", selectionMode: "None", separators: "None", accessibleRole: "Menu", accessibleName: this._ariaLabelledByActions, onItemClick: this._handleMenuItemClick, onMouseOver: this._itemMouseOver, "onui5-close-menu": this._handleMenuItemClose, children: _jsx("slot", {}) }), this._hasCustomFooter &&
                 _jsx("div", { slot: "footer", class: "ui5-user-menu-footer", children: _jsx("slot", { name: "footer" }) }), this._showDefaultFooter &&
                 _jsx("div", { slot: "footer", class: "ui5-user-menu-footer", children: _jsx(Button, { class: "ui5-user-menu-sign-out-btn", design: "Transparent", icon: log, onClick: this._handleSignOutClick, children: this._signOutButtonText }) })] }));
 }

@@ -17,7 +17,7 @@ import "@ui5/webcomponents-icons/dist/accept.js";
 import "@ui5/webcomponents-icons/dist/decline.js";
 import "@ui5/webcomponents-icons/dist/less.js";
 import SwitchDesign from "./types/SwitchDesign.js";
-import { FORM_CHECKABLE_REQUIRED, SWITCH_ON, SWITCH_OFF, } from "./generated/i18n/i18n-defaults.js";
+import { FORM_CHECKABLE_REQUIRED, SWITCH_ON, SWITCH_OFF, ACC_STATE_READONLY, } from "./generated/i18n/i18n-defaults.js";
 // Template
 import SwitchTemplate from "./SwitchTemplate.js";
 // Styles
@@ -223,6 +223,12 @@ let Switch = Switch_1 = class Switch extends UI5Element {
     }
     get ariaLabelText() {
         return getEffectiveAriaLabelText(this) || getAssociatedLabelForTexts(this) || undefined;
+    }
+    get ariaDescribedBy() {
+        return this.readonly ? `${this._id}-readonly-desc` : undefined;
+    }
+    get ariaDescribedByText() {
+        return this.readonly ? Switch_1.i18nBundle.getText(ACC_STATE_READONLY) : "";
     }
 };
 __decorate([

@@ -4,6 +4,7 @@ import DragAndDropHandler from "./delegate/DragAndDropHandler.js";
 import MovePlacement from "@ui5/webcomponents-base/dist/types/MovePlacement.js";
 import type DropIndicator from "./DropIndicator.js";
 import type ListItemBase from "./ListItemBase.js";
+import type { ListItemBaseClickEventDetail } from "./ListItemBase.js";
 import type ListItemGroupHeader from "./ListItemGroupHeader.js";
 import WrappingType from "./types/WrappingType.js";
 type ListItemGroupMoveEventDetail = {
@@ -33,6 +34,7 @@ type ListItemGroupMoveEventDetail = {
  */
 declare class ListItemGroup extends UI5Element {
     eventDetails: {
+        "click"?: ListItemBaseClickEventDetail;
         "move-over": ListItemGroupMoveEventDetail;
         "move": ListItemGroupMoveEventDetail;
     };

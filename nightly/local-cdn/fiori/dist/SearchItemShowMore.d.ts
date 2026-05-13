@@ -1,6 +1,7 @@
 import ListItemBase from "@ui5/webcomponents/dist/ListItemBase.js";
+import type { ListItemBaseClickEventDetail } from "@ui5/webcomponents/dist/ListItemBase.js";
 import type I18nBundle from "@ui5/webcomponents-base/dist/i18nBundle.js";
-type ShowMoreItemClickEventDetail = {
+type ShowMoreItemClickEventDetail = ListItemBaseClickEventDetail & {
     fromKeyboard: boolean;
 };
 /**

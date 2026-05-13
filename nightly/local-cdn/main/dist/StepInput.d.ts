@@ -245,8 +245,8 @@ declare class StepInput extends UI5Element implements IFormInputElement {
     _getValueOnkeyDown(e: KeyboardEvent, inputValue: string, cursorPosition?: number): string;
     _removeGroupSeparators(value: string): string;
     _isInputValueValid(typedValue: string, parsedValue: number): boolean;
-    _decSpin(): void;
-    _incSpin(): void;
+    _decSpin(e: MouseEvent): void;
+    _incSpin(e: MouseEvent): void;
     /**
      * Calculates the time which should be waited until _spinValue function is called.
      */

@@ -73,6 +73,57 @@ declare class SliderScale extends UI5Element {
      */
     labelInterval: number;
     /**
+     * Tab index for the progress bar.
+     * @default -1
+     * @private
+     */
+    progressTabIndex: number;
+    /**
+     * ARIA role for the progress bar.
+     * @private
+     */
+    progressRole?: string;
+    /**
+     * ARIA aria-valuenow for the progress bar.
+     * @private
+     */
+    progressAriaValueNow?: number;
+    /**
+     * ARIA aria-valuetext for the progress bar.
+     * @private
+     */
+    progressAriaValueText?: string;
+    /**
+     * ARIA aria-label for the progress bar.
+     * @private
+     */
+    progressAriaLabel?: string;
+    /**
+     * ARIA aria-disabled for the progress bar.
+     * @private
+     */
+    progressAriaDisabled?: boolean;
+    /**
+     * Indicates that the progress bar is being pressed/dragged.
+     * Used to show the focus outline during mouse interaction.
+     * @default false
+     * @private
+     */
+    progressPressed: boolean;
+    /**
+     * Indicates that the progress bar should show as focused.
+     * Set by parent component (RangeSlider) when the progress bar has focus.
+     * @default false
+     * @private
+     */
+    progressFocused: boolean;
+    /**
+     * Indicates that the progress bar is being hovered.
+     * @default false
+     * @private
+     */
+    progressHovered: boolean;
+    /**
      * @private
      */
     _labelInterval: number;
@@ -101,6 +152,8 @@ declare class SliderScale extends UI5Element {
      * @private
      */
     _spaceBetweenTickmarks(): number;
+    _onProgressMouseEnter(): void;
+    _onProgressMouseLeave(): void;
     get _tickmarksCount(): number;
     get _visibleLabels(): {
         value: number;

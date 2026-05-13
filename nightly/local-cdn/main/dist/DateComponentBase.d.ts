@@ -105,11 +105,11 @@ declare class DateComponentBase extends UI5Element {
     _getStringFromTimestamp(timestamp: number): string;
     _getDisplayStringFromTimestamp(timestamp: number): string;
     _getValueStringFromTimestamp(timestamp: number): string;
-    getFormat(): import("sap/ui/core/format/DateFormat").default;
+    getFormat(): DateFormat;
     get _displayFormat(): string | undefined;
     get _valueFormat(): string;
-    getDisplayFormat(): import("sap/ui/core/format/DateFormat").default;
-    getValueFormat(): import("sap/ui/core/format/DateFormat").default;
+    getDisplayFormat(): DateFormat;
+    getValueFormat(): DateFormat;
     getISOFormat(): DateFormat;
 }
 export default DateComponentBase;

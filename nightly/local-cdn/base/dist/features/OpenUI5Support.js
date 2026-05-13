@@ -6,7 +6,7 @@ import { setTheme } from "../config/Theme.js";
 import { secondaryBoot } from "../Boot.js";
 const OPENUI5_POLLING_INTERVAL = 100;
 class OpenUI5Support {
-    static isAtLeastVersion116() {
+    static isAtLeastVersion(minor) {
         if (!window.sap.ui.version) {
             return true; // sap.ui.version will be removed in newer OpenUI5 versions
         }
@@ -15,7 +15,7 @@ class OpenUI5Support {
         if (!parts || parts.length < 2) {
             return false;
         }
-        return parseInt(parts[0]) > 1 || parseInt(parts[1]) >= 116;
+        return parseInt(parts[0]) > 1 || parseInt(parts[1]) >= minor;
     }
     static isOpenUI5Detected() {
         return typeof window.sap?.ui?.require === "function";
@@ -44,7 +44,7 @@ class OpenUI5Support {
                 window.sap.ui.require(["sap/ui/core/Core"], async (Core) => {
                     const callback = () => {
                         let deps = ["sap/ui/core/Popup", "sap/m/Dialog", "sap/ui/core/Patcher", "sap/ui/core/LocaleData"];
-                        if (_a.isAtLeastVersion116()) { // for versions since 1.116.0 and onward, use the modular core
+                        if (_a.isAtLeastVersion(116)) { // for versions since 1.116.0 and onward, use the modular core
                             deps = [
                                 ...deps,
                                 "sap/base/i18n/Formatting",
@@ -60,7 +60,7 @@ class OpenUI5Support {
                             resolve();
                         });
                     };
-                    if (_a.isAtLeastVersion116()) {
+                    if (_a.isAtLeastVersion(116)) {
                         await Core.ready();
                         callback();
                     }
@@ -76,7 +76,7 @@ class OpenUI5Support {
         if (!_a.isOpenUI5Detected()) {
             return {};
         }
-        if (_a.isAtLeastVersion116()) {
+        if (_a.isAtLeastVersion(116)) {
             const ControlBehavior = window.sap.ui.require("sap/ui/core/ControlBehavior");
             const Localization = window.sap.ui.require("sap/base/i18n/Localization");
             const Theming = window.sap.ui.require("sap/ui/core/Theming");
@@ -119,7 +119,7 @@ class OpenUI5Support {
             return;
         }
         const LocaleData = window.sap.ui.require("sap/ui/core/LocaleData");
-        if (_a.isAtLeastVersion116()) {
+        if (_a.isAtLeastVersion(116)) {
             const Localization = window.sap.ui.require("sap/base/i18n/Localization");
             return LocaleData.getInstance(Localization.getLanguageTag())._get();
         }
@@ -128,7 +128,7 @@ class OpenUI5Support {
         return LocaleData.getInstance(config.getLocale())._get();
     }
     static _listenForThemeChange() {
-        if (_a.isAtLeastVersion116()) {
+        if (_a.isAtLeastVersion(116)) {
             const Theming = window.sap.ui.require("sap/ui/core/Theming");
             Theming.attachApplied(() => {
                 setTheme(Theming.getTheme());
@@ -158,7 +158,10 @@ class OpenUI5Support {
             return false;
         }
         // The file name is "css_variables.css" until 1.127 and "library.css" from 1.127 onwards
-        return !!link.href.match(/\/css(-|_)variables\.css/) || !!link.href.match(/\/library\.css/);
+        if (_a.isAtLeastVersion(127)) {
+            return !!link.href.match(/\/css(-|_)variables\.css/) || !!link.href.match(/\/library\.css/);
+        }
+        return !!link.href.match(/\/css(-|_)variables\.css/);
     }
     static addOpenedPopup(popupInfo) {
         addOpenedPopup(popupInfo);

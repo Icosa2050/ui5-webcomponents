@@ -83,6 +83,7 @@ declare class MultiInput extends Input implements IFormInputElement {
     tokens: Slot<IToken>;
     _skipOpenSuggestions: boolean;
     _valueHelpIconPressed: boolean;
+    _focusInTokenizer: boolean;
     get formValidityMessage(): string;
     get formValidity(): ValidityStateFlags;
     get formFormattedValue(): FormData | string | null;
@@ -97,6 +98,11 @@ declare class MultiInput extends Input implements IFormInputElement {
     _onkeydown(e: KeyboardEvent): void;
     _onTokenizerKeydown(e: KeyboardEvent): void;
     _handleLeft(e: KeyboardEvent): void;
+    _focusToken(tokenToFocus: IToken): void;
+    /**
+     * @override
+     */
+    _handleChange(): void;
     _handleBackspace(e: KeyboardEvent): void;
     _focusFirstToken(e: KeyboardEvent): void;
     _onfocusout(e: FocusEvent): void;

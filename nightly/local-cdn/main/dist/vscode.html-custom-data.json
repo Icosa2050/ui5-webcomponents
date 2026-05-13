@@ -106,6 +106,11 @@
             { "name": "Negative" },
             { "name": "Information" }
           ]
+        },
+        {
+          "name": "tooltip",
+          "description": "Defines the tooltip text of the badge icon.\n\n**Note:** If not provided, the badge uses the icon accessible name.\nIf no icon accessible name is available, a generic fallback text is used.",
+          "values": []
         }
       ],
       "references": []
@@ -205,7 +210,7 @@
     },
     {
       "name": "ui5-breadcrumbs-item",
-      "description": "### Overview\n\nThe `ui5-breadcrumbs-item` component defines the content of an item in `ui5-breadcrumbs`.\n\n\n---\n\n\n\n\n### **Slots:**\n - **default** - Defines the text of the component.\n\n**Note:** Although this slot accepts HTML Elements, it is strongly recommended that you only use text in order to preserve the intended design.",
+      "description": "### Overview\n\nThe `ui5-breadcrumbs-item` component defines the content of an item in `ui5-breadcrumbs`.\n\n\n---\n\n\n\n\n### **Events:**\n - **click** - Fired when the component is activated either with a mouse/tap or by using the Enter or Space key.\n\n**Note:** The event is also fired for the current page location item (the last item), which is not a link by design.\n\n### **Slots:**\n - **default** - Defines the text of the component.\n\n**Note:** Although this slot accepts HTML Elements, it is strongly recommended that you only use text in order to preserve the intended design.",
       "attributes": [
         {
           "name": "accessible-name",
@@ -306,6 +311,11 @@
         {
           "name": "end-icon",
           "description": "Defines the icon, displayed as graphical element within the component after the button text.\n\n**Note:** It is highly recommended to use `endIcon` property only together with `icon` and/or `text` properties.\nUsage of `endIcon` only should be avoided.\n\nThe SAP-icons font provides numerous options.\n\nExample:\nSee all the available icons within the [Icon Explorer](https://sdk.openui5.org/test-resources/sap/m/demokit/iconExplorer/webapp/index.html).",
+          "values": []
+        },
+        {
+          "name": "form",
+          "description": "Associates the button with a form element by the form's `id` attribute.\nWhen set, the button can submit or reset the specified form even if the button\nis not a descendant of that form.\n\n**Note:** This property takes effect only when the button's \"type\" property is set to \"Submit\" or \"Reset\".",
           "values": []
         },
         {
@@ -826,11 +836,16 @@
     },
     {
       "name": "ui5-color-palette-item",
-      "description": "### Overview\n\nThe `ui5-color-palette-item` component represents a color in the the `ui5-color-palette`.\n\n\n---\n\n\n",
+      "description": "### Overview\n\nThe `ui5-color-palette-item` component represents a color in the the `ui5-color-palette`.\n\n\n---\n\n\n\n\n### **Events:**\n - **click** - Fired when the component is activated either with a mouse/tap or by using the Enter or Space key.\n\n**Note:** The event will not be fired if the `disabled` property is set to `true`.",
       "attributes": [
         {
           "name": "selected",
           "description": "Defines if the component is selected.\n\n**Note:** Only one item must be selected per <code>ui5-color-palette</code>.\nIf more than one item is defined as selected, the last one would be considered as the selected one.",
+          "values": []
+        },
+        {
+          "name": "tooltip",
+          "description": "Defines the tooltip of the component. When not set, the color value is used as the tooltip.",
           "values": []
         },
         {
@@ -1025,7 +1040,7 @@
     },
     {
       "name": "ui5-cb-item",
-      "description": "The `ui5-cb-item` represents the item for a `ui5-combobox`.\n\n\n---\n\n\n",
+      "description": "The `ui5-cb-item` represents the item for a `ui5-combobox`.\n\n\n---\n\n\n\n\n### **Events:**\n - **click** - Fired when the component is activated either with a mouse/tap or by using the Enter or Space key.\n\n**Note:** The event will not be fired if the `disabled` property is set to `true`.",
       "attributes": [
         {
           "name": "additional-text",
@@ -1283,7 +1298,7 @@
     },
     {
       "name": "ui5-daterange-picker",
-      "description": "### Overview\nThe DateRangePicker enables the users to enter a localized date range using touch, mouse, keyboard input, or by selecting a date range in the calendar.\n\n### Usage\nThe user can enter a date by:\nUsing the calendar that opens in a popup or typing it in directly in the input field (not available for mobile devices).\nFor the `ui5-daterange-picker`\n### ES6 Module Import\n\n`import \"@ui5/webcomponents/dist/DateRangePicker.js\";`\n\n### Keyboard Handling\nThe `ui5-daterange-picker` provides advanced keyboard handling.\n\nWhen the `ui5-daterange-picker` input field is focused the user can\nincrement or decrement respectively the range start or end date, depending on where the cursor is.\nThe following shortcuts are available:\n\n- [Page Down] - Decrements the corresponding day of the month by one\n- [Shift] + [Page Down] - Decrements the corresponding month by one\n- [Shift] + [Ctrl] + [Page Down] - Decrements the corresponding year by one\n- [Page Up] - Increments the corresponding day of the month by one\n- [Shift] + [Page Up] - Increments the corresponding month by one\n- [Shift] + [Ctrl] + [Page Up] - Increments the corresponding year by one\n\n\n---\n\n\n\n\n### **Events:**\n - **change** - Fired when the input operation has finished by pressing Enter or on focusout.\n- **close** - Fired after the component's picker is closed.\n- **input** - Fired when the value of the component is changed at each key stroke.\n- **open** - Fired after the component's picker is opened.\n- **value-state-change** - Fired before the value state of the component is updated internally.\nThe event is preventable, meaning that if it's default action is\nprevented, the component will not update the value state.\n\n### **Methods:**\n - **formatValue(date: _Date_): _string_** - Formats a Java Script date object into a string representing a locale date\naccording to the `formatPattern` property of the DatePicker instance\n- **isInValidRange(value: _string_): _boolean_** - Checks if a date is between the minimum and maximum date.\n- **isValid(value: _string_): _boolean_** - Checks if a value is valid against the current date format of the DatePicker.\n- **isValidDisplayValue(value: _string_): _boolean_** - Checks if a value is valid against the current date format of the DatePicker.\n- **isValidValue(value: _string_): _boolean_** - Checks if a value is valid against the current date format of the DatePicker.\n\n### **Slots:**\n - **valueStateMessage** - Defines the value state message that will be displayed as pop up under the component.\n\n**Note:** If not specified, a default text (in the respective language) will be displayed.\n\n**Note:** The `valueStateMessage` would be displayed,\nwhen the component is in `Information`, `Critical` or `Negative` value state.\n\n### **CSS Parts:**\n - **input** - Used to style the input element. This part is forwarded to the underlying ui5-input element.",
+      "description": "### Overview\nThe DateRangePicker enables the users to enter a localized date range using touch, mouse, keyboard input, or by selecting a date range in the calendar.\n\n### Usage\nThe user can enter a date by:\nUsing the calendar that opens in a popup or typing it in directly in the input field (not available for mobile devices).\nFor the `ui5-daterange-picker`:\n\n**Note:** Relative date values such as \"today\", \"yesterday\", or \"tomorrow\" are not supported.\nEntering a relative date sets the component to an error state.\n### ES6 Module Import\n\n`import \"@ui5/webcomponents/dist/DateRangePicker.js\";`\n\n### Keyboard Handling\nThe `ui5-daterange-picker` provides advanced keyboard handling.\n\nWhen the `ui5-daterange-picker` input field is focused the user can\nincrement or decrement respectively the range start or end date, depending on where the cursor is.\nThe following shortcuts are available:\n\n- [Page Down] - Decrements the corresponding day of the month by one\n- [Shift] + [Page Down] - Decrements the corresponding month by one\n- [Shift] + [Ctrl] + [Page Down] - Decrements the corresponding year by one\n- [Page Up] - Increments the corresponding day of the month by one\n- [Shift] + [Page Up] - Increments the corresponding month by one\n- [Shift] + [Ctrl] + [Page Up] - Increments the corresponding year by one\n\n\n---\n\n\n\n\n### **Events:**\n - **change** - Fired when the input operation has finished by pressing Enter or on focusout.\n- **close** - Fired after the component's picker is closed.\n- **input** - Fired when the value of the component is changed at each key stroke.\n- **open** - Fired after the component's picker is opened.\n- **value-state-change** - Fired before the value state of the component is updated internally.\nThe event is preventable, meaning that if it's default action is\nprevented, the component will not update the value state.\n\n### **Methods:**\n - **formatValue(date: _Date_): _string_** - Formats a Java Script date object into a string representing a locale date\naccording to the `formatPattern` property of the DatePicker instance\n- **isInValidRange(value: _string_): _boolean_** - Checks if a date is between the minimum and maximum date.\n- **isValid(value: _string_): _boolean_** - Checks if a value is valid against the current date format of the DatePicker.\n- **isValidDisplayValue(value: _string_): _boolean_** - Checks if a value is valid against the current date format of the DatePicker.\n- **isValidValue(value: _string_): _boolean_** - Checks if a value is valid against the current date format of the DatePicker.\n\n### **Slots:**\n - **valueStateMessage** - Defines the value state message that will be displayed as pop up under the component.\n\n**Note:** If not specified, a default text (in the respective language) will be displayed.\n\n**Note:** The `valueStateMessage` would be displayed,\nwhen the component is in `Information`, `Critical` or `Negative` value state.\n\n### **CSS Parts:**\n - **input** - Used to style the input element. This part is forwarded to the underlying ui5-input element.",
       "attributes": [
         {
           "name": "accessible-description",
@@ -1423,6 +1438,11 @@
           "values": []
         },
         {
+          "name": "show-two-months",
+          "description": "Defines whether the component displays two months side by side in the picker popup.\n\nWhen enabled, two consecutive months are shown, making it easier to select date ranges\nthat span multiple months without the need to navigate between months.\n\n**Note:** On mobile devices only a single month\nwill be displayed regardless of this setting.",
+          "values": []
+        },
+        {
           "name": "start-date-value",
           "description": "Returns the start date of the currently selected range as JavaScript Date instance.",
           "values": [{ "name": "any" }]
@@ -1453,7 +1473,7 @@
     },
     {
       "name": "ui5-datetime-input",
-      "description": "Extention of the UI5 Input, so we do not modify Input's private properties within the datetime components.\nIntended to be used for the DateTime components.\n\n\n---\n\n\n\n\n### **Events:**\n - **change** - Fired when the input operation has finished by pressing Enter or on focusout.\n- **close** - Fired when the suggestions picker is closed.\n- **input** - Fired when the value of the component changes at each keystroke,\nand when a suggestion item has been selected.\n- **open** - Fired when the suggestions picker is open.\n- **select** - Fired when some text has been selected.\n- **selection-change** - Fired when the user navigates to a suggestion item via the ARROW keys,\nas a preview, before the final selection.\n\n### **Slots:**\n - **default** - Defines the suggestion items.\n\n**Note:** The suggestions would be displayed only if the `showSuggestions`\nproperty is set to `true`.\n\n**Note:** The `<ui5-suggestion-item>`, `<ui5-suggestion-item-group>` and `ui5-suggestion-item-custom` are recommended to be used as suggestion items.\n- **icon** - Defines the icon to be displayed in the component.\n- **valueStateMessage** - Defines the value state message that will be displayed as pop up under the component.\nThe value state message slot should contain only one root element.\n\n**Note:** If not specified, a default text (in the respective language) will be displayed.\n\n**Note:** The `valueStateMessage` would be displayed,\nwhen the component is in `Information`, `Critical` or `Negative` value state.\n\n**Note:** If the component has `suggestionItems`,\nthe `valueStateMessage` would be displayed as part of the same popover, if used on desktop, or dialog - on phone.\n\n### **CSS Parts:**\n - **clear-icon** - Used to style the clear icon, which can be pressed to clear user input text\n- **input** - Used to style the native input element\n- **root** - Used to style the root DOM element of the Input component",
+      "description": "Extention of the UI5 Input, so we do not modify Input's private properties within the datetime components.\nIntended to be used for the DateTime components.\n\n\n---\n\n\n\n\n### **Events:**\n - **change** - Fired when the input operation has finished by pressing Enter or on focusout.\n- **close** - Fired when the suggestions picker is closed.\n- **input** - Fired when the value of the component changes at each keystroke,\nand when a suggestion item has been selected.\n- **open** - Fired when the suggestions picker is open.\n- **select** - Fired when some text has been selected.\n- **selection-change** - Fired when the user navigates to a suggestion item via the ARROW keys,\nas a preview, before the final selection.\n\n### **Slots:**\n - **default** - Defines the suggestion items.\n\n**Note:** The suggestions would be displayed only if the `showSuggestions`\nproperty is set to `true`.\n\n**Note:** The `<ui5-suggestion-item>`, `<ui5-suggestion-item-group>` and `ui5-suggestion-item-custom` are recommended to be used as suggestion items.\n\n**Note:** Input with type `Number` does not support suggestions.\n- **icon** - Defines the icon to be displayed in the component.\n- **valueStateMessage** - Defines the value state message that will be displayed as pop up under the component.\nThe value state message slot should contain only one root element.\n\n**Note:** If not specified, a default text (in the respective language) will be displayed.\n\n**Note:** The `valueStateMessage` would be displayed,\nwhen the component is in `Information`, `Critical` or `Negative` value state.\n\n**Note:** If the component has `suggestionItems`,\nthe `valueStateMessage` would be displayed as part of the same popover, if used on desktop, or dialog - on phone.\n\n### **CSS Parts:**\n - **clear-icon** - Used to style the clear icon, which can be pressed to clear user input text\n- **input** - Used to style the native input element\n- **root** - Used to style the root DOM element of the Input component",
       "attributes": [
         {
           "name": "accessible-description",
@@ -1537,7 +1557,7 @@
         },
         {
           "name": "type",
-          "description": "Defines the HTML type of the component.\n\n**Notes:**\n\n- The particular effect of this property differs depending on the browser\nand the current language settings, especially for type `Number`.\n- The property is mostly intended to be used with touch devices\nthat use different soft keyboard layouts depending on the given input type.",
+          "description": "Defines the HTML type of the component.\n\n**Notes:**\n\n- The particular effect of this property differs depending on the browser\nand the current language settings, especially for type `Number`.\n- The property is mostly intended to be used with touch devices\nthat use different soft keyboard layouts depending on the given input type.\n- Type `Number` does not support suggestions.",
           "values": [
             { "name": "Text" },
             { "name": "Email" },
@@ -2188,7 +2208,7 @@
     },
     {
       "name": "ui5-input",
-      "description": "### Overview\n\nThe `ui5-input` component allows the user to enter and edit text or numeric values in one line.\n\nAdditionally, you can provide `suggestionItems`,\nthat are displayed in a popover right under the input.\n\nThe text field can be editable or read-only (`readonly` property),\nand it can be enabled or disabled (`disabled` property).\nTo visualize semantic states, such as \"Negative\" or \"Critical\", the `valueState` property is provided.\nWhen the user makes changes to the text, the change event is fired,\nwhich enables you to react on any text change.\n\n### Keyboard Handling\nThe `ui5-input` provides the following keyboard shortcuts:\n\n- [Escape] - Closes the suggestion list, if open. If closed or not enabled, cancels changes and reverts to the value which the Input field had when it got the focus.\n- [Enter] or [Return] - If suggestion list is open takes over the current matching item and closes it. If value state or group header is focused, does nothing.\n- [Down] - Focuses the next matching item in the suggestion list. Selection-change event is fired.\n- [Up] - Focuses the previous matching item in the suggestion list. Selection-change event is fired.\n- [Home] - If focus is in the text input, moves caret before the first character. If focus is in the list, highlights the first item and updates the input accordingly.\n- [End] - If focus is in the text input, moves caret after the last character. If focus is in the list, highlights the last item and updates the input accordingly.\n- [Page Up] - If focus is in the list, moves highlight up by page size (10 items by default). If focus is in the input, does nothing.\n- [Page Down] - If focus is in the list, moves highlight down by page size (10 items by default). If focus is in the input, does nothing.\n- [Ctrl]+[Alt]+[F8] or [Command]+[Option]+[F8] - Focuses the first link in the value state message, if available. Pressing [Tab] moves the focus to the next link in the value state message, or closes the value state message if there are no more links.\n\n### ES6 Module Import\n\n`import \"@ui5/webcomponents/dist/Input.js\";`\n\n\n---\n\n\n\n\n### **Events:**\n - **change** - Fired when the input operation has finished by pressing Enter or on focusout.\n- **close** - Fired when the suggestions picker is closed.\n- **input** - Fired when the value of the component changes at each keystroke,\nand when a suggestion item has been selected.\n- **open** - Fired when the suggestions picker is open.\n- **select** - Fired when some text has been selected.\n- **selection-change** - Fired when the user navigates to a suggestion item via the ARROW keys,\nas a preview, before the final selection.\n\n### **Slots:**\n - **default** - Defines the suggestion items.\n\n**Note:** The suggestions would be displayed only if the `showSuggestions`\nproperty is set to `true`.\n\n**Note:** The `<ui5-suggestion-item>`, `<ui5-suggestion-item-group>` and `ui5-suggestion-item-custom` are recommended to be used as suggestion items.\n- **icon** - Defines the icon to be displayed in the component.\n- **valueStateMessage** - Defines the value state message that will be displayed as pop up under the component.\nThe value state message slot should contain only one root element.\n\n**Note:** If not specified, a default text (in the respective language) will be displayed.\n\n**Note:** The `valueStateMessage` would be displayed,\nwhen the component is in `Information`, `Critical` or `Negative` value state.\n\n**Note:** If the component has `suggestionItems`,\nthe `valueStateMessage` would be displayed as part of the same popover, if used on desktop, or dialog - on phone.\n\n### **CSS Parts:**\n - **clear-icon** - Used to style the clear icon, which can be pressed to clear user input text\n- **input** - Used to style the native input element\n- **root** - Used to style the root DOM element of the Input component",
+      "description": "### Overview\n\nThe `ui5-input` component allows the user to enter and edit text or numeric values in one line.\n\nAdditionally, you can provide `suggestionItems`\nthat are displayed in a popover right under the input. Keep in mind that `ui5-input` with type `Number` does not support suggestions.\n\nThe text field can be editable or read-only (`readonly` property),\nand it can be enabled or disabled (`disabled` property).\nTo visualize semantic states, such as \"Negative\" or \"Critical\", the `valueState` property is provided.\nWhen the user makes changes to the text, the change event is fired,\nwhich enables you to react on any text change.\n\n### Keyboard Handling\nThe `ui5-input` provides the following keyboard shortcuts:\n\n- [Escape] - Closes the suggestion list, if open. If closed or not enabled, cancels changes and reverts to the value which the Input field had when it got the focus.\n- [Enter] or [Return] - If suggestion list is open takes over the current matching item and closes it. If value state or group header is focused, does nothing.\n- [Down] - Focuses the next matching item in the suggestion list. Selection-change event is fired.\n- [Up] - Focuses the previous matching item in the suggestion list. Selection-change event is fired.\n- [Home] - If focus is in the text input, moves caret before the first character. If focus is in the list, highlights the first item and updates the input accordingly.\n- [End] - If focus is in the text input, moves caret after the last character. If focus is in the list, highlights the last item and updates the input accordingly.\n- [Page Up] - If focus is in the list, moves highlight up by page size (10 items by default). If focus is in the input, does nothing.\n- [Page Down] - If focus is in the list, moves highlight down by page size (10 items by default). If focus is in the input, does nothing.\n- [Ctrl]+[Alt]+[F8] or [Command]+[Option]+[F8] - Focuses the first link in the value state message, if available. Pressing [Tab] moves the focus to the next link in the value state message, or closes the value state message if there are no more links.\n\n### ES6 Module Import\n\n`import \"@ui5/webcomponents/dist/Input.js\";`\n\n\n---\n\n\n\n\n### **Events:**\n - **change** - Fired when the input operation has finished by pressing Enter or on focusout.\n- **close** - Fired when the suggestions picker is closed.\n- **input** - Fired when the value of the component changes at each keystroke,\nand when a suggestion item has been selected.\n- **open** - Fired when the suggestions picker is open.\n- **select** - Fired when some text has been selected.\n- **selection-change** - Fired when the user navigates to a suggestion item via the ARROW keys,\nas a preview, before the final selection.\n\n### **Slots:**\n - **default** - Defines the suggestion items.\n\n**Note:** The suggestions would be displayed only if the `showSuggestions`\nproperty is set to `true`.\n\n**Note:** The `<ui5-suggestion-item>`, `<ui5-suggestion-item-group>` and `ui5-suggestion-item-custom` are recommended to be used as suggestion items.\n\n**Note:** Input with type `Number` does not support suggestions.\n- **icon** - Defines the icon to be displayed in the component.\n- **valueStateMessage** - Defines the value state message that will be displayed as pop up under the component.\nThe value state message slot should contain only one root element.\n\n**Note:** If not specified, a default text (in the respective language) will be displayed.\n\n**Note:** The `valueStateMessage` would be displayed,\nwhen the component is in `Information`, `Critical` or `Negative` value state.\n\n**Note:** If the component has `suggestionItems`,\nthe `valueStateMessage` would be displayed as part of the same popover, if used on desktop, or dialog - on phone.\n\n### **CSS Parts:**\n - **clear-icon** - Used to style the clear icon, which can be pressed to clear user input text\n- **input** - Used to style the native input element\n- **root** - Used to style the root DOM element of the Input component",
       "attributes": [
         {
           "name": "accessible-description",
@@ -2272,7 +2292,7 @@
         },
         {
           "name": "type",
-          "description": "Defines the HTML type of the component.\n\n**Notes:**\n\n- The particular effect of this property differs depending on the browser\nand the current language settings, especially for type `Number`.\n- The property is mostly intended to be used with touch devices\nthat use different soft keyboard layouts depending on the given input type.",
+          "description": "Defines the HTML type of the component.\n\n**Notes:**\n\n- The particular effect of this property differs depending on the browser\nand the current language settings, especially for type `Number`.\n- The property is mostly intended to be used with touch devices\nthat use different soft keyboard layouts depending on the given input type.\n- Type `Number` does not support suggestions.",
           "values": [
             { "name": "Text" },
             { "name": "Email" },
@@ -2526,12 +2546,23 @@
     },
     {
       "name": "list-item",
-      "description": "A class to serve as a base\nfor the `ListItemStandard` and `ListItemCustom` classes.\n\n\n---\n\n\n\n\n### **Events:**\n - **detail-click** - Fired when the user clicks on the detail button when type is `Detail`.\n\n### **Slots:**\n - **deleteButton** - Defines the delete button, displayed in \"Delete\" mode.\n**Note:** While the slot allows custom buttons, to match\ndesign guidelines, please use the `ui5-button` component.\n**Note:** When the slot is not present, a built-in delete button will be displayed.",
+      "description": "A class to serve as a base\nfor the `ListItemStandard` and `ListItemCustom` classes.\n\n\n---\n\n\n\n\n### **Events:**\n - **click** - Fired when the component is activated either with a mouse/tap or by using the Enter or Space key.\n\n**Note:** The event will not be fired if the `disabled` property is set to `true`.\n- **detail-click** - Fired when the user clicks on the detail button when type is `Detail`.\n\n### **Slots:**\n - **deleteButton** - Defines the delete button, displayed in \"Delete\" mode.\n**Note:** While the slot allows custom buttons, to match\ndesign guidelines, please use the `ui5-button` component.\n**Note:** When the slot is not present, a built-in delete button will be displayed.",
       "attributes": [
         {
           "name": "accessibility-attributes",
           "description": "Defines the additional accessibility attributes that will be applied to the component.\nThe following fields are supported:\n\n- **ariaSetsize**: Defines the number of items in the current set  when not all items in the set are present in the DOM.\n**Note:** The value is an integer reflecting the number of items in the complete set. If the size of the entire set is unknown, set `-1`.\n\n\t- **ariaPosinset**: Defines an element's number or position in the current set when not all items are present in the DOM.\n\t**Note:** The value is an integer greater than or equal to 1, and less than or equal to the size of the set when that size is known.",
           "values": [{ "name": "ListItemAccessibilityAttributes" }]
+        },
+        {
+          "name": "accessible-role",
+          "description": "Used to define the role of the list item.\n\n**Note:** If not set, the role is automatically inherited from the parent `ui5-list` based on its `accessible-role` property\n(e.g. `Menu` -> `MenuItem`, `Tree` -> `TreeItem`, `ListBox` -> `Option`).\nAn explicitly set `accessible-role` on the list item takes precedence over the inherited role.",
+          "values": [
+            { "name": "None" },
+            { "name": "ListItem" },
+            { "name": "MenuItem" },
+            { "name": "TreeItem" },
+            { "name": "Option" }
+          ]
         },
         {
           "name": "highlight",
@@ -2574,13 +2605,13 @@
     },
     {
       "name": "list-item-base",
-      "description": "A class to serve as a foundation\nfor the `ListItem` and `ListItemGroupHeader` classes.\n\n\n---\n\n\n",
+      "description": "A class to serve as a foundation\nfor the `ListItem` and `ListItemGroupHeader` classes.\n\n\n---\n\n\n\n\n### **Events:**\n - **click** - Fired when the component is activated either with a mouse/tap or by using the Enter or Space key.\n\n**Note:** The event will not be fired if the `disabled` property is set to `true`.",
       "attributes": [],
       "references": []
     },
     {
       "name": "ui5-li-custom",
-      "description": "A component to be used as custom list item within the `ui5-list`\nthe same way as the standard `ui5-li`.\n\nThe component accepts arbitrary HTML content to allow full customization.\n\n\n---\n\n\n\n\n### **Events:**\n - **detail-click** - Fired when the user clicks on the detail button when type is `Detail`.\n\n### **Slots:**\n - **default** - Defines the content of the component.\n- **deleteButton** - Defines the delete button, displayed in \"Delete\" mode.\n**Note:** While the slot allows custom buttons, to match\ndesign guidelines, please use the `ui5-button` component.\n**Note:** When the slot is not present, a built-in delete button will be displayed.\n\n### **CSS Parts:**\n - **checkbox** - Used to style the checkbox rendered when the list item is in multiple selection mode\n- **content** - Used to style the content area of the list item\n- **delete-button** - Used to style the button rendered when the list item is in delete mode\n- **detail-button** - Used to style the button rendered when the list item is of type detail\n- **native-li** - Used to style the main li tag of the list item\n- **radio** - Used to style the radio button rendered when the list item is in single selection mode",
+      "description": "A component to be used as custom list item within the `ui5-list`\nthe same way as the standard `ui5-li`.\n\nThe component accepts arbitrary HTML content to allow full customization.\n\n\n---\n\n\n\n\n### **Events:**\n - **click** - Fired when the component is activated either with a mouse/tap or by using the Enter or Space key.\n\n**Note:** The event will not be fired if the `disabled` property is set to `true`.\n- **detail-click** - Fired when the user clicks on the detail button when type is `Detail`.\n\n### **Slots:**\n - **default** - Defines the content of the component.\n- **deleteButton** - Defines the delete button, displayed in \"Delete\" mode.\n**Note:** While the slot allows custom buttons, to match\ndesign guidelines, please use the `ui5-button` component.\n**Note:** When the slot is not present, a built-in delete button will be displayed.\n\n### **CSS Parts:**\n - **checkbox** - Used to style the checkbox rendered when the list item is in multiple selection mode\n- **content** - Used to style the content area of the list item\n- **delete-button** - Used to style the button rendered when the list item is in delete mode\n- **detail-button** - Used to style the button rendered when the list item is of type detail\n- **native-li** - Used to style the main li tag of the list item\n- **radio** - Used to style the radio button rendered when the list item is in single selection mode",
       "attributes": [
         {
           "name": "accessibility-attributes",
@@ -2591,6 +2622,17 @@
           "name": "accessible-name",
           "description": "Defines the text alternative of the component.\n\n**Note**: If not provided a default text alternative will be set, if present.",
           "values": []
+        },
+        {
+          "name": "accessible-role",
+          "description": "Used to define the role of the list item.\n\n**Note:** If not set, the role is automatically inherited from the parent `ui5-list` based on its `accessible-role` property\n(e.g. `Menu` -> `MenuItem`, `Tree` -> `TreeItem`, `ListBox` -> `Option`).\nAn explicitly set `accessible-role` on the list item takes precedence over the inherited role.",
+          "values": [
+            { "name": "None" },
+            { "name": "ListItem" },
+            { "name": "MenuItem" },
+            { "name": "TreeItem" },
+            { "name": "Option" }
+          ]
         },
         {
           "name": "highlight",
@@ -2660,7 +2702,7 @@
     },
     {
       "name": "ui5-li-group-header",
-      "description": "The `ui5-li-group-header` is a special list item, used only to separate other list items into logical groups.\n\n\n---\n\n\n\n\n### **Slots:**\n - **default** - Defines the text of the component.\n\n**Note:** Although this slot accepts HTML Elements, it is strongly recommended that you only use text in order to preserve the intended design.",
+      "description": "The `ui5-li-group-header` is a special list item, used only to separate other list items into logical groups.\n\n\n---\n\n\n\n\n### **Events:**\n - **click** - Fired when the component is activated either with a mouse/tap or by using the Enter or Space key.\n\n**Note:** The event will not be fired if the `disabled` property is set to `true`.\n\n### **Slots:**\n - **default** - Defines the text of the component.\n\n**Note:** Although this slot accepts HTML Elements, it is strongly recommended that you only use text in order to preserve the intended design.",
       "attributes": [
         {
           "name": "accessible-name",
@@ -2677,7 +2719,7 @@
     },
     {
       "name": "ui5-li",
-      "description": "The `ui5-li` represents the simplest type of item for a `ui5-list`.\n\nThis is a list item,\nproviding the most common use cases such as `text`,\n`image` and `icon`.\n\n\n---\n\n\n\n\n### **Events:**\n - **detail-click** - Fired when the user clicks on the detail button when type is `Detail`.\n\n### **Slots:**\n - **default** - Defines the custom formatted text of the component.\n\n**Note:** For optimal text wrapping and a consistent layout, it is strongly recommended to use the `text` property.\n\nUse the `default` slot only when custom formatting with HTML elements (e.g., `<b>`, `<i>`) is required.\nBe aware that wrapping (via `wrappingType=\"Normal\"`) may not function correctly with custom HTML content in the `default` slot.\n\nIf both `text` and `default` slot are used, the `text` property takes precedence.\n- **deleteButton** - Defines the delete button, displayed in \"Delete\" mode.\n**Note:** While the slot allows custom buttons, to match\ndesign guidelines, please use the `ui5-button` component.\n**Note:** When the slot is not present, a built-in delete button will be displayed.\n- **image** - **Note:** While the slot allows option for setting custom avatar, to match the\ndesign guidelines, please use the `ui5-avatar` with it's default size - S.\n\n**Note:** If bigger `ui5-avatar` needs to be used, then the size of the\n`ui5-li` should be customized in order to fit.\n\n### **CSS Parts:**\n - **additional-text** - Used to style the additionalText of the list item\n- **checkbox** - Used to style the checkbox rendered when the list item is in multiple selection mode\n- **content** - Used to style the content area of the list item\n- **delete-button** - Used to style the button rendered when the list item is in delete mode\n- **description** - Used to style the description of the list item\n- **detail-button** - Used to style the button rendered when the list item is of type detail\n- **icon** - Used to style the icon of the list item\n- **native-li** - Used to style the main li tag of the list item\n- **radio** - Used to style the radio button rendered when the list item is in single selection mode\n- **title** - Used to style the title of the list item",
+      "description": "The `ui5-li` represents the simplest type of item for a `ui5-list`.\n\nThis is a list item,\nproviding the most common use cases such as `text`,\n`image` and `icon`.\n\n\n---\n\n\n\n\n### **Events:**\n - **click** - Fired when the component is activated either with a mouse/tap or by using the Enter or Space key.\n\n**Note:** The event will not be fired if the `disabled` property is set to `true`.\n- **detail-click** - Fired when the user clicks on the detail button when type is `Detail`.\n\n### **Slots:**\n - **default** - Defines the custom formatted text of the component.\n\n**Note:** For optimal text wrapping and a consistent layout, it is strongly recommended to use the `text` property.\n\nUse the `default` slot only when custom formatting with HTML elements (e.g., `<b>`, `<i>`) is required.\nBe aware that wrapping (via `wrappingType=\"Normal\"`) may not function correctly with custom HTML content in the `default` slot.\n\nIf both `text` and `default` slot are used, the `text` property takes precedence.\n- **deleteButton** - Defines the delete button, displayed in \"Delete\" mode.\n**Note:** While the slot allows custom buttons, to match\ndesign guidelines, please use the `ui5-button` component.\n**Note:** When the slot is not present, a built-in delete button will be displayed.\n- **image** - **Note:** While the slot allows option for setting custom avatar, to match the\ndesign guidelines, please use the `ui5-avatar` with it's default size - S.\n\n**Note:** If bigger `ui5-avatar` needs to be used, then the size of the\n`ui5-li` should be customized in order to fit.\n\n### **CSS Parts:**\n - **additional-text** - Used to style the additionalText of the list item\n- **checkbox** - Used to style the checkbox rendered when the list item is in multiple selection mode\n- **content** - Used to style the content area of the list item\n- **delete-button** - Used to style the button rendered when the list item is in delete mode\n- **description** - Used to style the description of the list item\n- **detail-button** - Used to style the button rendered when the list item is of type detail\n- **icon** - Used to style the icon of the list item\n- **native-li** - Used to style the main li tag of the list item\n- **radio** - Used to style the radio button rendered when the list item is in single selection mode\n- **title** - Used to style the title of the list item",
       "attributes": [
         {
           "name": "accessibility-attributes",
@@ -2688,6 +2730,17 @@
           "name": "accessible-name",
           "description": "Defines the text alternative of the component.\nNote: If not provided a default text alternative will be set, if present.",
           "values": []
+        },
+        {
+          "name": "accessible-role",
+          "description": "Used to define the role of the list item.\n\n**Note:** If not set, the role is automatically inherited from the parent `ui5-list` based on its `accessible-role` property\n(e.g. `Menu` -> `MenuItem`, `Tree` -> `TreeItem`, `ListBox` -> `Option`).\nAn explicitly set `accessible-role` on the list item takes precedence over the inherited role.",
+          "values": [
+            { "name": "None" },
+            { "name": "ListItem" },
+            { "name": "MenuItem" },
+            { "name": "TreeItem" },
+            { "name": "Option" }
+          ]
         },
         {
           "name": "additional-text",
@@ -2828,7 +2881,7 @@
     },
     {
       "name": "ui5-menu-item",
-      "description": "### Overview\n\n`ui5-menu-item` is the item to use inside a `ui5-menu`.\nAn arbitrary hierarchy structure can be represented by recursively nesting menu items.\n\n### Usage\n\n`ui5-menu-item` represents a node in a `ui5-menu`. The menu itself is rendered as a list,\nand each `ui5-menu-item` is represented by a list item in that list. Therefore, you should only use\n`ui5-menu-item` directly in your apps. The `ui5-li` list item is internal for the list, and not intended for public use.\n\n### ES6 Module Import\n\n`import \"@ui5/webcomponents/dist/MenuItem.js\";`\n\n\n---\n\n\n\n\n### **Events:**\n - **before-close** - Fired before the menu is closed. This event can be cancelled, which will prevent the menu from closing.\n- **before-open** - Fired before the menu is opened. This event can be cancelled, which will prevent the menu from opening.\n\n**Note:** Since 1.14.0 the event is also fired before a sub-menu opens.\n- **check** - Fired when an item is checked or unchecked.\n- **close** - Fired after the menu is closed.\n- **detail-click** - Fired when the user clicks on the detail button when type is `Detail`.\n- **open** - Fired after the menu is opened.\n\n### **Slots:**\n - **default** - Defines the items of this component.\n\n**Note:** The slot can hold menu item and menu separator items.\n\nIf there are items added to this slot, an arrow will be displayed at the end\nof the item in order to indicate that there are items added. In that case components added\nto `endContent` slot or `additionalText` content will not be displayed.\n\nThe priority of what will be displayed at the end of the menu item is as follows:\nsub-menu arrow (if there are items added in `items` slot) -> components added in `endContent` -> text set to `additionalText`.\n- **deleteButton** - Defines the delete button, displayed in \"Delete\" mode.\n**Note:** While the slot allows custom buttons, to match\ndesign guidelines, please use the `ui5-button` component.\n**Note:** When the slot is not present, a built-in delete button will be displayed.\n- **endContent** - Defines the components that should be displayed at the end of the menu item.\n\n**Note:** It is highly recommended to slot only components of type `ui5-button`,`ui5-link`\nor `ui5-icon` in order to preserve the intended design. If there are components added to this slot,\nand there is text set in `additionalText`, it will not be displayed. If there are items added to `items` slot,\nnether `additionalText` nor components added to this slot would be displayed.\n\nThe priority of what will be displayed at the end of the menu item is as follows:\nsub-menu arrow (if there are items added in `items` slot) -> components added in `endContent` -> text set to `additionalText`.\n\nApplication developers are responsible for ensuring that interactive elements placed in the `endContent` slot\nhave the correct accessibility behaviour, including their enabled or disabled states.\nThe menu does not manage these aspects when the menu item state changes.",
+      "description": "### Overview\n\n`ui5-menu-item` is the item to use inside a `ui5-menu`.\nAn arbitrary hierarchy structure can be represented by recursively nesting menu items.\n\n### Usage\n\n`ui5-menu-item` represents a node in a `ui5-menu`. The menu itself is rendered as a list,\nand each `ui5-menu-item` is represented by a list item in that list. Therefore, you should only use\n`ui5-menu-item` directly in your apps. The `ui5-li` list item is internal for the list, and not intended for public use.\n\n### ES6 Module Import\n\n`import \"@ui5/webcomponents/dist/MenuItem.js\";`\n\n\n---\n\n\n\n\n### **Events:**\n - **before-close** - Fired before the menu is closed. This event can be cancelled, which will prevent the menu from closing.\n- **before-open** - Fired before the menu is opened. This event can be cancelled, which will prevent the menu from opening.\n\n**Note:** Since 1.14.0 the event is also fired before a sub-menu opens.\n- **check** - Fired when an item is checked or unchecked.\n- **click** - Fired when the component is activated either with a mouse/tap or by using the Enter or Space key.\n\n**Note:** The event will not be fired if the `disabled` property is set to `true`.\n- **close** - Fired after the menu is closed.\n- **detail-click** - Fired when the user clicks on the detail button when type is `Detail`.\n- **open** - Fired after the menu is opened.\n\n### **Slots:**\n - **default** - Defines the items of this component.\n\n**Note:** The slot can hold menu item and menu separator items.\n\nIf there are items added to this slot, an arrow will be displayed at the end\nof the item in order to indicate that there are items added. In that case components added\nto `endContent` slot or `additionalText` content will not be displayed.\n\nThe priority of what will be displayed at the end of the menu item is as follows:\nsub-menu arrow (if there are items added in `items` slot) -> components added in `endContent` -> text set to `additionalText`.\n- **deleteButton** - Defines the delete button, displayed in \"Delete\" mode.\n**Note:** While the slot allows custom buttons, to match\ndesign guidelines, please use the `ui5-button` component.\n**Note:** When the slot is not present, a built-in delete button will be displayed.\n- **endContent** - Defines the components that should be displayed at the end of the menu item.\n\n**Note:** It is highly recommended to slot only components of type `ui5-button`,`ui5-link`\nor `ui5-icon` in order to preserve the intended design. If there are components added to this slot,\nand there is text set in `additionalText`, it will not be displayed. If there are items added to `items` slot,\nnether `additionalText` nor components added to this slot would be displayed.\n\nThe priority of what will be displayed at the end of the menu item is as follows:\nsub-menu arrow (if there are items added in `items` slot) -> components added in `endContent` -> text set to `additionalText`.\n\nApplication developers are responsible for ensuring that interactive elements placed in the `endContent` slot\nhave the correct accessibility behaviour, including their enabled or disabled states.\nThe menu does not manage these aspects when the menu item state changes.",
       "attributes": [
         {
           "name": "accessibility-attributes",
@@ -2839,6 +2892,17 @@
           "name": "accessible-name",
           "description": "Defines the accessible ARIA name of the component.",
           "values": []
+        },
+        {
+          "name": "accessible-role",
+          "description": "Used to define the role of the list item.\n\n**Note:** If not set, the role is automatically inherited from the parent `ui5-list` based on its `accessible-role` property\n(e.g. `Menu` -> `MenuItem`, `Tree` -> `TreeItem`, `ListBox` -> `Option`).\nAn explicitly set `accessible-role` on the list item takes precedence over the inherited role.",
+          "values": [
+            { "name": "None" },
+            { "name": "ListItem" },
+            { "name": "MenuItem" },
+            { "name": "TreeItem" },
+            { "name": "Option" }
+          ]
         },
         {
           "name": "additional-text",
@@ -2932,7 +2996,7 @@
     },
     {
       "name": "ui5-menu-separator",
-      "description": "The `ui5-menu-separator` represents a horizontal line to separate menu items inside a `ui5-menu`.\n\n\n---\n\n\n",
+      "description": "The `ui5-menu-separator` represents a horizontal line to separate menu items inside a `ui5-menu`.\n\n\n---\n\n\n\n\n### **Events:**\n - **click** - Fired when the component is activated either with a mouse/tap or by using the Enter or Space key.\n\n**Note:** The event will not be fired if the `disabled` property is set to `true`.",
       "attributes": [],
       "references": []
     },
@@ -3139,7 +3203,7 @@
     },
     {
       "name": "ui5-mcb-item",
-      "description": "The `ui5-mcb-item` represents the item for a `ui5-multi-combobox`.\n\n\n---\n\n\n",
+      "description": "The `ui5-mcb-item` represents the item for a `ui5-multi-combobox`.\n\n\n---\n\n\n\n\n### **Events:**\n - **click** - Fired when the component is activated either with a mouse/tap or by using the Enter or Space key.\n\n**Note:** The event will not be fired if the `disabled` property is set to `true`.",
       "attributes": [
         {
           "name": "additional-text",
@@ -3188,7 +3252,7 @@
     },
     {
       "name": "ui5-multi-input",
-      "description": "### Overview\nA `ui5-multi-input` field allows the user to enter multiple values, which are displayed as `ui5-token`.\n\nUser can choose interaction for creating tokens.\nFiori Guidelines say that user should create tokens when:\n\n- Type a value in the input and press enter or focus out the input field (`change` event is fired)\n- Move between suggestion items (`selection-change` event is fired)\n- Clicking on a suggestion item (`selection-change` event is fired if the clicked item is different than the current value. Also `change` event is fired )\n\n### ES6 Module Import\n\n`import \"@ui5/webcomponents/dist/MultiInput.js\";`\n\n\n---\n\n\n\n\n### **Events:**\n - **change** - Fired when the input operation has finished by pressing Enter or on focusout.\n- **close** - Fired when the suggestions picker is closed.\n- **input** - Fired when the value of the component changes at each keystroke,\nand when a suggestion item has been selected.\n- **open** - Fired when the suggestions picker is open.\n- **select** - Fired when some text has been selected.\n- **selection-change** - Fired when the user navigates to a suggestion item via the ARROW keys,\nas a preview, before the final selection.\n- **token-delete** - Fired when tokens are being deleted.\n- **value-help-trigger** - Fired when the value help icon is pressed\nand F4 or ALT/OPTION + ARROW_UP/ARROW_DOWN keyboard keys are used.\n\n### **Slots:**\n - **default** - Defines the suggestion items.\n\n**Note:** The suggestions would be displayed only if the `showSuggestions`\nproperty is set to `true`.\n\n**Note:** The `<ui5-suggestion-item>`, `<ui5-suggestion-item-group>` and `ui5-suggestion-item-custom` are recommended to be used as suggestion items.\n- **icon** - Defines the icon to be displayed in the component.\n- **tokens** - Defines the component tokens.\n- **valueStateMessage** - Defines the value state message that will be displayed as pop up under the component.\nThe value state message slot should contain only one root element.\n\n**Note:** If not specified, a default text (in the respective language) will be displayed.\n\n**Note:** The `valueStateMessage` would be displayed,\nwhen the component is in `Information`, `Critical` or `Negative` value state.\n\n**Note:** If the component has `suggestionItems`,\nthe `valueStateMessage` would be displayed as part of the same popover, if used on desktop, or dialog - on phone.\n\n### **CSS Parts:**\n - **clear-icon** - Used to style the clear icon, which can be pressed to clear user input text\n- **input** - Used to style the native input element\n- **root** - Used to style the root DOM element of the Input component",
+      "description": "### Overview\nA `ui5-multi-input` field allows the user to enter multiple values, which are displayed as `ui5-token`.\n\nUser can choose interaction for creating tokens.\nFiori Guidelines say that user should create tokens when:\n\n- Type a value in the input and press enter or focus out the input field (`change` event is fired)\n- Move between suggestion items (`selection-change` event is fired)\n- Clicking on a suggestion item (`selection-change` event is fired if the clicked item is different than the current value. Also `change` event is fired )\n\n### ES6 Module Import\n\n`import \"@ui5/webcomponents/dist/MultiInput.js\";`\n\n\n---\n\n\n\n\n### **Events:**\n - **change** - Fired when the input operation has finished by pressing Enter or on focusout.\n- **close** - Fired when the suggestions picker is closed.\n- **input** - Fired when the value of the component changes at each keystroke,\nand when a suggestion item has been selected.\n- **open** - Fired when the suggestions picker is open.\n- **select** - Fired when some text has been selected.\n- **selection-change** - Fired when the user navigates to a suggestion item via the ARROW keys,\nas a preview, before the final selection.\n- **token-delete** - Fired when tokens are being deleted.\n- **value-help-trigger** - Fired when the value help icon is pressed\nand F4 or ALT/OPTION + ARROW_UP/ARROW_DOWN keyboard keys are used.\n\n### **Slots:**\n - **default** - Defines the suggestion items.\n\n**Note:** The suggestions would be displayed only if the `showSuggestions`\nproperty is set to `true`.\n\n**Note:** The `<ui5-suggestion-item>`, `<ui5-suggestion-item-group>` and `ui5-suggestion-item-custom` are recommended to be used as suggestion items.\n\n**Note:** Input with type `Number` does not support suggestions.\n- **icon** - Defines the icon to be displayed in the component.\n- **tokens** - Defines the component tokens.\n- **valueStateMessage** - Defines the value state message that will be displayed as pop up under the component.\nThe value state message slot should contain only one root element.\n\n**Note:** If not specified, a default text (in the respective language) will be displayed.\n\n**Note:** The `valueStateMessage` would be displayed,\nwhen the component is in `Information`, `Critical` or `Negative` value state.\n\n**Note:** If the component has `suggestionItems`,\nthe `valueStateMessage` would be displayed as part of the same popover, if used on desktop, or dialog - on phone.\n\n### **CSS Parts:**\n - **clear-icon** - Used to style the clear icon, which can be pressed to clear user input text\n- **input** - Used to style the native input element\n- **root** - Used to style the root DOM element of the Input component",
       "attributes": [
         {
           "name": "accessible-description",
@@ -3277,7 +3341,7 @@
         },
         {
           "name": "type",
-          "description": "Defines the HTML type of the component.\n\n**Notes:**\n\n- The particular effect of this property differs depending on the browser\nand the current language settings, especially for type `Number`.\n- The property is mostly intended to be used with touch devices\nthat use different soft keyboard layouts depending on the given input type.",
+          "description": "Defines the HTML type of the component.\n\n**Notes:**\n\n- The particular effect of this property differs depending on the browser\nand the current language settings, especially for type `Number`.\n- The property is mostly intended to be used with touch devices\nthat use different soft keyboard layouts depending on the given input type.\n- Type `Number` does not support suggestions.",
           "values": [
             { "name": "Text" },
             { "name": "Email" },
@@ -3309,7 +3373,7 @@
     },
     {
       "name": "ui5-option",
-      "description": "### Overview\n\nThe `ui5-option` component defines the content of an option in the `ui5-select`.\n\n### ES6 Module Import\n\n`import \"@ui5/webcomponents/dist/Option.js\";`\n\n\n---\n\n\n\n\n### **Slots:**\n - **default** - Defines the text of the component.\n\n**Note:** Although this slot accepts HTML Elements, it is strongly recommended that you only use text in order to preserve the intended design.",
+      "description": "### Overview\n\nThe `ui5-option` component defines the content of an option in the `ui5-select`.\n\n### ES6 Module Import\n\n`import \"@ui5/webcomponents/dist/Option.js\";`\n\n\n---\n\n\n\n\n### **Events:**\n - **click** - Fired when the component is activated either with a mouse/tap or by using the Enter or Space key.\n\n**Note:** The event will not be fired if the `disabled` property is set to `true`.\n\n### **Slots:**\n - **default** - Defines the text of the component.\n\n**Note:** Although this slot accepts HTML Elements, it is strongly recommended that you only use text in order to preserve the intended design.",
       "attributes": [
         {
           "name": "additional-text",
@@ -3341,7 +3405,7 @@
     },
     {
       "name": "ui5-option-custom",
-      "description": "### Overview\n\nThe `ui5-option-custom` component defines a custom content of an option in the `ui5-select`.\nA component to be the same way as the standard `ui5-option`.\nThe component accepts arbitrary HTML content to allow full customization.\n\n### ES6 Module Import\n\n`import \"@ui5/webcomponents/dist/OptionCustom.js\";`\n\n\n---\n\n\n\n\n### **Slots:**\n - **default** - Defines the content of the component.",
+      "description": "### Overview\n\nThe `ui5-option-custom` component defines a custom content of an option in the `ui5-select`.\nA component to be the same way as the standard `ui5-option`.\nThe component accepts arbitrary HTML content to allow full customization.\n\n### ES6 Module Import\n\n`import \"@ui5/webcomponents/dist/OptionCustom.js\";`\n\n\n---\n\n\n\n\n### **Events:**\n - **click** - Fired when the component is activated either with a mouse/tap or by using the Enter or Space key.\n\n**Note:** The event will not be fired if the `disabled` property is set to `true`.\n\n### **Slots:**\n - **default** - Defines the content of the component.",
       "attributes": [
         {
           "name": "display-text",
@@ -3991,7 +4055,7 @@
     },
     {
       "name": "ui5-segmented-button-item",
-      "description": "### Overview\n\nUsers can use the `ui5-segmented-button-item` as part of a `ui5-segmented-button`.\n\nClicking or tapping on a `ui5-segmented-button-item` changes its state to `selected`.\nThe item returns to its initial state when the user clicks or taps on it again.\nBy applying additional custom CSS-styling classes, apps can give a different style to any\n`ui5-segmented-button-item`.\n\n### ES6 Module Import\n\n`import \"@ui5/webcomponents/dist/SegmentedButtonItem.js\";`\n\n\n---\n\n\n\n\n### **Slots:**\n - **default** - Defines the text of the component.\n\n**Note:** Although this slot accepts HTML Elements, it is strongly recommended that you only use text in order to preserve the intended design.",
+      "description": "### Overview\n\nUsers can use the `ui5-segmented-button-item` as part of a `ui5-segmented-button`.\n\nClicking or tapping on a `ui5-segmented-button-item` changes its state to `selected`.\nThe item returns to its initial state when the user clicks or taps on it again.\nBy applying additional custom CSS-styling classes, apps can give a different style to any\n`ui5-segmented-button-item`.\n\n### ES6 Module Import\n\n`import \"@ui5/webcomponents/dist/SegmentedButtonItem.js\";`\n\n\n---\n\n\n\n\n### **Events:**\n - **click** - Fired when the component is activated either with a mouse/tap or by using the Enter or Space key.\n\n**Note:** The event will not be fired if the `disabled` property is set to `true`.\n\n### **Slots:**\n - **default** - Defines the text of the component.\n\n**Note:** Although this slot accepts HTML Elements, it is strongly recommended that you only use text in order to preserve the intended design.",
       "attributes": [
         {
           "name": "accessible-description",
@@ -4240,33 +4304,7 @@
     {
       "name": "ui5-slider-handle",
       "description": "The <code>ui5-slider-handle</code> component represents the handle of the <code>ui5-slider</code> component.\n\n\n---\n\n\n",
-      "attributes": [
-        {
-          "name": "active",
-          "description": "Defines whether the slider handle is active.\n<br><br>\n<b>Note:</b> An active slider handle is currently being interacted with.",
-          "values": []
-        },
-        {
-          "name": "disabled",
-          "description": "Defines whether the slider handle is disabled.\n<br><br>\n<b>Note:</b> A disabled slider handle cannot be interacted with.",
-          "values": []
-        },
-        {
-          "name": "max",
-          "description": "Defines the maximum value of the slider handle.\n<br><br>\n<b>Note:</b> The value should be greater than the <code>min</code> property of the parent <code>ui5-slider</code>.",
-          "values": []
-        },
-        {
-          "name": "min",
-          "description": "Defines the minimum value of the slider handle.\n<br><br>\n<b>Note:</b> The value should be less than the <code>max</code> property of the parent <code>ui5-slider</code>.",
-          "values": []
-        },
-        {
-          "name": "value",
-          "description": "Defines the value of the slider handle.\n<br><br>\n<b>Note:</b> The value should be between the <code>min</code> and <code>max</code> properties of the parent <code>ui5-slider</code>.",
-          "values": []
-        }
-      ],
+      "attributes": [],
       "references": []
     },
     {
@@ -4435,7 +4473,7 @@
     },
     {
       "name": "ui5-suggestion-item",
-      "description": "The `ui5-suggestion-item` represents the suggestion item of the `ui5-input`.\n\n\n---\n\n\n",
+      "description": "The `ui5-suggestion-item` represents the suggestion item of the `ui5-input`.\n\n\n---\n\n\n\n\n### **Events:**\n - **click** - Fired when the component is activated either with a mouse/tap or by using the Enter or Space key.\n\n**Note:** The event will not be fired if the `disabled` property is set to `true`.",
       "attributes": [
         {
           "name": "additional-text",
@@ -4452,7 +4490,7 @@
     },
     {
       "name": "ui5-suggestion-item-custom",
-      "description": "The `ui5-suggestion-item-custom` is type of suggestion item,\nthat can be used to place suggestion items with custom content in the input.\nThe text property is considered only for autocomplete.\nIn case the user needs highlighting functionality, check \"@ui5/webcomponents-base/dist/util/generateHighlightedMarkup.js\"\n\n\n---\n\n\n\n\n### **Slots:**\n - **default** - Defines the content of the component.",
+      "description": "The `ui5-suggestion-item-custom` is type of suggestion item,\nthat can be used to place suggestion items with custom content in the input.\nThe text property is considered only for autocomplete.\nIn case the user needs highlighting functionality, check \"@ui5/webcomponents-base/dist/util/generateHighlightedMarkup.js\"\n\n\n---\n\n\n\n\n### **Events:**\n - **click** - Fired when the component is activated either with a mouse/tap or by using the Enter or Space key.\n\n**Note:** The event will not be fired if the `disabled` property is set to `true`.\n\n### **Slots:**\n - **default** - Defines the content of the component.",
       "attributes": [
         {
           "name": "text",
@@ -4486,7 +4524,7 @@
     },
     {
       "name": "ui5-li-suggestion-item",
-      "description": "The `ui5-li-suggestion-item` represents the suggestion item in the `ui5-input`\nsuggestion popover.\n\n\n---\n\n\n\n\n### **Events:**\n - **detail-click** - Fired when the user clicks on the detail button when type is `Detail`.\n\n### **Slots:**\n - **default** - Defines the title text of the suggestion item.\n- **deleteButton** - Defines the delete button, displayed in \"Delete\" mode.\n**Note:** While the slot allows custom buttons, to match\ndesign guidelines, please use the `ui5-button` component.\n**Note:** When the slot is not present, a built-in delete button will be displayed.\n- **image** - **Note:** While the slot allows option for setting custom avatar, to match the\ndesign guidelines, please use the `ui5-avatar` with it's default size - S.\n\n**Note:** If bigger `ui5-avatar` needs to be used, then the size of the\n`ui5-li` should be customized in order to fit.\n- **richDescription** - Defines a description that can contain HTML.\n**Note:** If not specified, the `description` property will be used.\n\n### **CSS Parts:**\n - **additional-text** - Used to style the additionalText of the list item\n- **checkbox** - Used to style the checkbox rendered when the list item is in multiple selection mode\n- **content** - Used to style the content area of the list item\n- **delete-button** - Used to style the button rendered when the list item is in delete mode\n- **description** - Used to style the description of the suggestion list item\n- **detail-button** - Used to style the button rendered when the list item is of type detail\n- **icon** - Used to style the icon of the list item\n- **info** - Used to style the info of the suggestion list item\n- **native-li** - Used to style the main li tag of the list item\n- **radio** - Used to style the radio button rendered when the list item is in single selection mode\n- **title** - Used to style the title of the suggestion list item",
+      "description": "The `ui5-li-suggestion-item` represents the suggestion item in the `ui5-input`\nsuggestion popover.\n\n\n---\n\n\n\n\n### **Events:**\n - **click** - Fired when the component is activated either with a mouse/tap or by using the Enter or Space key.\n\n**Note:** The event will not be fired if the `disabled` property is set to `true`.\n- **detail-click** - Fired when the user clicks on the detail button when type is `Detail`.\n\n### **Slots:**\n - **default** - Defines the title text of the suggestion item.\n- **deleteButton** - Defines the delete button, displayed in \"Delete\" mode.\n**Note:** While the slot allows custom buttons, to match\ndesign guidelines, please use the `ui5-button` component.\n**Note:** When the slot is not present, a built-in delete button will be displayed.\n- **image** - **Note:** While the slot allows option for setting custom avatar, to match the\ndesign guidelines, please use the `ui5-avatar` with it's default size - S.\n\n**Note:** If bigger `ui5-avatar` needs to be used, then the size of the\n`ui5-li` should be customized in order to fit.\n- **richDescription** - Defines a description that can contain HTML.\n**Note:** If not specified, the `description` property will be used.\n\n### **CSS Parts:**\n - **additional-text** - Used to style the additionalText of the list item\n- **checkbox** - Used to style the checkbox rendered when the list item is in multiple selection mode\n- **content** - Used to style the content area of the list item\n- **delete-button** - Used to style the button rendered when the list item is in delete mode\n- **description** - Used to style the description of the suggestion list item\n- **detail-button** - Used to style the button rendered when the list item is of type detail\n- **icon** - Used to style the icon of the list item\n- **info** - Used to style the info of the suggestion list item\n- **native-li** - Used to style the main li tag of the list item\n- **radio** - Used to style the radio button rendered when the list item is in single selection mode\n- **title** - Used to style the title of the suggestion list item",
       "attributes": [
         {
           "name": "accessibility-attributes",
@@ -4497,6 +4535,17 @@
           "name": "accessible-name",
           "description": "Defines the text alternative of the component.\nNote: If not provided a default text alternative will be set, if present.",
           "values": []
+        },
+        {
+          "name": "accessible-role",
+          "description": "Used to define the role of the list item.\n\n**Note:** If not set, the role is automatically inherited from the parent `ui5-list` based on its `accessible-role` property\n(e.g. `Menu` -> `MenuItem`, `Tree` -> `TreeItem`, `ListBox` -> `Option`).\nAn explicitly set `accessible-role` on the list item takes precedence over the inherited role.",
+          "values": [
+            { "name": "None" },
+            { "name": "ListItem" },
+            { "name": "MenuItem" },
+            { "name": "TreeItem" },
+            { "name": "Option" }
+          ]
         },
         {
           "name": "additional-text",
@@ -4652,7 +4701,7 @@
     },
     {
       "name": "ui5-tab",
-      "description": "The `ui5-tab` represents a selectable item inside a `ui5-tabcontainer`.\nIt defines both the item in the tab strip (top part of the `ui5-tabcontainer`) and the\ncontent that is presented to the user once the tab is selected.\n\n\n---\n\n\n\n\n### **Methods:**\n - **getDomRefInStrip(): _HTMLElement | undefined_** - Returns the DOM reference of the tab that is placed in the header.\n\n**Note:** Tabs, placed in the `items` slot of other tabs are not shown in the header. Calling this method on such tabs will return `undefined`.\n\n**Note:** If you need a DOM ref to the tab content please use the `getDomRef` method.\n\n### **Slots:**\n - **default** - Holds the content associated with this tab.\n- **items** - Defines hierarchies with nested sub tabs.\n\n**Note:** Use `ui5-tab` and `ui5-tab-separator` for the intended design.",
+      "description": "The `ui5-tab` represents a selectable item inside a `ui5-tabcontainer`.\nIt defines both the item in the tab strip (top part of the `ui5-tabcontainer`) and the\ncontent that is presented to the user once the tab is selected.\n\n\n---\n\n\n\n\n### **Events:**\n - **click** - Fired when the tab is selected either with a mouse/tap or by using the Enter or Space key.\n\n### **Methods:**\n - **getDomRefInStrip(): _HTMLElement | undefined_** - Returns the DOM reference of the tab that is placed in the header.\n\n**Note:** Tabs, placed in the `items` slot of other tabs are not shown in the header. Calling this method on such tabs will return `undefined`.\n\n**Note:** If you need a DOM ref to the tab content please use the `getDomRef` method.\n\n### **Slots:**\n - **default** - Holds the content associated with this tab.\n- **items** - Defines hierarchies with nested sub tabs.\n\n**Note:** Use `ui5-tab` and `ui5-tab-separator` for the intended design.",
       "attributes": [
         {
           "name": "additional-text",
@@ -4818,7 +4867,7 @@
         },
         {
           "name": "merged",
-          "description": "Defines whether the cell is visually merged with the cell directly above it.\n\nThis is useful when consecutive cells in a column have the same value and should visually appear as a single merged cell.\nAlthough the cell is visually merged with the previous one, its content must still be provided for accessibility purposes.\n**Note:** This feature is disabled when cells are rendered as popin, and should remain `false` for interactive cell content.",
+          "description": "Defines whether the cell is visually merged with the cell directly above it.\n\nThis is useful if consecutive cells in a column have the same value and should visually appear as a single merged cell.\nAlthough the cell is visually merged with the previous one, its content must still be provided for accessibility purposes.\n**Note:** This feature is disabled when cells are rendered as a popin, and should remain `false` for interactive cell content.",
           "values": []
         }
       ],
@@ -5553,6 +5602,11 @@
           "values": []
         },
         {
+          "name": "form",
+          "description": "Associates the button with a form element by the form's `id` attribute.\nWhen set, the button can submit or reset the specified form even if the button\nis not a descendant of that form.\n\n**Note:** This property takes effect only when the button's \"type\" property is set to \"Submit\" or \"Reset\".",
+          "values": []
+        },
+        {
           "name": "icon",
           "description": "Defines the icon, displayed as graphical element within the component.\nThe SAP-icons font provides numerous options.\n\nExample:\nSee all the available icons within the [Icon Explorer](https://sdk.openui5.org/test-resources/sap/m/demokit/iconExplorer/webapp/index.html).",
           "values": []
@@ -5643,6 +5697,11 @@
         {
           "name": "end-icon",
           "description": "Defines the icon, displayed as graphical element within the component after the button text.\n\n**Note:** It is highly recommended to use `endIcon` property only together with `icon` and/or `text` properties.\nUsage of `endIcon` only should be avoided.\n\nThe SAP-icons font provides numerous options.\n\nExample:\nSee all the available icons within the [Icon Explorer](https://sdk.openui5.org/test-resources/sap/m/demokit/iconExplorer/webapp/index.html).",
+          "values": []
+        },
+        {
+          "name": "form",
+          "description": "Associates the button with a form element by the form's `id` attribute.\nWhen set, the button can submit or reset the specified form even if the button\nis not a descendant of that form.\n\n**Note:** This property takes effect only when the button's \"type\" property is set to \"Submit\" or \"Reset\".",
           "values": []
         },
         {
@@ -5769,6 +5828,11 @@
           "name": "design",
           "description": "Defines the toolbar design.",
           "values": [{ "name": "Transparent" }, { "name": "Solid" }]
+        },
+        {
+          "name": "overflow-button-accessible-name",
+          "description": "Defines the accessible ARIA name of the overflow button of the component.\n\n**Note:** When not set, the built-in translation for \"Additional Options\" is used.",
+          "values": []
         }
       ],
       "references": []
@@ -6067,7 +6131,7 @@
     },
     {
       "name": "ui5-tree-item",
-      "description": "### Overview\nThe `ui5-tree-item` represents a node in a tree structure, shown as a `ui5-list`.\n\nThis is the item to use inside a `ui5-tree`.\nYou can represent an arbitrary tree structure by recursively nesting tree items.\n\n### ES6 Module Import\n`import \"@ui5/webcomponents/dist/TreeItem.js\";`\n\n\n---\n\n\n\n\n### **Events:**\n - **detail-click** - Fired when the user clicks on the detail button when type is `Detail`.\n\n### **Methods:**\n - **toggle(): _void_** - Call this method to manually switch the `expanded` state of a tree item.\n\n### **Slots:**\n - **default** - Defines the items of the component.\n\n**Note:** Use `ui5-tree-item` or `ui5-tree-item-custom`\n- **deleteButton** - Defines the delete button, displayed in \"Delete\" mode.\n**Note:** While the slot allows custom buttons, to match\ndesign guidelines, please use the `ui5-button` component.\n**Note:** When the slot is not present, a built-in delete button will be displayed.\n- **image** - **Note:** While the slot allows option for setting custom avatar, to match the\ndesign guidelines, please use the `ui5-avatar` with size XS.\n\n**Note:** If bigger `ui5-avatar` needs to be used, then the size of the\n`ui5-tree-item` should be customized in order to fit.\n\n### **CSS Parts:**\n - **additionalText** - Used to style the additionalText of the tree list item\n- **icon** - Used to style the icon of the tree list item\n- **title** - Used to style the title of the tree list item",
+      "description": "### Overview\nThe `ui5-tree-item` represents a node in a tree structure, shown as a `ui5-list`.\n\nThis is the item to use inside a `ui5-tree`.\nYou can represent an arbitrary tree structure by recursively nesting tree items.\n\n### ES6 Module Import\n`import \"@ui5/webcomponents/dist/TreeItem.js\";`\n\n\n---\n\n\n\n\n### **Events:**\n - **click** - Fired when the component is activated either with a mouse/tap or by using the Enter or Space key.\n\n**Note:** The event will not be fired if the `disabled` property is set to `true`.\n- **detail-click** - Fired when the user clicks on the detail button when type is `Detail`.\n\n### **Methods:**\n - **toggle(): _void_** - Call this method to manually switch the `expanded` state of a tree item.\n\n### **Slots:**\n - **default** - Defines the items of the component.\n\n**Note:** Use `ui5-tree-item` or `ui5-tree-item-custom`\n- **deleteButton** - Defines the delete button, displayed in \"Delete\" mode.\n**Note:** While the slot allows custom buttons, to match\ndesign guidelines, please use the `ui5-button` component.\n**Note:** When the slot is not present, a built-in delete button will be displayed.\n- **image** - **Note:** While the slot allows option for setting custom avatar, to match the\ndesign guidelines, please use the `ui5-avatar` with size XS.\n\n**Note:** If bigger `ui5-avatar` needs to be used, then the size of the\n`ui5-tree-item` should be customized in order to fit.\n\n### **CSS Parts:**\n - **additionalText** - Used to style the additionalText of the tree list item\n- **icon** - Used to style the icon of the tree list item\n- **title** - Used to style the title of the tree list item",
       "attributes": [
         {
           "name": "accessibility-attributes",
@@ -6078,6 +6142,17 @@
           "name": "accessible-name",
           "description": "Defines the accessible name of the component.",
           "values": []
+        },
+        {
+          "name": "accessible-role",
+          "description": "Used to define the role of the list item.\n\n**Note:** If not set, the role is automatically inherited from the parent `ui5-list` based on its `accessible-role` property\n(e.g. `Menu` -> `MenuItem`, `Tree` -> `TreeItem`, `ListBox` -> `Option`).\nAn explicitly set `accessible-role` on the list item takes precedence over the inherited role.",
+          "values": [
+            { "name": "None" },
+            { "name": "ListItem" },
+            { "name": "MenuItem" },
+            { "name": "TreeItem" },
+            { "name": "Option" }
+          ]
         },
         {
           "name": "additional-text",
@@ -6166,7 +6241,7 @@
     },
     {
       "name": "tree-item-base",
-      "description": "A class to serve as a foundation\nfor the `TreeItem` and `TreeItemCustom` classes.\n\n\n---\n\n\n\n\n### **Events:**\n - **detail-click** - Fired when the user clicks on the detail button when type is `Detail`.\n\n### **Methods:**\n - **toggle(): _void_** - Call this method to manually switch the `expanded` state of a tree item.\n\n### **Slots:**\n - **default** - Defines the items of the component.\n\n**Note:** Use `ui5-tree-item` or `ui5-tree-item-custom`\n- **deleteButton** - Defines the delete button, displayed in \"Delete\" mode.\n**Note:** While the slot allows custom buttons, to match\ndesign guidelines, please use the `ui5-button` component.\n**Note:** When the slot is not present, a built-in delete button will be displayed.\n- **image** - **Note:** While the slot allows option for setting custom avatar, to match the\ndesign guidelines, please use the `ui5-avatar` with size XS.\n\n**Note:** If bigger `ui5-avatar` needs to be used, then the size of the\n`ui5-tree-item` should be customized in order to fit.",
+      "description": "A class to serve as a foundation\nfor the `TreeItem` and `TreeItemCustom` classes.\n\n\n---\n\n\n\n\n### **Events:**\n - **click** - Fired when the component is activated either with a mouse/tap or by using the Enter or Space key.\n\n**Note:** The event will not be fired if the `disabled` property is set to `true`.\n- **detail-click** - Fired when the user clicks on the detail button when type is `Detail`.\n\n### **Methods:**\n - **toggle(): _void_** - Call this method to manually switch the `expanded` state of a tree item.\n\n### **Slots:**\n - **default** - Defines the items of the component.\n\n**Note:** Use `ui5-tree-item` or `ui5-tree-item-custom`\n- **deleteButton** - Defines the delete button, displayed in \"Delete\" mode.\n**Note:** While the slot allows custom buttons, to match\ndesign guidelines, please use the `ui5-button` component.\n**Note:** When the slot is not present, a built-in delete button will be displayed.\n- **image** - **Note:** While the slot allows option for setting custom avatar, to match the\ndesign guidelines, please use the `ui5-avatar` with size XS.\n\n**Note:** If bigger `ui5-avatar` needs to be used, then the size of the\n`ui5-tree-item` should be customized in order to fit.",
       "attributes": [
         {
           "name": "accessibility-attributes",
@@ -6177,6 +6252,17 @@
           "name": "accessible-name",
           "description": "Defines the accessible name of the component.",
           "values": []
+        },
+        {
+          "name": "accessible-role",
+          "description": "Used to define the role of the list item.\n\n**Note:** If not set, the role is automatically inherited from the parent `ui5-list` based on its `accessible-role` property\n(e.g. `Menu` -> `MenuItem`, `Tree` -> `TreeItem`, `ListBox` -> `Option`).\nAn explicitly set `accessible-role` on the list item takes precedence over the inherited role.",
+          "values": [
+            { "name": "None" },
+            { "name": "ListItem" },
+            { "name": "MenuItem" },
+            { "name": "TreeItem" },
+            { "name": "Option" }
+          ]
         },
         {
           "name": "additional-text-state",
@@ -6255,7 +6341,7 @@
     },
     {
       "name": "ui5-tree-item-custom",
-      "description": "The `ui5-tree-item-custom` represents a node in a tree structure, shown as a `ui5-list`.\n\nThis is the item to use inside a `ui5-tree`.\nYou can represent an arbitrary tree structure by recursively nesting tree items.\n\nYou can use this item to put any custom content inside the tree item.\n\n### ES6 Module Import\n`import \"@ui5/webcomponents/dist/TreeItemCustom.js\";`\n\n\n---\n\n\n\n\n### **Events:**\n - **detail-click** - Fired when the user clicks on the detail button when type is `Detail`.\n\n### **Methods:**\n - **toggle(): _void_** - Call this method to manually switch the `expanded` state of a tree item.\n\n### **Slots:**\n - **content** - Defines the content of the `ui5-tree-item`.\n- **default** - Defines the items of the component.\n\n**Note:** Use `ui5-tree-item` or `ui5-tree-item-custom`\n- **deleteButton** - Defines the delete button, displayed in \"Delete\" mode.\n**Note:** While the slot allows custom buttons, to match\ndesign guidelines, please use the `ui5-button` component.\n**Note:** When the slot is not present, a built-in delete button will be displayed.\n- **image** - **Note:** While the slot allows option for setting custom avatar, to match the\ndesign guidelines, please use the `ui5-avatar` with size XS.\n\n**Note:** If bigger `ui5-avatar` needs to be used, then the size of the\n`ui5-tree-item` should be customized in order to fit.\n\n### **CSS Parts:**\n - **additionalText** - Used to style the additionalText of the tree list item\n- **icon** - Used to style the icon of the tree list item\n- **title** - Used to style the title of the tree list item",
+      "description": "The `ui5-tree-item-custom` represents a node in a tree structure, shown as a `ui5-list`.\n\nThis is the item to use inside a `ui5-tree`.\nYou can represent an arbitrary tree structure by recursively nesting tree items.\n\nYou can use this item to put any custom content inside the tree item.\n\n### ES6 Module Import\n`import \"@ui5/webcomponents/dist/TreeItemCustom.js\";`\n\n\n---\n\n\n\n\n### **Events:**\n - **click** - Fired when the component is activated either with a mouse/tap or by using the Enter or Space key.\n\n**Note:** The event will not be fired if the `disabled` property is set to `true`.\n- **detail-click** - Fired when the user clicks on the detail button when type is `Detail`.\n\n### **Methods:**\n - **toggle(): _void_** - Call this method to manually switch the `expanded` state of a tree item.\n\n### **Slots:**\n - **content** - Defines the content of the `ui5-tree-item`.\n- **default** - Defines the items of the component.\n\n**Note:** Use `ui5-tree-item` or `ui5-tree-item-custom`\n- **deleteButton** - Defines the delete button, displayed in \"Delete\" mode.\n**Note:** While the slot allows custom buttons, to match\ndesign guidelines, please use the `ui5-button` component.\n**Note:** When the slot is not present, a built-in delete button will be displayed.\n- **image** - **Note:** While the slot allows option for setting custom avatar, to match the\ndesign guidelines, please use the `ui5-avatar` with size XS.\n\n**Note:** If bigger `ui5-avatar` needs to be used, then the size of the\n`ui5-tree-item` should be customized in order to fit.\n\n### **CSS Parts:**\n - **additionalText** - Used to style the additionalText of the tree list item\n- **icon** - Used to style the icon of the tree list item\n- **title** - Used to style the title of the tree list item",
       "attributes": [
         {
           "name": "accessibility-attributes",
@@ -6266,6 +6352,17 @@
           "name": "accessible-name",
           "description": "Defines the accessible name of the component.",
           "values": []
+        },
+        {
+          "name": "accessible-role",
+          "description": "Used to define the role of the list item.\n\n**Note:** If not set, the role is automatically inherited from the parent `ui5-list` based on its `accessible-role` property\n(e.g. `Menu` -> `MenuItem`, `Tree` -> `TreeItem`, `ListBox` -> `Option`).\nAn explicitly set `accessible-role` on the list item takes precedence over the inherited role.",
+          "values": [
+            { "name": "None" },
+            { "name": "ListItem" },
+            { "name": "MenuItem" },
+            { "name": "TreeItem" },
+            { "name": "Option" }
+          ]
         },
         {
           "name": "additional-text-state",

@@ -49,6 +49,14 @@ declare class SideNavigationItemBase extends UI5Element implements ITabbable {
      * @since 2.0.0
      */
     tooltip?: string;
+    /**
+     * Defines the accessible ARIA name of the component.
+     *
+     * @default undefined
+     * @public
+     * @since 2.22.0
+     */
+    accessibleName?: string;
     forcedTabIndex: string;
     sideNavCollapsed: boolean;
     inPopover: boolean;

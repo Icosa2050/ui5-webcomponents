@@ -15,6 +15,8 @@ const getLocaleData = async (lang) => {
     const localeLang = locale.getLanguage();
     if (!instances.has(localeLang)) {
         await fetchCldr(locale.getLanguage(), locale.getRegion(), locale.getScript());
+        // @ts-expect-error - The LocaleData constructor expects a LocaleT, but we are passing a Locale. This is a known issue and can be ignored for now.
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         instances.set(localeLang, new LocaleData(locale));
     }
     return instances.get(localeLang);

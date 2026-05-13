@@ -106,6 +106,9 @@ __decorate([
     property()
 ], SideNavigationItemBase.prototype, "tooltip", void 0);
 __decorate([
+    property()
+], SideNavigationItemBase.prototype, "accessibleName", void 0);
+__decorate([
     property({ noAttribute: true })
 ], SideNavigationItemBase.prototype, "forcedTabIndex", void 0);
 __decorate([

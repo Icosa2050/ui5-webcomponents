@@ -172,5 +172,7 @@ declare class Switch extends UI5Element implements IFormInputElement {
     get effectiveAriaReadonly(): "true" | undefined;
     get effectiveAriaDisabled(): "true" | undefined;
     get ariaLabelText(): string | undefined;
+    get ariaDescribedBy(): string | undefined;
+    get ariaDescribedByText(): string;
 }
 export default Switch;

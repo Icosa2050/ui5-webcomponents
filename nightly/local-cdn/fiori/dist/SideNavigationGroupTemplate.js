@@ -9,8 +9,8 @@ export default function SideNavigationGroupTemplate() {
     return TreeItemTemplate.call(this);
 }
 function TreeItemTemplate() {
-    return (_jsxs("li", { id: this._id, class: `ui5-sn-list-li ${this.belowGroupClassName}`, role: "none", children: [_jsx("div", { class: "ui5-sn-item-separator" }), _jsxs("div", { id: this._id, "data-sap-focus-ref": true, class: `ui5-sn-item ui5-sn-item-group ${this._classes}`, role: "treeitem", onKeyDown: this._onkeydown, onClick: this._onclick, onFocusIn: this._onfocusin, tabIndex: this.effectiveTabIndex, "aria-expanded": this._expanded, title: this._tooltip, "aria-owns": this._groupId, children: [_jsx("div", { class: "ui5-sn-item-text", children: this.text }), !!this.items.length &&
+    return (_jsxs("li", { id: this._id, class: `ui5-sn-list-li ${this.belowGroupClassName}`, role: "none", children: [_jsx("div", { class: "ui5-sn-item-separator" }), _jsxs("div", { id: this._id, "data-sap-focus-ref": true, class: `ui5-sn-item ui5-sn-item-group ${this._classes}`, role: "treeitem", onKeyDown: this._onkeydown, onClick: this._onclick, onFocusIn: this._onfocusin, tabIndex: this.effectiveTabIndex, "aria-expanded": this._expanded, "aria-label": this.accessibleName || undefined, title: this._tooltip, "aria-owns": this._groupId, children: [_jsx("div", { class: "ui5-sn-item-text", children: this.text }), !!this.items.length &&
                         _jsx(Icon, { class: "ui5-sn-item-toggle-icon", name: this.expanded ? navDownArrow : navRightArrow, accessibleName: this._arrowTooltip, showTooltip: true })] }), !!this.items.length &&
-                _jsx("ul", { id: this._groupId, class: "ui5-sn-item-ul", "aria-label": this.text, role: "group", children: _jsx("slot", {}) }), _jsx("div", { class: "ui5-sn-item-separator" })] }));
+                _jsx("ul", { id: this._groupId, class: "ui5-sn-item-ul", "aria-label": this.accessibleName || this.text, role: "group", children: _jsx("slot", {}) }), _jsx("div", { class: "ui5-sn-item-separator" })] }));
 }
 //# sourceMappingURL=SideNavigationGroupTemplate.js.map

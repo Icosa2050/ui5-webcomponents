@@ -32,6 +32,10 @@ let ShellBarSearch = ShellBarSearch_1 = class ShellBarSearch extends Search {
         this.autoOpen = false;
     }
     _handleSearchIconPress() {
+        if (isPhone() && this.open) {
+            this._handleSearchEvent();
+            return;
+        }
         super._handleSearchIconPress();
         if (this.collapsed) {
             this.collapsed = false;

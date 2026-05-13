@@ -15,6 +15,10 @@ type NotificationListItemCloseEventDetail = {
 type NotificationListItemPressEventDetail = {
     item: NotificationListItem;
 };
+type NotificationListItemClickEventDetail = {
+    item: NotificationListItem;
+    originalEvent: Event;
+};
 /**
  * @class
  *
@@ -63,6 +67,7 @@ type NotificationListItemPressEventDetail = {
 declare class NotificationListItem extends NotificationListItemBase {
     eventDetails: NotificationListItemBase["eventDetails"] & {
         _press: NotificationListItemPressEventDetail;
+        click: NotificationListItemClickEventDetail;
         close: NotificationListItemCloseEventDetail;
         _close: NotificationListItemCloseEventDetail;
     };
@@ -181,7 +186,7 @@ declare class NotificationListItem extends NotificationListItemBase {
     /**
      * Event handlers
      */
-    _onclick(): void;
+    _onclick(e: MouseEvent): void;
     _onShowMoreClick(e: UI5CustomEvent<Link, "click">): void;
     _onkeydown(e: KeyboardEvent): Promise<void>;
     _onkeyup(e: KeyboardEvent): void;
@@ -193,8 +198,8 @@ declare class NotificationListItem extends NotificationListItemBase {
     /**
      * Private
      */
-    fireItemPress(): void;
+    fireItemPress(e: Event): void;
     onResize(): void;
 }
 export default NotificationListItem;
-export type { NotificationListItemPressEventDetail, NotificationListItemCloseEventDetail, };
+export type { NotificationListItemPressEventDetail, NotificationListItemClickEventDetail, NotificationListItemCloseEventDetail, };

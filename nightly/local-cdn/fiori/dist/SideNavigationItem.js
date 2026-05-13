@@ -155,6 +155,9 @@ let SideNavigationItem = SideNavigationItem_1 = class SideNavigationItem extends
             : SideNavigationItem_1.i18nBundle.getText(SIDE_NAVIGATION_ICON_EXPAND);
     }
     get _ariaLabel() {
+        if (this.accessibleName) {
+            return this.accessibleName;
+        }
         if (this.isOverflow) {
             return SideNavigationItem_1.i18nBundle.getText(SIDE_NAVIGATION_OVERFLOW_ITEM_LABEL);
         }

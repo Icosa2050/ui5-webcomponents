@@ -159,6 +159,12 @@ declare class Tokenizer extends UI5Element implements IFormInputElement {
      */
     popoverMinWidth?: number;
     /**
+     * Sets the title of the nMore Popover on mobile.
+     * **Note:** Used inside MultiInput component.
+     * @private
+     */
+    popoverTitle?: string;
+    /**
      * Prevents tokens to be part of the tab chain.
      * **Note:** Used inside MultiInput, MultiComboBox and FileUploader components.
      * @default false
@@ -265,6 +271,7 @@ declare class Tokenizer extends UI5Element implements IFormInputElement {
     getFocusDomRef(): HTMLElement | undefined;
     _toggleTokenSelection(tokens: Array<Token>): void;
     _handleTokenSelection(e: KeyboardEvent | MouseEvent, deselectAll?: boolean): void;
+    _deselectAllTokens(): void;
     get hasTokens(): boolean;
     get showEffectiveClearAll(): boolean;
     _fillClipboard(shortcutName: ClipboardDataOperation, tokens: Array<IToken>): void;

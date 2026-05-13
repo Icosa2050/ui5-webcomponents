@@ -9,7 +9,7 @@ const _handlePosition = (min, max, value) => {
 };
 const handle = (slider) => {
     const position = _handlePosition(slider.min, slider.max, slider.value);
-    return (_jsxs(_Fragment, { children: [_jsx(SliderHandle, { "data-sap-focus-ref": true, value: slider.value, min: slider.min, max: slider.max, tabIndex: slider.disabled ? -1 : 0, disabled: slider.disabled, "aria-orientation": "horizontal", part: "handle", exportparts: "icon: handle-icon", role: "slider", "aria-valuemin": slider.min, "aria-valuemax": slider.max, "aria-valuenow": slider.value, "aria-label": slider._ariaLabel, "aria-disabled": slider._ariaDisabled, "aria-keyshortcuts": slider._ariaKeyshortcuts, "aria-describedby": slider._ariaDescribedByHandleText, style: {
+    return (_jsxs(_Fragment, { children: [_jsx(SliderHandle, { "data-sap-focus-ref": true, value: slider.value, min: slider.min, max: slider.max, tabIndex: slider.disabled ? -1 : 0, "aria-orientation": "horizontal", part: "handle", exportparts: "icon: handle-icon", role: "slider", "aria-valuemin": slider.min, "aria-valuemax": slider.max, "aria-valuenow": slider.value, "aria-label": slider._ariaLabel, "aria-disabled": slider._ariaDisabled, "aria-describedby": slider._ariaDescribedByHandleText, style: {
                     "inset-inline-start": `clamp(0%, ${position}%, 100%)`,
                 } }), tooltip(slider)] }));
 };

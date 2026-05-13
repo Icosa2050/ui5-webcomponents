@@ -1,6 +1,9 @@
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
 import type I18nBundle from "@ui5/webcomponents-base/dist/i18nBundle.js";
 import type { IColorPaletteItem } from "./ColorPalette.js";
+type ColorPaletteItemNativeClickEventDetail = {
+    originalEvent: Event;
+};
 /**
  * @class
  *
@@ -14,6 +17,9 @@ import type { IColorPaletteItem } from "./ColorPalette.js";
  * @public
  */
 declare class ColorPaletteItem extends UI5Element implements IColorPaletteItem {
+    eventDetails: {
+        "click": ColorPaletteItemNativeClickEventDetail;
+    };
     /**
      * Defines the colour of the component.
      *
@@ -28,11 +34,19 @@ declare class ColorPaletteItem extends UI5Element implements IColorPaletteItem {
      * **Note:** Only one item must be selected per <code>ui5-color-palette</code>.
      * If more than one item is defined as selected, the last one would be considered as the selected one.
      *
-     * @public
      * @default false
+     * @public
      * @since 2.0.0
      */
     selected: boolean;
+    /**
+     * Defines the tooltip of the component. When not set, the color value is used as the tooltip.
+     *
+     * @default undefined
+     * @public
+     * @since 2.22.0
+     */
+    tooltip?: string;
     /**
      * Defines the tab-index of the element, helper information for the ItemNavigation.
      * @private
@@ -57,10 +71,13 @@ declare class ColorPaletteItem extends UI5Element implements IColorPaletteItem {
     constructor();
     onBeforeRendering(): void;
     get colorLabel(): string;
+    get getLabelText(): string;
     get classes(): {
         root: {
             "ui5-cp-item": boolean;
         };
     };
+    _onClick(e: MouseEvent): void;
 }
 export default ColorPaletteItem;
+export type { ColorPaletteItemNativeClickEventDetail };

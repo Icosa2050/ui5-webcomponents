@@ -157,11 +157,10 @@ let ColorPalette = ColorPalette_1 = class ColorPalette extends UI5Element {
         });
     }
     get effectiveColorItems() {
-        let colorItems = this.colors;
         if (this.popupMode) {
-            colorItems = this.getSlottedNodes("colors");
+            return this.getSlottedNodes("colors");
         }
-        return colorItems;
+        return this.colors;
     }
     /**
      * Ensures that only one item is selected or only the last selected item remains active if more than one are explicitly set as 'selected'.
@@ -179,6 +178,9 @@ let ColorPalette = ColorPalette_1 = class ColorPalette extends UI5Element {
         });
     }
     _onclick(e) {
+        if (e.defaultPrevented) {
+            return;
+        }
         this.handleSelection(e.target);
     }
     _onmousedown(e) {
@@ -403,10 +405,10 @@ let ColorPalette = ColorPalette_1 = class ColorPalette extends UI5Element {
         return isDown(e) || isRight(e);
     }
     _isFirstSwatch(target, swatches) {
-        return swatches && Boolean(swatches.length) && swatches[0] === target;
+        return swatches && Boolean(swatches.length) && swatches[0] === (target);
     }
     _isLastSwatch(target, swatches) {
-        return swatches && Boolean(swatches.length) && swatches[swatches.length - 1] === target;
+        return swatches && Boolean(swatches.length) && swatches[swatches.length - 1] === (target);
     }
     /**
      * Checks if the target swatch is the first swatch in its row.

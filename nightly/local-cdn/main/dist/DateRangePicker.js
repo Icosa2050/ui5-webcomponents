@@ -12,11 +12,12 @@ import CalendarDate from "@ui5/webcomponents-localization/dist/dates/CalendarDat
 import UI5Date from "@ui5/webcomponents-localization/dist/dates/UI5Date.js";
 import modifyDateBy from "@ui5/webcomponents-localization/dist/dates/modifyDateBy.js";
 import getTodayUTCTimestamp from "@ui5/webcomponents-localization/dist/dates/getTodayUTCTimestamp.js";
-import { DATERANGE_DESCRIPTION, DATERANGEPICKER_POPOVER_ACCESSIBLE_NAME, DATETIME_COMPONENTS_PLACEHOLDER_PREFIX, DATERANGE_VALUE_MISSING, DATERANGE_PATTERN_MISMATCH, DATERANGE_UNDERFLOW, DATERANGE_OVERFLOW, } from "./generated/i18n/i18n-defaults.js";
+import { DATERANGE_DESCRIPTION, DATERANGEPICKER_POPOVER_ACCESSIBLE_NAME, DATETIME_COMPONENTS_PLACEHOLDER_PREFIX, DATERANGE_VALUE_MISSING, DATERANGE_PATTERN_MISMATCH, DATERANGE_UNDERFLOW, DATERANGE_OVERFLOW, CALENDAR_FOOTER_CANCEL_BUTTON, CALENDAR_FOOTER_OK_BUTTON, } from "./generated/i18n/i18n-defaults.js";
 import DateRangePickerTemplate from "./DateRangePickerTemplate.js";
 // Styles
 import DateRangePickerCss from "./generated/themes/DateRangePicker.css.js";
 import DatePicker from "./DatePicker.js";
+import { isPhone } from "@ui5/webcomponents-base/dist/Device.js";
 const DEFAULT_DELIMITER = "-";
 /**
  * @class
@@ -27,7 +28,10 @@ const DEFAULT_DELIMITER = "-";
  * ### Usage
  * The user can enter a date by:
  * Using the calendar that opens in a popup or typing it in directly in the input field (not available for mobile devices).
- * For the `ui5-daterange-picker`
+ * For the `ui5-daterange-picker`:
+ *
+ * **Note:** Relative date values such as "today", "yesterday", or "tomorrow" are not supported.
+ * Entering a relative date sets the component to an error state.
  * ### ES6 Module Import
  *
  * `import "@ui5/webcomponents/dist/DateRangePicker.js";`
@@ -97,7 +101,39 @@ let DateRangePicker = DateRangePicker_1 = class DateRangePicker extends DatePick
         * @public
         */
         this.delimiter = "-";
+        /**
+         * Defines whether the component displays two months side by side in the picker popup.
+         *
+         * When enabled, two consecutive months are shown, making it easier to select date ranges
+         * that span multiple months without the need to navigate between months.
+         *
+         * **Note:** On mobile devices only a single month
+         * will be displayed regardless of this setting.
+         *
+         * @default false
+         * @public
+         * @since 2.22.0
+         */
+        this.showTwoMonths = false;
         this._prevDelimiter = null;
+    }
+    /**
+     * Checks if a date string is a relative date (e.g. "today", "tomorrow")
+     * that would be resolved by DateFormat.parseRelative().
+     * Relative dates are not supported in DateRangePicker.
+     * @private
+     */
+    _isRelativeValue(dateString, format) {
+        const trimmed = dateString.trim();
+        if (!trimmed) {
+            return false;
+        }
+        const parsed = format.parse(trimmed);
+        if (!parsed) {
+            return false;
+        }
+        const formatted = format.format(parsed);
+        return formatted !== trimmed;
     }
     /**
      * **Note:** The getter method is inherited and not supported. If called it will return an empty value.
@@ -151,6 +187,9 @@ let DateRangePicker = DateRangePicker_1 = class DateRangePicker extends DatePick
         }
         return [];
     }
+    get _isPhone() {
+        return isPhone();
+    }
     /**
      * Returns the start date of the currently selected range as JavaScript Date instance.
      * @public
@@ -189,6 +228,34 @@ let DateRangePicker = DateRangePicker_1 = class DateRangePicker extends DatePick
         // translatable placeholder – for example "e.g. 2025-12-27 - 2025-12-31"
         return `${DateRangePicker_1.i18nBundle.getText(DATETIME_COMPONENTS_PLACEHOLDER_PREFIX)} ${this._lastDateRangeForTheCurrentYear}`;
     }
+    get _submitDisabled() {
+        return !this._startDateTimestamp || !this._endDateTimestamp;
+    }
+    get _cancelButtonText() {
+        return DateRangePicker_1.i18nBundle.getText(CALENDAR_FOOTER_CANCEL_BUTTON);
+    }
+    get _okButtonText() {
+        return DateRangePicker_1.i18nBundle.getText(CALENDAR_FOOTER_OK_BUTTON);
+    }
+    /**
+     * Handles clicking on the `submit` button, within the picker`s footer in mobile devices.
+     */
+    _submitClick() {
+        if (!this._startDateTimestamp || !this._endDateTimestamp) {
+            return;
+        }
+        const newValue = this._buildValue(this._startDateTimestamp, this._endDateTimestamp);
+        this._updateValueAndFireEvents(newValue, true, ["change", "value-changed"]);
+        this._togglePicker();
+    }
+    /**
+     * Handles clicking on the `cancel` button, within the picker`s footer,
+     * that would disregard the user selection.
+     */
+    _cancelClick() {
+        this._tempValue = "";
+        this._togglePicker();
+    }
     /**
      * @override
      */
@@ -215,6 +282,9 @@ let DateRangePicker = DateRangePicker_1 = class DateRangePicker extends DatePick
      */
     isValid(value) {
         const parts = this._splitValueByDelimiter(value).filter(str => str.trim() !== "");
+        if (parts.some(dateString => this._isRelativeValue(dateString, this.getFormat()))) {
+            return false;
+        }
         return parts.length <= 2 && parts.every(dateString => super.isValid(dateString)); // must be at most 2 dates and each must be valid
     }
     /**
@@ -224,6 +294,9 @@ let DateRangePicker = DateRangePicker_1 = class DateRangePicker extends DatePick
      */
     isValidValue(value) {
         const parts = this._splitValueByDelimiter(value).filter(str => str.trim() !== "");
+        if (parts.some(dateString => this._isRelativeValue(dateString, this.getValueFormat()))) {
+            return false;
+        }
         return parts.length <= 2 && parts.every(dateString => super.isValidValue(dateString)); // must be at most 2 dates and each must be valid
     }
     /**
@@ -233,6 +306,9 @@ let DateRangePicker = DateRangePicker_1 = class DateRangePicker extends DatePick
      */
     isValidDisplayValue(value) {
         const parts = this._splitValueByDelimiter(value).filter(str => str.trim() !== "");
+        if (parts.some(dateString => this._isRelativeValue(dateString, this.getDisplayFormat()))) {
+            return false;
+        }
         return parts.length <= 2 && parts.every(dateString => super.isValidDisplayValue(dateString)); // must be at most 2 dates and each must be valid
     }
     /**
@@ -309,8 +385,13 @@ let DateRangePicker = DateRangePicker_1 = class DateRangePicker extends DatePick
             return;
         }
         const newValue = this._buildValue(event.detail.selectedDates[0], event.detail.selectedDates[1]); // the value will be normalized so we don't need to order them here
-        this._updateValueAndFireEvents(newValue, true, ["change", "value-changed"]);
-        this._togglePicker();
+        if (!this._isPhone) { // on desktop we update the value immediately, on mobile we wait for the user to confirm the selection with the "OK" button
+            this._updateValueAndFireEvents(newValue, true, ["change", "value-changed"]);
+            this._togglePicker();
+        }
+        else {
+            this._updateValueAndFireEvents(newValue, true, ["value-changed"]); // fire value-changed immediately on mobile so the app can react to the change (e.g. update the input field), but wait with firing "change" until the user clicks "OK"
+        }
     }
     /**
      * @override
@@ -467,6 +548,9 @@ let DateRangePicker = DateRangePicker_1 = class DateRangePicker extends DatePick
 __decorate([
     property()
 ], DateRangePicker.prototype, "delimiter", void 0);
+__decorate([
+    property({ type: Boolean })
+], DateRangePicker.prototype, "showTwoMonths", void 0);
 __decorate([
     property()
 ], DateRangePicker.prototype, "_tempValue", void 0);

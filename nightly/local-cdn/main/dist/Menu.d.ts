@@ -1,5 +1,6 @@
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
 import type { DefaultSlot } from "@ui5/webcomponents-base/dist/UI5Element.js";
+import type { ListItemBaseClickEventDetail } from "./ListItemBase.js";
 import type I18nBundle from "@ui5/webcomponents-base/dist/i18nBundle.js";
 import "@ui5/webcomponents-icons/dist/slim-arrow-right.js";
 import type { Timeout } from "@ui5/webcomponents-base/dist/types.js";
@@ -19,6 +20,9 @@ interface IMenuItem extends UI5Element {
     isMenuItem?: boolean;
     isSeparator?: boolean;
     isGroup?: boolean;
+    eventDetails: {
+        click?: ListItemBaseClickEventDetail;
+    };
 }
 type MenuItemClickEventDetail = {
     item: MenuItem;

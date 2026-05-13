@@ -8,7 +8,7 @@ import MovePlacement from "@ui5/webcomponents-base/dist/types/MovePlacement.js";
 import type Button from "./Button.js";
 import type DropIndicator from "./DropIndicator.js";
 import type Tab from "./Tab.js";
-import type { TabInStrip, TabInOverflow } from "./Tab.js";
+import type { TabInStrip, TabInOverflow, TabClickEventDetail } from "./Tab.js";
 import type { TabSeparatorInStrip } from "./TabSeparator.js";
 import type { ListItemClickEventDetail, ListMoveEventDetail } from "./List.js";
 import type ResponsivePopover from "./ResponsivePopover.js";
@@ -55,6 +55,9 @@ interface ITab extends UI5Element {
     receiveOverflowInfo: (arg0: TabContainerOverflowInfo) => void;
     getDomRefInStrip: () => HTMLElement | undefined;
     items?: Array<ITab>;
+    eventDetails: {
+        click?: TabClickEventDetail;
+    };
 }
 /**
  * @class
@@ -233,7 +236,7 @@ declare class TabContainer extends UI5Element {
     _findTabInOverflow(realTab: ITab): TabInOverflow | undefined;
     _onTabStripKeyDown(e: KeyboardEvent): void;
     _onTabStripKeyUp(e: KeyboardEvent): void;
-    _onHeaderItemSelect(tab: HTMLElement): void;
+    _onHeaderItemSelect(tab: HTMLElement, originalEvent?: Event): void;
     _onOverflowListItemClick(e: CustomEvent<ListItemClickEventDetail>): Promise<void>;
     /**
      * Returns all slotted tabs and their subTabs in a flattened array.
@@ -244,7 +247,7 @@ declare class TabContainer extends UI5Element {
      */
     get allItems(): Array<ITab>;
     _flatten(items: Array<ITab>): ITab[];
-    _onItemSelect(selectedTabId: string): void;
+    _onItemSelect(selectedTabId: string, originalEvent?: Event): void;
     /**
      * Fires the `tab-select` event and changes the internal reference for the currently selected tab.
      * If the event is prevented, the current tab is not changed.

@@ -22,8 +22,11 @@ export default function TableHeaderRowTemplate(ariaColIndex = 1) {
                 cell.role ??= cell.ariaRole;
                 cell.ariaColIndex = (cell.role === cell.ariaRole) ? `${ariaColIndex++}` : null;
                 return [_jsx("slot", { name: cell._individualSlot })];
-            }), this._rowActionCount > 0 &&
-                _jsx(TableHeaderCell, { id: "actions-cell", "aria-colindex": ariaColIndex++, children: _jsx("div", { id: "actions-cell-content", children: this._i18nRowActions }) }), this._popinCells.length > 0 &&
+            }), this._renderDummyCell && this._hasPopin &&
+                _jsx(TableHeaderCell, { id: "dummy-cell", role: "none", "aria-hidden": true, "data-excluded-from-navigation": "" }), this._rowActionCount > 0 &&
+                _jsx(TableHeaderCell, { id: "actions-cell", "aria-colindex": ariaColIndex++, children: _jsx("div", { id: "actions-cell-content", children: this._i18nRowActions }) }), this._renderNavigated &&
+                _jsx(TableHeaderCell, { id: "navigated-cell", "data-excluded-from-navigation": true, "aria-hidden": true, role: "none", children: _jsx("div", { id: "navigated" }) }), this._renderDummyCell && !this._hasPopin &&
+                _jsx(TableHeaderCell, { id: "dummy-cell", role: "none", "aria-hidden": true, "data-excluded-from-navigation": "nofocus" }), this._hasPopin &&
                 _jsx(TableHeaderCell, { id: "popin-cell", "aria-colindex": ariaColIndex++, "data-excluded-from-navigation": true, children: _jsx("div", { id: "popin-cell-content", children: this._i18nRowPopin }) })] }));
 }
 //# sourceMappingURL=TableHeaderRowTemplate.js.map

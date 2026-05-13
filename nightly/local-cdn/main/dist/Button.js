@@ -482,6 +482,9 @@ __decorate([
 ], Button.prototype, "submits", void 0);
 __decorate([
     property()
+], Button.prototype, "form", void 0);
+__decorate([
+    property()
 ], Button.prototype, "tooltip", void 0);
 __decorate([
     property()

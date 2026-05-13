@@ -7,6 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var Tab_1;
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
 import customElement from "@ui5/webcomponents-base/dist/decorators/customElement.js";
+import event from "@ui5/webcomponents-base/dist/decorators/event-strict.js";
 import property from "@ui5/webcomponents-base/dist/decorators/property.js";
 import slot from "@ui5/webcomponents-base/dist/decorators/slot-strict.js";
 import jsxRenderer from "@ui5/webcomponents-base/dist/renderer/JsxRenderer.js";
@@ -396,6 +397,18 @@ Tab = Tab_1 = __decorate([
         renderer: jsxRenderer,
         template: TabTemplate,
         styles: css,
+    })
+    /**
+     * Fired when the tab is selected either with a mouse/tap or by using the Enter or Space key.
+     *
+     * @since 2.22.0
+     * @public
+     * @param {Tab} tab The selected tab.
+     * @param {Event} originalEvent The original event from the user interaction.
+     */
+    ,
+    event("click", {
+        bubbles: true,
     })
 ], Tab);
 Tab.define();

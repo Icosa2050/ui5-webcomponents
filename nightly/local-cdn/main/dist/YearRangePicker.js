@@ -101,9 +101,8 @@ let YearRangePicker = YearRangePicker_1 = class YearRangePicker extends Calendar
         return gridStartYear;
     }
     _getYearRanges() {
-        const locale = getLocale();
-        const yearFormat = DateFormat.getDateInstance({ format: "y", calendarType: this._primaryCalendarType }, locale);
-        const yearFormatInSecType = DateFormat.getDateInstance({ format: "y", calendarType: this._secondaryCalendarType }, locale);
+        const yearFormat = DateFormat.getDateInstance({ format: "y", calendarType: this._primaryCalendarType });
+        const yearFormatInSecType = DateFormat.getDateInstance({ format: "y", calendarType: this._secondaryCalendarType });
         const pageSize = this._getPageSize();
         const rowSize = this._getRowSize();
         const rangeSize = this._getRangeSize();

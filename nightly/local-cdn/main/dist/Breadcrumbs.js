@@ -247,6 +247,15 @@ let Breadcrumbs = Breadcrumbs_1 = class Breadcrumbs extends UI5Element {
     }
     _onLinkPress(e) {
         const link = e.target, items = this._getItems(), item = items.find(x => `${x._id}-link` === link.id), { altKey, ctrlKey, metaKey, shiftKey, } = e.detail;
+        if (!item.fireDecoratorEvent("click", {
+            altKey,
+            ctrlKey,
+            metaKey,
+            shiftKey,
+        })) {
+            e.preventDefault();
+            return;
+        }
         if (!this.fireDecoratorEvent("item-click", {
             item,
             altKey,
@@ -259,6 +268,14 @@ let Breadcrumbs = Breadcrumbs_1 = class Breadcrumbs extends UI5Element {
     }
     _onLabelPress(e) {
         const items = this._getItems(), item = items[items.length - 1], { altKey, ctrlKey, metaKey, shiftKey, } = e;
+        if (!item.fireDecoratorEvent("click", {
+            altKey,
+            ctrlKey,
+            metaKey,
+            shiftKey,
+        })) {
+            return;
+        }
         this.fireDecoratorEvent("item-click", {
             item,
             altKey,
@@ -269,6 +286,14 @@ let Breadcrumbs = Breadcrumbs_1 = class Breadcrumbs extends UI5Element {
     }
     _onOverflowListItemSelect(e) {
         const listItem = e.detail.selectedItems[0], items = this._getItems(), item = items.find(x => `${x._id}-li` === listItem.id);
+        if (!item.fireDecoratorEvent("click", {
+            altKey: false,
+            ctrlKey: false,
+            metaKey: false,
+            shiftKey: false,
+        })) {
+            return;
+        }
         if (this.fireDecoratorEvent("item-click", { item })) {
             locationOpen(item.href, item.target || "_self", "noopener,noreferrer");
             this.responsivePopover.open = false;

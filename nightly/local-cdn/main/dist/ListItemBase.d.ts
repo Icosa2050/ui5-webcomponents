@@ -6,6 +6,10 @@ type ListItemBasePressEventDetail = {
     selected?: boolean;
     key?: string;
 };
+type ListItemBaseClickEventDetail = {
+    item: ListItemBase;
+    originalEvent: Event;
+};
 /**
  * @class
  * A class to serve as a foundation
@@ -17,6 +21,7 @@ type ListItemBasePressEventDetail = {
  */
 declare class ListItemBase extends UI5Element implements ITabbable {
     eventDetails: {
+        "click": ListItemBaseClickEventDetail;
         "request-tabindex-change": FocusEvent;
         "_press": ListItemBasePressEventDetail;
         "_focused": FocusEvent;
@@ -100,4 +105,4 @@ declare class ListItemBase extends UI5Element implements ITabbable {
     get isListItemBase(): boolean;
 }
 export default ListItemBase;
-export type { ListItemBasePressEventDetail, };
+export type { ListItemBasePressEventDetail, ListItemBaseClickEventDetail, };

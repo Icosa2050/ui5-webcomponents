@@ -91,7 +91,6 @@ declare class Slider extends SliderBase implements IFormInputElement {
      */
     onBeforeRendering(): void;
     onAfterRendering(): void;
-    _handleResize(): void;
     /**
      * Called when the user starts interacting with the slider
      * @private
@@ -129,9 +128,9 @@ declare class Slider extends SliderBase implements IFormInputElement {
     get _sliderHandle(): HTMLElement;
     get _ariaDisabled(): true | undefined;
     get _ariaLabelledByText(): string;
+    get tickmarksObject(): boolean[];
     get _ariaDescribedByInputText(): string;
     get _ariaLabelledByInputText(): string;
-    get tickmarksObject(): never[];
     _onkeydown(e: KeyboardEvent): void;
 }
 export default Slider;

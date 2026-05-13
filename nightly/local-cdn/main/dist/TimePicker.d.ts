@@ -303,9 +303,9 @@ declare class TimePicker extends UI5Element implements IFormInputElement {
     get _isValueFormatPattern(): boolean;
     get _isDisplayFormatPattern(): boolean;
     get displayValue(): string;
-    getFormat(): import("sap/ui/core/format/DateFormat").default;
+    getFormat(): DateFormat;
     getISOFormat(): DateFormat;
-    getDisplayFormat(): import("sap/ui/core/format/DateFormat").default;
+    getDisplayFormat(): DateFormat;
     getValueFormat(): import("sap/ui/core/format/DateFormat").default;
     /**
      * Formats a Java Script date object into a string representing a locale date and time

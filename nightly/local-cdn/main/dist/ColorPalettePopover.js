@@ -105,7 +105,7 @@ let ColorPalettePopover = ColorPalettePopover_1 = class ColorPalettePopover exte
             colorPalette._defaultColorButton?.focus();
         }
         // since height is dynamically determined by padding-block-start
-        colorPalette.allColorsInPalette.forEach((item) => {
+        (colorPalette.allColorsInPalette).forEach((item) => {
             const itemHeight = item.offsetHeight + 4; // adding 4px for the offsets on top and bottom
             item.style.setProperty("--_ui5_color_palette_item_height", `${itemHeight}px`);
         });

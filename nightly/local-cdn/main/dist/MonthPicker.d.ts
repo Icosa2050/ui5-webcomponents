@@ -10,7 +10,7 @@ type Month = {
     selected: boolean;
     ariaSelected: boolean;
     name: string;
-    nameInSecType: string;
+    nameInSecType: string | undefined;
     disabled: boolean;
     ariaDisabled: boolean | undefined;
     classes: string;
@@ -70,8 +70,8 @@ declare class MonthPicker extends CalendarPart implements ICalendarPicker {
     get rowSize(): 2 | 3;
     _buildMonths(): void;
     _getDisplayedSecondaryMonthText(timestamp: number): {
-        text: any;
-        textInfo: any;
+        text: string;
+        textInfo: string;
     };
     /**
       * Returns true if month timestamp is inside the selection range.
