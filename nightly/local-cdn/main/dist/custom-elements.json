@@ -29514,6 +29514,48 @@
     },
     {
       "kind": "javascript-module",
+      "path": "dist/features/ColorPaletteMoreColors.js",
+      "declarations": [],
+      "exports": []
+    },
+    {
+      "kind": "javascript-module",
+      "path": "dist/features/InputComposition.js",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "name": "InputComposition",
+            "module": "dist/features/InputComposition.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "dist/features/InputSuggestions.js",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "name": "Suggestions",
+            "module": "dist/features/InputSuggestions.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "dist/features/ListItemStandardExpandableText.js",
+      "declarations": [],
+      "exports": []
+    },
+    {
+      "kind": "javascript-module",
       "path": "dist/dynamic-date-range-options/DateRange.js",
       "declarations": [
         {
@@ -29731,48 +29773,6 @@
     {
       "kind": "javascript-module",
       "path": "dist/dynamic-date-range-options/toDates.js",
-      "declarations": [],
-      "exports": []
-    },
-    {
-      "kind": "javascript-module",
-      "path": "dist/features/ColorPaletteMoreColors.js",
-      "declarations": [],
-      "exports": []
-    },
-    {
-      "kind": "javascript-module",
-      "path": "dist/features/InputComposition.js",
-      "declarations": [],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "default",
-          "declaration": {
-            "name": "InputComposition",
-            "module": "dist/features/InputComposition.js"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "dist/features/InputSuggestions.js",
-      "declarations": [],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "default",
-          "declaration": {
-            "name": "Suggestions",
-            "module": "dist/features/InputSuggestions.js"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "dist/features/ListItemStandardExpandableText.js",
       "declarations": [],
       "exports": []
     },
