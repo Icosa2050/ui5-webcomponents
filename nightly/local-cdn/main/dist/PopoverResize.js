@@ -170,7 +170,7 @@ class PopoverResize {
         this._totalDeltaX = this._currentDeltaX;
         this._totalDeltaY = this._currentDeltaY;
         const { minWidth, minHeight, } = window.getComputedStyle(this._popover);
-        const domRefComputedStyle = window.getComputedStyle(this._popover._getRealDomRef());
+        const domRefComputedStyle = window.getComputedStyle(this._popover);
         this._initialClientX = e.clientX;
         this._initialClientY = e.clientY;
         this._minWidth = Math.max(Number.parseFloat(minWidth), Number.parseFloat(domRefComputedStyle.minWidth));

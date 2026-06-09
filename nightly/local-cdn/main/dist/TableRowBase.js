@@ -34,6 +34,9 @@ let TableRowBase = TableRowBase_1 = class TableRowBase extends UI5Element {
     isHeaderRow() {
         return false;
     }
+    isGroupRow() {
+        return false;
+    }
     onEnterDOM() {
         !this.role && this.setAttribute("role", "row");
         this.toggleAttribute("ui5-table-row-base", true);

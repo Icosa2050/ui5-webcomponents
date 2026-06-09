@@ -105,7 +105,7 @@ let TableSelectionMulti = class TableSelectionMulti extends TableSelectionBase {
             return false;
         }
         const selectedSet = this.getSelectedAsSet();
-        return this._table.rows.every(row => {
+        return this._table.rows.filter(row => row._isSelectable).every(row => {
             const rowKey = this.getRowKey(row);
             return selectedSet.has(rowKey);
         });

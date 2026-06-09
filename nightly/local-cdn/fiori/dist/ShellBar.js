@@ -43,8 +43,6 @@ import ShellBarItemNavigation from "./shellbar/ShellBarItemNavigation.js";
 import ShellBarItem from "./ShellBarItem.js";
 import ShellBarSpacer from "./ShellBarSpacer.js";
 import { SHELLBAR_LABEL, SHELLBAR_NOTIFICATIONS, SHELLBAR_NOTIFICATIONS_NO_COUNT, SHELLBAR_PROFILE, SHELLBAR_PRODUCTS, SHELLBAR_SEARCH, SHELLBAR_ASSISTANT, SHELLBAR_OVERFLOW, SHELLBAR_ADDITIONAL_CONTEXT, } from "./generated/i18n/i18n-defaults.js";
-// actions always visible in lean mode, order is important
-const PREDEFINED_PLACE_ITEMS = ["feedback", "sys-help"];
 const ShellBarActions = {
     Search: "search",
     Profile: "profile",
@@ -337,7 +335,7 @@ let ShellBar = ShellBar_1 = class ShellBar extends UI5Element {
         const result = this.overflow.updateOverflow({
             actions: this.actions,
             content: this.sortContent(this.content),
-            customItems: this.sortItems(this.items),
+            customItems: this.items,
             hiddenItemsIds: this.hiddenItemsIds,
             showSearchField: this.enabledFeatures.search && this.showSearchField,
             overflowOuter: this.overflowOuter,
@@ -419,7 +417,7 @@ let ShellBar = ShellBar_1 = class ShellBar extends UI5Element {
     get overflowItems() {
         return this.overflow.getOverflowItems({
             actions: this.actions,
-            customItems: this.sortItems(this.items),
+            customItems: this.items,
             hiddenItemsIds: this.hiddenItemsIds,
         });
     }
@@ -578,13 +576,6 @@ let ShellBar = ShellBar_1 = class ShellBar extends UI5Element {
         return { shouldPack: isHidden && isLastItem };
     }
     /* =================== Items Management =================== */
-    sortItems(items) {
-        return items.toSorted((a, b) => {
-            const aIndex = PREDEFINED_PLACE_ITEMS.indexOf(a.icon || "");
-            const bIndex = PREDEFINED_PLACE_ITEMS.indexOf(b.icon || "");
-            return aIndex - bIndex;
-        });
-    }
     /* =================== Accessibility =================== */
     get actionsAccessibilityInfo() {
         return this.accessibility.getActionsAccessibilityAttributes(this.texts, {

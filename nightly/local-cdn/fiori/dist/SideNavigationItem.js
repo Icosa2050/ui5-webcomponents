@@ -13,6 +13,7 @@ import i18n from "@ui5/webcomponents-base/dist/decorators/i18n.js";
 import { isLeft, isRight, isMinus, isPlus, isEnter, } from "@ui5/webcomponents-base/dist/Keys.js";
 import SideNavigationSelectableItemBase from "./SideNavigationSelectableItemBase.js";
 import { SIDE_NAVIGATION_ICON_COLLAPSE, SIDE_NAVIGATION_ICON_EXPAND, SIDE_NAVIGATION_OVERFLOW_ITEM_LABEL, SIDE_NAVIGATION_PARENT_ITEM_SELECTABLE_DESCRIPTION, } from "./generated/i18n/i18n-defaults.js";
+import "@ui5/webcomponents/dist/Tag.js";
 // Templates
 import SideNavigationItemTemplate from "./SideNavigationItemTemplate.js";
 // Styles
@@ -130,9 +131,29 @@ let SideNavigationItem = SideNavigationItem_1 = class SideNavigationItem extends
         return this.expanded;
     }
     get _describedBy() {
+        const parts = [];
+        if (this.hasTag) {
+            parts.push(this._tagId);
+        }
+        if (!this.effectiveDisabled && this.items.length && !this.unselectable) {
+            parts.push(this._selectableItemDescriptionId);
+        }
+        return parts.length > 0 ? parts.join(" ") : undefined;
+    }
+    get _selectableItemDescriptionId() {
+        return `${this._id}-selectable-description`;
+    }
+    get _selectableItemDescriptionText() {
         if (!this.effectiveDisabled && this.items.length && !this.unselectable) {
             return SideNavigationItem_1.i18nBundle.getText(SIDE_NAVIGATION_PARENT_ITEM_SELECTABLE_DESCRIPTION, this.text ?? "");
         }
+        return undefined;
+    }
+    get hasTag() {
+        return !!this.tag.length;
+    }
+    get _textId() {
+        return `${this._id}-text`;
     }
     get classesArray() {
         const classes = super.classesArray;
@@ -264,6 +285,9 @@ __decorate([
 __decorate([
     slot({ type: HTMLElement, invalidateOnChildChange: true, "default": true })
 ], SideNavigationItem.prototype, "items", void 0);
+__decorate([
+    slot({ type: HTMLElement })
+], SideNavigationItem.prototype, "tag", void 0);
 __decorate([
     i18n("@ui5/webcomponents-fiori")
 ], SideNavigationItem, "i18nBundle", void 0);

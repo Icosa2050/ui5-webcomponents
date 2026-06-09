@@ -58,7 +58,8 @@ import type PanelAccessibleRole from "./types/PanelAccessibleRole.js";
  * @extends UI5Element
  * @public
  * @slot {Array<Node>} default - Defines the content of the component. The content is visible only when the component is expanded.
- * @csspart header - Used to style the wrapper of the header.
+ * @csspart header-wrapper - Used to style the outermost header wrapper, useful for adjusting sticky header position.
+ * @csspart header - Used to style the header.
  * @csspart content - Used to style the wrapper of the content.
  */
 declare class Panel extends UI5Element {
@@ -143,12 +144,6 @@ declare class Panel extends UI5Element {
     _pendingToggle: boolean;
     _touched: boolean;
     /**
-     * Indicates whether the content area should be focusable.
-     * This is true when content is scrollable and has no focusable children.
-     * @private
-     */
-    _contentFocusable: boolean;
-    /**
      * Defines the component header area.
      *
      * **Note:** When a header is provided, the `headerText` property is ignored.
@@ -157,7 +152,6 @@ declare class Panel extends UI5Element {
     header: Slot<HTMLElement>;
     static i18nBundle: I18nBundle;
     onBeforeRendering(): void;
-    onAfterRendering(): void;
     shouldToggle(element: HTMLElement): boolean;
     get shouldNotAnimate(): boolean;
     _isMobile(): void;
@@ -168,21 +162,6 @@ declare class Panel extends UI5Element {
     _headerKeyUp(e: KeyboardEvent): void;
     _toggleOpen(): void;
     _headerOnTarget(target: HTMLElement): boolean;
-    /**
-     * Updates the focusability of the content area.
-     * Content becomes focusable when:
-     * - Panel is expanded (not collapsed)
-     * - Content is scrollable (scrollHeight > clientHeight or scrollWidth > clientWidth)
-     * - No focusable children exist inside
-     * @private
-     */
-    _updateContentFocusable(): void;
-    /**
-     * Returns the tabindex for the content area.
-     * Returns 0 when content should be focusable, undefined otherwise (removes attribute).
-     * @private
-     */
-    get _contentTabIndex(): number | undefined;
     get toggleButtonTitle(): string;
     get expanded(): boolean;
     get accRole(): Lowercase<PanelAccessibleRole>;

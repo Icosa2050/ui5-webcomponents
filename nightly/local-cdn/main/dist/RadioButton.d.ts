@@ -33,6 +33,7 @@ import type WrappingType from "./types/WrappingType.js";
  * @public
  * @csspart outer-ring - Used to style the outer ring of the `ui5-radio-button`.
  * @csspart inner-ring - Used to style the inner ring of the `ui5-radio-button`.
+ * @csspart root - Used to style the root DOM element of the component.
  */
 declare class RadioButton extends UI5Element implements IFormInputElement {
     eventDetails: {

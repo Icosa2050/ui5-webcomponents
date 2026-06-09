@@ -1,4 +1,10 @@
 export default `:host{
+    --_ui5_banner_background: var(--sapShell_HeroBanner_Background);
+    --_ui5_banner_text_color: var(--sapShell_HeroBanner_TextColor);
+    --_ui5_banner_border_radius: var(--sapTile_BorderCornerRadius);
+    --_ui5_banner_border: .0625rem solid var(--sapTile_BorderColor);
+    --_ui5_banner_box_shadow: var(--sapContent_Shadow0);
+    --_ui5_banner_background_image: var(--sapShell_HeroBanner_BackgroundImage);
     --_ui5_fcl_solid_bg: var(--sapBackgroundColor);
     --_ui5_fcl_column_border: solid .0625rem var(--sapGroup_ContentBorderColor);
     --_ui5_fcl_decoration_top: linear-gradient(to top, var(--sapObjectHeader_BorderColor), #000);
@@ -220,9 +226,11 @@ export default `:host{
     --_ui5_search_separator_background: none;
     --_ui5-search-wrapper-hover-background: none;
     --_ui5-search-wrapper-hover-background-color: none;
-    --_ui5-search-elements-hover-background: var(--sapShell_Hover_Background);
-    --_ui5-search-elements-active-background: var(--sapShell_Active_Background);
+    --_ui5-search-elements-hover-background: none;
+    --_ui5-search-elements-active-background: none;
     --_ui5_search_input_scope_margin: 0;
+    --_ui5-search_input_scope_hover_shadow: none;
+    --_ui5-search_input_scope_active_shadow: none;
     --_ui5-search-elements-background: var(--sapShell_InteractiveBackground);
     --_ui5_search_wrapper_outline: none;
     --_ui5_search_input_outline: var(--sapContent_FocusWidth) var(--sapContent_FocusStyle) var(--sapField_Active_BorderColor);

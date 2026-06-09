@@ -1,5 +1,6 @@
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
 import type { ResizeObserverCallback } from "@ui5/webcomponents-base/dist/delegate/ResizeHandler.js";
+import type { Tickmark } from "./SliderScale.js";
 type StateStorage = {
     [key: string]: number | undefined;
 };
@@ -48,6 +49,9 @@ declare abstract class SliderBase extends UI5Element {
      * **Note:** The step and tickmarks properties must be enabled.
      * Example - if the step value is set to 2 and the label interval is also specified to 2 - then every second
      * tickmark will be labelled, which means every 4th value number.
+     *
+     * **Note:** This property is ignored when the `tickmarks` property is used.
+     * In that case every custom tickmark is labelled with its own `label`.
      * @default 0
      * @public
      */
@@ -60,6 +64,24 @@ declare abstract class SliderBase extends UI5Element {
      * @public
      */
     showTickmarks: boolean;
+    /**
+     * Defines custom tickmarks with labels on the slider scale.
+     * Each tickmark object has a numeric `value` and an optional `label` string.
+     * Tickmarks are purely visual — they display labeled markers at specific positions
+     * but do not affect the slider's movement behavior. The slider still moves
+     * according to `min`, `max`, and `step`.
+     *
+     * When the current value matches a tickmark value, the tickmark's label
+     * is shown in the tooltip and announced via `aria-valuetext`.
+     *
+     * **Note:** When `tickmarks` is provided, the scale is automatically shown
+     * (equivalent to `showTickmarks`), and `labelInterval` is ignored - every
+     * custom tickmark is rendered with its own `label`.
+     * @default []
+     * @public
+     * @since 2.23.0
+     */
+    tickmarks: Array<Tickmark>;
     /**
      * Enables handle tooltip displaying the current value.
      * @default false
@@ -237,6 +259,12 @@ declare abstract class SliderBase extends UI5Element {
      * @private
      */
     static _getDecimalPrecisionOfNumber(value: number): number;
+    get _hasCustomTickmarks(): boolean;
+    /**
+     * Returns the label of the custom tickmark matching the given value, or `undefined` if none matches.
+     * @private
+     */
+    _getCustomLabel(value: number): string | undefined;
     /**
      * In order to always keep the visual UI representation and the internal
      * state in sync, the component has a 'state storage' that is updated when the

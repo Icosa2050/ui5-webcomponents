@@ -1,4 +1,4 @@
-import { jsx as _jsx, Fragment as _Fragment } from "@ui5/webcomponents-base/jsx-runtime";
+import { jsx as _jsx, Fragment as _Fragment, jsxs as _jsxs } from "@ui5/webcomponents-base/jsx-runtime";
 import MenuItemTemplate from "@ui5/webcomponents/dist/MenuItemTemplate.js";
 import Icon from "@ui5/webcomponents/dist/Icon.js";
 import slimArrowRightIcon from "@ui5/webcomponents-icons/dist/slim-arrow-right.js";
@@ -24,11 +24,9 @@ function iconBegin() {
     }
 }
 function iconEnd() {
-    if (this.hasSubmenu) {
-        return _jsx(Icon, { part: "icon", name: slimArrowRightIcon, class: "ui5-menu-item-icon-end" });
-    }
-    if (this.isExternalLink) {
-        return _jsx(Icon, { class: "ui5-sn-item-external-link-icon", name: arrowRightIcon });
-    }
+    return (_jsxs(_Fragment, { children: [this.hasTag &&
+                _jsx("span", { id: this._tagContainerId, class: "ui5-navmenu-item-tag-container", children: _jsx("slot", { name: "tag" }) }), this.hasSubmenu &&
+                _jsx(Icon, { part: "icon", name: slimArrowRightIcon, class: "ui5-menu-item-icon-end" }), !this.hasSubmenu && this.isExternalLink &&
+                _jsx(Icon, { class: "ui5-sn-item-external-link-icon", name: arrowRightIcon })] }));
 }
 //# sourceMappingURL=NavigationMenuItemTemplate.js.map

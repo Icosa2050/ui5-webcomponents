@@ -61,6 +61,7 @@ declare class ExpandableText extends UI5Element {
      */
     emptyIndicatorMode: `${TextEmptyIndicatorMode}`;
     _expanded: boolean;
+    _shouldScrollToToggle: boolean;
     static i18nBundle: I18nBundle;
     getFocusDomRef(): HTMLElement | undefined;
     get _displayedText(): string | undefined;
@@ -72,6 +73,7 @@ declare class ExpandableText extends UI5Element {
     get _accessibilityAttributesForToggle(): LinkAccessibilityAttributes;
     get _accessibleNameForToggle(): string | undefined;
     _handlePopoverClose(): void;
+    onAfterRendering(): void;
     _handleToggleClick(): void;
     _handleCloseButtonClick(e: UI5CustomEvent<Button, "click">): void;
 }

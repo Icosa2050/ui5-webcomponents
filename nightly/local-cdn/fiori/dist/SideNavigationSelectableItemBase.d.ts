@@ -138,6 +138,7 @@ declare class SideNavigationSelectableItemBase extends SideNavigationItemBase {
     get _classes(): string;
     get _ariaCurrent(): "page" | undefined;
     get _ariaSelected(): boolean | undefined;
+    get _tagId(): string;
     _onkeydown(e: KeyboardEvent): void;
     _onkeyup(e: KeyboardEvent): void;
     _onclick(e: MouseEvent): void;

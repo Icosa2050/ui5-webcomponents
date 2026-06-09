@@ -47,6 +47,14 @@ declare class DynamicPageHeader extends UI5Element {
      * @private
      */
     _snapped: boolean;
+    /**
+     * Defines the accessible ARIA label for the header region.
+     * Overrides the default "Header Expanded" / "Header Snapped" text.
+     * @public
+     * @default undefined
+     * @since 2.24.0
+     */
+    accessibleName?: string;
     static i18nBundle: I18nBundle;
     /**
      * Returns the aria-label for the header region.

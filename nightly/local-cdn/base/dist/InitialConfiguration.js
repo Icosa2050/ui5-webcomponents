@@ -19,6 +19,7 @@ let initialConfig = {
     fetchDefaultLanguage: false,
     defaultFontLoading: true,
     enableDefaultTooltips: true,
+    ignoreUrlParams: false,
 };
 /* General settings */
 const getAnimationMode = () => {
@@ -57,6 +58,10 @@ const getDefaultFontLoading = () => {
 const getEnableDefaultTooltips = () => {
     initConfiguration();
     return initialConfig.enableDefaultTooltips;
+};
+const getIgnoreUrlParams = () => {
+    initConfiguration();
+    return initialConfig.ignoreUrlParams;
 };
 /**
  * Get the configured calendar type
@@ -170,9 +175,11 @@ const resetConfiguration = (testEnv) => {
     // 1. Lowest priority - configuration script
     parseConfigurationScript();
     // 2. URL parameters overwrite configuration script parameters
-    parseURLParameters();
+    if (!initialConfig.ignoreUrlParams) {
+        parseURLParameters();
+    }
     // 3. If OpenUI5 is detected, it has the highest priority
     applyOpenUI5Configuration();
 };
-export { getAnimationMode, getTheme, getThemeRoot, getLanguage, getFetchDefaultLanguage, getNoConflict, getCalendarType, getSecondaryCalendarType, getTimezone, getFormatSettings, getDefaultFontLoading, resetConfiguration, getEnableDefaultTooltips, };
+export { getAnimationMode, getTheme, getThemeRoot, getLanguage, getFetchDefaultLanguage, getNoConflict, getCalendarType, getSecondaryCalendarType, getTimezone, getFormatSettings, getDefaultFontLoading, resetConfiguration, getEnableDefaultTooltips, getIgnoreUrlParams, };
 //# sourceMappingURL=InitialConfiguration.js.map

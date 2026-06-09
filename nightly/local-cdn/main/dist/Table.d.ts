@@ -326,6 +326,7 @@ declare class Table extends UI5Element {
         };
     };
     get _gridTemplateColumns(): string | undefined;
+    get _hasPopin(): boolean;
     get _hasFlexibleColumns(): boolean;
     get _isRowSelectorRequired(): boolean | undefined;
     get _scrollContainer(): HTMLElement;

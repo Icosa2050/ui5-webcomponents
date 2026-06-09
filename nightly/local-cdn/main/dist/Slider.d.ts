@@ -83,6 +83,8 @@ declare class Slider extends SliderBase implements IFormInputElement {
     _handlePositionFromStart: number;
     _lastValidInputValue: string;
     get formFormattedValue(): string;
+    get _isTooltipVisible(): boolean;
+    get _ariaValueText(): string | undefined;
     static i18nBundle: I18nBundle;
     constructor();
     /**

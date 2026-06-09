@@ -358,7 +358,7 @@ let NotificationListItem = NotificationListItem_1 = class NotificationListItem e
         // NotificationListItem will never be assigned to a variable of type ListItemBase
         // typescipt complains here, if that is the case, the parameter to the _press event handler could be a ListItemBase item,
         // but this is never the case, all components are used by their class and never assigned to a variable with a type of ListItemBase
-        this.fireDecoratorEvent("click", { item: this, originalEvent: e });
+        this.fireDecoratorEvent("click", { originalEvent: e });
         this.fireDecoratorEvent("_press", { item: this });
     }
     onResize() {
@@ -437,9 +437,8 @@ NotificationListItem = NotificationListItem_1 = __decorate([
     /**
      * Fired when the component is activated either with a mouse/tap or by using the Enter or Space key.
      *
-     * @since 2.22.0
+     * @since 2.23.0
      * @public
-     * @param {NotificationListItem} item The activated item.
      * @param {Event} originalEvent The original event from the user interaction.
      */
     ,

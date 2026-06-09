@@ -234,6 +234,7 @@ declare class MenuItem extends ListItem implements IMenuItem {
         listItemAriaLabel?: string;
         ariaOwns?: string;
         tooltip?: string;
+        ariaDescribedBy?: string;
     };
     get _popover(): ResponsivePopover | null;
     get _markChecked(): boolean;

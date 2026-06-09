@@ -7,7 +7,7 @@ type ListItemBasePressEventDetail = {
     key?: string;
 };
 type ListItemBaseClickEventDetail = {
-    item: ListItemBase;
+    item?: ListItemBase;
     originalEvent: Event;
 };
 /**

@@ -135,7 +135,7 @@ let TableSelection = class TableSelection extends UI5Element {
             return false;
         }
         const selectedArray = this.selectedAsArray;
-        return this._table.rows.every(row => {
+        return this._table.rows.filter(row => row._isSelectable).every(row => {
             const rowKey = this.getRowKey(row);
             return selectedArray.includes(rowKey);
         });
@@ -179,7 +179,7 @@ let TableSelection = class TableSelection extends UI5Element {
     }
     _selectHeaderRow(selected) {
         const selectedSet = this.selectedAsSet;
-        this._table.rows.forEach(row => {
+        this._table.rows.filter(row => row._isSelectable).forEach(row => {
             const rowKey = this.getRowKey(row);
             selectedSet[selected ? "add" : "delete"](rowKey);
         });

@@ -18,7 +18,7 @@ import "@ui5/webcomponents-icons/dist/error.js";
 import "@ui5/webcomponents-icons/dist/alert.js";
 import "@ui5/webcomponents-icons/dist/sys-enter-2.js";
 import "@ui5/webcomponents-icons/dist/information.js";
-import { DIALOG_HEADER_ARIA_ROLE_DESCRIPTION, DIALOG_HEADER_ARIA_DESCRIBEDBY_RESIZABLE, DIALOG_HEADER_ARIA_DESCRIBEDBY_DRAGGABLE, DIALOG_HEADER_ARIA_DESCRIBEDBY_DRAGGABLE_RESIZABLE, } from "./generated/i18n/i18n-defaults.js";
+import { DIALOG_HEADER_ARIA_ROLE_DESCRIPTION, DIALOG_HEADER_ARIA_DESCRIBEDBY_RESIZABLE, DIALOG_HEADER_ARIA_DESCRIBEDBY_DRAGGABLE, DIALOG_HEADER_ARIA_DESCRIBEDBY_DRAGGABLE_RESIZABLE, DIALOG_HEADER_ARIA_LABEL, DIALOG_CONTENT_ARIA_LABEL, DIALOG_FOOTER_ARIA_LABEL, } from "./generated/i18n/i18n-defaults.js";
 // Template
 import DialogTemplate from "./DialogTemplate.js";
 // Styles
@@ -228,6 +228,18 @@ let Dialog = Dialog_1 = class Dialog extends Popup {
             return toLowercaseEnumValue(PopupAccessibleRole.AlertDialog);
         }
         return toLowercaseEnumValue(this.accessibleRole);
+    }
+    get _contentRole() {
+        return "region";
+    }
+    get _headerAriaLabel() {
+        return Dialog_1.i18nBundle.getText(DIALOG_HEADER_ARIA_LABEL);
+    }
+    get _contentAriaLabel() {
+        return Dialog_1.i18nBundle.getText(DIALOG_CONTENT_ARIA_LABEL);
+    }
+    get _footerAriaLabel() {
+        return Dialog_1.i18nBundle.getText(DIALOG_FOOTER_ARIA_LABEL);
     }
     _show() {
         super._show();

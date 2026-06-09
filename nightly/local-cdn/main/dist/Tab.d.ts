@@ -13,7 +13,6 @@ import type ListItemCustom from "./ListItemCustom.js";
 import TabInStripTemplate from "./TabInStripTemplate.js";
 import TabInOverflowTemplate from "./TabInOverflowTemplate.js";
 type TabClickEventDetail = {
-    tab: Tab;
     originalEvent: Event;
 };
 interface TabInStrip extends HTMLElement {

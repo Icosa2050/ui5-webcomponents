@@ -126,6 +126,8 @@ declare class UploadCollectionItem extends ListItem {
     _onRenameKeyup(e: KeyboardEvent): void;
     _onRenameCancel(e: KeyboardEvent | UI5CustomEvent<Button, "click">): Promise<void>;
     _onRenameCancelKeyup(e: KeyboardEvent): void;
+    _handleTabNext(e: KeyboardEvent): void;
+    _handleTabPrevious(e: KeyboardEvent): void;
     _focus(): void;
     _onFileNameClick(): void;
     _onRetry(): void;

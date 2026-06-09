@@ -1,4 +1,10 @@
 export default `:host{
+    --_ui5_banner_background: var(--sapShell_Banner_Background, var(--sapHighlightColor));
+    --_ui5_banner_text_color: var(--sapShell_Banner_TextColor, var(--sapContent_ContrastTextColor));
+    --_ui5_banner_border_radius: var(--sapTile_BorderCornerRadius);
+    --_ui5_banner_border: .0625rem solid var(--sapTile_BorderColor);
+    --_ui5_banner_box_shadow: var(--sapContent_Shadow0);
+    --_ui5_banner_background_image: var(--sapShell_HeroBanner_BackgroundImage);
     --_ui5_fcl_solid_bg: var(--sapShell_Background);
     --_ui5_fcl_column_border: solid .0625rem var(--sapGroup_ContentBorderColor);
     --_ui5_fcl_decoration_top: linear-gradient(to top, var(--sapHighlightColor), transparent);

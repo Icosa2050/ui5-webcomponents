@@ -12,6 +12,7 @@ import getEffectiveIconCollection from "./asset-registries/util/getIconCollectio
 import { startMultipleDrag } from "./DragAndDrop.js";
 import { getLanguage, setLanguage, getDefaultLanguage, setFetchDefaultLanguage, getFetchDefaultLanguage, } from "./config/Language.js";
 import { getNoConflict, setNoConflict } from "./config/NoConflict.js";
+import { getIgnoreUrlParams, setIgnoreUrlParams } from "./config/UrlParams.js";
 import { getTheme, setTheme, getDefaultTheme, } from "./config/Theme.js";
 // decorators/
 import customElement from "./decorators/customElement.js";
@@ -60,7 +61,7 @@ startMultipleDrag,
 // animations/
 scroll, slideDown, slideUp, 
 // config/
-getAnimationMode, setAnimationMode, getCalendarType, getFirstDayOfWeek, getLegacyDateCalendarCustomizing, setDefaultIconCollection, getDefaultIconCollection, getEffectiveIconCollection, RegisteredIconCollection, getLanguage, setLanguage, getDefaultLanguage, setFetchDefaultLanguage, getFetchDefaultLanguage, getNoConflict, setNoConflict, getTheme, setTheme, getDefaultTheme, 
+getAnimationMode, setAnimationMode, getCalendarType, getFirstDayOfWeek, getLegacyDateCalendarCustomizing, setDefaultIconCollection, getDefaultIconCollection, getEffectiveIconCollection, RegisteredIconCollection, getLanguage, setLanguage, getDefaultLanguage, setFetchDefaultLanguage, getFetchDefaultLanguage, getNoConflict, setNoConflict, getIgnoreUrlParams, setIgnoreUrlParams, getTheme, setTheme, getDefaultTheme, 
 // decorators/
 customElement, event, property, slot, slotStrict, 
 // delegate/

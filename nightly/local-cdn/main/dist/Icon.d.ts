@@ -1,5 +1,6 @@
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
 import type { AriaRole } from "@ui5/webcomponents-base/dist/types.js";
+import type { Slot } from "@ui5/webcomponents-base/dist/UI5Element.js";
 import type { I18nText } from "@ui5/webcomponents-base/dist/i18nBundle.js";
 import type I18nBundle from "@ui5/webcomponents-base/dist/i18nBundle.js";
 import type IconDesign from "./types/IconDesign.js";
@@ -143,6 +144,23 @@ declare class Icon extends UI5Element implements IIcon {
      */
     mode: `${IconMode}`;
     /**
+     * Defines the font icon to be used as an icon.
+     * Intended for font-based icon libraries where
+     * the application loads the font and provides a slotted element with the unicode character.
+     * When this slot is used, the component renders a `<span>` instead of an `<svg>`.
+     * Accessibility is fully delegated to the application — set `accessible-name` and `mode` explicitly.
+     *
+     * **Example:**
+     * ```html
+     * <ui5-icon mode="Image" accessible-name="Home">
+     *   <i class="fa fa-home" slot="fontIcon"></i>
+     * </ui5-icon>
+     * ```
+     * @public
+     * @since 2.23.0
+     */
+    fontIcon: Slot<HTMLElement>;
+    /**
      * @private
      */
     pathData: Array<string>;
@@ -175,6 +193,7 @@ declare class Icon extends UI5Element implements IIcon {
     get effectiveAccessibleRole(): "button" | "presentation" | "img";
     onEnterDOM(): void;
     onBeforeRendering(): Promise<void>;
+    get hasFontIcon(): boolean;
     get hasIconTooltip(): string | false | undefined;
     _getAriaTypeDescription(): string;
     get accessibilityInfo(): {

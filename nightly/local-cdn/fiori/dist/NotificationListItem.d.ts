@@ -16,7 +16,6 @@ type NotificationListItemPressEventDetail = {
     item: NotificationListItem;
 };
 type NotificationListItemClickEventDetail = {
-    item: NotificationListItem;
     originalEvent: Event;
 };
 /**

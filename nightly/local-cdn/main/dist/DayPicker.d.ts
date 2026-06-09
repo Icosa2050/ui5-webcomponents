@@ -149,9 +149,10 @@ declare class DayPicker extends CalendarPart implements ICalendarPicker {
      * Selects/deselects a day.
      * @param e
      * @param isShift true if the user did Click+Shift or Enter+Shift (but not Space+Shift)
+     * @param setTimestamp whether to move focus (timestamp) to the selected day; false for mouse clicks where focus is independent
      * @private
      */
-    _selectDate(e: Event, isShift: boolean): void;
+    _selectDate(e: Event, isShift: boolean, setTimestamp?: boolean): void;
     _updateSelectedDates(timestamp: number, isShift: boolean): void;
     /**
      * Selects/deselects the whole row (week).
@@ -161,6 +162,7 @@ declare class DayPicker extends CalendarPart implements ICalendarPicker {
     _toggleTimestampInSelection(timestamp: number): void;
     _addTimestampToSelection(timestamp: number): void;
     _removeTimestampFromSelection(timestamp: number): void;
+    _onmousedown(e: MouseEvent): void;
     /**
      * Called when at least one day is selected and the user presses "Shift".
      * @param timestamp
@@ -232,16 +234,31 @@ declare class DayPicker extends CalendarPart implements ICalendarPicker {
     get shouldHideWeekNumbers(): boolean;
     _isWeekend(oDate: CalendarDate): boolean;
     /**
+     * Pre-computes disabled date range timestamps once before the rendering loop.
+     * Avoids repeated date string parsing inside the per-cell _isDateEnabled check.
+     * @private
+     */
+    _precomputeDisabledDates(): Array<{
+        startTimestamp: number;
+        endTimestamp: number;
+    }>;
+    /**
      * Checks if a given date is enabled (selectable).
      * A date is considered disabled if:
      * - It falls outside the min/max date range defined by the component
      * - It matches a single disabled date
      * - It falls within a disabled date range (exclusive of start and end dates)
      * @param date - The date to check
+     * @param minDate - Pre-resolved min calendar date
+     * @param maxDate - Pre-resolved max calendar date
+     * @param precomputedDisabledDates - Pre-parsed disabled date range timestamps
      * @returns `true` if the date is enabled (selectable), `false` if disabled
      * @private
      */
-    _isDateEnabled(date: CalendarDate): boolean;
+    _isDateEnabled(date: CalendarDate, minDate?: CalendarDate, maxDate?: CalendarDate, precomputedDisabledDates?: Array<{
+        startTimestamp: number;
+        endTimestamp: number;
+    }>): boolean;
     /**
      * Converts a date value string to a timestamp.
      * @param dateValue - Date string to convert

@@ -24,7 +24,7 @@ import { isPhone } from "@ui5/webcomponents-base/dist/Device.js";
 import i18n from "@ui5/webcomponents-base/dist/decorators/i18n.js";
 import InvisibleMessageMode from "@ui5/webcomponents-base/dist/types/InvisibleMessageMode.js";
 import List from "./List.js";
-import { VALUE_STATE_SUCCESS, VALUE_STATE_INFORMATION, VALUE_STATE_ERROR, VALUE_STATE_WARNING, VALUE_STATE_TYPE_SUCCESS, VALUE_STATE_TYPE_INFORMATION, VALUE_STATE_TYPE_ERROR, VALUE_STATE_TYPE_WARNING, INPUT_SUGGESTIONS_TITLE, LIST_ITEM_POSITION, SELECT_ROLE_DESCRIPTION, FORM_SELECTABLE_REQUIRED, } from "./generated/i18n/i18n-defaults.js";
+import { VALUE_STATE_SUCCESS, VALUE_STATE_INFORMATION, VALUE_STATE_ERROR, VALUE_STATE_WARNING, VALUE_STATE_TYPE_SUCCESS, VALUE_STATE_TYPE_INFORMATION, VALUE_STATE_TYPE_ERROR, VALUE_STATE_TYPE_WARNING, INPUT_SUGGESTIONS_TITLE, LIST_ITEM_POSITION, SELECT_ROLE_DESCRIPTION, SELECT_DIALOG_CANCEL_BUTTON, FORM_SELECTABLE_REQUIRED, } from "./generated/i18n/i18n-defaults.js";
 import Label from "./Label.js";
 import ResponsivePopover from "./ResponsivePopover.js";
 import Popover from "./Popover.js";
@@ -670,6 +670,9 @@ let Select = Select_1 = class Select extends UI5Element {
     get _headerTitleText() {
         return Select_1.i18nBundle.getText(INPUT_SUGGESTIONS_TITLE);
     }
+    get _cancelButtonText() {
+        return Select_1.i18nBundle.getText(SELECT_DIALOG_CANCEL_BUTTON);
+    }
     get _currentlySelectedOption() {
         return this.options[this._selectedIndex];
     }
@@ -709,6 +712,7 @@ let Select = Select_1 = class Select extends UI5Element {
         };
     }
     get styles() {
+        const remSizeInPx = parseInt(getComputedStyle(document.documentElement).fontSize);
         return {
             popoverHeader: {
                 "display": "block",
@@ -720,6 +724,8 @@ let Select = Select_1 = class Select extends UI5Element {
             },
             responsivePopover: {
                 "min-width": `${this.offsetWidth}px`,
+                "max-width": (this.offsetWidth / remSizeInPx) > 40 ? `${this.offsetWidth}px` : "40rem",
+                "margin-top": "var(--sapField_BorderWidth)",
             },
         };
     }

@@ -26,7 +26,7 @@ declare class ListItemGroupHeader extends ListItemBase {
      * @public
      */
     accessibleName?: string;
-    accessibleRole: `${ListItemAccessibleRole}`;
+    accessibleRole: `${ListItemAccessibleRole}` | "Group";
     /**
      * Defines if the text of the component should wrap when it's too long.
      * When set to "Normal", the content (title, description) will be wrapped

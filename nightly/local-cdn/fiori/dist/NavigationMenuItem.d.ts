@@ -3,6 +3,7 @@ import type { ClassMap } from "@ui5/webcomponents-base/dist/types.js";
 import MenuItem from "@ui5/webcomponents/dist/MenuItem.js";
 import type SideNavigationItemDesign from "./types/SideNavigationItemDesign.js";
 import type SideNavigationSelectableItemBase from "./SideNavigationSelectableItemBase.js";
+import type { Slot } from "@ui5/webcomponents-base/dist/UI5Element.js";
 /**
  * @class
  *
@@ -56,8 +57,12 @@ declare class NavigationMenuItem extends MenuItem {
     design: `${SideNavigationItemDesign}`;
     static i18nBundleFiori: I18nBundle;
     associatedItem?: SideNavigationSelectableItemBase;
+    tag: Slot<HTMLElement>;
+    get hasTag(): boolean;
     get isExternalLink(): boolean | "" | undefined;
     get _href(): string | undefined;
+    get _tagContainerId(): string;
+    get _ariaDescribedByIds(): string;
     get _accInfo(): {
         role: import("@ui5/webcomponents-base/dist/types.js").AriaRole;
         ariaHaspopup?: `${import("@ui5/webcomponents-base/dist/types.js").AriaHasPopup}`;
@@ -75,6 +80,7 @@ declare class NavigationMenuItem extends MenuItem {
         listItemAriaLabel?: string;
         ariaOwns?: string;
         tooltip?: string;
+        ariaDescribedBy?: string;
     };
     get classes(): ClassMap;
     _onclick(e: MouseEvent): void;

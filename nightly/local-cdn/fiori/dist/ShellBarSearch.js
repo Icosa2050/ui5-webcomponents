@@ -44,6 +44,17 @@ let ShellBarSearch = ShellBarSearch_1 = class ShellBarSearch extends Search {
             this.collapsed = true;
         }
     }
+    _handleEnter() {
+        if (!this.value && !this.collapsed) {
+            this.collapsed = true;
+            setTimeout(() => {
+                this.focus();
+            }, 0);
+        }
+        else {
+            super._handleEnter();
+        }
+    }
     _onFocusOutSearch(e) {
         if (isPhone()) {
             return;

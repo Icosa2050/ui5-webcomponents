@@ -281,6 +281,7 @@ let MultiComboBox = MultiComboBox_1 = class MultiComboBox extends UI5Element {
     onEnterDOM() {
         ResizeHandler.register(this, this._handleResizeBound);
         this._enableComposition();
+        this._effectiveValueState = this.valueState;
     }
     onExitDOM() {
         ResizeHandler.deregister(this, this._handleResizeBound);
@@ -1408,6 +1409,13 @@ let MultiComboBox = MultiComboBox_1 = class MultiComboBox extends UI5Element {
         }
         if ((!this.shadowRoot.contains(e.relatedTarget) || focusIsGoingInPopover) && !this._deleting && !this._clearingValue) {
             this.focused = false;
+            if (!this.noValidation && this.value) {
+                this.value = "";
+                this._lastValue = "";
+                if (this.valueState === ValueState.Negative && this._effectiveValueState !== ValueState.Negative) {
+                    this._updateValueState(this._effectiveValueState);
+                }
+            }
             if (this._lastValue !== this.value) {
                 this._inputChange();
             }

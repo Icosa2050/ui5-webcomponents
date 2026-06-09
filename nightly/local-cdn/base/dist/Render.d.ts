@@ -8,6 +8,14 @@ type BeforeComponentRenderCallback = (webComponent: UI5Element) => void;
  */
 declare const renderDeferred: (webComponent: UI5Element) => Promise<void>;
 /**
+ * Register all web components attached to the DOM
+ */
+declare const registerElement: (webComponent: UI5Element) => void;
+/**
+ * Unregister all web components detached from the DOM
+ */
+declare const unregisterElement: (webComponent: UI5Element) => void;
+/**
  * Renders a component synchronously and adds it to the registry of rendered components
  *
  * @param webComponent
@@ -44,4 +52,4 @@ declare const reRenderAllUI5Elements: (filters?: {
 }) => Promise<void>;
 declare const attachBeforeComponentRender: (listener: BeforeComponentRenderCallback) => void;
 declare const detachBeforeComponentRender: (listener: BeforeComponentRenderCallback) => void;
-export { renderDeferred, renderImmediately, cancelRender, renderFinished, reRenderAllUI5Elements, attachBeforeComponentRender, detachBeforeComponentRender, };
+export { renderDeferred, renderImmediately, cancelRender, registerElement, unregisterElement, renderFinished, reRenderAllUI5Elements, attachBeforeComponentRender, detachBeforeComponentRender, };

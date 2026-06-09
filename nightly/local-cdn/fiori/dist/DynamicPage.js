@@ -113,6 +113,34 @@ let DynamicPage = DynamicPage_1 = class DynamicPage extends UI5Element {
          * @public
          */
         this.showFooter = false;
+        /**
+        * Defines additional accessibility attributes on different areas of the component.
+        *
+        * The accessibilityAttributes object has the following fields,
+        * where each field is an object supporting one or more accessibility attributes:
+        *
+        *  - **root**: `root.role` and `root.name`.
+        *  - **header**: `header.role` and `header.name`.
+        *  - **content**: `content.role` and `content.name`.
+        *  - **footer**: `footer.role` and `footer.name`.
+        *
+        * The accessibility attributes support the following values:
+        *
+        * - **role**: Defines the accessible ARIA landmark role of the area.
+        * Accepts the following values per section:
+        * `root` — `none`, `main`, `region`;
+        * `header` — `none`, `banner`, `region`;
+        * `content` — `none`, `main`, `region`, `form`;
+        * `footer` — `none`, `contentinfo`, `region`.
+        *
+        * - **name**: Defines the accessible ARIA name of the area.
+        * Accepts any string.
+        *
+        * @default {}
+        * @public
+        * @since 2.24.0
+        */
+        this.accessibilityAttributes = {};
         this.skipSnapOnScroll = false;
         this.showHeaderInStickArea = false;
         this.isToggled = false;
@@ -132,10 +160,15 @@ let DynamicPage = DynamicPage_1 = class DynamicPage extends UI5Element {
     get endAreaHeight() {
         return this.showFooter ? this.footerWrapper?.getBoundingClientRect().height || 0 : 0;
     }
-    get topAreaHeight() {
+    get scrollPaddingTop() {
         const titleHeight = this.dynamicPageTitle?.getBoundingClientRect().height || 0;
         const headerHeight = this.dynamicPageHeader?.getBoundingClientRect().height || 0;
-        return this._headerSnapped ? titleHeight : headerHeight + titleHeight;
+        if (this._headerSnapped) {
+            return titleHeight;
+        }
+        const fullHeight = headerHeight + titleHeight;
+        const scrollTop = this.scrollContainer?.scrollTop || 0;
+        return Math.max(titleHeight, fullHeight - scrollTop);
     }
     get dynamicPageTitle() {
         return this.querySelector("[ui5-dynamic-page-title]");
@@ -179,8 +212,15 @@ let DynamicPage = DynamicPage_1 = class DynamicPage extends UI5Element {
         return isPhone() && this.headerSnapped && this.dynamicPageTitle?.snappedTitleOnMobile.length;
     }
     get headerAriaLabel() {
-        return this.hasHeading ? this._headerLabel : undefined;
+        return this.accessibilityAttributes.header?.name || (this.hasHeading ? this._headerLabel : undefined);
     }
+    get _headerRole() { return this.accessibilityAttributes.header?.role; }
+    get _rootRole() { return this.accessibilityAttributes.root?.role; }
+    get _rootAriaLabel() { return this.accessibilityAttributes.root?.name; }
+    get _contentRole() { return this.accessibilityAttributes.content?.role; }
+    get _contentAriaLabel() { return this.accessibilityAttributes.content?.name; }
+    get _footerRole() { return this.accessibilityAttributes.footer?.role; }
+    get _footerAriaLabel() { return this.accessibilityAttributes.footer?.name; }
     get _hidePinButton() {
         return this.hidePinButton || isPhone();
     }
@@ -324,7 +364,7 @@ let DynamicPage = DynamicPage_1 = class DynamicPage extends UI5Element {
     }
     onContentFocusIn(e) {
         const target = e.target;
-        this.setScrollPadding({ start: this.topAreaHeight, end: this.endAreaHeight });
+        this.setScrollPadding({ start: this.scrollPaddingTop, end: this.endAreaHeight });
         // textareas and similar elements appear "in view" even when partially
         // hidden behind sticky header/footer.
         // manual scroll brings them fully into view.
@@ -364,6 +404,9 @@ __decorate([
 __decorate([
     slot({ type: HTMLElement })
 ], DynamicPage.prototype, "footerArea", void 0);
+__decorate([
+    property({ type: Object })
+], DynamicPage.prototype, "accessibilityAttributes", void 0);
 __decorate([
     property({ type: Boolean })
 ], DynamicPage.prototype, "_headerSnapped", void 0);

@@ -2,6 +2,7 @@ import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
 import type { Slot, DefaultSlot } from "@ui5/webcomponents-base/dist/UI5Element.js";
 import type { AriaRole } from "@ui5/webcomponents-base";
 import type I18nBundle from "@ui5/webcomponents-base/dist/i18nBundle.js";
+import type { Breakpoint } from "./form-utils/FormUtils.js";
 import type FormItemSpacing from "./types/FormItemSpacing.js";
 import type FormAccessibleMode from "./types/FormAccessibleMode.js";
 import type TitleLevel from "./types/TitleLevel.js";
@@ -17,6 +18,7 @@ interface IFormItem extends UI5Element {
     colsL?: number;
     colsM?: number;
     colsS?: number;
+    colSpan?: string;
     columnSpan?: number;
     headerText?: string;
     headerLevel?: `${TitleLevel}`;
@@ -63,10 +65,10 @@ type ItemsInfo = {
  *
  * The Form component reacts and changes its layout on predefined breakpoints.
  * Depending on its size, the Form content (FormGroups and FormItems) gets divided into one or more columns as follows:
- * - **S** (< 600px) – 1 column is recommended (default: 1)
- * - **M** (600px - 1022px) – up to 2 columns are recommended (default: 1)
- * - **L** (1023px - 1439px) - up to 3 columns are recommended (default: 2)
- * - **XL** (> 1439px) – up to 6 columns are recommended (default: 3)
+ * - **S** (0 - 599px) – 1 column is recommended (default: 1)
+ * - **M** (600px - 1023px) – up to 2 columns are recommended (default: 1)
+ * - **L** (1024px - 1439px) - up to 3 columns are recommended (default: 2)
+ * - **XL** (>= 1440px) – up to 6 columns are recommended (default: 3)
  *
  * To change the layout, use the `layout` property - f.e. layout="S1 M2 L3 XL6".
  *
@@ -127,23 +129,7 @@ type ItemsInfo = {
  *
  * ### Navigation flow
  *
- * The Form component supports two layout options for keyboard navigation:
- *
- * #### Simple form
- *
- * In this "simple form" layout, each `ui5-form-item` acts as a standalone group
- * with one item, so focus moves horizontally across the grid from one `ui5-form-item` to the next.
- * This layout is ideal for simpler forms and supports custom arrangements, e.g.,
- *
- * ```
- * | 1 | 2 |
- * |   3   |
- * | 4 | 5 |
- * ```
- *
- * #### Complex form
- *
- * In this layout, items are grouped into `ui5-form-group` elements, allowing more complex configurations:
+ * Items are grouped into `ui5-form-group` elements, allowing the following navigation:
  *
  * - **Single-Column Group**: Focus moves vertically down from one item to the next.
  *   ```
@@ -292,6 +278,10 @@ declare class Form extends UI5Element {
      *
      * **Note:** Mixing FormGroups and standalone FormItems (not belonging to a group) is not supported.
      * Either use FormGroups and make sure all FormItems are part of a FormGroup, or use just FormItems without any FormGroups.
+     *
+     * **Note:** As of version 2.23.0 the support for standalone FormItems (not belonging to a group) is deprecated.
+     * We recommend using FormGroups, as they provide better accessibility and layout options.
+     *
      * @public
      */
     items: DefaultSlot<IFormItem>;
@@ -313,27 +303,21 @@ declare class Form extends UI5Element {
     emptySpanXl: number;
     onBeforeRendering(): void;
     onAfterRendering(): void;
-    setColumnLayout(): void;
-    parseFormItemSpan(): void;
-    setFormItemLayout(): void;
-    isValidFormItemLayout(labelSpan: number, emptySpan: number): boolean;
+    parseLayoutConfiguration(): void;
+    getFormItemLayout(breakpoint: Breakpoint): string;
     setFastNavGroup(): void;
     setGroupsColSpan(): void;
-    getGroupsColSpan(cols: number, groups: number, index: number, group: IFormItem): number;
     setItemsState(): void;
     get hasGroupItems(): boolean;
     get hasHeader(): boolean;
     get hasHeaderText(): boolean;
     get hasCustomHeader(): boolean;
     get effectiveAccessibleName(): string | undefined;
-    get effectiveАccessibleNameRef(): string | undefined;
+    get effectiveAccessibleNameRef(): string | undefined;
     get effectiveAccessibleRole(): "form" | "region";
     get groupItemsInfo(): Array<GroupItemsInfo>;
     get itemsInfo(): Array<ItemsInfo>;
     getItemsInfo(items?: Array<IFormItem>): Array<ItemsInfo>;
-    createAdditionalCSSStyleSheet(): void;
-    getAdditionalCSS(step: string, colsNumber: number): string | undefined;
-    getCSSStyleSheet(cssText: string): CSSStyleSheet;
 }
 export default Form;
 export type { IFormItem, };

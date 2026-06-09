@@ -10,6 +10,7 @@ import jsxRender from "@ui5/webcomponents-base/dist/renderer/JsxRenderer.js";
 import customElement from "@ui5/webcomponents-base/dist/decorators/customElement.js";
 import event from "@ui5/webcomponents-base/dist/decorators/event-strict.js";
 import property from "@ui5/webcomponents-base/dist/decorators/property.js";
+import slot from "@ui5/webcomponents-base/dist/decorators/slot-strict.js";
 import { getIconData, getIconDataSync } from "@ui5/webcomponents-base/dist/asset-registries/Icons.js";
 import { getI18nBundle } from "@ui5/webcomponents-base/dist/i18nBundle.js";
 import i18n from "@ui5/webcomponents-base/dist/decorators/i18n.js";
@@ -177,6 +178,16 @@ let Icon = Icon_1 = class Icon extends UI5Element {
         }
     }
     async onBeforeRendering() {
+        if (this.fontIcon.length) {
+            // Font-based icon via slot — skip registry, accessibility is app's responsibility
+            if (!this.accessibleName) {
+                this.effectiveAccessibleName = undefined;
+            }
+            else {
+                this.effectiveAccessibleName = this.accessibleName;
+            }
+            return;
+        }
         const name = this.name;
         if (!name) {
             return;
@@ -226,6 +237,9 @@ let Icon = Icon_1 = class Icon extends UI5Element {
             this.effectiveAccessibleName = undefined;
         }
     }
+    get hasFontIcon() {
+        return this.fontIcon.length > 0;
+    }
     get hasIconTooltip() {
         return this.showTooltip && this.effectiveAccessibleName;
     }
@@ -265,6 +279,9 @@ __decorate([
 __decorate([
     property()
 ], Icon.prototype, "mode", void 0);
+__decorate([
+    slot({ type: HTMLElement })
+], Icon.prototype, "fontIcon", void 0);
 __decorate([
     property({ type: Array, noAttribute: true })
 ], Icon.prototype, "pathData", void 0);

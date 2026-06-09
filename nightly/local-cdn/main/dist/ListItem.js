@@ -9,7 +9,6 @@ import customElement from "@ui5/webcomponents-base/dist/decorators/customElement
 import { isSpace, isEnter, isDelete, isF2, } from "@ui5/webcomponents-base/dist/Keys.js";
 import jsxRenderer from "@ui5/webcomponents-base/dist/renderer/JsxRenderer.js";
 import getActiveElement from "@ui5/webcomponents-base/dist/util/getActiveElement.js";
-import { getFirstFocusableElement } from "@ui5/webcomponents-base/dist/util/FocusableElements.js";
 import { getTabbableElements } from "@ui5/webcomponents-base/dist/util/TabbableElements.js";
 import property from "@ui5/webcomponents-base/dist/decorators/property.js";
 import event from "@ui5/webcomponents-base/dist/decorators/event-strict.js";
@@ -88,6 +87,14 @@ let ListItem = ListItem_1 = class ListItem extends ListItemBase {
         this.highlight = "None";
         this._selectionMode = "None";
         /**
+         * Indicates whether the list item is in edit mode.
+         * When active, Tab cycles through internal focusable elements
+         * instead of navigating to the next list item.
+         * Toggled by F2; also set by the parent List on F7.
+         * @private
+         */
+        this._editMode = false;
+        /**
          * Defines the current media query size.
          * @default "S"
          * @private
@@ -161,6 +168,12 @@ let ListItem = ListItem_1 = class ListItem extends ListItemBase {
         }
     }
     _onfocusout(e) {
+        if (this._editMode) {
+            const relatedTarget = e.relatedTarget;
+            if (!relatedTarget || !(this.contains(relatedTarget) || this.shadowRoot.contains(relatedTarget))) {
+                this._editMode = false;
+            }
+        }
         if (e.target !== this.getFocusDomRef()) {
             return;
         }
@@ -300,6 +313,9 @@ let ListItem = ListItem_1 = class ListItem extends ListItemBase {
         ].filter(Boolean);
         return texts.join(" ");
     }
+    get _ariaDescribedByIds() {
+        return `${this._id}-invisibleText-describedby`;
+    }
     get _accInfo() {
         return {
             role: this.listItemAccessibleRole,
@@ -312,6 +328,7 @@ let ListItem = ListItem_1 = class ListItem extends ListItemBase {
             setsize: this.accessibilityAttributes.ariaSetsize,
             posinset: this.accessibilityAttributes.ariaPosinset,
             tooltip: this.tooltip,
+            ariaDescribedBy: this._ariaDescribedByIds || undefined,
         };
     }
     get _hasHighlightColor() {
@@ -323,37 +340,72 @@ let ListItem = ListItem_1 = class ListItem extends ListItemBase {
     get _listItem() {
         return this.shadowRoot.querySelector("li");
     }
-    async _handleF2() {
+    _handleF2() {
         const focusDomRef = this.getFocusDomRef();
-        const activeElement = getActiveElement();
-        const focusables = this._getFocusableElements().length > 0;
-        if (!focusables) {
-            return;
-        }
-        if (activeElement === focusDomRef) {
-            const firstFocusable = await getFirstFocusableElement(focusDomRef);
-            firstFocusable?.focus();
+        if (getActiveElement() === focusDomRef) {
+            const focusables = this._getFocusableElements();
+            if (!focusables.length) {
+                return;
+            }
+            this._editMode = true;
+            focusables[0].focus();
         }
         else {
+            this._editMode = false;
             focusDomRef.focus();
+        }
+    }
+    _handleTabNext(e) {
+        if (this._editMode) {
+            const focusables = this._getFocusableElements();
+            const currentIndex = this._indexOfActiveElement(focusables);
+            const nextIndex = currentIndex + 1;
+            if (currentIndex !== -1 && nextIndex < focusables.length) {
+                e.preventDefault();
+                focusables[nextIndex].focus();
+            }
+            else if (!this.fireDecoratorEvent("forward-after")) {
+                e.preventDefault();
+            }
+            return;
+        }
+        if (!this.fireDecoratorEvent("forward-after")) {
+            e.preventDefault();
+        }
+    }
+    _handleTabPrevious(e) {
+        if (this._editMode) {
+            const focusables = this._getFocusableElements();
+            const currentIndex = this._indexOfActiveElement(focusables);
+            if (currentIndex > 0) {
+                e.preventDefault();
+                focusables[currentIndex - 1].focus();
+            }
+            else if (!this.fireDecoratorEvent("forward-before")) {
+                e.preventDefault();
+            }
+            return;
+        }
+        if (!this.fireDecoratorEvent("forward-before")) {
+            e.preventDefault();
         }
     }
     _getFocusableElements() {
         const focusDomRef = this.getFocusDomRef();
         return getTabbableElements(focusDomRef);
     }
-    _getFocusedElementIndex() {
-        const focusables = this._getFocusableElements();
+    _indexOfActiveElement(focusables) {
         const activeElement = getActiveElement();
-        return focusables.indexOf(activeElement);
+        return focusables.findIndex(el => el === activeElement || (el.shadowRoot !== null && el.shadowRoot.contains(activeElement)));
+    }
+    _getFocusedElementIndex() {
+        return this._indexOfActiveElement(this._getFocusableElements());
     }
     _hasFocusableElements() {
         return this._getFocusableElements().length > 0;
     }
     _isFocusOnInternalElement() {
-        const focusables = this._getFocusableElements();
-        const currentElementIndex = focusables.indexOf(getActiveElement());
-        return currentElementIndex !== -1;
+        return this._indexOfActiveElement(this._getFocusableElements()) !== -1;
     }
     _focusInternalElement(targetIndex) {
         const focusables = this._getFocusableElements();

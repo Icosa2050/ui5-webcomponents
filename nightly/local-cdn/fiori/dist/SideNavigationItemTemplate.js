@@ -11,16 +11,18 @@ export default function SideNavigationItemTemplate() {
 }
 function ItemTemplate() {
     const EffectiveTag = this._effectiveTag;
-    return (_jsxs(_Fragment, { children: [_jsxs(EffectiveTag, { id: this._id, "data-sap-focus-ref": true, class: `ui5-sn-item ui5-sn-item-level1 ${this._classes}`, role: this.ariaRole, onKeyDown: this._onkeydown, onKeyUp: this._onkeyup, onClick: this._onclick, onFocusIn: this._onfocusin, tabIndex: this.effectiveTabIndex, "aria-current": this._ariaCurrent, "aria-selected": this._ariaSelected, title: this._tooltip, "aria-disabled": this.effectiveDisabled, href: this._href, target: this._target, "aria-haspopup": this._ariaHasPopup, onFocusOut: this._onfocusout, onMouseEnter: this._onmouseenter, onMouseLeave: this._onmouseleave, "aria-checked": this._ariaChecked, "aria-owns": this._groupId, "aria-label": this._ariaLabel, "aria-expanded": this._expanded, "aria-describedby": this._describedBy, children: [this.sideNavCollapsed ?
+    return (_jsxs(_Fragment, { children: [_jsxs(EffectiveTag, { id: this._id, "data-sap-focus-ref": true, class: `ui5-sn-item ui5-sn-item-level1 ${this._classes}`, role: this.ariaRole, onKeyDown: this._onkeydown, onKeyUp: this._onkeyup, onClick: this._onclick, onFocusIn: this._onfocusin, tabIndex: this.effectiveTabIndex, "aria-current": this._ariaCurrent, "aria-selected": this._ariaSelected, title: this._tooltip, "aria-disabled": this.effectiveDisabled, href: this._href, target: this._target, "aria-haspopup": this._ariaHasPopup, onFocusOut: this._onfocusout, onMouseEnter: this._onmouseenter, onMouseLeave: this._onmouseleave, "aria-checked": this._ariaChecked, "aria-owns": this._groupId, "aria-label": this._ariaLabel, "aria-expanded": this._expanded, "aria-labelledby": this._textId, "aria-describedby": this._describedBy, children: [this.sideNavCollapsed ?
                         _jsx(Icon, { class: "ui5-sn-item-icon", name: this.icon })
                         :
-                            this.icon && _jsx(Icon, { class: "ui5-sn-item-icon", name: this.icon }), _jsx("div", { class: "ui5-sn-item-text", children: this.text }), this.sideNavCollapsed ?
+                            this.icon && _jsx(Icon, { class: "ui5-sn-item-icon", name: this.icon }), _jsx("div", { class: "ui5-sn-item-text", id: this._textId, children: this.text }), this.hasTag &&
+                        _jsx("div", { id: this._tagId, class: "ui5-sn-item-tag-slot", children: _jsx("slot", { name: "tag" }) }), this.sideNavCollapsed ?
                         !!this.items.length &&
                             _jsx(Icon, { class: "ui5-sn-item-toggle-icon", name: navRightArrow })
                         :
                             !!this.items.length &&
                                 _jsx(Icon, { class: "ui5-sn-item-toggle-icon", name: this.expanded ? navDownArrow : navRightArrow, accessibleName: this._arrowTooltip, showTooltip: true, onClick: this._onToggleClick }), this.isExternalLink &&
                         _jsx(Icon, { class: "ui5-sn-item-external-link-icon", name: arrowRight })] }), !this.sideNavCollapsed && !!this.items.length &&
-                _jsx("ul", { id: this._groupId, class: "ui5-sn-item-ul", "aria-label": this.accessibleName || this.text, role: "group", children: _jsx("slot", {}) })] }));
+                _jsx("ul", { id: this._groupId, class: "ui5-sn-item-ul", "aria-label": this.accessibleName || this.text, role: "group", children: _jsx("slot", {}) }), this._selectableItemDescriptionText &&
+                _jsx("span", { id: this._selectableItemDescriptionId, class: "ui5-hidden-text", children: this._selectableItemDescriptionText })] }));
 }
 //# sourceMappingURL=SideNavigationItemTemplate.js.map

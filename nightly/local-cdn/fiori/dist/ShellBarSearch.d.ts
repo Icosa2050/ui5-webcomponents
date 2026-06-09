@@ -16,6 +16,7 @@ declare class ShellBarSearch extends Search {
      */
     autoOpen: boolean;
     _handleSearchIconPress(): void;
+    _handleEnter(): void;
     _onFocusOutSearch(e: FocusEvent): void;
     _handleInput(e: InputEvent): void;
     get _effectiveIconTooltip(): string;

@@ -176,7 +176,9 @@ let ListItemBase = class ListItemBase extends UI5Element {
     _handleTabPrevious(e) {
         const target = e.target;
         if (this.shouldForwardTabBefore(target)) {
-            this.fireDecoratorEvent("forward-before");
+            if (!this.fireDecoratorEvent("forward-before")) {
+                e.preventDefault();
+            }
         }
     }
     /**
@@ -257,9 +259,8 @@ ListItemBase = __decorate([
      *
      * **Note:** The event will not be fired if the `disabled` property is set to `true`.
      *
-     * @since 2.22.0
+     * @since 2.23.0
      * @public
-     * @param {ListItemBase} item The activated item.
      * @param {Event} originalEvent The original event from the user interaction.
      */
     ,
@@ -281,6 +282,7 @@ ListItemBase = __decorate([
     }),
     event("forward-before", {
         bubbles: true,
+        cancelable: true,
     })
 ], ListItemBase);
 export default ListItemBase;

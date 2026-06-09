@@ -6,8 +6,10 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 import customElement from "@ui5/webcomponents-base/dist/decorators/customElement.js";
 import jsxRender from "@ui5/webcomponents-base/dist/renderer/JsxRenderer.js";
+import slot from "@ui5/webcomponents-base/dist/decorators/slot-strict.js";
 import SideNavigationSelectableItemBase from "./SideNavigationSelectableItemBase.js";
 import SideNavigationSubItemTemplate from "./SideNavigationSubItemTemplate.js";
+import "@ui5/webcomponents/dist/Tag.js";
 // Styles
 import SideNavigationSubItemCss from "./generated/themes/SideNavigationSubItem.css.js";
 /**
@@ -28,6 +30,15 @@ import SideNavigationSubItemCss from "./generated/themes/SideNavigationSubItem.c
  * @since 1.0.0-rc.8
  */
 let SideNavigationSubItem = class SideNavigationSubItem extends SideNavigationSelectableItemBase {
+    get hasTag() {
+        return !!this.tag.length;
+    }
+    get _textId() {
+        return `${this._id}-text`;
+    }
+    get _describedBy() {
+        return this.hasTag ? this._tagId : undefined;
+    }
     _onkeydown(e) {
         super._onkeydown(e);
     }
@@ -51,6 +62,9 @@ let SideNavigationSubItem = class SideNavigationSubItem extends SideNavigationSe
         return classes;
     }
 };
+__decorate([
+    slot({ type: HTMLElement })
+], SideNavigationSubItem.prototype, "tag", void 0);
 SideNavigationSubItem = __decorate([
     customElement({
         tag: "ui5-side-navigation-sub-item",

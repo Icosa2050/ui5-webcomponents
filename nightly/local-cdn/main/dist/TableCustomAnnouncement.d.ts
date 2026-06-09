@@ -20,5 +20,6 @@ declare class TableCustomAnnouncement extends TableExtension {
     _handleTableHeaderRowFocusin(headerRow: TableHeaderRow): void;
     _handleTableRowFocusin(row: TableRow): void;
     _handleTableCellFocusin(cell: TableCell): void;
+    private _findGroupRow;
 }
 export default TableCustomAnnouncement;

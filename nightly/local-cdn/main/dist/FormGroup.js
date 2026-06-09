@@ -96,6 +96,9 @@ __decorate([
 ], FormGroup.prototype, "columnSpan", void 0);
 __decorate([
     property()
+], FormGroup.prototype, "colSpan", void 0);
+__decorate([
+    property()
 ], FormGroup.prototype, "accessibleName", void 0);
 __decorate([
     property()

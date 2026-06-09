@@ -81,7 +81,7 @@ let RangeSlider = RangeSlider_1 = class RangeSlider extends SliderBase {
      */
     set startValue(value) {
         this._startValue = value;
-        this.tooltipStartValue = value?.toString() ?? "";
+        this.tooltipStartValue = this._getCustomLabel(value) || (value?.toString() ?? "");
     }
     get startValue() {
         return this._startValue;
@@ -95,7 +95,7 @@ let RangeSlider = RangeSlider_1 = class RangeSlider extends SliderBase {
      */
     set endValue(value) {
         this._endValue = value;
-        this.tooltipEndValue = value?.toString() ?? "";
+        this.tooltipEndValue = this._getCustomLabel(value) || (value?.toString() ?? "");
     }
     get endValue() {
         return this._endValue;
@@ -151,6 +151,30 @@ let RangeSlider = RangeSlider_1 = class RangeSlider extends SliderBase {
     }
     get _ariaDisabled() {
         return this.disabled || undefined;
+    }
+    get _isStartTooltipVisible() {
+        if (!this._tooltipsOpen) {
+            return false;
+        }
+        if (!this._hasCustomTickmarks) {
+            return true;
+        }
+        return this._getCustomLabel(this.startValue) !== undefined;
+    }
+    get _isEndTooltipVisible() {
+        if (!this._tooltipsOpen) {
+            return false;
+        }
+        if (!this._hasCustomTickmarks) {
+            return true;
+        }
+        return this._getCustomLabel(this.endValue) !== undefined;
+    }
+    get _ariaValueTextStart() {
+        return this._getCustomLabel(this.startValue);
+    }
+    get _ariaValueTextEnd() {
+        return this._getCustomLabel(this.endValue);
     }
     get _ariaLabelledByText() {
         return RangeSlider_1.i18nBundle.getText(RANGE_SLIDER_ARIA_DESCRIPTION);
@@ -323,8 +347,8 @@ let RangeSlider = RangeSlider_1 = class RangeSlider extends SliderBase {
             const newEndValue = Number(ctor.clipValue(newValueOffset + this.endValue, min, max).toFixed(stepPrecision));
             this.update(affectedValue, newStartValue, newEndValue);
         }
-        this.tooltipStartValue = this.startValue.toString();
-        this.tooltipEndValue = this.endValue.toString();
+        this.tooltipStartValue = this._getCustomLabel(this.startValue) || this.startValue.toString();
+        this.tooltipEndValue = this._getCustomLabel(this.endValue) || this.endValue.toString();
     }
     /**
      * Determines affected value (start/end) depending on the currently
@@ -467,8 +491,8 @@ let RangeSlider = RangeSlider_1 = class RangeSlider extends SliderBase {
         }
         // Updates UI and state when dragging of the whole selected range
         this._updateValueOnRangeDrag(e);
-        this.tooltipStartValue = this.startValue.toString();
-        this.tooltipEndValue = this.endValue.toString();
+        this.tooltipStartValue = this._getCustomLabel(this.startValue) || this.startValue.toString();
+        this.tooltipEndValue = this._getCustomLabel(this.endValue) || this.endValue.toString();
     }
     /**
      * Updates UI and state when dragging a single Range Slider handle
@@ -787,8 +811,8 @@ let RangeSlider = RangeSlider_1 = class RangeSlider extends SliderBase {
         if (!this.startValue || !this.endValue) {
             return;
         }
-        this.tooltipStartValue = this.startValue.toString();
-        this.tooltipEndValue = this.endValue.toString();
+        this.tooltipStartValue = this._getCustomLabel(this.startValue) || this.startValue.toString();
+        this.tooltipEndValue = this._getCustomLabel(this.endValue) || this.endValue.toString();
     }
     _onTooltipInput(e) {
         const tooltip = e.target;

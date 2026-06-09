@@ -142,6 +142,9 @@ let SideNavigationSelectableItemBase = class SideNavigationSelectableItemBase ex
         }
         return this.selected;
     }
+    get _tagId() {
+        return `${this._id}-tag`;
+    }
     _onkeydown(e) {
         const isRTL = this.effectiveDir === "rtl";
         if (isSpace(e) || isRight(e) || isLeft(e)) {

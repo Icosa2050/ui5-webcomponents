@@ -8,7 +8,7 @@ export default function PanelTemplate() {
                     _jsx("div", { class: {
                             "ui5-panel-heading-wrapper": true,
                             "ui5-panel-heading-wrapper-sticky": this.stickyHeader,
-                        }, role: this.headingWrapperRole, "aria-level": this.headingWrapperAriaLevel, children: _jsxs("div", { onClick: this._headerClick, onKeyDown: this._headerKeyDown, onKeyUp: this._headerKeyUp, onTouchStart: this._isMobile, onFocusOut: this._headerFocusOut, class: "ui5-panel-header", tabindex: this.headerTabIndex, role: this.accInfo.role, "aria-expanded": this.accInfo.ariaExpanded, "aria-controls": this.accInfo.ariaControls, "aria-labelledby": this.accInfo.ariaLabelledby, part: "header", children: [!this.fixed &&
+                        }, role: this.headingWrapperRole, "aria-level": this.headingWrapperAriaLevel, part: "header-wrapper", children: _jsxs("div", { onClick: this._headerClick, onKeyDown: this._headerKeyDown, onKeyUp: this._headerKeyUp, onTouchStart: this._isMobile, onFocusOut: this._headerFocusOut, class: "ui5-panel-header", tabindex: this.headerTabIndex, role: this.accInfo.role, "aria-expanded": this.accInfo.ariaExpanded, "aria-controls": this.accInfo.ariaControls, "aria-labelledby": this.accInfo.ariaLabelledby, part: "header", children: [!this.fixed &&
                                     _jsx("div", { class: "ui5-panel-header-button-root", children: this._hasHeader ?
                                             _jsx(Button, { design: "Transparent", class: "ui5-panel-header-button ui5-panel-header-button-with-icon", onClick: this._toggleButtonClick, accessibilityAttributes: this.accInfo.button.accessibilityAttributes, tooltip: this.accInfo.button.title, accessibleName: this.accInfo.button.ariaLabelButton, children: _jsx("div", { class: "ui5-panel-header-icon-wrapper", children: _jsx(Icon, { class: {
                                                             "ui5-panel-header-icon": true,
@@ -22,11 +22,8 @@ export default function PanelTemplate() {
                                                     }, name: slimArrowRight, showTooltip: true, accessibleName: this.toggleButtonTitle }) }), this._hasHeader ?
                                     _jsx("slot", { name: "header" })
                                     : // else
-                                        _jsx("div", { id: `${this._id}-header-title`, class: "ui5-panel-header-title", children: this.headerText })] }) }), _jsx("div", { class: {
-                        "ui5-panel-content-wrapper": true,
-                        "ui5-panel-content-focusable": this._contentFocusable,
-                    }, style: {
+                                        _jsx("div", { id: `${this._id}-header-title`, class: "ui5-panel-header-title", children: this.headerText })] }) }), _jsx("div", { class: "ui5-panel-content", id: `${this._id}-content`, tabindex: -1, style: {
                         display: this._contentExpanded ? "block" : "none",
-                    }, children: _jsx("div", { class: "ui5-panel-content", id: `${this._id}-content`, tabindex: this._contentTabIndex, part: "content", children: _jsx("slot", {}) }) })] }) }));
+                    }, part: "content", children: _jsx("slot", {}) })] }) }));
 }
 //# sourceMappingURL=PanelTemplate.js.map

@@ -2,7 +2,7 @@ export default `:root {
     color-scheme: light dark;
     --_ui5-light-scheme: var(--_ui5-f2d95f8);
     --_ui5-dark-scheme:  ;
-    --sapThemeMetaData-Base-baseLib: {"Path": "Base.baseLib.sap_horizon_hcw.css_variables","PathPattern": "/%frameworkId%/%libId%/%themeId%/%fileId%.css","Extends": ["sap_horizon_hcb","sap_horizon","baseTheme"],"Tags": ["Fiori_3","HighContrast","LightColorScheme"],"FallbackThemeId": "sap_fiori_3_hcw","Engine":{"Name": "theming-engine","Version": "17.0.8"},"Version":{"Build": "11.35.0.20260401080514","Source": "11.35.0"}};
+    --sapThemeMetaData-Base-baseLib: {"Path": "Base.baseLib.sap_horizon_hcw.css_variables","PathPattern": "/%frameworkId%/%libId%/%themeId%/%fileId%.css","Extends": ["sap_horizon_hcb","sap_horizon","baseTheme"],"Tags": ["Fiori_3","HighContrast","LightColorScheme"],"FallbackThemeId": "sap_fiori_3_hcw","Engine":{"Name": "theming-engine","Version": "17.0.18"},"Version":{"Build": "11.36.3.20260526103300","Source": "11.36.3"}};
     --sapBrandColor: light-dark(#e97624, #795100);
     --sapHighlightColor: light-dark(#e97624, #795100);
     --sapBaseColor: light-dark(#fff, #000);
@@ -189,7 +189,7 @@ export default `:root {
     --sapFontHeader6Size: .875rem;
     --sapLink_TextDecoration: underline;
     --sapLink_Hover_Color: light-dark(#000, #fff);
-    --sapLink_Hover_TextDecoration: none;
+    --sapLink_Hover_TextDecoration: underline;
     --sapLink_Active_Color: light-dark(#000, #fff);
     --sapLink_Active_TextDecoration: underline;
     --sapLink_Visited_Color: light-dark(#000, #fff);
@@ -229,7 +229,7 @@ export default `:root {
     --sapShell_Assistant_ForegroundColor: light-dark(#000, #fff);
     --sapShell_SubBrand_TextColor: light-dark(#000, #fff);
     --sapShell_HeroBanner_Background: light-dark(#d1efff, #223548);
-    --sapShell_HeroBanner_BackgroundImage: linear-gradient(135deg, #0000 45%, #00000073 75%);
+    --sapShell_HeroBanner_BackgroundImage: linear-gradient(135deg, transparent 45%, rgba(0,0,0,.45) 75%);
     --sapShell_HeroBanner_TextColor: light-dark(#000, #fff);
     --sapShell_Category_1_Background: light-dark(#fff, #000);
     --sapShell_Category_1_BorderColor: light-dark(#004ccb, #6bd3ff);
@@ -1481,9 +1481,9 @@ export default `:root {
     --sapSapThemeId: var(--_ui5-light-scheme, sap_horizon_hcw) var(--_ui5-dark-scheme, sap_horizon_hcb);
     --sapHighlightTextColor: light-dark(#000, #fff);
     --sapButton_Emphasized_FontWeight: bold;
-    --sapShell_BackgroundGradient: var(--_ui5-light-scheme, linear-gradient(to bottom, #fff, #fff)
-) var(--_ui5-dark-scheme, linear-gradient(to bottom, #000, #000)
-)
+    --sapShell_BackgroundGradient: var(--_ui5-light-scheme, linear-gradient(to bottom, #fff, #fff)) var(--_ui5-dark-scheme, linear-gradient(to bottom, #000, #000));
+    --sapAt: @
+
 }
 @media (prefers-color-scheme: dark) {
     :root {

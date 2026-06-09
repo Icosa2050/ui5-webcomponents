@@ -51,10 +51,22 @@ declare class FormGroup extends UI5Element implements IFormItem {
      * Defines column span of the component,
      * e.g how many columns the group should span to.
      *
+     * **Note:** If this property is set, it has higher priority than `colSpan` and `colSpan` will be ignored.
+     *
      * @default undefined
      * @public
      */
     columnSpan?: number;
+    /**
+     * Defines the number of columns to distribute the form content by breakpoint (S1 M2 L3 XL4 for example).
+     *
+     * **Note:** This property is ignored if `columnSpan` is set, as it is expected that the column span is defined.
+     *
+     * @default undefined
+     * @since 2.23.0
+     * @public
+     */
+    colSpan?: string;
     /**
      * Defines the accessible ARIA name of the component.
      * @default undefined

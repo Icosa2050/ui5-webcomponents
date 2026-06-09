@@ -167,6 +167,7 @@ declare class TreeItemBase extends ListItem {
         ariaChecked?: boolean;
         tooltip?: string;
         ariaKeyShortcuts?: string;
+        ariaDescribedBy?: string;
     };
     /**
      * Used to duck-type TreeItem elements without using instanceof

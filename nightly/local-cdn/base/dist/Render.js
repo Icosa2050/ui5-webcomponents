@@ -21,13 +21,25 @@ const renderDeferred = async (webComponent) => {
     await scheduleRenderTask();
 };
 /**
+ * Register all web components attached to the DOM
+ */
+const registerElement = (webComponent) => {
+    registeredElements.add(webComponent);
+};
+/**
+ * Unregister all web components detached from the DOM
+ */
+const unregisterElement = (webComponent) => {
+    registeredElements.delete(webComponent);
+};
+/**
  * Renders a component synchronously and adds it to the registry of rendered components
  *
  * @param webComponent
  */
 const renderImmediately = (webComponent) => {
     eventProvider.fireEvent("beforeComponentRender", webComponent);
-    registeredElements.add(webComponent);
+    registerElement(webComponent);
     webComponent._render();
 };
 /**
@@ -37,7 +49,7 @@ const renderImmediately = (webComponent) => {
  */
 const cancelRender = (webComponent) => {
     invalidatedWebComponents.remove(webComponent);
-    registeredElements.delete(webComponent);
+    unregisterElement(webComponent);
 };
 /**
  * Schedules a rendering task, if not scheduled already
@@ -139,5 +151,5 @@ const attachBeforeComponentRender = (listener) => {
 const detachBeforeComponentRender = (listener) => {
     eventProvider.detachEvent("beforeComponentRender", listener);
 };
-export { renderDeferred, renderImmediately, cancelRender, renderFinished, reRenderAllUI5Elements, attachBeforeComponentRender, detachBeforeComponentRender, };
+export { renderDeferred, renderImmediately, cancelRender, registerElement, unregisterElement, renderFinished, reRenderAllUI5Elements, attachBeforeComponentRender, detachBeforeComponentRender, };
 //# sourceMappingURL=Render.js.map

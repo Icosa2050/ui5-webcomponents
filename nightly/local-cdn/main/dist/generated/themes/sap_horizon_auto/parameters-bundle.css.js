@@ -191,7 +191,7 @@ export default `:host {
     --_ui5_checkbox_transition: unset;
     --_ui5_checkbox_disabled_opacity: var(--sapContent_DisabledOpacity);
     --_ui5_checkbox_border_radius: 0;
-    --_ui5_checkbox_hover_background: var(--sapContent_Selected_Hover_Background);
+    --_ui5_checkbox_hover_background: var(--sapField_Selector_Hover_Background);
     --_ui5_checkbox_active_background: var(--sapContent_Selected_Hover_Background);
     --_ui5_checkbox_checkmark_warning_color: var(--sapField_WarningColor);
     --_ui5_checkbox_inner_warning_color: var(--sapField_WarningColor);
@@ -212,10 +212,10 @@ export default `:host {
     --_ui5_checkbox_inner_error_border: var(--sapField_InvalidBorderWidth) solid var(--sapField_InvalidColor);
     --_ui5_checkbox_inner_warning_border: var(--sapField_WarningBorderWidth) solid var(--sapField_WarningColor);
     --_ui5_checkbox_inner_information_border: var(--sapField_InformationBorderWidth) solid var(--sapField_InformationColor);
-    --_ui5_checkbox_inner_warning_background_hover: var(--sapField_Hover_Background);
-    --_ui5_checkbox_inner_error_background_hover: var(--sapField_Hover_Background);
-    --_ui5_checkbox_inner_success_background_hover: var(--sapField_Hover_Background);
-    --_ui5_checkbox_inner_information_background_hover: var(--sapField_Hover_Background);
+    --_ui5_checkbox_inner_warning_background_hover: var(--sapField_Selector_Hover_WarningBackground);
+    --_ui5_checkbox_inner_error_background_hover: var(--sapField_Selector_Hover_InvalidBackground);
+    --_ui5_checkbox_inner_success_background_hover: var(--sapField_Selector_Hover_SuccessBackground);
+    --_ui5_checkbox_inner_information_background_hover: var(--sapField_Selector_Hover_InformationBackground);
     --_ui5_checkbox_inner_success_border: var(--sapField_SuccessBorderWidth) solid var(--sapField_SuccessColor);
     --_ui5_checkbox_inner_readonly_border: var(--sapElement_BorderWidth) var(--sapField_ReadOnly_BorderColor) dashed;
     --_ui5_checkbox_inner_background: var(--sapField_Background);
@@ -441,8 +441,8 @@ export default `:host {
     --_ui5_input_icon_padding: var(--_ui5-compact-size, .3125rem .5rem .25rem .5rem)  var(--_ui5-cozy-size, .625rem .625rem .5625rem .625rem);
     --_ui5_input_icon_color: var(--sapField_TextColor);
     --_ui5_input_icon_pressed_color: var(--sapButton_Active_TextColor);
-    --_ui5_input_icon_pressed_bg: var(--sapField_Hover_Background);
-    --_ui5_input_icon_hover_bg: var(--sapField_Focus_Background);
+    --_ui5_input_icon_pressed_bg: transparent;
+    --_ui5_input_icon_hover_bg: transparent;
     --_ui5_input_icon_border_radius: var(--sapField_BorderCornerRadius);
     --_ui5_input_icon_box_shadow: var(--sapField_Hover_Shadow);
     --_ui5_input_icon_border: none;
@@ -528,7 +528,6 @@ export default `:host {
     --_ui5_panel_focus_offset: 0px;
     --_ui5_panel_focus_bottom_offset: -1px;
     --_ui5_panel_content_padding: .625rem 1rem;
-    --_ui5_panel_content_focus_offset: -.1875rem;
     --_ui5_panel_header_background_color: var(--sapGroup_TitleBackground);
     --_ui5_popover_background: var(--sapGroup_ContentBackground);
     --_ui5_popover_box_shadow: var(--sapContent_Shadow2);
@@ -643,8 +642,8 @@ export default `:host {
     --_ui5_radio_button_outer_ring_hover_color: var(--sapField_Hover_BorderColor);
     --_ui5_radio_button_outer_ring_active_color: var(--sapField_Hover_BorderColor);
     --_ui5_radio_button_outer_ring_checked_hover_color: var(--sapField_Hover_BorderColor);
-    --_ui5_radio_button_outer_ring_padding: var(--_ui5-compact-size, 0 .5rem)  var(--_ui5-cozy-size, 0 .6875rem);
-    --_ui5_radio_button_outer_ring_padding_with_label: var(--_ui5-compact-size, 0 .5rem)  var(--_ui5-cozy-size, 0 .6875rem);
+    --_ui5_radio_button_outer_ring_padding: var(--_ui5-compact-size, .5rem)  var(--_ui5-cozy-size, .6875rem);
+    --_ui5_radio_button_outer_ring_padding_with_label: var(--_ui5-compact-size, .5rem)  var(--_ui5-cozy-size, .6875rem);
     --_ui5_radio_button_border_radius: .5rem;
     --_ui5_radio_button_border: none;
     --_ui5_radio_button_focus_outline: block;
@@ -757,8 +756,9 @@ export default `:host {
     --_ui5_select_hover_icon_left_border: none;
     --_ui5_select_label_color: var(--sapField_TextColor);
     --_ui5_select_icon_width: var(--_ui5-compact-size, 2rem)  var(--_ui5-cozy-size, 2.25rem);
-    --_ui5_select_icon_wrapper_height: calc(100% - .0625rem) ;
-    --_ui5_select_icon_wrapper_state_height: calc(100% - .125rem) ;
+    --_ui5_select_icon_wrapper_height: 100%;
+    --_ui5_select_bottom_border_gradient: linear-gradient(var(--sapField_BorderColor), var(--sapField_BorderColor)) bottom / 100% var(--sapField_BorderWidth) no-repeat;
+    --_ui5_select_icon_wrapper_state_height: 100%;
     --_ui5_split_button_focused_border: .125rem solid var(--sapContent_FocusColor);
     --_ui5_split_button_focused_border_radius: .375rem;
     --_ui5_split_button_middle_separator_left: -.0625rem;
@@ -1164,10 +1164,9 @@ export default `:host {
     --_ui5_tc_item_icon_circle_size: var(--_ui5-compact-size, 2rem)  var(--_ui5-cozy-size, 2.75rem);
     --_ui5_tc_item_icon_size: var(--_ui5-compact-size, 1rem)  var(--_ui5-cozy-size, 1.25rem);
     --_ui5_tc_item_add_text_margin_top: var(--_ui5-compact-size, .3125rem)  var(--_ui5-cozy-size, .375rem);
-    --_ui5_radio_button_height: var(--_ui5-compact-size, 2rem)  var(--_ui5-cozy-size, 2.75rem);
-    --_ui5_radio_button_label_side_padding: var(--_ui5-compact-size, .5rem)  var(--_ui5-cozy-size, .875rem);
+    --_ui5_radio_button_label_side_padding: var(--_ui5-compact-size, .5rem)  var(--_ui5-cozy-size, .6875rem);
     --_ui5_radio_button_inner_size: var(--_ui5-compact-size, 2rem)  var(--_ui5-cozy-size, 2.75rem);
-    --_ui5_radio_button_svg_size: var(--_ui5-compact-size, 1rem)  var(--_ui5-cozy-size, 1.375rem);
+    --_ui5_radio_button_svg_size: var(--_ui5-compact-size, 1.1429em)  var(--_ui5-cozy-size, 1.5714em);
     --_ui5-responsive_popover_header_height: var(--_ui5-compact-size, 2.5rem)  var(--_ui5-cozy-size, 2.75rem);
     --_ui5-tree-indent-step: var(--_ui5-compact-size, .5rem)  var(--_ui5-cozy-size, 1.5rem);
     --_ui5-tree-toggle-box-width: var(--_ui5-compact-size, 2rem)  var(--_ui5-cozy-size, 2.75rem);

@@ -2,7 +2,7 @@ export default `:root {
     color-scheme: light dark;
     --_ui5-light-scheme: var(--_ui5-f2d95f8);
     --_ui5-dark-scheme:  ;
-    --sapThemeMetaData-Base-baseLib: {"Path": "Base.baseLib.sap_horizon.css_variables","PathPattern": "/%frameworkId%/%libId%/%themeId%/%fileId%.css","Extends": ["baseTheme"],"Tags": ["Fiori_3","LightColorScheme"],"FallbackThemeId": "sap_fiori_3","Engine":{"Name": "theming-engine","Version": "17.0.8"},"Version":{"Build": "11.35.0.20260401080514","Source": "11.35.0"}};
+    --sapThemeMetaData-Base-baseLib: {"Path": "Base.baseLib.sap_horizon.css_variables","PathPattern": "/%frameworkId%/%libId%/%themeId%/%fileId%.css","Extends": ["baseTheme"],"Tags": ["Fiori_3","LightColorScheme"],"FallbackThemeId": "sap_fiori_3","Engine":{"Name": "theming-engine","Version": "17.0.18"},"Version":{"Build": "11.36.3.20260526103300","Source": "11.36.3"}};
     --sapBrandColor: #0070f2;
     --sapHighlightColor: light-dark(#0064d9, #4db1ff);
     --sapBaseColor: light-dark(#fff, #1d232a);
@@ -229,7 +229,7 @@ export default `:root {
     --sapShell_Assistant_ForegroundColor: light-dark(#5d36ff, #8e73ff);
     --sapShell_SubBrand_TextColor: light-dark(#003e87, #a5cfff);
     --sapShell_HeroBanner_Background: light-dark(#0070f2, #0057d2);
-    --sapShell_HeroBanner_BackgroundImage: linear-gradient(135deg, #0000 45%, #00000073 75%);
+    --sapShell_HeroBanner_BackgroundImage: linear-gradient(135deg, transparent 45%, rgba(0,0,0,.45) 75%);
     --sapShell_HeroBanner_TextColor: light-dark(#fff, #f5f6f7);
     --sapShell_Category_1_Background: light-dark(#0057d2, #89d1ff);
     --sapShell_Category_1_BorderColor: light-dark(#0057d2, #89d1ff);
@@ -1481,9 +1481,9 @@ export default `:root {
     --sapSapThemeId: var(--_ui5-light-scheme, sap_horizon) var(--_ui5-dark-scheme, sap_horizon_dark);
     --sapHighlightTextColor: light-dark(#fff, #1d232a);
     --sapButton_Emphasized_FontWeight: bold;
-    --sapShell_BackgroundGradient: var(--_ui5-light-scheme, linear-gradient(to bottom, #eff1f2, #eff1f2)
-) var(--_ui5-dark-scheme, linear-gradient(to bottom, #12171c, #12171c)
-)
+    --sapShell_BackgroundGradient: var(--_ui5-light-scheme, linear-gradient(to bottom, #eff1f2, #eff1f2)) var(--_ui5-dark-scheme, linear-gradient(to bottom, #12171c, #12171c));
+    --sapAt: @
+
 }
 @media (prefers-color-scheme: dark) {
     :root {

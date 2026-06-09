@@ -61,6 +61,9 @@ class SliderBase extends UI5Element {
          * **Note:** The step and tickmarks properties must be enabled.
          * Example - if the step value is set to 2 and the label interval is also specified to 2 - then every second
          * tickmark will be labelled, which means every 4th value number.
+         *
+         * **Note:** This property is ignored when the `tickmarks` property is used.
+         * In that case every custom tickmark is labelled with its own `label`.
          * @default 0
          * @public
          */
@@ -73,6 +76,24 @@ class SliderBase extends UI5Element {
          * @public
          */
         this.showTickmarks = false;
+        /**
+         * Defines custom tickmarks with labels on the slider scale.
+         * Each tickmark object has a numeric `value` and an optional `label` string.
+         * Tickmarks are purely visual — they display labeled markers at specific positions
+         * but do not affect the slider's movement behavior. The slider still moves
+         * according to `min`, `max`, and `step`.
+         *
+         * When the current value matches a tickmark value, the tickmark's label
+         * is shown in the tooltip and announced via `aria-valuetext`.
+         *
+         * **Note:** When `tickmarks` is provided, the scale is automatically shown
+         * (equivalent to `showTickmarks`), and `labelInterval` is ignored - every
+         * custom tickmark is rendered with its own `label`.
+         * @default []
+         * @public
+         * @since 2.23.0
+         */
+        this.tickmarks = [];
         /**
          * Enables handle tooltip displaying the current value.
          * @default false
@@ -434,6 +455,18 @@ class SliderBase extends UI5Element {
         }
         return Math.max(0, (match[1] ? match[1].length : 0) - (match[2] ? Number(match[2]) : 0));
     }
+    get _hasCustomTickmarks() {
+        return this.tickmarks.length > 0;
+    }
+    /**
+     * Returns the label of the custom tickmark matching the given value, or `undefined` if none matches.
+     * @private
+     */
+    _getCustomLabel(value) {
+        const precision = SliderBase_1._getDecimalPrecisionOfNumber(this.step);
+        const target = value.toFixed(precision);
+        return this.tickmarks.find(t => t.value.toFixed(precision) === target)?.label;
+    }
     /**
      * In order to always keep the visual UI representation and the internal
      * state in sync, the component has a 'state storage' that is updated when the
@@ -630,6 +663,9 @@ __decorate([
 __decorate([
     property({ type: Boolean })
 ], SliderBase.prototype, "showTickmarks", void 0);
+__decorate([
+    property({ type: Array })
+], SliderBase.prototype, "tickmarks", void 0);
 __decorate([
     property({ type: Boolean })
 ], SliderBase.prototype, "showTooltip", void 0);

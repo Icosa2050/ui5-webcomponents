@@ -68,6 +68,7 @@ let ExpandableText = ExpandableText_1 = class ExpandableText extends UI5Element 
          */
         this.emptyIndicatorMode = "Off";
         this._expanded = false;
+        this._shouldScrollToToggle = false;
     }
     getFocusDomRef() {
         if (this._usePopover) {
@@ -121,8 +122,18 @@ let ExpandableText = ExpandableText_1 = class ExpandableText extends UI5Element 
             this._expanded = false;
         }
     }
+    onAfterRendering() {
+        if (this._shouldScrollToToggle) {
+            this._shouldScrollToToggle = false;
+            const toggleLink = this.shadowRoot?.querySelector("#toggle");
+            toggleLink?.scrollIntoView?.({ block: "nearest" });
+        }
+    }
     _handleToggleClick() {
         this._expanded = !this._expanded;
+        if (this._expanded && !this._usePopover) {
+            this._shouldScrollToToggle = true;
+        }
     }
     _handleCloseButtonClick(e) {
         this._expanded = false;

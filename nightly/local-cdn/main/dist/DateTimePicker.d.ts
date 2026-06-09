@@ -1,4 +1,5 @@
 import type { ResizeObserverCallback } from "@ui5/webcomponents-base/dist/delegate/ResizeHandler.js";
+import CalendarDate from "@ui5/webcomponents-localization/dist/dates/CalendarDate.js";
 import type { IFormInputElement } from "@ui5/webcomponents-base/dist/features/InputElementsFormSupport.js";
 import "@ui5/webcomponents-icons/dist/date-time.js";
 import DateFormat from "@ui5/webcomponents-localization/dist/DateFormat.js";
@@ -186,17 +187,15 @@ declare class DateTimePicker extends DatePicker implements IFormInputElement {
      * @override
      */
     _updateValueAndFireEvents(value: string, normalizeValue: boolean, events: Array<"change" | "value-changed" | "input">, updateValue?: boolean): void;
-    /**
-     * Checks if the provided value is valid and within valid range.
-     * @override
-     * @param value
-     */
-    _checkValueValidity(value: string): boolean;
     getSelectedDateTime(): Date;
     getFormat(): import("sap/ui/core/format/DateFormat").default;
     getDisplayFormat(): import("sap/ui/core/format/DateFormat").default;
     getValueFormat(): import("sap/ui/core/format/DateFormat").default;
     getISOFormat(): DateFormat;
+    /**
+     * @override
+     */
+    _getCalendarDateFromString(value: string): CalendarDate | undefined;
     /**
      * @override
      */

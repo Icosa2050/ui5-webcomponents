@@ -118,6 +118,10 @@ declare class RangeSlider extends SliderBase implements IFormInputElement {
      */
     _onDocumentClick(e: MouseEvent): void;
     get _ariaDisabled(): true | undefined;
+    get _isStartTooltipVisible(): boolean;
+    get _isEndTooltipVisible(): boolean;
+    get _ariaValueTextStart(): string | undefined;
+    get _ariaValueTextEnd(): string | undefined;
     get _ariaLabelledByText(): string;
     get _ariaHandlesText(): AriaHandlesText;
     get _ariaValueNow(): number;

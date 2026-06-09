@@ -8,7 +8,7 @@ function starLi(star) {
         return (_jsx("li", { "data-ui5-value": star.index, class: "ui5-rating-indicator-item ui5-rating-indicator-item-sel", children: _jsx(Icon, { "data-ui5-value": star.index, name: this.ratedIcon }) }));
     }
     if (star.halfStar) {
-        return (_jsxs("li", { class: "ui5-rating-indicator-item ui5-rating-indicator-item-half", children: [_jsx("div", { class: "ui5-rating-indicator-half-icon-wrapper ui5-rating-indicator-half-icon-left", children: _jsx(Icon, { "data-ui5-value": star.index, name: this.ratedIcon }) }), _jsx("div", { class: "ui5-rating-indicator-half-icon-wrapper ui5-rating-indicator-half-icon-right", children: _jsx(Icon, { "data-ui5-value": star.index, name: halfStarIconName.call(this) }) })] }));
+        return (_jsxs("li", { class: "ui5-rating-indicator-item ui5-rating-indicator-item-half", children: [_jsx("div", { class: "ui5-rating-indicator-half-icon-wrapper ui5-rating-indicator-half-icon-left", children: _jsx(Icon, { "data-ui5-value": star.index, name: this.ratedIcon }) }), _jsx("div", { class: "ui5-rating-indicator-half-icon-wrapper ui5-rating-indicator-half-icon-right", children: _jsx(Icon, { "data-ui5-value": star.index, name: this.unratedIcon }) })] }));
     }
     if (this.readonly) {
         return (_jsx("li", { class: "ui5-rating-indicator-item ui5-rating-indicator-item-unsel", children: _jsx(Icon, { "data-ui5-value": star.index, name: this.ratedIcon }) }));
@@ -17,8 +17,5 @@ function starLi(star) {
         return (_jsx("li", { class: "ui5-rating-indicator-item ui5-rating-indicator-item-unsel", children: _jsx(Icon, { "data-ui5-value": star.index, name: this.ratedIcon }) }));
     }
     return (_jsx("li", { "data-ui5-value": star.index, class: "ui5-rating-indicator-item ui5-rating-indicator-item-unsel", children: _jsx(Icon, { "data-ui5-value": star.index, name: this.unratedIcon }) }));
-}
-function halfStarIconName() {
-    return this.disabled || this.readonly ? this.ratedIcon : this.unratedIcon;
 }
 //# sourceMappingURL=RatingIndicatorTemplate.js.map

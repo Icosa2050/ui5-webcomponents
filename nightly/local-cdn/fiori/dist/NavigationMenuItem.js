@@ -11,6 +11,7 @@ import i18n from "@ui5/webcomponents-base/dist/decorators/i18n.js";
 import property from "@ui5/webcomponents-base/dist/decorators/property.js";
 import MenuItem from "@ui5/webcomponents/dist/MenuItem.js";
 import { isSpace, isEnter, isEnterShift, isEnterCtrl, isEnterAlt, } from "@ui5/webcomponents-base/dist/Keys.js";
+import slot from "@ui5/webcomponents-base/dist/decorators/slot-strict.js";
 // Templates
 import NavigationMenuItemTemplate from "./NavigationMenuItemTemplate.js";
 // Styles
@@ -43,17 +44,31 @@ let NavigationMenuItem = NavigationMenuItem_1 = class NavigationMenuItem extends
         super(...arguments);
         this.design = "Default";
     }
+    get hasTag() {
+        return !!this.tag.length;
+    }
     get isExternalLink() {
         return this.href && this.target === "_blank";
     }
     get _href() {
         return (!this.disabled && this.href) ? this.href : undefined;
     }
+    get _tagContainerId() {
+        return `${this._id}-tag-container`;
+    }
+    get _ariaDescribedByIds() {
+        const ids = [
+            `${this._id}-invisibleText-describedby`,
+        ];
+        if (this.hasTag) {
+            ids.push(this._tagContainerId);
+        }
+        return ids.filter(Boolean).join(" ");
+    }
     get _accInfo() {
         const accInfo = super._accInfo;
         accInfo.role = "none";
         if (this.hasSubmenu && this.associatedItem?.isSelectable) {
-            // For the menu item on first level (parent item)
             accInfo.ariaSelectedText = NavigationMenuItem_1.i18nBundleFiori.getText(NAVIGATION_MENU_SELECTABLE_ITEM_HIDDEN_TEXT);
         }
         return accInfo;
@@ -143,6 +158,9 @@ __decorate([
 __decorate([
     property()
 ], NavigationMenuItem.prototype, "design", void 0);
+__decorate([
+    slot({ type: HTMLElement })
+], NavigationMenuItem.prototype, "tag", void 0);
 __decorate([
     i18n("@ui5/webcomponents-fiori")
 ], NavigationMenuItem, "i18nBundleFiori", void 0);

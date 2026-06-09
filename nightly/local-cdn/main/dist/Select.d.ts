@@ -381,6 +381,7 @@ declare class Select extends UI5Element implements IFormInputElement {
     get responsivePopoverId(): string;
     get isDisabled(): true | undefined;
     get _headerTitleText(): string;
+    get _cancelButtonText(): string;
     get _currentlySelectedOption(): IOption;
     get _effectiveTabIndex(): 0 | -1;
     /**
@@ -412,6 +413,8 @@ declare class Select extends UI5Element implements IFormInputElement {
         };
         responsivePopover: {
             "min-width": string;
+            "max-width": string;
+            "margin-top": string;
         };
     };
     get ariaLabelText(): string | undefined;

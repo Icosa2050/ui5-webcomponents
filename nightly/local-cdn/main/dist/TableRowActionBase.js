@@ -81,7 +81,7 @@ let TableRowActionBase = class TableRowActionBase extends UI5Element {
         return this.getRenderInfo().icon;
     }
     get _isInteractive() {
-        return this.getRenderInfo().interactive;
+        return this.getRenderInfo().interactive !== false;
     }
 };
 TableRowActionBase._menuItems = new WeakMap();

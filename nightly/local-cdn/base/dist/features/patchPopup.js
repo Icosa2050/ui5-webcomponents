@@ -1,6 +1,19 @@
 // OpenUI5's Control.js subset
 import getSharedResource from "../getSharedResource.js";
 import insertOpenUI5PopupStyles from "./insertOpenUI5PopupStyles.js";
+import VersionInfo from "../generated/VersionInfo.js";
+import { compareVersions } from "../Runtimes.js";
+const PatchedFunctions = getSharedResource("PatchedFunctions", {});
+const shouldRepatch = (key) => {
+    const existing = PatchedFunctions[key];
+    if (!existing) {
+        return true;
+    }
+    if (!existing.version) {
+        return true;
+    }
+    return compareVersions(VersionInfo, existing.version) > 0;
+};
 // contains all OpenUI5 and Web Component popups that are currently opened
 const AllOpenedPopupsRegistry = getSharedResource("AllOpenedPopupsRegistry", { openedRegistry: [] });
 const addOpenedPopup = (popupInfo) => {
@@ -111,7 +124,11 @@ const isNativePopoverOpen = (root = document) => {
     });
 };
 const patchDialog = (Dialog) => {
-    const origOnsapescape = Dialog.prototype.onsapescape;
+    const key = "Dialog.prototype.onsapescape";
+    if (shouldRepatch(key)) {
+        PatchedFunctions[key] = { version: VersionInfo, originalFn: PatchedFunctions[key]?.originalFn ?? Dialog.prototype.onsapescape };
+    }
+    const origOnsapescape = PatchedFunctions[key].originalFn;
     Dialog.prototype.onsapescape = function onsapescape(...args) {
         if (hasWebComponentPopupAbove(this.oPopup)) {
             return;
@@ -120,7 +137,11 @@ const patchDialog = (Dialog) => {
     };
 };
 const patchOpen = (Popup) => {
-    const origOpen = Popup.prototype.open;
+    const key = "Popup.prototype.open";
+    if (shouldRepatch(key)) {
+        PatchedFunctions[key] = { version: VersionInfo, originalFn: PatchedFunctions[key]?.originalFn ?? Popup.prototype.open };
+    }
+    const origOpen = PatchedFunctions[key].originalFn;
     Popup.prototype.open = function open(...args) {
         origOpen.apply(this, args); // call open first to initiate opening
         openNativePopoverForOpenUI5(this);
@@ -131,7 +152,11 @@ const patchOpen = (Popup) => {
     };
 };
 const patchClosed = (Popup) => {
-    const _origClosed = Popup.prototype._closed;
+    const key = "Popup.prototype._closed";
+    if (shouldRepatch(key)) {
+        PatchedFunctions[key] = { version: VersionInfo, originalFn: PatchedFunctions[key]?.originalFn ?? Popup.prototype._closed };
+    }
+    const _origClosed = PatchedFunctions[key].originalFn;
     Popup.prototype._closed = function _closed(...args) {
         closeNativePopoverForOpenUI5(this);
         _origClosed.apply(this, args); // only then call _close
@@ -139,7 +164,11 @@ const patchClosed = (Popup) => {
     };
 };
 const patchFocusEvent = (Popup) => {
-    const origFocusEvent = Popup.prototype.onFocusEvent;
+    const key = "Popup.prototype.onFocusEvent";
+    if (shouldRepatch(key)) {
+        PatchedFunctions[key] = { version: VersionInfo, originalFn: PatchedFunctions[key]?.originalFn ?? Popup.prototype.onFocusEvent };
+    }
+    const origFocusEvent = PatchedFunctions[key].originalFn;
     Popup.prototype.onFocusEvent = function onFocusEvent(...args) {
         if (!hasWebComponentPopupAbove(this)) {
             origFocusEvent.apply(this, args);

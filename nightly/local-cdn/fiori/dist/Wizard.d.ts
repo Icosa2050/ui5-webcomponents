@@ -324,6 +324,12 @@ declare class Wizard extends UI5Element {
      */
     scrollToSelectedStep(): void;
     /**
+     * Focuses the first focusable element in the currently selected step.
+     * This helps screen readers announce the step change.
+     * @private
+     */
+    focusFirstElementInCurrentStep(): Promise<void>;
+    /**
      * Scrolls to the content item within the `ui5-wizard` shadowDOM
      * by given step index.
      * @private

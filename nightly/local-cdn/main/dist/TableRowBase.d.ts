@@ -22,6 +22,7 @@ declare abstract class TableRowBase<TCell extends TableCellBase = TableCellBase>
     _navigatedCell?: HTMLElement;
     static i18nBundle: I18nBundle;
     isHeaderRow(): boolean;
+    isGroupRow(): boolean;
     onEnterDOM(): void;
     onBeforeRendering(): void;
     onAfterRendering(): void;

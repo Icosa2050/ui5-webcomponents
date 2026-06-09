@@ -345,17 +345,6 @@ let DateTimePicker = DateTimePicker_1 = class DateTimePicker extends DatePicker 
             this._lastValidValue = this.value;
         }
     }
-    /**
-     * Checks if the provided value is valid and within valid range.
-     * @override
-     * @param value
-     */
-    _checkValueValidity(value) {
-        if (value === "") {
-            return true;
-        }
-        return this.isValidValue(value);
-    }
     getSelectedDateTime() {
         const selectedDate = this.getValueFormat().parse(this._calendarSelectedDates[0]);
         const selectedTime = this.getValueFormat().parse(this._timeSelectionValue);
@@ -417,6 +406,15 @@ let DateTimePicker = DateTimePicker_1 = class DateTimePicker extends DatePicker 
             });
         }
         return this._isoFormatInstance;
+    }
+    /**
+     * @override
+     */
+    _getCalendarDateFromString(value) {
+        const jsDate = this.getValueFormat().parse(value);
+        if (jsDate) {
+            return CalendarDate.fromTimestamp(jsDate.getTime(), this._primaryCalendarType);
+        }
     }
     /**
      * @override

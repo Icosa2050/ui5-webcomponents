@@ -73,6 +73,18 @@ let Slider = Slider_1 = class Slider extends SliderBase {
     get formFormattedValue() {
         return this.value.toString();
     }
+    get _isTooltipVisible() {
+        if (!this._tooltipsOpen) {
+            return false;
+        }
+        if (!this._hasCustomTickmarks) {
+            return true;
+        }
+        return this._getCustomLabel(this.value) !== undefined;
+    }
+    get _ariaValueText() {
+        return this._getCustomLabel(this.value);
+    }
     constructor() {
         super();
         /**
@@ -102,7 +114,6 @@ let Slider = Slider_1 = class Slider extends SliderBase {
      * @private
      */
     onBeforeRendering() {
-        // Clamp value visually without modifying the actual value property
         const ctor = this.constructor;
         const clampedValue = ctor.clipValue(this.value, this.min, this.max);
         this._updateHandleAndProgress(clampedValue);
@@ -116,25 +127,20 @@ let Slider = Slider_1 = class Slider extends SliderBase {
      * @private
      */
     _onmousedown(e) {
-        // If step is 0 no interaction is available because there is no constant
-        // (equal for all user environments) quantitative representation of the value
         if (this.disabled || this.step === 0 || e.target.hasAttribute("ui5-slider-tooltip")) {
             return;
         }
         const newValue = this.handleDownBase(e);
         this._valueOnInteractionStart = this.value;
-        // Set initial value if one is not set previously on focus in.
-        // It will be restored if ESC key is pressed.
         if (this._valueInitial === undefined) {
             this._valueInitial = this.value;
         }
-        // Do not yet update the Slider if press is over a handle. It will be updated if the user drags the mouse.
         const ctor = this.constructor;
         if (!this._isHandlePressed(ctor.getPageXValueFromEvent(e))) {
             const stepPrecision = ctor._getDecimalPrecisionOfNumber(this.step);
             this._updateHandleAndProgress(newValue);
             this.value = newValue;
-            this.tooltipValue = newValue.toFixed(stepPrecision);
+            this.tooltipValue = this._getCustomLabel(newValue) || newValue.toFixed(stepPrecision);
             this.updateStateStorageAndFireInputEvent("value");
         }
     }
@@ -189,6 +195,11 @@ let Slider = Slider_1 = class Slider extends SliderBase {
         }
     }
     _onTooltipOpen() {
+        const customLabel = this._getCustomLabel(this.value);
+        if (customLabel) {
+            this.tooltipValue = customLabel;
+            return;
+        }
         const ctor = this.constructor;
         const stepPrecision = ctor._getDecimalPrecisionOfNumber(this.step);
         this.tooltipValue = this.value.toFixed(stepPrecision);
@@ -207,7 +218,7 @@ let Slider = Slider_1 = class Slider extends SliderBase {
         const stepPrecision = ctor._getDecimalPrecisionOfNumber(this.step);
         this._updateHandleAndProgress(newValue);
         this.value = newValue;
-        this.tooltipValue = newValue.toFixed(stepPrecision);
+        this.tooltipValue = this._getCustomLabel(newValue) || newValue.toFixed(stepPrecision);
         this.updateStateStorageAndFireInputEvent("value");
     }
     /** Called when the user finish interacting with the slider
@@ -241,9 +252,7 @@ let Slider = Slider_1 = class Slider extends SliderBase {
     _updateHandleAndProgress(newValue) {
         const max = this.max;
         const min = this.min;
-        // The progress (completed) percentage of the slider.
         this._progressPercentage = (newValue - min) / (max - min);
-        // How many pixels from the left end of the slider will be the placed the affected  by the user action handle
         this._handlePositionFromStart = this._progressPercentage * 100;
     }
     _handleActionKeyPress(e) {
@@ -256,7 +265,7 @@ let Slider = Slider_1 = class Slider extends SliderBase {
             const stepPrecision = ctor._getDecimalPrecisionOfNumber(this.step);
             this._updateHandleAndProgress(newValue);
             this.value = newValue;
-            this.tooltipValue = this.value.toFixed(stepPrecision);
+            this.tooltipValue = this._getCustomLabel(newValue) || this.value.toFixed(stepPrecision);
             this.updateStateStorageAndFireInputEvent("value");
         }
     }

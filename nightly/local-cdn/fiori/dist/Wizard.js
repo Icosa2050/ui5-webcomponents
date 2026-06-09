@@ -187,6 +187,7 @@ let Wizard = Wizard_1 = class Wizard extends UI5Element {
         this.storeStepScrollOffsets();
         if (this.previouslySelectedStepIndex !== this.selectedStepIndex) {
             this.scrollToSelectedStep();
+            this.focusFirstElementInCurrentStep();
         }
         this.attachStepsResizeObserver();
         this.previouslySelectedStepIndex = this.selectedStepIndex;
@@ -686,6 +687,22 @@ let Wizard = Wizard_1 = class Wizard extends UI5Element {
             this.scrollToContentItem(this.selectedStepIndex);
         }
         this.selectionRequestedByScroll = false;
+    }
+    /**
+     * Focuses the first focusable element in the currently selected step.
+     * This helps screen readers announce the step change.
+     * @private
+     */
+    async focusFirstElementInCurrentStep() {
+        const currentStep = this.slottedSteps[this.selectedStepIndex];
+        if (!currentStep || currentStep.disabled) {
+            return;
+        }
+        const firstElementChild = currentStep.firstElementChild;
+        const firstFocusableElement = await getFirstFocusableElement(firstElementChild);
+        if (firstFocusableElement) {
+            firstFocusableElement.focus();
+        }
     }
     /**
      * Scrolls to the content item within the `ui5-wizard` shadowDOM

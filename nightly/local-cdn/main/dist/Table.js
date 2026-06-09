@@ -179,12 +179,24 @@ let Table = Table_1 = class Table extends UI5Element {
         this._events.forEach(eventType => this.removeEventListener(eventType, this._onEventBound));
     }
     onBeforeRendering() {
+        let alternateIndex = 0;
+        const hasFlexibleColumns = this._hasFlexibleColumns;
+        const rowActionCount = this.rowActionCount > 0 && this.rows.length > 0 ? this.rowActionCount : 0;
         this._renderNavigated = this.rows.some(row => row.navigated);
-        [...this.headerRow, ...this.rows].forEach((row, index) => {
-            row._rowActionCount = this.rows.length > 0 ? this.rowActionCount : 0;
-            row._renderNavigated = this._renderNavigated;
-            row._renderDummyCell = !this._hasFlexibleColumns;
-            row._alternate = this.alternateRowColors && index % 2 === 0;
+        [...this.headerRow, ...this.rows].forEach(row => {
+            if (!row.isGroupRow()) {
+                row._rowActionCount = rowActionCount;
+                row._renderDummyCell = !hasFlexibleColumns;
+                row._renderNavigated = this._renderNavigated;
+                row._alternate = this.alternateRowColors && alternateIndex++ % 2 === 0;
+            }
+            else {
+                row._rowActionCount = 0;
+                row._renderDummyCell = !hasFlexibleColumns && !this._hasPopin;
+                row._renderNavigated = false;
+                row._alternate = false;
+                alternateIndex = 1;
+            }
         });
         this.style.setProperty("--ui5_grid_sticky_top", this.stickyTop);
         this._refreshPopinState();
@@ -295,8 +307,8 @@ let Table = Table_1 = class Table extends UI5Element {
         this.rows.forEach(row => {
             const cell = row.cells[headerIndex];
             if (cell) {
-                row.cells[headerIndex]._popinHidden = headerCell.popinHidden;
-                row.cells[headerIndex]._popin = headerCell._popin;
+                cell._popinHidden = headerCell.popinHidden;
+                cell._popin = headerCell._popin;
             }
         });
     }
@@ -349,8 +361,8 @@ let Table = Table_1 = class Table extends UI5Element {
         }));
         // Dummy Cell Width (before actions when popin, after navigated otherwise)
         const dummyColumnWidth = !this._hasFlexibleColumns ? "minmax(0, 1fr)" : "";
-        const hasPopinCells = this.headerRow[0]._popinCells.length > 0;
-        if (dummyColumnWidth && hasPopinCells) {
+        const hasPopin = this._hasPopin;
+        if (dummyColumnWidth && hasPopin) {
             widths.push(dummyColumnWidth);
         }
         // Row Action Cell Width
@@ -361,10 +373,13 @@ let Table = Table_1 = class Table extends UI5Element {
         if (this._renderNavigated) {
             widths.push(`var(--_ui5_table_navigated_cell_width)`);
         }
-        if (dummyColumnWidth && !hasPopinCells) {
+        if (dummyColumnWidth && !hasPopin) {
             widths.push(dummyColumnWidth);
         }
         return widths.join(" ");
+    }
+    get _hasPopin() {
+        return this.overflowMode === TableOverflowMode.Popin && this.headerRow?.[0]?._hasPopin;
     }
     get _hasFlexibleColumns() {
         return this.headerRow?.[0]?._visibleCells.some(cell => !isValidColumnWidth(cell.width));

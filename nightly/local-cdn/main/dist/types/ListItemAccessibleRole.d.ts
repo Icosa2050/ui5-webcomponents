@@ -5,11 +5,6 @@
  */
 declare enum ListItemAccessibleRole {
     /**
-     * Represents the ARIA role "group".
-     * @private
-     */
-    Group = "Group",
-    /**
      * Represents the ARIA role "listitem". (by default)
      * @public
      */

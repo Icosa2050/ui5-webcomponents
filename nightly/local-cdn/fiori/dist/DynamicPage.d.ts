@@ -1,9 +1,32 @@
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
 import type I18nBundle from "@ui5/webcomponents-base/dist/i18nBundle.js";
+import type { AriaLandmarkRole } from "@ui5/webcomponents-base";
 import DynamicPageHeader from "./DynamicPageHeader.js";
 import DynamicPageTitle from "./DynamicPageTitle.js";
 import type DynamicPageHeaderActions from "./DynamicPageHeaderActions.js";
 import type { Slot, DefaultSlot } from "@ui5/webcomponents-base/dist/UI5Element.js";
+type DynamicPageHeaderRoles = Extract<AriaLandmarkRole, "none" | "banner" | "region">;
+type DynamicPageContentRoles = Extract<AriaLandmarkRole, "none" | "main" | "region" | "form">;
+type DynamicPageFooterRoles = Extract<AriaLandmarkRole, "none" | "contentinfo" | "region">;
+type DynamicPageRootRoles = Extract<AriaLandmarkRole, "none" | "main" | "region">;
+type DynamicPageAccessibilityAttributes = {
+    root?: {
+        role?: DynamicPageRootRoles;
+        name?: string;
+    };
+    header?: {
+        role?: DynamicPageHeaderRoles;
+        name?: string;
+    };
+    content?: {
+        role?: DynamicPageContentRoles;
+        name?: string;
+    };
+    footer?: {
+        role?: DynamicPageFooterRoles;
+        name?: string;
+    };
+};
 /**
  * @class
  *
@@ -115,6 +138,34 @@ declare class DynamicPage extends UI5Element {
      * @public
      */
     footerArea: Slot<HTMLElement>;
+    /**
+    * Defines additional accessibility attributes on different areas of the component.
+    *
+    * The accessibilityAttributes object has the following fields,
+    * where each field is an object supporting one or more accessibility attributes:
+    *
+    *  - **root**: `root.role` and `root.name`.
+    *  - **header**: `header.role` and `header.name`.
+    *  - **content**: `content.role` and `content.name`.
+    *  - **footer**: `footer.role` and `footer.name`.
+    *
+    * The accessibility attributes support the following values:
+    *
+    * - **role**: Defines the accessible ARIA landmark role of the area.
+    * Accepts the following values per section:
+    * `root` — `none`, `main`, `region`;
+    * `header` — `none`, `banner`, `region`;
+    * `content` — `none`, `main`, `region`, `form`;
+    * `footer` — `none`, `contentinfo`, `region`.
+    *
+    * - **name**: Defines the accessible ARIA name of the area.
+    * Accepts any string.
+    *
+    * @default {}
+    * @public
+    * @since 2.24.0
+    */
+    accessibilityAttributes: DynamicPageAccessibilityAttributes;
     static i18nBundle: I18nBundle;
     skipSnapOnScroll: boolean;
     showHeaderInStickArea: boolean;
@@ -125,7 +176,7 @@ declare class DynamicPage extends UI5Element {
     constructor();
     onBeforeRendering(): void;
     get endAreaHeight(): number;
-    get topAreaHeight(): number;
+    get scrollPaddingTop(): number;
     get dynamicPageTitle(): DynamicPageTitle | null;
     get dynamicPageHeader(): DynamicPageHeader | null;
     get footerWrapper(): Element | null | undefined;
@@ -140,6 +191,13 @@ declare class DynamicPage extends UI5Element {
     get headerSnapped(): boolean;
     get hasSnappedTitleOnMobile(): number | false | undefined;
     get headerAriaLabel(): string | undefined;
+    get _headerRole(): DynamicPageHeaderRoles | undefined;
+    get _rootRole(): DynamicPageRootRoles | undefined;
+    get _rootAriaLabel(): string | undefined;
+    get _contentRole(): DynamicPageContentRoles | undefined;
+    get _contentAriaLabel(): string | undefined;
+    get _footerRole(): DynamicPageFooterRoles | undefined;
+    get _footerAriaLabel(): string | undefined;
     get _hidePinButton(): boolean;
     /**
      * Defines if the header is snapped.
@@ -164,3 +222,4 @@ declare class DynamicPage extends UI5Element {
     }): void;
 }
 export default DynamicPage;
+export type { DynamicPageAccessibilityAttributes };

@@ -1,4 +1,4 @@
-import type { ClassMap } from "@ui5/webcomponents-base/dist/types.js";
+import type { ClassMap, AriaRole } from "@ui5/webcomponents-base/dist/types.js";
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
 import type { DefaultSlot } from "@ui5/webcomponents-base/dist/UI5Element.js";
 import type { ResizeObserverCallback } from "@ui5/webcomponents-base/dist/delegate/ResizeHandler.js";
@@ -254,6 +254,8 @@ declare abstract class Popup extends UI5Element {
     get ariaDescribedByIds(): string;
     get _root(): HTMLElement;
     get _role(): "dialog" | "alertdialog" | undefined;
+    get _contentRole(): AriaRole | undefined;
+    get _contentAriaLabel(): string | undefined;
     get _ariaModal(): "true" | undefined;
     get contentDOM(): HTMLElement;
     get styles(): {

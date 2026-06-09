@@ -14,6 +14,7 @@ declare const getFetchDefaultLanguage: () => boolean;
 declare const getNoConflict: () => boolean;
 declare const getDefaultFontLoading: () => boolean;
 declare const getEnableDefaultTooltips: () => boolean;
+declare const getIgnoreUrlParams: () => boolean;
 /**
  * Get the configured calendar type
  * @returns { String } the name of the configured calendar type
@@ -31,4 +32,4 @@ declare const getFormatSettings: () => FormatSettings;
  * @private
  */
 declare const resetConfiguration: (testEnv?: boolean) => void;
-export { getAnimationMode, getTheme, getThemeRoot, getLanguage, getFetchDefaultLanguage, getNoConflict, getCalendarType, getSecondaryCalendarType, getTimezone, getFormatSettings, getDefaultFontLoading, resetConfiguration, getEnableDefaultTooltips, };
+export { getAnimationMode, getTheme, getThemeRoot, getLanguage, getFetchDefaultLanguage, getNoConflict, getCalendarType, getSecondaryCalendarType, getTimezone, getFormatSettings, getDefaultFontLoading, resetConfiguration, getEnableDefaultTooltips, getIgnoreUrlParams, };
