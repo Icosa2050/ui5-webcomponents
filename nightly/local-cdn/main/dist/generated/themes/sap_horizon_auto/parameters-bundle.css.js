@@ -1038,7 +1038,7 @@ export default `:host {
     --_ui5-toolbar-padding-left: .5rem;
     --_ui5-toolbar-padding-right: .5rem;
     --_ui5-toolbar-item-margin-left: 0;
-    --_ui5-toolbar-item-margin-right: .25rem;
+    --_ui5-toolbar-item-margin-right: .5rem;
     --_ui5_step_input_input_error_background_color: inherit;
     --_ui5-step_input_button_state_hover_background_color: var(--sapField_Hover_Background);
     --_ui5_step_input_border_style: none;

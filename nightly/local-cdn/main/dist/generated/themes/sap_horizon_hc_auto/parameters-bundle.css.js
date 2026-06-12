@@ -878,7 +878,7 @@ export default `:host {
     --_ui5-toolbar-padding-left: .5rem;
     --_ui5-toolbar-padding-right: .5rem;
     --_ui5-toolbar-item-margin-left: 0;
-    --_ui5-toolbar-item-margin-right: .25rem;
+    --_ui5-toolbar-item-margin-right: .5rem;
     --_ui5_load_more_padding: .25rem;
     --_ui5_load_more_border: 1px solid var(--sapButton_BorderColor);
     --_ui5_load_more_border_radius: .375rem;

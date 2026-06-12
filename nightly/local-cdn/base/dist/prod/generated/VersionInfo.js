@@ -1,2 +1,2 @@
-"use strict";const e={version:"2.23.0",major:2,minor:23,patch:0,suffix:"",isNext:!1,buildTime:1781140631};export default e;
+"use strict";const e={version:"2.24.0-rc.0",major:2,minor:24,patch:0,suffix:"-rc.0",isNext:!1,buildTime:1781227210};export default e;
 //# sourceMappingURL=VersionInfo.js.map

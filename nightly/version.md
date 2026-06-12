@@ -1,5 +1,5 @@
-commit f6191c234fa82f447fffdc99d19d8520bceb848d
-Author: Nayden Naydenov <31909318+nnaydenow@users.noreply.github.com>
-Date:   Mon Jun 8 15:32:17 2026 +0300
+commit 55834d96ca1b888b08c8b8d4387f9662b8e66bb2
+Author: ui5-webcomponents-bot <ui5-webcomponents-bot@sap.com>
+Date:   Thu Jun 11 15:08:59 2026 +0000
 
-    test: skip flaky tests across components (#13656)
+    chore(release): publish v2.24.0-rc.0 [ci skip]

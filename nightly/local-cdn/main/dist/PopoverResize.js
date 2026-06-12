@@ -169,12 +169,19 @@ class PopoverResize {
         this._initialBoundingRect = this._popover.getBoundingClientRect();
         this._totalDeltaX = this._currentDeltaX;
         this._totalDeltaY = this._currentDeltaY;
-        const { minWidth, minHeight, } = window.getComputedStyle(this._popover);
+        const { minWidth, minHeight, maxWidth, maxHeight, } = window.getComputedStyle(this._popover);
         const domRefComputedStyle = window.getComputedStyle(this._popover);
         this._initialClientX = e.clientX;
         this._initialClientY = e.clientY;
         this._minWidth = Math.max(Number.parseFloat(minWidth), Number.parseFloat(domRefComputedStyle.minWidth));
         this._minHeight = Number.parseFloat(minHeight);
+        const viewportMargin = this._popover._viewportMargin;
+        const defaultMaxWidth = window.innerWidth - 2 * viewportMargin;
+        const defaultMaxHeight = window.innerHeight - 2 * viewportMargin;
+        const computedMaxWidth = maxWidth !== "none" ? Number.parseFloat(maxWidth) : Infinity;
+        const computedMaxHeight = maxHeight !== "none" ? Number.parseFloat(maxHeight) : Infinity;
+        this._maxWidth = computedMaxWidth < defaultMaxWidth ? computedMaxWidth : Infinity;
+        this._maxHeight = computedMaxHeight < defaultMaxHeight ? computedMaxHeight : Infinity;
         this._attachMouseResizeHandlers();
     }
     /**
@@ -197,7 +204,7 @@ class PopoverResize {
         // Calculate width changes
         if (isResizingFromLeft) {
             // Resizing from left edge - width increases when moving left (negative delta)
-            const maxWidthFromLeft = initialBoundingRect.x + initialBoundingRect.width - margin;
+            const maxWidthFromLeft = Math.min(initialBoundingRect.x + initialBoundingRect.width - margin, this._maxWidth);
             newWidth = clamp(initialBoundingRect.width - deltaX, this._minWidth, maxWidthFromLeft);
             // Adjust left position when resizing from left
             // Ensure the left edge respects the viewport margin and the right edge position
@@ -208,14 +215,14 @@ class PopoverResize {
         }
         else {
             // Resizing from right edge - width increases when moving right (positive delta)
-            const maxWidthFromRight = window.innerWidth - initialBoundingRect.x - margin;
+            const maxWidthFromRight = Math.min(window.innerWidth - initialBoundingRect.x - margin, this._maxWidth);
             newWidth = clamp(initialBoundingRect.width + deltaX, this._minWidth, maxWidthFromRight);
             this._currentDeltaX = (initialBoundingRect.width - newWidth) / 2;
         }
         // Calculate height changes
         if (isResizingFromTop) {
             // Resizing from top edge - height increases when moving up (negative delta)
-            const maxHeightFromTop = initialBoundingRect.y + initialBoundingRect.height - margin;
+            const maxHeightFromTop = Math.min(initialBoundingRect.y + initialBoundingRect.height - margin, this._maxHeight);
             newHeight = clamp(initialBoundingRect.height - deltaY, this._minHeight, maxHeightFromTop);
             // Adjust top position when resizing from top
             // Ensure the top edge respects the viewport margin and the bottom edge position
@@ -226,7 +233,7 @@ class PopoverResize {
         }
         else {
             // Resizing from bottom edge - height increases when moving down (positive delta)
-            const maxHeightFromBottom = window.innerHeight - initialBoundingRect.y - margin;
+            const maxHeightFromBottom = Math.min(window.innerHeight - initialBoundingRect.y - margin, this._maxHeight);
             newHeight = clamp(initialBoundingRect.height + deltaY, this._minHeight, maxHeightFromBottom);
             this._currentDeltaY = (initialBoundingRect.height - newHeight) / 2;
         }
@@ -254,6 +261,8 @@ class PopoverResize {
         delete this._initialBoundingRect;
         delete this._minWidth;
         delete this._minHeight;
+        delete this._maxWidth;
+        delete this._maxHeight;
         this._detachMouseResizeHandlers();
     }
     /**

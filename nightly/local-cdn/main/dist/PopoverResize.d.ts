@@ -19,6 +19,8 @@ declare class PopoverResize {
     _initialBoundingRect?: DOMRect;
     _minWidth?: number;
     _minHeight?: number;
+    _maxWidth?: number;
+    _maxHeight?: number;
     _resized: boolean;
     _currentDeltaX?: number;
     _currentDeltaY?: number;
