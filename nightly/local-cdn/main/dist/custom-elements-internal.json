@@ -34931,6 +34931,12 @@
     },
     {
       "kind": "javascript-module",
+      "path": "dist/form-utils/FormUtils.js",
+      "declarations": [],
+      "exports": []
+    },
+    {
+      "kind": "javascript-module",
       "path": "dist/features/ColorPaletteMoreColors.js",
       "declarations": [],
       "exports": []
@@ -34968,12 +34974,6 @@
     {
       "kind": "javascript-module",
       "path": "dist/features/ListItemStandardExpandableText.js",
-      "declarations": [],
-      "exports": []
-    },
-    {
-      "kind": "javascript-module",
-      "path": "dist/form-utils/FormUtils.js",
       "declarations": [],
       "exports": []
     },
