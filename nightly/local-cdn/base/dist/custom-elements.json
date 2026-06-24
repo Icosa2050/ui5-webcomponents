@@ -1802,51 +1802,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "dist/thirdparty/_merge.js",
-      "declarations": [],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "default",
-          "declaration": {
-            "name": "fnMerge",
-            "module": "dist/thirdparty/_merge.js"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "dist/thirdparty/isPlainObject.js",
-      "declarations": [],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "default",
-          "declaration": {
-            "name": "fnIsPlainObject",
-            "module": "dist/thirdparty/isPlainObject.js"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "dist/thirdparty/merge.js",
-      "declarations": [],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "default",
-          "declaration": {
-            "name": "fnMerge",
-            "module": "dist/thirdparty/merge.js"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "dist/theming/CustomStyle.js",
       "declarations": [],
       "exports": []
@@ -1940,6 +1895,51 @@
           "declaration": {
             "name": "getThemeDesignerTheme",
             "module": "dist/theming/getThemeDesignerTheme.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "dist/thirdparty/_merge.js",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "name": "fnMerge",
+            "module": "dist/thirdparty/_merge.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "dist/thirdparty/isPlainObject.js",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "name": "fnIsPlainObject",
+            "module": "dist/thirdparty/isPlainObject.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "dist/thirdparty/merge.js",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "name": "fnMerge",
+            "module": "dist/thirdparty/merge.js"
           }
         }
       ]
