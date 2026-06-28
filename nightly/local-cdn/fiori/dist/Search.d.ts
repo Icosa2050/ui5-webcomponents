@@ -48,6 +48,7 @@ type SearchEventDetails = {
  * @public
  * @since 2.9.0
  * @experimental
+ * @csspart popover - Used to style the suggestions popup
  */
 declare class Search extends SearchField {
     eventDetails: SearchField["eventDetails"] & {
@@ -171,6 +172,7 @@ declare class Search extends SearchField {
     _handleEnter(): void;
     _onMobileInputKeydown(e: KeyboardEvent): void;
     _handleSearchEvent(): void;
+    _closePopupAndResetState(): void;
     _handleEscape(): void;
     _handleInput(e: InputEvent): void;
     _handleClear(): void;

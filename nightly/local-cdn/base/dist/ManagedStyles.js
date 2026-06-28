@@ -21,6 +21,9 @@ const createStyle = (content, name, value = "", theme) => {
     document.adoptedStyleSheets = [...document.adoptedStyleSheets, stylesheet];
 };
 const updateStyle = (content, name, value = "", theme) => {
+    if (isSSR) {
+        return;
+    }
     const currentRuntimeIndex = getCurrentRuntimeIndex();
     const stylesheet = document.adoptedStyleSheets.find(sh => sh._ui5StyleId === getStyleId(name, value));
     if (!stylesheet) {

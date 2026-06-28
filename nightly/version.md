@@ -1,5 +1,7 @@
-commit 55834d96ca1b888b08c8b8d4387f9662b8e66bb2
-Author: ui5-webcomponents-bot <ui5-webcomponents-bot@sap.com>
-Date:   Thu Jun 11 15:08:59 2026 +0000
+commit 1849ee19228dddae2961726340665d8627cd34c0
+Author: Georgieva <lidiya.georgieva@sap.com>
+Date:   Fri Jun 26 16:26:35 2026 +0300
 
-    chore(release): publish v2.24.0-rc.0 [ci skip]
+    test(ui5-select): fix flaky OpenUI5 Dialog integration test (#13756)
+    
+    fixes: #13658

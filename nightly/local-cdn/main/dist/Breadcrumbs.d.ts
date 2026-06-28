@@ -77,6 +77,13 @@ declare class Breadcrumbs extends UI5Element implements IToolbarItemContent {
      */
     separators: `${BreadcrumbsSeparator}`;
     /**
+     * Defines the accessible name of the component.
+     * @default undefined
+     * @public
+     * @since 2.24.0
+     */
+    accessibleName?: string;
+    /**
      * Holds the number of items in the overflow.
      * @default 0
      * @private

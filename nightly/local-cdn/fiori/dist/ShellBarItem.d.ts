@@ -1,6 +1,7 @@
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
 import type { AccessibilityAttributes, UI5CustomEvent } from "@ui5/webcomponents-base";
 import Button from "@ui5/webcomponents/dist/Button.js";
+import ListItemStandard from "@ui5/webcomponents/dist/ListItemStandard.js";
 type ShellBarItemClickEventDetail = {
     targetRef: HTMLElement;
 };
@@ -68,9 +69,11 @@ declare class ShellBarItem extends UI5Element {
      */
     inOverflow: boolean;
     get stableDomRef(): string;
+    get isShellBarItem(): boolean;
     hasListItems(): boolean;
     get listItems(): HTMLElement[];
-    fireClickEvent(e: UI5CustomEvent<Button, "click">): boolean;
+    fireClickEvent(e: UI5CustomEvent<Button, "click"> | UI5CustomEvent<ListItemStandard, "click">): boolean;
 }
 export default ShellBarItem;
+export declare const isInstanceOfShellBarItem: (object: any) => object is ShellBarItem;
 export type { ShellBarItemClickEventDetail, ShellBarItemAccessibilityAttributes };

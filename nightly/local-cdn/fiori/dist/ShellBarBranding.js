@@ -57,23 +57,30 @@ let ShellBarBranding = class ShellBarBranding extends UI5Element {
     _fireClick() {
         this.fireDecoratorEvent("click");
     }
-    _onclick(e) {
+    _activate(e) {
         e.stopPropagation();
         this._fireClick();
     }
-    _onkeyup(e) {
-        if (isSpace(e)) {
-            this._fireClick();
-        }
+    _getAnchor() {
+        return this.shadowRoot?.querySelector("a");
+    }
+    _onclick(e) {
+        this._activate(e);
     }
     _onkeydown(e) {
-        if (isSpace(e)) {
+        if (isEnter(e) && !this.href) {
             e.preventDefault();
+            this._getAnchor()?.click();
+        }
+        else if (isSpace(e)) {
+            e.preventDefault();
+        }
+    }
+    _onkeyup(e) {
+        if (!isSpace(e)) {
             return;
         }
-        if (isEnter(e)) {
-            this._fireClick();
-        }
+        this._getAnchor()?.click();
     }
 };
 __decorate([

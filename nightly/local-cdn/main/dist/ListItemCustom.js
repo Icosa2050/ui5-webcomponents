@@ -10,6 +10,7 @@ import jsxRenderer from "@ui5/webcomponents-base/dist/renderer/JsxRenderer.js";
 import customElement from "@ui5/webcomponents-base/dist/decorators/customElement.js";
 import property from "@ui5/webcomponents-base/dist/decorators/property.js";
 import i18n from "@ui5/webcomponents-base/dist/decorators/i18n.js";
+import createInstanceChecker from "@ui5/webcomponents-base/dist/util/createInstanceChecker.js";
 import ListItem from "./ListItem.js";
 import ListItemCustomTemplate from "./ListItemCustomTemplate.js";
 import { getCustomAnnouncement, applyCustomAnnouncement } from "./CustomAnnouncement.js";
@@ -44,6 +45,9 @@ let ListItemCustom = ListItemCustom_1 = class ListItemCustom extends ListItem {
          * @since 2.0.0
          */
         this.movable = false;
+    }
+    get isCustomListItem() {
+        return true;
     }
     _onkeydown(e) {
         const isFocused = this.matches(":focus");
@@ -167,4 +171,5 @@ ListItemCustom = ListItemCustom_1 = __decorate([
 ], ListItemCustom);
 ListItemCustom.define();
 export default ListItemCustom;
+export const isInstanceOfListItemCustom = createInstanceChecker("isCustomListItem");
 //# sourceMappingURL=ListItemCustom.js.map

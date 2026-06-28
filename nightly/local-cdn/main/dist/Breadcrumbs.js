@@ -470,7 +470,7 @@ let Breadcrumbs = Breadcrumbs_1 = class Breadcrumbs extends UI5Element {
         return !!this.responsivePopover && this.responsivePopover.open;
     }
     get _accessibleNameText() {
-        return Breadcrumbs_1.i18nBundle.getText(BREADCRUMBS_ARIA_LABEL);
+        return this.accessibleName || Breadcrumbs_1.i18nBundle.getText(BREADCRUMBS_ARIA_LABEL);
     }
     get _dropdownArrowAccessibleNameText() {
         return Breadcrumbs_1.i18nBundle.getText(BREADCRUMBS_OVERFLOW_ARIA_LABEL);
@@ -488,6 +488,9 @@ __decorate([
 __decorate([
     property()
 ], Breadcrumbs.prototype, "separators", void 0);
+__decorate([
+    property()
+], Breadcrumbs.prototype, "accessibleName", void 0);
 __decorate([
     property({ type: Number, noAttribute: true })
 ], Breadcrumbs.prototype, "_overflowSize", void 0);

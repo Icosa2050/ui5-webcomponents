@@ -7,8 +7,8 @@ import CalendarHeaderTemplate from "./CalendarHeaderTemplate.js";
 import CalendarSelectionMode from "./types/CalendarSelectionMode.js";
 export default function CalendarTemplate() {
     const showMultipleMonths = this._monthsToShow > 1 && !this._isDayPickerHidden;
-    const shouldRenderSeparateHeaders = this._isDefaultHeaderModeInMultipleMonths && !this._portraitView && !this._isCompactMode;
-    const shouldRenderInlineHeaders = this._isDefaultHeaderModeInMultipleMonths && (this._portraitView || this._isCompactMode);
+    const shouldRenderSeparateHeaders = this._isDefaultHeaderModeInMultipleMonths && !this._portraitView;
+    const shouldRenderInlineHeaders = this._isDefaultHeaderModeInMultipleMonths && this._portraitView;
     return (_jsxs(_Fragment, { children: [_jsxs("div", { class: {
                     "ui5-cal-root": true,
                     "ui5-dt-cal--mobile": this._phoneView,

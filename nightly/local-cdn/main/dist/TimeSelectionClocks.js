@@ -7,6 +7,8 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 import customElement from "@ui5/webcomponents-base/dist/decorators/customElement.js";
 import property from "@ui5/webcomponents-base/dist/decorators/property.js";
 import event from "@ui5/webcomponents-base/dist/decorators/event-strict.js";
+import AnimationMode from "@ui5/webcomponents-base/dist/types/AnimationMode.js";
+import { getAnimationMode } from "@ui5/webcomponents-base/dist/config/AnimationMode.js";
 import "@ui5/webcomponents-localization/dist/features/calendar/Gregorian.js"; // default calendar for bundling
 import { isDown, isUp, isDownAlt, isUpAlt, isPageUp, isPageDown, isPageUpShift, isPageDownShift, isPageUpShiftCtrl, isPageDownShiftCtrl, isSpace, isEnter, isKeyA, isKeyP, isNumber, isColon, } from "@ui5/webcomponents-base/dist/Keys.js";
 import TimePickerInternals from "./TimePickerInternals.js";
@@ -352,13 +354,14 @@ let TimeSelectionClocks = class TimeSelectionClocks extends TimePickerInternals 
         if (this._activeIndex === clockIndex || !this._entities.length || clockIndex >= this._entities.length) {
             return;
         }
+        const shouldSkipAnimation = skipAnimation || getAnimationMode() === AnimationMode.None;
         const currentClockComponent = this._clockComponent(this._activeIndex);
         const newClockComponent = this._clockComponent(clockIndex);
         if (this._skipAnimation && clockIndex !== 0 && this._activeIndex === 0 && currentClockComponent) {
             currentClockComponent._skipAnimation = false;
-            this._skipAnimation = skipAnimation;
+            this._skipAnimation = shouldSkipAnimation;
         }
-        if (newClockComponent && skipAnimation) {
+        if (newClockComponent && shouldSkipAnimation) {
             newClockComponent._skipAnimation = true;
             this._activateClock(clockIndex);
         }
@@ -372,11 +375,11 @@ let TimeSelectionClocks = class TimeSelectionClocks extends TimePickerInternals 
      * @param clockIndex the index of the clock to be activated
      */
     _activateClock(clockIndex) {
-        const newButton = this._buttonComponent(clockIndex);
         this._entities[this._activeIndex].active = false;
         this._activeIndex = clockIndex;
         this._entities[this._activeIndex].active = true;
-        newButton && newButton.focus();
+        const newButton = this._buttonComponent(clockIndex);
+        newButton?.getFocusDomRef()?.focus();
     }
     /**
      * Switches to the next available clock.

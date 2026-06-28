@@ -2,7 +2,7 @@
 
 > Enterprise-grade, framework-agnostic web components library implementing SAP Fiori design
 
-Version: 2.24.0-rc.0
+Version: 2.24.0-rc.3
 Website: https://ui5.github.io/webcomponents/
 GitHub: https://github.com/SAP/ui5-webcomponents
 
@@ -133,6 +133,10 @@ import "@ui5/webcomponents/dist/Button.js";
   - tag: `ui5-cb-item`
   - description: The ui5-cb-item represents the item for a ui5-combobox.
 
+#### [ComboBoxItemCustom](https://ui5.github.io/webcomponents/components/ComboBoxItemCustom/)
+  - tag: `ui5-cb-item-custom`
+  - description: The ui5-cb-item-custom is a combobox item component
+
 #### [ComboBoxItemGroup](https://ui5.github.io/webcomponents/components/ComboBoxItemGroup/)
   - tag: `ui5-cb-item-group`
   - description: The ui5-cb-group-item is type of suggestion item,
@@ -236,6 +240,10 @@ import "@ui5/webcomponents/dist/Button.js";
 #### [MultiComboBoxItem](https://ui5.github.io/webcomponents/components/MultiComboBoxItem/)
   - tag: `ui5-mcb-item`
   - description: The ui5-mcb-item represents the item for a ui5-multi-combobox.
+
+#### [MultiComboBoxItemCustom](https://ui5.github.io/webcomponents/components/MultiComboBoxItemCustom/)
+  - tag: `ui5-mcb-item-custom`
+  - description: The ui5-mcb-item-custom is a multi-combobox item component
 
 #### [MultiComboBoxItemGroup](https://ui5.github.io/webcomponents/components/MultiComboBoxItemGroup/)
   - tag: `ui5-mcb-item-group`
@@ -838,4 +846,4 @@ import "@ui5/webcomponents-icons/dist/add.js";
 
 ---
 
-Generated: 2026-06-27T01:11:23.069Z
+Generated: 2026-06-28T01:17:00.054Z

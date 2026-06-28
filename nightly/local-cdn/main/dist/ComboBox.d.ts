@@ -12,12 +12,14 @@ import type { IFormInputElement } from "@ui5/webcomponents-base/dist/features/In
 import type { IIcon } from "./Icon.js";
 import "./ComboBoxItem.js";
 import type ComboBoxItem from "./ComboBoxItem.js";
+import "./ComboBoxItemCustom.js";
 import type Popover from "./Popover.js";
 import type ResponsivePopover from "./ResponsivePopover.js";
 import type List from "./List.js";
 import type { ListItemClickEventDetail } from "./List.js";
 import "./ComboBoxItemGroup.js";
 import type ComboBoxFilter from "./types/ComboBoxFilter.js";
+import ComboBoxSelectionChangeTrigger from "./types/ComboBoxSelectionChangeTrigger.js";
 import type { InputEventDetail } from "./Input.js";
 import type { ListItemBaseClickEventDetail } from "./ListItemBase.js";
 import type InputComposition from "./features/InputComposition.js";
@@ -43,6 +45,7 @@ type ValueStateAnnouncement = Record<Exclude<ValueState, ValueState.None>, strin
 type ValueStateTypeAnnouncement = Record<Exclude<ValueState, ValueState.None>, string>;
 type ComboBoxSelectionChangeEventDetail = {
     item: ComboBoxItem | null;
+    trigger: `${ComboBoxSelectionChangeTrigger}`;
 };
 /**
  * @class
@@ -306,6 +309,7 @@ declare class ComboBox extends UI5Element implements IFormInputElement {
     _autocomplete: boolean;
     _isKeyNavigation: boolean;
     _selectionPerformed: boolean;
+    _selectionTrigger?: `${ComboBoxSelectionChangeTrigger}`;
     _lastValue: string;
     _selectedItemText: string;
     _userTypedValue: string;
@@ -451,4 +455,5 @@ declare class ComboBox extends UI5Element implements IFormInputElement {
     };
 }
 export default ComboBox;
+export { ComboBoxSelectionChangeTrigger };
 export type { ComboBoxSelectionChangeEventDetail, IComboBoxItem, };

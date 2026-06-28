@@ -12,6 +12,7 @@ import "@ui5/webcomponents-icons/dist/sys-enter-2.js";
 import "@ui5/webcomponents-icons/dist/information.js";
 import type { IFormInputElement } from "@ui5/webcomponents-base/dist/features/InputElementsFormSupport.js";
 import MultiComboBoxItem from "./MultiComboBoxItem.js";
+import "./MultiComboBoxItemCustom.js";
 import Tokenizer from "./Tokenizer.js";
 import type { TokenizerTokenDeleteEventDetail } from "./Tokenizer.js";
 import type { IIcon } from "./Icon.js";
@@ -400,6 +401,7 @@ declare class MultiComboBox extends UI5Element implements IFormInputElement {
      */
     _getItems(): Array<IMultiComboBoxItem>;
     _getSelectedItems(): Array<MultiComboBoxItem>;
+    _getSelectedValues(): Array<string>;
     _listSelectionChange(e: CustomEvent<ListSelectionChangeEventDetail>): void;
     fireSelectionChange(): boolean;
     _getList(): List;

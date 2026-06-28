@@ -2,7 +2,6 @@ export default `:host {
     --_ui5_banner_background: light-dark(var(--sapShell_Banner_Background, var(--sapHighlightColor)), var(--sapShell_HeroBanner_Background));
     --_ui5_banner_text_color: light-dark(var(--sapShell_Banner_TextColor, var(--sapContent_ContrastTextColor)), var(--sapShell_HeroBanner_TextColor));
     --_ui5_banner_border_radius: var(--sapTile_BorderCornerRadius);
-    --_ui5_banner_border: .0625rem solid var(--sapTile_BorderColor);
     --_ui5_banner_box_shadow: var(--sapContent_Shadow0);
     --_ui5_banner_background_image: var(--sapShell_HeroBanner_BackgroundImage);
     --_ui5_timeline_scroll_container_offset: var(--_ui5-light-scheme, .5rem) var(--_ui5-dark-scheme, var(--_ui5-f2d95f8));
@@ -13,17 +12,6 @@ export default `:host {
     --_ui5_fcl_column_border: solid .0625rem var(--sapGroup_ContentBorderColor);
     --_ui5_fcl_decoration_top: linear-gradient(to top, var(--sapHighlightColor), transparent);
     --_ui5_fcl_decoration_bottom: linear-gradient(to bottom, var(--sapHighlightColor), transparent);
-    --sapIllus_BrandColorPrimary: var(--sapContent_Illustrative_Color1);
-    --sapIllus_BrandColorSecondary: var(--sapContent_Illustrative_Color2);
-    --sapIllus_StrokeDetailColor: var(--sapContent_Illustrative_Color4);
-    --sapIllus_Layering1: var(--sapContent_Illustrative_Color5);
-    --sapIllus_Layering2: var(--sapContent_Illustrative_Color6);
-    --sapIllus_BackgroundColor: var(--sapContent_Illustrative_Color7);
-    --sapIllus_ObjectFillColor: var(--sapContent_Illustrative_Color8);
-    --sapIllus_AccentColor: var(--sapContent_Illustrative_Color3);
-    --sapIllus_NoColor: none;
-    --sapIllus_PatternShadow: url(#sapIllus_PatternShadow);
-    --sapIllus_PatternHighlight: url(#sapIllus_PatternHighlight);
     --_ui5_media_gallery_overflow_btn_background: var(--sapButton_Background);
     --_ui5_media_gallery_overflow_btn_color: var(--sapButton_TextColor);
     --_ui5_media_gallery_overflow_btn_border: 1px solid var(--sapButton_BorderColor);
@@ -256,6 +244,7 @@ export default `:host {
     --_ui5-search-field-text-color: var(--sapField_TextColor);
     --_ui5_search_item_vertical_padding: var(--_ui5-compact-size, .5rem)  var(--_ui5-cozy-size, 1rem);
     --_ui5_search_byline_vertical_padding: .5rem;
+    --_ui5_search_popover_max_height: 39rem;
     --_ui5_dynamic_page_title_padding_top: .5rem;
     --_ui5_dynamic_page_title_padding_bottom: .5rem;
     --_ui5_dynamic_page_title_min_height: 4rem;

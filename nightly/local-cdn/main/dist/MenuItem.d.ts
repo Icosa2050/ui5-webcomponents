@@ -252,6 +252,7 @@ declare class MenuItem extends ListItem implements IMenuItem {
     _isSpace(e: KeyboardEvent): boolean;
     _isEnter(e: KeyboardEvent): boolean;
     _onclick(e: MouseEvent): void;
+    _isEndContentClicked(e: MouseEvent): boolean;
     _itemKeyDown(e: KeyboardEvent): void;
     _itemKeyUp(e: KeyboardEvent): void;
     _endContentKeyDown(e: KeyboardEvent): void;

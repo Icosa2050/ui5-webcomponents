@@ -34,6 +34,7 @@ let ShellBarSearch = ShellBarSearch_1 = class ShellBarSearch extends Search {
     _handleSearchIconPress() {
         if (isPhone() && this.open) {
             this._handleSearchEvent();
+            this._closePopupAndResetState();
             return;
         }
         super._handleSearchIconPress();

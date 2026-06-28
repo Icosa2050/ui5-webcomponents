@@ -11,22 +11,18 @@ export default function DialogTemplate() {
 }
 function beforeContent() {
     return (_jsx(_Fragment, { children: !!this._displayHeader &&
-            _jsxs("div", { class: "ui5-popup-header-root", id: "ui5-popup-header", role: "region", "aria-label": this._headerAriaLabel, "aria-describedby": this.effectiveAriaDescribedBy, "aria-roledescription": this.ariaRoleDescriptionHeaderText, tabIndex: this._headerTabIndex, onKeyDown: this._onDragOrResizeKeyDown, onMouseDown: this._onDragMouseDown, part: "header", children: [this.hasValueState &&
+            _jsxs("div", { class: "ui5-popup-header-root", id: "ui5-popup-header", role: "region", "aria-label": this._headerAriaLabel, onMouseDown: this._onDragMouseDown, part: "header", children: [this.hasValueState &&
                         _jsx(Icon, { class: "ui5-dialog-value-state-icon", name: this._dialogStateIcon }), this.header.length ?
                         _jsx("slot", { name: "header" })
                         :
-                            _jsx(Title, { level: "H1", id: "ui5-popup-header-text", class: "ui5-popup-header-text", children: this.headerText }), this.resizable ?
-                        this.draggable ?
-                            _jsx("span", { id: `${this._id}-descr`, "aria-hidden": "true", class: "ui5-hidden-text", children: this.ariaDescribedByHeaderTextDraggableAndResizable })
-                            :
-                                _jsx("span", { id: `${this._id}-descr`, "aria-hidden": "true", class: "ui5-hidden-text", children: this.ariaDescribedByHeaderTextResizable })
-                        :
-                            this.draggable &&
-                                _jsx("span", { id: `${this._id}-descr`, "aria-hidden": "true", class: "ui5-hidden-text", children: this.ariaDescribedByHeaderTextDraggable })] }) }));
+                            _jsx(Title, { level: "H1", id: "ui5-popup-header-text", class: "ui5-popup-header-text", children: this.headerText })] }) }));
 }
 function afterContent() {
     return (_jsxs(_Fragment, { children: [!!this.footer.length &&
                 _jsx("div", { class: "ui5-popup-footer-root", role: "region", "aria-label": this._footerAriaLabel, part: "footer", children: _jsx("slot", { name: "footer" }) }), this._showResizeHandle &&
-                _jsx("div", { class: "ui5-popup-resize-handle", onMouseDown: this._onResizeMouseDown, children: _jsx(Icon, { name: resizeCorner }) })] }));
+                _jsx("div", { class: "ui5-popup-resize-handle", onMouseDown: this._onResizeMouseDown, title: this._resizeHandleTooltip, children: _jsx(Icon, { name: resizeCorner }) }), this._movable &&
+                _jsxs(_Fragment, { children: [_jsx("span", { id: `${this._id}-dragResizeHandler`, class: "ui5-popup-drag-resize-handler ui5-hidden-text", tabIndex: this._dragResizeHandleTabIndex, role: "img", "aria-roledescription": this._dragResizeHandleAriaRoleDescription, "aria-label": this._dragResizeHandleAriaLabel, "aria-describedby": this._dragResizeHandleAriaDescribedBy, onKeyDown: this._onDragOrResizeKeyDown }), this.ariaDescribedByHandlerText &&
+                            _jsx("span", { id: `${this._id}-descr`, "aria-hidden": "true", class: "ui5-hidden-text", children: this.ariaDescribedByHandlerText }), this.dialogAriaDescribedByText &&
+                            _jsx("span", { id: `${this._id}-dialog-descr`, "aria-hidden": "true", class: "ui5-hidden-text", children: this.dialogAriaDescribedByText })] })] }));
 }
 //# sourceMappingURL=DialogTemplate.js.map

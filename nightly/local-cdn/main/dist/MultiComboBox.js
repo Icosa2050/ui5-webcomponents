@@ -27,6 +27,7 @@ import { getAssociatedLabelForTexts, getEffectiveAriaLabelText } from "@ui5/webc
 import arraysAreEqual from "@ui5/webcomponents-base/dist/util/arraysAreEqual.js";
 import { submitForm } from "@ui5/webcomponents-base/dist/features/InputElementsFormSupport.js";
 import MultiComboBoxItem, { isInstanceOfMultiComboBoxItem } from "./MultiComboBoxItem.js";
+import "./MultiComboBoxItemCustom.js";
 import MultiComboBoxItemGroup, { isInstanceOfMultiComboBoxItemGroup } from "./MultiComboBoxItemGroup.js";
 import ListItemGroup from "./ListItemGroup.js";
 import Tokenizer, { getTokensCountText } from "./Tokenizer.js";
@@ -1069,6 +1070,12 @@ let MultiComboBox = MultiComboBox_1 = class MultiComboBox extends UI5Element {
         // Angular 2 way data binding
         return this._getItems().filter(item => item.selected);
     }
+    _getSelectedValues() {
+        return this._getItems()
+            .filter((i) => isInstanceOfMultiComboBoxItem(i) && i.selected)
+            .map(i => i.value)
+            .filter((v) => !!v);
+    }
     _listSelectionChange(e) {
         let changePrevented;
         if (this.readonly) {
@@ -1078,15 +1085,14 @@ let MultiComboBox = MultiComboBox_1 = class MultiComboBox extends UI5Element {
         if (!isPhone()) {
             this._previouslySelectedItems = e.detail.previouslySelectedItems;
         }
+        // Update selectedValues for both desktop and mobile
+        // On mobile, this provides visual feedback (checkbox state)
+        // On desktop, this happens before firing the selection-change event
+        if (this.selectedValues) {
+            this.selectedValues = this._getSelectedValues();
+        }
         // don't call selection change right after selection as user can cancel it on phone
         if (!isPhone()) {
-            if (this.selectedValues) {
-                // Get values from all selected items (not just filtered ones)
-                this.selectedValues = this._getItems()
-                    .filter((i) => isInstanceOfMultiComboBoxItem(i) && i.selected)
-                    .map(i => i.value)
-                    .filter((v) => !!v);
-            }
             changePrevented = this.fireSelectionChange();
             if (changePrevented) {
                 e.preventDefault();
@@ -1341,6 +1347,10 @@ let MultiComboBox = MultiComboBox_1 = class MultiComboBox extends UI5Element {
                 item.ref.selected = item.selected;
             }
         });
+        // Revert selectedValues to match the restored selection state
+        if (this.selectedValues) {
+            this.selectedValues = this._getSelectedValues();
+        }
         this._toggleTokenizerPopover();
         this.value = this._valueBeforeOpen;
     }

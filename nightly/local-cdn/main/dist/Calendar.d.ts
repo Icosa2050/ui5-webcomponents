@@ -7,7 +7,7 @@ import "@ui5/webcomponents-icons/dist/slim-arrow-right.js";
 import CalendarDateRange from "./CalendarDateRange.js";
 import "./SpecialCalendarDate.js";
 import CalendarPart from "./CalendarPart.js";
-import type { DayPickerChangeEventDetail } from "./DayPicker.js";
+import type { DayPickerChangeEventDetail, DayPickerNavigateEventDetail } from "./DayPicker.js";
 import type { MonthPickerChangeEventDetail } from "./MonthPicker.js";
 import type { YearPickerChangeEventDetail } from "./YearPicker.js";
 import CalendarSelectionMode from "./types/CalendarSelectionMode.js";
@@ -336,7 +336,6 @@ declare class Calendar extends CalendarPart {
         monthButtonText: string;
         monthButtonInfo: string;
     } | undefined;
-    get _isCompactMode(): boolean;
     get _monthsToShow(): 1 | 2;
     /**
      * The month button is hidden when the month picker or year picker is shown
@@ -366,7 +365,7 @@ declare class Calendar extends CalendarPart {
     onSelectedMonthChange(e: CustomEvent<MonthPickerChangeEventDetail>): void;
     onSelectedYearChange(e: CustomEvent<YearPickerChangeEventDetail>): void;
     onSelectedYearRangeChange(e: CustomEvent<YearRangePickerChangeEventDetail>): void;
-    onNavigate(e: CustomEvent): Promise<void>;
+    onNavigate(e: CustomEvent<DayPickerNavigateEventDetail>): Promise<void>;
     _onkeydown(e: KeyboardEvent): void;
     _onLegendFocusOut(): void;
     get _specialDates(): SpecialCalendarDate[];

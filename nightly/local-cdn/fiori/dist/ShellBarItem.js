@@ -9,6 +9,7 @@ import property from "@ui5/webcomponents-base/dist/decorators/property.js";
 import event from "@ui5/webcomponents-base/dist/decorators/event-strict.js";
 import customElement from "@ui5/webcomponents-base/dist/decorators/customElement.js";
 import jsxRenderer from "@ui5/webcomponents-base/dist/renderer/JsxRenderer.js";
+import createInstanceChecker from "@ui5/webcomponents-base/dist/util/createInstanceChecker.js";
 import Button from "@ui5/webcomponents/dist/Button.js";
 import ButtonBadge from "@ui5/webcomponents/dist/ButtonBadge.js";
 import ListItemStandard from "@ui5/webcomponents/dist/ListItemStandard.js";
@@ -57,6 +58,9 @@ let ShellBarItem = class ShellBarItem extends UI5Element {
     }
     get stableDomRef() {
         return this.getAttribute("stable-dom-ref") || `${this._id}-stable-dom-ref`;
+    }
+    get isShellBarItem() {
+        return true;
     }
     hasListItems() {
         return this.inOverflow;
@@ -110,4 +114,5 @@ ShellBarItem = __decorate([
 ], ShellBarItem);
 ShellBarItem.define();
 export default ShellBarItem;
+export const isInstanceOfShellBarItem = createInstanceChecker("isShellBarItem");
 //# sourceMappingURL=ShellBarItem.js.map

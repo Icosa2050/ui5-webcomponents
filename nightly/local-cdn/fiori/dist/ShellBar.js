@@ -40,7 +40,7 @@ import ShellBarSearchLegacy from "./shellbar/ShellBarSearchLegacy.js";
 import ShellBarOverflow from "./shellbar/ShellBarOverflow.js";
 import ShellBarAccessibility from "./shellbar/ShellBarAccessibility.js";
 import ShellBarItemNavigation from "./shellbar/ShellBarItemNavigation.js";
-import ShellBarItem from "./ShellBarItem.js";
+import ShellBarItem, { isInstanceOfShellBarItem } from "./ShellBarItem.js";
 import ShellBarSpacer from "./ShellBarSpacer.js";
 import { SHELLBAR_LABEL, SHELLBAR_NOTIFICATIONS, SHELLBAR_NOTIFICATIONS_NO_COUNT, SHELLBAR_PROFILE, SHELLBAR_PRODUCTS, SHELLBAR_SEARCH, SHELLBAR_ASSISTANT, SHELLBAR_OVERFLOW, SHELLBAR_ADDITIONAL_CONTEXT, } from "./generated/i18n/i18n-defaults.js";
 const ShellBarActions = {
@@ -335,7 +335,7 @@ let ShellBar = ShellBar_1 = class ShellBar extends UI5Element {
         const result = this.overflow.updateOverflow({
             actions: this.actions,
             content: this.sortContent(this.content),
-            customItems: this.items,
+            customItems: this._validItems,
             hiddenItemsIds: this.hiddenItemsIds,
             showSearchField: this.enabledFeatures.search && this.showSearchField,
             overflowOuter: this.overflowOuter,
@@ -353,7 +353,7 @@ let ShellBar = ShellBar_1 = class ShellBar extends UI5Element {
     handleUpdateOverflowResult(result) {
         const { hiddenItemsIds, showOverflowButton } = result;
         // Update items overflow state
-        this.items.forEach(item => {
+        this._validItems.forEach(item => {
             item.inOverflow = hiddenItemsIds.includes(item._id);
             if (item.inOverflow) {
                 // clear the hidden class to ensure the item is visible in the overflow popover
@@ -417,9 +417,20 @@ let ShellBar = ShellBar_1 = class ShellBar extends UI5Element {
     get overflowItems() {
         return this.overflow.getOverflowItems({
             actions: this.actions,
-            customItems: this.items,
+            customItems: this._validItems,
             hiddenItemsIds: this.hiddenItemsIds,
         });
+    }
+    /**
+     * Only entries that are actually `ui5-shellbar-item` instances participate in the
+     * overflow calculation and template rendering. The default slot's type is
+     * `HTMLElement`, so any stray child (e.g. a bare `<span>`) ends up in `this.items`;
+     * if such an element reaches the overflow algorithm it has no `_id` / `stableDomRef`,
+     * which writes `undefined` back into reactive properties on every pass and re-enters
+     * the render queue until `RenderQueue` throws "processed too many times".
+     */
+    get _validItems() {
+        return this.items.filter(isInstanceOfShellBarItem);
     }
     /**
      * Returns badge text for overflow button.
@@ -637,6 +648,9 @@ let ShellBar = ShellBar_1 = class ShellBar extends UI5Element {
      * @since 1.0.0-rc.16
      */
     get notificationsDomRef() {
+        if (this.isHidden(ShellBarActions.Notifications)) {
+            return this.overflowDomRef;
+        }
         return this.shadowRoot.querySelector(`*[data-ui5-stable="notifications"]`);
     }
     /**

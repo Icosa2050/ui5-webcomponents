@@ -38,7 +38,6 @@ import CalendarTemplate from "./CalendarTemplate.js";
 import calendarCSS from "./generated/themes/Calendar.css.js";
 import CalendarHeaderCss from "./generated/themes/CalendarHeader.css.js";
 import { CALENDAR_HEADER_MONTH_BUTTON, CALENDAR_HEADER_MONTH_BUTTON_SHORTCUT, CALENDAR_HEADER_YEAR_BUTTON, CALENDAR_HEADER_YEAR_BUTTON_SHORTCUT, CALENDAR_HEADER_YEAR_RANGE_BUTTON, CALENDAR_HEADER_YEAR_RANGE_BUTTON_SHORTCUT, CALENDAR_HEADER_MONTH_NEXT_BUTTON_TITLE, CALENDAR_HEADER_MONTH_NEXT_BUTTON_SHORTCUT, CALENDAR_HEADER_MONTH_PREVIOUS_BUTTON_TITLE, CALENDAR_HEADER_MONTH_PREVIOUS_BUTTON_SHORTCUT, CALENDAR_HEADER_YEAR_NEXT_BUTTON_TITLE, CALENDAR_HEADER_YEAR_PREVIOUS_BUTTON_TITLE, CALENDAR_HEADER_YEAR_RANGE_NEXT_BUTTON_TITLE, CALENDAR_HEADER_YEAR_RANGE_PREVIOUS_BUTTON_TITLE, } from "./generated/i18n/i18n-defaults.js";
-import getEffectiveContentDensity from "@ui5/webcomponents-base/dist/util/getEffectiveContentDensity.js";
 import modifyDateBy from "@ui5/webcomponents-localization/dist/dates/modifyDateBy.js";
 const PHONE_MODE_BREAKPOINT = 640; // px
 /**
@@ -533,9 +532,6 @@ let Calendar = Calendar_1 = class Calendar extends CalendarPart {
             monthButtonInfo: secondMonthInfo.textInfo,
         };
     }
-    get _isCompactMode() {
-        return getEffectiveContentDensity(this) === "compact";
-    }
     get _monthsToShow() {
         const monthsToShow = this._showTwoMonths && !isPhone() ? 2 : 1;
         return monthsToShow;
@@ -651,6 +647,12 @@ let Calendar = Calendar_1 = class Calendar extends CalendarPart {
     }
     async onNavigate(e) {
         this.timestamp = e.detail.timestamp;
+        // Mouse-driven navigation handles its own focus; the click already landed
+        // where the user wants. Refocusing after the deferred render would steal
+        // focus from a sibling component (e.g. a time picker in DateTimePicker).
+        if (e.detail.mouse) {
+            return;
+        }
         await renderFinished();
         this._currentPickerDOM.focus();
     }

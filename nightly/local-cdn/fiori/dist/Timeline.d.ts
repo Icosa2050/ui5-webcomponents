@@ -118,7 +118,7 @@ declare class Timeline extends UI5Element {
      *
      * @default false
      * @public
-     * @since 2.22.0
+     * @since 2.24.0
      */
     stickyHeader: boolean;
     /**
@@ -136,7 +136,7 @@ declare class Timeline extends UI5Element {
      * Typically a `ui5-toolbar` with search, sort, and filter controls.
      *
      * @public
-     * @since 2.22.0
+     * @since 2.24.0
      */
     header: Slot<HTMLElement>;
     /**
@@ -144,7 +144,7 @@ declare class Timeline extends UI5Element {
      * and above the items. Use for status display (applied filters, sort direction, counts).
      *
      * @public
-     * @since 2.22.0
+     * @since 2.24.0
      */
     infoBar: Slot<HTMLElement>;
     timelineEndMarker: HTMLElement;

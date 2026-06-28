@@ -39,6 +39,7 @@ type DayPickerChangeEventDetail = {
 };
 type DayPickerNavigateEventDetail = {
     timestamp: number;
+    mouse?: boolean;
 };
 /**
  * @class

@@ -344,6 +344,7 @@ declare class List extends UI5Element {
     get ariaLabelTxt(): string | undefined;
     get ariaDescriptionText(): string;
     get defaultAriaDescriptionText(): string;
+    get _hasInteractiveItems(): boolean;
     get growingButtonAriaLabel(): string | undefined;
     get growingButtonAriaLabelledBy(): string | undefined;
     get growingButtonAriaDescribedBy(): string | undefined;

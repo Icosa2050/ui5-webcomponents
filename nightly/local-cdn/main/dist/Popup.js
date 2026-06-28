@@ -15,7 +15,7 @@ import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
 import { isChrome, isDesktop, isPhone, } from "@ui5/webcomponents-base/dist/Device.js";
 import { getFirstFocusableElement, getLastFocusableElement } from "@ui5/webcomponents-base/dist/util/FocusableElements.js";
 import { registerUI5Element, getEffectiveAriaLabelText, getEffectiveAriaDescriptionText, getAllAccessibleDescriptionRefTexts, deregisterUI5Element, } from "@ui5/webcomponents-base/dist/util/AccessibilityTextsHelper.js";
-import { hasStyle, createStyle } from "@ui5/webcomponents-base/dist/ManagedStyles.js";
+import { createOrUpdateStyle } from "@ui5/webcomponents-base/dist/ManagedStyles.js";
 import { isEnter, isTabPrevious } from "@ui5/webcomponents-base/dist/Keys.js";
 import { getFocusedElement, isFocusedElementWithinNode } from "@ui5/webcomponents-base/dist/util/PopupUtils.js";
 import ResizeHandler from "@ui5/webcomponents-base/dist/delegate/ResizeHandler.js";
@@ -29,9 +29,7 @@ import popupStlyes from "./generated/themes/Popup.css.js";
 import popupBlockLayerStyles from "./generated/themes/PopupBlockLayer.css.js";
 import globalStyles from "./generated/themes/PopupGlobal.css.js";
 const createBlockingStyle = () => {
-    if (!hasStyle("data-ui5-popup-scroll-blocker")) {
-        createStyle(globalStyles, "data-ui5-popup-scroll-blocker");
-    }
+    createOrUpdateStyle(globalStyles, "data-ui5-popup-scroll-blocker");
 };
 createBlockingStyle();
 const pageScrollingBlockers = new Set();

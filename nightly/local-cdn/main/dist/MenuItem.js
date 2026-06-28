@@ -304,8 +304,15 @@ let MenuItem = MenuItem_1 = class MenuItem extends ListItem {
         return isEnter(e) || isEnterShift(e);
     }
     _onclick(e) {
+        // Clicks on the endContent slot must not activate the item (which would close the menu).
+        if (this._isEndContentClicked(e)) {
+            return;
+        }
         this._shiftPressed = this._isCheckable && e.shiftKey;
         super._onclick(e);
+    }
+    _isEndContentClicked(e) {
+        return this.endContent.some(element => e.composedPath().includes(element));
     }
     _itemKeyDown(e) {
         const item = e.target;

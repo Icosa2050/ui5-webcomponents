@@ -377,6 +377,15 @@ declare class ShellBar extends UI5Element {
     handleOverflowItemClick(e: MouseEvent): void;
     get overflowItems(): readonly import("./shellbar/ShellBarOverflow.js").ShellBarOverflowItem[];
     /**
+     * Only entries that are actually `ui5-shellbar-item` instances participate in the
+     * overflow calculation and template rendering. The default slot's type is
+     * `HTMLElement`, so any stray child (e.g. a bare `<span>`) ends up in `this.items`;
+     * if such an element reaches the overflow algorithm it has no `_id` / `stableDomRef`,
+     * which writes `undefined` back into reactive properties on every pass and re-enters
+     * the render queue until `RenderQueue` throws "processed too many times".
+     */
+    get _validItems(): ShellBarItem[];
+    /**
      * Returns badge text for overflow button.
      * Shows count if only one item with count is overflowed, otherwise shows attention dot.
      */

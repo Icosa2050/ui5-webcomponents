@@ -345,12 +345,9 @@ export default `:host {
     --_ui5_daypicker_item_now_selected_between_border_radius: .1875rem;
     --_ui5_daypicker_item_select_between_border: 1px solid var(--sapContent_Selected_ForegroundColor);
     --_ui5-dp-item_withsecondtype_border: .25rem;
-    --_ui5_dialog_header_focus_bottom_offset: 2px;
-    --_ui5_dialog_header_focus_top_offset: 1px;
-    --_ui5_dialog_header_focus_left_offset: 1px;
-    --_ui5_dialog_header_focus_right_offset: 1px;
-    --_ui5_dialog_header_border_radius: var(--sapElement_BorderCornerRadius);
     --_ui5_dialog_header_state_line_height: .0625rem;
+    --_ui5_dialog_focus_outline_offset: .0625rem;
+    --_ui5_dialog_resizable_bottom_right_radius: 1.75rem;
     --_ui5_file_uploader_display_input_width: calc(100% - var(--_ui5_input_icon_width));
     --_ui5_file_uploader_tokenizer_width: calc(100% - 2 * var(--_ui5_input_icon_width) - var(--_ui5_input_inner_space_to_tokenizer));
     --_ui5_table_cell_valign: center;
@@ -1074,9 +1071,9 @@ export default `:host {
     --_ui5_calendar_header_height: var(--_ui5-compact-size, 2rem)  var(--_ui5-cozy-size, 3rem);
     --_ui5_calendar_header_arrow_button_width: var(--_ui5-compact-size, 2rem)  var(--_ui5-cozy-size, 2.5rem);
     --_ui5_calendar_header_padding: var(--_ui5-compact-size, 0)  var(--_ui5-cozy-size, .25rem 0);
-    --_ui5_calendar_multiple_layout: var(--_ui5-compact-size, column)  var(--_ui5-cozy-size, row);
+    --_ui5_calendar_multiple_layout: row;
     --_ui5_calendar_multiple_gap: var(--_ui5-compact-size, .5rem)  var(--_ui5-cozy-size, 1rem);
-    --_ui5_calendar_multiple_width: var(--_ui5-compact-size, var(--_ui5_calendar_width))  var(--_ui5-cozy-size, calc((var(--_ui5_calendar_width) * 2) + (var(--_ui5_calendar_left_right_padding) * 2)));
+    --_ui5_calendar_multiple_width: var(--_ui5-compact-size, calc((var(--_ui5_calendar_width) * 2) + (var(--_ui5_calendar_left_right_padding) * 2)))  var(--_ui5-cozy-size, calc((var(--_ui5_calendar_width) * 2) + (var(--_ui5_calendar_left_right_padding) * 2)));
     --_ui5_calendar_overlay_top: var(--_ui5-compact-size, 54%)  var(--_ui5-cozy-size, 57%);
     --_ui5_calendar_overlay_width: var(--_ui5-compact-size, 100%)  var(--_ui5-cozy-size, 16rem);
     --_ui5_checkbox_root_side_padding: var(--_ui5-compact-size, var(--_ui5_checkbox_wrapped_focus_padding))  var(--_ui5-cozy-size, .6875rem);
@@ -1096,7 +1093,7 @@ export default `:host {
     --_ui5_daypicker_item_now_selected_two_calendar_focus_secondary_text_padding_block: var(--_ui5-compact-size, 0 1rem)  var(--_ui5-cozy-size, 0 .5rem);
     --_ui5_daypicker_two_calendar_item_selected_focus_margin_bottom: var(--_ui5-compact-size, -.25rem)  var(--_ui5-cozy-size, 0);
     --_ui5_daypicker_two_calendar_item_selected_focus_padding_right: var(--_ui5-compact-size, .4375rem)  var(--_ui5-cozy-size, .5rem);
-    --_ui5_calendar_multiple_months_height: var(--_ui5-compact-size, calc(2 * var(--_ui5_calendar_height)))  var(--_ui5-cozy-size, var(--_ui5_calendar_height));
+    --_ui5_calendar_multiple_months_height: var(--_ui5-compact-size, var(--_ui5_calendar_height))  var(--_ui5-cozy-size, var(--_ui5_calendar_height));
     --_ui5-calendar-legend-item-root-focus-offset: -.125rem;
     --_ui5-calendar-legend-item-box-inner-margin: .5rem;
     --_ui5_color_picker_slider_progress_container_height: var(--_ui5-compact-size, 1.125rem)  var(--_ui5-cozy-size, 1.625rem);

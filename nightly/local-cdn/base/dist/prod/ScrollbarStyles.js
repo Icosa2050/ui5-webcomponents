@@ -1,2 +1,2 @@
-"use strict";import{hasStyle as l,createStyle as r}from"./ManagedStyles.js";import t from"./generated/css/ScrollbarStyles.css.js";const s=()=>{l("data-ui5-scrollbar-styles")||r(t,"data-ui5-scrollbar-styles")};export default s;
+"use strict";import{createOrUpdateStyle as r}from"./ManagedStyles.js";import t from"./generated/css/ScrollbarStyles.css.js";const l=()=>{r(t,"data-ui5-scrollbar-styles")};export default l;
 //# sourceMappingURL=ScrollbarStyles.js.map

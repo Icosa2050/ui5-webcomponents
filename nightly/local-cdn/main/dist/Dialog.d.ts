@@ -37,14 +37,14 @@ import "@ui5/webcomponents-icons/dist/information.js";
  * ### Keyboard Handling
  *
  * #### Basic Navigation
- * When the `ui5-dialog` has the `draggable` property set to `true` and the header is focused, the user can move the dialog
+ * When the `ui5-dialog` has the `draggable` property set to `true`, the user can move the dialog
  * with the following keyboard shortcuts:
  *
  * - [Up] or [Down] arrow keys - Move the dialog up/down.
  * - [Left] or [Right] arrow keys - Move the dialog left/right.
  *
  * #### Resizing
- * When the `ui5-dialog` has the `resizable` property set to `true` and the header is focused, the user can change the size of the dialog
+ * When the `ui5-dialog` has the `resizable` property set to `true`, the user can change the size of the dialog
  * with the following keyboard shortcuts:
  *
  * - [Shift] + [Up] or [Down] - Decrease/Increase the height of the dialog.
@@ -156,18 +156,24 @@ declare class Dialog extends Popup {
     static _isHeader(element: HTMLElement): boolean;
     get isModal(): boolean;
     get _ariaLabelledBy(): string | undefined;
-    get ariaRoleDescriptionHeaderText(): string | undefined;
     get effectiveAriaDescribedBy(): string | undefined;
-    get ariaDescribedByHeaderTextResizable(): string;
-    get ariaDescribedByHeaderTextDraggable(): string;
-    get ariaDescribedByHeaderTextDraggableAndResizable(): string;
+    get ariaDescribedByIds(): string;
+    get dialogAriaDescribedByText(): string;
+    get ariaDescribedByTextResizable(): string;
+    get ariaDescribedByTextDraggable(): string;
+    get ariaDescribedByTextDraggableAndResizable(): string;
+    get ariaDescribedByHandlerText(): string;
     /**
      * Determines if the header should be shown.
      */
     get _displayHeader(): string | number | boolean;
     get _movable(): boolean;
-    get _headerTabIndex(): 0 | undefined;
+    get _dragResizeHandleTabIndex(): 0 | undefined;
+    get _dragResizeHandleAriaLabel(): string;
+    get _dragResizeHandleAriaRoleDescription(): string | undefined;
+    get _dragResizeHandleAriaDescribedBy(): string | undefined;
     get _showResizeHandle(): boolean;
+    get _resizeHandleTooltip(): string | undefined;
     get _minHeight(): number;
     get hasValueState(): boolean;
     get _dialogStateIcon(): string;
@@ -208,5 +214,11 @@ declare class Dialog extends Popup {
     _handleDragStart(e: DragEvent): void;
     _attachMouseResizeHandlers(): void;
     _detachMouseResizeHandlers(): void;
+    /**
+     * Overrides Popup's forwardToLast to prioritize the drag/resize handler
+     * when Shift+Tab is pressed from the first focusable element.
+     * @private
+     */
+    forwardToLast(): Promise<void>;
 }
 export default Dialog;

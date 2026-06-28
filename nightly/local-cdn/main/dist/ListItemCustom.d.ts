@@ -21,6 +21,7 @@ import ListItem from "./ListItem.js";
  */
 declare class ListItemCustom extends ListItem {
     static i18nBundle: I18nBundle;
+    get isCustomListItem(): boolean;
     /**
      * Defines whether the item is movable.
      * @default false
@@ -60,3 +61,4 @@ declare class ListItemCustom extends ListItem {
     get accessibilityInfo(): AccessibilityInfo;
 }
 export default ListItemCustom;
+export declare const isInstanceOfListItemCustom: (object: any) => object is ListItemCustom;

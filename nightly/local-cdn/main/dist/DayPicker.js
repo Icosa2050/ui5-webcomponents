@@ -424,7 +424,7 @@ let DayPicker = DayPicker_1 = class DayPicker extends CalendarPart {
             return;
         }
         this._safelySetTimestamp(this._getTimestampFromDom(target));
-        this.fireDecoratorEvent("navigate", { timestamp: this.timestamp });
+        this.fireDecoratorEvent("navigate", { timestamp: this.timestamp, mouse: true });
     }
     /**
      * Called when at least one day is selected and the user presses "Shift".

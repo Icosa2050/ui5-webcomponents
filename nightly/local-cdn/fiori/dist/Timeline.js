@@ -117,7 +117,7 @@ let Timeline = Timeline_1 = class Timeline extends UI5Element {
          *
          * @default false
          * @public
-         * @since 2.22.0
+         * @since 2.24.0
          */
         this.stickyHeader = false;
         /**

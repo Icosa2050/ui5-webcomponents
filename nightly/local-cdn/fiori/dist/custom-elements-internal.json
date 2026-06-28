@@ -115,11 +115,19 @@
                   }
                 ]
               },
-              "description": "Fires when the scan is completed successfuuly.",
+              "description": "Fires when the scan is completed successfully.",
               "_ui5Cancelable": false,
               "_ui5allowPreventDefault": false,
               "_ui5Bubbles": true,
               "_ui5parameters": [
+                {
+                  "type": {
+                    "text": "string"
+                  },
+                  "name": "format",
+                  "_ui5privacy": "public",
+                  "description": "the format of the scanned barcode (e.g. \"QR_CODE\", \"EAN_13\", \"CODE_128\")"
+                },
                 {
                   "type": {
                     "text": "Object"
@@ -6118,6 +6126,12 @@
           "kind": "class",
           "description": "### Overview\n\nA `ui5-search` is an input with suggestions, used for user search.\n\nThe `ui5-search` consists of several elements parts:\n- Scope - displays a select in the beggining of the component, used for filtering results by their scope.\n- Input field - for user input value\n- Clear button - gives the possibility for deleting the entered value\n- Search button - a primary button for performing search, when the user has entered a search term\n- Suggestions - a list with available search suggestions\n\n### ES6 Module Import\n\n`import \"@ui5/webcomponents-fiori/dist/Search.js\";`",
           "name": "Search",
+          "cssParts": [
+            {
+              "description": "Used to style the suggestions popup",
+              "name": "popover"
+            }
+          ],
           "slots": [
             {
               "name": "action",
@@ -8766,6 +8780,12 @@
           "_ui5experimental": true,
           "_ui5since": "2.10.0",
           "_ui5privacy": "public",
+          "cssParts": [
+            {
+              "description": "Used to style the suggestions popup",
+              "name": "popover"
+            }
+          ],
           "slots": [
             {
               "name": "action",
@@ -10602,7 +10622,7 @@
             {
               "name": "header",
               "description": "Defines the content of the Timeline's header area, displayed above the items.\nTypically a `ui5-toolbar` with search, sort, and filter controls.",
-              "_ui5since": "2.22.0",
+              "_ui5since": "2.24.0",
               "_ui5type": {
                 "text": "Array<HTMLElement>"
               },
@@ -10611,7 +10631,7 @@
             {
               "name": "infoBar",
               "description": "Defines the content of the Timeline's info bar area, displayed below the header\nand above the items. Use for status display (applied filters, sort direction, counts).",
-              "_ui5since": "2.22.0",
+              "_ui5since": "2.24.0",
               "_ui5type": {
                 "text": "Array<HTMLElement>"
               },
@@ -10696,7 +10716,7 @@
               "default": "false",
               "description": "Defines whether the content of the `header` and `infoBar` slots remains visible when the user scrolls the Timeline.\n\n**Note:** The bars pin to the Timeline's own scrollport. Give the Timeline a\nconstrained height (for example `style=\"height: 32rem\"`) so its items scroll\ninside it. Placing the Timeline inside an externally scrolling ancestor while\nleaving the Timeline itself unsized is not supported in this mode — the bars\nwill scroll away with the ancestor.",
               "privacy": "public",
-              "_ui5since": "2.22.0"
+              "_ui5since": "2.24.0"
             }
           ],
           "events": [
@@ -11938,6 +11958,15 @@
               "name": "footer",
               "description": "Defines custom footer content.\n\n**Note:** When provided, replaces the default \"Sign Out\" button. Use an empty element to hide the footer completely.",
               "_ui5since": "2.20.0",
+              "_ui5type": {
+                "text": "Array<HTMLElement>"
+              },
+              "_ui5privacy": "public"
+            },
+            {
+              "name": "infoArea",
+              "description": "Defines the content of the info area inside the User Menu's account block.\n\n**Note:** When empty, the User Menu renders unchanged.",
+              "_ui5since": "2.24.0",
               "_ui5type": {
                 "text": "Array<HTMLElement>"
               },

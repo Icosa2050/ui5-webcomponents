@@ -109,6 +109,15 @@ declare class UserMenu extends UI5Element {
      * @since 2.20.0
      */
     footer: Slot<HTMLElement>;
+    /**
+     * Defines the content of the info area inside the User Menu's account block.
+     *
+     * **Note:** When empty, the User Menu renders unchanged.
+     *
+     * @public
+     * @since 2.24.0
+     */
+    infoArea: Slot<HTMLElement>;
     static i18nBundle: I18nBundle;
     /**
      * @default false
@@ -176,6 +185,7 @@ declare class UserMenu extends UI5Element {
     get _ariaLabelledByActions(): string;
     get _hasCustomFooter(): boolean;
     get _showDefaultFooter(): boolean;
+    get _hasInfoArea(): boolean;
     getAccountDescriptionText(account: UserMenuAccount): string;
     getAccountByRefId(refId: string): UserMenuAccount;
     captureRef(ref: HTMLElement & {

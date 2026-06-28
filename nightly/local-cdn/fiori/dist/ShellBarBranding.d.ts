@@ -72,8 +72,10 @@ declare class ShellBarBranding extends UI5Element {
     get _role(): "button" | "link";
     get accessibleNameText(): string | undefined;
     _fireClick(): void;
+    private _activate;
+    private _getAnchor;
     _onclick(e: MouseEvent): void;
-    _onkeyup(e: KeyboardEvent): void;
     _onkeydown(e: KeyboardEvent): void;
+    _onkeyup(e: KeyboardEvent): void;
 }
 export default ShellBarBranding;

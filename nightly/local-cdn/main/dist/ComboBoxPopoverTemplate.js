@@ -18,10 +18,10 @@ export default function ComboBoxPopoverTemplate() {
                                                         // For group items, return all nested items
                                                         return item.items
                                                             .filter(nestedItem => !!nestedItem)
-                                                            .map(nestedItem => _jsx(SuggestionItem, { text: nestedItem.text, "additional-text": nestedItem.additionalText, markupText: generateHighlightedMarkupFirstMatch(nestedItem.text || "", this.filterValue) }));
+                                                            .map(nestedItem => _jsx(SuggestionItem, { text: nestedItem.text, additionalText: nestedItem.additionalText, markupText: generateHighlightedMarkupFirstMatch(nestedItem.text || "", this.filterValue) }));
                                                     }
                                                     // For regular items
-                                                    return _jsx(SuggestionItem, { text: item.text, "additional-text": item.additionalText, markupText: generateHighlightedMarkupFirstMatch(item.text || "", this.filterValue) });
+                                                    return _jsx(SuggestionItem, { text: item.text, additionalText: item.additionalText, markupText: generateHighlightedMarkupFirstMatch(item.text || "", this.filterValue) });
                                                 }) }) })] }), this.hasValueStateText &&
                                     _jsxs("div", { class: this.classes.popoverValueState, style: this.styles.popoverValueStateMessage, children: [_jsx(Icon, { class: "ui5-input-value-state-message-icon", name: this._valueStateMessageIcon }), this.open && valueStateMessage.call(this)] })] }), !this._isPhone && this.hasValueStateText &&
                         _jsxs("div", { slot: "header", class: {
