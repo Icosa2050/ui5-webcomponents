@@ -318,8 +318,8 @@ let ColorPalette = ColorPalette_1 = class ColorPalette extends UI5Element {
         }
     }
     _onColorContainerKeyDown(e) {
-        const target = e.target;
-        const isLastSwatchInSingleRow = this._isSingleRow() && this._isLastSwatch(target, this.displayedColors);
+        const eventTarget = e.target;
+        const swatchTarget = this._getColorPaletteItemFromEvent(e, this.displayedColors);
         // Prevent Home/End keys from working in embedded mode - they only work in popup mode as per design
         if (this._shouldPreventHomeEnd(e)) {
             e.preventDefault();
@@ -331,37 +331,41 @@ let ColorPalette = ColorPalette_1 = class ColorPalette extends UI5Element {
         }
         if (isTabNext(e) && this.popupMode) {
             e.preventDefault();
-            this.selectColor(target);
+            this.selectColor(swatchTarget || eventTarget);
         }
-        if (this._isPrevious(e) && this._isFirstSwatch(target, this.displayedColors)) {
+        if (!swatchTarget) {
+            return;
+        }
+        const isLastSwatchInSingleRow = this._isSingleRow() && this._isLastSwatch(swatchTarget, this.displayedColors);
+        if (this._isPrevious(e) && this._isFirstSwatch(swatchTarget, this.displayedColors)) {
             e.preventDefault();
             e.stopPropagation();
             this._focusFirstAvailable(() => this._focusDefaultColor(), () => this._focusLastRecentColor(), () => this._focusMoreColors(), () => this._focusLastSwatchOfLastFullRow(), () => this._focusLastDisplayedColor());
         }
-        else if ((isRight(e) && this._isLastSwatch(target, this.displayedColors))
-            || (isDown(e) && (this._isLastSwatchOfLastFullRow(target) || isLastSwatchInSingleRow))) {
+        else if ((isRight(e) && this._isLastSwatch(swatchTarget, this.displayedColors))
+            || (isDown(e) && (this._isLastSwatchOfLastFullRow(swatchTarget) || isLastSwatchInSingleRow))) {
             e.preventDefault();
             e.stopPropagation();
             this._focusFirstAvailable(() => this._focusMoreColors(), () => this._focusFirstRecentColor(), () => this._focusDefaultColor(), () => this._focusFirstDisplayedColor());
         }
-        else if (isHome(e) && this._isFirstSwatchInRow(target)) {
+        else if (isHome(e) && this._isFirstSwatchInRow(swatchTarget)) {
             e.preventDefault();
             e.stopPropagation();
             this._focusFirstAvailable(() => this._focusDefaultColor(), () => this._focusMoreColors(), () => this._focusFirstDisplayedColor());
         }
-        else if (isEnd(e) && this._isLastSwatchInRow(target)) {
+        else if (isEnd(e) && this._isLastSwatchInRow(swatchTarget)) {
             e.preventDefault();
             e.stopPropagation();
             this._focusFirstAvailable(() => this._focusMoreColors(), () => this._focusDefaultColor(), () => this._focusLastDisplayedColor());
         }
-        else if (isEnd(e) && this._isSwatchInLastRow(target)) {
+        else if (isEnd(e) && this._isSwatchInLastRow(swatchTarget)) {
             e.preventDefault();
             e.stopPropagation();
             this._focusLastDisplayedColor();
         }
     }
     _onRecentColorsContainerKeyDown(e) {
-        const target = e.target;
+        const swatchTarget = this._getColorPaletteItemFromEvent(e, this.recentColorsElements);
         // Prevent Home/End keys from working in embedded mode - they only work in popup mode as per design
         if (this._shouldPreventHomeEnd(e)) {
             e.preventDefault();
@@ -371,12 +375,15 @@ let ColorPalette = ColorPalette_1 = class ColorPalette extends UI5Element {
         if (this._isUpOrDownNavigatableColorPaletteItem(e)) {
             this._currentlySelected = undefined;
         }
-        if (this._isNext(e) && this._isLastSwatch(target, this.recentColorsElements)) {
+        if (!swatchTarget) {
+            return;
+        }
+        if (this._isNext(e) && this._isLastSwatch(swatchTarget, this.recentColorsElements)) {
             e.preventDefault();
             e.stopPropagation();
             this._focusFirstAvailable(() => this._focusDefaultColor(), () => this._focusMoreColors(), () => this._focusFirstDisplayedColor());
         }
-        else if (this._isPrevious(e) && this._isFirstSwatch(target, this.recentColorsElements)) {
+        else if (this._isPrevious(e) && this._isFirstSwatch(swatchTarget, this.recentColorsElements)) {
             e.preventDefault();
             e.stopPropagation();
             this._focusFirstAvailable(() => this._focusMoreColors(), () => this._focusLastSwatchOfLastFullRow(), () => this._focusLastDisplayedColor(), () => this._focusDefaultColor());
@@ -406,6 +413,10 @@ let ColorPalette = ColorPalette_1 = class ColorPalette extends UI5Element {
     }
     _isFirstSwatch(target, swatches) {
         return swatches && Boolean(swatches.length) && swatches[0] === (target);
+    }
+    _getColorPaletteItemFromEvent(e, swatches) {
+        const path = e.composedPath();
+        return swatches.find(swatch => path.includes(swatch));
     }
     _isLastSwatch(target, swatches) {
         return swatches && Boolean(swatches.length) && swatches[swatches.length - 1] === (target);

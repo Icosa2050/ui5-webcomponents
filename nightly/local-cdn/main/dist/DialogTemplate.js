@@ -3,6 +3,7 @@ import resizeCorner from "@ui5/webcomponents-icons/dist/resize-corner.js";
 import PopupTemplate from "./PopupTemplate.js";
 import Title from "./Title.js";
 import Icon from "./Icon.js";
+import Button from "./Button.js";
 export default function DialogTemplate() {
     return PopupTemplate.call(this, {
         beforeContent,
@@ -11,11 +12,12 @@ export default function DialogTemplate() {
 }
 function beforeContent() {
     return (_jsx(_Fragment, { children: !!this._displayHeader &&
-            _jsxs("div", { class: "ui5-popup-header-root", id: "ui5-popup-header", role: "region", "aria-label": this._headerAriaLabel, onMouseDown: this._onDragMouseDown, part: "header", children: [this.hasValueState &&
+            _jsxs("div", { class: "ui5-popup-header-root", id: "ui5-popup-header", role: "region", "aria-label": this._headerAriaLabel, onMouseDown: this._onDragMouseDown, onDblClick: this._showFullscreenButton ? this._onHeaderDblClick : undefined, part: "header", children: [this.hasValueState &&
                         _jsx(Icon, { class: "ui5-dialog-value-state-icon", name: this._dialogStateIcon }), this.header.length ?
                         _jsx("slot", { name: "header" })
                         :
-                            _jsx(Title, { level: "H1", id: "ui5-popup-header-text", class: "ui5-popup-header-text", children: this.headerText })] }) }));
+                            _jsx(Title, { level: "H1", id: "ui5-popup-header-text", class: "ui5-popup-header-text", children: this.headerText }), this._showFullscreenButton &&
+                        _jsx(Button, { class: "ui5-dialog-fullscreen-btn", icon: this._fullscreenButtonIcon, design: "Transparent", tooltip: this._fullscreenButtonTooltip, accessibleName: this._fullscreenButtonTooltip, accessibilityAttributes: this._fullscreenButtonAccessibilityAttributes, onClick: this._toggleFullscreen })] }) }));
 }
 function afterContent() {
     return (_jsxs(_Fragment, { children: [!!this.footer.length &&

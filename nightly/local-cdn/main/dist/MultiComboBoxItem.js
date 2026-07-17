@@ -10,7 +10,7 @@ import i18n from "@ui5/webcomponents-base/dist/decorators/i18n.js";
 import { property, eventStrict as event, } from "@ui5/webcomponents-base/dist/decorators.js";
 import ComboBoxItem from "./ComboBoxItem.js";
 import CheckBox from "./CheckBox.js";
-import { ARIA_LABEL_LIST_ITEM_CHECKBOX, } from "./generated/i18n/i18n-defaults.js";
+import { ARIA_LABEL_LIST_ITEM_CHECKBOX, LIST_ITEM_SELECTED, LIST_ITEM_NOT_SELECTED, } from "./generated/i18n/i18n-defaults.js";
 import styles from "./generated/themes/MultiComboBoxItem.css.js";
 import MultiComboBoxItemTemplate from "./MultiComboBoxItemTemplate.js";
 import createInstanceChecker from "@ui5/webcomponents-base/dist/util/createInstanceChecker.js";
@@ -34,6 +34,12 @@ let MultiComboBoxItem = MultiComboBoxItem_1 = class MultiComboBoxItem extends Co
     }
     get isMultiComboBoxItem() {
         return true;
+    }
+    get _selectionStateText() {
+        const stateText = this.selected
+            ? MultiComboBoxItem_1.i18nBundle.getText(LIST_ITEM_SELECTED)
+            : MultiComboBoxItem_1.i18nBundle.getText(LIST_ITEM_NOT_SELECTED);
+        return `${stateText},`;
     }
     _onclick(e) {
         if (e.target?.hasAttribute("ui5-checkbox")) {

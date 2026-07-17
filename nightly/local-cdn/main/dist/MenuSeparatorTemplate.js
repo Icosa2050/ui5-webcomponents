@@ -1,6 +1,5 @@
 import { jsx as _jsx } from "@ui5/webcomponents-base/jsx-runtime";
-import ListItemCustom from "./ListItemCustom.js";
 export default function MenuSeparatorTemplate() {
-    return (_jsx(ListItemCustom, { class: "ui5-menu-separator", _forcedAccessibleRole: "separator", disabled: true }));
+    return (_jsx("li", { role: "separator", class: "ui5-menu-separator" }));
 }
 //# sourceMappingURL=MenuSeparatorTemplate.js.map

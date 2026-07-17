@@ -97,6 +97,19 @@ MultiComboBoxItemCustom = MultiComboBoxItemCustom_1 = __decorate([
             ListItemBase.styles,
             styles,
         ],
+    })
+    /**
+     * Fired when the component is activated either with a mouse/tap or by using the Enter or Space key.
+     *
+     * **Note:** The event will not be fired if the `disabled` property is set to `true`.
+     *
+     * @since 2.24.0
+     * @public
+     * @param {Event} originalEvent The original event from the user interaction.
+     */
+    ,
+    event("click", {
+        bubbles: true,
     }),
     event("selection-requested", {
         bubbles: true,

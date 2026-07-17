@@ -41,6 +41,7 @@ declare class MultiComboBoxItem extends ComboBoxItem implements IMultiComboBoxIt
     _readonly: boolean;
     static i18nBundle: I18nBundle;
     get isMultiComboBoxItem(): boolean;
+    get _selectionStateText(): string;
     _onclick(e: MouseEvent): boolean | undefined;
     get _accessibleName(): string;
     get checkBoxAccInfo(): {

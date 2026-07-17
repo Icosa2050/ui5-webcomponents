@@ -42,6 +42,7 @@ import { i18n } from "@ui5/webcomponents-base/dist/decorators.js";
  * @since 2.9.0
  * @experimental
  * @csspart popover - Used to style the suggestions popup
+ * @since 2.24.0
  */
 let Search = Search_1 = class Search extends SearchField {
     constructor() {

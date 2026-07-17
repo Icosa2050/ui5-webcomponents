@@ -19,7 +19,6 @@ import type List from "./List.js";
 import type { ListItemClickEventDetail } from "./List.js";
 import "./ComboBoxItemGroup.js";
 import type ComboBoxFilter from "./types/ComboBoxFilter.js";
-import ComboBoxSelectionChangeTrigger from "./types/ComboBoxSelectionChangeTrigger.js";
 import type { InputEventDetail } from "./Input.js";
 import type { ListItemBaseClickEventDetail } from "./ListItemBase.js";
 import type InputComposition from "./features/InputComposition.js";
@@ -43,9 +42,15 @@ interface IComboBoxItem extends UI5Element {
 }
 type ValueStateAnnouncement = Record<Exclude<ValueState, ValueState.None>, string>;
 type ValueStateTypeAnnouncement = Record<Exclude<ValueState, ValueState.None>, string>;
+/**
+ * Describes the source of a `selection-change` event fired by the `ui5-combobox`.
+ * @public
+ * @since 2.24.0
+ */
+type ComboBoxSelectionChangeTrigger = "Typeahead" | "Click" | "Keyboard";
 type ComboBoxSelectionChangeEventDetail = {
     item: ComboBoxItem | null;
-    trigger: `${ComboBoxSelectionChangeTrigger}`;
+    trigger: ComboBoxSelectionChangeTrigger;
 };
 /**
  * @class
@@ -309,7 +314,7 @@ declare class ComboBox extends UI5Element implements IFormInputElement {
     _autocomplete: boolean;
     _isKeyNavigation: boolean;
     _selectionPerformed: boolean;
-    _selectionTrigger?: `${ComboBoxSelectionChangeTrigger}`;
+    _selectionTrigger?: ComboBoxSelectionChangeTrigger;
     _lastValue: string;
     _selectedItemText: string;
     _userTypedValue: string;
@@ -455,5 +460,4 @@ declare class ComboBox extends UI5Element implements IFormInputElement {
     };
 }
 export default ComboBox;
-export { ComboBoxSelectionChangeTrigger };
-export type { ComboBoxSelectionChangeEventDetail, IComboBoxItem, };
+export type { ComboBoxSelectionChangeEventDetail, ComboBoxSelectionChangeTrigger, IComboBoxItem, };

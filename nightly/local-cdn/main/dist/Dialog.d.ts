@@ -6,6 +6,8 @@ import "@ui5/webcomponents-icons/dist/error.js";
 import "@ui5/webcomponents-icons/dist/alert.js";
 import "@ui5/webcomponents-icons/dist/sys-enter-2.js";
 import "@ui5/webcomponents-icons/dist/information.js";
+import "@ui5/webcomponents-icons/dist/full-screen.js";
+import "@ui5/webcomponents-icons/dist/exit-full-screen.js";
 /**
  * @class
  * ### Overview
@@ -49,6 +51,12 @@ import "@ui5/webcomponents-icons/dist/information.js";
  *
  * - [Shift] + [Up] or [Down] - Decrease/Increase the height of the dialog.
  * - [Shift] + [Left] or [Right] - Decrease/Increase the width of the dialog.
+ *
+ * #### Fullscreen
+ * When the `ui5-dialog` has the `showFullscreenButton` property set to `true`, the user can toggle fullscreen mode
+ * with the following keyboard shortcut:
+ *
+ * - [Shift] + [Ctrl] + [F] - Toggle fullscreen mode.
  *
  * ### ES6 Module Import
  *
@@ -108,6 +116,19 @@ declare class Dialog extends Popup {
      */
     resizable: boolean;
     /**
+     * Defines whether a fullscreen toggle button is shown in the dialog header.
+     * When pressed, it toggles the `stretch` property.
+     * The fullscreen button is not available on phone devices.
+     *
+     * **Note:** The fullscreen button is not available on phone devices,
+     * nor when a custom header slot is provided — the application is expected
+     * to render its own toggle inside the custom header in those cases.
+     * @default false
+     * @since 2.25.0
+     * @public
+     */
+    showFullscreenButton: boolean;
+    /**
      * Defines the state of the `Dialog`.
      *
      * **Note:** If `"Negative"` and `"Critical"` states is set, it will change the
@@ -117,12 +138,17 @@ declare class Dialog extends Popup {
      * @since 1.0.0-rc.15
      */
     state: `${ValueState}`;
+    /**
+     * @private
+     */
+    _showFullscreenButton: boolean;
     _screenResizeHandler: () => void;
     _dragMouseMoveHandler: (e: MouseEvent) => void;
     _dragMouseUpHandler: (e: MouseEvent) => void;
     _resizeMouseMoveHandler: (e: MouseEvent) => void;
     _resizeMouseUpHandler: (e: MouseEvent) => void;
     _dragStartHandler: (e: DragEvent) => void;
+    _fullscreenKeydownHandler: (e: KeyboardEvent) => void;
     _y?: number;
     _x?: number;
     _isRTL?: boolean;
@@ -137,6 +163,7 @@ declare class Dialog extends Popup {
     _cachedMinHeight?: number;
     _draggedOrResized: boolean;
     _dragHandlerRegistered: boolean;
+    _fullscreenKeydownHandlerRegistered: boolean;
     /**
      * Defines the header HTML Element.
      *
@@ -173,6 +200,11 @@ declare class Dialog extends Popup {
     get _dragResizeHandleAriaRoleDescription(): string | undefined;
     get _dragResizeHandleAriaDescribedBy(): string | undefined;
     get _showResizeHandle(): boolean;
+    get _fullscreenButtonIcon(): "exit-full-screen" | "full-screen";
+    get _fullscreenButtonTooltip(): string;
+    get _fullscreenButtonAccessibilityAttributes(): {
+        ariaKeyShortcuts: string;
+    };
     get _resizeHandleTooltip(): string | undefined;
     get _minHeight(): number;
     get hasValueState(): boolean;
@@ -195,11 +227,17 @@ declare class Dialog extends Popup {
     _detachScreenResizeHandler(): void;
     _registerDragHandler(): void;
     _deregisterDragHandler(): void;
+    _registerFullscreenKeydownHandler(): void;
+    _deregisterFullscreenKeydownHandler(): void;
     _center(): void;
     _revertSize: () => void;
     /**
      * Event handlers
      */
+    _toggleFullscreen(): void;
+    _onHeaderDblClick(e: MouseEvent): void;
+    _onFullscreenKeydown(e: KeyboardEvent): void;
+    _isFullscreenShortcut(e: KeyboardEvent): boolean;
     _onDragMouseDown(e: MouseEvent): void;
     _onDragMouseMove(e: MouseEvent): void;
     _onDragMouseUp(): void;
@@ -214,6 +252,7 @@ declare class Dialog extends Popup {
     _handleDragStart(e: DragEvent): void;
     _attachMouseResizeHandlers(): void;
     _detachMouseResizeHandlers(): void;
+    _getFirstFocusableElement(): Promise<HTMLElement | null>;
     /**
      * Overrides Popup's forwardToLast to prioritize the drag/resize handler
      * when Shift+Tab is pressed from the first focusable element.

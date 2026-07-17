@@ -2,7 +2,7 @@ export default `:root {
     color-scheme: light dark;
     --_ui5-light-scheme: var(--_ui5-f2d95f8);
     --_ui5-dark-scheme:  ;
-    --sapThemeMetaData-Base-baseLib: {"Path": "Base.baseLib.sap_horizon_hcw.css_variables","PathPattern": "/%frameworkId%/%libId%/%themeId%/%fileId%.css","Extends": ["sap_horizon_hcb","sap_horizon","baseTheme"],"Tags": ["Fiori_3","HighContrast","LightColorScheme"],"FallbackThemeId": "sap_fiori_3_hcw","Engine":{"Name": "theming-engine","Version": "17.0.18"},"Version":{"Build": "11.36.3.20260526103300","Source": "11.36.3"}};
+    --sapThemeMetaData-Base-baseLib: {"Path": "Base.baseLib.sap_horizon_hcw.css_variables","PathPattern": "/%frameworkId%/%libId%/%themeId%/%fileId%.css","Extends": ["sap_horizon_hcb","sap_horizon","baseTheme"],"Tags": ["Fiori_3","HighContrast","LightColorScheme"],"FallbackThemeId": "sap_fiori_3_hcw","Engine":{"Name": "theming-engine","Version": "17.0.29"},"Version":{"Build": "11.36.4.20260616082028","Source": "11.36.4"}};
     --sapBrandColor: light-dark(#e97624, #795100);
     --sapHighlightColor: light-dark(#e97624, #795100);
     --sapBaseColor: light-dark(#fff, #000);

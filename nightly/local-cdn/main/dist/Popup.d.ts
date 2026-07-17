@@ -199,6 +199,7 @@ declare abstract class Popup extends UI5Element {
      * @returns Promise that resolves when the focus is applied
      */
     applyFocus(): Promise<void>;
+    _getFirstFocusableElement(): Promise<HTMLElement | null>;
     isFocusWithin(): boolean;
     _updateMediaRange(): void;
     _updateAssociatedLabelsTexts(): void;
@@ -258,6 +259,7 @@ declare abstract class Popup extends UI5Element {
     get _contentAriaLabel(): string | undefined;
     get _ariaModal(): "true" | undefined;
     get contentDOM(): HTMLElement;
+    get footerDOM(): HTMLElement | null;
     get styles(): {
         root: {};
         content: {};

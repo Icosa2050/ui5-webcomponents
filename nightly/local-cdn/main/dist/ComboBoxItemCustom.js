@@ -6,6 +6,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 import property from "@ui5/webcomponents-base/dist/decorators/property.js";
 import customElement from "@ui5/webcomponents-base/dist/decorators/customElement.js";
+import event from "@ui5/webcomponents-base/dist/decorators/event-strict.js";
 import slot from "@ui5/webcomponents-base/dist/decorators/slot-strict.js";
 import ListItemBase from "./ListItemBase.js";
 import ComboBoxItemCustomTemplate from "./ComboBoxItemCustomTemplate.js";
@@ -64,6 +65,19 @@ ComboBoxItemCustom = __decorate([
             ListItemBase.styles,
             styles,
         ],
+    })
+    /**
+     * Fired when the component is activated either with a mouse/tap or by using the Enter or Space key.
+     *
+     * **Note:** The event will not be fired if the `disabled` property is set to `true`.
+     *
+     * @since 2.24.0
+     * @public
+     * @param {Event} originalEvent The original event from the user interaction.
+     */
+    ,
+    event("click", {
+        bubbles: true,
     })
 ], ComboBoxItemCustom);
 ComboBoxItemCustom.define();

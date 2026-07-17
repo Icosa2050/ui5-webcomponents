@@ -9599,6 +9599,16 @@
           "members": [
             {
               "kind": "field",
+              "name": "avatarInteractive",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Defines whether the avatar of the selected account is interactive (focusable and pressable).\n\nWhen `false` (default), the avatar is rendered as a non-interactive image\nand is not announced as a button by screen readers.\n\n**Note:** When `showEditButton` is set to `true`, the avatar is treated as interactive\nregardless of this property's value, to preserve the edit affordance.",
+              "privacy": "public"
+            },
+            {
+              "kind": "field",
               "name": "open",
               "type": {
                 "text": "boolean"
@@ -9731,6 +9741,15 @@
             }
           ],
           "attributes": [
+            {
+              "description": "Defines whether the avatar of the selected account is interactive (focusable and pressable).\n\nWhen `false` (default), the avatar is rendered as a non-interactive image\nand is not announced as a button by screen readers.\n\n**Note:** When `showEditButton` is set to `true`, the avatar is treated as interactive\nregardless of this property's value, to preserve the edit affordance.",
+              "name": "avatar-interactive",
+              "default": "false",
+              "fieldName": "avatarInteractive",
+              "type": {
+                "text": "boolean"
+              }
+            },
             {
               "description": "Defines if the User Menu is opened.",
               "name": "open",

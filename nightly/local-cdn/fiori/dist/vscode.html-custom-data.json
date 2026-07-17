@@ -1464,6 +1464,11 @@
       "description": "### Overview\n\nThe `ui5-user-menu` is an SAP Fiori specific web component that is used in `ui5-shellbar`\nand allows the user to easily see information and settings for the current user and all other logged in accounts.\n\n### ES6 Module Import\n`import \"@ui5/webcomponents-fiori/dist/UserMenu.js\";`\n\n`import \"@ui5/webcomponents-fiori/dist/UserMenuItem.js\";` (for `ui5-user-menu-item`)\n\n\n---\n\n\n\n\n### **Events:**\n - **avatar-click** - Fired when the account avatar is selected.\n- **change-account** - Fired when the account is switched to a different one.\n- **close** - Fired when a user menu is close.\n- **edit-accounts-click** - Fired when the \"Edit Accounts\" button is selected.\n- **item-click** - Fired when a menu item is selected.\n- **manage-account-click** - Fired when the \"Manage Account\" button is selected.\n- **open** - Fired when a user menu is open.\n- **sign-out-click** - Fired when the \"Sign Out\" button is selected.\n\n### **Slots:**\n - **accounts** - Defines the user accounts.\n\n**Note:** If one item is used, it will be shown as the selected one. If more than one item is used, the first one will be shown as selected unless\nthere is an item with `selected` property set to `true`.\n- **default** - Defines the menu items.\n- **footer** - Defines custom footer content.\n\n**Note:** When provided, replaces the default \"Sign Out\" button. Use an empty element to hide the footer completely.\n- **infoArea** - Defines the content of the info area inside the User Menu's account block.\n\n**Note:** When empty, the User Menu renders unchanged.",
       "attributes": [
         {
+          "name": "avatar-interactive",
+          "description": "Defines whether the avatar of the selected account is interactive (focusable and pressable).\n\nWhen `false` (default), the avatar is rendered as a non-interactive image\nand is not announced as a button by screen readers.\n\n**Note:** When `showEditButton` is set to `true`, the avatar is treated as interactive\nregardless of this property's value, to preserve the edit affordance.",
+          "values": []
+        },
+        {
           "name": "open",
           "description": "Defines if the User Menu is opened.",
           "values": []

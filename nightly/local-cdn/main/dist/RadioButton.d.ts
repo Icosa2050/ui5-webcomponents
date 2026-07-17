@@ -173,7 +173,8 @@ declare class RadioButton extends UI5Element implements IFormInputElement {
     toggle(): this;
     canToggle(): boolean;
     get effectiveAriaDisabled(): true | undefined;
-    get ariaLabelText(): string;
+    get ariaLabelText(): string | undefined;
+    get ariaLabelledBy(): string | undefined;
     get effectiveAriaDescribedBy(): string | undefined;
     get hasValueState(): boolean;
     get valueStateText(): string;

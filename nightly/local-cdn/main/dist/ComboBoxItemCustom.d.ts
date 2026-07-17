@@ -1,6 +1,11 @@
 import type { IComboBoxItem } from "./ComboBox.js";
 import ListItemBase from "./ListItemBase.js";
+import type { ListItemBasePressEventDetail } from "./ListItemBase.js";
 import type { DefaultSlot } from "@ui5/webcomponents-base/dist/UI5Element.js";
+type ComboBoxItemCustomClickEventDetail = {
+    item?: ComboBoxItemCustom;
+    originalEvent: Event;
+};
 /**
  * @class
  * The `ui5-cb-item-custom` is a combobox item component
@@ -15,7 +20,14 @@ import type { DefaultSlot } from "@ui5/webcomponents-base/dist/UI5Element.js";
  * @since 2.24.0
  */
 declare class ComboBoxItemCustom extends ListItemBase implements IComboBoxItem {
-    eventDetails: ListItemBase["eventDetails"];
+    eventDetails: {
+        "click": ComboBoxItemCustomClickEventDetail;
+        "request-tabindex-change": FocusEvent;
+        "_press": ListItemBasePressEventDetail;
+        "_focused": FocusEvent;
+        "forward-after": void;
+        "forward-before": void;
+    };
     /**
      * Defines the text of the component.
      * Used for filtering, autocomplete, and mobile rendering.
@@ -48,3 +60,4 @@ declare class ComboBoxItemCustom extends ListItemBase implements IComboBoxItem {
     get _effectiveTabIndex(): number;
 }
 export default ComboBoxItemCustom;
+export type { ComboBoxItemCustomClickEventDetail };

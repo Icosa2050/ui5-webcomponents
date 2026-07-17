@@ -16,7 +16,7 @@ import { getEffectiveAriaLabelText, getAssociatedLabelForTexts, getAllAccessible
 import jsxRenderer from "@ui5/webcomponents-base/dist/renderer/JsxRenderer.js";
 import i18n from "@ui5/webcomponents-base/dist/decorators/i18n.js";
 import { isUpAlt, isDownAlt, isEnter, isDelete, isF4, isSpace, isRight, isLeft, } from "@ui5/webcomponents-base/dist/Keys.js";
-import { FILEUPLOADER_INPUT_TOOLTIP, FILEUPLOADER_VALUE_HELP_TOOLTIP, FILEUPLOADER_CLEAR_ICON_TOOLTIP, VALUE_STATE_SUCCESS, VALUE_STATE_INFORMATION, VALUE_STATE_ERROR, VALUE_STATE_WARNING, FILEUPLOADER_DEFAULT_PLACEHOLDER, FILEUPLOADER_DEFAULT_MULTIPLE_PLACEHOLDER, FILEUPLOADER_ROLE_DESCRIPTION, FILEUPLOAER_VALUE_MISSING, } from "./generated/i18n/i18n-defaults.js";
+import { FILEUPLOADER_INPUT_TOOLTIP, FILEUPLOADER_VALUE_HELP_TOOLTIP, FILEUPLOADER_CLEAR_ICON_TOOLTIP, VALUE_STATE_SUCCESS, VALUE_STATE_INFORMATION, VALUE_STATE_ERROR, VALUE_STATE_WARNING, VALUE_STATE_TYPE_SUCCESS, VALUE_STATE_TYPE_INFORMATION, VALUE_STATE_TYPE_ERROR, VALUE_STATE_TYPE_WARNING, FILEUPLOADER_DEFAULT_PLACEHOLDER, FILEUPLOADER_DEFAULT_MULTIPLE_PLACEHOLDER, FILEUPLOADER_ROLE_DESCRIPTION, FILEUPLOAER_VALUE_MISSING, } from "./generated/i18n/i18n-defaults.js";
 // Template
 import FileUploaderTemplate from "./FileUploaderTemplate.js";
 // Styles
@@ -358,7 +358,28 @@ let FileUploader = FileUploader_1 = class FileUploader extends UI5Element {
             "ariaHasPopup": "dialog",
             "ariaLabel": getAllAccessibleNameRefTexts(this) || getEffectiveAriaLabelText(this) || getAssociatedLabelForTexts(this) || undefined,
             "ariaDescription": getAllAccessibleDescriptionRefTexts(this) || getEffectiveAriaDescriptionText(this) || undefined,
+            "ariaDescribedBy": this.hasValueState ? "valueStateDesc" : undefined,
         };
+    }
+    get valueStateTypeMappings() {
+        return {
+            "Positive": FileUploader_1.i18nBundle.getText(VALUE_STATE_TYPE_SUCCESS),
+            "Information": FileUploader_1.i18nBundle.getText(VALUE_STATE_TYPE_INFORMATION),
+            "Negative": FileUploader_1.i18nBundle.getText(VALUE_STATE_TYPE_ERROR),
+            "Critical": FileUploader_1.i18nBundle.getText(VALUE_STATE_TYPE_WARNING),
+        };
+    }
+    get ariaValueStateHiddenText() {
+        if (!this.hasValueState) {
+            return undefined;
+        }
+        const valueStateType = this.valueStateTypeMappings[this.valueState];
+        if (this.shouldDisplayDefaultValueStateMessage) {
+            return this.valueStateText ? `${valueStateType} ${this.valueStateText}` : valueStateType;
+        }
+        return this.valueStateMessage.length
+            ? `${valueStateType} ${this.valueStateMessage.map(el => el.textContent).join(" ")}`
+            : valueStateType;
     }
     get inputTitle() {
         return FileUploader_1.i18nBundle.getText(FILEUPLOADER_INPUT_TOOLTIP);

@@ -2,7 +2,7 @@
 
 > Enterprise-grade, framework-agnostic web components library implementing SAP Fiori design
 
-Version: 2.24.0-rc.3
+Version: 2.25.0-rc.0
 Website: https://ui5.github.io/webcomponents/
 GitHub: https://github.com/SAP/ui5-webcomponents
 
@@ -188,6 +188,10 @@ import "@ui5/webcomponents/dist/Button.js";
 #### [Input](https://ui5.github.io/webcomponents/components/Input/)
   - tag: `ui5-input`
   - description: The ui5-input component allows the user to enter and edit text or numeric values in one line.
+
+#### [InputIcon](https://ui5.github.io/webcomponents/components/InputIcon/)
+  - tag: `ui5-input-icon`
+  - description: The ui5-input-icon component represents an interactive icon that can be placed inside an ui5-input component.
 
 #### [Label](https://ui5.github.io/webcomponents/components/Label/)
   - tag: `ui5-label`
@@ -846,4 +850,4 @@ import "@ui5/webcomponents-icons/dist/add.js";
 
 ---
 
-Generated: 2026-07-16T00:48:30.163Z
+Generated: 2026-07-17T00:50:55.099Z

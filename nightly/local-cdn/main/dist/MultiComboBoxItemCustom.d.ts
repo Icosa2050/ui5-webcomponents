@@ -1,9 +1,14 @@
 import type I18nBundle from "@ui5/webcomponents-base/dist/i18nBundle.js";
 import ListItemBase from "./ListItemBase.js";
+import type { ListItemBasePressEventDetail } from "./ListItemBase.js";
 import type { IMultiComboBoxItem } from "./MultiComboBox.js";
 import type { SelectionRequestEventDetail } from "./ListItem.js";
 import type { AriaRole } from "@ui5/webcomponents-base";
 import type { DefaultSlot } from "@ui5/webcomponents-base/dist/UI5Element.js";
+type MultiComboBoxItemCustomClickEventDetail = {
+    item?: MultiComboBoxItemCustom;
+    originalEvent: Event;
+};
 /**
  * @class
  * The `ui5-mcb-item-custom` is a multi-combobox item component
@@ -18,8 +23,14 @@ import type { DefaultSlot } from "@ui5/webcomponents-base/dist/UI5Element.js";
  * @since 2.24.0
  */
 declare class MultiComboBoxItemCustom extends ListItemBase implements IMultiComboBoxItem {
-    eventDetails: ListItemBase["eventDetails"] & {
+    eventDetails: {
+        "click": MultiComboBoxItemCustomClickEventDetail;
         "selection-requested": SelectionRequestEventDetail;
+        "request-tabindex-change": FocusEvent;
+        "_press": ListItemBasePressEventDetail;
+        "_focused": FocusEvent;
+        "forward-after": void;
+        "forward-before": void;
     };
     /**
      * Defines the text of the component.
@@ -65,3 +76,4 @@ declare class MultiComboBoxItemCustom extends ListItemBase implements IMultiComb
 }
 export default MultiComboBoxItemCustom;
 export declare const isInstanceOfMultiComboBoxItemCustom: (object: any) => object is MultiComboBoxItemCustom;
+export type { MultiComboBoxItemCustomClickEventDetail };

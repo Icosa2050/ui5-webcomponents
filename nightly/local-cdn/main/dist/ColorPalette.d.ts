@@ -158,6 +158,7 @@ declare class ColorPalette extends UI5Element {
     _isPrevious(e: KeyboardEvent): boolean;
     _isNext(e: KeyboardEvent): boolean;
     _isFirstSwatch(target: ColorPaletteItem, swatches: Array<ColorPaletteItem>): boolean;
+    _getColorPaletteItemFromEvent(e: KeyboardEvent, swatches: Array<ColorPaletteItem>): ColorPaletteItem | undefined;
     _isLastSwatch(target: ColorPaletteItem, swatches: Array<ColorPaletteItem>): boolean;
     /**
      * Checks if the target swatch is the first swatch in its row.

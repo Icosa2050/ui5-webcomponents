@@ -305,6 +305,14 @@ let Input = Input_1 = class Input extends UI5Element {
         }
         this._effectiveShowClearIcon = (this.showClearIcon && !!this.value && !this.readonly && !this.disabled);
         this.style.setProperty("--_ui5-input-icons-count", `${this.iconsCount}`);
+        // Sync value state to slotted input icons
+        this.icon.forEach((iconElement) => {
+            if (iconElement.hasAttribute("ui5-input-icon")) {
+                iconElement.valueState = this.valueState;
+                iconElement.readonly = this.readonly;
+                iconElement._parentDisabled = this.disabled;
+            }
+        });
         const hasItems = !!this._flattenItems.length;
         const hasValue = !!this.value;
         const isFocused = this.shadowRoot.querySelector("input") === getActiveElement();

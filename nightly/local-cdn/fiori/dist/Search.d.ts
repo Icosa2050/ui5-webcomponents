@@ -49,6 +49,7 @@ type SearchEventDetails = {
  * @since 2.9.0
  * @experimental
  * @csspart popover - Used to style the suggestions popup
+ * @since 2.24.0
  */
 declare class Search extends SearchField {
     eventDetails: SearchField["eventDetails"] & {

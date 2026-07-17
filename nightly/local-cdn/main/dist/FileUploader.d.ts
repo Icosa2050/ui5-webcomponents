@@ -6,6 +6,7 @@ import type { IFormInputElement } from "@ui5/webcomponents-base/dist/features/In
 import type { InputAccInfo } from "./Input.js";
 import type Popover from "./Popover.js";
 import type Tokenizer from "./Tokenizer.js";
+type MappedValueState = Exclude<`${ValueState}`, "None">;
 type FileData = {
     fileName: string;
     fileSize: number;
@@ -224,12 +225,14 @@ declare class FileUploader extends UI5Element implements IFormInputElement {
     openValueStatePopover(): void;
     closeValueStatePopover(): void;
     get accInfo(): InputAccInfo;
+    get valueStateTypeMappings(): Record<MappedValueState, string>;
+    get ariaValueStateHiddenText(): string | undefined;
     get inputTitle(): string;
     get valueHelpTitle(): string;
     get clearIconTitle(): string;
     get resolvedPlaceholder(): string;
-    get valueStateTextMappings(): Record<string, string>;
-    get valueStateText(): string;
+    get valueStateTextMappings(): Record<MappedValueState, string>;
+    get valueStateText(): string | undefined;
     get hasValueState(): boolean;
     get shouldDisplayDefaultValueStateMessage(): boolean;
     get shouldOpenValueStateMessagePopover(): boolean;
