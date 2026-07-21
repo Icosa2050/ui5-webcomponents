@@ -1828,6 +1828,105 @@
     },
     {
       "kind": "javascript-module",
+      "path": "dist/theming/CustomStyle.js",
+      "declarations": [],
+      "exports": []
+    },
+    {
+      "kind": "javascript-module",
+      "path": "dist/theming/ThemeLoaded.js",
+      "declarations": [],
+      "exports": []
+    },
+    {
+      "kind": "javascript-module",
+      "path": "dist/theming/ThemeRegistered.js",
+      "declarations": [],
+      "exports": []
+    },
+    {
+      "kind": "javascript-module",
+      "path": "dist/theming/applyTheme.js",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "name": "applyTheme",
+            "module": "dist/theming/applyTheme.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "dist/theming/componentStyles.js",
+      "declarations": [],
+      "exports": []
+    },
+    {
+      "kind": "javascript-module",
+      "path": "dist/theming/getConstructableStyle.js",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "name": "getConstructableStyle",
+            "module": "dist/theming/getConstructableStyle.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "dist/theming/getEffectiveStyle.js",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "name": "getEffectiveStyle",
+            "module": "dist/theming/getEffectiveStyle.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "dist/theming/getStylesString.js",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "name": "getStylesString",
+            "module": "dist/theming/getStylesString.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "dist/theming/getThemeDesignerTheme.js",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "name": "getThemeDesignerTheme",
+            "module": "dist/theming/getThemeDesignerTheme.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "dist/thirdparty/_merge.js",
       "declarations": [],
       "exports": [
@@ -2279,105 +2378,6 @@
           "declaration": {
             "name": "ValueState",
             "module": "dist/types/ValueState.js"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "dist/theming/CustomStyle.js",
-      "declarations": [],
-      "exports": []
-    },
-    {
-      "kind": "javascript-module",
-      "path": "dist/theming/ThemeLoaded.js",
-      "declarations": [],
-      "exports": []
-    },
-    {
-      "kind": "javascript-module",
-      "path": "dist/theming/ThemeRegistered.js",
-      "declarations": [],
-      "exports": []
-    },
-    {
-      "kind": "javascript-module",
-      "path": "dist/theming/applyTheme.js",
-      "declarations": [],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "default",
-          "declaration": {
-            "name": "applyTheme",
-            "module": "dist/theming/applyTheme.js"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "dist/theming/componentStyles.js",
-      "declarations": [],
-      "exports": []
-    },
-    {
-      "kind": "javascript-module",
-      "path": "dist/theming/getConstructableStyle.js",
-      "declarations": [],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "default",
-          "declaration": {
-            "name": "getConstructableStyle",
-            "module": "dist/theming/getConstructableStyle.js"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "dist/theming/getEffectiveStyle.js",
-      "declarations": [],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "default",
-          "declaration": {
-            "name": "getEffectiveStyle",
-            "module": "dist/theming/getEffectiveStyle.js"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "dist/theming/getStylesString.js",
-      "declarations": [],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "default",
-          "declaration": {
-            "name": "getStylesString",
-            "module": "dist/theming/getStylesString.js"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "dist/theming/getThemeDesignerTheme.js",
-      "declarations": [],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "default",
-          "declaration": {
-            "name": "getThemeDesignerTheme",
-            "module": "dist/theming/getThemeDesignerTheme.js"
           }
         }
       ]
