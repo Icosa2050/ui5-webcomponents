@@ -159,6 +159,7 @@ let MultiInput = MultiInput_1 = class MultiInput extends Input {
             return;
         }
         if (isShow(e)) {
+            e.preventDefault();
             this.valueHelpPress();
         }
         this._isKeyNavigation = false;

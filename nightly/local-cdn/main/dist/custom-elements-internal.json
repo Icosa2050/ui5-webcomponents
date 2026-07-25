@@ -9942,6 +9942,17 @@
           "members": [
             {
               "kind": "field",
+              "name": "accessibleNameRef",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Receives id(or many ids) of the elements that label the component.",
+              "default": "undefined",
+              "privacy": "public",
+              "_ui5since": "2.25.0"
+            },
+            {
+              "kind": "field",
               "name": "options",
               "type": {
                 "text": "string"
@@ -10012,6 +10023,15 @@
             }
           ],
           "attributes": [
+            {
+              "description": "Receives id(or many ids) of the elements that label the component.",
+              "name": "accessible-name-ref",
+              "default": "undefined",
+              "fieldName": "accessibleNameRef",
+              "type": {
+                "text": "string | undefined"
+              }
+            },
             {
               "description": "Defines the options listed as a string, separated by commas and using capital case.\nExample: \"TODAY, YESTERDAY, DATERANGE\"",
               "name": "options",
@@ -11230,6 +11250,12 @@
           }
         }
       ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "dist/IToolbarArrowNavProvider.js",
+      "declarations": [],
+      "exports": []
     },
     {
       "kind": "javascript-module",
@@ -31382,7 +31408,7 @@
       "declarations": [
         {
           "kind": "class",
-          "description": "### Overview\n\nThe `ui5-toolbar` component is used to create a horizontal layout with items.\nThe items can be overflowing in a popover, when the space is not enough to show all of them.\n\n### Keyboard Handling\nThe `ui5-toolbar` provides advanced keyboard handling.\n\n- The control is not interactive, but can contain of interactive elements\n- [Tab] - iterates through elements\n\n### ES6 Module Import\n`import \"@ui5/webcomponents/dist/Toolbar.js\";`",
+          "description": "### Overview\n\nThe `ui5-toolbar` component is used to create a horizontal layout with items.\nThe items can be overflowing in a popover, when the space is not enough to show all of them.\n\n### Keyboard Handling\nThe `ui5-toolbar` provides advanced keyboard handling.\n\n- [Left]/[Right] - navigate among toolbar items\n- [Home]/[End] - move to first/last toolbar item\n- [Tab] / [Shift]+[Tab] - exit the toolbar\n\n### ES6 Module Import\n`import \"@ui5/webcomponents/dist/Toolbar.js\";`",
           "name": "Toolbar",
           "slots": [
             {
@@ -31409,7 +31435,7 @@
               "type": {
                 "text": "string | undefined"
               },
-              "description": "Defines the accessible ARIA name of the component.",
+              "description": "Defines the accessible ARIA name of the component.\n\n**Note:** It is strongly recommended to always set this property or `accessibleNameRef`\nwhen the toolbar has `role=\"toolbar\"` (i.e. when it contains more than one interactive item).\nWithout an accessible name, screen readers will announce the toolbar without any context,\nmaking it harder for keyboard-only and AT users to understand its purpose.",
               "default": "undefined",
               "privacy": "public"
             },
@@ -31419,7 +31445,7 @@
               "type": {
                 "text": "string | undefined"
               },
-              "description": "Receives id(or many ids) of the elements that label the input.",
+              "description": "Receives id(or many ids) of the elements that label the input.\n\n**Note:** When the toolbar has `role=\"toolbar\"`, at least one of `accessibleName` or\n`accessibleNameRef` should be provided to satisfy WCAG 2.1 success criterion 4.1.2.",
               "default": "undefined",
               "privacy": "public"
             },
@@ -31483,7 +31509,7 @@
           ],
           "attributes": [
             {
-              "description": "Defines the accessible ARIA name of the component.",
+              "description": "Defines the accessible ARIA name of the component.\n\n**Note:** It is strongly recommended to always set this property or `accessibleNameRef`\nwhen the toolbar has `role=\"toolbar\"` (i.e. when it contains more than one interactive item).\nWithout an accessible name, screen readers will announce the toolbar without any context,\nmaking it harder for keyboard-only and AT users to understand its purpose.",
               "name": "accessible-name",
               "default": "undefined",
               "fieldName": "accessibleName",
@@ -31492,7 +31518,7 @@
               }
             },
             {
-              "description": "Receives id(or many ids) of the elements that label the input.",
+              "description": "Receives id(or many ids) of the elements that label the input.\n\n**Note:** When the toolbar has `role=\"toolbar\"`, at least one of `accessibleName` or\n`accessibleNameRef` should be provided to satisfy WCAG 2.1 success criterion 4.1.2.",
               "name": "accessible-name-ref",
               "default": "undefined",
               "fieldName": "accessibleNameRef",
@@ -31896,7 +31922,7 @@
         {
           "kind": "interface",
           "name": "IToolbarItemContent",
-          "description": "Interface for the slotted item in `ui5-toolbar-item`.\n\nIt could be any HTMLElement or UI5 Web Component with option to specify custom overflow closing events and overflow behavior.",
+          "description": "Interface for the slotted item in `ui5-toolbar-item`.\n\nIt could be any HTMLElement or UI5 Web Component with option to specify custom overflow closing events and overflow behavior.\nComponents that also implement `IToolbarArrowNavProvider` can report their internal navigation boundary\nstate to the toolbar for caret-aware arrow-key handling.",
           "_ui5privacy": "public",
           "_ui5since": "2.20.0"
         },
@@ -32243,6 +32269,7 @@
               "_ui5Cancelable": true,
               "_ui5allowPreventDefault": true,
               "_ui5Bubbles": true,
+              "_ui5since": "2.25.0",
               "_ui5parameters": [
                 {
                   "type": {
@@ -32251,6 +32278,14 @@
                   "name": "selectedOption",
                   "_ui5privacy": "public",
                   "description": "the selected option."
+                },
+                {
+                  "type": {
+                    "text": "HTMLElement"
+                  },
+                  "name": "selectedToolbarOption",
+                  "_ui5privacy": "public",
+                  "description": "the original toolbar select option."
                 }
               ]
             },
@@ -32417,6 +32452,17 @@
               "type": {
                 "text": "boolean"
               }
+            },
+            {
+              "kind": "field",
+              "name": "value",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Defines the value of the component.",
+              "default": "undefined",
+              "privacy": "public",
+              "_ui5since": "2.25.0"
             }
           ],
           "attributes": [
@@ -32427,6 +32473,15 @@
               "fieldName": "selected",
               "type": {
                 "text": "any"
+              }
+            },
+            {
+              "description": "Defines the value of the component.",
+              "name": "value",
+              "default": "undefined",
+              "fieldName": "value",
+              "type": {
+                "text": "string | undefined"
               }
             }
           ],
@@ -35107,6 +35162,48 @@
     },
     {
       "kind": "javascript-module",
+      "path": "dist/features/ColorPaletteMoreColors.js",
+      "declarations": [],
+      "exports": []
+    },
+    {
+      "kind": "javascript-module",
+      "path": "dist/features/InputComposition.js",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "name": "InputComposition",
+            "module": "dist/features/InputComposition.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "dist/features/InputSuggestions.js",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "name": "Suggestions",
+            "module": "dist/features/InputSuggestions.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "dist/features/ListItemStandardExpandableText.js",
+      "declarations": [],
+      "exports": []
+    },
+    {
+      "kind": "javascript-module",
       "path": "dist/dynamic-date-range-options/DateRange.js",
       "declarations": [
         {
@@ -35414,48 +35511,6 @@
     {
       "kind": "javascript-module",
       "path": "dist/dynamic-date-range-options/toDates.js",
-      "declarations": [],
-      "exports": []
-    },
-    {
-      "kind": "javascript-module",
-      "path": "dist/features/ColorPaletteMoreColors.js",
-      "declarations": [],
-      "exports": []
-    },
-    {
-      "kind": "javascript-module",
-      "path": "dist/features/InputComposition.js",
-      "declarations": [],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "default",
-          "declaration": {
-            "name": "InputComposition",
-            "module": "dist/features/InputComposition.js"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "dist/features/InputSuggestions.js",
-      "declarations": [],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "default",
-          "declaration": {
-            "name": "Suggestions",
-            "module": "dist/features/InputSuggestions.js"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "dist/features/ListItemStandardExpandableText.js",
       "declarations": [],
       "exports": []
     },

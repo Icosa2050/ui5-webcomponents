@@ -1,5 +1,6 @@
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
 import type ToolbarItemOverflowBehavior from "./types/ToolbarItemOverflowBehavior.js";
+import type { ToolbarArrowNavState } from "./IToolbarArrowNavProvider.js";
 type ToolbarItemEventDetail = {
     targetRef: HTMLElement;
 };
@@ -21,6 +22,14 @@ declare class ToolbarItemBase extends UI5Element {
      * @public
      */
     preventOverflowClosing: boolean;
+    _getNavigationTargets(): HTMLElement[];
+    /**
+     * Focus entry point when toolbar navigates into this item.
+     * Override in complex items (e.g., Breadcrumbs) to handle direction-aware entry.
+     * @private
+     */
+    focusForToolbarNavigation(isForward: boolean): void;
+    getArrowNavState(): ToolbarArrowNavState | undefined;
     _isOverflowed: boolean;
     get isOverflowed(): boolean;
     /**
@@ -51,6 +60,7 @@ declare class ToolbarItemBase extends UI5Element {
      * @protected
      */
     get isInteractive(): boolean;
+    get isToolbarNavigatable(): boolean;
     get hasOverflow(): boolean;
     /**
      * Returns if the item is separator.

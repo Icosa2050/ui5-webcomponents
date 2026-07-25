@@ -96,6 +96,7 @@ let SideNavigation = SideNavigation_1 = class SideNavigation extends UI5Element 
         this.inPopover = false;
         this._menuPopoverItems = [];
         this._isOverflow = false;
+        this._bAnimating = false;
         this._flexibleItemNavigation = new ItemNavigation(this, {
             skipItemsSize: PAGE_UP_DOWN_SIZE, // PAGE_UP and PAGE_DOWN will skip trough 10 items
             navigationMode: NavigationMode.Vertical,
@@ -109,6 +110,13 @@ let SideNavigation = SideNavigation_1 = class SideNavigation extends UI5Element 
         this._handleResizeBound = this.handleResize.bind(this);
         this._isOverflow = false;
     }
+    onInvalidation(changeInfo) {
+        if (changeInfo.type === "property" && changeInfo.name === "collapsed") {
+            if (this.getDomRef()) {
+                this._bAnimating = true;
+            }
+        }
+    }
     onBeforeRendering() {
         super.onBeforeRendering();
         this._getAllItems(this.items)
@@ -117,6 +125,7 @@ let SideNavigation = SideNavigation_1 = class SideNavigation extends UI5Element 
             item.sideNavCollapsed = this.collapsed;
             item.inPopover = this.inPopover;
             item.sideNavigation = this;
+            item.sideNavAnimating = this._bAnimating;
         });
         this.initGroupsSettings(this.items);
         this.initGroupsSettings(this.fixedItems);
@@ -309,12 +318,22 @@ let SideNavigation = SideNavigation_1 = class SideNavigation extends UI5Element 
         if (this.collapsed) {
             this.handleResize();
         }
+        this._handleExpandCollapseAnimation();
     }
     onEnterDOM() {
         ResizeHandler.register(this, this._handleResizeBound);
     }
     onExitDOM() {
         ResizeHandler.deregister(this, this._handleResizeBound);
+        if (this._fnTransitionEnd) {
+            this.removeEventListener("transitionend", this._fnTransitionEnd);
+            this._fnTransitionEnd = undefined;
+        }
+        if (this._animationTimeoutId) {
+            clearTimeout(this._animationTimeoutId);
+            this._animationTimeoutId = undefined;
+        }
+        this._bAnimating = false;
     }
     handleResize() {
         // In smaller screen the side navigation hidden when collapsed and there is no overflow items
@@ -405,6 +424,50 @@ let SideNavigation = SideNavigation_1 = class SideNavigation extends UI5Element 
     }
     _isSmallScreen() {
         return isPhone() || window.innerWidth < SCREEN_WIDTH_BREAKPOINT;
+    }
+    _handleExpandCollapseAnimation() {
+        if (!this._bAnimating) {
+            return;
+        }
+        const oDomRef = this.getDomRef();
+        if (!oDomRef) {
+            return;
+        }
+        oDomRef.classList.add("ui5-sn-animating");
+        if (this._fnTransitionEnd) {
+            this.removeEventListener("transitionend", this._fnTransitionEnd);
+        }
+        if (this._animationTimeoutId) {
+            clearTimeout(this._animationTimeoutId);
+        }
+        const cleanupAnimation = () => {
+            oDomRef.classList.remove("ui5-sn-animating");
+            if (this._fnTransitionEnd) {
+                this.removeEventListener("transitionend", this._fnTransitionEnd);
+                this._fnTransitionEnd = undefined;
+            }
+            if (this._animationTimeoutId) {
+                clearTimeout(this._animationTimeoutId);
+                this._animationTimeoutId = undefined;
+            }
+            this._bAnimating = false;
+            this._getAllItems(this.items)
+                .concat(this._getAllItems(this.fixedItems))
+                .forEach(item => {
+                item.sideNavAnimating = false;
+            });
+        };
+        this._fnTransitionEnd = (oEvent) => {
+            if (oEvent.propertyName !== "width" && oEvent.propertyName !== "min-width") {
+                return;
+            }
+            cleanupAnimation();
+        };
+        this.addEventListener("transitionend", this._fnTransitionEnd);
+        // Fallback timeout in case transitionend doesn't fire
+        this._animationTimeoutId = setTimeout(() => {
+            cleanupAnimation();
+        }, 500);
     }
     _handleItemClick(e, item) {
         this.fireDecoratorEvent("item-click", { item });

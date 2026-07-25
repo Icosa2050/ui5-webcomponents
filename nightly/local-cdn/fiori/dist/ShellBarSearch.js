@@ -47,6 +47,9 @@ let ShellBarSearch = ShellBarSearch_1 = class ShellBarSearch extends Search {
     }
     _handleEnter() {
         if (!this.value && !this.collapsed) {
+            // Fire `ui5-search` so a host ShellBar collapses in sync; also collapse
+            // locally for standalone usage (host converges on the same state).
+            this._handleSearchEvent();
             this.collapsed = true;
             setTimeout(() => {
                 this.focus();
@@ -80,6 +83,9 @@ let ShellBarSearch = ShellBarSearch_1 = class ShellBarSearch extends Search {
     get nativeInput() {
         const domRef = this.shadowRoot;
         return isPhone() ? domRef?.querySelector(`[ui5-responsive-popover] input`) : super.nativeInput;
+    }
+    getSearchButtonDomRef() {
+        return this.shadowRoot?.querySelector(".ui5-shell-search-field-button") ?? null;
     }
     _onfocusin() {
         super._onfocusin();

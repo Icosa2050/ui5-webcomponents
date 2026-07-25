@@ -5,7 +5,7 @@ import "@ui5/webcomponents-icons/dist/overflow.js";
 import type I18nBundle from "@ui5/webcomponents-base/dist/i18nBundle.js";
 import type ToolbarAlign from "./types/ToolbarAlign.js";
 import type ToolbarDesign from "./types/ToolbarDesign.js";
-import type ToolbarItemBase from "./ToolbarItemBase.js";
+import ToolbarItemBase from "./ToolbarItemBase.js";
 import type Button from "./Button.js";
 import type Popover from "./Popover.js";
 type ToolbarMinWidthChangeEventDetail = {
@@ -22,8 +22,9 @@ type ToolbarMinWidthChangeEventDetail = {
  * ### Keyboard Handling
  * The `ui5-toolbar` provides advanced keyboard handling.
  *
- * - The control is not interactive, but can contain of interactive elements
- * - [Tab] - iterates through elements
+ * - [Left]/[Right] - navigate among toolbar items
+ * - [Home]/[End] - move to first/last toolbar item
+ * - [Tab] / [Shift]+[Tab] - exit the toolbar
  *
  * ### ES6 Module Import
  * `import "@ui5/webcomponents/dist/Toolbar.js";`
@@ -62,12 +63,20 @@ declare class Toolbar extends UI5Element {
     reverseOverflow: boolean;
     /**
      * Defines the accessible ARIA name of the component.
+     *
+     * **Note:** It is strongly recommended to always set this property or `accessibleNameRef`
+     * when the toolbar has `role="toolbar"` (i.e. when it contains more than one interactive item).
+     * Without an accessible name, screen readers will announce the toolbar without any context,
+     * making it harder for keyboard-only and AT users to understand its purpose.
      * @default undefined
      * @public
      */
     accessibleName?: string;
     /**
      * Receives id(or many ids) of the elements that label the input.
+     *
+     * **Note:** When the toolbar has `role="toolbar"`, at least one of `accessibleName` or
+     * `accessibleNameRef` should be provided to satisfy WCAG 2.1 success criterion 4.1.2.
      * @default undefined
      * @public
      */
@@ -98,9 +107,12 @@ declare class Toolbar extends UI5Element {
     items: DefaultSlot<ToolbarItemBase>;
     _onResize: ResizeObserverCallback;
     _onCloseOverflow: EventListener;
+    _onFocusIn: (e: FocusEvent) => void;
+    _onKeyDown: (e: KeyboardEvent) => void;
     itemsToOverflow: Array<ToolbarItemBase>;
     itemsWidth: number;
     minContentWidth: number;
+    _lastFocusedItem?: ToolbarItemBase | HTMLElement;
     ITEMS_WIDTH_MAP: Map<string, number>;
     static get styles(): string[];
     constructor();
@@ -151,6 +163,12 @@ declare class Toolbar extends UI5Element {
     onInvalidation(changeInfo: ChangeInfo): void;
     onBeforeRendering(): void;
     onAfterRendering(): Promise<void>;
+    /**
+     * Drops the tracked re-entry item once it leaves the navigation chain
+     * (moved to overflow or removed), so Tab re-entry and arrow/Home/End
+     * navigation don't silently restart from the first item.
+     */
+    _reconcileLastFocusedItem(): void;
     addItemsAdditionalProperties(item: ToolbarItemBase): void;
     /**
      * Returns if the overflow popup is open.
@@ -188,6 +206,25 @@ declare class Toolbar extends UI5Element {
     onToolbarItemChange(): void;
     getItemWidth(item: ToolbarItemBase): number;
     getCachedItemWidth(id: string): number | undefined;
+    /**
+     * Keyboard Navigation
+     */
+    _isFocusInsideOverflow(path: Array<EventTarget>): boolean;
+    _onfocusin(e: FocusEvent): void;
+    _onkeydown(e: KeyboardEvent): void;
+    _findItemByPath(path: Array<EventTarget>): ToolbarItemBase | undefined;
+    _findOverflowButtonByPath(path: Array<EventTarget>): HTMLElement | undefined;
+    _isNodeInsideElement(node: Node, element: HTMLElement): boolean;
+    _findCurrentTargetByActiveElement(): ToolbarItemBase | HTMLElement | undefined;
+    _getNavigationChain(): (HTMLElement | ToolbarItemBase)[];
+    _getNavigableItems(): ToolbarItemBase[];
+    _setCurrentItem(item: ToolbarItemBase | HTMLElement): void;
+    _moveToNext(): void;
+    _moveToPrev(): void;
+    _moveToFirst(): void;
+    _moveToLast(): void;
+    _moveToItem(indexCalc: (currentIndex: number, items: Array<ToolbarItemBase | HTMLElement>) => number, isForward: boolean): void;
+    _focusNavigationItem(item: ToolbarItemBase | HTMLElement, isForward: boolean): void;
 }
 export default Toolbar;
 export type { ToolbarMinWidthChangeEventDetail, };

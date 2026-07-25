@@ -15,6 +15,7 @@ import i18n from "@ui5/webcomponents-base/dist/decorators/i18n.js";
 import { isDesktop } from "@ui5/webcomponents-base/dist/Device.js";
 import { renderFinished } from "@ui5/webcomponents-base/dist/Render.js";
 import { isF4, isShow } from "@ui5/webcomponents-base/dist/Keys.js";
+import { getAssociatedLabelForTexts, getAllAccessibleNameRefTexts, } from "@ui5/webcomponents-base/dist/util/AccessibilityTextsHelper.js";
 import DynamicDateRangeTemplate from "./DynamicDateRangeTemplate.js";
 import IconMode from "./types/IconMode.js";
 import { DYNAMIC_DATE_RANGE_SELECTED_TEXT, DYNAMIC_DATE_RANGE_EMPTY_SELECTED_TEXT, DYNAMIC_DATE_RANGE_NAVIGATION_ICON_TOOLTIP, DYNAMIC_DATE_RANGE_POPOVER_ACCESSIBLE_NAME, } from "./generated/i18n/i18n-defaults.js";
@@ -157,6 +158,14 @@ let DynamicDateRange = DynamicDateRange_1 = class DynamicDateRange extends UI5El
      */
     get _iconMode() {
         return isDesktop() ? IconMode.Decorative : IconMode.Interactive;
+    }
+    get _ariaLabelText() {
+        return getAllAccessibleNameRefTexts(this) || getAssociatedLabelForTexts(this) || "";
+    }
+    get _accInfo() {
+        return {
+            ariaLabel: this._ariaLabelText || undefined,
+        };
     }
     get tooltipNavigationIcon() {
         return DynamicDateRange_1.i18nBundle.getText(DYNAMIC_DATE_RANGE_NAVIGATION_ICON_TOOLTIP);
@@ -349,6 +358,9 @@ __decorate([
 __decorate([
     property({ type: Boolean })
 ], DynamicDateRange.prototype, "open", void 0);
+__decorate([
+    property()
+], DynamicDateRange.prototype, "accessibleNameRef", void 0);
 __decorate([
     property({ type: Object })
 ], DynamicDateRange.prototype, "_currentOption", void 0);

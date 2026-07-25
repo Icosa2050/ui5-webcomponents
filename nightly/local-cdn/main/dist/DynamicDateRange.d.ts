@@ -126,6 +126,13 @@ declare class DynamicDateRange extends UI5Element {
      * @default false
      */
     open: boolean;
+    /**
+     * Receives id(or many ids) of the elements that label the component.
+     * @default undefined
+     * @public
+     * @since 2.25.0
+     */
+    accessibleNameRef?: string;
     _currentOption?: IDynamicDateRangeOption;
     _lastSelectedOption?: IDynamicDateRangeOption;
     currentValue?: DynamicDateRangeValue;
@@ -147,6 +154,10 @@ declare class DynamicDateRange extends UI5Element {
      * @private
      */
     get _iconMode(): IconMode.Decorative | IconMode.Interactive;
+    get _ariaLabelText(): string;
+    get _accInfo(): {
+        ariaLabel: string | undefined;
+    };
     get tooltipNavigationIcon(): string;
     get popoverAccessibleName(): string;
     _togglePicker(): void;

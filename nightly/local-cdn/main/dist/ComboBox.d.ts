@@ -316,6 +316,7 @@ declare class ComboBox extends UI5Element implements IFormInputElement {
     _selectionPerformed: boolean;
     _selectionTrigger?: ComboBoxSelectionChangeTrigger;
     _lastValue: string;
+    _lastSelectedValue?: string;
     _selectedItemText: string;
     _userTypedValue: string;
     _useSelectedValue: boolean;

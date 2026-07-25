@@ -1,7 +1,7 @@
 {
   "$schema": "https://raw.githubusercontent.com/JetBrains/web-types/master/schema/web-types.json",
   "name": "@ui5/webcomponents-fiori",
-  "version": "2.25.0-rc.0",
+  "version": "2.25.0-rc.3",
   "description-markup": "markdown",
   "contributions": {
     "html": {
@@ -3945,7 +3945,7 @@
         },
         {
           "name": "ui5-user-settings-dialog",
-          "description": "### Overview\n\nThe `ui5-user-settings-dialog` is an SAP Fiori-specific web component used in the `ui5-user-menu`.\nIt allows the user to easily view information and settings for an account.\n\n### ES6 Module Import\n`import \"@ui5/webcomponents-fiori/dist/UserSettingsDialog.js\";`\n---\n\n\n### **Events:**\n - **before-close** - Fired before the settings dialog is closed.\n- **close** - Fired when a settings dialog is closed.\n- **open** - Fired when a settings dialog is open.\n- **selection-change** - Fired when an item is selected.\n\n### **Slots:**\n - **default** - Defines the user settings items.\n\n**Note:**  If no setting item is set as `selected`, the first one will be selected.\n- **fixedItems** - Defines the fixed user settings items.",
+          "description": "### Overview\n\nThe `ui5-user-settings-dialog` is an SAP Fiori-specific web component used in the `ui5-user-menu`.\nIt allows the user to easily view information and settings for an account.\n\n### ES6 Module Import\n`import \"@ui5/webcomponents-fiori/dist/UserSettingsDialog.js\";`\n---\n\n\n### **Events:**\n - **before-close** - Fired before the settings dialog is closed.\n\n**Note:** This event is cancelable via `preventDefault()`, allowing the application to keep the\ndialog open — for example, to prompt the user about unsaved changes before dismissal.\n- **cancel** - Fired when the Cancel button in the footer is clicked.\nThe dialog does not close automatically — the application is responsible\nfor closing it after discarding the changes.\n- **close** - Fired when the settings dialog is closed.\n- **open** - Fired when the settings dialog is opened.\n- **save** - Fired when the Save button in the footer is clicked.\nThe dialog does not close automatically — the application is responsible\nfor closing it after persisting the changes.\n- **selection-change** - Fired when an item is selected.\n\n### **Slots:**\n - **default** - Defines the user settings items.\n\n**Note:**  If no setting item is set as `selected`, the first one will be selected.\n- **fixedItems** - Defines the fixed user settings items.",
           "doc-url": "",
           "attributes": [
             {
@@ -3956,6 +3956,11 @@
             {
               "name": "open",
               "description": "Defines, if the User Settings Dialog is opened.",
+              "value": { "type": "boolean", "default": "false" }
+            },
+            {
+              "name": "save-mode",
+              "description": "Defines whether the dialog offers Save and Cancel actions in its footer.\n\nWhen true, the footer renders a Save (Emphasized) and a Cancel button\ninstead of the default Close button. Save and Cancel each fire a\ncorresponding event; the application is responsible for closing the\ndialog (typically after persisting or discarding the changes).",
               "value": { "type": "boolean", "default": "false" }
             },
             {
@@ -3977,15 +3982,23 @@
           "events": [
             {
               "name": "before-close",
-              "description": "Fired before the settings dialog is closed."
+              "description": "Fired before the settings dialog is closed.\n\n**Note:** This event is cancelable via `preventDefault()`, allowing the application to keep the\ndialog open — for example, to prompt the user about unsaved changes before dismissal."
+            },
+            {
+              "name": "cancel",
+              "description": "Fired when the Cancel button in the footer is clicked.\nThe dialog does not close automatically — the application is responsible\nfor closing it after discarding the changes."
             },
             {
               "name": "close",
-              "description": "Fired when a settings dialog is closed."
+              "description": "Fired when the settings dialog is closed."
             },
             {
               "name": "open",
-              "description": "Fired when a settings dialog is open."
+              "description": "Fired when the settings dialog is opened."
+            },
+            {
+              "name": "save",
+              "description": "Fired when the Save button in the footer is clicked.\nThe dialog does not close automatically — the application is responsible\nfor closing it after persisting the changes."
             },
             {
               "name": "selection-change",
@@ -4005,6 +4018,11 @@
                 "value": { "type": "boolean" }
               },
               {
+                "name": "save-mode",
+                "description": "Defines whether the dialog offers Save and Cancel actions in its footer.\n\nWhen true, the footer renders a Save (Emphasized) and a Cancel button\ninstead of the default Close button. Save and Cancel each fire a\ncorresponding event; the application is responsible for closing the\ndialog (typically after persisting or discarding the changes).",
+                "value": { "type": "boolean" }
+              },
+              {
                 "name": "show-search-field",
                 "description": "Defines if the Search Field would be displayed.\n\n**Note:** By default the Search Field is not displayed.",
                 "value": { "type": "boolean" }
@@ -4013,15 +4031,23 @@
             "events": [
               {
                 "name": "before-close",
-                "description": "Fired before the settings dialog is closed."
+                "description": "Fired before the settings dialog is closed.\n\n**Note:** This event is cancelable via `preventDefault()`, allowing the application to keep the\ndialog open — for example, to prompt the user about unsaved changes before dismissal."
+              },
+              {
+                "name": "cancel",
+                "description": "Fired when the Cancel button in the footer is clicked.\nThe dialog does not close automatically — the application is responsible\nfor closing it after discarding the changes."
               },
               {
                 "name": "close",
-                "description": "Fired when a settings dialog is closed."
+                "description": "Fired when the settings dialog is closed."
               },
               {
                 "name": "open",
-                "description": "Fired when a settings dialog is open."
+                "description": "Fired when the settings dialog is opened."
+              },
+              {
+                "name": "save",
+                "description": "Fired when the Save button in the footer is clicked.\nThe dialog does not close automatically — the application is responsible\nfor closing it after persisting the changes."
               },
               {
                 "name": "selection-change",

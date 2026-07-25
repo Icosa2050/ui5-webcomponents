@@ -47,11 +47,14 @@ let ToolbarSelectOption = class ToolbarSelectOption extends UI5Element {
                 }
             });
             if (parent.select) {
-                parent.select.value = this.textContent || "";
+                parent.select.value = this.value !== undefined && this.value !== "" ? this.value : (this.textContent || "");
             }
         }
     }
 };
+__decorate([
+    property()
+], ToolbarSelectOption.prototype, "value", void 0);
 __decorate([
     property({ type: Boolean })
 ], ToolbarSelectOption.prototype, "selected", null);

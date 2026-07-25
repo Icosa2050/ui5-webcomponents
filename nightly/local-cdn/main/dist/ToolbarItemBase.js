@@ -43,6 +43,22 @@ class ToolbarItemBase extends UI5Element {
         this._maxWidth = 0;
         this._isRendering = true;
     }
+    _getNavigationTargets() {
+        const ref = this.getFocusDomRef();
+        return ref ? [ref] : [];
+    }
+    /**
+     * Focus entry point when toolbar navigates into this item.
+     * Override in complex items (e.g., Breadcrumbs) to handle direction-aware entry.
+     * @private
+     */
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    focusForToolbarNavigation(isForward) {
+        this.getFocusDomRef()?.focus();
+    }
+    getArrowNavState() {
+        return undefined;
+    }
     get isOverflowed() {
         return this._isOverflowed;
     }
@@ -87,6 +103,9 @@ class ToolbarItemBase extends UI5Element {
      */
     get isInteractive() {
         return true;
+    }
+    get isToolbarNavigatable() {
+        return this.isInteractive && !this.hidden && !("disabled" in this && !!this.disabled);
     }
     get hasOverflow() {
         return false;

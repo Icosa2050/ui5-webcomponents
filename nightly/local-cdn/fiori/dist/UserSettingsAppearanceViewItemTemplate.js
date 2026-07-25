@@ -8,6 +8,6 @@ export default function UserSettingsAppearanceViewItemTemplate() {
     });
 }
 function listItemContent() {
-    return (_jsx("div", { class: "list-item", children: _jsxs("div", { class: "item-left", children: [_jsx(Avatar, { class: "avatar-cozy", shape: "Square", icon: this.icon, "color-scheme": this.colorScheme, size: AvatarSize.S }), _jsx(Avatar, { class: "avatar-compact", shape: "Square", icon: this.icon, "color-scheme": this.colorScheme, size: AvatarSize.XS }), _jsx("div", { class: "item-texts", children: _jsx("span", { class: "item-title", children: this.text }) })] }) }));
+    return (_jsx("div", { class: "list-item", children: _jsxs("div", { class: "item-left", children: [_jsx(Avatar, { shape: "Square", icon: this.icon, "color-scheme": this.colorScheme, size: AvatarSize.S }), _jsx("div", { class: "item-texts", children: _jsx("span", { class: "item-title", children: this.text }) })] }) }));
 }
 //# sourceMappingURL=UserSettingsAppearanceViewItemTemplate.js.map

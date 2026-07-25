@@ -33,6 +33,7 @@ class SideNavigationItemBase extends UI5Element {
         this.disabled = false;
         this.forcedTabIndex = "-1";
         this.sideNavCollapsed = false;
+        this.sideNavAnimating = false;
         this.inPopover = false;
         /**
          * Defines if the item's group is disabled.
@@ -114,6 +115,9 @@ __decorate([
 __decorate([
     property({ type: Boolean })
 ], SideNavigationItemBase.prototype, "sideNavCollapsed", void 0);
+__decorate([
+    property({ type: Boolean })
+], SideNavigationItemBase.prototype, "sideNavAnimating", void 0);
 __decorate([
     property({ type: Boolean })
 ], SideNavigationItemBase.prototype, "inPopover", void 0);

@@ -5,7 +5,9 @@ import type { ToolbarItemEventDetail } from "./ToolbarItemBase.js";
 import type ToolbarSelectOption from "./ToolbarSelectOption.js";
 import type { SelectChangeEventDetail } from "./Select.js";
 import type { DefaultSlot, Slot } from "@ui5/webcomponents-base/dist/UI5Element.js";
-type ToolbarSelectChangeEventDetail = ToolbarItemEventDetail & SelectChangeEventDetail;
+type ToolbarSelectChangeEventDetail = ToolbarItemEventDetail & SelectChangeEventDetail & {
+    selectedToolbarOption: ToolbarSelectOption | undefined;
+};
 /**
  * @class
  *
@@ -96,7 +98,7 @@ declare class ToolbarSelect extends ToolbarItemBase {
     onOpen(e: Event): void;
     onClose(e: Event): void;
     onChange(e: CustomEvent<SelectChangeEventDetail>): void;
-    _syncOptions(selectedOption: HTMLElement): void;
+    _syncOptions(selectedOptionIndex: number): void;
     get styles(): {
         width: string | undefined;
     };

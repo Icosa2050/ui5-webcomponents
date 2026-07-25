@@ -12,6 +12,7 @@ import type InputSuggestions from "./features/InputSuggestions.js";
 import InputType from "./types/InputType.js";
 import type Popover from "./Popover.js";
 import type { IIcon } from "./Icon.js";
+import type { ToolbarArrowNavState, IToolbarArrowNavProvider } from "./IToolbarArrowNavProvider.js";
 import type { ListItemClickEventDetail, ListSelectionChangeEventDetail } from "./List.js";
 import type { ListItemBaseClickEventDetail } from "./ListItemBase.js";
 import type ResponsivePopover from "./ResponsivePopover.js";
@@ -105,7 +106,7 @@ type InputSuggestionScrollEventDetail = {
  * @csspart input - Used to style the native input element
  * @csspart clear-icon - Used to style the clear icon, which can be pressed to clear user input text
  */
-declare class Input extends UI5Element implements SuggestionComponent, IFormInputElement {
+declare class Input extends UI5Element implements SuggestionComponent, IFormInputElement, IToolbarArrowNavProvider {
     eventDetails: {
         "change": InputEventDetail;
         "input": InputEventDetail;
@@ -472,6 +473,7 @@ declare class Input extends UI5Element implements SuggestionComponent, IFormInpu
     getInputValue(): string;
     getInputDOMRef(): HTMLInputElement | Input | null;
     getInputDOMRefSync(): HTMLInputElement | null;
+    getArrowNavState(): ToolbarArrowNavState | undefined;
     /**
      * Returns a reference to the native input element
      * @protected

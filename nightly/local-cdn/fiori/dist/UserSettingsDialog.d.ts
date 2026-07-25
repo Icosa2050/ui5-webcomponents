@@ -30,6 +30,8 @@ declare class UserSettingsDialog extends UI5Element {
         "open": void;
         "before-close": UserSettingsBeforeCloseEventDetail;
         "close": void;
+        "save": void;
+        "cancel": void;
     };
     /**
      * Defines, if the User Settings Dialog is opened.
@@ -53,6 +55,18 @@ declare class UserSettingsDialog extends UI5Element {
      * @public
      */
     showSearchField: boolean;
+    /**
+     * Defines whether the dialog offers Save and Cancel actions in its footer.
+     *
+     * When true, the footer renders a Save (Emphasized) and a Cancel button
+     * instead of the default Close button. Save and Cancel each fire a
+     * corresponding event; the application is responsible for closing the
+     * dialog (typically after persisting or discarding the changes).
+     *
+     * @default false
+     * @public
+     */
+    saveMode: boolean;
     /**
      * Defines the user settings items.
      *
@@ -105,10 +119,14 @@ declare class UserSettingsDialog extends UI5Element {
     get accessibleNameText(): string;
     get ariaRoleDescList(): string;
     get closeButtonText(): string;
+    get saveButtonText(): string;
+    get cancelButtonText(): string;
     get noSearchResultsText(): string;
     get _selectedItemSlotName(): string | undefined;
     get _showSettingWithNavigation(): boolean;
     _handleCloseButtonClick(): void;
+    _handleSaveButtonClick(): void;
+    _handleCancelButtonClick(): void;
     _handleCollapseClick(): void;
     _handleInput(e: CustomEvent<InputEventDetail>): void;
     captureRef(ref: HTMLElement & {

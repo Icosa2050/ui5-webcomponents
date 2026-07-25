@@ -127,6 +127,9 @@ let Slider = Slider_1 = class Slider extends SliderBase {
      * @private
      */
     _onmousedown(e) {
+        if (this._isNonPrimaryClick(e)) {
+            return;
+        }
         if (this.disabled || this.step === 0 || e.target.hasAttribute("ui5-slider-tooltip")) {
             return;
         }

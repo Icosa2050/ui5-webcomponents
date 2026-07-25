@@ -1,5 +1,5 @@
 import UI5Element from "@ui5/webcomponents-base/dist/UI5Element.js";
-import type { Slot, DefaultSlot } from "@ui5/webcomponents-base/dist/UI5Element.js";
+import type { Slot, DefaultSlot, ChangeInfo } from "@ui5/webcomponents-base/dist/UI5Element.js";
 import type ResponsivePopover from "@ui5/webcomponents/dist/ResponsivePopover.js";
 import type NavigationMenu from "./NavigationMenu.js";
 import type I18nBundle from "@ui5/webcomponents-base/dist/i18nBundle.js";
@@ -127,6 +127,10 @@ declare class SideNavigation extends UI5Element {
     static i18nBundle: I18nBundle;
     constructor();
     _handleResizeBound: () => void;
+    _fnTransitionEnd?: (event: TransitionEvent) => void;
+    _animationTimeoutId?: ReturnType<typeof setTimeout>;
+    _bAnimating: boolean;
+    onInvalidation(changeInfo: ChangeInfo): void;
     onBeforeRendering(): void;
     initGroupsSettings(items: Array<SideNavigationItemBase>): void;
     _onAfterPopoverOpen(): void;
@@ -170,6 +174,7 @@ declare class SideNavigation extends UI5Element {
     _findSelectedItem(items: Array<SideNavigationItemBase>): SideNavigationSelectableItemBase | undefined;
     get overflowItems(): Array<HTMLElement>;
     private _isSmallScreen;
+    _handleExpandCollapseAnimation(): void;
     _handleItemClick(e: KeyboardEvent | MouseEvent, item: SideNavigationSelectableItemBase): void;
     _handleOverflowClick(): void;
     _getOverflowItems(): Array<SideNavigationItem>;

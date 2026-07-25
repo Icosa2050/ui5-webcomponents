@@ -1,7 +1,7 @@
 {
   "$schema": "https://raw.githubusercontent.com/JetBrains/web-types/master/schema/web-types.json",
   "name": "@ui5/webcomponents",
-  "version": "2.25.0-rc.0",
+  "version": "2.25.0-rc.3",
   "description-markup": "markdown",
   "contributions": {
     "html": {
@@ -4000,6 +4000,11 @@
           "doc-url": "",
           "attributes": [
             {
+              "name": "accessible-name-ref",
+              "description": "Receives id(or many ids) of the elements that label the component.",
+              "value": { "type": "string | undefined", "default": "undefined" }
+            },
+            {
               "name": "options",
               "description": "Defines the options listed as a string, separated by commas and using capital case.\nExample: \"TODAY, YESTERDAY, DATERANGE\"",
               "value": { "type": "string", "default": "\"\"" }
@@ -4021,6 +4026,11 @@
           ],
           "js": {
             "properties": [
+              {
+                "name": "accessible-name-ref",
+                "description": "Receives id(or many ids) of the elements that label the component.",
+                "value": { "type": "string | undefined" }
+              },
               {
                 "name": "options",
                 "description": "Defines the options listed as a string, separated by commas and using capital case.\nExample: \"TODAY, YESTERDAY, DATERANGE\"",
@@ -12552,17 +12562,17 @@
         },
         {
           "name": "ui5-toolbar",
-          "description": "### Overview\n\nThe `ui5-toolbar` component is used to create a horizontal layout with items.\nThe items can be overflowing in a popover, when the space is not enough to show all of them.\n\n### Keyboard Handling\nThe `ui5-toolbar` provides advanced keyboard handling.\n\n- The control is not interactive, but can contain of interactive elements\n- [Tab] - iterates through elements\n\n### ES6 Module Import\n`import \"@ui5/webcomponents/dist/Toolbar.js\";`\n---\n\n\n### **Methods:**\n - **isOverflowOpen(): _boolean_** - Returns if the overflow popup is open.\n\n### **Slots:**\n - **default** - Defines the items of the component.\n\n**Note:** Currently only `ui5-toolbar-button`, `ui5-toolbar-select`, `ui5-toolbar-separator` and `ui5-toolbar-spacer` are allowed here.",
+          "description": "### Overview\n\nThe `ui5-toolbar` component is used to create a horizontal layout with items.\nThe items can be overflowing in a popover, when the space is not enough to show all of them.\n\n### Keyboard Handling\nThe `ui5-toolbar` provides advanced keyboard handling.\n\n- [Left]/[Right] - navigate among toolbar items\n- [Home]/[End] - move to first/last toolbar item\n- [Tab] / [Shift]+[Tab] - exit the toolbar\n\n### ES6 Module Import\n`import \"@ui5/webcomponents/dist/Toolbar.js\";`\n---\n\n\n### **Methods:**\n - **isOverflowOpen(): _boolean_** - Returns if the overflow popup is open.\n\n### **Slots:**\n - **default** - Defines the items of the component.\n\n**Note:** Currently only `ui5-toolbar-button`, `ui5-toolbar-select`, `ui5-toolbar-separator` and `ui5-toolbar-spacer` are allowed here.",
           "doc-url": "",
           "attributes": [
             {
               "name": "accessible-name",
-              "description": "Defines the accessible ARIA name of the component.",
+              "description": "Defines the accessible ARIA name of the component.\n\n**Note:** It is strongly recommended to always set this property or `accessibleNameRef`\nwhen the toolbar has `role=\"toolbar\"` (i.e. when it contains more than one interactive item).\nWithout an accessible name, screen readers will announce the toolbar without any context,\nmaking it harder for keyboard-only and AT users to understand its purpose.",
               "value": { "type": "string | undefined", "default": "undefined" }
             },
             {
               "name": "accessible-name-ref",
-              "description": "Receives id(or many ids) of the elements that label the input.",
+              "description": "Receives id(or many ids) of the elements that label the input.\n\n**Note:** When the toolbar has `role=\"toolbar\"`, at least one of `accessibleName` or\n`accessibleNameRef` should be provided to satisfy WCAG 2.1 success criterion 4.1.2.",
               "value": { "type": "string | undefined", "default": "undefined" }
             },
             {
@@ -12595,12 +12605,12 @@
             "properties": [
               {
                 "name": "accessible-name",
-                "description": "Defines the accessible ARIA name of the component.",
+                "description": "Defines the accessible ARIA name of the component.\n\n**Note:** It is strongly recommended to always set this property or `accessibleNameRef`\nwhen the toolbar has `role=\"toolbar\"` (i.e. when it contains more than one interactive item).\nWithout an accessible name, screen readers will announce the toolbar without any context,\nmaking it harder for keyboard-only and AT users to understand its purpose.",
                 "value": { "type": "string | undefined" }
               },
               {
                 "name": "accessible-name-ref",
-                "description": "Receives id(or many ids) of the elements that label the input.",
+                "description": "Receives id(or many ids) of the elements that label the input.\n\n**Note:** When the toolbar has `role=\"toolbar\"`, at least one of `accessibleName` or\n`accessibleNameRef` should be provided to satisfy WCAG 2.1 success criterion 4.1.2.",
                 "value": { "type": "string | undefined" }
               },
               {
@@ -12977,6 +12987,11 @@
               "name": "selected",
               "description": "Defines the selected state of the component.",
               "value": { "type": "any", "default": "false" }
+            },
+            {
+              "name": "value",
+              "description": "Defines the value of the component.",
+              "value": { "type": "string | undefined", "default": "undefined" }
             }
           ],
           "slots": [
@@ -12992,6 +13007,11 @@
                 "name": "selected",
                 "description": "Defines the selected state of the component.",
                 "value": { "type": "any" }
+              },
+              {
+                "name": "value",
+                "description": "Defines the value of the component.",
+                "value": { "type": "string | undefined" }
               }
             ],
             "events": []

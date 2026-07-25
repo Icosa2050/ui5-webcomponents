@@ -1669,7 +1669,7 @@
     },
     {
       "name": "ui5-user-settings-dialog",
-      "description": "### Overview\n\nThe `ui5-user-settings-dialog` is an SAP Fiori-specific web component used in the `ui5-user-menu`.\nIt allows the user to easily view information and settings for an account.\n\n### ES6 Module Import\n`import \"@ui5/webcomponents-fiori/dist/UserSettingsDialog.js\";`\n\n\n---\n\n\n\n\n### **Events:**\n - **before-close** - Fired before the settings dialog is closed.\n- **close** - Fired when a settings dialog is closed.\n- **open** - Fired when a settings dialog is open.\n- **selection-change** - Fired when an item is selected.\n\n### **Slots:**\n - **default** - Defines the user settings items.\n\n**Note:**  If no setting item is set as `selected`, the first one will be selected.\n- **fixedItems** - Defines the fixed user settings items.",
+      "description": "### Overview\n\nThe `ui5-user-settings-dialog` is an SAP Fiori-specific web component used in the `ui5-user-menu`.\nIt allows the user to easily view information and settings for an account.\n\n### ES6 Module Import\n`import \"@ui5/webcomponents-fiori/dist/UserSettingsDialog.js\";`\n\n\n---\n\n\n\n\n### **Events:**\n - **before-close** - Fired before the settings dialog is closed.\n\n**Note:** This event is cancelable via `preventDefault()`, allowing the application to keep the\ndialog open — for example, to prompt the user about unsaved changes before dismissal.\n- **cancel** - Fired when the Cancel button in the footer is clicked.\nThe dialog does not close automatically — the application is responsible\nfor closing it after discarding the changes.\n- **close** - Fired when the settings dialog is closed.\n- **open** - Fired when the settings dialog is opened.\n- **save** - Fired when the Save button in the footer is clicked.\nThe dialog does not close automatically — the application is responsible\nfor closing it after persisting the changes.\n- **selection-change** - Fired when an item is selected.\n\n### **Slots:**\n - **default** - Defines the user settings items.\n\n**Note:**  If no setting item is set as `selected`, the first one will be selected.\n- **fixedItems** - Defines the fixed user settings items.",
       "attributes": [
         {
           "name": "header-text",
@@ -1679,6 +1679,11 @@
         {
           "name": "open",
           "description": "Defines, if the User Settings Dialog is opened.",
+          "values": []
+        },
+        {
+          "name": "save-mode",
+          "description": "Defines whether the dialog offers Save and Cancel actions in its footer.\n\nWhen true, the footer renders a Save (Emphasized) and a Cancel button\ninstead of the default Close button. Save and Cancel each fire a\ncorresponding event; the application is responsible for closing the\ndialog (typically after persisting or discarding the changes).",
           "values": []
         },
         {

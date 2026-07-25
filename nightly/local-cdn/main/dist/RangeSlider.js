@@ -414,7 +414,7 @@ let RangeSlider = RangeSlider_1 = class RangeSlider extends SliderBase {
      * @private
      */
     _onmousedown(e) {
-        if (e?.button && e?.button !== 0) {
+        if (this._isNonPrimaryClick(e)) {
             return;
         }
         // If step is 0 no interaction is available because there is no constant

@@ -46,10 +46,10 @@ class UserSettingsAccountView extends UserSettingsView {
         this.fireDecoratorEvent("manage-account-click");
     }
     get _manageAccountButtonText() {
-        return UserSettingsAccountView_1.i18nBundle.getText(USER_SETTINGS_ACCOUNT_MANAGE_ACCOUNT_BUTTON_TXT);
+        return UserSettingsAccountView_1.i18nBundle?.getText(USER_SETTINGS_ACCOUNT_MANAGE_ACCOUNT_BUTTON_TXT);
     }
     get _editAvatarTooltip() {
-        return UserSettingsAccountView_1.i18nBundle.getText(USER_SETTINGS_ACCOUNT_EDIT_AVATAR_TXT);
+        return UserSettingsAccountView_1.i18nBundle?.getText(USER_SETTINGS_ACCOUNT_EDIT_AVATAR_TXT);
     }
     get _account() {
         return this?.account?.[0];

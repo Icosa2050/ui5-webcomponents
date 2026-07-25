@@ -149,6 +149,14 @@ class SliderBase extends UI5Element {
     _handleUp(e) { } // eslint-disable-line
     _onmousedown(e) { } // eslint-disable-line
     _handleActionKeyPress(e) { } // eslint-disable-line
+    /**
+     * Checks if the mouse event is a non-primary button click (e.g., right-click).
+     * Returns true if the event should be ignored.
+     * @protected
+     */
+    _isNonPrimaryClick(e) {
+        return !!e?.button && e?.button !== 0;
+    }
     static get ACTION_KEYS() {
         return [
             isLeft,

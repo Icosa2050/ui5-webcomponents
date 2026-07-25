@@ -14,6 +14,13 @@ import type { DefaultSlot } from "@ui5/webcomponents-base/dist/UI5Element.js";
  */
 declare class ToolbarSelectOption extends UI5Element {
     /**
+     * Defines the value of the component.
+     * @default undefined
+     * @public
+     * @since 2.25.0
+     */
+    value?: string;
+    /**
      * Defines the selected state of the component.
      * @default false
      * @public

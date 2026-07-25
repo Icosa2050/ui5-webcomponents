@@ -171,7 +171,7 @@ export default `:host {
     --_ui5_card_header_focus_border: var(--sapContent_FocusWidth) var(--sapContent_FocusStyle) var(--sapContent_FocusColor);
     --_ui5_card_header_focus_radius: var(--_ui5_card_border-radius);
     --_ui5_card_header_focus_bottom_radius: 0px;
-    --_ui5_card_header_focus_offset: 0px;
+    --_ui5_card_header_focus_offset: 1px;
     --_ui5_card_header_title_font_family: var(--sapFontHeaderFamily);
     --_ui5_card_header_title_font_size: var(--sapFontHeader6Size);
     --_ui5_card_header_title_font_weight: normal;

@@ -463,6 +463,7 @@ let ShellBar = ShellBar_1 = class ShellBar extends UI5Element {
             getSearchState: () => this.enabledFeatures.search && this.showSearchField,
             getCSSVariable: (cssVar) => this.getCSSVariable(cssVar),
             setSearchState: (expanded) => this.setSearchState(expanded),
+            handleSearchButtonClick: () => this.handleSearchButtonClick(),
             getOverflowed: () => this.overflow.isOverflowing(this.overflowOuter, this.overflowInner),
         };
     }
@@ -473,7 +474,9 @@ let ShellBar = ShellBar_1 = class ShellBar extends UI5Element {
         return this._searchAdaptorLegacy;
     }
     handleSearchButtonClick() {
-        const searchButton = this.shadowRoot.querySelector(".ui5-shellbar-search-button");
+        const searchButton = this.isSelfCollapsibleSearch
+            ? this.search?.shadowRoot?.querySelector(".ui5-shell-search-field-button") ?? null
+            : this.shadowRoot.querySelector(".ui5-shellbar-search-button");
         const defaultPrevented = !this.fireDecoratorEvent("search-button-click", {
             targetRef: searchButton,
             searchFieldVisible: this.showSearchField,
@@ -686,6 +689,9 @@ let ShellBar = ShellBar_1 = class ShellBar extends UI5Element {
      */
     async getSearchButtonDomRef() {
         await renderFinished();
+        if (this.isSelfCollapsibleSearch) {
+            return this.search.getSearchButtonDomRef();
+        }
         return this.shadowRoot.querySelector(`*[data-ui5-stable="toggle-search"]`);
     }
     _fireClickEvent(eventName, domRef) {

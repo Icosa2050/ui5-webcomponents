@@ -141,6 +141,12 @@ declare abstract class SliderBase extends UI5Element {
     _handleUp(e: TouchEvent | MouseEvent): void;
     _onmousedown(e: TouchEvent | MouseEvent): void;
     _handleActionKeyPress(e: Event): void;
+    /**
+     * Checks if the mouse event is a non-primary button click (e.g., right-click).
+     * Returns true if the event should be ignored.
+     * @protected
+     */
+    _isNonPrimaryClick(e: TouchEvent | MouseEvent): boolean;
     abstract tickmarksObject: Array<boolean>;
     abstract _ariaLabelledByText: string;
     static get ACTION_KEYS(): ((event: KeyboardEvent) => boolean)[];

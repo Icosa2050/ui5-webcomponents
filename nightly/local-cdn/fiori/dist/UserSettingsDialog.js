@@ -14,7 +14,7 @@ import MediaRange from "@ui5/webcomponents-base/dist/MediaRange.js";
 import UserSettingsDialogTemplate from "./UserSettingsDialogTemplate.js";
 import UserSettingsDialogCss from "./generated/themes/UserSettingsDialog.css.js";
 // Texts
-import { USER_SETTINGS_DIALOG_ACCESSIBLE_NAME, USER_SETTINGS_LIST_ARIA_ROLE_DESC, USER_SETTINGS_DIALOG_CLOSE_BUTTON_TEXT, USER_SETTINGS_DIALOG_NO_SEARCH_RESULTS_TEXT, } from "./generated/i18n/i18n-defaults.js";
+import { USER_SETTINGS_DIALOG_ACCESSIBLE_NAME, USER_SETTINGS_LIST_ARIA_ROLE_DESC, USER_SETTINGS_DIALOG_CLOSE_BUTTON_TEXT, USER_SETTINGS_DIALOG_SAVE_BUTTON_TEXT, USER_SETTINGS_DIALOG_CANCEL_BUTTON_TEXT, USER_SETTINGS_DIALOG_NO_SEARCH_RESULTS_TEXT, } from "./generated/i18n/i18n-defaults.js";
 /**
  * @class
  * ### Overview
@@ -48,6 +48,18 @@ let UserSettingsDialog = UserSettingsDialog_1 = class UserSettingsDialog extends
          * @public
          */
         this.showSearchField = false;
+        /**
+         * Defines whether the dialog offers Save and Cancel actions in its footer.
+         *
+         * When true, the footer renders a Save (Emphasized) and a Cancel button
+         * instead of the default Close button. Save and Cancel each fire a
+         * corresponding event; the application is responsible for closing the
+         * dialog (typically after persisting or discarding the changes).
+         *
+         * @default false
+         * @public
+         */
+        this.saveMode = false;
         /**
          * @private
          */
@@ -156,6 +168,12 @@ let UserSettingsDialog = UserSettingsDialog_1 = class UserSettingsDialog extends
     get closeButtonText() {
         return UserSettingsDialog_1.i18nBundle.getText(USER_SETTINGS_DIALOG_CLOSE_BUTTON_TEXT);
     }
+    get saveButtonText() {
+        return UserSettingsDialog_1.i18nBundle.getText(USER_SETTINGS_DIALOG_SAVE_BUTTON_TEXT);
+    }
+    get cancelButtonText() {
+        return UserSettingsDialog_1.i18nBundle.getText(USER_SETTINGS_DIALOG_CANCEL_BUTTON_TEXT);
+    }
     get noSearchResultsText() {
         return UserSettingsDialog_1.i18nBundle.getText(USER_SETTINGS_DIALOG_NO_SEARCH_RESULTS_TEXT);
     }
@@ -170,6 +188,12 @@ let UserSettingsDialog = UserSettingsDialog_1 = class UserSettingsDialog extends
         if (!eventPrevented) {
             this.open = false;
         }
+    }
+    _handleSaveButtonClick() {
+        this.fireDecoratorEvent("save");
+    }
+    _handleCancelButtonClick() {
+        this.fireDecoratorEvent("cancel");
     }
     _handleCollapseClick() {
         this._collapsed = false;
@@ -192,6 +216,9 @@ __decorate([
 __decorate([
     property({ type: Boolean })
 ], UserSettingsDialog.prototype, "showSearchField", void 0);
+__decorate([
+    property({ type: Boolean })
+], UserSettingsDialog.prototype, "saveMode", void 0);
 __decorate([
     slot({
         "default": true,
@@ -248,13 +275,16 @@ UserSettingsDialog = UserSettingsDialog_1 = __decorate([
         cancelable: true,
     })
     /**
-     * Fired when a settings dialog is open.
+     * Fired when the settings dialog is opened.
      * @public
      */
     ,
     event("open")
     /**
      * Fired before the settings dialog is closed.
+     *
+     * **Note:** This event is cancelable via `preventDefault()`, allowing the application to keep the
+     * dialog open — for example, to prompt the user about unsaved changes before dismissal.
      * @public
      */
     ,
@@ -262,11 +292,27 @@ UserSettingsDialog = UserSettingsDialog_1 = __decorate([
         cancelable: true,
     })
     /**
-     * Fired when a settings dialog is closed.
+     * Fired when the settings dialog is closed.
      * @public
      */
     ,
     event("close")
+    /**
+     * Fired when the Save button in the footer is clicked.
+     * The dialog does not close automatically — the application is responsible
+     * for closing it after persisting the changes.
+     * @public
+     */
+    ,
+    event("save")
+    /**
+     * Fired when the Cancel button in the footer is clicked.
+     * The dialog does not close automatically — the application is responsible
+     * for closing it after discarding the changes.
+     * @public
+     */
+    ,
+    event("cancel")
 ], UserSettingsDialog);
 UserSettingsDialog.define();
 export default UserSettingsDialog;

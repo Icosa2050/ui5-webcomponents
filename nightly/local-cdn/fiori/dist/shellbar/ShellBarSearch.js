@@ -4,7 +4,7 @@ import { isPhone } from "@ui5/webcomponents-base/dist/Device.js";
  * Handles search fields with collapsed/open properties and ui5-open/close/search events.
  */
 class ShellBarSearch {
-    constructor({ getOverflowed, setSearchState, getSearchField, getSearchState, getCSSVariable, }) {
+    constructor({ getOverflowed, setSearchState, getSearchField, getSearchState, getCSSVariable, handleSearchButtonClick, }) {
         this.onSearchBound = this.onSearch.bind(this);
         this.onSearchOpenBound = this.onSearchOpen.bind(this);
         this.onSearchCloseBound = this.onSearchClose.bind(this);
@@ -14,6 +14,7 @@ class ShellBarSearch {
         this.getSearchField = getSearchField;
         this.getSearchState = getSearchState;
         this.setSearchState = setSearchState;
+        this.handleSearchButtonClick = handleSearchButtonClick;
     }
     subscribe(searchField = this.getSearchField()) {
         if (!searchField) {
@@ -110,7 +111,7 @@ class ShellBarSearch {
         if (isPhone() || (this.getSearchField()?.value && this.getSearchState())) {
             return;
         }
-        this.setSearchState(!this.getSearchState());
+        this.handleSearchButtonClick();
     }
     /**
      * Gets the minimum width needed for search field from CSS variable.

@@ -4,6 +4,7 @@ interface ShellBarSearchConstructorParams {
     getOverflowed: () => boolean;
     getSearchState: () => boolean;
     setSearchState: (expanded: boolean) => void;
+    handleSearchButtonClick: () => boolean;
     getSearchField: () => IShellBarSearchField | null;
     getCSSVariable: (variable: string) => string;
 }
@@ -21,9 +22,10 @@ declare class ShellBarSearch implements IShellBarSearchController {
     private getSearchField;
     private getSearchState;
     private setSearchState;
+    private handleSearchButtonClick;
     private getCSSVariable;
     private initialRender;
-    constructor({ getOverflowed, setSearchState, getSearchField, getSearchState, getCSSVariable, }: ShellBarSearchConstructorParams);
+    constructor({ getOverflowed, setSearchState, getSearchField, getSearchState, getCSSVariable, handleSearchButtonClick, }: ShellBarSearchConstructorParams);
     subscribe(searchField?: HTMLElement | null): void;
     unsubscribe(searchField?: HTMLElement | null): void;
     /**

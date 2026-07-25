@@ -336,6 +336,7 @@ let ComboBox = ComboBox_1 = class ComboBox extends UI5Element {
         this._autocomplete = false;
         if (!e.relatedTarget || (e.relatedTarget !== this.shadowRoot.querySelector(".ui5-input-clear-icon"))) {
             this._lastValue = this.value;
+            this._lastSelectedValue = this.selectedValue;
         }
         !isPhone() && e.target.setSelectionRange(0, this.value.length);
     }
@@ -385,6 +386,7 @@ let ComboBox = ComboBox_1 = class ComboBox extends UI5Element {
         }
         if (this._selectionPerformed) {
             this._lastValue = this.value;
+            this._lastSelectedValue = this.selectedValue;
             this._selectionPerformed = false;
         }
         this.open = false;
@@ -442,6 +444,7 @@ let ComboBox = ComboBox_1 = class ComboBox extends UI5Element {
         this._resetFilter();
         if (isPhone() && this.value && !this._lastValue) {
             this._lastValue = this.value;
+            this._lastSelectedValue = this.selectedValue;
         }
         this._toggleRespPopover();
     }
@@ -950,9 +953,12 @@ let ComboBox = ComboBox_1 = class ComboBox extends UI5Element {
         }
     }
     _fireChangeEvent() {
-        if (this.value !== this._lastValue) {
+        const valueChanged = this.value !== this._lastValue;
+        const selectedValueChanged = this._useSelectedValue && this.selectedValue !== this._lastSelectedValue;
+        if (valueChanged || selectedValueChanged) {
             this.fireDecoratorEvent("change");
             this._lastValue = this.value;
+            this._lastSelectedValue = this.selectedValue;
         }
     }
     _inputChange(e) {
@@ -1032,6 +1038,7 @@ let ComboBox = ComboBox_1 = class ComboBox extends UI5Element {
         this.fireDecoratorEvent("input");
         if (this._isPhone) {
             this._lastValue = "";
+            this._lastSelectedValue = undefined;
             this.fireDecoratorEvent("change");
         }
         else {

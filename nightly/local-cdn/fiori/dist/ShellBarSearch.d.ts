@@ -21,6 +21,7 @@ declare class ShellBarSearch extends Search {
     _handleInput(e: InputEvent): void;
     get _effectiveIconTooltip(): string;
     get nativeInput(): HTMLInputElement | null | undefined;
+    getSearchButtonDomRef(): HTMLElement | null;
     _onfocusin(): void;
     onBeforeRendering(): void;
 }

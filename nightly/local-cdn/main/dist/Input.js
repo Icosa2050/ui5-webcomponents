@@ -1044,6 +1044,24 @@ let Input = Input_1 = class Input extends UI5Element {
         }
         return this.nativeInput;
     }
+    getArrowNavState() {
+        const input = this.getInputDOMRefSync();
+        if (!input) {
+            return undefined;
+        }
+        const active = getActiveElement();
+        const isInputFocused = !!active && (active === input || input.contains(active));
+        if (!isInputFocused) {
+            return undefined;
+        }
+        const caret = input.selectionStart ?? 0;
+        const caretEnd = input.selectionEnd ?? caret;
+        const len = input.value?.length ?? 0;
+        // A non-collapsed selection is not a navigation boundary: Left/Right should
+        // collapse the selection (native behaviour), not exit to the next toolbar item.
+        const collapsed = caret === caretEnd;
+        return { atLeftEnd: collapsed && caret === 0, atRightEnd: collapsed && caretEnd >= len };
+    }
     /**
      * Returns a reference to the native input element
      * @protected

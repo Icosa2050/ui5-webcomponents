@@ -1,6 +1,6 @@
 export default `:host{
-    --_ui5_banner_background: var(--sapShell_Banner_Background, var(--sapHighlightColor));
-    --_ui5_banner_text_color: var(--sapShell_Banner_TextColor, var(--sapContent_ContrastTextColor));
+    --_ui5_banner_background: var(--sapShell_HeroBanner_Background, var(--sapHighlightColor));
+    --_ui5_banner_text_color: var(--sapShell_HeroBanner_TextColor, var(--sapContent_ContrastTextColor));
     --_ui5_banner_border_radius: var(--sapTile_BorderCornerRadius);
     --_ui5_banner_box_shadow: var(--sapContent_Shadow0);
     --_ui5_banner_background_image: var(--sapShell_HeroBanner_BackgroundImage);

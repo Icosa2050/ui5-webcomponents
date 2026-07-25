@@ -92,14 +92,15 @@ let ToolbarSelect = class ToolbarSelect extends ToolbarItemBase {
     }
     onChange(e) {
         e.stopImmediatePropagation();
-        const prevented = !this.fireDecoratorEvent("change", { ...e.detail, targetRef: e.target });
+        const selectedOptionIndex = Number(e.detail.selectedOption?.getAttribute("data-ui5-external-action-item-index"));
+        const selectedToolbarOption = this.options[selectedOptionIndex];
+        const prevented = !this.fireDecoratorEvent("change", { ...e.detail, targetRef: e.target, selectedToolbarOption });
         if (!prevented) {
             this.fireDecoratorEvent("close-overflow");
         }
-        this._syncOptions(e.detail.selectedOption);
+        this._syncOptions(selectedOptionIndex);
     }
-    _syncOptions(selectedOption) {
-        const selectedOptionIndex = Number(selectedOption?.getAttribute("data-ui5-external-action-item-index"));
+    _syncOptions(selectedOptionIndex) {
         this.options.forEach((option, index) => {
             option.selected = index === selectedOptionIndex;
         });
@@ -151,6 +152,8 @@ ToolbarSelect = __decorate([
     /**
      * Fired when the selected option changes.
      * @param {HTMLElement} selectedOption the selected option.
+     * @param {HTMLElement} selectedToolbarOption the original toolbar select option.
+     * @since 2.25.0
      * @public
      */
     ,

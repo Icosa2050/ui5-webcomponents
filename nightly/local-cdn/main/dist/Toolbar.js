@@ -13,6 +13,7 @@ import customElement from "@ui5/webcomponents-base/dist/decorators/customElement
 import jsxRenderer from "@ui5/webcomponents-base/dist/renderer/JsxRenderer.js";
 import { renderFinished } from "@ui5/webcomponents-base/dist/Render.js";
 import ResizeHandler from "@ui5/webcomponents-base/dist/delegate/ResizeHandler.js";
+import { isLeft, isRight, isHome, isEnd, isTabNext, isTabPrevious, } from "@ui5/webcomponents-base/dist/Keys.js";
 import { getEffectiveAriaLabelText } from "@ui5/webcomponents-base/dist/util/AccessibilityTextsHelper.js";
 import "@ui5/webcomponents-icons/dist/overflow.js";
 import i18n from "@ui5/webcomponents-base/dist/decorators/i18n.js";
@@ -21,6 +22,7 @@ import ToolbarTemplate from "./ToolbarTemplate.js";
 import ToolbarCss from "./generated/themes/Toolbar.css.js";
 import ToolbarPopoverCss from "./generated/themes/ToolbarPopover.css.js";
 import ToolbarItemOverflowBehavior from "./types/ToolbarItemOverflowBehavior.js";
+import ToolbarItemBase from "./ToolbarItemBase.js";
 import getActiveElement from "@ui5/webcomponents-base/dist/util/getActiveElement.js";
 function calculateCSSREMValue(styleSet, propertyName) {
     return Number(styleSet.getPropertyValue(propertyName).replace("rem", "")) * parseInt(getComputedStyle(document.body).getPropertyValue("font-size"));
@@ -39,8 +41,9 @@ function parsePxValue(styleSet, propertyName) {
  * ### Keyboard Handling
  * The `ui5-toolbar` provides advanced keyboard handling.
  *
- * - The control is not interactive, but can contain of interactive elements
- * - [Tab] - iterates through elements
+ * - [Left]/[Right] - navigate among toolbar items
+ * - [Home]/[End] - move to first/last toolbar item
+ * - [Tab] / [Shift]+[Tab] - exit the toolbar
  *
  * ### ES6 Module Import
  * `import "@ui5/webcomponents/dist/Toolbar.js";`
@@ -83,6 +86,8 @@ let Toolbar = Toolbar_1 = class Toolbar extends UI5Element {
         this.ITEMS_WIDTH_MAP = new Map();
         this._onResize = this.onResize.bind(this);
         this._onCloseOverflow = this.closeOverflow.bind(this);
+        this._onFocusIn = this._onfocusin.bind(this);
+        this._onKeyDown = this._onkeydown.bind(this);
     }
     /**
      * Read-only members
@@ -160,9 +165,11 @@ let Toolbar = Toolbar_1 = class Toolbar extends UI5Element {
      */
     onEnterDOM() {
         ResizeHandler.register(this, this._onResize);
+        this.attachListeners();
     }
     onExitDOM() {
         ResizeHandler.deregister(this, this._onResize);
+        this.detachListeners();
     }
     onInvalidation(changeInfo) {
         if (changeInfo.reason === "childchange") {
@@ -173,11 +180,13 @@ let Toolbar = Toolbar_1 = class Toolbar extends UI5Element {
         }
     }
     onBeforeRendering() {
-        this.detachListeners();
-        this.attachListeners();
         if (getActiveElement() === this.overflowButtonDOM?.getFocusDomRef() && this.hideOverflowButton) {
-            const lastItem = this.standardItems.filter(item => item.isInteractive).at(-1);
-            lastItem?.focus();
+            const items = this.standardItems.filter(item => item.isToolbarNavigatable);
+            const lastItem = items.at(-1);
+            if (lastItem) {
+                this._lastFocusedItem = lastItem;
+                lastItem.focusForToolbarNavigation(false);
+            }
         }
         this.prePopulateAlwaysOverflowItems();
     }
@@ -188,6 +197,17 @@ let Toolbar = Toolbar_1 = class Toolbar extends UI5Element {
         this.items.forEach(item => {
             this.addItemsAdditionalProperties(item);
         });
+        this._reconcileLastFocusedItem();
+    }
+    /**
+     * Drops the tracked re-entry item once it leaves the navigation chain
+     * (moved to overflow or removed), so Tab re-entry and arrow/Home/End
+     * navigation don't silently restart from the first item.
+     */
+    _reconcileLastFocusedItem() {
+        if (this._lastFocusedItem instanceof ToolbarItemBase && !this._getNavigationChain().includes(this._lastFocusedItem)) {
+            this._lastFocusedItem = undefined;
+        }
     }
     addItemsAdditionalProperties(item) {
         item.isOverflowed = this.overflowItems.indexOf(item) !== -1;
@@ -342,6 +362,8 @@ let Toolbar = Toolbar_1 = class Toolbar extends UI5Element {
     }
     onOverflowPopoverOpened() {
         this.popoverOpen = true;
+        const firstItem = this.overflowItems.find(item => item.isInteractive && !item.hidden);
+        firstItem?.focusForToolbarNavigation(true);
     }
     onResize() {
         this.closeOverflow();
@@ -353,9 +375,13 @@ let Toolbar = Toolbar_1 = class Toolbar extends UI5Element {
      */
     attachListeners() {
         this.addEventListener("ui5-close-overflow", this._onCloseOverflow);
+        this.addEventListener("focusin", this._onFocusIn);
+        this.addEventListener("keydown", this._onKeyDown, true);
     }
     detachListeners() {
         this.removeEventListener("ui5-close-overflow", this._onCloseOverflow);
+        this.removeEventListener("focusin", this._onFocusIn);
+        this.removeEventListener("keydown", this._onKeyDown, true);
     }
     onToolbarItemChange() {
         // some items were updated reset the cache and trigger a re-render
@@ -383,6 +409,199 @@ let Toolbar = Toolbar_1 = class Toolbar extends UI5Element {
     }
     getCachedItemWidth(id) {
         return this.ITEMS_WIDTH_MAP.get(id);
+    }
+    /**
+     * Keyboard Navigation
+     */
+    _isFocusInsideOverflow(path) {
+        const popover = this.getOverflowPopover();
+        if (!popover) {
+            return false;
+        }
+        // Check popover shadow DOM (e.g. focus trap sentinels)
+        if (path.some(node => popover === node || popover.shadowRoot === node)) {
+            return true;
+        }
+        // Check if the event originates from a slotted overflow item (light DOM, not contained by popover)
+        const overflowItemSet = new Set(this.overflowItems);
+        return path.some(node => overflowItemSet.has(node));
+    }
+    _onfocusin(e) {
+        const path = e.composedPath();
+        if (this.popoverOpen && this._isFocusInsideOverflow(path)) {
+            return;
+        }
+        const currentTarget = this._findItemByPath(path)
+            || this._findOverflowButtonByPath(path)
+            || this._findCurrentTargetByActiveElement();
+        if (currentTarget) {
+            this._setCurrentItem(currentTarget);
+        }
+    }
+    _onkeydown(e) {
+        const path = e.composedPath();
+        if (this.popoverOpen && this._isFocusInsideOverflow(path)) {
+            return;
+        }
+        if (isTabNext(e) || isTabPrevious(e)) {
+            const tabTarget = this._findItemByPath(path)
+                || this._findOverflowButtonByPath(path)
+                || this._findCurrentTargetByActiveElement()
+                || this._lastFocusedItem;
+            if (tabTarget) {
+                this._setCurrentItem(tabTarget);
+            }
+            return;
+        }
+        const isForward = this.effectiveDir === "rtl" ? isLeft(e) : isRight(e);
+        const isBackward = this.effectiveDir === "rtl" ? isRight(e) : isLeft(e);
+        const isHomeKey = isHome(e);
+        const isEndKey = isEnd(e);
+        if (!isForward && !isBackward && !isHomeKey && !isEndKey) {
+            return;
+        }
+        const currentTarget = this._findItemByPath(path)
+            || this._findOverflowButtonByPath(path)
+            || this._findCurrentTargetByActiveElement()
+            || this._lastFocusedItem;
+        if (!currentTarget) {
+            return;
+        }
+        // Items that manage their own internal navigation (Input caret, Breadcrumbs,
+        // checkbox groups) report a boundary state; the toolbar only takes over the
+        // key once the item is at the relevant end.
+        const navState = currentTarget instanceof ToolbarItemBase ? currentTarget.getArrowNavState() : undefined;
+        if (navState && (isForward || isBackward)) {
+            const atEnd = isForward ? navState.atRightEnd : navState.atLeftEnd;
+            if (!atEnd) {
+                return;
+            }
+        }
+        if (navState && (isHomeKey || isEndKey)) {
+            return;
+        }
+        if (isHomeKey) {
+            this._moveToFirst();
+            e.preventDefault();
+            e.stopPropagation();
+            return;
+        }
+        if (isEndKey) {
+            this._moveToLast();
+            e.preventDefault();
+            e.stopPropagation();
+            return;
+        }
+        if (isForward || isBackward) {
+            if (isForward) {
+                this._moveToNext();
+            }
+            else {
+                this._moveToPrev();
+            }
+            e.preventDefault();
+            e.stopPropagation();
+        }
+    }
+    _findItemByPath(path) {
+        return path.find((el) => el instanceof ToolbarItemBase);
+    }
+    _findOverflowButtonByPath(path) {
+        const overflowButton = this.overflowButtonDOM;
+        if (!overflowButton) {
+            return undefined;
+        }
+        const active = getActiveElement();
+        return path.includes(overflowButton)
+            || !!(active && this._isNodeInsideElement(active, overflowButton))
+            ? overflowButton
+            : undefined;
+    }
+    _isNodeInsideElement(node, element) {
+        let current = node;
+        while (current) {
+            if (current === element) {
+                return true;
+            }
+            const root = current.getRootNode?.();
+            if (root instanceof ShadowRoot) {
+                current = root.host;
+            }
+            else {
+                current = current.parentNode;
+            }
+        }
+        return false;
+    }
+    _findCurrentTargetByActiveElement() {
+        const active = getActiveElement();
+        if (!active) {
+            return undefined;
+        }
+        const overflowButton = this.overflowButtonDOM;
+        if (overflowButton && this._isNodeInsideElement(active, overflowButton)) {
+            return overflowButton;
+        }
+        // _getNavigationTargets() already includes the item's focus ref, so a single
+        // membership check per item is enough - no need to test getFocusDomRef separately.
+        return this._getNavigableItems().find(item => item._getNavigationTargets().some(target => this._isNodeInsideElement(active, target)));
+    }
+    _getNavigationChain() {
+        const chain = [...this._getNavigableItems()];
+        const overflowButton = this.overflowButtonDOM;
+        if (!this.hideOverflowButton && overflowButton) {
+            chain.push(overflowButton);
+        }
+        return chain;
+    }
+    _getNavigableItems() {
+        return this.items.filter(item => item.isToolbarNavigatable && !item.isOverflowed);
+    }
+    _setCurrentItem(item) {
+        this._lastFocusedItem = item;
+    }
+    _moveToNext() {
+        this._moveToItem((current, items) => Math.min(current + 1, items.length - 1), true);
+    }
+    _moveToPrev() {
+        this._moveToItem(current => Math.max(current - 1, 0), false);
+    }
+    _moveToFirst() {
+        this._moveToItem(() => 0, true);
+    }
+    _moveToLast() {
+        this._moveToItem((_, items) => items.length - 1, false);
+    }
+    _moveToItem(indexCalc, isForward) {
+        const items = this._getNavigationChain();
+        if (!items.length) {
+            return;
+        }
+        const currentIndex = this._lastFocusedItem ? items.indexOf(this._lastFocusedItem) : -1;
+        // No tracked item in the current chain: enter at the near end for the
+        // pressed direction (first item for forward, last for backward) instead
+        // of coercing to 0 and then stepping past it.
+        if (currentIndex === -1) {
+            const entryItem = items[isForward ? 0 : items.length - 1];
+            this._setCurrentItem(entryItem);
+            this._focusNavigationItem(entryItem, isForward);
+            return;
+        }
+        const nextIndex = indexCalc(currentIndex, items);
+        if (nextIndex === currentIndex) {
+            return;
+        }
+        const nextItem = items[nextIndex];
+        this._setCurrentItem(nextItem);
+        this._focusNavigationItem(nextItem, isForward);
+    }
+    _focusNavigationItem(item, isForward) {
+        if (item instanceof ToolbarItemBase) {
+            item.focusForToolbarNavigation(isForward);
+        }
+        else {
+            item.focus();
+        }
     }
 };
 __decorate([
