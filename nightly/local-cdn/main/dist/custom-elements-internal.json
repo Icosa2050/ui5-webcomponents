@@ -35132,21 +35132,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "dist/colorpicker-utils/ColorValue.js",
-      "declarations": [],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "default",
-          "declaration": {
-            "name": "ColorValue",
-            "module": "dist/colorpicker-utils/ColorValue.js"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "dist/delegate/DragAndDropHandler.js",
       "declarations": [],
       "exports": [
@@ -35162,45 +35147,18 @@
     },
     {
       "kind": "javascript-module",
-      "path": "dist/features/ColorPaletteMoreColors.js",
-      "declarations": [],
-      "exports": []
-    },
-    {
-      "kind": "javascript-module",
-      "path": "dist/features/InputComposition.js",
+      "path": "dist/colorpicker-utils/ColorValue.js",
       "declarations": [],
       "exports": [
         {
           "kind": "js",
           "name": "default",
           "declaration": {
-            "name": "InputComposition",
-            "module": "dist/features/InputComposition.js"
+            "name": "ColorValue",
+            "module": "dist/colorpicker-utils/ColorValue.js"
           }
         }
       ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "dist/features/InputSuggestions.js",
-      "declarations": [],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "default",
-          "declaration": {
-            "name": "Suggestions",
-            "module": "dist/features/InputSuggestions.js"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "dist/features/ListItemStandardExpandableText.js",
-      "declarations": [],
-      "exports": []
     },
     {
       "kind": "javascript-module",
@@ -35511,6 +35469,48 @@
     {
       "kind": "javascript-module",
       "path": "dist/dynamic-date-range-options/toDates.js",
+      "declarations": [],
+      "exports": []
+    },
+    {
+      "kind": "javascript-module",
+      "path": "dist/features/ColorPaletteMoreColors.js",
+      "declarations": [],
+      "exports": []
+    },
+    {
+      "kind": "javascript-module",
+      "path": "dist/features/InputComposition.js",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "name": "InputComposition",
+            "module": "dist/features/InputComposition.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "dist/features/InputSuggestions.js",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "name": "Suggestions",
+            "module": "dist/features/InputSuggestions.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "dist/features/ListItemStandardExpandableText.js",
       "declarations": [],
       "exports": []
     },
