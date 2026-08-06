@@ -35132,21 +35132,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "dist/colorpicker-utils/ColorValue.js",
-      "declarations": [],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "default",
-          "declaration": {
-            "name": "ColorValue",
-            "module": "dist/colorpicker-utils/ColorValue.js"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "dist/delegate/DragAndDropHandler.js",
       "declarations": [],
       "exports": [
@@ -35156,6 +35141,21 @@
           "declaration": {
             "name": "DragAndDropHandler",
             "module": "dist/delegate/DragAndDropHandler.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "dist/colorpicker-utils/ColorValue.js",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "name": "ColorValue",
+            "module": "dist/colorpicker-utils/ColorValue.js"
           }
         }
       ]
@@ -35474,6 +35474,12 @@
     },
     {
       "kind": "javascript-module",
+      "path": "dist/form-utils/FormUtils.js",
+      "declarations": [],
+      "exports": []
+    },
+    {
+      "kind": "javascript-module",
       "path": "dist/features/ColorPaletteMoreColors.js",
       "declarations": [],
       "exports": []
@@ -35511,12 +35517,6 @@
     {
       "kind": "javascript-module",
       "path": "dist/features/ListItemStandardExpandableText.js",
-      "declarations": [],
-      "exports": []
-    },
-    {
-      "kind": "javascript-module",
-      "path": "dist/form-utils/FormUtils.js",
       "declarations": [],
       "exports": []
     },
