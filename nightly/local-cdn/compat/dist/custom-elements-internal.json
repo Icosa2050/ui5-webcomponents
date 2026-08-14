@@ -844,6 +844,12 @@
     },
     {
       "kind": "javascript-module",
+      "path": "dist/utils/CompatCustomElementsScope.js",
+      "declarations": [],
+      "exports": []
+    },
+    {
+      "kind": "javascript-module",
       "path": "dist/types/TableColumnPopinDisplay.js",
       "declarations": [
         {
@@ -1027,12 +1033,6 @@
           }
         }
       ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "dist/utils/CompatCustomElementsScope.js",
-      "declarations": [],
-      "exports": []
     }
   ]
 }
